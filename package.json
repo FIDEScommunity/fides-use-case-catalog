@@ -1,0 +1,39 @@
+{
+  "name": "fides-use-case-catalog",
+  "version": "0.1.0",
+  "description": "FIDES Community Use Case Catalog",
+  "main": "dist/index.js",
+  "scripts": {
+    "preinstall": "node scripts/check-node-version.cjs",
+    "crawl": "tsx src/crawler/index.ts",
+    "build": "tsc",
+    "dev": "tsx watch src/crawler/index.ts",
+    "validate": "ajv validate --spec=draft2020 -c ajv-formats -s schemas/use-case-catalog.schema.json -d data/aggregated.json",
+    "sync-plugin-local": "bash scripts/sync-plugin-local.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FIDEScommunity/fides-use-case-catalog.git"
+  },
+  "keywords": [
+    "fides",
+    "use-case-catalog",
+    "verifiable-credentials"
+  ],
+  "author": "FIDES Community",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@vercel/node": "^3.0.0",
+    "ajv-cli": "^5.0.0",
+    "tsx": "^4.6.2",
+    "typescript": "^5.3.2"
+  }
+}
