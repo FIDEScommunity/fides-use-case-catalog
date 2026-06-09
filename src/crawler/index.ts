@@ -80,11 +80,29 @@ async function syncFromWordPress(): Promise<void> {
 
   const res = await fetch(CONFIG.exportUrl, {
     headers: { Accept: 'application/json' },
+    redirect: 'follow',
   });
   if (!res.ok) {
-    fail(`Export request failed: HTTP ${res.status}`);
+    fail(`Export request failed: HTTP ${res.status} (final URL: ${res.url}).`);
   }
-  const data = (await res.json()) as WordPressExport;
+
+  // The export endpoint must be the canonical WordPress host. A common
+  // misconfiguration is pointing at a www/CDN host (e.g. Squarespace) that
+  // 301s or serves an HTML page — which yields a cryptic JSON parse error.
+  // Read as text and surface a clear, actionable message instead.
+  const body = await res.text();
+  const contentType = res.headers.get('content-type') || '';
+  let data: WordPressExport;
+  try {
+    data = JSON.parse(body) as WordPressExport;
+  } catch {
+    const snippet = body.slice(0, 200).replace(/\s+/g, ' ').trim();
+    fail(
+      `Export endpoint did not return JSON (content-type: "${contentType}", final URL: ${res.url}).\n` +
+      `       Use the canonical WordPress host without a redirect (e.g. https://fides.community/... not https://www.fides.community/...).\n` +
+      `       Response started with: ${snippet}`
+    );
+  }
   if (!data || !Array.isArray(data.organizations)) {
     fail('Export response missing "organizations" array.');
   }
