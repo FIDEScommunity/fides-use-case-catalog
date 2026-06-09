@@ -338,7 +338,7 @@ function fides_use_case_catalog_row_to_item(array $row): array {
         'title' => (string) $row['title'],
         'summary' => (string) $row['summary'],
         'organizationName' => (string) $row['organization_name'],
-        'stage'            => fides_use_case_catalog_normalize_stage((string) $row['stage']),
+        'productionDeployment' => fides_use_case_catalog_normalize_production_deployment((string) ($row['production_deployment'] ?? '')),
         'status' => fides_use_case_catalog_normalize_status((string) $row['status']),
         'updatedAt' => get_date_from_gmt((string) $row['updated_at'], DATE_ATOM),
         'publishedAt' => ! empty($row['published_at']) ? get_date_from_gmt((string) $row['published_at'], DATE_ATOM) : null,
@@ -351,14 +351,21 @@ function fides_use_case_catalog_row_to_item(array $row): array {
         'interopProfiles' => $taxonomy['interopProfiles'],
     );
 
-    if (! empty($row['video_url']) && ! empty($row['video_provider'])) {
+    $media = fides_use_case_catalog_media_from_row($row);
+    if (! empty($media['images'])) {
+        $item['imageUrls'] = $media['images'];
+        $item['imageUrl'] = (string) $media['images'][0];
+    } elseif (! empty($row['image_url'])) {
+        $item['imageUrl'] = (string) $row['image_url'];
+    }
+    if (! empty($media['videos'])) {
+        $item['videos'] = $media['videos'];
+        $item['video'] = $media['videos'][0];
+    } elseif (! empty($row['video_url']) && ! empty($row['video_provider'])) {
         $item['video'] = array(
             'url' => (string) $row['video_url'],
             'provider' => (string) $row['video_provider'],
         );
-    }
-    if (! empty($row['image_url'])) {
-        $item['imageUrl'] = (string) $row['image_url'];
     }
     if (! empty($row['more_info_url'])) {
         $item['moreInfoUrl'] = (string) $row['more_info_url'];
@@ -373,6 +380,77 @@ function fides_use_case_catalog_row_to_item(array $row): array {
     }
 
     return $item;
+}
+
+/**
+ * Inverse of fides_use_case_catalog_row_to_item(): map a catalog item (as found
+ * in the GitHub aggregated.json) back onto the DB content columns.
+ *
+ * Only content columns are returned — identity, ownership and lifecycle columns
+ * (id, use_case_id, contact_email, status, published_at, created_at) are left to
+ * the caller so a GitHub refresh never clobbers them. `updated_at` is set so the
+ * local copy reflects when it was last synced.
+ *
+ * @param array<string, mixed> $item
+ * @return array<string, mixed>
+ */
+function fides_use_case_catalog_item_to_row_data(array $item): array {
+    $sector = fides_use_case_catalog_normalize_sector($item['sector'] ?? '');
+
+    $taxonomy = fides_use_case_catalog_normalize_taxonomy_payload(
+        array(
+            'interactionModes'      => $item['interactionModes'] ?? array(),
+            'vcFormats'             => $item['vcFormats'] ?? array(),
+            'issuanceProtocols'     => $item['issuanceProtocols'] ?? array(),
+            'presentationProtocols' => $item['presentationProtocols'] ?? array(),
+            'interopProfiles'       => $item['interopProfiles'] ?? array(),
+        )
+    );
+
+    $media_input = array(
+        'imageUrls' => isset($item['imageUrls']) && is_array($item['imageUrls']) ? $item['imageUrls'] : array(),
+        'imageUrl'  => isset($item['imageUrl']) ? (string) $item['imageUrl'] : '',
+        'videos'    => isset($item['videos']) && is_array($item['videos']) ? $item['videos'] : array(),
+    );
+    if (empty($media_input['videos']) && isset($item['video']) && is_array($item['video'])) {
+        $media_input['videos'] = array($item['video']);
+    }
+    $media         = fides_use_case_catalog_normalize_media_payload($media_input);
+    $media_storage = fides_use_case_catalog_media_storage_fields($media);
+
+    $tags = array();
+    if (isset($item['tags']) && is_array($item['tags'])) {
+        foreach ($item['tags'] as $tag) {
+            $tag = sanitize_text_field((string) $tag);
+            if ($tag !== '') {
+                $tags[] = $tag;
+            }
+        }
+    }
+
+    $links = fides_use_case_catalog_normalize_links_structure($item['links'] ?? array());
+
+    $country = fides_use_case_catalog_normalize_country_code((string) ($item['country'] ?? ''));
+
+    return array(
+        'event_key'             => '',
+        'theme_key'             => '',
+        'sectors_json'          => wp_json_encode($sector !== '' ? array($sector) : array()),
+        'taxonomy_json'         => wp_json_encode($taxonomy),
+        'title'                 => sanitize_text_field((string) ($item['title'] ?? '')),
+        'summary'               => trim(wp_kses_post((string) ($item['summary'] ?? ''))),
+        'organization_name'     => sanitize_text_field((string) ($item['organizationName'] ?? '')),
+        'country_code'          => $country,
+        'production_deployment' => fides_use_case_catalog_normalize_production_deployment((string) ($item['productionDeployment'] ?? '')),
+        'video_url'             => $media_storage['video_url'] !== '' ? $media_storage['video_url'] : null,
+        'video_provider'        => $media_storage['video_provider'] !== '' ? $media_storage['video_provider'] : null,
+        'image_url'             => $media_storage['image_url'] !== '' ? $media_storage['image_url'] : null,
+        'media_json'            => $media_storage['media_json'] !== '' ? $media_storage['media_json'] : null,
+        'more_info_url'         => isset($item['moreInfoUrl']) && $item['moreInfoUrl'] !== '' ? esc_url_raw((string) $item['moreInfoUrl']) : null,
+        'user_journey'          => isset($item['userJourney']) && $item['userJourney'] !== '' ? trim(wp_kses_post((string) $item['userJourney'])) : null,
+        'tags_json'             => wp_json_encode($tags),
+        'links_json'            => wp_json_encode($links),
+    );
 }
 
 /**
@@ -528,6 +606,298 @@ function fides_use_case_catalog_sanitize_country_code(string $code): string {
     }
 
     return in_array($normalized, fides_use_case_catalog_iso_country_codes(), true) ? $normalized : '';
+}
+
+/**
+ * @return array{images: list<string>, videos: list<array{url: string, provider: string}>}
+ */
+function fides_use_case_catalog_media_from_row(array $row): array {
+    $media_json = (string) ( $row['media_json'] ?? '' );
+    if ( $media_json !== '' ) {
+        $decoded = json_decode( $media_json, true );
+        if ( is_array( $decoded ) ) {
+            $images = array();
+            if ( isset( $decoded['images'] ) && is_array( $decoded['images'] ) ) {
+                foreach ( $decoded['images'] as $url ) {
+                    $clean = esc_url_raw( (string) $url );
+                    if ( $clean !== '' ) {
+                        $images[] = $clean;
+                    }
+                }
+            }
+            $videos = array();
+            if ( isset( $decoded['videos'] ) && is_array( $decoded['videos'] ) ) {
+                foreach ( $decoded['videos'] as $entry ) {
+                    if ( ! is_array( $entry ) ) {
+                        continue;
+                    }
+                    $url      = esc_url_raw( (string) ( $entry['url'] ?? '' ) );
+                    $provider = sanitize_text_field( (string) ( $entry['provider'] ?? '' ) );
+                    if ( $url !== '' && $provider !== '' ) {
+                        $videos[] = array(
+                            'url'      => $url,
+                            'provider' => $provider,
+                        );
+                    }
+                }
+            }
+            if ( ! empty( $images ) || ! empty( $videos ) ) {
+                return array(
+                    'images' => array_values( array_unique( $images ) ),
+                    'videos' => $videos,
+                );
+            }
+        }
+    }
+
+    $images = array();
+    $videos = array();
+    if ( ! empty( $row['image_url'] ) ) {
+        $images[] = (string) $row['image_url'];
+    }
+    if ( ! empty( $row['video_url'] ) && ! empty( $row['video_provider'] ) ) {
+        $videos[] = array(
+            'url'      => (string) $row['video_url'],
+            'provider' => (string) $row['video_provider'],
+        );
+    }
+
+    return array(
+        'images' => $images,
+        'videos' => $videos,
+    );
+}
+
+/**
+ * @param array<string, mixed> $payload
+ * @return array{images: list<string>, videos: list<array{url: string, provider: string}>}
+ */
+function fides_use_case_catalog_normalize_media_payload(array $payload): array {
+    $images = array();
+    if ( isset( $payload['imageUrls'] ) && is_array( $payload['imageUrls'] ) ) {
+        foreach ( $payload['imageUrls'] as $url ) {
+            $clean = esc_url_raw( (string) $url );
+            if ( $clean !== '' ) {
+                $images[] = $clean;
+            }
+        }
+    }
+    $legacy_image = esc_url_raw( (string) ( $payload['imageUrl'] ?? '' ) );
+    if ( $legacy_image !== '' && ! in_array( $legacy_image, $images, true ) ) {
+        array_unshift( $images, $legacy_image );
+    }
+    $images = array_values( array_unique( $images ) );
+
+    $videos = array();
+    if ( isset( $payload['videoUrls'] ) && is_array( $payload['videoUrls'] ) ) {
+        foreach ( $payload['videoUrls'] as $url ) {
+            $clean = esc_url_raw( (string) $url );
+            if ( $clean === '' ) {
+                continue;
+            }
+            $provider = fides_use_case_catalog_detect_video_provider( $clean );
+            if ( $provider !== '' ) {
+                $videos[] = array(
+                    'url'      => $clean,
+                    'provider' => $provider,
+                );
+            }
+        }
+    }
+    if ( isset( $payload['videos'] ) && is_array( $payload['videos'] ) ) {
+        foreach ( $payload['videos'] as $entry ) {
+            if ( ! is_array( $entry ) ) {
+                continue;
+            }
+            $clean = esc_url_raw( (string) ( $entry['url'] ?? '' ) );
+            if ( $clean === '' ) {
+                continue;
+            }
+            $provider = fides_use_case_catalog_detect_video_provider( $clean );
+            if ( $provider !== '' ) {
+                $videos[] = array(
+                    'url'      => $clean,
+                    'provider' => $provider,
+                );
+            }
+        }
+    }
+    $legacy_video = esc_url_raw( (string) ( $payload['videoUrl'] ?? '' ) );
+    if ( $legacy_video !== '' ) {
+        $provider = fides_use_case_catalog_detect_video_provider( $legacy_video );
+        if ( $provider !== '' ) {
+            $exists = false;
+            foreach ( $videos as $video ) {
+                if ( ( $video['url'] ?? '' ) === $legacy_video ) {
+                    $exists = true;
+                    break;
+                }
+            }
+            if ( ! $exists ) {
+                array_unshift(
+                    $videos,
+                    array(
+                        'url'      => $legacy_video,
+                        'provider' => $provider,
+                    )
+                );
+            }
+        }
+    }
+
+    return array(
+        'images' => $images,
+        'videos' => $videos,
+    );
+}
+
+/**
+ * @return list<string>
+ */
+function fides_use_case_catalog_parse_url_lines(string $raw): array {
+    $urls = array();
+    foreach (preg_split('/\r\n|\r|\n/', $raw) as $line) {
+        $clean = esc_url_raw(trim($line));
+        if ($clean !== '') {
+            $urls[] = $clean;
+        }
+    }
+
+    return array_values(array_unique($urls));
+}
+
+/**
+ * @param list<string> $image_urls
+ */
+function fides_use_case_catalog_render_admin_media_previews(array $image_urls): string {
+    if ($image_urls === array()) {
+        return '';
+    }
+
+    $html = '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">';
+    foreach ($image_urls as $url) {
+        $html .= sprintf(
+            '<a href="%1$s" target="_blank" rel="noopener noreferrer"><img src="%1$s" alt="" loading="lazy" style="width:160px;height:auto;aspect-ratio:16/7;object-fit:cover;border:1px solid #ccd0d4;border-radius:4px;background:#fff;" /></a>',
+            esc_url($url)
+        );
+    }
+    $html .= '</div>';
+
+    return $html;
+}
+
+/**
+ * @param array<string, mixed> $payload
+ */
+function fides_use_case_catalog_validate_media_video_urls(array $payload): ?string {
+    $raw_urls = array();
+    if ( isset( $payload['videoUrls'] ) && is_array( $payload['videoUrls'] ) ) {
+        foreach ( $payload['videoUrls'] as $url ) {
+            $raw_urls[] = (string) $url;
+        }
+    }
+    if ( isset( $payload['videoUrl'] ) ) {
+        $raw_urls[] = (string) $payload['videoUrl'];
+    }
+    foreach ( $raw_urls as $url ) {
+        $clean = esc_url_raw( trim( $url ) );
+        if ( $clean === '' ) {
+            continue;
+        }
+        if ( fides_use_case_catalog_detect_video_provider( $clean ) === '' ) {
+            return 'Video URL must be YouTube or Vimeo.';
+        }
+    }
+
+    return null;
+}
+
+/**
+ * @param array{images: list<string>, videos: list<array{url: string, provider: string}>} $media
+ * @return array{image_url: string, video_url: string, video_provider: string, media_json: string}
+ */
+function fides_use_case_catalog_media_storage_fields(array $media): array {
+    $images = $media['images'] ?? array();
+    $videos = $media['videos'] ?? array();
+    $image_url      = ! empty( $images ) ? (string) $images[0] : '';
+    $video_url      = '';
+    $video_provider = '';
+    if ( ! empty( $videos ) ) {
+        $video_url      = (string) ( $videos[0]['url'] ?? '' );
+        $video_provider = (string) ( $videos[0]['provider'] ?? '' );
+    }
+
+    return array(
+        'image_url'      => $image_url,
+        'video_url'      => $video_url,
+        'video_provider' => $video_provider,
+        'media_json'     => wp_json_encode(
+            array(
+                'images' => $images,
+                'videos' => $videos,
+            )
+        ),
+    );
+}
+
+function fides_use_case_catalog_migrate_production_deployment_column(): void {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $production_column = $wpdb->get_results("SHOW COLUMNS FROM {$table} LIKE 'production_deployment'", ARRAY_A);
+    if (! empty($production_column)) {
+        return;
+    }
+
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $stage_column = $wpdb->get_results("SHOW COLUMNS FROM {$table} LIKE 'stage'", ARRAY_A);
+    if (empty($stage_column)) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query("ALTER TABLE {$table} ADD COLUMN production_deployment VARCHAR(8) NOT NULL DEFAULT '' AFTER contact_email");
+        return;
+    }
+
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $wpdb->query("ALTER TABLE {$table} ADD COLUMN production_deployment VARCHAR(8) NOT NULL DEFAULT '' AFTER contact_email");
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $wpdb->query("UPDATE {$table} SET production_deployment = 'yes' WHERE stage = 'production'");
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $wpdb->query("UPDATE {$table} SET production_deployment = 'no' WHERE stage = 'demo'");
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $wpdb->query("ALTER TABLE {$table} DROP COLUMN stage");
+}
+
+function fides_use_case_catalog_migrate_media_column(): void {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $column = $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'media_json'", ARRAY_A );
+    if ( empty( $column ) ) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query( "ALTER TABLE {$table} ADD COLUMN media_json LONGTEXT NULL AFTER image_url" );
+    }
+
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $rows = $wpdb->get_results( "SELECT id, image_url, video_url, video_provider, media_json FROM {$table}", ARRAY_A );
+    if ( ! is_array( $rows ) ) {
+        return;
+    }
+
+    foreach ( $rows as $row ) {
+        if ( ! empty( $row['media_json'] ) ) {
+            continue;
+        }
+        $media = fides_use_case_catalog_media_from_row( $row );
+        if ( empty( $media['images'] ) && empty( $media['videos'] ) ) {
+            continue;
+        }
+        $storage = fides_use_case_catalog_media_storage_fields( $media );
+        $wpdb->update(
+            $table,
+            array( 'media_json' => $storage['media_json'] ),
+            array( 'id' => (int) $row['id'] )
+        );
+    }
 }
 
 function fides_use_case_catalog_migrate_country_column(): void {

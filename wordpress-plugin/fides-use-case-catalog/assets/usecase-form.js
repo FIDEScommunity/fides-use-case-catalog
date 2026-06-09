@@ -5,7 +5,6 @@
 
   const apiBase = String(config.apiBase || "").replace(/\/$/, "");
   const taxonomy = config.taxonomy || {};
-  const readinessLevels = config.readinessLevels || { demo: "Demo", production: "Production" };
   const contactEmail = String(config.contactEmail || "").trim();
   const restNonce = String(config.restNonce || "").trim();
 
@@ -63,13 +62,11 @@
     renderCheckboxGroup("Interop profile", "interopProfiles", taxonomy.interopProfiles, false)
   ].join("");
 
-  const howItWorksPlaceholder = [
-    "Example:",
-    "1) The user opens their wallet app.",
-    "2) They scan a QR code at the relying party.",
-    "3) They choose which credential to present and confirm.",
-    "4) The RP verifies the presentation and grants access."
-  ].join("\n");
+  const descriptionPlaceholder =
+    "Describe the use case, the problem it solves, the value it creates, the organizations and user roles involved, and the role of digital wallets and verifiable credentials.";
+
+  const howItWorksPlaceholder =
+    "Walk through the process step by step from a user and organizational perspective. Explain how the different parties interact and where digital wallets and verifiable credentials are used throughout the flow.";
 
   root.innerHTML = `
     <section class="fides-use-case-card">
@@ -87,11 +84,12 @@
             </div>
             <div class="fides-form-row">
               <label for="fides-summary">Description *</label>
-              <textarea id="fides-summary" name="summary" minlength="30" maxlength="1200" required></textarea>
+              <textarea id="fides-summary" name="summary" minlength="30" maxlength="1200" required placeholder="${escapeHtml(descriptionPlaceholder)}"></textarea>
             </div>
-            <div class="fides-form-grid fides-form-grid-pair">
+            <div class="fides-form-grid fides-form-grid-pair fides-form-grid-pair--aligned">
               <div class="fides-form-row">
                 <label for="fides-sector">Sector *</label>
+                <p class="fides-help">The primary sector this use case applies to.</p>
                 <select id="fides-sector" name="sector" required>
                   <option value="">Select...</option>
                   ${sortedSectorOptionEntries(taxonomy.sectors)
@@ -100,13 +98,18 @@
                 </select>
               </div>
               <div class="fides-form-row">
-                <label for="fides-stage">Readiness level *</label>
-                <select id="fides-stage" name="stage" required>
-                  <option value="">Select...</option>
-                  ${sortedOptionEntries(readinessLevels)
-                    .map(([key, label]) => `<option value="${escapeHtml(key)}">${escapeHtml(label)}</option>`)
-                    .join("")}
-                </select>
+                <span class="fides-form-label">Production deployment *</span>
+                <p class="fides-help">Is this use case currently deployed in a live operational environment?</p>
+                <div class="fides-form-choices fides-form-choices-inline">
+                  <label class="fides-form-choice">
+                    <input type="radio" id="fides-production-deployment-yes" name="productionDeployment" value="yes" required>
+                    <span>Yes</span>
+                  </label>
+                  <label class="fides-form-choice">
+                    <input type="radio" id="fides-production-deployment-no" name="productionDeployment" value="no" required>
+                    <span>No</span>
+                  </label>
+                </div>
               </div>
             </div>
             <div class="fides-overview-orgs">
@@ -125,7 +128,7 @@
                   contactEmail
                     ? `<div class="fides-form-row">
                   <label for="fides-contact-email">Contact email *</label>
-                  <p class="fides-help fides-contact-email-hint">Taken from your WordPress profile.</p>
+                  <p class="fides-help fides-contact-email-hint">Taken from your FIDES account</p>
                   <input id="fides-contact-email" class="fides-input-locked" type="email" value="${escapeHtml(contactEmail)}" readonly aria-readonly="true" tabindex="-1" />
                 </div>`
                     : `<div class="fides-form-row"><p class="fides-form-message is-error">Your WordPress profile must have a valid email address before you can submit.</p></div>`
@@ -163,27 +166,20 @@
             <h3 id="fides-media-section-title" class="fides-form-section-title">Media</h3>
             <span class="fides-form-accordion-badge">Optional</span>
           </div>
-          <p class="fides-form-section-intro">Cover image and demo video appear on the catalog card and detail page. A demo video helps visitors understand your use case—it is one of the clearest ways to explain the flow. If you omit the cover image, the catalog uses a thumbnail from your video. If both are omitted, an AI-generated image is created from your use case description.</p>
+          <p class="fides-form-section-intro">Images and demo videos appear on the catalog card and detail page. The first image or video thumbnail is used on the card; all media are shown in the detail modal. If you omit images, the catalog uses a thumbnail from your first video. If both are omitted, an AI-generated image is created from your use case description.</p>
           <div class="fides-form-section-body fides-media-section-body">
             <div class="fides-form-grid fides-media-grid">
               <div class="fides-media-col">
-                <label for="fides-image-url">Cover image</label>
-                <p class="fides-help fides-media-col-help">Landscape image for the catalog card (16:7). Upload or paste a URL.</p>
-                <div class="fides-media-inputs">
-                  <input id="fides-image-url" name="imageUrl" type="url" placeholder="https://…" />
-                  <label class="fides-secondary-btn fides-upload-btn">
-                    Upload
-                    <input type="file" id="fides-image-file" accept="image/jpeg,image/png,image/webp,image/gif" hidden />
-                  </label>
-                </div>
+                <label>Cover images</label>
+                <p class="fides-help fides-media-col-help">Landscape images for the catalog (16:7). Upload or paste URLs. The first image is used on the card.</p>
+                <div id="fides-image-rows" class="fides-media-rows" aria-live="polite"></div>
               </div>
               <div class="fides-media-col">
-                <label for="fides-video-url">Demo video</label>
-                <p class="fides-help fides-media-col-help">YouTube or Vimeo link to a demo of the flow.</p>
-                <input id="fides-video-url" name="videoUrl" type="url" placeholder="https://…" />
+                <label>Demo videos</label>
+                <p class="fides-help fides-media-col-help">YouTube or Vimeo links to demos of the flow.</p>
+                <div id="fides-video-rows" class="fides-media-rows" aria-live="polite"></div>
               </div>
             </div>
-            <div id="fides-image-preview" class="fides-image-preview" hidden></div>
             <p id="fides-image-upload-status" class="fides-lookup-hint" hidden></p>
           </div>
         </section>
@@ -232,10 +228,11 @@
 
   const form = root.querySelector("#fides-use-case-form");
   const messageEl = root.querySelector("#fides-form-message");
-  const imageUrlInput = root.querySelector("#fides-image-url");
-  const imageFileInput = root.querySelector("#fides-image-file");
-  const imagePreviewEl = root.querySelector("#fides-image-preview");
+  const imageRowsEl = root.querySelector("#fides-image-rows");
+  const videoRowsEl = root.querySelector("#fides-video-rows");
   const imageUploadStatusEl = root.querySelector("#fides-image-upload-status");
+  const imageRowsState = [{ url: "" }];
+  const videoRowsState = [{ url: "" }];
 
   function getCheckedValues(fieldKey) {
     return Array.from(form.querySelectorAll(`input[name="${fieldKey}"]:checked`))
@@ -316,61 +313,175 @@
     imageUploadStatusEl.textContent = text;
   }
 
-  function updateImagePreview(url) {
-    if (!imagePreviewEl) return;
-    const trimmed = String(url || "").trim();
-    if (!trimmed) {
-      imagePreviewEl.hidden = true;
-      imagePreviewEl.innerHTML = "";
+  function collectMediaUrls(state) {
+    return state.map((entry) => String(entry.url || "").trim()).filter(Boolean);
+  }
+
+  function renderImageRows() {
+    if (!imageRowsEl) return;
+    const lastIndex = imageRowsState.length - 1;
+    imageRowsEl.innerHTML = imageRowsState
+      .map(
+        (entry, index) => {
+          const isLast = index === lastIndex;
+          const rowAction = isLast
+            ? `<button type="button" class="fides-secondary-btn fides-media-action-btn" data-add-image="1">Add</button>`
+            : `<button type="button" class="fides-secondary-btn fides-media-action-btn" data-remove-image="${index}" aria-label="Remove image">Remove</button>`;
+          return `
+          <div class="fides-media-row" data-image-index="${index}">
+            <div class="fides-media-inputs">
+              <input type="url" data-image-url="${index}" value="${escapeHtml(entry.url || "")}" placeholder="https://…" />
+              <label class="fides-secondary-btn fides-media-action-btn fides-upload-btn">
+                Upload
+                <input type="file" data-image-file="${index}" accept="image/jpeg,image/png,image/webp,image/gif" hidden />
+              </label>
+              ${rowAction}
+            </div>
+            ${
+              entry.url
+                ? `<div class="fides-image-preview"><img src="${escapeHtml(entry.url)}" alt="Image preview" loading="lazy" /></div>`
+                : ""
+            }
+          </div>`;
+        }
+      )
+      .join("");
+  }
+
+  function renderVideoRows() {
+    if (!videoRowsEl) return;
+    const lastIndex = videoRowsState.length - 1;
+    videoRowsEl.innerHTML = videoRowsState
+      .map(
+        (entry, index) => {
+          const isLast = index === lastIndex;
+          const rowAction = isLast
+            ? `<button type="button" class="fides-secondary-btn fides-media-action-btn" data-add-video="1">Add</button>`
+            : `<button type="button" class="fides-secondary-btn fides-media-action-btn" data-remove-video="${index}" aria-label="Remove video">Remove</button>`;
+          return `
+          <div class="fides-media-row" data-video-index="${index}">
+            <div class="fides-media-inputs">
+              <input type="url" data-video-url="${index}" value="${escapeHtml(entry.url || "")}" placeholder="https://…" />
+              ${rowAction}
+            </div>
+          </div>`;
+        }
+      )
+      .join("");
+  }
+
+  function resetMediaRows() {
+    imageRowsState.length = 0;
+    imageRowsState.push({ url: "" });
+    videoRowsState.length = 0;
+    videoRowsState.push({ url: "" });
+    renderImageRows();
+    renderVideoRows();
+    setImageUploadStatus("");
+  }
+
+  async function uploadImageFile(file, rowIndex) {
+    if (!file || !apiBase) {
+      setImageUploadStatus("Missing API configuration.");
       return;
     }
-    imagePreviewEl.hidden = false;
-    imagePreviewEl.innerHTML = `<img src="${escapeHtml(trimmed)}" alt="Card image preview" loading="lazy" />`;
-  }
-
-  if (imageUrlInput) {
-    imageUrlInput.addEventListener("input", () => updateImagePreview(imageUrlInput.value));
-  }
-
-  if (imageFileInput && imageUrlInput) {
-    imageFileInput.addEventListener("change", async () => {
-      const file = imageFileInput.files && imageFileInput.files[0];
-      imageFileInput.value = "";
-      if (!file) return;
-      if (!apiBase) {
-        setImageUploadStatus("Missing API configuration.");
+    setImageUploadStatus("Uploading…");
+    const formData = new FormData();
+    formData.append("file", file);
+    const headers = {};
+    if (restNonce) {
+      headers["X-WP-Nonce"] = restNonce;
+    }
+    try {
+      const response = await fetch(`${apiBase}/submissions/card-image`, {
+        method: "POST",
+        credentials: "same-origin",
+        headers,
+        body: formData
+      });
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setImageUploadStatus(json.message || "Image upload failed.");
         return;
       }
-      setImageUploadStatus("Uploading…");
-      const formData = new FormData();
-      formData.append("file", file);
-      const headers = {};
-      if (restNonce) {
-        headers["X-WP-Nonce"] = restNonce;
+      const url = json.url ? String(json.url) : "";
+      if (!url) {
+        setImageUploadStatus("Upload succeeded but no URL was returned.");
+        return;
       }
-      try {
-        const response = await fetch(`${apiBase}/submissions/card-image`, {
-          method: "POST",
-          credentials: "same-origin",
-          headers,
-          body: formData
-        });
-        const json = await response.json().catch(() => ({}));
-        if (!response.ok) {
-          setImageUploadStatus(json.message || "Image upload failed.");
-          return;
-        }
-        const url = json.url ? String(json.url) : "";
-        if (!url) {
-          setImageUploadStatus("Upload succeeded but no URL was returned.");
-          return;
-        }
-        imageUrlInput.value = url;
-        updateImagePreview(url);
-        setImageUploadStatus("Image uploaded.");
-      } catch (_err) {
-        setImageUploadStatus("Image upload failed due to a network error.");
+      if (imageRowsState[rowIndex]) {
+        imageRowsState[rowIndex].url = url;
       }
+      renderImageRows();
+      setImageUploadStatus("Image uploaded.");
+    } catch (_err) {
+      setImageUploadStatus("Image upload failed due to a network error.");
+    }
+  }
+
+  renderImageRows();
+  renderVideoRows();
+
+  if (imageRowsEl) {
+    imageRowsEl.addEventListener("input", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || !target.hasAttribute("data-image-url")) return;
+      const index = Number(target.getAttribute("data-image-url"));
+      if (!Number.isFinite(index) || !imageRowsState[index]) return;
+      imageRowsState[index].url = target.value.trim();
+      renderImageRows();
+    });
+
+    imageRowsEl.addEventListener("change", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || !target.hasAttribute("data-image-file")) return;
+      const index = Number(target.getAttribute("data-image-file"));
+      const file = target.files && target.files[0];
+      target.value = "";
+      if (!Number.isFinite(index) || !file) return;
+      uploadImageFile(file, index);
+    });
+
+    imageRowsEl.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (target.hasAttribute("data-add-image")) {
+        imageRowsState.push({ url: "" });
+        renderImageRows();
+        return;
+      }
+      const indexAttr = target.getAttribute("data-remove-image");
+      if (indexAttr == null) return;
+      const index = Number(indexAttr);
+      if (!Number.isFinite(index) || imageRowsState.length <= 1) return;
+      imageRowsState.splice(index, 1);
+      renderImageRows();
+    });
+  }
+
+  if (videoRowsEl) {
+    videoRowsEl.addEventListener("input", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement) || !target.hasAttribute("data-video-url")) return;
+      const index = Number(target.getAttribute("data-video-url"));
+      if (!Number.isFinite(index) || !videoRowsState[index]) return;
+      videoRowsState[index].url = target.value.trim();
+    });
+
+    videoRowsEl.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLElement)) return;
+      if (target.hasAttribute("data-add-video")) {
+        videoRowsState.push({ url: "" });
+        renderVideoRows();
+        return;
+      }
+      const indexAttr = target.getAttribute("data-remove-video");
+      if (indexAttr == null) return;
+      const index = Number(indexAttr);
+      if (!Number.isFinite(index) || videoRowsState.length <= 1) return;
+      videoRowsState.splice(index, 1);
+      renderVideoRows();
     });
   }
 
@@ -577,6 +688,10 @@
       const input = getInput(name);
       return input && "value" in input ? String(input.value || "").trim() : "";
     };
+    const getRadioValue = (name) => {
+      const input = form.querySelector(`input[name="${name}"]:checked`);
+      return input ? String(input.value || "").trim() : "";
+    };
     const isChecked = (name) => {
       const input = getInput(name);
       return Boolean(input && "checked" in input && input.checked);
@@ -601,6 +716,11 @@
       setMessage("Select the organization submitting this use case.", "error");
       return;
     }
+    const productionDeployment = getRadioValue("productionDeployment");
+    if (!productionDeployment) {
+      setMessage("Select whether this use case is deployed in production.", "error");
+      return;
+    }
 
     const payload = {
       sector,
@@ -612,9 +732,11 @@
       title: getValue("title"),
       summary: getValue("summary"),
       organizationName: getValue("organizationName"),
-      stage: getValue("stage"),
-      videoUrl: getValue("videoUrl"),
-      imageUrl: getValue("imageUrl"),
+      productionDeployment: productionDeployment,
+      imageUrls: collectMediaUrls(imageRowsState),
+      videoUrls: collectMediaUrls(videoRowsState),
+      imageUrl: collectMediaUrls(imageRowsState)[0] || "",
+      videoUrl: collectMediaUrls(videoRowsState)[0] || "",
       moreInfoUrl: getValue("moreInfoUrl"),
       userJourney: getValue("userJourney"),
       tags: getValue("tags")
@@ -648,8 +770,7 @@
       }
       setMessage(`Submission received. Reference: ${json.id}`, "success");
       form.reset();
-      updateImagePreview("");
-      setImageUploadStatus("");
+      resetMediaRows();
       Object.keys(linkState).forEach((key) => {
         linkState[key] = [];
       });

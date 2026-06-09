@@ -31,3 +31,5 @@ temp/
 
 # WordPress plugin local artifacts
 wordpress-plugin/*.zip
+wordpress-plugin/__MACOSX/
+__MACOSX/

@@ -1,6 +1,10 @@
 (function () {
   const config = window.FIDES_USE_CASE_LIST_CONFIG || {};
   const apiBase = String(config.apiBase || "").replace(/\/$/, "");
+  // Primary data source = git-versioned aggregated.json on GitHub (the source
+  // organizations can amend via pull request). REST /catalog stays as the
+  // same-origin fallback for local/empty/unreachable situations.
+  const aggregatedUrl = String(config.aggregatedUrl || "").trim();
   const taxonomy = config.taxonomy || {};
   const SECTOR_LABELS = taxonomy.sectors || {};
   const INTERACTION_MODE_LABELS = taxonomy.interactionModes || {};
@@ -9,13 +13,22 @@
   const PRESENTATION_PROTOCOL_LABELS = taxonomy.presentationProtocols || {};
   const INTEROP_PROFILE_LABELS = taxonomy.interopProfiles || {};
   const TAXONOMY_FILTER_GROUPS = [
-    { key: "sector", title: "Sector", labels: SECTOR_LABELS },
     { key: "interactionModes", title: "Interaction mode", labels: INTERACTION_MODE_LABELS },
     { key: "vcFormats", title: "VC format", labels: VC_FORMAT_LABELS },
     { key: "issuanceProtocols", title: "Issuance protocol", labels: ISSUANCE_PROTOCOL_LABELS },
     { key: "presentationProtocols", title: "Presentation protocol", labels: PRESENTATION_PROTOCOL_LABELS },
     { key: "interopProfiles", title: "Interop profile", labels: INTEROP_PROFILE_LABELS }
   ];
+  const USE_CASE_FILTER_TO_VOCAB = {
+    sector: "sector",
+    country: "country",
+    productionDeployment: "productionDeployment",
+    interactionModes: "interactionMode",
+    vcFormats: "vcFormat",
+    issuanceProtocols: "issuanceProtocol",
+    presentationProtocols: "presentationProtocol",
+    interopProfiles: "interopProfile"
+  };
   const RATINGS_API_BASE = config.ratingsApiBase ? String(config.ratingsApiBase).trim().replace(/\/$/, "") : "";
   const RATINGS_NONCE = config.ratingsNonce ? String(config.ratingsNonce) : "";
   const RATINGS_IS_LOGGED_IN = !!config.ratingsIsLoggedIn;
@@ -25,17 +38,18 @@
   const root = document.getElementById("fides-use-case-catalog-root");
   if (!root) return;
 
-  const READINESS_LABELS = Object.assign(
-    { demo: "Demo", production: "Production" },
-    config.readinessLevels || {}
+  const PRODUCTION_DEPLOYMENT_LABELS = Object.assign(
+    { no: "No", yes: "Yes" },
+    config.productionDeploymentOptions || {}
   );
-  const READINESS_OPTIONS = Object.keys(READINESS_LABELS);
+  const PRODUCTION_DEPLOYMENT_OPTIONS = Object.keys(PRODUCTION_DEPLOYMENT_LABELS);
   const CATALOG_URLS = {
     personalWallet: String(config.personalWalletCatalogUrl || config.walletCatalogUrl || "").replace(/\/$/, ""),
     businessWallet: String(config.businessWalletCatalogUrl || "").replace(/\/$/, ""),
     issuer: String(config.issuerCatalogUrl || "").replace(/\/$/, ""),
     credential: String(config.credentialCatalogUrl || "").replace(/\/$/, ""),
-    rp: String(config.rpCatalogUrl || "").replace(/\/$/, "")
+    rp: String(config.rpCatalogUrl || "").replace(/\/$/, ""),
+    organization: String(config.organizationCatalogUrl || "").replace(/\/$/, "")
   };
   const LINK_ACCORDION_SECTIONS = [
     {
@@ -62,17 +76,12 @@
     { key: "rps", linksKey: "rps", title: "Relying parties", iconKey: "building", catalogType: "rp", param: "rp", pluralParam: "rps" },
     { key: "credentials", linksKey: "credentials", title: "Credential types", iconKey: "fileCheck", catalogType: "credential", param: "credential", pluralParam: "credentials" }
   ];
-  const LEGACY_STAGE_MAP = {
-    idea: "demo",
-    pilot: "production",
-    live: "production",
-    "technical-demo": "demo",
-    "use-case-demo": "demo",
-    "production-pilot": "production"
-  };
   const ratingSummariesByUseCaseId = Object.create(null);
   const ratingSummariesByLinkedType = Object.create(null);
   let selectedUseCase = null;
+  let vocabulary = null;
+  const VOCABULARY_URL = config.vocabularyUrl ? String(config.vocabularyUrl) : "";
+  const VOCABULARY_FALLBACK_URL = config.vocabularyFallbackUrl ? String(config.vocabularyFallbackUrl) : "";
 
   function normalizeColumns(value) {
     const cols = String(value || "3");
@@ -98,6 +107,10 @@
       '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>',
     chevronDown:
       '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+    chevronLeft:
+      '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>',
+    chevronRight:
+      '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>',
     chevronUp:
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"></path></svg>',
     chevronDoubleDown:
@@ -120,6 +133,10 @@
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
     xLarge:
       '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>',
+    maximize:
+      '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>',
+    play:
+      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>',
     share:
       '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>',
     server:
@@ -160,17 +177,14 @@
       .trim();
   }
 
-  function normalizeStage(value) {
-    const raw = String(value || "").trim();
-    if (!raw) return "";
-    const slug = raw.replaceAll("_", "-").toLowerCase();
-    if (LEGACY_STAGE_MAP[slug]) return LEGACY_STAGE_MAP[slug];
-    return READINESS_LABELS[slug] ? slug : "";
+  function normalizeProductionDeployment(value) {
+    const raw = String(value || "").trim().toLowerCase();
+    return PRODUCTION_DEPLOYMENT_LABELS[raw] ? raw : "";
   }
 
-  function stageLabel(value) {
-    const stage = normalizeStage(value);
-    return stage ? READINESS_LABELS[stage] || prettifyKey(stage) : "—";
+  function productionDeploymentLabel(value) {
+    const slug = normalizeProductionDeployment(value);
+    return slug ? PRODUCTION_DEPLOYMENT_LABELS[slug] || prettifyKey(slug) : "—";
   }
 
   function formatLikeCount(count) {
@@ -789,46 +803,339 @@
     }
   }
 
-  function renderUseCaseModalMedia(item) {
-    const video = item.video || {};
-    const videoUrl = video.url ? String(video.url) : "";
-    const imageUrl = item.imageUrl ? String(item.imageUrl) : deriveCardImage(item);
+  function itemVideos(item) {
+    if (Array.isArray(item.videos) && item.videos.length) {
+      return item.videos.filter((video) => video && video.url);
+    }
+    if (item.video && item.video.url) {
+      return [item.video];
+    }
+    return [];
+  }
 
-    if (videoUrl && video.provider === "youtube") {
+  function itemImageUrls(item) {
+    if (Array.isArray(item.imageUrls) && item.imageUrls.length) {
+      return item.imageUrls.filter(Boolean);
+    }
+    if (item.imageUrl) {
+      return [String(item.imageUrl)];
+    }
+    return [];
+  }
+
+  function getVideoEmbedSrc(video) {
+    const videoUrl = video && video.url ? String(video.url) : "";
+    if (!videoUrl) return "";
+
+    if (video.provider === "youtube") {
       const id = parseYoutubeVideoId(videoUrl);
       if (id) {
-        return `
-          <div class="fides-use-case-modal-media fides-use-case-modal-media-video">
-            <div class="fides-use-case-modal-media-frame">
-              <iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}" title="Demo video" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-            </div>
-          </div>
-        `;
+        return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}`;
       }
     }
 
-    if (videoUrl && video.provider === "vimeo") {
+    if (video.provider === "vimeo") {
       const id = parseVimeoVideoId(videoUrl);
       if (id) {
-        return `
-          <div class="fides-use-case-modal-media fides-use-case-modal-media-video">
-            <div class="fides-use-case-modal-media-frame">
-              <iframe src="https://player.vimeo.com/video/${encodeURIComponent(id)}" title="Demo video" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>
-            </div>
-          </div>
-        `;
+        return `https://player.vimeo.com/video/${encodeURIComponent(id)}`;
       }
     }
 
-    if (imageUrl) {
+    return "";
+  }
+
+  let currentModalMediaSlides = [];
+
+  function slideThumbUrl(slide) {
+    if (slide.type === "image") return slide.imageUrl;
+    return slide.thumbUrl || "";
+  }
+
+  function buildModalMediaSlides(item) {
+    const title = item.title || "Use case preview";
+    const slides = [];
+
+    itemVideos(item).forEach((video, index) => {
+      const embedSrc = getVideoEmbedSrc(video);
+      if (!embedSrc) return;
+      let thumbUrl = "";
+      if (video.provider === "youtube") {
+        const id = parseYoutubeVideoId(String(video.url || ""));
+        if (id) thumbUrl = `https://i.ytimg.com/vi/${encodeURIComponent(id)}/hqdefault.jpg`;
+      }
+      slides.push({
+        type: "video",
+        label: index === 0 ? "Demo video" : `Demo video ${index + 1}`,
+        embedSrc,
+        videoTitle: index === 0 ? "Demo video" : `Demo video ${index + 1}`,
+        thumbUrl
+      });
+    });
+
+    const seenImages = new Set();
+    itemImageUrls(item).forEach((url, index) => {
+      const imageUrl = String(url || "").trim();
+      if (!imageUrl || seenImages.has(imageUrl)) return;
+      seenImages.add(imageUrl);
+      slides.push({
+        type: "image",
+        label: index === 0 ? "Cover image" : `Image ${index + 1}`,
+        imageUrl,
+        alt: index === 0 ? title : `${title} image ${index + 1}`
+      });
+    });
+
+    if (!slides.length) {
+      const fallback = deriveCardImage(item);
+      if (fallback && !seenImages.has(fallback)) {
+        slides.push({
+          type: "image",
+          label: "Cover image",
+          imageUrl: fallback,
+          alt: title
+        });
+      }
+    }
+
+    return slides;
+  }
+
+  function renderUseCaseModalMediaSlide(slide) {
+    if (slide.type === "video") {
       return `
-        <div class="fides-use-case-modal-media fides-use-case-modal-media-image">
-          <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(item.title || "Use case preview")}" loading="lazy">
+        <div class="fides-use-case-modal-media fides-use-case-modal-media-video">
+          <div
+            class="fides-use-case-modal-media-frame"
+            data-video-embed-src="${escapeHtml(slide.embedSrc)}"
+            data-video-title="${escapeHtml(slide.videoTitle)}"
+          ></div>
         </div>
       `;
     }
 
-    return "";
+    return `
+      <div class="fides-use-case-modal-media fides-use-case-modal-media-image">
+        <img src="${escapeHtml(slide.imageUrl)}" alt="${escapeHtml(slide.alt)}" loading="lazy">
+      </div>
+    `;
+  }
+
+  function renderMediaThumbs(slides, context) {
+    if (slides.length < 2) return "";
+    const thumbs = slides
+      .map((slide, index) => {
+        const thumb = slideThumbUrl(slide);
+        const inner = thumb
+          ? `<img src="${escapeHtml(thumb)}" alt="" loading="lazy">`
+          : `<span class="fides-media-thumb-fallback">${icons.play}</span>`;
+        const videoBadge = slide.type === "video" ? `<span class="fides-media-thumb-play">${icons.play}</span>` : "";
+        return `
+          <button type="button" class="fides-media-thumb${index === 0 ? " is-active" : ""}" data-thumb-index="${index}" aria-label="${escapeHtml(slide.label)}">
+            ${inner}${videoBadge}
+          </button>`;
+      })
+      .join("");
+    return `<div class="fides-media-thumbs" data-media-thumbs="${context}">${thumbs}</div>`;
+  }
+
+  function renderUseCaseModalMedia(item) {
+    const slides = buildModalMediaSlides(item);
+    currentModalMediaSlides = slides;
+    if (!slides.length) return "";
+
+    const multi = slides.length > 1;
+    const expandLabel = slides[0].type === "video" ? "View larger" : "View larger";
+
+    return `
+      <div class="fides-use-case-modal-media-wrap${multi ? " is-multi" : ""}">
+        <div class="fides-use-case-modal-carousel" tabindex="0" aria-roledescription="carousel" aria-label="Use case media">
+          <div class="fides-use-case-modal-carousel-viewport">
+            <div class="fides-use-case-modal-carousel-track" data-carousel-track style="transform: translateX(0);">
+              ${slides
+                .map(
+                  (slide, index) => `
+                <div class="fides-use-case-modal-carousel-slide${index === 0 ? " is-active" : ""}" data-carousel-slide="${index}" aria-hidden="${index === 0 ? "false" : "true"}">
+                  <button type="button" class="fides-media-expand-btn" data-media-expand="${index}" aria-label="${escapeHtml(expandLabel)}" title="${escapeHtml(expandLabel)}">${icons.maximize}</button>
+                  ${renderUseCaseModalMediaSlide(slide)}
+                </div>`
+                )
+                .join("")}
+            </div>
+            ${
+              multi
+                ? `<button type="button" class="fides-carousel-nav fides-carousel-nav-edge fides-carousel-prev" data-carousel-prev aria-label="Previous slide">${icons.chevronLeft}</button>
+                   <button type="button" class="fides-carousel-nav fides-carousel-nav-edge fides-carousel-next" data-carousel-next aria-label="Next slide">${icons.chevronRight}</button>
+                   <span class="fides-carousel-counter-overlay" data-carousel-counter>1 / ${slides.length}</span>`
+                : ""
+            }
+          </div>
+          ${renderMediaThumbs(slides, "modal")}
+        </div>
+      </div>
+    `;
+  }
+
+  function activateCarouselSlideMedia(slide) {
+    if (!slide) return;
+    slide.querySelectorAll("[data-video-embed-src]").forEach((frame) => {
+      const src = frame.getAttribute("data-video-embed-src");
+      if (!src || frame.querySelector("iframe")) return;
+      const iframe = document.createElement("iframe");
+      iframe.src = src;
+      iframe.title = frame.getAttribute("data-video-title") || "Demo video";
+      iframe.setAttribute("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share");
+      iframe.setAttribute("allowfullscreen", "");
+      iframe.setAttribute("loading", "lazy");
+      frame.appendChild(iframe);
+    });
+  }
+
+  function deactivateCarouselSlideMedia(slide) {
+    if (!slide) return;
+    slide.querySelectorAll("[data-video-embed-src]").forEach((frame) => {
+      const iframe = frame.querySelector("iframe");
+      if (iframe) iframe.remove();
+    });
+  }
+
+  function bindCarousel(carousel, options) {
+    const opts = options || {};
+    const slideEls = Array.from(carousel.querySelectorAll("[data-carousel-slide]"));
+    if (!slideEls.length) return null;
+
+    const track = carousel.querySelector("[data-carousel-track]");
+    const counter = carousel.querySelector("[data-carousel-counter]");
+    const thumbButtons = Array.from(carousel.querySelectorAll("[data-thumb-index]"));
+    const prevBtn = carousel.querySelector("[data-carousel-prev]");
+    const nextBtn = carousel.querySelector("[data-carousel-next]");
+    let index = Math.min(Math.max(opts.startIndex || 0, 0), slideEls.length - 1);
+
+    function applyIndex(skipActivate) {
+      slideEls.forEach((slide, slideIndex) => {
+        const isActive = slideIndex === index;
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("aria-hidden", isActive ? "false" : "true");
+      });
+      thumbButtons.forEach((btn) => {
+        btn.classList.toggle("is-active", Number(btn.getAttribute("data-thumb-index")) === index);
+      });
+      if (track) track.style.transform = `translateX(-${index * 100}%)`;
+      if (counter) counter.textContent = `${index + 1} / ${slideEls.length}`;
+      if (!skipActivate) {
+        slideEls.forEach((slide, slideIndex) => {
+          if (slideIndex !== index) deactivateCarouselSlideMedia(slide);
+        });
+        activateCarouselSlideMedia(slideEls[index]);
+      }
+    }
+
+    function goTo(nextIndex) {
+      index = (nextIndex + slideEls.length) % slideEls.length;
+      applyIndex(false);
+    }
+
+    if (prevBtn) prevBtn.addEventListener("click", () => goTo(index - 1));
+    if (nextBtn) nextBtn.addEventListener("click", () => goTo(index + 1));
+    thumbButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const thumbIndex = Number(btn.getAttribute("data-thumb-index"));
+        if (Number.isFinite(thumbIndex)) goTo(thumbIndex);
+      });
+    });
+    carousel.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goTo(index - 1);
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goTo(index + 1);
+      }
+    });
+
+    applyIndex(false);
+    return { goTo: goTo, current: () => index };
+  }
+
+  function closeMediaLightbox() {
+    const existing = document.getElementById("fides-media-lightbox");
+    if (!existing) return;
+    existing.querySelectorAll("[data-carousel-slide]").forEach((slide) => deactivateCarouselSlideMedia(slide));
+    existing.remove();
+    document.removeEventListener("keydown", onMediaLightboxKeydown);
+  }
+
+  function onMediaLightboxKeydown(event) {
+    if (event.key === "Escape") {
+      event.stopPropagation();
+      closeMediaLightbox();
+    }
+  }
+
+  function openMediaLightbox(startIndex) {
+    const slides = currentModalMediaSlides;
+    if (!slides || !slides.length) return;
+    closeMediaLightbox();
+
+    const multi = slides.length > 1;
+    const html = `
+      <div class="fides-media-lightbox" id="fides-media-lightbox" role="dialog" aria-modal="true" aria-label="Media viewer">
+        <button type="button" class="fides-media-lightbox-close" data-lightbox-close aria-label="Close viewer">${icons.xLarge}</button>
+        <div class="fides-media-lightbox-stage">
+          <div class="fides-use-case-modal-carousel fides-media-lightbox-carousel" tabindex="0">
+            <div class="fides-use-case-modal-carousel-viewport">
+              <div class="fides-use-case-modal-carousel-track" data-carousel-track style="transform: translateX(0);">
+                ${slides
+                  .map(
+                    (slide, index) => `
+                  <div class="fides-use-case-modal-carousel-slide${index === 0 ? " is-active" : ""}" data-carousel-slide="${index}" aria-hidden="${index === 0 ? "false" : "true"}">
+                    ${renderUseCaseModalMediaSlide(slide)}
+                  </div>`
+                  )
+                  .join("")}
+              </div>
+              ${
+                multi
+                  ? `<button type="button" class="fides-carousel-nav fides-carousel-nav-edge fides-carousel-prev" data-carousel-prev aria-label="Previous slide">${icons.chevronLeft}</button>
+                     <button type="button" class="fides-carousel-nav fides-carousel-nav-edge fides-carousel-next" data-carousel-next aria-label="Next slide">${icons.chevronRight}</button>
+                     <span class="fides-carousel-counter-overlay" data-carousel-counter>1 / ${slides.length}</span>`
+                  : ""
+              }
+            </div>
+            ${renderMediaThumbs(slides, "lightbox")}
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML("beforeend", html);
+
+    const lightbox = document.getElementById("fides-media-lightbox");
+    if (!lightbox) return;
+    const carousel = lightbox.querySelector(".fides-media-lightbox-carousel");
+    if (carousel) bindCarousel(carousel, { startIndex: startIndex || 0 });
+
+    lightbox.addEventListener("click", (event) => {
+      if (event.target === lightbox) closeMediaLightbox();
+    });
+    const closeBtn = lightbox.querySelector("[data-lightbox-close]");
+    if (closeBtn) closeBtn.addEventListener("click", closeMediaLightbox);
+    document.addEventListener("keydown", onMediaLightboxKeydown);
+
+    const focusTarget = carousel || closeBtn;
+    if (focusTarget && typeof focusTarget.focus === "function") focusTarget.focus();
+  }
+
+  function initUseCaseModalMediaCarousels() {
+    document.querySelectorAll("#fides-modal-overlay .fides-use-case-modal-carousel").forEach((carousel) => {
+      bindCarousel(carousel, { startIndex: 0 });
+    });
+
+    document.querySelectorAll("#fides-modal-overlay [data-media-expand]").forEach((btn) => {
+      btn.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const idx = Number(btn.getAttribute("data-media-expand"));
+        openMediaLightbox(Number.isFinite(idx) ? idx : 0);
+      });
+    });
   }
 
   function renderUseCaseModalHero(item) {
@@ -933,7 +1240,7 @@
 
   function renderMetaCountryIcon(countryCode) {
     const code = countryCode ? String(countryCode).trim().toUpperCase() : "";
-    if (code.length === 2 && code !== "EU") {
+    if (code.length === 2) {
       return (
         '<img src="https://flagcdn.com/w20/' +
         escapeHtml(code.toLowerCase()) +
@@ -943,11 +1250,136 @@
     return icons.globe;
   }
 
+  function itemSectorCodes(item) {
+    const codes = [];
+    const primary = itemSector(item);
+    if (primary) codes.push(primary);
+    itemListValues(item, "sectors").forEach((code) => {
+      const normalized = String(code || "").trim();
+      if (normalized && !codes.includes(normalized)) codes.push(normalized);
+    });
+    return codes.filter((code) => Object.prototype.hasOwnProperty.call(SECTOR_LABELS, code));
+  }
+
+  function renderUseCaseModalBadges(item) {
+    const stage = normalizeProductionDeployment(item.productionDeployment);
+    const readinessBadge = stage
+      ? `<span class="fides-modal-badge readiness-${escapeHtml(stage)}">${escapeHtml(productionDeploymentLabel(item.productionDeployment))}</span>`
+      : "";
+    const sectorBadges = itemSectorCodes(item)
+      .slice()
+      .sort((a, b) => SECTOR_LABELS[a].localeCompare(SECTOR_LABELS[b], "en", { sensitivity: "base" }))
+      .map((code) => `<span class="fides-modal-badge sector">${escapeHtml(SECTOR_LABELS[code])}</span>`)
+      .join("");
+    if (!readinessBadge && !sectorBadges) return "";
+    return `
+      <div class="fides-modal-badges">
+        <div class="fides-modal-badges-left">
+          ${readinessBadge}
+          ${sectorBadges}
+        </div>
+      </div>
+    `;
+  }
+
+  function orgInitial(label) {
+    const cleaned = String(label || "").trim();
+    if (!cleaned) return "?";
+    return cleaned.charAt(0).toUpperCase();
+  }
+
+  function organizationChipHref(link) {
+    const refId = link && link.refId ? String(link.refId).trim() : "";
+    const orgBase = CATALOG_URLS.organization;
+    if (refId && orgBase) {
+      return `${orgBase}/?org=${encodeURIComponent(refId)}`;
+    }
+    if (link && link.url) return String(link.url);
+    return "";
+  }
+
+  function renderUseCaseInvolvedOrganizations(item) {
+    const orgs = getLinkItems(item, "organizations");
+    if (orgs.length === 0) return "";
+    const chips = orgs
+      .slice()
+      .sort((a, b) => linkItemLabel(a).localeCompare(linkItemLabel(b), undefined, { sensitivity: "base" }))
+      .map((link) => {
+        const label = linkItemLabel(link);
+        const labelHtml = escapeHtml(label);
+        const avatar = `<span class="fides-modal-org-avatar" aria-hidden="true">${escapeHtml(orgInitial(label))}</span>`;
+        const inner = `${avatar}<span class="fides-modal-org-name">${labelHtml}</span>`;
+        const href = organizationChipHref(link);
+        if (href) {
+          const external = !(link && link.refId && CATALOG_URLS.organization);
+          const relAttr = external ? ' target="_blank" rel="noopener noreferrer"' : "";
+          return `<a class="fides-modal-org-chip" href="${escapeHtml(href)}"${relAttr} onclick="event.stopPropagation();">${inner}</a>`;
+        }
+        return `<span class="fides-modal-org-chip fides-modal-org-chip--static">${inner}</span>`;
+      })
+      .join("");
+    return `
+      <div class="fides-modal-orgs">
+        <span class="fides-modal-orgs-label">${icons.building} Involved organizations</span>
+        <div class="fides-modal-orgs-list">${chips}</div>
+      </div>
+    `;
+  }
+
+  function useCaseHasTechnicalDetails(item) {
+    return !!(
+      itemListValues(item, "interactionModes").length ||
+      itemListValues(item, "vcFormats").length ||
+      itemListValues(item, "issuanceProtocols").length ||
+      itemListValues(item, "presentationProtocols").length ||
+      itemListValues(item, "interopProfiles").length
+    );
+  }
+
+  function renderTechnicalKvCell(label, values, labelMap) {
+    if (!values.length) return "";
+    const display = formatListLabels(values, labelMap);
+    return `
+      <div class="fides-kv-row">
+        <span class="fides-kv-key">${escapeHtml(label)}</span>
+        <span class="fides-kv-val">${escapeHtml(display)}</span>
+      </div>`;
+  }
+
+  function renderUseCaseTechnicalAccordion(item) {
+    if (!useCaseHasTechnicalDetails(item)) return "";
+    const cells = [
+      renderTechnicalKvCell("Interaction mode", itemListValues(item, "interactionModes"), INTERACTION_MODE_LABELS),
+      renderTechnicalKvCell("VC format", itemListValues(item, "vcFormats"), VC_FORMAT_LABELS),
+      renderTechnicalKvCell("Issuance protocol", itemListValues(item, "issuanceProtocols"), ISSUANCE_PROTOCOL_LABELS),
+      renderTechnicalKvCell("Presentation protocol", itemListValues(item, "presentationProtocols"), PRESENTATION_PROTOCOL_LABELS),
+      renderTechnicalKvCell("Interop profile", itemListValues(item, "interopProfiles"), INTEROP_PROFILE_LABELS)
+    ].filter(Boolean);
+
+    return `
+      <div class="fides-accordion" id="fides-accordion-technical">
+        <div class="fides-accordion-header-bar">
+          <button class="fides-accordion-header fides-accordion-toggle" type="button" aria-expanded="false">
+            <span class="fides-accordion-title">${icons.fileCheck} Technical details</span>
+          </button>
+          <button type="button" class="fides-accordion-chevron-btn fides-accordion-toggle" aria-expanded="false" aria-label="Toggle technical details section">
+            <span class="fides-accordion-chevron">${icons.chevronDown}</span>
+          </button>
+        </div>
+        <div class="fides-accordion-body">
+          <div class="fides-details-kv fides-details-kv--technical-grid">
+            ${cells.join("")}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
   function renderUseCaseDetailsAccordion(item) {
-    const readinessLabel = stageLabel(item.stage);
-    const sector = itemSector(item);
     const tags = Array.isArray(item.tags) ? item.tags : [];
     const moreInfoUrl = item.moreInfoUrl ? String(item.moreInfoUrl) : "";
+    const sector = itemSector(item);
+    const readinessLabel = productionDeploymentLabel(item.productionDeployment);
 
     return `
       <div class="fides-accordion is-open" id="fides-accordion-details">
@@ -961,31 +1393,23 @@
         </div>
         <div class="fides-accordion-body">
           <div class="fides-details-kv">
-            <div class="fides-kv-row">
-              <span class="fides-kv-key">Use case ID</span>
-              <span class="fides-kv-val fides-modal-identifier">${escapeHtml(item.id || "—")}</span>
-            </div>
-            ${
-              sector
-                ? `<div class="fides-kv-row"><span class="fides-kv-key">Sector</span><span class="fides-kv-val">${escapeHtml(sectorLabel(item))}</span></div>`
-                : ""
-            }
             ${
               item.country
                 ? `<div class="fides-kv-row"><span class="fides-kv-key">Country</span><span class="fides-kv-val">${escapeHtml(countryLabel(item))}</span></div>`
                 : ""
             }
+            ${
+              item.productionDeployment
+                ? `<div class="fides-kv-row"><span class="fides-kv-key">Production deployment</span><span class="fides-kv-val">${escapeHtml(readinessLabel)}</span></div>`
+                : ""
+            }
+            ${
+              sector
+                ? `<div class="fides-kv-row"><span class="fides-kv-key">Sector</span><span class="fides-kv-val">${escapeHtml(sectorLabel(item))}</span></div>`
+                : ""
+            }
             <div class="fides-kv-row">
-              <span class="fides-kv-key">Readiness</span>
-              <span class="fides-kv-val">${escapeHtml(readinessLabel)}</span>
-            </div>
-            ${renderTaxonomyKvRow("Interaction mode", itemListValues(item, "interactionModes"), INTERACTION_MODE_LABELS)}
-            ${renderTaxonomyKvRow("VC format", itemListValues(item, "vcFormats"), VC_FORMAT_LABELS)}
-            ${renderTaxonomyKvRow("Issuance protocol", itemListValues(item, "issuanceProtocols"), ISSUANCE_PROTOCOL_LABELS)}
-            ${renderTaxonomyKvRow("Presentation protocol", itemListValues(item, "presentationProtocols"), PRESENTATION_PROTOCOL_LABELS)}
-            ${renderTaxonomyKvRow("Interop profile", itemListValues(item, "interopProfiles"), INTEROP_PROFILE_LABELS)}
-            <div class="fides-kv-row">
-              <span class="fides-kv-key">Organization</span>
+              <span class="fides-kv-key">Submitted by</span>
               <span class="fides-kv-val">${escapeHtml(item.organizationName || "—")}</span>
             </div>
             <div class="fides-kv-row">
@@ -1018,9 +1442,20 @@
     const item = selectedUseCase;
     const catalogEl = root.querySelector(".fides-use-case-catalog");
     const currentTheme = catalogEl ? catalogEl.getAttribute("data-theme") || "fides" : "fides";
-    const sectorBadge = sectorLabel(item);
-    const readinessLabel = stageLabel(item.stage);
-    const organization = String(item.organizationName || "").trim() || "—";
+    const sectorText = itemSectorCodes(item)
+      .slice()
+      .sort((a, b) => SECTOR_LABELS[a].localeCompare(SECTOR_LABELS[b], "en", { sensitivity: "base" }))
+      .map((code) => SECTOR_LABELS[code])
+      .join(", ");
+    const countryText = item.country ? countryLabel(item) : "";
+    const subtitleParts = [];
+    if (sectorText) {
+      subtitleParts.push(`<span class="fides-modal-subtitle-item">${icons.building} ${escapeHtml(sectorText)}</span>`);
+    }
+    if (countryText) {
+      subtitleParts.push(`<span class="fides-modal-subtitle-item">${icons.globe} ${escapeHtml(countryText)}</span>`);
+    }
+    const subtitleHtml = subtitleParts.join('<span class="fides-modal-subtitle-sep">|</span>');
 
     return `
       <div class="fides-modal-overlay fides-modal-overlay--usecase" id="fides-modal-overlay" data-theme="${escapeHtml(currentTheme)}">
@@ -1030,7 +1465,7 @@
               <div class="fides-modal-logo-placeholder">${icons.globe}</div>
               <div class="fides-modal-title-wrap">
                 <h2 class="fides-modal-title" id="fides-modal-title">${escapeHtml(item.title || item.id)}</h2>
-                <p class="fides-modal-provider">${icons.building} ${escapeHtml(organization)}</p>
+                ${subtitleHtml ? `<p class="fides-modal-provider">${subtitleHtml}</p>` : ""}
               </div>
             </div>
             <div class="fides-modal-header-actions">
@@ -1042,15 +1477,13 @@
           </div>
           <div class="fides-modal-body">
             <div id="fides-modal-rating-slot"></div>
-            <div class="fides-modal-badges">
-              <span class="fides-modal-badge">${escapeHtml(sectorBadge)}</span>
-              <span class="fides-modal-badge">${escapeHtml(readinessLabel)}</span>
-            </div>
+            ${renderUseCaseInvolvedOrganizations(item)}
             ${renderUseCaseModalHero(item)}
             ${renderUseCaseHowItWorks(item)}
             <div class="fides-use-case-modal-accordions">
               ${renderUseCaseEcosystemModel(item)}
               ${LINK_ACCORDION_SECTIONS.map((section) => renderLinkAccordionSection(section, item)).join("")}
+              ${renderUseCaseTechnicalAccordion(item)}
               ${renderUseCaseDetailsAccordion(item)}
             </div>
           </div>
@@ -1069,12 +1502,14 @@
     document.body.insertAdjacentHTML("beforeend", html);
     document.body.style.overflow = "hidden";
     bindUseCaseModalEvents();
+    initUseCaseModalMediaCarousels();
     if (selectedUseCase && selectedUseCase.id) {
       initUseCaseModalLike(selectedUseCase.id);
     }
   }
 
   function closeUseCaseModal() {
+    closeMediaLightbox();
     const existing = document.getElementById("fides-modal-overlay");
     if (existing) existing.remove();
     document.removeEventListener("keydown", onUseCaseModalKeydown);
@@ -1149,6 +1584,8 @@
 
   function onUseCaseModalKeydown(event) {
     if (event.key !== "Escape" || !document.getElementById("fides-modal-overlay")) return;
+    // If the media lightbox is open, let it handle Escape (close lightbox only).
+    if (document.getElementById("fides-media-lightbox")) return;
     selectedUseCase = null;
     clearUseCaseDeepLink();
     closeUseCaseModal();
@@ -1228,24 +1665,24 @@
   let filterFacets = null;
   const filterGroupState = {
     sector: true,
-    stage: true,
+    country: false,
+    productionDeployment: false,
     interactionModes: false,
     vcFormats: false,
     issuanceProtocols: false,
     presentationProtocols: false,
-    interopProfiles: false,
-    quick: true
+    interopProfiles: false
   };
   const filters = {
     search: "",
     sector: [],
+    country: [],
     interactionModes: [],
     vcFormats: [],
     issuanceProtocols: [],
     presentationProtocols: [],
     interopProfiles: [],
-    stage: [],
-    hasVideo: false,
+    productionDeployment: [],
     sortBy: "updated_desc"
   };
 
@@ -1262,13 +1699,13 @@
   function getActiveFilterCount() {
     return (
       filters.sector.length +
+      filters.country.length +
       filters.interactionModes.length +
       filters.vcFormats.length +
       filters.issuanceProtocols.length +
       filters.presentationProtocols.length +
       filters.interopProfiles.length +
-      filters.stage.length +
-      (filters.hasVideo ? 1 : 0)
+      filters.productionDeployment.length
     );
   }
 
@@ -1282,23 +1719,27 @@
   function computeFacets(items) {
     const facets = {
       sector: {},
+      country: {},
       interactionModes: {},
       vcFormats: {},
       issuanceProtocols: {},
       presentationProtocols: {},
       interopProfiles: {},
-      stage: {}
+      productionDeployment: {}
     };
     items.forEach((item) => {
       const sectorValue = itemSector(item);
       if (sectorValue) facets.sector[sectorValue] = (facets.sector[sectorValue] || 0) + 1;
+      if (item.country) {
+        const countryCode = String(item.country).trim().toUpperCase();
+        if (countryCode) facets.country[countryCode] = (facets.country[countryCode] || 0) + 1;
+      }
       TAXONOMY_FILTER_GROUPS.forEach((group) => {
-        if (group.key === "sector") return;
         incrementFacetCounts(facets, group.key, itemListValues(item, group.key));
       });
-      if (item.stage) {
-        const stage = normalizeStage(item.stage);
-        if (stage) facets.stage[stage] = (facets.stage[stage] || 0) + 1;
+      if (item.productionDeployment) {
+        const stage = normalizeProductionDeployment(item.productionDeployment);
+        if (stage) facets.productionDeployment[stage] = (facets.productionDeployment[stage] || 0) + 1;
       }
     });
     return facets;
@@ -1309,6 +1750,10 @@
     if (!selected.length) return true;
     if (itemKey === "sector") {
       const value = itemSector(item);
+      return value !== "" && selected.includes(value);
+    }
+    if (itemKey === "country") {
+      const value = item.country ? String(item.country).trim().toUpperCase() : "";
       return value !== "" && selected.includes(value);
     }
     return selected.some((value) => itemListValues(item, itemKey).includes(value));
@@ -1345,8 +1790,13 @@
   function renderFiltersPanel() {
     if (!settings.showFilters) return "";
     const activeFilterCount = getActiveFilterCount();
-    const stageOptions = READINESS_OPTIONS;
-    const hasVideoCount = currentItems.filter((i) => i.video && i.video.url).length;
+    const stageOptions = PRODUCTION_DEPLOYMENT_OPTIONS;
+    const sectorOptions = Object.keys(SECTOR_LABELS)
+      .filter((key) => (filterFacets?.sector?.[key] || 0) > 0)
+      .sort((a, b) => SECTOR_LABELS[a].localeCompare(SECTOR_LABELS[b], "en", { sensitivity: "base" }));
+    const countryOptions = Object.keys(filterFacets?.country || {})
+      .filter((key) => (filterFacets?.country?.[key] || 0) > 0)
+      .sort((a, b) => countryLabel({ country: a }).localeCompare(countryLabel({ country: b }), "en", { sensitivity: "base" }));
     const taxonomyFilterPanels = TAXONOMY_FILTER_GROUPS.map((group) => {
       const options = Object.keys(group.labels).filter((key) => (filterFacets?.[group.key]?.[key] || 0) > 0);
       if (!options.length) return "";
@@ -1367,23 +1817,30 @@
           </div>
         </div>
         <div class="fides-sidebar-content">
-          <div class="fides-quick-filters">
-            <span class="fides-quick-filters-title">Quick filters</span>
-            <label class="fides-filter-checkbox">
-              <input type="checkbox" id="fides-filter-has-video" ${filters.hasVideo ? "checked" : ""}>
-              <span>Has demo video<span class="fides-filter-option-count">(${hasVideoCount})</span></span>
-            </label>
-          </div>
+          ${
+            sectorOptions.length
+              ? renderCheckboxGroup("Sector", "sector", sectorOptions, (value) => SECTOR_LABELS[value] || prettifyKey(value))
+              : ""
+          }
+          ${
+            countryOptions.length
+              ? renderCheckboxGroup("Country", "country", countryOptions, (value) => countryLabel({ country: value }))
+              : ""
+          }
+          ${renderCheckboxGroup("Production deployment", "productionDeployment", stageOptions, (value) => productionDeploymentLabel(value))}
           ${taxonomyFilterPanels}
-          ${renderCheckboxGroup("Readiness", "stage", stageOptions, (value) => stageLabel(value))}
         </div>
       </aside>
     `;
   }
 
   function computeMetrics(items) {
-    const orgs = new Set(items.map((i) => i.organizationName).filter(Boolean));
-    const linked = items.reduce((sum, item) => sum + countLinkedItems(item), 0);
+    const countries = new Set(
+      items.map((i) => String(i.country || "").trim().toUpperCase()).filter(Boolean)
+    );
+    const productionDeployments = items.filter(
+      (i) => normalizeProductionDeployment(i.productionDeployment) === "yes"
+    ).length;
     const recent = items.filter((i) => {
       const t = Date.parse(i.updatedAt || "");
       if (!Number.isFinite(t)) return false;
@@ -1391,8 +1848,8 @@
     }).length;
     return {
       total: items.length,
-      organizations: orgs.size,
-      linkedItems: linked,
+      countries: countries.size,
+      productionDeployments,
       recent
     };
   }
@@ -1401,8 +1858,8 @@
     return `
       <div class="fides-kpi-row">
         <div class="fides-kpi-card"><span class="fides-kpi-value">${metrics.total}</span><span class="fides-kpi-label">Use cases</span></div>
-        <div class="fides-kpi-card"><span class="fides-kpi-value">${metrics.organizations}</span><span class="fides-kpi-label">Organizations</span></div>
-        <div class="fides-kpi-card"><span class="fides-kpi-value">${metrics.linkedItems}</span><span class="fides-kpi-label">Linked items</span></div>
+        <div class="fides-kpi-card"><span class="fides-kpi-value">${metrics.countries}</span><span class="fides-kpi-label">Countries</span></div>
+        <div class="fides-kpi-card"><span class="fides-kpi-value">${metrics.productionDeployments}</span><span class="fides-kpi-label">Production deployments</span></div>
         <div class="fides-kpi-card"><span class="fides-kpi-value">${metrics.recent}</span><span class="fides-kpi-label">Updated last 30 days</span></div>
       </div>
     `;
@@ -1443,7 +1900,7 @@
 
   function renderUseCaseCard(item) {
     const imageUrl = deriveCardImage(item);
-    const readinessLabel = stageLabel(item.stage);
+    const readinessLabel = productionDeploymentLabel(item.productionDeployment);
     const summary = String(item.summary || "").trim();
     const ctaUrl = item.moreInfoUrl || (item.video && item.video.url) || "";
     const heroStyle = imageUrl ? ` style="background-image:url('${escapeHtml(imageUrl)}')"` : "";
@@ -1467,47 +1924,80 @@
         </div>
         <div class="fides-use-case-meta-strip">
           ${renderMetaItem(renderMetaCountryIcon(countryCode), "Country", countryLabel(item))}
-          ${renderMetaItem(icons.check, "Readiness", readinessLabel)}
-          ${renderMetaItem(icons.shield, "Sector", sectorLabel(item))}
+          ${renderMetaItem(icons.check, "Production deployment", readinessLabel)}
+          ${renderMetaItem(icons.building, "Sector", sectorLabel(item))}
         </div>
         <footer class="fides-credential-footer">${renderViewUseCaseDetails(ctaUrl)}</footer>
       </article>
     `;
   }
 
+  function renderUseCaseListLike(useCaseId) {
+    if (!RATINGS_API_BASE) return "";
+    const summary = ratingSummariesByUseCaseId[useCaseId];
+    const count = summary ? Number(summary.count) || 0 : 0;
+    const isLiked = summary && summary.myRating === 1;
+    return (
+      '<span class="fides-row-like-badge' +
+      (isLiked ? " is-liked" : "") +
+      '" title="Community likes">' +
+      '<span class="fides-row-like-star" aria-hidden="true">★</span>' +
+      '<span class="fides-row-like-count">' +
+      escapeHtml(String(count)) +
+      "</span></span>"
+    );
+  }
+
+  function renderUseCaseListHeader() {
+    return `
+      <div class="fides-use-case-list-header" aria-hidden="true">
+        <div>Use case</div>
+        <div class="fides-list-col-likes"></div>
+        <div>Country</div>
+        <div>Production deployment</div>
+        <div>Sector</div>
+        <div style="padding-left:0.75rem">Updated</div>
+      </div>
+    `;
+  }
+
   function renderUseCaseRow(item) {
-    const readinessLabel = stageLabel(item.stage);
+    const readinessLabel = productionDeploymentLabel(item.productionDeployment);
     const sectorText = sectorLabel(item);
     const countryText = countryLabel(item);
-    const summary = String(item.summary || "");
-    const shortSummary = summary.length > 180 ? `${summary.slice(0, 177)}...` : summary;
-    const ctaUrl = item.moreInfoUrl || (item.video && item.video.url) || "";
+    const countryCode = item.country ? String(item.country).trim().toUpperCase() : "";
+    const useCaseId = String(item.id || "");
 
     return `
-      <article class="fides-use-case-row-item" data-use-case-id="${escapeHtml(item.id || "")}" role="button" tabindex="0">
-        <div class="fides-use-case-row-main">
-          <h3>${escapeHtml(item.title || item.id)}</h3>
-          <p>${escapeHtml(shortSummary)}</p>
+      <article class="fides-use-case-row-item" data-use-case-id="${escapeHtml(useCaseId)}" role="button" tabindex="0" aria-label="${escapeHtml(item.title || item.id)}">
+        <div class="fides-row-name">
+          <span class="fides-row-name-text" title="${escapeHtml(item.title || item.id)}">${escapeHtml(item.title || item.id)}</span>
         </div>
-        <div class="fides-use-case-row-meta">
-          <span>${escapeHtml(countryText)}</span>
-          <span>${escapeHtml(readinessLabel)}</span>
-          <span>${escapeHtml(sectorText)}</span>
+        <div class="fides-row-likes">${renderUseCaseListLike(useCaseId)}</div>
+        <div class="fides-row-country">
+          <span class="fides-row-country-icon" aria-hidden="true">${renderMetaCountryIcon(countryCode)}</span>
+          <span class="fides-row-country-text">${escapeHtml(countryText)}</span>
         </div>
-        ${renderViewUseCaseDetails(ctaUrl)}
+        <div class="fides-row-deployment">${escapeHtml(readinessLabel)}</div>
+        <div class="fides-row-sector">${escapeHtml(sectorText)}</div>
+        <div class="fides-row-updated">${escapeHtml(formatDateLabel(item.updatedAt))}</div>
       </article>
     `;
   }
 
   function renderCards(items) {
     const mode = effectiveView();
+    if (items.length === 0) {
+      return `
+      <div class="fides-use-case-grid" data-view="${escapeHtml(mode)}" data-columns="${escapeHtml(settings.columns)}">
+        <p class="fides-empty">No use cases found.</p>
+      </div>
+    `;
+    }
     return `
       <div class="fides-use-case-grid" data-view="${escapeHtml(mode)}" data-columns="${escapeHtml(settings.columns)}">
-        ${
-          items.length > 0
-            ? items.map((item) => (mode === "list" ? renderUseCaseRow(item) : renderUseCaseCard(item))).join("")
-            : '<p class="fides-empty">No use cases found.</p>'
-        }
+        ${mode === "list" ? renderUseCaseListHeader() : ""}
+        ${items.map((item) => (mode === "list" ? renderUseCaseRow(item) : renderUseCaseCard(item))).join("")}
       </div>
     `;
   }
@@ -1568,6 +2058,12 @@
     bindEvents();
   }
 
+  function linkedWalletSearchTerms(item) {
+    return [...getLinkItems(item, "personalWallets"), ...getLinkItems(item, "businessWallets")]
+      .map(linkItemLabel)
+      .filter((label) => label && label !== "—");
+  }
+
   function getFilteredUseCases() {
     const list = currentItems
       .filter((item) => {
@@ -1579,6 +2075,8 @@
             ...(item.tags ?? []),
             sectorLabel(item),
             itemSector(item),
+            countryLabel(item),
+            ...linkedWalletSearchTerms(item),
             ...itemListValues(item, "interactionModes").map((v) => INTERACTION_MODE_LABELS[v] || v),
             ...itemListValues(item, "vcFormats").map((v) => VC_FORMAT_LABELS[v] || v),
             ...itemListValues(item, "issuanceProtocols").map((v) => ISSUANCE_PROTOCOL_LABELS[v] || v),
@@ -1590,13 +2088,13 @@
           if (!haystack.includes(filters.search)) return false;
         }
         if (!itemMatchesArrayFilter(item, "sector", "sector")) return false;
+        if (!itemMatchesArrayFilter(item, "country", "country")) return false;
         if (!itemMatchesArrayFilter(item, "interactionModes", "interactionModes")) return false;
         if (!itemMatchesArrayFilter(item, "vcFormats", "vcFormats")) return false;
         if (!itemMatchesArrayFilter(item, "issuanceProtocols", "issuanceProtocols")) return false;
         if (!itemMatchesArrayFilter(item, "presentationProtocols", "presentationProtocols")) return false;
         if (!itemMatchesArrayFilter(item, "interopProfiles", "interopProfiles")) return false;
-        if (filters.stage.length > 0 && !filters.stage.includes(normalizeStage(item.stage || ""))) return false;
-        if (filters.hasVideo && !(item.video && item.video.url)) return false;
+        if (filters.productionDeployment.length > 0 && !filters.productionDeployment.includes(normalizeProductionDeployment(item.productionDeployment || ""))) return false;
         return true;
       })
       .slice();
@@ -1623,8 +2121,8 @@
     const kpiValues = root.querySelectorAll(".fides-kpi-card .fides-kpi-value");
     if (kpiValues.length >= 4) {
       kpiValues[0].textContent = String(metrics.total);
-      kpiValues[1].textContent = String(metrics.organizations);
-      kpiValues[2].textContent = String(metrics.linkedItems);
+      kpiValues[1].textContent = String(metrics.countries);
+      kpiValues[2].textContent = String(metrics.productionDeployments);
       kpiValues[3].textContent = String(metrics.recent);
     }
 
@@ -1637,7 +2135,6 @@
     const searchInput = root.querySelector("#fides-search-input");
     const searchClear = root.querySelector("#fides-search-clear");
     const sortSelect = root.querySelector("#fides-sort-select");
-    const hasVideoFilter = root.querySelector("#fides-filter-has-video");
     const clearBtn = root.querySelector("#fides-clear");
 
     if (searchInput) {
@@ -1661,23 +2158,17 @@
         renderResultsOnly();
       });
     }
-    if (hasVideoFilter) {
-      hasVideoFilter.addEventListener("change", (e) => {
-        filters.hasVideo = Boolean(e.target.checked);
-        render();
-      });
-    }
     if (clearBtn) {
       clearBtn.addEventListener("click", () => {
         filters.search = "";
         filters.sector = [];
+        filters.country = [];
         filters.interactionModes = [];
         filters.vcFormats = [];
         filters.issuanceProtocols = [];
         filters.presentationProtocols = [];
         filters.interopProfiles = [];
-        filters.stage = [];
-        filters.hasVideo = false;
+        filters.productionDeployment = [];
         filters.sortBy = "updated_desc";
         render();
       });
@@ -1754,21 +2245,229 @@
     }
 
     bindUseCaseCardEvents();
+    initVocabularyInfo(root);
+  }
+
+  function isFidesLocalDevHost() {
+    try {
+      const host = window.location.hostname || "";
+      const href = window.location.href || "";
+      return host.includes(".local") || href.includes(".local");
+    } catch (_err) {
+      return false;
+    }
+  }
+
+  async function loadVocabulary(primaryUrl, fallbackUrl) {
+    let first = primaryUrl;
+    let second = fallbackUrl;
+    if (isFidesLocalDevHost() && primaryUrl && fallbackUrl) {
+      first = fallbackUrl;
+      second = primaryUrl;
+    }
+    const tryLoad = async (url) => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      return data.terms || null;
+    };
+    if (first) {
+      try {
+        return await tryLoad(first);
+      } catch (e) {
+        console.warn("Vocabulary load failed (first):", e.message);
+      }
+    }
+    if (second) {
+      try {
+        return await tryLoad(second);
+      } catch (e) {
+        console.warn("Vocabulary load failed (second):", e.message);
+      }
+    }
+    return null;
+  }
+
+  function hideVocabularyPopup() {
+    const overlay = document.querySelector(".fides-vocab-overlay");
+    const popup = document.querySelector(".fides-vocab-popup");
+    if (overlay) overlay.remove();
+    if (popup) popup.remove();
+  }
+
+  function filterCheckboxLabelTextWithoutCount(label) {
+    const span = label.querySelector("span");
+    if (!span) return label.textContent.trim();
+    const clone = span.cloneNode(true);
+    clone.querySelectorAll(".fides-filter-option-count").forEach((el) => el.remove());
+    return clone.textContent.trim();
+  }
+
+  function showVocabularyPopup(button, groupEl, vocabKey) {
+    hideVocabularyPopup();
+    if (!vocabulary) return;
+    const groupTerm = vocabulary[vocabKey];
+    const categoryName = (groupEl.querySelector(".fides-filter-label") || {}).textContent
+      ? groupEl.querySelector(".fides-filter-label").textContent.trim()
+      : "";
+    let html = "";
+    if (categoryName) html += '<p class="fides-vocab-popup-title"><strong>' + escapeHtml(categoryName) + "</strong></p>";
+    if (groupTerm && groupTerm.description) html += '<p class="fides-vocab-popup-intro">' + escapeHtml(groupTerm.description) + "</p>";
+    const optionsEl = groupEl.querySelector(".fides-filter-options");
+    if (optionsEl) {
+      const labels = optionsEl.querySelectorAll("label.fides-filter-checkbox");
+      if (labels.length > 0) {
+        const listItems = [];
+        labels.forEach((label) => {
+          const input = label.querySelector("input");
+          const value = input ? input.dataset.value || input.value : "";
+          const labelText = filterCheckboxLabelTextWithoutCount(label);
+          const term = vocabulary[value] || null;
+          const desc = term && term.description ? escapeHtml(term.description) : "";
+          listItems.push({ labelText, desc });
+        });
+        const hasAnyOptionDesc = listItems.some((item) => item.desc);
+        if (hasAnyOptionDesc) {
+          html += '<ul class="fides-vocab-popup-list">';
+          listItems.forEach((item) => {
+            html += "<li><strong>" + escapeHtml(item.labelText) + "</strong>" + (item.desc ? ": " + item.desc : "") + "</li>";
+          });
+          html += "</ul>";
+        }
+      }
+    }
+    if (!html) html = "<p>No description available.</p>";
+    const popup = document.createElement("div");
+    popup.className = "fides-vocab-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-label", "Filter explanation");
+    popup.innerHTML = html;
+    const overlay = document.createElement("div");
+    overlay.className = "fides-vocab-overlay";
+    document.body.appendChild(overlay);
+    document.body.appendChild(popup);
+    const margin = 20;
+    const rect = button.getBoundingClientRect();
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const pw = popup.offsetWidth;
+    const ph = popup.offsetHeight;
+    const left = Math.max(margin, Math.min(rect.right + 40, w - pw - margin));
+    const top = Math.max(margin, Math.min((h - ph) / 2, h - ph - margin));
+    popup.style.left = left + "px";
+    popup.style.top = top + "px";
+    setTimeout(() => {
+      overlay.classList.add("visible");
+      popup.classList.add("visible");
+    }, 10);
+    const close = (e) => {
+      if (e && e.target.closest && e.target.closest(".fides-vocab-popup")) return;
+      hideVocabularyPopup();
+      document.removeEventListener("click", close, true);
+      document.removeEventListener("keydown", onKeydown);
+    };
+    function onKeydown(e) {
+      if (e.key === "Escape") close();
+    }
+    document.addEventListener("keydown", onKeydown);
+    setTimeout(() => document.addEventListener("click", close, true), 0);
+  }
+
+  function initVocabularyInfo(containerEl) {
+    if (!vocabulary) return;
+    hideVocabularyPopup();
+    containerEl.querySelectorAll(".fides-vocab-info").forEach((btn) => btn.remove());
+    containerEl.querySelectorAll(".fides-filter-group").forEach((groupEl) => {
+      const toggle = groupEl.querySelector(".fides-filter-label-toggle");
+      const labelSpan = toggle && toggle.querySelector(".fides-filter-label");
+      if (!toggle || !labelSpan) return;
+      const filterGroup = groupEl.dataset.filterGroup;
+      const vocabKey = USE_CASE_FILTER_TO_VOCAB[filterGroup] || filterGroup;
+      if (!vocabulary[vocabKey]) return;
+      const infoBtn = document.createElement("button");
+      infoBtn.type = "button";
+      infoBtn.className = "fides-vocab-info";
+      infoBtn.dataset.group = vocabKey;
+      infoBtn.setAttribute("aria-label", "Explain filter");
+      infoBtn.textContent = "i";
+      infoBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        showVocabularyPopup(e.currentTarget, groupEl, vocabKey);
+      });
+      const parent = labelSpan.parentNode;
+      if (parent.classList && parent.classList.contains("fides-filter-label-with-info")) {
+        parent.appendChild(infoBtn);
+        return;
+      }
+      const wrapper = document.createElement("div");
+      wrapper.className = "fides-filter-label-with-info";
+      parent.insertBefore(wrapper, labelSpan);
+      wrapper.appendChild(labelSpan);
+      wrapper.appendChild(infoBtn);
+      const spacer = document.createElement("span");
+      spacer.className = "fides-filter-toggle-spacer";
+      spacer.setAttribute("aria-hidden", "true");
+      parent.insertBefore(spacer, wrapper.nextSibling);
+    });
+  }
+
+  async function fetchUseCases(url, options) {
+    const response = await fetch(url, options || {});
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const json = await response.json();
+    return Array.isArray(json.useCases) ? json.useCases : [];
+  }
+
+  // Try the git-versioned GitHub aggregate first, then fall back to the
+  // same-origin REST /catalog. The REST endpoint is also used when GitHub
+  // returns an empty set (e.g. a local site with no published git data yet).
+  async function loadUseCases() {
+    if (aggregatedUrl) {
+      try {
+        const items = await fetchUseCases(aggregatedUrl, { cache: "no-cache" });
+        if (items.length > 0) return items;
+      } catch (githubError) {
+        console.warn("Use case GitHub source unavailable, falling back to REST:", githubError.message);
+      }
+    }
+    if (apiBase) {
+      return fetchUseCases(`${apiBase}/catalog`);
+    }
+    return [];
   }
 
   async function load() {
-    if (!apiBase) return;
+    if (!aggregatedUrl && !apiBase) return;
     try {
-      const response = await fetch(`${apiBase}/catalog`);
-      const json = await response.json();
-      currentItems = Array.isArray(json.useCases)
-        ? json.useCases.map((item) => Object.assign({}, item, { stage: normalizeStage(item.stage) }))
-        : [];
+      const rawItems = await loadUseCases();
+      currentItems = rawItems.map((item) => Object.assign({}, item, { productionDeployment: normalizeProductionDeployment(item.productionDeployment) }));
       filterFacets = computeFacets(currentItems);
       await loadUseCaseRatingSummaries(currentItems);
       render();
       openUseCaseFromQueryParam();
+      if (VOCABULARY_URL || VOCABULARY_FALLBACK_URL) {
+        loadVocabulary(VOCABULARY_URL, VOCABULARY_FALLBACK_URL)
+          .then((terms) => {
+            vocabulary = terms;
+            if (vocabulary) initVocabularyInfo(root);
+          })
+          .catch((vocabError) => {
+            console.warn("Use case vocabulary load failed:", vocabError.message);
+          });
+      }
     } catch (_err) {
+      // Reveal the server-rendered SSR fallback (if present) instead of
+      // wiping the container with an error — keeps content for no-JS/crawlers
+      // and for users when the upstream catalog feed is unreachable.
+      const ssrFallback = root.querySelector('[data-fides-ssr="usecase"]');
+      if (ssrFallback) {
+        ssrFallback.style.display = "";
+        ssrFallback.removeAttribute("aria-hidden");
+        const spinner = root.querySelector('[data-fides-ssr-spinner="1"]');
+        if (spinner) spinner.remove();
+        return;
+      }
       root.innerHTML = '<p class="fides-form-message is-error">Could not load catalog data.</p>';
     }
   }

@@ -1,208 +1,50 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://fides.community/schemas/use-case-catalog/v1.1",
-  "title": "FIDES Use Case Catalog Aggregated Schema",
+  "$id": "https://fides.community/schemas/use-case-catalog/v1",
+  "title": "FIDES Use Case Catalog (per-organization source file)",
+  "description": "One file per submitting organization. Generated from the WordPress submission DB via the /export endpoint and aggregated by the crawler into data/aggregated.json.",
   "type": "object",
-  "required": ["schemaVersion", "catalogType", "lastUpdated", "useCases"],
+  "required": ["orgId", "useCases"],
   "properties": {
-    "schemaVersion": {
-      "type": "string",
-      "const": "1.1.0"
-    },
-    "catalogType": {
-      "type": "string",
-      "const": "use-case-catalog"
-    },
-    "lastUpdated": {
-      "type": "string",
-      "format": "date-time"
-    },
+    "$schema": { "type": "string" },
+    "orgId": { "type": "string", "minLength": 1 },
+    "orgName": { "type": "string" },
     "useCases": {
       "type": "array",
-      "items": {
-        "type": "object",
-        "required": [
-          "id",
-          "sector",
-          "title",
-          "summary",
-          "organizationName",
-          "status",
-          "updatedAt"
-        ],
-        "properties": {
-          "id": {
-            "type": "string",
-            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-          },
-          "sector": {
-            "type": "string",
-            "minLength": 1
-          },
-          "interactionModes": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": ["remote", "proximity"]
-            }
-          },
-          "vcFormats": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "issuanceProtocols": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": ["oid4vci", "other"]
-            }
-          },
-          "presentationProtocols": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "interopProfiles": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "title": {
-            "type": "string",
-            "minLength": 5,
-            "maxLength": 120
-          },
-          "summary": {
-            "type": "string",
-            "minLength": 30,
-            "maxLength": 1200
-          },
-          "userJourney": {
-            "type": "string",
-            "minLength": 1,
-            "maxLength": 8000
-          },
-          "organizationName": {
-            "type": "string",
-            "minLength": 2,
-            "maxLength": 120
-          },
-          "country": {
-            "type": "string",
-            "pattern": "^[A-Z]{2}$|^EU$",
-            "description": "ISO 3166-1 alpha-2 country code or EU for pan-European use cases"
-          },
-          "stage": {
-            "type": "string",
-            "enum": ["demo", "production"]
-          },
-          "imageUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "moreInfoUrl": {
-            "type": "string",
-            "format": "uri"
-          },
-          "video": {
-            "type": "object",
-            "required": ["url", "provider"],
-            "properties": {
-              "url": {
-                "type": "string",
-                "format": "uri"
-              },
-              "provider": {
-                "type": "string",
-                "enum": ["youtube", "vimeo"]
-              }
-            },
-            "additionalProperties": false
-          },
-          "links": {
-            "type": "object",
-            "properties": {
-              "personalWallets": {
-                "$ref": "#/$defs/linksList"
-              },
-              "businessWallets": {
-                "$ref": "#/$defs/linksList"
-              },
-              "wallets": {
-                "$ref": "#/$defs/linksList"
-              },
-              "issuers": {
-                "$ref": "#/$defs/linksList"
-              },
-              "credentials": {
-                "$ref": "#/$defs/linksList"
-              },
-              "organizations": {
-                "$ref": "#/$defs/linksList"
-              },
-              "rps": {
-                "$ref": "#/$defs/linksList"
-              }
-            },
-            "additionalProperties": false
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 1,
-              "maxLength": 64
-            }
-          },
-          "status": {
-            "type": "string",
-            "enum": ["received", "approved", "published"]
-          },
-          "publishedAt": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updatedAt": {
-            "type": "string",
-            "format": "date-time"
-          }
-        },
-        "additionalProperties": false
-      }
+      "items": { "$ref": "#/$defs/useCase" }
     }
   },
+  "additionalProperties": true,
   "$defs": {
-    "linkItem": {
+    "useCase": {
       "type": "object",
+      "required": ["id", "title", "summary"],
       "properties": {
-        "refId": {
-          "type": ["string", "null"]
-        },
-        "labelRaw": {
-          "type": ["string", "null"]
-        },
-        "url": {
-          "type": ["string", "null"],
-          "format": "uri"
-        },
-        "source": {
-          "type": "string",
-          "enum": ["catalog", "manual"]
-        }
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "summary": { "type": "string" },
+        "sector": { "type": "string" },
+        "organizationName": { "type": "string" },
+        "productionDeployment": { "type": "string", "enum": ["yes", "no", ""] },
+        "status": { "type": "string" },
+        "country": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "publishedAt": { "type": ["string", "null"] },
+        "moreInfoUrl": { "type": "string" },
+        "userJourney": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "imageUrls": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "interactionModes": { "type": "array", "items": { "type": "string" } },
+        "vcFormats": { "type": "array", "items": { "type": "string" } },
+        "issuanceProtocols": { "type": "array", "items": { "type": "string" } },
+        "presentationProtocols": { "type": "array", "items": { "type": "string" } },
+        "interopProfiles": { "type": "array", "items": { "type": "string" } },
+        "links": { "type": "object" },
+        "video": { "type": ["object", "null"] },
+        "videos": { "type": "array" }
       },
-      "required": ["refId", "labelRaw", "url", "source"],
-      "additionalProperties": false
-    },
-    "linksList": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/linkItem"
-      }
+      "additionalProperties": true
     }
-  },
-  "additionalProperties": false
+  }
 }

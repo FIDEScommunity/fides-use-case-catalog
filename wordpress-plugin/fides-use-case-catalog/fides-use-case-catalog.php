@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.2.45
+ * Version: 0.5.0
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,14 +11,19 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.2.45');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.5.0');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
 define('FIDES_USE_CASE_CATALOG_PATH', plugin_dir_path(__FILE__));
 define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_case_submissions');
-define('FIDES_USE_CASE_CATALOG_DB_VERSION', '1.4.0');
+define('FIDES_USE_CASE_CATALOG_DB_VERSION', '1.6.0');
 define('FIDES_USE_CASE_LOOKUP_LIMIT', 8);
 
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-taxonomy.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-notifications.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-catalog-ssr.php';
+
+// Boot the SSR/SEO renderer (no-op shim when the tiles base class is absent).
+Fides_Use_Case_Catalog_SSR::bootstrap();
 
 register_activation_hook(__FILE__, 'fides_use_case_catalog_activate');
 add_action('admin_init', 'fides_use_case_catalog_maybe_upgrade_schema');
@@ -26,6 +31,7 @@ add_action('init', 'fides_use_case_catalog_register_with_core', 5);
 add_action('admin_menu', 'fides_use_case_catalog_register_admin_page');
 add_action('admin_post_fides_use_case_set_status', 'fides_use_case_catalog_handle_status_action');
 add_action('admin_post_fides_use_case_save_submission', 'fides_use_case_catalog_handle_save_submission_action');
+add_action('admin_post_fides_use_case_refresh_github', 'fides_use_case_catalog_handle_refresh_github_action');
 add_action('rest_api_init', 'fides_use_case_catalog_register_rest_routes');
 
 function fides_use_case_catalog_activate(): void {
@@ -46,10 +52,11 @@ function fides_use_case_catalog_activate(): void {
         organization_name VARCHAR(191) NOT NULL,
         country_code VARCHAR(8) NULL,
         contact_email VARCHAR(191) NOT NULL,
-        stage VARCHAR(32) NOT NULL DEFAULT '',
+        production_deployment VARCHAR(8) NOT NULL DEFAULT '',
         video_url TEXT NULL,
         video_provider VARCHAR(32) NULL,
         image_url TEXT NULL,
+        media_json LONGTEXT NULL,
         more_info_url TEXT NULL,
         user_journey TEXT NULL,
         tags_json LONGTEXT NULL,
@@ -76,9 +83,10 @@ function fides_use_case_catalog_maybe_upgrade_schema(): void {
         return;
     }
     fides_use_case_catalog_activate();
-    fides_use_case_catalog_migrate_legacy_stages();
+    fides_use_case_catalog_migrate_production_deployment_column();
     fides_use_case_catalog_migrate_awards_columns();
     fides_use_case_catalog_migrate_country_column();
+    fides_use_case_catalog_migrate_media_column();
     update_option('fides_use_case_catalog_db_version', FIDES_USE_CASE_CATALOG_DB_VERSION);
 }
 
@@ -99,60 +107,24 @@ function fides_use_case_catalog_register_rest_route(string $route, array $args):
 }
 
 /**
- * Readiness levels aligned with the RP catalog.
+ * Production deployment options (stored as yes/no).
  *
  * @return array<string, string>
  */
-function fides_use_case_catalog_readiness_levels(): array {
+function fides_use_case_catalog_production_deployment_options(): array {
     return array(
-        'demo'       => 'Demo',
-        'production' => 'Production',
+        'yes' => 'Yes',
+        'no'  => 'No',
     );
 }
 
 /**
- * Map legacy stage values and validate against readiness enum.
+ * Validate production deployment slug.
  */
-function fides_use_case_catalog_normalize_stage(string $stage): string {
-    $stage = sanitize_key(str_replace('_', '-', $stage));
-    $legacy = array(
-        'idea'             => 'demo',
-        'technical-demo'   => 'demo',
-        'use-case-demo'    => 'demo',
-        'pilot'            => 'production',
-        'production-pilot' => 'production',
-        'live'             => 'production',
-    );
-    if (isset($legacy[ $stage ])) {
-        return $legacy[ $stage ];
-    }
-    $levels = fides_use_case_catalog_readiness_levels();
-    return isset($levels[ $stage ]) ? $stage : '';
-}
-
-/**
- * Upgrade stored legacy readiness values to demo/production slugs.
- */
-function fides_use_case_catalog_migrate_legacy_stages(): void {
-    global $wpdb;
-    $table = FIDES_USE_CASE_CATALOG_TABLE;
-    $map = array(
-        'idea'             => 'demo',
-        'technical-demo'   => 'demo',
-        'use-case-demo'    => 'demo',
-        'pilot'            => 'production',
-        'production-pilot' => 'production',
-        'live'             => 'production',
-    );
-    foreach ($map as $old => $new) {
-        $wpdb->update(
-            $table,
-            array('stage' => $new),
-            array('stage' => $old),
-            array('%s'),
-            array('%s')
-        );
-    }
+function fides_use_case_catalog_normalize_production_deployment(string $value): string {
+    $value = sanitize_key(str_replace('_', '-', $value));
+    $options = fides_use_case_catalog_production_deployment_options();
+    return isset($options[ $value ]) ? $value : '';
 }
 
 /**
@@ -183,11 +155,17 @@ function fides_use_case_catalog_register_with_core(): void {
         'usecase',
         array(
             'label'             => 'Use Cases',
-            'json_url'          => rest_url(fides_use_case_catalog_rest_namespace() . '/catalog'),
+            // Source of truth = git-versioned aggregated.json on GitHub (same
+            // pattern as the other FIDES catalogs). The shared core caches this
+            // with a transient + options backup; SSR, sitemap and the catalog
+            // map all read from it. REST /catalog stays available as the JS
+            // fallback and feeds the export/crawler pipeline.
+            'json_url'          => fides_use_case_catalog_aggregated_url(),
             'collection_key'    => 'useCases',
             'id_field'          => 'id',
             'name_field'        => 'title',
             'description_field' => 'summary',
+            'logo_field'        => 'imageUrl',
             'detail_param'      => 'usecase',
             'pages'             => array(
                 'main' => apply_filters('fides_use_case_catalog_path', '/use-cases/'),
@@ -262,6 +240,9 @@ function fides_use_case_catalog_catalog_urls(): array {
         'rpCatalogUrl' => $use_local
             ? $base . '/community-tools/relying-party-catalog/'
             : 'https://fides.community/community-tools/relying-party-catalog/',
+        'organizationCatalogUrl' => $use_local
+            ? $base . '/organizations/'
+            : 'https://fides.community/ecosystem-explorer/organization-catalog/',
     );
 }
 
@@ -283,30 +264,91 @@ function fides_use_case_catalog_lookup_sources(): array {
 }
 
 function fides_use_case_catalog_cached_remote_json(string $url): ?array {
-    $cache_key = 'fides_uc_lookup_' . md5($url);
+    $cache_key  = 'fides_uc_lookup_' . md5($url);
+    $backup_key = 'fides_uc_lookup_bak_' . md5($url);
+
     $cached = get_transient($cache_key);
     if (is_array($cached)) {
         return $cached;
     }
 
     $response = wp_remote_get($url, array('timeout' => 10));
-    if (is_wp_error($response)) {
-        return null;
+    if (! is_wp_error($response)) {
+        $status = wp_remote_retrieve_response_code($response);
+        $body   = wp_remote_retrieve_body($response);
+        if ($status < 400 && $body !== '') {
+            $json = json_decode($body, true);
+            if (is_array($json)) {
+                set_transient($cache_key, $json, 10 * MINUTE_IN_SECONDS);
+                // Long-lived backup so a later upstream outage / rate-limit
+                // still returns the last-known-good payload instead of nothing.
+                set_transient($backup_key, $json, 7 * DAY_IN_SECONDS);
+                return $json;
+            }
+        }
     }
 
-    $status = wp_remote_retrieve_response_code($response);
-    $body = wp_remote_retrieve_body($response);
-    if ($status >= 400 || $body === '') {
+    // Upstream unreachable, rate-limited, or returned junk: serve the stale
+    // backup if we have one, otherwise fail safe with null.
+    $backup = get_transient($backup_key);
+    return is_array($backup) ? $backup : null;
+}
+
+/**
+ * Canonical published data source: the git-versioned aggregated.json on GitHub.
+ *
+ * This — not the WordPress DB — is the source of truth for published use cases.
+ * Organizations can amend their use cases through a pull request against the
+ * per-organization community-catalog files, which the crawler aggregates here.
+ * The WordPress submission DB is only the intake/moderation workspace.
+ */
+function fides_use_case_catalog_aggregated_url(): string {
+    return apply_filters(
+        'fides_use_case_catalog_aggregated_url',
+        'https://raw.githubusercontent.com/FIDEScommunity/fides-use-case-catalog/main/data/aggregated.json'
+    );
+}
+
+/**
+ * Fetch the published use cases from the GitHub aggregated.json.
+ *
+ * Cached + fail-safe via fides_use_case_catalog_cached_remote_json(). Pass
+ * $bust = true to skip the short-lived cache (used by the admin "Refresh from
+ * GitHub" action so moderators always see the latest committed version).
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function fides_use_case_catalog_github_items(bool $bust = false): array {
+    $url = fides_use_case_catalog_aggregated_url();
+    if ($url === '') {
+        return array();
+    }
+    if ($bust) {
+        delete_transient('fides_uc_lookup_' . md5($url));
+    }
+    $json = fides_use_case_catalog_cached_remote_json($url);
+    if (! is_array($json) || ! isset($json['useCases']) || ! is_array($json['useCases'])) {
+        return array();
+    }
+    return $json['useCases'];
+}
+
+/**
+ * Find a single published use case in the GitHub aggregated.json by its id.
+ *
+ * @return array<string, mixed>|null
+ */
+function fides_use_case_catalog_github_item_by_id(string $use_case_id, bool $bust = false): ?array {
+    $use_case_id = trim($use_case_id);
+    if ($use_case_id === '') {
         return null;
     }
-
-    $json = json_decode($body, true);
-    if (! is_array($json)) {
-        return null;
+    foreach (fides_use_case_catalog_github_items($bust) as $item) {
+        if (is_array($item) && isset($item['id']) && (string) $item['id'] === $use_case_id) {
+            return $item;
+        }
     }
-
-    set_transient($cache_key, $json, 10 * MINUTE_IN_SECONDS);
-    return $json;
+    return null;
 }
 
 function fides_use_case_catalog_extract_items_for_type(array $json, string $type): array {
@@ -703,7 +745,7 @@ function fides_use_case_catalog_register_rest_routes(): void {
                 $title = sanitize_text_field((string) ($payload['title'] ?? ''));
                 $summary = trim(wp_kses_post((string) ($payload['summary'] ?? '')));
                 $organization_name = sanitize_text_field((string) ($payload['organizationName'] ?? ''));
-                $stage = fides_use_case_catalog_normalize_stage(sanitize_text_field((string) ($payload['stage'] ?? '')));
+                $production_deployment = fides_use_case_catalog_normalize_production_deployment(sanitize_text_field((string) ($payload['productionDeployment'] ?? '')));
                 $video_url = esc_url_raw((string) ($payload['videoUrl'] ?? ''));
                 $image_url = esc_url_raw((string) ($payload['imageUrl'] ?? ''));
                 $more_info_url = esc_url_raw((string) ($payload['moreInfoUrl'] ?? ''));
@@ -714,8 +756,8 @@ function fides_use_case_catalog_register_rest_routes(): void {
                 if (strlen($title) < 5 || strlen($summary) < 30 || $organization_name === '') {
                     return new WP_REST_Response(array('message' => 'Validation failed for required fields.'), 400);
                 }
-                if ($stage === '') {
-                    return new WP_REST_Response(array('message' => 'Readiness level is required.'), 400);
+                if ($production_deployment === '') {
+                    return new WP_REST_Response(array('message' => 'Production deployment is required.'), 400);
                 }
                 if ($user_journey === '') {
                     return new WP_REST_Response(array('message' => 'How it works is required.'), 400);
@@ -731,13 +773,17 @@ function fides_use_case_catalog_register_rest_routes(): void {
 
                 $taxonomy = fides_use_case_catalog_normalize_taxonomy_payload($payload);
 
-                $video_provider = '';
-                if ($video_url !== '') {
-                    $video_provider = fides_use_case_catalog_detect_video_provider($video_url);
-                    if ($video_provider === '') {
-                        return new WP_REST_Response(array('message' => 'Video URL must be YouTube or Vimeo.'), 400);
-                    }
+                $video_validation_error = fides_use_case_catalog_validate_media_video_urls($payload);
+                if ($video_validation_error !== null) {
+                    return new WP_REST_Response(array('message' => $video_validation_error), 400);
                 }
+
+                $media = fides_use_case_catalog_normalize_media_payload($payload);
+                $media_storage = fides_use_case_catalog_media_storage_fields($media);
+                $video_url = $media_storage['video_url'];
+                $video_provider = $media_storage['video_provider'];
+                $image_url = $media_storage['image_url'];
+                $media_json = $media_storage['media_json'];
 
                 $links = is_array($payload['links'] ?? null) ? $payload['links'] : array();
                 $normalized_links = fides_use_case_catalog_normalize_links_structure($links);
@@ -756,10 +802,11 @@ function fides_use_case_catalog_register_rest_routes(): void {
                         'summary' => $summary,
                         'organization_name' => $organization_name,
                         'contact_email' => $contact_email,
-                        'stage' => $stage,
+                        'production_deployment' => $production_deployment,
                         'video_url' => $video_url !== '' ? $video_url : null,
                         'video_provider' => $video_provider !== '' ? $video_provider : null,
                         'image_url' => $image_url !== '' ? $image_url : null,
+                        'media_json' => $media_json !== '' ? $media_json : null,
                         'more_info_url' => $more_info_url !== '' ? $more_info_url : null,
                         'user_journey' => $user_journey,
                         'tags_json' => wp_json_encode($tags),
@@ -773,6 +820,14 @@ function fides_use_case_catalog_register_rest_routes(): void {
                 if (! $inserted) {
                     return new WP_REST_Response(array('message' => 'Failed to store submission.'), 500);
                 }
+
+                fides_use_case_catalog_notify_submission(
+                    (int) $wpdb->insert_id,
+                    $use_case_id,
+                    $title,
+                    $organization_name,
+                    $contact_email
+                );
 
                 return rest_ensure_response(
                     array(
@@ -820,6 +875,101 @@ function fides_use_case_catalog_register_rest_routes(): void {
                 );
             },
         )
+    );
+
+    // Per-organization export consumed by the git/crawler publishing pipeline.
+    fides_use_case_catalog_register_rest_route(
+        '/export',
+        array(
+            'methods' => WP_REST_Server::READABLE,
+            'permission_callback' => '__return_true',
+            'callback' => function () {
+                return rest_ensure_response(fides_use_case_catalog_build_export());
+            },
+        )
+    );
+}
+
+/**
+ * Build the per-organization export of all published use cases.
+ *
+ * The shape mirrors the other FIDES catalogs' community-catalog source files so
+ * a crawler can write one `community-catalogs/<orgSlug>/use-case-catalog.json`
+ * per organization and aggregate them into a single `data/aggregated.json`.
+ *
+ * @return array<string, mixed>
+ */
+function fides_use_case_catalog_build_export(): array {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    $rows = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT * FROM {$table} WHERE status = %s ORDER BY COALESCE(published_at, updated_at) DESC",
+            'published'
+        ),
+        ARRAY_A
+    );
+
+    $buckets = array();
+    foreach ((array) $rows as $row) {
+        if (! is_array($row)) {
+            continue;
+        }
+        $item   = fides_use_case_catalog_row_to_item($row);
+        $bucket = fides_use_case_catalog_org_bucket($item);
+        $slug   = $bucket['orgSlug'];
+        if (! isset($buckets[$slug])) {
+            $buckets[$slug] = array(
+                'orgSlug'  => $slug,
+                'orgId'    => $bucket['orgId'],
+                'orgName'  => $bucket['orgName'],
+                'useCases' => array(),
+            );
+        }
+        $buckets[$slug]['useCases'][] = $item;
+    }
+
+    ksort($buckets);
+
+    return array(
+        'schemaVersion' => '1.0.0',
+        'catalogType'   => 'use-case-catalog',
+        'generatedAt'   => gmdate(DATE_ATOM),
+        'organizations' => array_values($buckets),
+    );
+}
+
+/**
+ * Resolve the organization bucket (folder slug + id + display name) for an item.
+ *
+ * Prefers a linked organization reference (refId from the organization catalog)
+ * and otherwise derives a stable slug from the free-text organizationName.
+ *
+ * @param array<string, mixed> $item
+ * @return array{orgSlug:string, orgId:string, orgName:string}
+ */
+function fides_use_case_catalog_org_bucket(array $item): array {
+    $org_name = isset($item['organizationName']) ? trim((string) $item['organizationName']) : '';
+
+    $linked_ref = '';
+    if (isset($item['links']['organizations'][0]) && is_array($item['links']['organizations'][0])) {
+        $linked_ref = isset($item['links']['organizations'][0]['refId'])
+            ? trim((string) $item['links']['organizations'][0]['refId'])
+            : '';
+    }
+
+    $slug_basis = $org_name !== '' ? $org_name : $linked_ref;
+    $slug = $slug_basis !== ''
+        ? fides_use_case_catalog_slugify($slug_basis)
+        : 'unknown-organization';
+
+    // A linked refId is already an org:… style identifier from the org catalog.
+    $org_id = $linked_ref !== '' ? $linked_ref : ('org:' . $slug);
+
+    return array(
+        'orgSlug' => $slug,
+        'orgId'   => $org_id,
+        'orgName' => $org_name !== '' ? $org_name : ($linked_ref !== '' ? $linked_ref : 'Unknown organization'),
     );
 }
 
@@ -921,7 +1071,7 @@ function fides_use_case_catalog_form_shortcode(array $atts = array()): string {
     $config = array(
         'apiBase' => esc_url_raw(rest_url(fides_use_case_catalog_rest_namespace())),
         'taxonomy' => fides_use_case_catalog_taxonomy_options(),
-        'readinessLevels' => fides_use_case_catalog_readiness_levels(),
+        'productionDeploymentOptions' => fides_use_case_catalog_production_deployment_options(),
         'isLoggedIn' => true,
         'contactEmail' => sanitize_email((string) $user->user_email),
         'restNonce' => wp_create_nonce('wp_rest'),
@@ -965,9 +1115,15 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
     $config = array_merge(
         array(
             'apiBase' => esc_url_raw(rest_url(fides_use_case_catalog_rest_namespace())),
+            // Primary data source: git-versioned aggregated.json on GitHub
+            // (org-editable via pull request). REST /catalog (apiBase) is the
+            // same-origin fallback for local/empty/unreachable situations.
+            'aggregatedUrl' => esc_url_raw(fides_use_case_catalog_aggregated_url()),
             'taxonomy' => fides_use_case_catalog_taxonomy_options(),
             'columns' => $columns,
-            'readinessLevels' => fides_use_case_catalog_readiness_levels(),
+            'productionDeploymentOptions' => fides_use_case_catalog_production_deployment_options(),
+            'vocabularyUrl' => 'https://raw.githubusercontent.com/FIDEScommunity/fides-interop-profiles/main/data/vocabulary.json',
+            'vocabularyFallbackUrl' => FIDES_USE_CASE_CATALOG_URL . 'assets/vocabulary.json',
             'ratingsApiBase' => rest_url('fides-catalog/v1'),
             'ratingsNonce' => wp_create_nonce('wp_rest'),
             'ratingsIsLoggedIn' => is_user_logged_in(),
@@ -982,9 +1138,15 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
         'before'
     );
 
+    $ssr_html = '';
+    if (class_exists('Fides_Use_Case_Catalog_SSR')) {
+        $ssr_html = Fides_Use_Case_Catalog_SSR::build_initial_html($atts);
+    }
+
     return sprintf(
-        '<div id="fides-use-case-catalog-root" data-columns="%s"></div>',
-        esc_attr($columns)
+        '<div id="fides-use-case-catalog-root" data-columns="%s">%s</div>',
+        esc_attr($columns),
+        $ssr_html
     );
 }
 add_shortcode('fides_use_case_catalog', 'fides_use_case_catalog_list_shortcode');
@@ -1062,11 +1224,45 @@ function fides_use_case_catalog_render_admin_page(): void {
             ARRAY_A
         );
     }
+
+    // Published use cases are owned by the git-versioned GitHub aggregate, which
+    // organizations can amend via pull request. When a moderator opens a
+    // published submission, pull the latest committed version and — if it
+    // differs from the local copy — prefill the form with it (no DB write until
+    // the moderator saves). $github_diff drives the on-screen notice.
+    $github_diff = false;
+    if (is_array($selected_submission)
+        && fides_use_case_catalog_normalize_status((string) $selected_submission['status']) === 'published'
+    ) {
+        $github_item = fides_use_case_catalog_github_item_by_id((string) $selected_submission['use_case_id']);
+        if (is_array($github_item)) {
+            $github_row = fides_use_case_catalog_item_to_row_data($github_item);
+            foreach ($github_row as $col => $value) {
+                $existing = array_key_exists($col, $selected_submission) ? $selected_submission[$col] : null;
+                if ((string) $value !== (string) $existing) {
+                    $github_diff = true;
+                }
+                $selected_submission[$col] = $value;
+            }
+        }
+    }
+
     $rows = $wpdb->get_results("SELECT * FROM {$table} ORDER BY updated_at DESC LIMIT 250", ARRAY_A);
     ?>
     <div class="wrap">
         <h1>Use Case Submissions</h1>
         <p>Review submissions and move them through the publication workflow.</p>
+        <p>
+            <a class="button button-secondary"
+               href="<?php echo esc_url(rest_url(fides_use_case_catalog_rest_namespace() . '/export')); ?>"
+               download="fides-use-cases-export.json"
+               target="_blank" rel="noopener">
+                <?php esc_html_e('Download published export (JSON)', 'fides-use-case-catalog'); ?>
+            </a>
+            <span class="description" style="margin-left:.5em;">
+                <?php esc_html_e('Manual backup of all published use cases, grouped per organization (same data the crawler publishes to git).', 'fides-use-case-catalog'); ?>
+            </span>
+        </p>
         <?php if (! empty($_GET['sector_pending'])) : ?>
             <div class="notice notice-warning is-dismissible">
                 <p><?php esc_html_e('Cannot publish while sector is still “Other”. Open the submission, assign the correct sector, save, then publish.', 'fides-use-case-catalog'); ?></p>
@@ -1082,6 +1278,21 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <p><?php esc_html_e('Submission details saved.', 'fides-use-case-catalog'); ?></p>
             </div>
         <?php endif; ?>
+        <?php if (! empty($_GET['github_refreshed'])) : ?>
+            <div class="notice notice-success is-dismissible">
+                <p><?php esc_html_e('Local copy synced with the published version on GitHub.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if (! empty($_GET['github_missing'])) : ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><?php esc_html_e('This use case was not found in the GitHub aggregated data. It may not be published to git yet (the crawler runs daily), or its id changed.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if ($github_diff) : ?>
+            <div class="notice notice-info">
+                <p><?php esc_html_e('This published use case differs from the version on GitHub (the published source). The form below shows the GitHub version. Save to sync the local copy.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
         <?php if (is_array($selected_submission)) : ?>
             <?php
             $tags = json_decode((string) $selected_submission['tags_json'], true);
@@ -1095,11 +1306,36 @@ function fides_use_case_catalog_render_admin_page(): void {
             $involved_orgs = isset($links['organizations']) && is_array($links['organizations']) ? $links['organizations'] : array();
             $linked_catalog_sections = fides_use_case_catalog_admin_linked_catalog_sections();
             $selected_country = fides_use_case_catalog_normalize_country_code((string) ($selected_submission['country_code'] ?? ''));
+            $selected_media = fides_use_case_catalog_media_from_row($selected_submission);
+            $admin_image_urls_text = implode("\n", $selected_media['images']);
+            $admin_video_urls_text = implode(
+                "\n",
+                array_map(
+                    static function (array $video): string {
+                        return (string) ($video['url'] ?? '');
+                    },
+                    $selected_media['videos']
+                )
+            );
             ?>
             <div class="postbox" style="max-width: 1200px; margin: 16px 0;">
                 <div class="inside">
                     <h2 style="margin-top: 0;">Submission details</h2>
                     <p><strong>Status:</strong> <?php echo esc_html(fides_use_case_catalog_normalize_status((string) $selected_submission['status'])); ?></p>
+
+                    <?php if (fides_use_case_catalog_normalize_status((string) $selected_submission['status']) === 'published') : ?>
+                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin: 0 0 12px;">
+                            <input type="hidden" name="action" value="fides_use_case_refresh_github">
+                            <input type="hidden" name="id" value="<?php echo esc_attr((string) $selected_submission['id']); ?>">
+                            <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('fides_use_case_refresh_github_' . (int) $selected_submission['id'])); ?>">
+                            <button type="submit" class="button button-secondary">
+                                <?php esc_html_e('Refresh from GitHub', 'fides-use-case-catalog'); ?>
+                            </button>
+                            <span class="description" style="margin-left:.5em;">
+                                <?php esc_html_e('Overwrite the local copy with the latest committed version from the GitHub aggregated data.', 'fides-use-case-catalog'); ?>
+                            </span>
+                        </form>
+                    <?php endif; ?>
 
                     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin: 12px 0 16px;">
                         <input type="hidden" name="action" value="fides_use_case_save_submission">
@@ -1127,12 +1363,12 @@ function fides_use_case_catalog_render_admin_page(): void {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row"><label for="uc-stage">Readiness level</label></th>
+                                    <th scope="row"><label for="uc-production-deployment">Production deployment</label></th>
                                     <td>
-                                        <select id="uc-stage" name="stage">
-                                            <option value="" <?php selected((string) $selected_submission['stage'], ''); ?>>-</option>
-                                            <?php foreach (fides_use_case_catalog_readiness_levels() as $stage_key => $stage_label) : ?>
-                                                <option value="<?php echo esc_attr($stage_key); ?>" <?php selected(fides_use_case_catalog_normalize_stage((string) $selected_submission['stage']), $stage_key); ?>><?php echo esc_html($stage_label); ?></option>
+                                        <select id="uc-production-deployment" name="production_deployment">
+                                            <option value="" <?php selected((string) ($selected_submission['production_deployment'] ?? ''), ''); ?>>-</option>
+                                            <?php foreach (fides_use_case_catalog_production_deployment_options() as $option_key => $option_label) : ?>
+                                                <option value="<?php echo esc_attr($option_key); ?>" <?php selected(fides_use_case_catalog_normalize_production_deployment((string) ($selected_submission['production_deployment'] ?? '')), $option_key); ?>><?php echo esc_html($option_label); ?></option>
                                             <?php endforeach; ?>
                                         </select>
                                     </td>
@@ -1175,15 +1411,19 @@ function fides_use_case_catalog_render_admin_page(): void {
                         <table class="form-table" role="presentation">
                             <tbody>
                                 <tr>
-                                    <th scope="row"><label for="uc-image">Cover image</label></th>
+                                    <th scope="row"><label for="uc-image-urls">Cover images</label></th>
                                     <td>
-                                        <input class="regular-text" id="uc-image" name="image_url" type="url" value="<?php echo esc_attr((string) ($selected_submission['image_url'] ?? '')); ?>">
-                                        <p class="description">Landscape image for the catalog card (16:7).</p>
+                                        <textarea class="large-text code" id="uc-image-urls" name="image_urls" rows="4"><?php echo esc_textarea($admin_image_urls_text); ?></textarea>
+                                        <p class="description">One image URL per line. The first image is used on the catalog card; all images appear in the detail modal gallery.</p>
+                                        <?php echo fides_use_case_catalog_render_admin_media_previews($selected_media['images']); ?>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th scope="row"><label for="uc-video">Demo video</label></th>
-                                    <td><input class="regular-text" id="uc-video" name="video_url" type="url" value="<?php echo esc_attr((string) $selected_submission['video_url']); ?>"></td>
+                                    <th scope="row"><label for="uc-video-urls">Demo videos</label></th>
+                                    <td>
+                                        <textarea class="large-text code" id="uc-video-urls" name="video_urls" rows="4"><?php echo esc_textarea($admin_video_urls_text); ?></textarea>
+                                        <p class="description">One YouTube or Vimeo URL per line. All videos appear in the detail modal carousel.</p>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -1302,6 +1542,10 @@ function fides_use_case_catalog_handle_status_action(): void {
         wp_die('Invalid nonce.');
     }
 
+    $previous_status = (string) $wpdb->get_var(
+        $wpdb->prepare("SELECT status FROM {$table} WHERE id = %d", $id)
+    );
+
     $data = array(
         'status' => $status,
         'updated_at' => current_time('mysql', true),
@@ -1330,6 +1574,11 @@ function fides_use_case_catalog_handle_status_action(): void {
     }
 
     $wpdb->update($table, $data, array('id' => $id));
+
+    if ($status === 'published' && $previous_status !== 'published') {
+        fides_use_case_catalog_notify_published($id);
+    }
+
     wp_safe_redirect(admin_url('tools.php?page=fides-use-case-submissions'));
     exit;
 }
@@ -1363,9 +1612,9 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
     $organization_name = sanitize_text_field((string) ($_POST['organization_name'] ?? ''));
     $country_code      = fides_use_case_catalog_sanitize_country_code((string) ($_POST['country_code'] ?? ''));
     $contact_email     = sanitize_email((string) ($_POST['contact_email'] ?? ''));
-    $stage = fides_use_case_catalog_normalize_stage(sanitize_text_field((string) ($_POST['stage'] ?? '')));
-    $video_url = esc_url_raw((string) ($_POST['video_url'] ?? ''));
-    $image_url = esc_url_raw((string) ($_POST['image_url'] ?? ''));
+    $production_deployment = fides_use_case_catalog_normalize_production_deployment(sanitize_text_field((string) ($_POST['production_deployment'] ?? '')));
+    $image_urls_text = isset($_POST['image_urls']) ? (string) wp_unslash($_POST['image_urls']) : '';
+    $video_urls_text = isset($_POST['video_urls']) ? (string) wp_unslash($_POST['video_urls']) : '';
     $more_info_url = esc_url_raw((string) ($_POST['more_info_url'] ?? ''));
     $user_journey = trim(wp_kses_post((string) ($_POST['user_journey'] ?? '')));
     $tags_raw = sanitize_text_field((string) ($_POST['tags'] ?? ''));
@@ -1382,13 +1631,17 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
         wp_die('Required fields are missing or invalid. Assign a sector other than Other and select a country before saving.');
     }
 
-    $video_provider = '';
-    if ($video_url !== '') {
-        $video_provider = fides_use_case_catalog_detect_video_provider($video_url);
-        if ($video_provider === '') {
-            wp_die('Video URL must be YouTube or Vimeo.');
-        }
+    $media_payload = array(
+        'imageUrls' => fides_use_case_catalog_parse_url_lines($image_urls_text),
+        'videoUrls' => fides_use_case_catalog_parse_url_lines($video_urls_text),
+    );
+    $video_validation_error = fides_use_case_catalog_validate_media_video_urls($media_payload);
+    if ($video_validation_error !== null) {
+        wp_die(esc_html($video_validation_error));
     }
+
+    $media = fides_use_case_catalog_normalize_media_payload($media_payload);
+    $media_storage = fides_use_case_catalog_media_storage_fields($media);
 
     $tags = array();
     foreach (explode(',', $tags_raw) as $tag) {
@@ -1410,10 +1663,11 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
             'organization_name' => $organization_name,
             'country_code'      => $country_code,
             'contact_email'     => $contact_email,
-            'stage' => $stage,
-            'video_url' => $video_url !== '' ? $video_url : null,
-            'video_provider' => $video_provider !== '' ? $video_provider : null,
-            'image_url' => $image_url !== '' ? $image_url : null,
+            'production_deployment' => $production_deployment,
+            'video_url' => $media_storage['video_url'] !== '' ? $media_storage['video_url'] : null,
+            'video_provider' => $media_storage['video_provider'] !== '' ? $media_storage['video_provider'] : null,
+            'image_url' => $media_storage['image_url'] !== '' ? $media_storage['image_url'] : null,
+            'media_json' => $media_storage['media_json'] !== '' ? $media_storage['media_json'] : null,
             'more_info_url' => $more_info_url !== '' ? $more_info_url : null,
             'user_journey' => $user_journey !== '' ? $user_journey : null,
             'tags_json' => wp_json_encode($tags),
@@ -1423,6 +1677,48 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
     );
 
     wp_safe_redirect(admin_url('tools.php?page=fides-use-case-submissions&saved=1'));
+    exit;
+}
+
+/**
+ * Pull the latest committed version of a published use case from the GitHub
+ * aggregated.json and overwrite the local DB content columns with it.
+ *
+ * Lets a moderator reconcile the local moderation copy with edits an
+ * organization made through a pull request. Identity/lifecycle columns are
+ * preserved; only content is synced.
+ */
+function fides_use_case_catalog_handle_refresh_github_action(): void {
+    if (! current_user_can('manage_options')) {
+        wp_die('Insufficient permissions.');
+    }
+
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+
+    $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+    $nonce = isset($_POST['_wpnonce']) ? sanitize_text_field((string) $_POST['_wpnonce']) : '';
+    if ($id <= 0 || ! wp_verify_nonce($nonce, 'fides_use_case_refresh_github_' . $id)) {
+        wp_die('Invalid request.');
+    }
+
+    $use_case_id = (string) $wpdb->get_var(
+        $wpdb->prepare("SELECT use_case_id FROM {$table} WHERE id = %d", $id)
+    );
+
+    $redirect = admin_url('tools.php?page=fides-use-case-submissions&submission=' . $id);
+
+    $item = $use_case_id !== '' ? fides_use_case_catalog_github_item_by_id($use_case_id, true) : null;
+    if (! is_array($item)) {
+        wp_safe_redirect(add_query_arg('github_missing', '1', $redirect));
+        exit;
+    }
+
+    $data = fides_use_case_catalog_item_to_row_data($item);
+    $data['updated_at'] = current_time('mysql', true);
+    $wpdb->update($table, $data, array('id' => $id));
+
+    wp_safe_redirect(add_query_arg('github_refreshed', '1', $redirect));
     exit;
 }
 

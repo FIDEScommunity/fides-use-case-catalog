@@ -1,0 +1,135 @@
+{
+  "$schema": "https://fides.community/schemas/vocabulary/v1",
+  "version": "1.1.5",
+  "terms": {
+    "sector": {
+      "description": "Industry or domain the use case mainly applies to (for example public sector, finance, or mobility)."
+    },
+    "country": {
+      "description": "Country where the use case is deployed or primarily relevant."
+    },
+    "productionDeployment": {
+      "description": "Whether the use case is currently deployed in a live operational environment, or is still a demo, pilot, or proof of concept."
+    },
+    "yes": {
+      "description": "The use case is currently running in a live, operational (production) environment."
+    },
+    "no": {
+      "description": "The use case is not yet in production; it is a demo, pilot, or proof of concept."
+    },
+    "interactionMode": {
+      "description": "Determines how the holder interacts with the verifier."
+    },
+    "proximity": {
+      "description": "The Proximity Flow is used when the user and their device are physically near the Relying Party."
+    },
+    "remote": {
+      "description": "The Remote Flow is used when the user and the Relying Party are in different locations, and the interaction happens over the internet."
+    },
+    "both": {
+      "description": "The Relying Party supports both the Proximity Flow and the Remote Flow (user and device physically near the RP in some scenarios, and interaction over the internet from different locations in others)."
+    },
+    "vcFormat": {
+      "description": "The technical format in which credentials are encoded. Different formats support different features like selective disclosure, privacy protection, or compatibility with specific standards."
+    },
+    "SD-JWT-VC": {
+      "description": "IETF JWT-based format allowing holders to selectively reveal only necessary claims using cryptographic hashing."
+    },
+    "mDL/mDoc": {
+      "description": "ISO (18013-5) binary (CBOR) format for mobile documents with strong authentication and selective disclosure."
+    },
+    "JWT-VC": {
+      "description": "W3C credential format using JSON Web Tokens for signing and verification."
+    },
+    "AnonCreds": {
+      "description": "Privacy-preserving format using zero-knowledge proofs for selective disclosure without correlatable identifiers."
+    },
+    "JSON-LD VC": {
+      "description": "W3C VC format supporting rich semantic data with linked data capabilities."
+    },
+    "issuanceProtocol": {
+      "description": "The protocol used to issue credentials from an issuer to a wallet. Defines how authentication, credential request, and delivery work."
+    },
+    "OpenID4VCI": {
+      "description": "OpenID-based protocol for securely issuing credentials to wallets."
+    },
+    "presentationProtocol": {
+      "description": "The protocol used to present credentials from a wallet to a verifier. Defines how credential requests and presentations are exchanged."
+    },
+    "OpenID4VP": {
+      "description": "OpenID-based protocol for requesting and presenting credentials to verifiers."
+    },
+    "DIDComm v2": {
+      "description": "Secure messaging protocol for DID-based communication; used for agent-to-agent credential exchange and notifications."
+    },
+    "DIDComm v1": {
+      "description": "Earlier version of the DIDComm secure messaging protocol for communication between entities with DIDs."
+    },
+    "SIOPv2": {
+      "description": "Self-Issued OpenID Provider; allows the holder to act as an OpenID provider and present self-issued or other credentials."
+    },
+    "ISO 18013-5": {
+      "description": "International standard for mobile driver's licenses with device retrieval (local presentation)."
+    },
+    "interopProfile": {
+      "description": "Interoperability profiles define choices within existing standards and protocols that ensure wallets, issuers, and verifiers work together seamlessly across different implementations."
+    },
+    "DIIP v4": {
+      "description": "Community-driven interoperability profile based on OpenID4VCI and OpenID4VP combined with DIDs, VCDM 2.0 and SD-JWT VC credentials."
+    },
+    "DIIP v5": {
+      "description": "Community-driven interoperability profile based on OpenID4VCI and OpenID4VP 1.0 versions combined with DIDs, VCDM 2.0 and SD-JWT VC credentials."
+    },
+    "EWC v3": {
+      "description": "European Wallet Consortium LSP profile with specification set and conformance approach targeting EUDI Wallet implementations."
+    },
+    "HAIP v1": {
+      "description": "OpenID Foundation interoperability profile for high-assurance exchanges, including both SD-JWT VC and ISO mdoc vc formats. Will be used in EUDI-Wallet implementations."
+    },
+    "EUDI Wallet ARF": {
+      "description": "EUDI Wallet Architecture and Reference Framework defining requirements and guidance for interoperable EUDI Wallets."
+    },
+    "public_sector": {
+      "description": "Government and public administration: public services, e-government, and official issuers."
+    },
+    "finance": {
+      "description": "Banking, insurance, payments, and financial services."
+    },
+    "trade": {
+      "description": "International and domestic trade, commerce, and marketplaces."
+    },
+    "supply_chain": {
+      "description": "Logistics, sourcing, traceability, and end-to-end supply chain operations."
+    },
+    "manufacturing": {
+      "description": "Production, industrial goods, and factory-related processes."
+    },
+    "energy": {
+      "description": "Utilities, power, renewables, and energy markets."
+    },
+    "agriculture": {
+      "description": "Farming, agrifood production, and rural economy."
+    },
+    "food": {
+      "description": "Food safety, labeling, retail food, and agrifood distribution."
+    },
+    "retail": {
+      "description": "Consumer retail, e-commerce, and point-of-sale contexts."
+    },
+    "healthcare": {
+      "description": "Health services, medical records, and patient-related credentials where applicable."
+    },
+    "construction": {
+      "description": "Built environment, construction sites, and infrastructure projects."
+    },
+    "mobility": {
+      "description": "Transport, automotive, maritime, aviation, and traveller-related use cases."
+    },
+    "digital": {
+      "description": "Digital services, ICT, and online platforms when no more specific sector applies."
+    },
+    "education": {
+      "description": "Schools, universities, training providers, and qualifications."
+    }
+  }
+}

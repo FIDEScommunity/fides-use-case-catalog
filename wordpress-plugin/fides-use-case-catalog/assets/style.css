@@ -149,10 +149,30 @@
   margin: 0;
 }
 
-.fides-form-choice input[type="checkbox"] {
+.fides-form-choice input[type="checkbox"],
+.fides-form-choice input[type="radio"] {
   width: auto;
   margin: 0;
   flex-shrink: 0;
+}
+
+.fides-form-choices-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 32px;
+  min-height: 44px;
+}
+
+.fides-form-choices-inline .fides-form-choice {
+  flex: 0 0 auto;
+}
+
+.fides-form-label {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #0f172a;
 }
 
 .fides-form-choice span {
@@ -174,6 +194,28 @@
 .fides-form-grid-pair .fides-form-row {
   margin-bottom: 0;
   min-width: 0;
+}
+
+/* Align label → help → control across both columns so the fields line up,
+   regardless of how many lines the help text wraps to. */
+.fides-form-grid-pair--aligned {
+  grid-template-rows: auto auto auto;
+  row-gap: var(--fides-field-gap);
+  align-items: start;
+}
+
+.fides-form-grid-pair--aligned .fides-form-row {
+  grid-template-rows: subgrid;
+  grid-row: span 3;
+  height: 100%;
+}
+
+.fides-form-grid-pair--aligned .fides-form-row > .fides-help {
+  align-self: start;
+}
+
+.fides-form-grid-pair--aligned .fides-form-choices-inline {
+  align-self: stretch;
 }
 
 .fides-form-row textarea.fides-user-journey {
@@ -639,6 +681,50 @@
   align-items: stretch;
 }
 
+.fides-use-case-form .fides-media-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fides-use-case-form .fides-media-row .fides-media-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.fides-use-case-form .fides-media-row .fides-media-inputs input[type="url"] {
+  flex: 1 1 12rem;
+  min-width: 0;
+  min-height: 42px;
+}
+
+.fides-use-case-form .fides-media-row .fides-media-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: 15px;
+  line-height: 1.4;
+  border-radius: 8px;
+  font-weight: 500;
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  min-height: 42px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.fides-use-case-form .fides-media-row button.fides-media-action-btn {
+  width: 5.75rem;
+  min-width: 5.75rem;
+}
+
+.fides-use-case-form .fides-media-row .fides-image-preview {
+  margin-top: 0.35rem;
+}
+
 .fides-media-inputs input[type="url"] {
   width: 100%;
   min-width: 0;
@@ -669,6 +755,17 @@
     margin-top: 0;
   }
 
+  /* Linked-item search row: on narrow screens the "Add manually" button stole
+     so much width that the search input truncated its placeholder. Stack the
+     input above a full-width button instead. */
+  .fides-linked-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .fides-linked-inputs .fides-secondary-btn {
+    width: 100%;
+  }
+
 }
 
 .fides-upload-btn {
@@ -677,17 +774,6 @@
   justify-content: center;
   margin: 0;
   cursor: pointer;
-}
-
-.fides-media-inputs .fides-upload-btn {
-  padding: 10px 14px;
-  font-size: 15px;
-  line-height: 1.4;
-  border-radius: 8px;
-  font-weight: 500;
-  box-sizing: border-box;
-  align-self: stretch;
-  height: 100%;
 }
 
 .fides-image-preview {
@@ -785,6 +871,32 @@
 /* Use case catalog (listing) */
 #fides-use-case-catalog-root {
   color: #0f172a;
+}
+
+/* Initial loading state (also server-rendered via SSR before the JS UI mounts).
+   Scoped to the root so it works before the themed .fides-use-case-catalog
+   wrapper — which holds the CSS variables — exists. Matches the other catalogs. */
+#fides-use-case-catalog-root .fides-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  color: var(--fides-text-secondary, #374151);
+}
+
+#fides-use-case-catalog-root .fides-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--fides-border, rgba(0, 0, 0, 0.12));
+  border-top-color: var(--fides-accent, #0a6ef3);
+  border-radius: 50%;
+  animation: fides-spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes fides-spin {
+  to { transform: rotate(360deg); }
 }
 
 /* Canonical credential/issuer-like shell and controls */
@@ -1058,6 +1170,138 @@
 
 .fides-use-case-catalog .fides-filter-group.has-active .fides-filter-label {
   color: var(--fides-accent);
+}
+
+/* Vocabulary [i] explainer: wrapper keeps label + button together, spacer
+   pushes the active indicator and chevron to the right edge. */
+.fides-use-case-catalog .fides-filter-label-with-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.fides-use-case-catalog .fides-filter-label-with-info .fides-filter-label {
+  flex: 0 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fides-use-case-catalog .fides-filter-toggle-spacer {
+  flex: 1;
+  min-width: 0.5rem;
+}
+
+.fides-use-case-catalog .fides-vocab-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  padding: 0;
+  margin: 0;
+  border: 1px solid var(--fides-border);
+  border-radius: 50%;
+  background: var(--fides-bg-secondary);
+  color: var(--fides-text-muted);
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color 0.2s, background 0.2s, border-color 0.2s, transform 0.15s;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.fides-use-case-catalog .fides-vocab-info:hover {
+  color: #fff;
+  background: var(--fides-accent);
+  border-color: var(--fides-accent);
+  transform: scale(1.05);
+}
+
+.fides-use-case-catalog .fides-vocab-info:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--fides-accent);
+}
+
+.fides-vocab-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 10000000;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.fides-vocab-overlay.visible {
+  opacity: 1;
+}
+
+.fides-vocab-popup {
+  position: fixed;
+  z-index: 10000001;
+  max-width: 480px;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: 1.125rem 1.375rem;
+  background: #ffffff;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.fides-vocab-popup.visible {
+  opacity: 1;
+}
+
+.fides-vocab-popup-title {
+  margin: 0 0 0.5rem 0;
+  color: #1e293b;
+}
+
+.fides-vocab-popup-intro {
+  margin: 0 0 0.875rem 0;
+  color: #475569;
+  font-size: 0.875rem;
+}
+
+.fides-vocab-popup-list {
+  margin: 0;
+  padding-left: 1.375rem;
+  color: #334155;
+}
+
+.fides-vocab-popup-list li {
+  margin-bottom: 0.5rem;
+}
+
+.fides-vocab-popup-list li:last-child {
+  margin-bottom: 0;
+}
+
+.fides-vocab-popup-list strong {
+  color: #1e293b;
+}
+
+@media (max-width: 520px) {
+  .fides-vocab-popup {
+    left: 1rem !important;
+    right: 1rem !important;
+    width: auto !important;
+    max-width: none !important;
+    max-height: 85vh;
+    box-sizing: border-box;
+  }
 }
 
 .fides-use-case-catalog .fides-filter-count.hidden {
@@ -1531,7 +1775,26 @@
   margin: 0;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.fides-modal-overlay .fides-modal-subtitle-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.fides-modal-overlay .fides-modal-subtitle-item svg {
+  flex-shrink: 0;
+  width: 15px;
+  height: 15px;
+  opacity: 0.8;
+}
+
+.fides-modal-overlay .fides-modal-subtitle-sep {
+  color: var(--fides-text-secondary);
+  opacity: 0.5;
 }
 
 .fides-modal-overlay .fides-modal-header-actions {
@@ -1568,8 +1831,16 @@
 .fides-modal-overlay .fides-modal-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  align-items: center;
+  gap: 0.75rem;
   margin-bottom: 1rem;
+}
+
+.fides-modal-overlay .fides-modal-badges-left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .fides-modal-overlay .fides-modal-badge {
@@ -1582,6 +1853,156 @@
   color: var(--fides-text-secondary);
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+.fides-modal-overlay .fides-modal-badge.readiness-demo {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.25);
+}
+
+.fides-modal-overlay .fides-modal-badge.readiness-production {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.25);
+}
+
+.fides-modal-overlay .fides-modal-badge.sector {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c4b5fd;
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+.fides-modal-overlay[data-theme="fides"] .fides-modal-badge.readiness-demo,
+.fides-modal-overlay[data-theme="light"] .fides-modal-badge.readiness-demo {
+  background: rgba(10, 110, 243, 0.1);
+  color: #0A6EF3;
+  border-color: rgba(10, 110, 243, 0.25);
+}
+
+.fides-modal-overlay[data-theme="fides"] .fides-modal-badge.readiness-production,
+.fides-modal-overlay[data-theme="light"] .fides-modal-badge.readiness-production {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+  border-color: rgba(22, 163, 74, 0.25);
+}
+
+.fides-modal-overlay[data-theme="fides"] .fides-modal-badge.sector,
+.fides-modal-overlay[data-theme="light"] .fides-modal-badge.sector {
+  background: rgba(124, 58, 237, 0.1);
+  color: #7c3aed;
+  border-color: rgba(124, 58, 237, 0.3);
+}
+
+.fides-modal-overlay .fides-modal-orgs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.fides-modal-overlay .fides-modal-orgs-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fides-text-secondary);
+}
+
+.fides-modal-overlay .fides-modal-orgs-label svg {
+  width: 14px;
+  height: 14px;
+}
+
+.fides-modal-overlay .fides-modal-orgs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.fides-modal-overlay .fides-modal-org-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.7rem 0.3rem 0.3rem;
+  border-radius: 9999px;
+  border: 1px solid var(--fides-border);
+  background: var(--fides-surface, rgba(148, 163, 184, 0.08));
+  color: var(--fides-text-primary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+}
+
+.fides-modal-overlay a.fides-modal-org-chip:hover {
+  border-color: rgba(10, 110, 243, 0.45);
+  background: rgba(10, 110, 243, 0.08);
+}
+
+.fides-modal-overlay .fides-modal-org-chip--static {
+  cursor: default;
+}
+
+.fides-modal-overlay .fides-modal-org-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  background: rgba(10, 110, 243, 0.15);
+  color: #0A6EF3;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.fides-modal-overlay .fides-modal-org-name {
+  white-space: nowrap;
+}
+
+.fides-modal-overlay .fides-tag {
+  border: 1px solid rgba(10, 110, 243, 0.2);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--fides-text-secondary);
+  background: rgba(10, 110, 243, 0.08);
+}
+
+.fides-modal-taxonomy--above-ecosystem {
+  margin-bottom: 0.75rem;
+}
+
+.fides-modal-taxonomy .fides-modal-taxonomy-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.5rem 0.75rem;
+}
+
+.fides-modal-taxonomy-label {
+  flex: 0 0 auto;
+  min-width: 7.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  opacity: 0.85;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.fides-modal-taxonomy-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  flex: 1 1 12rem;
 }
 
 .fides-modal-overlay .fides-modal-description {
@@ -2009,38 +2430,200 @@
   color: #64748b;
 }
 
-.fides-use-case-grid[data-view="list"] {
-  grid-template-columns: 1fr;
-}
+/* ---- LIST VIEW (matches issuer / credential catalog list layout) ---- */
 
-.fides-use-case-row-item {
-  border: 1px solid var(--fides-border);
-  border-radius: 10px;
-  background: #ffffff;
-  padding: 0.75rem;
+/* Grid container switches from CSS grid to a single-column flex stack in list mode */
+.fides-use-case-grid[data-view="list"] {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0;
+  border: 1px solid var(--fides-border);
+  border-radius: var(--fides-radius);
+  overflow: hidden;
 }
 
-.fides-use-case-row-item h3 {
-  margin: 0;
-  font-size: 1rem;
-  color: var(--fides-text-primary);
+/*
+ * Column layout — 6 columns matching renderUseCaseListHeader() and renderUseCaseRow().
+ * use case | likes | country | production deployment | sector | updated
+ * If you add/remove a column, update this template AND both render functions.
+ */
+.fides-use-case-list-header,
+.fides-use-case-grid[data-view="list"] .fides-use-case-row-item {
+  grid-template-columns: 2.2fr minmax(54px, 64px) 1fr 1fr 1fr minmax(0, 110px);
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
 }
 
-.fides-use-case-row-item p {
-  margin: 0;
-  color: var(--fides-text-secondary);
-  font-size: 0.875rem;
-}
-
-.fides-use-case-row-meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.375rem;
+/* List header row */
+.fides-use-case-list-header {
+  display: none;
+  align-items: center;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--fides-text-muted);
+  background: var(--fides-bg-secondary);
+  border-bottom: 1px solid var(--fides-border);
+}
+
+.fides-use-case-grid[data-view="list"] .fides-use-case-list-header {
+  display: grid;
+}
+
+.fides-use-case-list-header .fides-list-col-likes {
+  min-height: 1px;
+}
+
+/* List row — overrides card styles */
+.fides-use-case-grid[data-view="list"] .fides-use-case-row-item {
+  display: grid;
+  align-items: center;
+  text-align: left;
+  min-height: unset;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid var(--fides-border);
+  box-shadow: none;
+  background: var(--fides-bg-card);
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  transition: background 0.15s;
+}
+
+.fides-use-case-grid[data-view="list"] .fides-use-case-row-item:last-child {
+  border-bottom: none;
+}
+
+.fides-use-case-grid[data-view="list"] .fides-use-case-row-item:nth-child(even) {
+  background: var(--fides-bg-primary);
+}
+
+.fides-use-case-grid[data-view="list"] .fides-use-case-row-item:hover {
+  background: rgba(59, 130, 246, 0.04);
+}
+
+/* ---- Row cell elements (hidden in grid mode, shown in list mode) ---- */
+.fides-row-name,
+.fides-row-likes,
+.fides-row-country,
+.fides-row-deployment,
+.fides-row-sector,
+.fides-row-updated {
+  display: none;
+}
+
+.fides-use-case-grid[data-view="list"] .fides-row-name,
+.fides-use-case-grid[data-view="list"] .fides-row-likes,
+.fides-use-case-grid[data-view="list"] .fides-row-country,
+.fides-use-case-grid[data-view="list"] .fides-row-deployment,
+.fides-use-case-grid[data-view="list"] .fides-row-sector,
+.fides-use-case-grid[data-view="list"] .fides-row-updated {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+/* Name cell */
+.fides-row-name {
+  overflow: hidden;
+  min-width: 0;
+}
+
+.fides-use-case-grid[data-view="list"] .fides-row-name {
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.fides-row-name-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--fides-text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* Likes cell */
+.fides-row-likes {
+  justify-content: flex-start;
+  min-height: 1rem;
+}
+
+.fides-row-like-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
   font-size: 0.8125rem;
+  color: var(--fides-text-secondary);
+}
+
+.fides-row-like-star {
+  color: #f59e0b;
+}
+
+.fides-row-like-badge.is-liked .fides-row-like-star {
+  color: #f59e0b;
+}
+
+/* Country cell */
+.fides-row-country {
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--fides-text-secondary);
+}
+
+.fides-row-country-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.fides-row-country-icon svg,
+.fides-row-country-icon img {
+  width: 16px;
+  height: 16px;
+}
+
+.fides-row-country-text {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Production deployment + sector cells */
+.fides-row-deployment,
+.fides-row-sector {
+  font-size: 0.8125rem;
+  color: var(--fides-text-secondary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.fides-use-case-grid[data-view="list"] .fides-row-deployment,
+.fides-use-case-grid[data-view="list"] .fides-row-sector {
+  display: flex;
+}
+
+/* Updated cell */
+.fides-row-updated {
+  font-size: 0.75rem;
+  color: var(--fides-text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 0.75rem;
+}
+
+/* Hide grid-only chrome inside list rows */
+.fides-use-case-grid[data-view="list"] .fides-use-case-row-item .fides-credential-footer {
+  display: none;
 }
 
 @media (max-width: 1023px) {
@@ -2081,7 +2664,7 @@
   }
 
   .fides-use-case-catalog .fides-view-toggle {
-    display: none;
+    display: none !important;
   }
 
   .fides-use-case-catalog .fides-kpi-row {
@@ -2098,9 +2681,55 @@
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 600px) {
+  /* KPI layout aligned with rp-catalog: keep 2 columns, value + label on one
+     line to save vertical height. */
   .fides-use-case-catalog .fides-kpi-row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .fides-use-case-catalog .fides-kpi-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.65rem;
+  }
+  .fides-use-case-catalog .fides-kpi-value {
+    flex-shrink: 0;
+    font-size: 1.05rem;
+  }
+  .fides-use-case-catalog .fides-kpi-label {
+    font-size: 0.72rem;
+    line-height: 1.2;
+    min-width: 0;
+  }
+
+  /* Card meta strip: on narrow screens the 3 columns are too cramped (labels
+     wrap, values truncate). Stack as full-width rows with the value aligned
+     right so nothing gets cut off. */
+  .fides-use-case-meta-strip {
     grid-template-columns: 1fr;
+  }
+  .fides-use-case-meta-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.625rem 1rem;
+    border-right: none;
+    border-bottom: 1px solid var(--fides-border);
+  }
+  .fides-use-case-meta-item:last-child {
+    border-bottom: none;
+  }
+  .fides-use-case-meta-heading {
+    flex-shrink: 0;
+  }
+  .fides-use-case-meta-value {
+    padding-left: 0;
+    text-align: right;
+    white-space: normal;
   }
 }
 
@@ -2152,6 +2781,227 @@
   color: var(--fides-text-secondary);
 }
 
+.fides-media-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fides-media-row .fides-media-inputs {
+  margin-bottom: 0.5rem;
+}
+
+/* Compact media viewer + thumbnail strip */
+.fides-use-case-modal-media-wrap {
+  --fides-media-height: 240px;
+}
+
+.fides-use-case-modal-carousel {
+  border: 1px solid var(--fides-border);
+  border-radius: 12px;
+  background: #0f172a;
+  overflow: hidden;
+}
+
+.fides-use-case-modal-carousel:focus,
+.fides-use-case-modal-carousel:focus-visible {
+  outline: 2px solid var(--fides-accent, #2563eb);
+  outline-offset: 2px;
+}
+
+.fides-use-case-modal-carousel-viewport {
+  position: relative;
+  overflow: hidden;
+}
+
+.fides-use-case-modal-carousel-track {
+  display: flex;
+  transition: transform 0.28s ease;
+  will-change: transform;
+}
+
+.fides-use-case-modal-carousel-slide {
+  position: relative;
+  flex: 0 0 100%;
+  min-width: 100%;
+}
+
+.fides-carousel-slide-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.fides-media-expand-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.fides-media-expand-btn:hover {
+  background: rgba(15, 23, 42, 0.92);
+}
+
+.fides-use-case-modal-carousel-slide .fides-use-case-modal-media {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Compact: cap both image and video to a fixed viewer height */
+.fides-use-case-modal-media-wrap .fides-use-case-modal-media-frame {
+  position: relative;
+  width: 100%;
+  height: var(--fides-media-height);
+  padding-top: 0;
+}
+
+.fides-use-case-modal-media-wrap .fides-use-case-modal-media-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.fides-use-case-modal-media-wrap .fides-use-case-modal-media-image {
+  height: var(--fides-media-height);
+}
+
+.fides-use-case-modal-media-wrap .fides-use-case-modal-media-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Edge navigation + counter overlay */
+.fides-carousel-nav-edge {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+}
+
+.fides-carousel-nav-edge.fides-carousel-prev {
+  left: 8px;
+}
+
+.fides-carousel-nav-edge.fides-carousel-next {
+  right: 8px;
+}
+
+.fides-carousel-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.25);
+}
+
+.fides-carousel-nav:hover {
+  background: #fff;
+}
+
+.fides-carousel-counter-overlay {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  z-index: 3;
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* Thumbnail strip */
+.fides-media-thumbs {
+  display: flex;
+  gap: 0.45rem;
+  padding: 0.55rem;
+  background: #f8fafc;
+  border-top: 1px solid var(--fides-border);
+  overflow-x: auto;
+}
+
+.fides-media-thumb {
+  position: relative;
+  flex: 0 0 auto;
+  width: 64px;
+  height: 40px;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #e2e8f0;
+  cursor: pointer;
+}
+
+.fides-media-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fides-media-thumb.is-active {
+  border-color: var(--fides-accent, #2563eb);
+}
+
+.fides-media-thumb-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: #64748b;
+}
+
+.fides-media-thumb-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  background: rgba(15, 23, 42, 0.35);
+}
+
+.fides-media-thumb-play svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Shared media primitives */
 .fides-use-case-modal-media {
   border-radius: 12px;
   overflow: hidden;
@@ -2179,6 +3029,74 @@
   height: auto;
   max-height: 360px;
   object-fit: cover;
+}
+
+/* Full-screen lightbox viewer */
+.fides-media-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 4vw, 48px);
+  background: rgba(2, 6, 23, 0.92);
+}
+
+.fides-media-lightbox-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  cursor: pointer;
+}
+
+.fides-media-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.fides-media-lightbox-stage {
+  width: min(1100px, 100%);
+}
+
+.fides-media-lightbox-carousel {
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  width: 100%;
+}
+
+.fides-media-lightbox-carousel .fides-use-case-modal-media-frame {
+  height: auto;
+  padding-top: 56.25%;
+}
+
+.fides-media-lightbox-carousel .fides-use-case-modal-media-image {
+  height: auto;
+}
+
+.fides-media-lightbox-carousel .fides-use-case-modal-media-image img {
+  width: 100%;
+  height: auto;
+  max-height: 78vh;
+  object-fit: contain;
+  background: #0f172a;
+}
+
+.fides-media-lightbox-carousel .fides-media-thumbs {
+  background: rgba(255, 255, 255, 0.06);
+  border-top: 0;
+  justify-content: center;
+  margin-top: 0.5rem;
+  border-radius: 10px;
 }
 
 .fides-use-case-modal-journey {
@@ -2456,21 +3374,25 @@
 
 .fides-modal-overlay .fides-details-kv {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   column-gap: 2.5rem;
 }
 
 .fides-modal-overlay .fides-kv-row {
   display: grid;
-  grid-template-columns: 9rem 1fr;
+  grid-template-columns: minmax(12rem, max-content) minmax(0, 1fr);
   align-items: baseline;
-  gap: 0.5rem;
+  gap: 0.75rem;
   padding: 0.45rem 0;
   min-width: 0;
 }
 
 .fides-modal-overlay .fides-kv-row-wide {
   grid-column: 1 / -1;
+}
+
+.fides-modal-overlay .fides-details-kv--technical-grid {
+  column-gap: 2.5rem;
 }
 
 .fides-modal-overlay .fides-kv-key {
@@ -2485,9 +3407,14 @@
 }
 
 .fides-modal-overlay .fides-kv-val {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
   font-size: 0.8125rem;
   color: var(--fides-text-secondary);
   min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .fides-modal-overlay .fides-kv-multiline {
@@ -2504,7 +3431,8 @@
   border: 1px solid var(--fides-border);
   background: #ffffff;
   font-size: 0.75rem;
-  margin-right: 0.25rem;
+  margin: 0 0.25rem 0.25rem 0;
+  white-space: nowrap;
 }
 
 .fides-modal-overlay .fides-modal-link-inline {
@@ -2803,13 +3731,36 @@
   background: #f8fafc !important;
 }
 
-@media (max-width: 768px) {
-  .fides-modal-overlay .fides-details-kv {
-    grid-template-columns: 1fr;
+/* Modal sizing on tablet/mobile — aligned with credential catalog */
+@media (max-width: 760px) {
+  .fides-modal-overlay .fides-modal {
+    width: 100%;
+    max-height: 95vh;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .fides-modal-overlay {
+    align-items: flex-end;
+  }
+
+  .fides-modal-overlay .fides-modal-header {
+    padding: 1rem 1rem 0.75rem;
+  }
+
+  .fides-modal-overlay .fides-modal-body {
+    padding: 1rem;
   }
 
   .fides-use-case-modal-hero.has-media {
     grid-template-columns: 1fr;
+  }
+
+  .fides-modal-overlay .fides-details-kv {
+    grid-template-columns: 1fr;
+  }
+
+  .fides-modal-overlay .fides-kv-row-wide {
+    grid-column: 1;
   }
 
   .fides-modal-overlay .fides-accordion-header-bar {
@@ -2819,5 +3770,66 @@
   .fides-modal-overlay .fides-accordion-explore-link {
     order: 3;
     margin: 0 0.75rem 0.75rem;
+  }
+
+  .fides-modal-overlay .fides-eco-main-row {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto auto;
+  }
+
+  .fides-modal-overlay .fides-eco-wallet-box.fides-eco-stat-box {
+    max-width: none;
+  }
+
+  .fides-modal-overlay .fides-eco-arrow {
+    transform: rotate(90deg);
+    justify-self: center;
+    padding: 0;
+  }
+
+  .fides-modal-overlay .fides-eco-col-center {
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--fides-border);
+    border-bottom: 1px solid var(--fides-border);
+  }
+}
+
+@media (max-width: 480px) {
+  .fides-modal-overlay .fides-modal {
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .fides-modal-overlay {
+    align-items: stretch;
+  }
+
+  .fides-modal-overlay .fides-modal-header {
+    padding: 0.875rem 0.875rem 0.625rem;
+  }
+
+  .fides-modal-overlay .fides-modal-title {
+    font-size: 1rem;
+  }
+
+  .fides-modal-overlay .fides-modal-body {
+    padding: 0.875rem;
+  }
+
+  .fides-modal-overlay .fides-eco-col {
+    padding: 0.75rem;
+  }
+
+  .fides-modal-overlay .fides-eco-center-card {
+    padding: 0.875rem 1rem;
+  }
+
+  .fides-modal-overlay .fides-accordion-header {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .fides-modal-overlay .fides-accordion-body {
+    padding: 0.75rem 0.875rem;
   }
 }

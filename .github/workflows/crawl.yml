@@ -1,0 +1,64 @@
+name: Crawl
+
+# Publishing pipeline for use cases.
+#
+# Unlike the other FIDES catalogs, use cases originate in the WordPress
+# submission DB (the source of truth). This workflow PULLS the published set
+# from the site's REST /export endpoint, materializes one
+# community-catalogs/<org>/use-case-catalog.json per organization (git-versioned
+# backup + cross-catalog/map source), then crawls them into data/aggregated.json.
+#
+# Required repo config to enable the WP pull:
+#   - vars.USE_CASE_EXPORT_URL  e.g. https://www.fides.community/wp-json/fides-use-case/v1/export
+# Without it the job still runs and re-aggregates whatever is already committed.
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'community-catalogs/**/use-case-catalog.json'
+
+jobs:
+  crawl:
+    if: github.repository == 'FIDEScommunity/fides-use-case-catalog'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Crawl (sync from WordPress when configured)
+        env:
+          USE_CASE_EXPORT_URL: ${{ vars.USE_CASE_EXPORT_URL }}
+        run: npm run crawl
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain community-catalogs/ data/ wordpress-plugin/fides-use-case-catalog/data/)" ]; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes to commit."
+          fi
+
+      - name: Commit published use cases + aggregated data
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add community-catalogs/ data/aggregated.json wordpress-plugin/fides-use-case-catalog/data/aggregated.json
+          git commit -m "chore: publish use cases + update aggregated data [skip ci]"
+          git push
