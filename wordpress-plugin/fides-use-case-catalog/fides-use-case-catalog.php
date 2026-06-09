@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.5.0
+ * Version: 0.5.1
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.5.0');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.5.1');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
 define('FIDES_USE_CASE_CATALOG_PATH', plugin_dir_path(__FILE__));
 define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_case_submissions');
@@ -1055,6 +1055,10 @@ add_action('wp_enqueue_scripts', 'fides_use_case_catalog_enqueue_assets');
 
 function fides_use_case_catalog_form_shortcode(array $atts = array()): string {
     if (! is_user_logged_in()) {
+        // Enqueue the stylesheet here too, otherwise the .fides-use-case-card
+        // message renders unstyled and inherits the theme's (white) text color
+        // on a white page — i.e. invisible.
+        wp_enqueue_style('fides-use-case-catalog-style');
         $login_url = fides_use_case_catalog_form_login_url();
         return sprintf(
             '<div class="fides-use-case-card"><p>%s</p><p><a class="fides-form-login-link" href="%s">%s</a></p></div>',
