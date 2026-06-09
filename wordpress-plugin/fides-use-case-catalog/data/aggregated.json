@@ -1,8 +1,257 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-08T19:45:23.410Z",
+  "lastUpdated": "2026-06-09T12:00:14.549Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 0,
-  "useCases": []
+  "count": 2,
+  "useCases": [
+    {
+      "id": "port-of-rotterdam-truck-access-ws3obt",
+      "sector": "supply_chain",
+      "title": "Port of Rotterdam - Truck Access",
+      "summary": "ggjgjggjhghg jhkjkjkk lklklllklkl jkjkjkjkjk",
+      "organizationName": "Digidentity",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-06-09T11:48:43+00:00",
+      "publishedAt": "2026-06-09T11:48:43+00:00",
+      "tags": [
+        "logistics"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "digidentity-wallet",
+            "labelRaw": "Digidentity Wallet",
+            "url": "https://www.digidentity.com",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "national-eudi-wallet-netherlands",
+            "labelRaw": "NL Wallet (Netherlands)",
+            "url": "https://www.nldigitalgovernment.nl/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:credenco:tulip:test",
+            "labelRaw": "Tulip Bank Demo Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:iban-sd-jwt-vc:sd-jwt-vc",
+            "labelRaw": "IBAN (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:rotterdam",
+            "labelRaw": "Gemeente Rotterdam",
+            "url": "https://www.rotterdam.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:digidentity",
+            "labelRaw": "Digidentity",
+            "url": "https://www.digidentity.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "rotterdam-sandbox",
+            "labelRaw": "Municipality of Rotterdam",
+            "url": "https://rotterdam.fides.community/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/06/Screenshot-2026-06-09-at-13.42.33.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/06/Screenshot-2026-06-09-at-13.42.33.png",
+      "moreInfoUrl": "https://www.digidentity.eu/sectors/automotive",
+      "userJourney": "bhgkjhkhkhkh",
+      "country": "NL"
+    },
+    {
+      "id": "digital-student-credential-for-campus-services-cmkVfj",
+      "sector": "education",
+      "title": "Digital student credential for campus services",
+      "summary": "A national university pilot lets students receive a verifiable student credential in their digital wallet. The credential proves enrollment status and can be presented to access campus facilities, exam registration, and partner discounts—without sharing a full student record. The issuer is the university; students present the credential to on-campus services and selected external relying parties via a remote or proximity flow.A national university pilot lets students receive a verifiable student credential in their digital wallet. The credential proves enrollment status and can be presented to access campus facilities, exam registration, and partner discounts—without sharing a full student record. The issuer is the university; students present the credential to on-campus services and selected external relying parties via a remote or proximity flow.",
+      "organizationName": "Utrecht University",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-06-09T11:43:04+00:00",
+      "publishedAt": "2026-06-09T11:43:04+00:00",
+      "tags": [
+        "education",
+        "student-id",
+        "campus",
+        "verifiable-credentials",
+        "wallet"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Wallet",
+            "url": "https://sphereon.com/wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "hovi-wallet",
+            "labelRaw": "Hovi Wallet",
+            "url": "https://www.hovi.id/wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "namirial-wallet-enterprise",
+            "labelRaw": "Namirial Wallet Enterprise",
+            "url": "https://www.namirial.com/en/wallet/",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:hovi:eudi-playground:test",
+            "labelRaw": "Hovi EUDI Playground",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:ewc:student-id-sd-jwt:sd-jwt-vc",
+            "labelRaw": "Student ID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:hovi",
+            "labelRaw": "Hovi",
+            "url": "https://www.hovi.id/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:sphereon",
+            "labelRaw": "Sphereon",
+            "url": "https://sphereon.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:credenco",
+            "labelRaw": "Credenco",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:surf",
+            "labelRaw": "SURF",
+            "url": "https://www.surf.nl/en",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Utrecht University",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "proximity"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=pXVtPkVgW_w",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=pXVtPkVgW_w",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.example.edu/digital-credentials-pilot",
+      "userJourney": "1) The student completes enrollment and receives an invitation to add their student credential to a supported wallet app.\r\n2) They open the university issuer portal or follow a deep link from the student information system.\r\n3) The wallet receives the verifiable credential after the student confirms issuance.\r\n4) At the library gate or exam desk, the student opens the wallet and presents the credential (QR for proximity, or remote flow on the service website).\r\n5) The relying party verifies the presentation, checks enrollment status, and grants access without storing unnecessary personal data.",
+      "country": "NL"
+    }
+  ]
 }

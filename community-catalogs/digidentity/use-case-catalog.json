@@ -1,0 +1,119 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "orgId": "org:rotterdam",
+  "orgName": "Digidentity",
+  "useCases": [
+    {
+      "id": "port-of-rotterdam-truck-access-ws3obt",
+      "sector": "supply_chain",
+      "title": "Port of Rotterdam - Truck Access",
+      "summary": "ggjgjggjhghg jhkjkjkk lklklllklkl jkjkjkjkjk",
+      "organizationName": "Digidentity",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-06-09T11:48:43+00:00",
+      "publishedAt": "2026-06-09T11:48:43+00:00",
+      "tags": [
+        "logistics"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "digidentity-wallet",
+            "labelRaw": "Digidentity Wallet",
+            "url": "https://www.digidentity.com",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "national-eudi-wallet-netherlands",
+            "labelRaw": "NL Wallet (Netherlands)",
+            "url": "https://www.nldigitalgovernment.nl/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:credenco:tulip:test",
+            "labelRaw": "Tulip Bank Demo Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:iban-sd-jwt-vc:sd-jwt-vc",
+            "labelRaw": "IBAN (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:rotterdam",
+            "labelRaw": "Gemeente Rotterdam",
+            "url": "https://www.rotterdam.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:digidentity",
+            "labelRaw": "Digidentity",
+            "url": "https://www.digidentity.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "rotterdam-sandbox",
+            "labelRaw": "Municipality of Rotterdam",
+            "url": "https://rotterdam.fides.community/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/06/Screenshot-2026-06-09-at-13.42.33.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/06/Screenshot-2026-06-09-at-13.42.33.png",
+      "moreInfoUrl": "https://www.digidentity.eu/sectors/automotive",
+      "userJourney": "bhgkjhkhkhkh",
+      "country": "NL"
+    }
+  ]
+}
