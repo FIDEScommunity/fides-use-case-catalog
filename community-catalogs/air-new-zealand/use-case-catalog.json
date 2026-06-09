@@ -1,0 +1,84 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "community",
+  "orgId": "org:air-new-zealand",
+  "orgName": "Air New Zealand",
+  "useCases": [
+    {
+      "id": "digital-travel-credential-check-in-boarding",
+      "sector": "mobility",
+      "title": "Digital travel credential at check-in and boarding",
+      "summary": "Travellers move through check-in and boarding by presenting credentials from their wallet at a proximity touchpoint, instead of juggling paper documents. The airline acts as the relying party and verifies an ISO-based digital identity (Photo ID / mDL) together with IATA travel credentials such as a boarding pass and booking order. The same pattern is being demonstrated by multiple airlines and airports (e.g. Air New Zealand, British Airways, Japan Airlines, IndiGo, Hong Kong and Bengaluru airports), pointing to an interoperable, document-light travel journey.",
+      "organizationName": "Air New Zealand",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-06-09T12:00:00+00:00",
+      "publishedAt": "2026-06-09T12:00:00+00:00",
+      "country": "NZ",
+      "tags": [
+        "travel",
+        "digital-travel-credential",
+        "boarding-pass",
+        "proximity",
+        "iso-18013-5"
+      ],
+      "interactionModes": [
+        "proximity"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5"
+      ],
+      "moreInfoUrl": "https://www.airnewzealand.com",
+      "userJourney": "1) The traveller holds a Photo ID / mDL and IATA travel credentials (boarding pass, booking order) in a supported wallet.\n2) At check-in or the boarding gate, a proximity reader requests the relevant credentials.\n3) The wallet shows the request; the traveller approves the presentation by tapping or scanning.\n4) The airline (relying party) verifies the digital identity and travel documents over an ISO/IEC 18013-5 flow.\n5) The traveller proceeds without presenting paper documents, sharing only what is needed for that step.",
+      "links": {
+        "organizations": [
+          {
+            "refId": "org:air-new-zealand",
+            "labelRaw": "Air New Zealand",
+            "url": "https://www.airnewzealand.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "air-new-zealand",
+            "labelRaw": "Air New Zealand",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "personalWallets": [
+          {
+            "refId": "apple-wallet",
+            "labelRaw": "Apple Wallet",
+            "url": "https://www.apple.com/wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": "https://wallet.google",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "neoke-wallet",
+            "labelRaw": "Neoke",
+            "url": null,
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "community",
+  "orgId": "org:nijmegen",
+  "orgName": "Gemeente Nijmegen",
+  "useCases": [
+    {
+      "id": "nijmegen-attribute-based-municipal-login",
+      "sector": "public_sector",
+      "title": "Municipal login with attribute-based credentials",
+      "summary": "Citizens log in to their municipal account and securely share only the personal attributes a service actually needs, using an attribute-based wallet. The municipality acts as the relying party and verifies the presented attributes over the IRMA protocol. This is one of the first production implementations of attribute-based authentication in Dutch municipal services, showing that privacy-friendly login at scale is possible today.",
+      "organizationName": "Gemeente Nijmegen",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-06-09T12:00:00+00:00",
+      "publishedAt": "2026-06-09T12:00:00+00:00",
+      "country": "NL",
+      "tags": [
+        "municipal-login",
+        "attribute-based",
+        "data-minimisation",
+        "irma",
+        "public-services"
+      ],
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "idemix"
+      ],
+      "presentationProtocols": [
+        "IRMA Protocol"
+      ],
+      "moreInfoUrl": "https://mijn.nijmegen.nl/login",
+      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\n2) They open their municipal account and choose to log in with the wallet.\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\n4) The citizen reviews the request in the wallet and confirms disclosure.\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
+      "links": {
+        "organizations": [
+          {
+            "refId": "org:nijmegen",
+            "labelRaw": "Gemeente Nijmegen",
+            "url": "https://www.nijmegen.nl",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "nijmegen-mijn-nijmegen-login",
+            "labelRaw": "Mijn Nijmegen - Yivi Login",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "personalWallets": [
+          {
+            "refId": "yivi-wallet",
+            "labelRaw": "Yivi",
+            "url": "https://yivi.app",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": []
+      }
+    }
+  ]
+}

@@ -117,6 +117,10 @@ async function syncFromWordPress(): Promise<void> {
 
     const file: UseCaseCatalogFile = {
       $schema: SCHEMA_REF,
+      // Provenance marker: files written from the WordPress export are pruned
+      // when their org drops out of the export. Community-authored files (added
+      // via pull request, marked "community") are protected from pruning.
+      source: 'wordpress',
       orgId: org.orgId,
       orgName: org.orgName,
       useCases: Array.isArray(org.useCases) ? org.useCases : [],
@@ -126,7 +130,9 @@ async function syncFromWordPress(): Promise<void> {
     log(`Wrote ${path.relative(ROOT, dest)} (${file.useCases.length} use cases)`);
   }
 
-  // Prune organizations that are no longer published.
+  // Prune organizations that are no longer published — but never touch
+  // community-authored files (source !== "wordpress"), which are maintained by
+  // organizations directly through pull requests rather than the WP export.
   const entries = existsSync(CONFIG.communityDir)
     ? await fs.readdir(CONFIG.communityDir, { withFileTypes: true })
     : [];
@@ -134,10 +140,23 @@ async function syncFromWordPress(): Promise<void> {
     if (!entry.isDirectory()) continue;
     if (keptSlugs.has(entry.name)) continue;
     const stale = path.join(CONFIG.communityDir, entry.name, 'use-case-catalog.json');
-    if (existsSync(stale)) {
-      await fs.rm(stale);
-      log(`Pruned stale ${path.relative(ROOT, stale)}`);
+    if (!existsSync(stale)) continue;
+
+    let staleSource = '';
+    try {
+      const parsed = await readJson<UseCaseCatalogFile>(stale);
+      staleSource = String(parsed.source || '');
+    } catch {
+      // Unreadable file: leave it for the validation step to flag.
+      continue;
     }
+    if (staleSource !== 'wordpress') {
+      log(`Kept community-authored ${path.relative(ROOT, stale)} (not from WP export)`);
+      continue;
+    }
+
+    await fs.rm(stale);
+    log(`Pruned stale ${path.relative(ROOT, stale)}`);
   }
 }
 

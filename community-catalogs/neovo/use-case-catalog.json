@@ -1,0 +1,70 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "community",
+  "orgId": "org:neovo",
+  "orgName": "Neovo",
+  "useCases": [
+    {
+      "id": "age-verification-online-purchase",
+      "sector": "retail",
+      "title": "Age verification for online purchases",
+      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer's wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
+      "organizationName": "Neovo",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-06-09T12:00:00+00:00",
+      "publishedAt": "2026-06-09T12:00:00+00:00",
+      "country": "CH",
+      "tags": [
+        "age-verification",
+        "e-commerce",
+        "data-minimisation",
+        "retail",
+        "openid4vp"
+      ],
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "moreInfoUrl": "https://shop.playground.neovo.ch/products/silent-tide",
+      "userJourney": "1) The customer adds an age-restricted product to their basket in the web shop.\n2) Before checkout, the shop (relying party) requests proof that the customer is over the required age.\n3) The wallet presents only an over-18 attribute over OpenID4VP — no date of birth, no full identity.\n4) The shop verifies the proof and unlocks the purchase.\n5) The customer completes checkout without uploading ID documents or sharing unnecessary personal data.",
+      "links": {
+        "organizations": [
+          {
+            "refId": "org:neovo",
+            "labelRaw": "Neovo",
+            "url": "https://neovo.ch",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "neovo-shop-playground",
+            "labelRaw": "Neovo Brewing webshop demo",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "SWIYU Wallet",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": []
+      }
+    }
+  ]
+}

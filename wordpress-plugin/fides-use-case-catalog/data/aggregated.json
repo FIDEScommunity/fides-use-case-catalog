@@ -1,10 +1,272 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-09T12:00:14.549Z",
+  "lastUpdated": "2026-06-09T14:25:45.255Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 2,
+  "count": 6,
   "useCases": [
+    {
+      "id": "digital-travel-credential-check-in-boarding",
+      "sector": "mobility",
+      "title": "Digital travel credential at check-in and boarding",
+      "summary": "Travellers move through check-in and boarding by presenting credentials from their wallet at a proximity touchpoint, instead of juggling paper documents. The airline acts as the relying party and verifies an ISO-based digital identity (Photo ID / mDL) together with IATA travel credentials such as a boarding pass and booking order. The same pattern is being demonstrated by multiple airlines and airports (e.g. Air New Zealand, British Airways, Japan Airlines, IndiGo, Hong Kong and Bengaluru airports), pointing to an interoperable, document-light travel journey.",
+      "organizationName": "Air New Zealand",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-06-09T12:00:00+00:00",
+      "publishedAt": "2026-06-09T12:00:00+00:00",
+      "country": "NZ",
+      "tags": [
+        "travel",
+        "digital-travel-credential",
+        "boarding-pass",
+        "proximity",
+        "iso-18013-5"
+      ],
+      "interactionModes": [
+        "proximity"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5"
+      ],
+      "moreInfoUrl": "https://www.airnewzealand.com",
+      "userJourney": "1) The traveller holds a Photo ID / mDL and IATA travel credentials (boarding pass, booking order) in a supported wallet.\n2) At check-in or the boarding gate, a proximity reader requests the relevant credentials.\n3) The wallet shows the request; the traveller approves the presentation by tapping or scanning.\n4) The airline (relying party) verifies the digital identity and travel documents over an ISO/IEC 18013-5 flow.\n5) The traveller proceeds without presenting paper documents, sharing only what is needed for that step.",
+      "links": {
+        "organizations": [
+          {
+            "refId": "org:air-new-zealand",
+            "labelRaw": "Air New Zealand",
+            "url": "https://www.airnewzealand.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "air-new-zealand",
+            "labelRaw": "Air New Zealand",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "personalWallets": [
+          {
+            "refId": "apple-wallet",
+            "labelRaw": "Apple Wallet",
+            "url": "https://www.apple.com/wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": "https://wallet.google",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "neoke-wallet",
+            "labelRaw": "Neoke",
+            "url": null,
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": []
+      }
+    },
+    {
+      "id": "ca-dmv-mdl-website-login",
+      "sector": "public_sector",
+      "title": "Driver's license login for government services",
+      "summary": "Residents log in to government online services using the mobile driver's license (mDL) already in their wallet, instead of creating yet another username and password. The DMV acts as the relying party and verifies the mDL through an ISO/IEC 18013-5 mdoc presentation, so the user only shares the attributes needed to authenticate. This is one of the first production deployments of wallet-based, passwordless login to a public-sector service.",
+      "organizationName": "California DMV",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-06-09T12:00:00+00:00",
+      "publishedAt": "2026-06-09T12:00:00+00:00",
+      "country": "US",
+      "tags": [
+        "mdl",
+        "passwordless-login",
+        "public-services",
+        "data-minimisation",
+        "iso-18013-5"
+      ],
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5"
+      ],
+      "moreInfoUrl": "https://www.dmv.ca.gov/portal/dmv-wallet/",
+      "userJourney": "1) The resident already holds a mobile driver's license (mDL) issued by the DMV in a supported wallet.\n2) They open a government online service and choose to log in with their driver's license.\n3) The service (relying party) requests an mDL presentation over an ISO/IEC 18013-5 mdoc flow.\n4) The wallet shows exactly which attributes are requested; the resident approves.\n5) The relying party verifies the presentation and signs the resident in, without a password and without collecting more data than needed.",
+      "links": {
+        "organizations": [
+          {
+            "refId": "org:ca-dmv",
+            "labelRaw": "California DMV",
+            "url": "https://www.dmv.ca.gov",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "ca-dmv-mdl-login-opencred",
+            "labelRaw": "CA DMV Website Login (mDL / mDoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "CA DMV Wallet",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": []
+      }
+    },
+    {
+      "id": "age-verification-online-purchase",
+      "sector": "retail",
+      "title": "Age verification for online purchases",
+      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer's wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
+      "organizationName": "Neovo",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-06-09T12:00:00+00:00",
+      "publishedAt": "2026-06-09T12:00:00+00:00",
+      "country": "CH",
+      "tags": [
+        "age-verification",
+        "e-commerce",
+        "data-minimisation",
+        "retail",
+        "openid4vp"
+      ],
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "moreInfoUrl": "https://shop.playground.neovo.ch/products/silent-tide",
+      "userJourney": "1) The customer adds an age-restricted product to their basket in the web shop.\n2) Before checkout, the shop (relying party) requests proof that the customer is over the required age.\n3) The wallet presents only an over-18 attribute over OpenID4VP — no date of birth, no full identity.\n4) The shop verifies the proof and unlocks the purchase.\n5) The customer completes checkout without uploading ID documents or sharing unnecessary personal data.",
+      "links": {
+        "organizations": [
+          {
+            "refId": "org:neovo",
+            "labelRaw": "Neovo",
+            "url": "https://neovo.ch",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "neovo-shop-playground",
+            "labelRaw": "Neovo Brewing webshop demo",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "SWIYU Wallet",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": []
+      }
+    },
+    {
+      "id": "nijmegen-attribute-based-municipal-login",
+      "sector": "public_sector",
+      "title": "Municipal login with attribute-based credentials",
+      "summary": "Citizens log in to their municipal account and securely share only the personal attributes a service actually needs, using an attribute-based wallet. The municipality acts as the relying party and verifies the presented attributes over the IRMA protocol. This is one of the first production implementations of attribute-based authentication in Dutch municipal services, showing that privacy-friendly login at scale is possible today.",
+      "organizationName": "Gemeente Nijmegen",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-06-09T12:00:00+00:00",
+      "publishedAt": "2026-06-09T12:00:00+00:00",
+      "country": "NL",
+      "tags": [
+        "municipal-login",
+        "attribute-based",
+        "data-minimisation",
+        "irma",
+        "public-services"
+      ],
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "idemix"
+      ],
+      "presentationProtocols": [
+        "IRMA Protocol"
+      ],
+      "moreInfoUrl": "https://mijn.nijmegen.nl/login",
+      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\n2) They open their municipal account and choose to log in with the wallet.\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\n4) The citizen reviews the request in the wallet and confirms disclosure.\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
+      "links": {
+        "organizations": [
+          {
+            "refId": "org:nijmegen",
+            "labelRaw": "Gemeente Nijmegen",
+            "url": "https://www.nijmegen.nl",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "nijmegen-mijn-nijmegen-login",
+            "labelRaw": "Mijn Nijmegen - Yivi Login",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "personalWallets": [
+          {
+            "refId": "yivi-wallet",
+            "labelRaw": "Yivi",
+            "url": "https://yivi.app",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": []
+      }
+    },
     {
       "id": "port-of-rotterdam-truck-access-ws3obt",
       "sector": "supply_chain",

@@ -50,6 +50,12 @@ export interface UseCase {
 /** Per-organization source file (community-catalogs/<orgSlug>/use-case-catalog.json). */
 export interface UseCaseCatalogFile {
   $schema?: string;
+  /**
+   * Provenance: "wordpress" = written by the crawler from the WP export (pruned
+   * when the org leaves the export); anything else (e.g. "community") = authored
+   * directly via pull request and protected from pruning.
+   */
+  source?: string;
   orgId: string;
   orgName?: string;
   useCases: UseCase[];
