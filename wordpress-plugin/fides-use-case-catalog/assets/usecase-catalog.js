@@ -1890,11 +1890,12 @@
     `;
   }
 
-  function renderViewUseCaseDetails(ctaUrl) {
+  function renderViewUseCaseDetails() {
+    // "View use case" opens the detail modal, handled by the card click /
+    // keyboard handler. It must stay a <span> (not an <a>): the card click
+    // handler skips clicks on anchors, so an <a> would navigate to the external
+    // more-info link instead of opening the modal.
     const label = `${icons.eye} View use case`;
-    if (ctaUrl) {
-      return `<a class="fides-view-details" href="${escapeHtml(ctaUrl)}" target="_blank" rel="noreferrer">${label}</a>`;
-    }
     return `<span class="fides-view-details">${label}</span>`;
   }
 
@@ -1902,7 +1903,6 @@
     const imageUrl = deriveCardImage(item);
     const readinessLabel = productionDeploymentLabel(item.productionDeployment);
     const summary = String(item.summary || "").trim();
-    const ctaUrl = item.moreInfoUrl || (item.video && item.video.url) || "";
     const heroStyle = imageUrl ? ` style="background-image:url('${escapeHtml(imageUrl)}')"` : "";
     const heroClass = imageUrl ? "fides-use-case-hero" : "fides-use-case-hero fides-use-case-hero-placeholder";
     const useCaseId = String(item.id || "");
@@ -1927,7 +1927,7 @@
           ${renderMetaItem(icons.check, "Production deployment", readinessLabel)}
           ${renderMetaItem(icons.building, "Sector", sectorLabel(item))}
         </div>
-        <footer class="fides-credential-footer">${renderViewUseCaseDetails(ctaUrl)}</footer>
+        <footer class="fides-credential-footer">${renderViewUseCaseDetails()}</footer>
       </article>
     `;
   }
