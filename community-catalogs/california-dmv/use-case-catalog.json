@@ -1,6 +1,6 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
-  "source": "community",
+  "source": "wordpress",
   "orgId": "org:ca-dmv",
   "orgName": "California DMV",
   "useCases": [
@@ -12,9 +12,8 @@
       "organizationName": "California DMV",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-09T12:00:00+00:00",
-      "publishedAt": "2026-06-09T12:00:00+00:00",
-      "country": "US",
+      "updatedAt": "2026-06-10T05:08:24+00:00",
+      "publishedAt": "2026-06-10T05:08:24+00:00",
       "tags": [
         "mdl",
         "passwordless-login",
@@ -22,18 +21,19 @@
         "data-minimisation",
         "iso-18013-5"
       ],
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "mdoc"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-5"
-      ],
-      "moreInfoUrl": "https://www.dmv.ca.gov/portal/dmv-wallet/",
-      "userJourney": "1) The resident already holds a mobile driver's license (mDL) issued by the DMV in a supported wallet.\n2) They open a government online service and choose to log in with their driver's license.\n3) The service (relying party) requests an mDL presentation over an ISO/IEC 18013-5 mdoc flow.\n4) The wallet shows exactly which attributes are requested; the resident approves.\n5) The relying party verifies the presentation and signs the resident in, without a password and without collecting more data than needed.",
       "links": {
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "CA DMV Wallet",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
         "organizations": [
           {
             "refId": "org:ca-dmv",
@@ -51,20 +51,22 @@
             "source": "catalog",
             "walletType": null
           }
-        ],
-        "personalWallets": [
-          {
-            "refId": null,
-            "labelRaw": "CA DMV Wallet",
-            "url": null,
-            "source": "manual",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": []
-      }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "ISO 18013-5"
+      ],
+      "interopProfiles": [],
+      "moreInfoUrl": "https://www.dmv.ca.gov/portal/dmv-wallet/",
+      "userJourney": "1) The resident already holds a mobile driver's license (mDL) issued by the DMV in a supported wallet.\n2) They open a government online service and choose to log in with their driver's license.\n3) The service (relying party) requests an mDL presentation over an ISO/IEC 18013-5 mdoc flow.\n4) The wallet shows exactly which attributes are requested; the resident approves.\n5) The relying party verifies the presentation and signs the resident in, without a password and without collecting more data than needed.",
+      "country": "US"
     }
   ]
 }

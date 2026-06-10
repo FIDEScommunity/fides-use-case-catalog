@@ -1,6 +1,6 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
-  "source": "community",
+  "source": "wordpress",
   "orgId": "org:nijmegen",
   "orgName": "Gemeente Nijmegen",
   "useCases": [
@@ -12,9 +12,8 @@
       "organizationName": "Gemeente Nijmegen",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-09T12:00:00+00:00",
-      "publishedAt": "2026-06-09T12:00:00+00:00",
-      "country": "NL",
+      "updatedAt": "2026-06-10T05:08:33+00:00",
+      "publishedAt": "2026-06-10T05:08:33+00:00",
       "tags": [
         "municipal-login",
         "attribute-based",
@@ -22,18 +21,19 @@
         "irma",
         "public-services"
       ],
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "idemix"
-      ],
-      "presentationProtocols": [
-        "IRMA Protocol"
-      ],
-      "moreInfoUrl": "https://mijn.nijmegen.nl/login",
-      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\n2) They open their municipal account and choose to log in with the wallet.\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\n4) The citizen reviews the request in the wallet and confirms disclosure.\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
       "links": {
+        "personalWallets": [
+          {
+            "refId": "yivi-wallet",
+            "labelRaw": "Yivi",
+            "url": "https://yivi.app",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
         "organizations": [
           {
             "refId": "org:nijmegen",
@@ -51,20 +51,22 @@
             "source": "catalog",
             "walletType": null
           }
-        ],
-        "personalWallets": [
-          {
-            "refId": "yivi-wallet",
-            "labelRaw": "Yivi",
-            "url": "https://yivi.app",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": []
-      }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "idemix"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "IRMA Protocol"
+      ],
+      "interopProfiles": [],
+      "moreInfoUrl": "https://mijn.nijmegen.nl/login",
+      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\n2) They open their municipal account and choose to log in with the wallet.\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\n4) The citizen reviews the request in the wallet and confirms disclosure.\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
+      "country": "NL"
     }
   ]
 }

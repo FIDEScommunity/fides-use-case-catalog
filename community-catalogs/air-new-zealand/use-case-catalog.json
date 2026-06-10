@@ -1,6 +1,6 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
-  "source": "community",
+  "source": "wordpress",
   "orgId": "org:air-new-zealand",
   "orgName": "Air New Zealand",
   "useCases": [
@@ -12,9 +12,8 @@
       "organizationName": "Air New Zealand",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-06-09T12:00:00+00:00",
-      "publishedAt": "2026-06-09T12:00:00+00:00",
-      "country": "NZ",
+      "updatedAt": "2026-06-10T05:08:16+00:00",
+      "publishedAt": "2026-06-10T05:08:16+00:00",
       "tags": [
         "travel",
         "digital-travel-credential",
@@ -22,36 +21,7 @@
         "proximity",
         "iso-18013-5"
       ],
-      "interactionModes": [
-        "proximity"
-      ],
-      "vcFormats": [
-        "mdoc"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-5"
-      ],
-      "moreInfoUrl": "https://www.airnewzealand.com",
-      "userJourney": "1) The traveller holds a Photo ID / mDL and IATA travel credentials (boarding pass, booking order) in a supported wallet.\n2) At check-in or the boarding gate, a proximity reader requests the relevant credentials.\n3) The wallet shows the request; the traveller approves the presentation by tapping or scanning.\n4) The airline (relying party) verifies the digital identity and travel documents over an ISO/IEC 18013-5 flow.\n5) The traveller proceeds without presenting paper documents, sharing only what is needed for that step.",
       "links": {
-        "organizations": [
-          {
-            "refId": "org:air-new-zealand",
-            "labelRaw": "Air New Zealand",
-            "url": "https://www.airnewzealand.com",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": "air-new-zealand",
-            "labelRaw": "Air New Zealand",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
         "personalWallets": [
           {
             "refId": "apple-wallet",
@@ -77,8 +47,40 @@
         ],
         "businessWallets": [],
         "issuers": [],
-        "credentials": []
-      }
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:air-new-zealand",
+            "labelRaw": "Air New Zealand",
+            "url": "https://www.airnewzealand.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "air-new-zealand",
+            "labelRaw": "Air New Zealand",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "ISO 18013-5"
+      ],
+      "interopProfiles": [],
+      "moreInfoUrl": "https://www.airnewzealand.com",
+      "userJourney": "1) The traveller holds a Photo ID / mDL and IATA travel credentials (boarding pass, booking order) in a supported wallet.\n2) At check-in or the boarding gate, a proximity reader requests the relevant credentials.\n3) The wallet shows the request; the traveller approves the presentation by tapping or scanning.\n4) The airline (relying party) verifies the digital identity and travel documents over an ISO/IEC 18013-5 flow.\n5) The traveller proceeds without presenting paper documents, sharing only what is needed for that step.",
+      "country": "NZ"
     }
   ]
 }
