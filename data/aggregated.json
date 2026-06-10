@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-10T09:59:44.768Z",
+  "lastUpdated": "2026-06-10T19:07:42.488Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 4,
   "useCases": [
@@ -73,11 +73,11 @@
       "id": "age-verification-online-purchase",
       "sector": "retail",
       "title": "Age verification for online purchases",
-      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer's wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
+      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer\\'s wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
       "organizationName": "Neovo",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-06-10T05:08:28+00:00",
+      "updatedAt": "2026-06-10T19:06:18+00:00",
       "publishedAt": "2026-06-10T05:08:28+00:00",
       "tags": [
         "age-verification",
@@ -89,16 +89,24 @@
       "links": {
         "personalWallets": [
           {
-            "refId": null,
+            "refId": "swiyu-wallet",
             "labelRaw": "SWIYU Wallet",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": "personal"
           }
         ],
         "businessWallets": [],
         "issuers": [],
-        "credentials": [],
+        "credentials": [
+          {
+            "refId": "credswiyubetaid-sdjwtsd-jwt-vc",
+            "labelRaw": "Beta-ID",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
         "organizations": [
           {
             "refId": "org:neovo",
@@ -130,7 +138,7 @@
       ],
       "interopProfiles": [],
       "moreInfoUrl": "https://shop.playground.neovo.ch/products/silent-tide",
-      "userJourney": "1) The customer adds an age-restricted product to their basket in the web shop.\n2) Before checkout, the shop (relying party) requests proof that the customer is over the required age.\n3) The wallet presents only an over-18 attribute over OpenID4VP — no date of birth, no full identity.\n4) The shop verifies the proof and unlocks the purchase.\n5) The customer completes checkout without uploading ID documents or sharing unnecessary personal data.",
+      "userJourney": "1) The customer adds an age-restricted product to their basket in the web shop.\r\n2) Before checkout, the shop (relying party) requests proof that the customer is over the required age.\r\n3) The wallet presents only an over-18 attribute over OpenID4VP — no date of birth, no full identity.\r\n4) The shop verifies the proof and unlocks the purchase.\r\n5) The customer completes checkout without uploading ID documents or sharing unnecessary personal data.",
       "country": "CH"
     },
     {
