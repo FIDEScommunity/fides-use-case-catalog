@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-10T19:48:07.999Z",
+  "lastUpdated": "2026-06-10T19:59:25.162Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 4,
   "useCases": [
@@ -263,7 +263,7 @@
       "organizationName": "Air New Zealand",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-06-10T05:08:16+00:00",
+      "updatedAt": "2026-06-10T19:58:51+00:00",
       "publishedAt": "2026-06-10T05:08:16+00:00",
       "tags": [
         "travel",
@@ -297,13 +297,92 @@
           }
         ],
         "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
+        "issuers": [
+          {
+            "refId": "issuer:iata:air-new-zealand:production",
+            "labelRaw": "Air New Zealand",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:iata:british-airways:production",
+            "labelRaw": "British Airways",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:iata:indigo:production",
+            "labelRaw": "IndiGo",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:iata:japan-airlines:production",
+            "labelRaw": "Japan Airlines",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
+            "labelRaw": "Boarding Pass",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "crediatabooking-order-mdocmdoc",
+            "labelRaw": "Booking Order",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
         "organizations": [
           {
             "refId": "org:air-new-zealand",
             "labelRaw": "Air New Zealand",
             "url": "https://www.airnewzealand.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:british-airways",
+            "labelRaw": "British Airways",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org-hong-kong-international-airport",
+            "labelRaw": "Hong Kong International Airport",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:indigo",
+            "labelRaw": "IndiGo",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:japan-airlines",
+            "labelRaw": "Japan Airlines",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bengaluru-international-airport",
+            "labelRaw": "Bengaluru International Airport",
+            "url": null,
             "source": "catalog",
             "walletType": null
           }
@@ -312,6 +391,41 @@
           {
             "refId": "air-new-zealand",
             "labelRaw": "Air New Zealand",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "bengaluru-international-airport",
+            "labelRaw": "Bengaluru International Airport",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "british-airways",
+            "labelRaw": "British Airways",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "hong-kong-international-airport",
+            "labelRaw": "Hong Kong International Airport",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "indigo",
+            "labelRaw": "IndiGo",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "japan-airlines",
+            "labelRaw": "Japan Airlines",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -329,8 +443,18 @@
         "ISO 18013-5"
       ],
       "interopProfiles": [],
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=6oKvezFzrx0&t=196s",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=6oKvezFzrx0&t=196s",
+        "provider": "youtube"
+      },
       "moreInfoUrl": "https://www.airnewzealand.com",
-      "userJourney": "1) The traveller holds a Photo ID / mDL and IATA travel credentials (boarding pass, booking order) in a supported wallet.\n2) At check-in or the boarding gate, a proximity reader requests the relevant credentials.\n3) The wallet shows the request; the traveller approves the presentation by tapping or scanning.\n4) The airline (relying party) verifies the digital identity and travel documents over an ISO/IEC 18013-5 flow.\n5) The traveller proceeds without presenting paper documents, sharing only what is needed for that step.",
+      "userJourney": "1) The traveller holds a Photo ID / mDL and IATA travel credentials (boarding pass, booking order) in a supported wallet.\r\n2) At check-in or the boarding gate, a proximity reader requests the relevant credentials.\r\n3) The wallet shows the request; the traveller approves the presentation by tapping or scanning.\r\n4) The airline (relying party) verifies the digital identity and travel documents over an ISO/IEC 18013-5 flow.\r\n5) The traveller proceeds without presenting paper documents, sharing only what is needed for that step.",
       "country": "NZ"
     }
   ]
