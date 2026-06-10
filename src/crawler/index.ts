@@ -57,6 +57,16 @@ function fail(msg: string): never {
   process.exit(1);
 }
 
+function warn(msg: string): void {
+  // Surface as a GitHub Actions annotation when running in CI, plus a plain log.
+  if (process.env.GITHUB_ACTIONS) {
+    // eslint-disable-next-line no-console
+    console.log(`::warning::[use-case-crawler] ${msg}`);
+  }
+  // eslint-disable-next-line no-console
+  console.warn(`[use-case-crawler] WARN: ${msg}`);
+}
+
 async function readJson<T>(file: string): Promise<T> {
   const raw = await fs.readFile(file, 'utf8');
   return JSON.parse(raw) as T;
@@ -74,7 +84,7 @@ async function writeJson(file: string, data: unknown): Promise<void> {
  */
 async function syncFromWordPress(): Promise<void> {
   if (!CONFIG.exportUrl) {
-    fail('Sync requested but USE_CASE_EXPORT_URL is not set.');
+    throw new Error('Sync requested but USE_CASE_EXPORT_URL is not set.');
   }
   log(`Fetching export from ${CONFIG.exportUrl}`);
 
@@ -83,7 +93,7 @@ async function syncFromWordPress(): Promise<void> {
     redirect: 'follow',
   });
   if (!res.ok) {
-    fail(`Export request failed: HTTP ${res.status} (final URL: ${res.url}).`);
+    throw new Error(`Export request failed: HTTP ${res.status} (final URL: ${res.url}).`);
   }
 
   // The export endpoint must be the canonical WordPress host. A common
@@ -97,14 +107,14 @@ async function syncFromWordPress(): Promise<void> {
     data = JSON.parse(body) as WordPressExport;
   } catch {
     const snippet = body.slice(0, 200).replace(/\s+/g, ' ').trim();
-    fail(
+    throw new Error(
       `Export endpoint did not return JSON (content-type: "${contentType}", final URL: ${res.url}).\n` +
       `       Use the canonical WordPress host without a redirect (e.g. https://fides.community/... not https://www.fides.community/...).\n` +
       `       Response started with: ${snippet}`
     );
   }
   if (!data || !Array.isArray(data.organizations)) {
-    fail('Export response missing "organizations" array.');
+    throw new Error('Export response missing "organizations" array.');
   }
 
   await fs.mkdir(CONFIG.communityDir, { recursive: true });
@@ -177,7 +187,17 @@ async function listCommunityFiles(): Promise<string[]> {
 
 async function main(): Promise<void> {
   if (CONFIG.syncMode) {
-    await syncFromWordPress();
+    // A sync failure (WP site down, transient network error, misconfigured
+    // export URL) must NOT break publishing: degrade gracefully and re-aggregate
+    // whatever is already committed. The warning is surfaced as a CI annotation.
+    try {
+      await syncFromWordPress();
+    } catch (err) {
+      warn(
+        `Sync from WordPress failed; continuing with already-committed ` +
+        `community-catalogs. Reason: ${(err as Error).message}`
+      );
+    }
   }
 
   const schema = await readJson<Record<string, unknown>>(CONFIG.schemaPath);
