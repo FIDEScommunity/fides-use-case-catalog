@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-10T19:07:42.488Z",
+  "lastUpdated": "2026-06-10T19:23:44.920Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 4,
   "useCases": [
@@ -73,11 +73,11 @@
       "id": "age-verification-online-purchase",
       "sector": "retail",
       "title": "Age verification for online purchases",
-      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer\\'s wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
+      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer\\\\\\\\\\\\\\'s wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
       "organizationName": "Neovo",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-06-10T19:06:18+00:00",
+      "updatedAt": "2026-06-10T19:23:09+00:00",
       "publishedAt": "2026-06-10T05:08:28+00:00",
       "tags": [
         "age-verification",
@@ -100,7 +100,7 @@
         "issuers": [],
         "credentials": [
           {
-            "refId": "credswiyubetaid-sdjwtsd-jwt-vc",
+            "refId": "cred:swiyu:betaid-sdjwt:sd-jwt-vc",
             "labelRaw": "Beta-ID",
             "url": null,
             "source": "catalog",
