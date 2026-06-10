@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.5.2
+ * Version: 0.6.0
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.5.2');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.6.0');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
 define('FIDES_USE_CASE_CATALOG_PATH', plugin_dir_path(__FILE__));
 define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_case_submissions');
@@ -32,6 +32,7 @@ add_action('admin_menu', 'fides_use_case_catalog_register_admin_page');
 add_action('admin_post_fides_use_case_set_status', 'fides_use_case_catalog_handle_status_action');
 add_action('admin_post_fides_use_case_save_submission', 'fides_use_case_catalog_handle_save_submission_action');
 add_action('admin_post_fides_use_case_refresh_github', 'fides_use_case_catalog_handle_refresh_github_action');
+add_action('admin_post_fides_use_case_delete', 'fides_use_case_catalog_handle_delete_action');
 add_action('rest_api_init', 'fides_use_case_catalog_register_rest_routes');
 
 function fides_use_case_catalog_activate(): void {
@@ -1282,6 +1283,11 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <p><?php esc_html_e('Submission details saved.', 'fides-use-case-catalog'); ?></p>
             </div>
         <?php endif; ?>
+        <?php if (! empty($_GET['deleted'])) : ?>
+            <div class="notice notice-success is-dismissible">
+                <p><?php esc_html_e('Submission permanently deleted. If it was published, it will also be removed from the live catalog after the next crawler run.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
         <?php if (! empty($_GET['github_refreshed'])) : ?>
             <div class="notice notice-success is-dismissible">
                 <p><?php esc_html_e('Local copy synced with the published version on GitHub.', 'fides-use-case-catalog'); ?></p>
@@ -1461,6 +1467,17 @@ function fides_use_case_catalog_render_admin_page(): void {
                         <p>
                             <button class="button button-secondary" type="submit">Save details</button>
                             <a class="button button-secondary" href="<?php echo esc_url(admin_url('tools.php?page=fides-use-case-submissions')); ?>">Cancel</a>
+                            <?php
+                            $detail_delete_url = admin_url('admin-post.php?action=fides_use_case_delete&id=' . (int) $selected_submission['id'] . '&_wpnonce=' . wp_create_nonce('fides_use_case_delete_' . (int) $selected_submission['id']));
+                            $detail_delete_confirm = esc_js(
+                                sprintf(
+                                    /* translators: %s: use case title */
+                                    __('Permanently delete “%s”? This cannot be undone.', 'fides-use-case-catalog'),
+                                    (string) $selected_submission['title']
+                                )
+                            );
+                            ?>
+                            <a class="button button-link-delete" style="float:right; color:#b32d2e;" href="<?php echo esc_url($detail_delete_url); ?>" onclick="return confirm('<?php echo $detail_delete_confirm; ?>');"><?php esc_html_e('Delete permanently', 'fides-use-case-catalog'); ?></a>
                         </p>
                     </form>
 
@@ -1510,10 +1527,19 @@ function fides_use_case_catalog_render_admin_page(): void {
                                 $base = admin_url('admin-post.php?action=fides_use_case_set_status&id=' . (int) $row['id']);
                                 $nonce = wp_create_nonce('fides_use_case_set_status_' . (int) $row['id']);
                                 $view_url = admin_url('tools.php?page=fides-use-case-submissions&submission=' . (int) $row['id']);
+                                $delete_url = admin_url('admin-post.php?action=fides_use_case_delete&id=' . (int) $row['id'] . '&_wpnonce=' . wp_create_nonce('fides_use_case_delete_' . (int) $row['id']));
+                                $delete_confirm = esc_js(
+                                    sprintf(
+                                        /* translators: %s: use case title */
+                                        __('Permanently delete “%s”? This cannot be undone.', 'fides-use-case-catalog'),
+                                        (string) $row['title']
+                                    )
+                                );
                                 ?>
                                 <a class="button button-small" href="<?php echo esc_url($view_url); ?>">View</a>
                                 <a class="button button-small" href="<?php echo esc_url($base . '&status=approved&_wpnonce=' . $nonce); ?>">Approve</a>
                                 <a class="button button-small button-primary" href="<?php echo esc_url($base . '&status=published&_wpnonce=' . $nonce); ?>">Publish</a>
+                                <a class="button button-small button-link-delete" style="color:#b32d2e;" href="<?php echo esc_url($delete_url); ?>" onclick="return confirm('<?php echo $delete_confirm; ?>');">Delete</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -1584,6 +1610,40 @@ function fides_use_case_catalog_handle_status_action(): void {
     }
 
     wp_safe_redirect(admin_url('tools.php?page=fides-use-case-submissions'));
+    exit;
+}
+
+/**
+ * Permanently delete a submission row from the database.
+ *
+ * Note: deleting a published row removes it from the /export endpoint, after
+ * which the crawler prunes its (source="wordpress") git file on the next run,
+ * so it disappears from the live catalog too. Community-authored use cases
+ * (git-only, source="community") are not stored in this table and cannot be
+ * deleted here — remove their JSON file via pull request instead.
+ */
+function fides_use_case_catalog_handle_delete_action(): void {
+    if (! current_user_can('manage_options')) {
+        wp_die('Insufficient permissions.');
+    }
+
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    if ($id <= 0) {
+        wp_safe_redirect(admin_url('tools.php?page=fides-use-case-submissions'));
+        exit;
+    }
+
+    $nonce = isset($_GET['_wpnonce']) ? sanitize_text_field((string) $_GET['_wpnonce']) : '';
+    if (! wp_verify_nonce($nonce, 'fides_use_case_delete_' . $id)) {
+        wp_die('Invalid nonce.');
+    }
+
+    $wpdb->delete($table, array('id' => $id), array('%d'));
+
+    wp_safe_redirect(add_query_arg('deleted', '1', admin_url('tools.php?page=fides-use-case-submissions')));
     exit;
 }
 

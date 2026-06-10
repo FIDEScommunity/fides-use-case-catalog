@@ -150,8 +150,11 @@ async function syncFromWordPress(): Promise<void> {
       // Unreadable file: leave it for the validation step to flag.
       continue;
     }
-    if (staleSource !== 'wordpress') {
-      log(`Kept community-authored ${path.relative(ROOT, stale)} (not from WP export)`);
+    // Only files explicitly marked "community" are protected from pruning.
+    // Everything else — WP-managed files, including legacy files that predate
+    // the provenance marker — is pruned once its org drops out of the export.
+    if (staleSource === 'community') {
+      log(`Kept community-authored ${path.relative(ROOT, stale)} (source="community")`);
       continue;
     }
 
