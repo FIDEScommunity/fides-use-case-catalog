@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-10T19:34:13.575Z",
+  "lastUpdated": "2026-06-10T19:48:07.999Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 4,
   "useCases": [
@@ -13,7 +13,7 @@
       "organizationName": "Gemeente Nijmegen",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-10T06:02:54+00:00",
+      "updatedAt": "2026-06-10T19:42:57+00:00",
       "publishedAt": "2026-06-10T05:08:33+00:00",
       "tags": [
         "municipal-login",
@@ -33,7 +33,15 @@
           }
         ],
         "businessWallets": [],
-        "issuers": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Yivi Issuer",
+            "url": "https://yivi.nijmegen.nl/login",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
         "credentials": [],
         "organizations": [
           {
@@ -65,6 +73,10 @@
         "IRMA Protocol"
       ],
       "interopProfiles": [],
+      "imageUrls": [
+        "https://yivi.app/img/inloggen-bestelproces.webp"
+      ],
+      "imageUrl": "https://yivi.app/img/inloggen-bestelproces.webp",
       "moreInfoUrl": "https://mijn.nijmegen.nl/login",
       "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\r\n2) They open their municipal account and choose to log in with the wallet.\r\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\r\n4) The citizen reviews the request in the wallet and confirms disclosure.\r\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
       "country": "NL"
@@ -73,11 +85,11 @@
       "id": "age-verification-online-purchase",
       "sector": "retail",
       "title": "Age verification for online purchases",
-      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'s wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
+      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer\\'s wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
       "organizationName": "Neovo",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-06-10T19:28:55+00:00",
+      "updatedAt": "2026-06-10T19:37:27+00:00",
       "publishedAt": "2026-06-10T05:08:28+00:00",
       "tags": [
         "age-verification",
@@ -156,12 +168,12 @@
     {
       "id": "ca-dmv-mdl-website-login",
       "sector": "public_sector",
-      "title": "Driver's license login for government services",
-      "summary": "Residents log in to government online services using the mobile driver's license (mDL) already in their wallet, instead of creating yet another username and password. The DMV acts as the relying party and verifies the mDL through an ISO/IEC 18013-5 mdoc presentation, so the user only shares the attributes needed to authenticate. This is one of the first production deployments of wallet-based, passwordless login to a public-sector service.",
+      "title": "Driver\\'s license login for government services",
+      "summary": "Residents log in to government online services using the mobile driver\\'s license (mDL) already in their wallet, instead of creating yet another username and password. The DMV acts as the relying party and verifies the mDL through an ISO/IEC 18013-5 mdoc presentation, so the user only shares the attributes needed to authenticate. This is one of the first production deployments of wallet-based, passwordless login to a public-sector service.",
       "organizationName": "California DMV",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-10T05:08:24+00:00",
+      "updatedAt": "2026-06-10T19:47:41+00:00",
       "publishedAt": "2026-06-10T05:08:24+00:00",
       "tags": [
         "mdl",
@@ -173,16 +185,38 @@
       "links": {
         "personalWallets": [
           {
-            "refId": null,
+            "refId": "ca-dmv-wallet",
             "labelRaw": "CA DMV Wallet",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "apple-wallet",
+            "labelRaw": "Apple Wallet",
+            "url": null,
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": null,
+            "source": "catalog",
             "walletType": "personal"
           }
         ],
         "businessWallets": [],
         "issuers": [],
-        "credentials": [],
+        "credentials": [
+          {
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "credisomdl-mdocmdoc",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
         "organizations": [
           {
             "refId": "org:ca-dmv",
@@ -213,8 +247,12 @@
         "ISO 18013-5"
       ],
       "interopProfiles": [],
+      "imageUrls": [
+        "https://www.dmv.ca.gov/portal/uploads/2026/04/Vehicle_Reg_online_mobile_V4B.jpg"
+      ],
+      "imageUrl": "https://www.dmv.ca.gov/portal/uploads/2026/04/Vehicle_Reg_online_mobile_V4B.jpg",
       "moreInfoUrl": "https://www.dmv.ca.gov/portal/dmv-wallet/",
-      "userJourney": "1) The resident already holds a mobile driver's license (mDL) issued by the DMV in a supported wallet.\n2) They open a government online service and choose to log in with their driver's license.\n3) The service (relying party) requests an mDL presentation over an ISO/IEC 18013-5 mdoc flow.\n4) The wallet shows exactly which attributes are requested; the resident approves.\n5) The relying party verifies the presentation and signs the resident in, without a password and without collecting more data than needed.",
+      "userJourney": "1) The resident already holds a mobile driver\\'s license (mDL) issued by the DMV in a supported wallet.\r\n2) They open a government online service and choose to log in with their driver\\'s license.\r\n3) The service (relying party) requests an mDL presentation over an ISO/IEC 18013-5 mdoc flow.\r\n4) The wallet shows exactly which attributes are requested; the resident approves.\r\n5) The relying party verifies the presentation and signs the resident in, without a password and without collecting more data than needed.",
       "country": "US"
     },
     {

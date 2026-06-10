@@ -7,12 +7,12 @@
     {
       "id": "ca-dmv-mdl-website-login",
       "sector": "public_sector",
-      "title": "Driver's license login for government services",
-      "summary": "Residents log in to government online services using the mobile driver's license (mDL) already in their wallet, instead of creating yet another username and password. The DMV acts as the relying party and verifies the mDL through an ISO/IEC 18013-5 mdoc presentation, so the user only shares the attributes needed to authenticate. This is one of the first production deployments of wallet-based, passwordless login to a public-sector service.",
+      "title": "Driver\\'s license login for government services",
+      "summary": "Residents log in to government online services using the mobile driver\\'s license (mDL) already in their wallet, instead of creating yet another username and password. The DMV acts as the relying party and verifies the mDL through an ISO/IEC 18013-5 mdoc presentation, so the user only shares the attributes needed to authenticate. This is one of the first production deployments of wallet-based, passwordless login to a public-sector service.",
       "organizationName": "California DMV",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-10T05:08:24+00:00",
+      "updatedAt": "2026-06-10T19:47:41+00:00",
       "publishedAt": "2026-06-10T05:08:24+00:00",
       "tags": [
         "mdl",
@@ -24,16 +24,38 @@
       "links": {
         "personalWallets": [
           {
-            "refId": null,
+            "refId": "ca-dmv-wallet",
             "labelRaw": "CA DMV Wallet",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "apple-wallet",
+            "labelRaw": "Apple Wallet",
+            "url": null,
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": null,
+            "source": "catalog",
             "walletType": "personal"
           }
         ],
         "businessWallets": [],
         "issuers": [],
-        "credentials": [],
+        "credentials": [
+          {
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "credisomdl-mdocmdoc",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
         "organizations": [
           {
             "refId": "org:ca-dmv",
@@ -64,8 +86,12 @@
         "ISO 18013-5"
       ],
       "interopProfiles": [],
+      "imageUrls": [
+        "https://www.dmv.ca.gov/portal/uploads/2026/04/Vehicle_Reg_online_mobile_V4B.jpg"
+      ],
+      "imageUrl": "https://www.dmv.ca.gov/portal/uploads/2026/04/Vehicle_Reg_online_mobile_V4B.jpg",
       "moreInfoUrl": "https://www.dmv.ca.gov/portal/dmv-wallet/",
-      "userJourney": "1) The resident already holds a mobile driver's license (mDL) issued by the DMV in a supported wallet.\n2) They open a government online service and choose to log in with their driver's license.\n3) The service (relying party) requests an mDL presentation over an ISO/IEC 18013-5 mdoc flow.\n4) The wallet shows exactly which attributes are requested; the resident approves.\n5) The relying party verifies the presentation and signs the resident in, without a password and without collecting more data than needed.",
+      "userJourney": "1) The resident already holds a mobile driver\\'s license (mDL) issued by the DMV in a supported wallet.\r\n2) They open a government online service and choose to log in with their driver\\'s license.\r\n3) The service (relying party) requests an mDL presentation over an ISO/IEC 18013-5 mdoc flow.\r\n4) The wallet shows exactly which attributes are requested; the resident approves.\r\n5) The relying party verifies the presentation and signs the resident in, without a password and without collecting more data than needed.",
       "country": "US"
     }
   ]

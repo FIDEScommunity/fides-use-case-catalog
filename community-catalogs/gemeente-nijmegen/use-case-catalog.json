@@ -12,7 +12,7 @@
       "organizationName": "Gemeente Nijmegen",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-10T06:02:54+00:00",
+      "updatedAt": "2026-06-10T19:42:57+00:00",
       "publishedAt": "2026-06-10T05:08:33+00:00",
       "tags": [
         "municipal-login",
@@ -32,7 +32,15 @@
           }
         ],
         "businessWallets": [],
-        "issuers": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Yivi Issuer",
+            "url": "https://yivi.nijmegen.nl/login",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
         "credentials": [],
         "organizations": [
           {
@@ -64,6 +72,10 @@
         "IRMA Protocol"
       ],
       "interopProfiles": [],
+      "imageUrls": [
+        "https://yivi.app/img/inloggen-bestelproces.webp"
+      ],
+      "imageUrl": "https://yivi.app/img/inloggen-bestelproces.webp",
       "moreInfoUrl": "https://mijn.nijmegen.nl/login",
       "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\r\n2) They open their municipal account and choose to log in with the wallet.\r\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\r\n4) The citizen reviews the request in the wallet and confirms disclosure.\r\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
       "country": "NL"
