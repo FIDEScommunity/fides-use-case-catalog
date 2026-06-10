@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.6.0
+ * Version: 0.6.1
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.6.0');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.6.1');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
 define('FIDES_USE_CASE_CATALOG_PATH', plugin_dir_path(__FILE__));
 define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_case_submissions');
@@ -33,6 +33,7 @@ add_action('admin_post_fides_use_case_set_status', 'fides_use_case_catalog_handl
 add_action('admin_post_fides_use_case_save_submission', 'fides_use_case_catalog_handle_save_submission_action');
 add_action('admin_post_fides_use_case_refresh_github', 'fides_use_case_catalog_handle_refresh_github_action');
 add_action('admin_post_fides_use_case_delete', 'fides_use_case_catalog_handle_delete_action');
+add_action('admin_post_fides_use_case_import_github', 'fides_use_case_catalog_handle_import_github_action');
 add_action('rest_api_init', 'fides_use_case_catalog_register_rest_routes');
 
 function fides_use_case_catalog_activate(): void {
@@ -1288,6 +1289,21 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <p><?php esc_html_e('Submission permanently deleted. If it was published, it will also be removed from the live catalog after the next crawler run.', 'fides-use-case-catalog'); ?></p>
             </div>
         <?php endif; ?>
+        <?php if (! empty($_GET['imported'])) : ?>
+            <div class="notice notice-success is-dismissible">
+                <p><?php esc_html_e('Use case imported from GitHub into the database (published). You can now edit it through the form below. Remove its git “community” file so the database becomes the single source.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if (! empty($_GET['import_exists'])) : ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><?php esc_html_e('This use case is already in the database; nothing imported.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if (! empty($_GET['import_missing'])) : ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><?php esc_html_e('Could not find that use case in the GitHub aggregated data.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
         <?php if (! empty($_GET['github_refreshed'])) : ?>
             <div class="notice notice-success is-dismissible">
                 <p><?php esc_html_e('Local copy synced with the published version on GitHub.', 'fides-use-case-catalog'); ?></p>
@@ -1500,6 +1516,65 @@ function fides_use_case_catalog_render_admin_page(): void {
                 </div>
             </div>
         <?php endif; ?>
+        <?php
+        // Community use cases that live only in git (GitHub aggregated.json) and
+        // are not yet in the local database. Importing creates a published row so
+        // moderators can maintain them through the form.
+        $existing_use_case_ids = array();
+        foreach ((array) $rows as $existing_row) {
+            $existing_use_case_ids[(string) $existing_row['use_case_id']] = true;
+        }
+        $importable_items = array();
+        if (function_exists('fides_use_case_catalog_github_items')) {
+            foreach (fides_use_case_catalog_github_items() as $gh_item) {
+                if (! is_array($gh_item)) {
+                    continue;
+                }
+                $gh_id = isset($gh_item['id']) ? (string) $gh_item['id'] : '';
+                if ($gh_id === '' || isset($existing_use_case_ids[ $gh_id ])) {
+                    continue;
+                }
+                $importable_items[] = $gh_item;
+            }
+        }
+        ?>
+        <?php if (! empty($importable_items)) : ?>
+            <div class="postbox" style="max-width: 1200px; margin: 16px 0;">
+                <div class="inside">
+                    <h2 style="margin-top: 0;"><?php esc_html_e('Import community use cases from GitHub', 'fides-use-case-catalog'); ?></h2>
+                    <p class="description">
+                        <?php esc_html_e('These use cases exist only in the git-versioned GitHub data, not in this database. Import one to manage it through the form. After importing, remove its git “community” file so the database is the single source.', 'fides-use-case-catalog'); ?>
+                    </p>
+                    <table class="widefat striped">
+                        <thead>
+                            <tr>
+                                <th><?php esc_html_e('Title', 'fides-use-case-catalog'); ?></th>
+                                <th><?php esc_html_e('Organization', 'fides-use-case-catalog'); ?></th>
+                                <th><?php esc_html_e('ID', 'fides-use-case-catalog'); ?></th>
+                                <th><?php esc_html_e('Actions', 'fides-use-case-catalog'); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($importable_items as $gh_item) : ?>
+                                <tr>
+                                    <td><strong><?php echo esc_html((string) ($gh_item['title'] ?? '')); ?></strong></td>
+                                    <td><?php echo esc_html((string) ($gh_item['organizationName'] ?? '')); ?></td>
+                                    <td><code><?php echo esc_html((string) ($gh_item['id'] ?? '')); ?></code></td>
+                                    <td>
+                                        <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin:0;">
+                                            <input type="hidden" name="action" value="fides_use_case_import_github">
+                                            <input type="hidden" name="use_case_id" value="<?php echo esc_attr((string) ($gh_item['id'] ?? '')); ?>">
+                                            <input type="hidden" name="_wpnonce" value="<?php echo esc_attr(wp_create_nonce('fides_use_case_import_github_' . md5((string) ($gh_item['id'] ?? '')))); ?>">
+                                            <button type="submit" class="button button-small button-primary"><?php esc_html_e('Import', 'fides-use-case-catalog'); ?></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <?php endif; ?>
         <table class="widefat striped">
             <thead>
                 <tr>
@@ -1644,6 +1719,58 @@ function fides_use_case_catalog_handle_delete_action(): void {
     $wpdb->delete($table, array('id' => $id), array('%d'));
 
     wp_safe_redirect(add_query_arg('deleted', '1', admin_url('tools.php?page=fides-use-case-submissions')));
+    exit;
+}
+
+/**
+ * Import a community (git-only) use case from the GitHub aggregated data into
+ * the local submissions table as a published row, so moderators can maintain it
+ * through the admin form. After importing, the git "community" file should be
+ * removed so the database becomes the single source (the crawler re-exports the
+ * row as a source="wordpress" file). Avoids the duplicate-source pitfall.
+ */
+function fides_use_case_catalog_handle_import_github_action(): void {
+    if (! current_user_can('manage_options')) {
+        wp_die('Insufficient permissions.');
+    }
+
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    $redirect = admin_url('tools.php?page=fides-use-case-submissions');
+
+    $use_case_id = isset($_POST['use_case_id']) ? sanitize_text_field((string) wp_unslash($_POST['use_case_id'])) : '';
+    $nonce = isset($_POST['_wpnonce']) ? sanitize_text_field((string) $_POST['_wpnonce']) : '';
+    if ($use_case_id === '' || ! wp_verify_nonce($nonce, 'fides_use_case_import_github_' . md5($use_case_id))) {
+        wp_die('Invalid request.');
+    }
+
+    $existing = (int) $wpdb->get_var(
+        $wpdb->prepare("SELECT id FROM {$table} WHERE use_case_id = %s LIMIT 1", $use_case_id)
+    );
+    if ($existing > 0) {
+        wp_safe_redirect(add_query_arg(array('submission' => $existing, 'import_exists' => '1'), $redirect));
+        exit;
+    }
+
+    $item = fides_use_case_catalog_github_item_by_id($use_case_id, true);
+    if (! is_array($item)) {
+        wp_safe_redirect(add_query_arg('import_missing', '1', $redirect));
+        exit;
+    }
+
+    $now = current_time('mysql', true);
+    $data = fides_use_case_catalog_item_to_row_data($item);
+    $data['use_case_id']  = $use_case_id;
+    $data['contact_email'] = sanitize_email((string) get_option('admin_email'));
+    $data['status']       = 'published';
+    $data['published_at'] = $now;
+    $data['created_at']   = $now;
+    $data['updated_at']   = $now;
+
+    $wpdb->insert($table, $data);
+    $new_id = (int) $wpdb->insert_id;
+
+    wp_safe_redirect(add_query_arg(array('submission' => $new_id, 'imported' => '1'), $redirect));
     exit;
 }
 
