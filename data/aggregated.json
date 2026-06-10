@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-10T05:11:49.496Z",
+  "lastUpdated": "2026-06-10T05:54:09.468Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 4,
   "useCases": [
@@ -13,7 +13,7 @@
       "organizationName": "Gemeente Nijmegen",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-10T05:08:33+00:00",
+      "updatedAt": "2026-06-10T05:52:08+00:00",
       "publishedAt": "2026-06-10T05:08:33+00:00",
       "tags": [
         "municipal-login",
@@ -25,9 +25,9 @@
       "links": {
         "personalWallets": [
           {
-            "refId": "yivi-wallet",
+            "refId": "yivi",
             "labelRaw": "Yivi",
-            "url": "https://yivi.app",
+            "url": null,
             "source": "catalog",
             "walletType": "personal"
           }
@@ -66,7 +66,7 @@
       ],
       "interopProfiles": [],
       "moreInfoUrl": "https://mijn.nijmegen.nl/login",
-      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\n2) They open their municipal account and choose to log in with the wallet.\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\n4) The citizen reviews the request in the wallet and confirms disclosure.\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
+      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\r\n2) They open their municipal account and choose to log in with the wallet.\r\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\r\n4) The citizen reviews the request in the wallet and confirms disclosure.\r\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
       "country": "NL"
     },
     {
