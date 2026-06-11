@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-11T08:17:27.351Z",
+  "lastUpdated": "2026-06-11T08:23:31.387Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 4,
   "useCases": [
@@ -13,8 +13,8 @@
       "organizationName": "Gemeente Nijmegen",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-11T05:07:07+00:00",
-      "publishedAt": "2026-06-10T05:08:33+00:00",
+      "updatedAt": "2026-06-11T08:22:32+00:00",
+      "publishedAt": "2026-06-11T08:22:32+00:00",
       "tags": [
         "municipal-login",
         "attribute-based",
@@ -48,6 +48,13 @@
             "refId": "org:nijmegen",
             "labelRaw": "Gemeente Nijmegen",
             "url": "https://www.nijmegen.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:caesar",
+            "labelRaw": "Caesar Groep",
+            "url": null,
             "source": "catalog",
             "walletType": null
           }
@@ -85,11 +92,11 @@
       "id": "age-verification-online-purchase",
       "sector": "retail",
       "title": "Age verification for online purchases",
-      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer\\'s wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
+      "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer's wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
       "organizationName": "Neovo",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-06-11T05:07:22+00:00",
+      "updatedAt": "2026-06-11T08:16:05+00:00",
       "publishedAt": "2026-06-10T05:08:28+00:00",
       "tags": [
         "age-verification",
@@ -263,7 +270,7 @@
       "organizationName": "Air New Zealand",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-06-11T05:06:51+00:00",
+      "updatedAt": "2026-06-11T08:01:08+00:00",
       "publishedAt": "2026-06-10T05:08:16+00:00",
       "tags": [
         "travel",
@@ -336,7 +343,7 @@
             "walletType": null
           },
           {
-            "refId": "crediatabooking-order-mdocmdoc",
+            "refId": "cred:iata:booking-order-mdoc:mdoc",
             "labelRaw": "Booking Order",
             "url": null,
             "source": "catalog",

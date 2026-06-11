@@ -12,8 +12,8 @@
       "organizationName": "Gemeente Nijmegen",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-11T05:07:07+00:00",
-      "publishedAt": "2026-06-10T05:08:33+00:00",
+      "updatedAt": "2026-06-11T08:22:32+00:00",
+      "publishedAt": "2026-06-11T08:22:32+00:00",
       "tags": [
         "municipal-login",
         "attribute-based",
@@ -47,6 +47,13 @@
             "refId": "org:nijmegen",
             "labelRaw": "Gemeente Nijmegen",
             "url": "https://www.nijmegen.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:caesar",
+            "labelRaw": "Caesar Groep",
+            "url": null,
             "source": "catalog",
             "walletType": null
           }
