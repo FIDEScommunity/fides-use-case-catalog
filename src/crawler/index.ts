@@ -78,6 +78,62 @@ async function writeJson(file: string, data: unknown): Promise<void> {
 }
 
 /**
+ * Fetch the WordPress export with a browser-like User-Agent and a small retry
+ * loop. Managed WP hosts sometimes serve an HTML challenge / cached HTML page
+ * to unknown clients on the first hit (the JSON arrives once a session cookie
+ * is set), so a single text/html response should not fail the whole sync.
+ */
+async function fetchExport(url: string): Promise<WordPressExport> {
+  const maxAttempts = 4;
+  let lastError = '';
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    // Cache-bust to avoid an edge-cached HTML response being replayed.
+    const target = new URL(url);
+    target.searchParams.set('_', String(Date.now()));
+
+    const res = await fetch(target.toString(), {
+      headers: {
+        Accept: 'application/json',
+        // A realistic UA avoids bot/HTML-challenge interstitials on managed hosts.
+        'User-Agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ' +
+          'Chrome/124.0 Safari/537.36 fides-use-case-crawler',
+        'Cache-Control': 'no-cache',
+      },
+      redirect: 'follow',
+    });
+
+    const body = await res.text();
+    const contentType = res.headers.get('content-type') || '';
+
+    if (res.ok) {
+      try {
+        return JSON.parse(body) as WordPressExport;
+      } catch {
+        const snippet = body.slice(0, 200).replace(/\s+/g, ' ').trim();
+        lastError =
+          `Export endpoint did not return JSON (content-type: "${contentType}", final URL: ${res.url}). ` +
+          `Response started with: ${snippet}`;
+      }
+    } else {
+      lastError = `Export request failed: HTTP ${res.status} (final URL: ${res.url}).`;
+    }
+
+    if (attempt < maxAttempts) {
+      const delayMs = 1500 * attempt;
+      log(`Export attempt ${attempt}/${maxAttempts} failed (${lastError}); retrying in ${delayMs}ms`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+
+  throw new Error(
+    `${lastError}\n` +
+    `       Use the canonical WordPress host without a redirect (e.g. https://fides.community/... not https://www.fides.community/...).`
+  );
+}
+
+/**
  * SYNC step: pull the WordPress export and (re)write per-organization files.
  * Existing use-case-catalog.json files for organizations no longer present in
  * the export are pruned so the git tree always mirrors the published set.
@@ -88,31 +144,7 @@ async function syncFromWordPress(): Promise<void> {
   }
   log(`Fetching export from ${CONFIG.exportUrl}`);
 
-  const res = await fetch(CONFIG.exportUrl, {
-    headers: { Accept: 'application/json' },
-    redirect: 'follow',
-  });
-  if (!res.ok) {
-    throw new Error(`Export request failed: HTTP ${res.status} (final URL: ${res.url}).`);
-  }
-
-  // The export endpoint must be the canonical WordPress host. A common
-  // misconfiguration is pointing at a www/CDN host (e.g. Squarespace) that
-  // 301s or serves an HTML page — which yields a cryptic JSON parse error.
-  // Read as text and surface a clear, actionable message instead.
-  const body = await res.text();
-  const contentType = res.headers.get('content-type') || '';
-  let data: WordPressExport;
-  try {
-    data = JSON.parse(body) as WordPressExport;
-  } catch {
-    const snippet = body.slice(0, 200).replace(/\s+/g, ' ').trim();
-    throw new Error(
-      `Export endpoint did not return JSON (content-type: "${contentType}", final URL: ${res.url}).\n` +
-      `       Use the canonical WordPress host without a redirect (e.g. https://fides.community/... not https://www.fides.community/...).\n` +
-      `       Response started with: ${snippet}`
-    );
-  }
+  const data = await fetchExport(CONFIG.exportUrl);
   if (!data || !Array.isArray(data.organizations)) {
     throw new Error('Export response missing "organizations" array.');
   }

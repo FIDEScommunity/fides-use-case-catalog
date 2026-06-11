@@ -231,6 +231,11 @@
     };
   }
 
+  function getUseCaseLikeCount(item) {
+    const summary = item && item.id ? ratingSummariesByUseCaseId[item.id] : null;
+    return summary ? Number(summary.count) || 0 : 0;
+  }
+
   function ratingMapForLinkedType(type) {
     if (!type) return null;
     if (!ratingSummariesByLinkedType[type]) {
@@ -588,17 +593,23 @@
   }
 
   function linkItemHref(link, catalogBase, param) {
-    if (link && link.url) return String(link.url);
+    // Prefer a deep link into the relevant FIDES catalog (e.g. ?wallet=<id>)
+    // so the entry opens in its own catalog modal — matching the other
+    // catalogs. Only fall back to an external URL when no catalog deep link
+    // can be built (no refId or no catalog base configured).
     const refId = link && link.refId ? String(link.refId) : "";
     const base = String(catalogBase || "").replace(/\/$/, "");
-    if (!refId || !base) return "";
-    try {
-      const url = new URL(base, window.location.origin);
-      url.searchParams.set(param, refId);
-      return url.toString();
-    } catch (_err) {
-      return "";
+    if (refId && base) {
+      try {
+        const url = new URL(base, window.location.origin);
+        url.searchParams.set(param, refId);
+        return url.toString();
+      } catch (_err) {
+        /* fall through to external url */
+      }
     }
+    if (link && link.url) return String(link.url);
+    return "";
   }
 
   function linkedItemsHaveVisibleLikes(links, ratingType) {
@@ -1492,11 +1503,8 @@
     `;
   }
 
-  async function openUseCaseModal() {
+  function openUseCaseModal() {
     closeUseCaseModal();
-    if (selectedUseCase) {
-      await loadLinkedEntityRatingSummaries(selectedUseCase);
-    }
     const html = renderUseCaseModal();
     if (!html) return;
     document.body.insertAdjacentHTML("beforeend", html);
@@ -1506,6 +1514,36 @@
     if (selectedUseCase && selectedUseCase.id) {
       initUseCaseModalLike(selectedUseCase.id);
     }
+    // Load community likes for linked entities in the background so the modal
+    // opens instantly (matching the other catalogs); refresh the linked
+    // sections in place once the counts arrive.
+    if (selectedUseCase && RATINGS_API_BASE) {
+      const target = selectedUseCase;
+      loadLinkedEntityRatingSummaries(target)
+        .then(() => refreshModalLinkedLikes(target))
+        .catch(() => {});
+    }
+  }
+
+  function refreshModalLinkedLikes(item) {
+    const overlay = document.getElementById("fides-modal-overlay");
+    if (!overlay || !item || selectedUseCase !== item) return;
+    LINK_ACCORDION_SECTIONS.forEach((section) => {
+      const links = getLinkItems(item, section.linksKey);
+      if (!links.length) return;
+      const accordion = document.getElementById("fides-accordion-" + section.key);
+      if (!accordion) return;
+      const body = accordion.querySelector(".fides-accordion-body");
+      if (!body) return;
+      const catalogBase = CATALOG_URLS[section.catalogType] || "";
+      body.innerHTML = renderLinkedEntityList(
+        links,
+        catalogBase,
+        section.param,
+        section.title,
+        section.ratingType || section.catalogType
+      );
+    });
   }
 
   function closeUseCaseModal() {
@@ -1683,7 +1721,7 @@
     presentationProtocols: [],
     interopProfiles: [],
     productionDeployment: [],
-    sortBy: "updated_desc"
+    sortBy: "likes_desc"
   };
 
   function effectiveView() {
@@ -2027,9 +2065,9 @@
               <label class="fides-sort-label" for="fides-sort-select">
                 <span class="fides-sort-text">Sort by:</span>
                 <select id="fides-sort-select" class="fides-sort-select">
+                  <option value="likes_desc" ${filters.sortBy === "likes_desc" ? "selected" : ""}>Most liked</option>
                   <option value="updated_desc" ${filters.sortBy === "updated_desc" ? "selected" : ""}>Most recent</option>
                   <option value="title_asc" ${filters.sortBy === "title_asc" ? "selected" : ""}>A–Z</option>
-                  <option value="linked_desc" ${filters.sortBy === "linked_desc" ? "selected" : ""}>Most linked</option>
                 </select>
               </label>
               ${
@@ -2101,10 +2139,15 @@
 
     if (filters.sortBy === "title_asc") {
       list.sort((a, b) => String(a.title || "").localeCompare(String(b.title || ""), undefined, { sensitivity: "base" }));
-    } else if (filters.sortBy === "linked_desc") {
-      list.sort((a, b) => countLinkedItems(b) - countLinkedItems(a));
-    } else {
+    } else if (filters.sortBy === "updated_desc") {
       list.sort((a, b) => Date.parse(b.updatedAt || "") - Date.parse(a.updatedAt || ""));
+    } else {
+      // likes_desc (default): most liked first, most recent as tie-breaker
+      list.sort((a, b) => {
+        const diff = getUseCaseLikeCount(b) - getUseCaseLikeCount(a);
+        if (diff !== 0) return diff;
+        return Date.parse(b.updatedAt || "") - Date.parse(a.updatedAt || "");
+      });
     }
     return list;
   }
@@ -2154,7 +2197,7 @@
     }
     if (sortSelect) {
       sortSelect.addEventListener("change", (e) => {
-        filters.sortBy = String(e.target.value || "updated_desc");
+        filters.sortBy = String(e.target.value || "likes_desc");
         renderResultsOnly();
       });
     }
@@ -2169,7 +2212,7 @@
         filters.presentationProtocols = [];
         filters.interopProfiles = [];
         filters.productionDeployment = [];
-        filters.sortBy = "updated_desc";
+        filters.sortBy = "likes_desc";
         render();
       });
     }

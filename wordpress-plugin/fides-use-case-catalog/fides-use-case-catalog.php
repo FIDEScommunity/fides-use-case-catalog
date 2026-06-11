@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.6.1
+ * Version: 0.7.0
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.6.1');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.7.0');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
 define('FIDES_USE_CASE_CATALOG_PATH', plugin_dir_path(__FILE__));
 define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_case_submissions');
@@ -223,8 +223,8 @@ function fides_use_case_catalog_catalog_urls(): array {
     $base = rtrim((string) get_site_url(), '/');
 
     $personal_wallet_catalog_url = $use_local
-        ? $base . '/community-tools/personal-wallets/'
-        : 'https://fides.community/community-tools/personal-wallets/';
+        ? $base . '/ecosystem-explorer/personal-wallets/'
+        : 'https://fides.community/ecosystem-explorer/personal-wallets/';
     $business_wallet_catalog_url = $use_local
         ? $base . '/ecosystem-explorer/organizational-wallets/'
         : 'https://fides.community/ecosystem-explorer/organizational-wallets/';
@@ -240,11 +240,11 @@ function fides_use_case_catalog_catalog_urls(): array {
             ? $base . '/ecosystem-explorer/credential-catalog/'
             : 'https://fides.community/ecosystem-explorer/credential-catalog/',
         'rpCatalogUrl' => $use_local
-            ? $base . '/community-tools/relying-party-catalog/'
-            : 'https://fides.community/community-tools/relying-party-catalog/',
+            ? $base . '/ecosystem-explorer/relying-party-catalog/'
+            : 'https://fides.community/ecosystem-explorer/relying-party-catalog/',
         'organizationCatalogUrl' => $use_local
             ? $base . '/organizations/'
-            : 'https://fides.community/ecosystem-explorer/organization-catalog/',
+            : 'https://fides.community/organizations/',
     );
 }
 
@@ -618,6 +618,50 @@ function fides_use_case_catalog_detect_video_provider(string $url): string {
         return 'vimeo';
     }
     return '';
+}
+
+/**
+ * Builds a normalized links structure from the admin editor POST payload
+ * ($_POST['links'][<bucket>][<index>][<field>]). Blank rows and rows flagged
+ * for removal are dropped; everything else runs through the standard
+ * normalizer so wallet types and bucket migration stay consistent.
+ *
+ * @param mixed $posted
+ * @return array<string, array<int, array<string, mixed>>>
+ */
+function fides_use_case_catalog_links_from_admin_post($posted): array {
+    if (! is_array($posted)) {
+        return fides_use_case_catalog_empty_links();
+    }
+
+    $raw = fides_use_case_catalog_empty_links();
+    foreach (array_keys($raw) as $bucket) {
+        if (! isset($posted[ $bucket ]) || ! is_array($posted[ $bucket ])) {
+            continue;
+        }
+        $items = array();
+        foreach ($posted[ $bucket ] as $row) {
+            if (! is_array($row) || ! empty($row['remove'])) {
+                continue;
+            }
+            $label = isset($row['labelRaw']) ? sanitize_text_field((string) $row['labelRaw']) : '';
+            $ref   = isset($row['refId']) ? sanitize_text_field((string) $row['refId']) : '';
+            $url   = isset($row['url']) ? esc_url_raw((string) $row['url']) : '';
+            if ($label === '' && $ref === '' && $url === '') {
+                continue; // blank row
+            }
+            $items[] = array(
+                'refId'      => $ref !== '' ? $ref : null,
+                'labelRaw'   => $label !== '' ? $label : null,
+                'url'        => $url !== '' ? $url : null,
+                'source'     => (isset($row['source']) && $row['source'] === 'catalog') ? 'catalog' : 'manual',
+                'walletType' => isset($row['walletType']) ? $row['walletType'] : null,
+            );
+        }
+        $raw[ $bucket ] = $items;
+    }
+
+    return fides_use_case_catalog_normalize_links_structure($raw);
 }
 
 function fides_use_case_catalog_normalize_link_items($items): array {
@@ -1191,6 +1235,62 @@ function fides_use_case_catalog_render_admin_linked_items_html(array $items): st
 }
 
 /**
+ * Renders an editable table for one linked-catalog bucket so moderators can fix
+ * refIds (deep-link / like targets), labels and URLs, remove entries, or add new
+ * ones. Field names use links[<bucket>][<index>][<field>] so the save handler
+ * can rebuild links_json. A couple of blank rows are appended for adding items.
+ *
+ * @param array<int, array<string, mixed>> $items
+ */
+function fides_use_case_catalog_render_admin_linked_items_editor(string $bucket, array $items, string $wallet_type = ''): string {
+    $rows = array();
+    foreach ($items as $item) {
+        if (is_array($item)) {
+            $rows[] = $item;
+        }
+    }
+    // One blank row to start adding entries; the “Add row” button clones more.
+    $rows[] = array();
+
+    $html  = '<table class="widefat striped fides-linked-items-table" data-bucket="' . esc_attr($bucket) . '" data-wallet-type="' . esc_attr($wallet_type) . '" style="max-width:980px; margin:0 0 6px;">';
+    $html .= '<thead><tr>'
+        . '<th style="width:30%;">Label</th>'
+        . '<th style="width:24%;">Catalog ID (refId)</th>'
+        . '<th style="width:26%;">URL (for manual entries)</th>'
+        . '<th style="width:12%;">Source</th>'
+        . '<th style="width:8%;text-align:center;">Remove</th>'
+        . '</tr></thead><tbody>';
+
+    foreach ($rows as $index => $item) {
+        $label  = isset($item['labelRaw']) ? (string) $item['labelRaw'] : '';
+        $ref    = isset($item['refId']) ? (string) $item['refId'] : '';
+        $url    = isset($item['url']) ? (string) $item['url'] : '';
+        $source = (isset($item['source']) && $item['source'] === 'catalog') ? 'catalog' : 'manual';
+        $base   = 'links[' . $bucket . '][' . (int) $index . ']';
+
+        $html .= '<tr>';
+        $html .= '<td><input type="text" style="width:100%;" name="' . esc_attr($base . '[labelRaw]') . '" value="' . esc_attr($label) . '"></td>';
+        $html .= '<td><input type="text" style="width:100%;" name="' . esc_attr($base . '[refId]') . '" value="' . esc_attr($ref) . '" placeholder="catalog id"></td>';
+        $html .= '<td><input type="text" style="width:100%;" name="' . esc_attr($base . '[url]') . '" value="' . esc_attr($url) . '" placeholder="https://…"></td>';
+        $html .= '<td><select name="' . esc_attr($base . '[source]') . '">'
+            . '<option value="catalog"' . selected($source, 'catalog', false) . '>Catalog</option>'
+            . '<option value="manual"' . selected($source, 'manual', false) . '>Manual</option>'
+            . '</select>';
+        if ($wallet_type !== '') {
+            $html .= '<input type="hidden" name="' . esc_attr($base . '[walletType]') . '" value="' . esc_attr($wallet_type) . '">';
+        }
+        $html .= '</td>';
+        $html .= '<td style="text-align:center;"><input type="checkbox" name="' . esc_attr($base . '[remove]') . '" value="1"></td>';
+        $html .= '</tr>';
+    }
+
+    $html .= '</tbody></table>';
+    $html .= '<p style="margin:0 0 16px;"><button type="button" class="button button-secondary fides-add-linked-row" data-bucket="' . esc_attr($bucket) . '">+ Add row</button></p>';
+
+    return $html;
+}
+
+/**
  * Linked catalog buckets in the same order as the public submission form.
  *
  * @return array<string, string>
@@ -1202,6 +1302,23 @@ function fides_use_case_catalog_admin_linked_catalog_sections(): array {
         'issuers'         => 'Issuers involved',
         'credentials'     => 'Credential types used',
         'rps'             => 'Relying parties',
+    );
+}
+
+/**
+ * Editable linked-catalog buckets (includes organizations) with wallet-type
+ * hints used by the admin editor.
+ *
+ * @return array<int, array{key:string, label:string, walletType:string}>
+ */
+function fides_use_case_catalog_admin_linked_editor_sections(): array {
+    return array(
+        array('key' => 'organizations',   'label' => 'Involved organizations', 'walletType' => ''),
+        array('key' => 'personalWallets', 'label' => 'Personal wallets used',  'walletType' => 'personal'),
+        array('key' => 'businessWallets', 'label' => 'Business wallets used',   'walletType' => 'organizational'),
+        array('key' => 'issuers',         'label' => 'Issuers involved',        'walletType' => ''),
+        array('key' => 'credentials',     'label' => 'Credential types used',   'walletType' => ''),
+        array('key' => 'rps',             'label' => 'Relying parties',         'walletType' => ''),
     );
 }
 
@@ -1233,9 +1350,11 @@ function fides_use_case_catalog_render_admin_page(): void {
 
     // Published use cases are owned by the git-versioned GitHub aggregate, which
     // organizations can amend via pull request. When a moderator opens a
-    // published submission, pull the latest committed version and — if it
-    // differs from the local copy — prefill the form with it (no DB write until
-    // the moderator saves). $github_diff drives the on-screen notice.
+    // published submission, detect whether the committed GitHub version differs
+    // from the local DB copy. We DO NOT overwrite the form here — the form edits
+    // (and Save persists) the local DB copy, which the crawler then exports to
+    // GitHub. To pull an organization's PR edits the moderator uses the explicit
+    // "Refresh from GitHub" button. $github_diff only drives the on-screen notice.
     $github_diff = false;
     if (is_array($selected_submission)
         && fides_use_case_catalog_normalize_status((string) $selected_submission['status']) === 'published'
@@ -1247,8 +1366,8 @@ function fides_use_case_catalog_render_admin_page(): void {
                 $existing = array_key_exists($col, $selected_submission) ? $selected_submission[$col] : null;
                 if ((string) $value !== (string) $existing) {
                     $github_diff = true;
+                    break;
                 }
-                $selected_submission[$col] = $value;
             }
         }
     }
@@ -1316,7 +1435,7 @@ function fides_use_case_catalog_render_admin_page(): void {
         <?php endif; ?>
         <?php if ($github_diff) : ?>
             <div class="notice notice-info">
-                <p><?php esc_html_e('This published use case differs from the version on GitHub (the published source). The form below shows the GitHub version. Save to sync the local copy.', 'fides-use-case-catalog'); ?></p>
+                <p><?php esc_html_e('This published use case differs from the version currently on GitHub. The form below shows your local (database) copy — edits you save here become the published version after the next crawler run. Use “Refresh from GitHub” only if you want to pull an organization’s pull-request edits into the database.', 'fides-use-case-catalog'); ?></p>
             </div>
         <?php endif; ?>
         <?php if (is_array($selected_submission)) : ?>
@@ -1329,8 +1448,6 @@ function fides_use_case_catalog_render_admin_page(): void {
             $selected_sector = fides_use_case_catalog_row_sector($selected_submission);
             $selected_taxonomy = fides_use_case_catalog_row_taxonomy($selected_submission);
             $save_nonce = wp_create_nonce('fides_use_case_save_submission_' . (int) $selected_submission['id']);
-            $involved_orgs = isset($links['organizations']) && is_array($links['organizations']) ? $links['organizations'] : array();
-            $linked_catalog_sections = fides_use_case_catalog_admin_linked_catalog_sections();
             $selected_country = fides_use_case_catalog_normalize_country_code((string) ($selected_submission['country_code'] ?? ''));
             $selected_media = fides_use_case_catalog_media_from_row($selected_submission);
             $admin_image_urls_text = implode("\n", $selected_media['images']);
@@ -1398,10 +1515,6 @@ function fides_use_case_catalog_render_admin_page(): void {
                                             <?php endforeach; ?>
                                         </select>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Involved organizations</th>
-                                    <td><?php echo fides_use_case_catalog_render_admin_linked_items_html($involved_orgs); ?></td>
                                 </tr>
                                 <tr>
                                     <th scope="row"><label for="uc-org">Submitted by organization</label></th>
@@ -1480,6 +1593,59 @@ function fides_use_case_catalog_render_admin_page(): void {
                             </tbody>
                         </table>
 
+                        <h3 style="margin: 24px 0 8px;">Linked catalog items</h3>
+                        <p class="description" style="margin: 0 0 12px;">
+                            <?php esc_html_e('Manage the catalog items linked to this use case. The Catalog ID (refId) must match the id in the target catalog so the deep link opens the right entry and community likes line up (e.g. the wallet id “yivi”, not “yivi-wallet”). Leave the URL empty for catalog entries; use it only for manual items that are not in a FIDES catalog. Tick Remove to delete a row; use “Add row” to link as many items as you need.', 'fides-use-case-catalog'); ?>
+                        </p>
+                        <?php foreach (fides_use_case_catalog_admin_linked_editor_sections() as $editor_section) : ?>
+                            <?php
+                            $bucket_key   = $editor_section['key'];
+                            $bucket_items = isset($links[ $bucket_key ]) && is_array($links[ $bucket_key ]) ? $links[ $bucket_key ] : array();
+                            ?>
+                            <p style="margin: 12px 0 4px;"><strong><?php echo esc_html($editor_section['label']); ?></strong></p>
+                            <?php
+                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- builder escapes each field.
+                            echo fides_use_case_catalog_render_admin_linked_items_editor($bucket_key, $bucket_items, (string) $editor_section['walletType']);
+                            ?>
+                        <?php endforeach; ?>
+                        <script>
+                        (function () {
+                            // Clone the last row of a linked-items bucket so moderators can link
+                            // an unlimited number of items without round-tripping a save first.
+                            function bumpRowIndex(name, newIndex) {
+                                return name.replace(/(\[[^\]]*\]\[)(\d+)(\])/, '$1' + newIndex + '$3');
+                            }
+                            document.addEventListener('click', function (event) {
+                                var btn = event.target && event.target.closest ? event.target.closest('.fides-add-linked-row') : null;
+                                if (!btn) { return; }
+                                event.preventDefault();
+                                var bucket = btn.getAttribute('data-bucket');
+                                var table = document.querySelector('.fides-linked-items-table[data-bucket="' + bucket + '"]');
+                                if (!table) { return; }
+                                var tbody = table.querySelector('tbody');
+                                var rows = tbody ? tbody.querySelectorAll('tr') : [];
+                                if (!rows.length) { return; }
+                                var maxIndex = -1;
+                                rows.forEach(function (row) {
+                                    row.querySelectorAll('[name]').forEach(function (el) {
+                                        var m = el.getAttribute('name').match(/\[(\d+)\]/);
+                                        if (m) { maxIndex = Math.max(maxIndex, parseInt(m[1], 10)); }
+                                    });
+                                });
+                                var newIndex = maxIndex + 1;
+                                var clone = rows[rows.length - 1].cloneNode(true);
+                                clone.querySelectorAll('[name]').forEach(function (el) {
+                                    el.setAttribute('name', bumpRowIndex(el.getAttribute('name'), newIndex));
+                                    if (el.type === 'checkbox') { el.checked = false; }
+                                    else if (el.type === 'hidden') { /* keep walletType */ }
+                                    else if (el.tagName === 'SELECT') { /* keep default source */ }
+                                    else { el.value = ''; }
+                                });
+                                tbody.appendChild(clone);
+                            });
+                        })();
+                        </script>
+
                         <p>
                             <button class="button button-secondary" type="submit">Save details</button>
                             <a class="button button-secondary" href="<?php echo esc_url(admin_url('tools.php?page=fides-use-case-submissions')); ?>">Cancel</a>
@@ -1496,23 +1662,6 @@ function fides_use_case_catalog_render_admin_page(): void {
                             <a class="button button-link-delete" style="float:right; color:#b32d2e;" href="<?php echo esc_url($detail_delete_url); ?>" onclick="return confirm('<?php echo $detail_delete_confirm; ?>');"><?php esc_html_e('Delete permanently', 'fides-use-case-catalog'); ?></a>
                         </p>
                     </form>
-
-                    <h3 style="margin: 24px 0 8px;">Linked catalog items</h3>
-                    <?php
-                    $has_linked_catalog = false;
-                    foreach ($linked_catalog_sections as $link_type => $link_label) {
-                        $items = isset($links[ $link_type ]) && is_array($links[ $link_type ]) ? $links[ $link_type ] : array();
-                        if (empty($items)) {
-                            continue;
-                        }
-                        $has_linked_catalog = true;
-                        ?>
-                        <p style="margin-bottom: 4px;"><strong><?php echo esc_html($link_label); ?></strong></p>
-                        <?php echo fides_use_case_catalog_render_admin_linked_items_html($items); ?>
-                    <?php } ?>
-                    <?php if (! $has_linked_catalog) : ?>
-                        <p>No linked catalog items.</p>
-                    <?php endif; ?>
                 </div>
             </div>
         <?php endif; ?>
@@ -1788,9 +1937,9 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
         wp_die('Invalid request.');
     }
 
-    $title = sanitize_text_field((string) ($_POST['title'] ?? ''));
-    $summary = trim(wp_kses_post((string) ($_POST['summary'] ?? '')));
-    $sector = fides_use_case_catalog_normalize_sector($_POST['sector'] ?? ($_POST['sectors'] ?? ''));
+    $title = sanitize_text_field((string) wp_unslash($_POST['title'] ?? ''));
+    $summary = trim(wp_kses_post((string) wp_unslash($_POST['summary'] ?? '')));
+    $sector = fides_use_case_catalog_normalize_sector(wp_unslash($_POST['sector'] ?? ($_POST['sectors'] ?? '')));
     $taxonomy = fides_use_case_catalog_normalize_taxonomy_payload(
         array(
             'interactionModes' => $_POST['interaction_modes'] ?? array(),
@@ -1800,15 +1949,15 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
             'interopProfiles' => $_POST['interop_profiles'] ?? array(),
         )
     );
-    $organization_name = sanitize_text_field((string) ($_POST['organization_name'] ?? ''));
-    $country_code      = fides_use_case_catalog_sanitize_country_code((string) ($_POST['country_code'] ?? ''));
-    $contact_email     = sanitize_email((string) ($_POST['contact_email'] ?? ''));
-    $production_deployment = fides_use_case_catalog_normalize_production_deployment(sanitize_text_field((string) ($_POST['production_deployment'] ?? '')));
+    $organization_name = sanitize_text_field((string) wp_unslash($_POST['organization_name'] ?? ''));
+    $country_code      = fides_use_case_catalog_sanitize_country_code((string) wp_unslash($_POST['country_code'] ?? ''));
+    $contact_email     = sanitize_email((string) wp_unslash($_POST['contact_email'] ?? ''));
+    $production_deployment = fides_use_case_catalog_normalize_production_deployment(sanitize_text_field((string) wp_unslash($_POST['production_deployment'] ?? '')));
     $image_urls_text = isset($_POST['image_urls']) ? (string) wp_unslash($_POST['image_urls']) : '';
     $video_urls_text = isset($_POST['video_urls']) ? (string) wp_unslash($_POST['video_urls']) : '';
-    $more_info_url = esc_url_raw((string) ($_POST['more_info_url'] ?? ''));
-    $user_journey = trim(wp_kses_post((string) ($_POST['user_journey'] ?? '')));
-    $tags_raw = sanitize_text_field((string) ($_POST['tags'] ?? ''));
+    $more_info_url = esc_url_raw((string) wp_unslash($_POST['more_info_url'] ?? ''));
+    $user_journey = trim(wp_kses_post((string) wp_unslash($_POST['user_journey'] ?? '')));
+    $tags_raw = sanitize_text_field((string) wp_unslash($_POST['tags'] ?? ''));
 
     if (
         $title === ''
@@ -1842,32 +1991,43 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
         }
     }
 
-    $wpdb->update(
-        $table,
-        array(
-            'event_key' => '',
-            'theme_key' => '',
-            'sectors_json' => wp_json_encode(array($sector)),
-            'taxonomy_json' => wp_json_encode($taxonomy),
-            'title' => $title,
-            'summary' => $summary,
-            'organization_name' => $organization_name,
-            'country_code'      => $country_code,
-            'contact_email'     => $contact_email,
-            'production_deployment' => $production_deployment,
-            'video_url' => $media_storage['video_url'] !== '' ? $media_storage['video_url'] : null,
-            'video_provider' => $media_storage['video_provider'] !== '' ? $media_storage['video_provider'] : null,
-            'image_url' => $media_storage['image_url'] !== '' ? $media_storage['image_url'] : null,
-            'media_json' => $media_storage['media_json'] !== '' ? $media_storage['media_json'] : null,
-            'more_info_url' => $more_info_url !== '' ? $more_info_url : null,
-            'user_journey' => $user_journey !== '' ? $user_journey : null,
-            'tags_json' => wp_json_encode($tags),
-            'updated_at' => current_time('mysql', true),
-        ),
-        array('id' => $id)
+    $update_data = array(
+        'event_key' => '',
+        'theme_key' => '',
+        'sectors_json' => wp_json_encode(array($sector)),
+        'taxonomy_json' => wp_json_encode($taxonomy),
+        'title' => $title,
+        'summary' => $summary,
+        'organization_name' => $organization_name,
+        'country_code'      => $country_code,
+        'contact_email'     => $contact_email,
+        'production_deployment' => $production_deployment,
+        'video_url' => $media_storage['video_url'] !== '' ? $media_storage['video_url'] : null,
+        'video_provider' => $media_storage['video_provider'] !== '' ? $media_storage['video_provider'] : null,
+        'image_url' => $media_storage['image_url'] !== '' ? $media_storage['image_url'] : null,
+        'media_json' => $media_storage['media_json'] !== '' ? $media_storage['media_json'] : null,
+        'more_info_url' => $more_info_url !== '' ? $more_info_url : null,
+        'user_journey' => $user_journey !== '' ? $user_journey : null,
+        'tags_json' => wp_json_encode($tags),
+        'updated_at' => current_time('mysql', true),
     );
 
-    wp_safe_redirect(admin_url('tools.php?page=fides-use-case-submissions&saved=1'));
+    // Only rebuild links_json when the editable linked-items fields were posted,
+    // so other save paths can never accidentally wipe existing links.
+    if (isset($_POST['links']) && is_array($_POST['links'])) {
+        $update_data['links_json'] = wp_json_encode(
+            fides_use_case_catalog_links_from_admin_post(wp_unslash($_POST['links']))
+        );
+    }
+
+    $wpdb->update($table, $update_data, array('id' => $id));
+
+    wp_safe_redirect(
+        add_query_arg(
+            array('saved' => '1', 'submission' => $id),
+            admin_url('tools.php?page=fides-use-case-submissions')
+        )
+    );
     exit;
 }
 
