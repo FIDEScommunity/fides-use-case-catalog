@@ -38,6 +38,18 @@ export default function handler(req: VercelRequest, res: VercelResponse): void {
     return;
   }
 
+  try {
+    sendList(req, res);
+  } catch (e) {
+    res.status(500).json({
+      message: 'Failed to load use case data',
+      error: e instanceof Error ? e.message : String(e),
+      timestamp: new Date().toISOString(),
+    });
+  }
+}
+
+function sendList(req: VercelRequest, res: VercelResponse): void {
   const data = loadUseCaseData();
   let useCases = [...(data.useCases || [])];
 

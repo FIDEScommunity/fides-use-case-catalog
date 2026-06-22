@@ -48,8 +48,18 @@ export default function handler(req: VercelRequest, res: VercelResponse): void {
     return;
   }
 
-  const data = loadUseCaseData();
-  const useCase = (data.useCases || []).find((uc) => uc.id === id);
+  let useCase;
+  try {
+    const data = loadUseCaseData();
+    useCase = (data.useCases || []).find((uc) => uc.id === id);
+  } catch (e) {
+    res.status(500).json({
+      message: 'Failed to load use case data',
+      error: e instanceof Error ? e.message : String(e),
+      timestamp: new Date().toISOString(),
+    });
+    return;
+  }
 
   if (!useCase) {
     res.status(404).json({

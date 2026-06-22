@@ -4,15 +4,17 @@
  * The richer authoring types live in `src/types/use-case.ts`; here we only model
  * what the read-only API serves from `data/aggregated.json`.
  *
- * Note: this repo is an ESM package ("type": "module"). Under ESM, Vercel's Node
- * File Trace does not reliably include a `process.cwd()`-based `fs` read, so the
- * data is imported statically and inlined into the function bundle at build time
- * instead (refreshed on each deploy, which is when the crawler updates the file).
+ * Note: this repo is an ESM package ("type": "module"). A `process.cwd()`-based
+ * `fs` read is not reliably traced/bundled by Vercel under ESM, and a bare
+ * `import ... from '*.json'` needs runtime import attributes. Loading the JSON
+ * via `createRequire` avoids both: the static path is traced and bundled, and
+ * `require()` of JSON works without attributes.
  */
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore - JSON import inlined by the bundler (esbuild) at build time.
-import aggregatedJson from '../data/aggregated.json';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const aggregatedJson = require('../data/aggregated.json');
 
 export interface UseCaseLinkRef {
   refId?: string | null;
