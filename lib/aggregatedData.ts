@@ -1,20 +1,12 @@
+import fs from 'fs';
+import path from 'path';
+
 /**
  * Self-contained data layer for the public Use Case Catalog API (mirrors the
  * rp-catalog `lib/aggregatedData.ts` pattern for uniformity across catalogs).
  * The richer authoring types live in `src/types/use-case.ts`; here we only model
  * what the read-only API serves from `data/aggregated.json`.
- *
- * Note: this repo is an ESM package ("type": "module"). A `process.cwd()`-based
- * `fs` read is not reliably traced/bundled by Vercel under ESM, and a bare
- * `import ... from '*.json'` needs runtime import attributes. Loading the JSON
- * via `createRequire` avoids both: the static path is traced and bundled, and
- * `require()` of JSON works without attributes.
  */
-
-import { createRequire } from 'module';
-
-const require = createRequire(import.meta.url);
-const aggregatedJson = require('../data/aggregated.json');
 
 export interface UseCaseLinkRef {
   refId?: string | null;
@@ -70,8 +62,15 @@ export interface AggregatedUseCaseData {
   useCases: AggregatedUseCase[];
 }
 
-const aggregated = aggregatedJson as unknown as AggregatedUseCaseData;
+let dataCache: AggregatedUseCaseData | null = null;
+let lastLoad = 0;
+const CACHE_TTL_MS = 60_000;
 
 export function loadUseCaseData(): AggregatedUseCaseData {
-  return aggregated;
+  const now = Date.now();
+  if (dataCache && now - lastLoad < CACHE_TTL_MS) return dataCache;
+  const raw = fs.readFileSync(path.join(process.cwd(), 'data', 'aggregated.json'), 'utf-8');
+  dataCache = JSON.parse(raw) as AggregatedUseCaseData;
+  lastLoad = now;
+  return dataCache;
 }

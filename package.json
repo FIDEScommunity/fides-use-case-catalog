@@ -2,7 +2,6 @@
   "name": "fides-use-case-catalog",
   "version": "1.0.0",
   "description": "FIDES Community Use Case Catalog - Real-world verifiable credential use cases, submitted via WordPress and published per organization, aggregated for the FIDES ecosystem.",
-  "type": "module",
   "main": "dist/index.js",
   "scripts": {
     "crawl": "tsx src/crawler/index.ts",
