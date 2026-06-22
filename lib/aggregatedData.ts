@@ -1,12 +1,18 @@
-import fs from 'fs';
-import path from 'path';
-
 /**
  * Self-contained data layer for the public Use Case Catalog API (mirrors the
  * rp-catalog `lib/aggregatedData.ts` pattern for uniformity across catalogs).
  * The richer authoring types live in `src/types/use-case.ts`; here we only model
  * what the read-only API serves from `data/aggregated.json`.
+ *
+ * Note: this repo is an ESM package ("type": "module"). Under ESM, Vercel's Node
+ * File Trace does not reliably include a `process.cwd()`-based `fs` read, so the
+ * data is imported statically and inlined into the function bundle at build time
+ * instead (refreshed on each deploy, which is when the crawler updates the file).
  */
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - JSON import inlined by the bundler (esbuild) at build time.
+import aggregatedJson from '../data/aggregated.json';
 
 export interface UseCaseLinkRef {
   refId?: string | null;
@@ -62,15 +68,8 @@ export interface AggregatedUseCaseData {
   useCases: AggregatedUseCase[];
 }
 
-let dataCache: AggregatedUseCaseData | null = null;
-let lastLoad = 0;
-const CACHE_TTL_MS = 60_000;
+const aggregated = aggregatedJson as unknown as AggregatedUseCaseData;
 
 export function loadUseCaseData(): AggregatedUseCaseData {
-  const now = Date.now();
-  if (dataCache && now - lastLoad < CACHE_TTL_MS) return dataCache;
-  const raw = fs.readFileSync(path.join(process.cwd(), 'data', 'aggregated.json'), 'utf-8');
-  dataCache = JSON.parse(raw) as AggregatedUseCaseData;
-  lastLoad = now;
-  return dataCache;
+  return aggregated;
 }
