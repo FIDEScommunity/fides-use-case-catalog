@@ -1,20 +1,12 @@
 name: Crawl
 
-# Publishing pipeline for use cases.
-#
-# Unlike the other FIDES catalogs, use cases originate in the WordPress
-# submission DB (the source of truth). This workflow PULLS the published set
-# from the site's REST /export endpoint, materializes one
-# community-catalogs/<org>/use-case-catalog.json per organization (git-versioned
-# backup + cross-catalog/map source), then crawls them into data/aggregated.json.
-#
-# Required repo config to enable the WP pull:
-#   - vars.USE_CASE_EXPORT_URL  e.g. https://www.fides.community/wp-json/fides-use-case/v1/export
-# Without it the job still runs and re-aggregates whatever is already committed.
+# Push primary: repository_dispatch from WP publish/delete/save (use-case export JSON).
+# HTTP export pull only on workflow_dispatch (recovery). Re-aggregate on community-catalog
+# commits without calling WordPress. See fides-community-tools-tiles governance §14.1.
 
 on:
-  schedule:
-    - cron: '0 6 * * *'
+  repository_dispatch:
+    types: [fides-catalog-export]
   workflow_dispatch:
   push:
     branches: [main]
@@ -39,8 +31,9 @@ jobs:
 
       - run: npm ci
 
-      - name: Crawl (sync from WordPress when configured)
+      - name: Crawl (inline export on dispatch; recovery pull on manual run)
         env:
+          USE_CASE_EXPORT_JSON: ${{ github.event.client_payload.export_json }}
           USE_CASE_EXPORT_URL: ${{ vars.USE_CASE_EXPORT_URL }}
         run: npm run crawl
 

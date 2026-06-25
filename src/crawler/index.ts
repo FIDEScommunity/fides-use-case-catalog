@@ -2,8 +2,8 @@
  * FIDES Use Case Catalog Crawler
  *
  * Pipeline:
- *   1. (optional) SYNC — when USE_CASE_EXPORT_URL is set (or `npm run sync`),
- *      fetch the WordPress /export endpoint and (re)write one
+ *   1. (optional) SYNC — inline JSON from WordPress push sync (primary), or HTTP
+ *      pull on manual workflow_dispatch (recovery), materializing one
  *      `community-catalogs/<orgSlug>/use-case-catalog.json` per organization.
  *   2. READ — load every `community-catalogs/<org>/use-case-catalog.json`.
  *   3. VALIDATE — against schemas/use-case-catalog.schema.json (draft 2020-12).
@@ -40,7 +40,6 @@ const CONFIG = {
   ),
   schemaPath: path.join(ROOT, 'schemas', 'use-case-catalog.schema.json'),
   exportUrl: process.env.USE_CASE_EXPORT_URL || '',
-  syncMode: process.env.USE_CASE_SYNC === '1' || !!process.env.USE_CASE_EXPORT_URL,
   schemaVersion: '1.0.0',
 };
 
@@ -132,17 +131,11 @@ async function fetchExport(url: string): Promise<WordPressExport> {
 }
 
 /**
- * SYNC step: pull the WordPress export and (re)write per-organization files.
+ * SYNC step: materialize per-organization files from a WordPress export payload.
  * Existing use-case-catalog.json files for organizations no longer present in
- * the export are pruned so the git tree always mirrors the published set.
+ * the export are pruned so the git tree mirrors the published set.
  */
-async function syncFromWordPress(): Promise<void> {
-  if (!CONFIG.exportUrl) {
-    throw new Error('Sync requested but USE_CASE_EXPORT_URL is not set.');
-  }
-  log(`Fetching export from ${CONFIG.exportUrl}`);
-
-  const data = await fetchExport(CONFIG.exportUrl);
+async function applyExportToCommunityFiles(data: WordPressExport): Promise<void> {
   if (!data || !Array.isArray(data.organizations)) {
     throw new Error('Export response missing "organizations" array.');
   }
@@ -203,6 +196,58 @@ async function syncFromWordPress(): Promise<void> {
   }
 }
 
+function loadInlineExportPayload(): WordPressExport | null {
+  const inline = process.env.USE_CASE_EXPORT_JSON?.trim();
+  if (!inline) return null;
+  try {
+    const data = JSON.parse(inline) as WordPressExport;
+    if (!data?.organizations || !Array.isArray(data.organizations)) {
+      throw new Error('export_json is missing organizations array.');
+    }
+    return data;
+  } catch (err) {
+    throw new Error(
+      `Invalid USE_CASE_EXPORT_JSON: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
+}
+
+function shouldSyncFromWordPress(): boolean {
+  if (process.env.USE_CASE_EXPORT_JSON?.trim()) return true;
+  const event = process.env.GITHUB_EVENT_NAME?.trim();
+  if (event === 'repository_dispatch') return true;
+  if (event === 'workflow_dispatch' && CONFIG.exportUrl) return true;
+  if (process.env.USE_CASE_SYNC === '1' && CONFIG.exportUrl) return true;
+  return false;
+}
+
+async function loadWordPressExport(): Promise<WordPressExport> {
+  const inline = loadInlineExportPayload();
+  if (inline) {
+    log('Using inline export payload (WordPress push sync).');
+    return inline;
+  }
+
+  const event = process.env.GITHUB_EVENT_NAME?.trim();
+  if (event === 'repository_dispatch') {
+    throw new Error(
+      'Missing USE_CASE_EXPORT_JSON on repository_dispatch. '
+      + 'Enable GitHub push sync in WP Settings → FIDES Catalog SEO, or run recovery via workflow_dispatch.',
+    );
+  }
+
+  if (!CONFIG.exportUrl) {
+    throw new Error('Sync requested but USE_CASE_EXPORT_URL is not set.');
+  }
+
+  log(
+    event === 'workflow_dispatch'
+      ? `Recovery sync: pulling export via HTTP from ${CONFIG.exportUrl}`
+      : `Fetching export from ${CONFIG.exportUrl}`,
+  );
+  return fetchExport(CONFIG.exportUrl);
+}
+
 async function listCommunityFiles(): Promise<string[]> {
   if (!existsSync(CONFIG.communityDir)) return [];
   const out: string[] = [];
@@ -216,18 +261,9 @@ async function listCommunityFiles(): Promise<string[]> {
 }
 
 async function main(): Promise<void> {
-  if (CONFIG.syncMode) {
-    // A sync failure (WP site down, transient network error, misconfigured
-    // export URL) must NOT break publishing: degrade gracefully and re-aggregate
-    // whatever is already committed. The warning is surfaced as a CI annotation.
-    try {
-      await syncFromWordPress();
-    } catch (err) {
-      warn(
-        `Sync from WordPress failed; continuing with already-committed ` +
-        `community-catalogs. Reason: ${(err as Error).message}`
-      );
-    }
+  if (shouldSyncFromWordPress()) {
+    const data = await loadWordPressExport();
+    await applyExportToCommunityFiles(data);
   }
 
   const schema = await readJson<Record<string, unknown>>(CONFIG.schemaPath);

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.7.1
+ * Version: 0.7.4
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.7.1');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.7.4');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
 define('FIDES_USE_CASE_CATALOG_PATH', plugin_dir_path(__FILE__));
 define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_case_submissions');
@@ -991,6 +991,19 @@ function fides_use_case_catalog_build_export(): array {
 }
 
 /**
+ * Push published use-case export to GitHub (requires tiles push sync ≥ 1.7.7).
+ */
+function fides_use_case_catalog_trigger_github_sync(): void {
+    if (! class_exists('Fides_Catalog_Github_Sync')) {
+        return;
+    }
+    Fides_Catalog_Github_Sync::trigger_export_data(
+        'use-case',
+        fides_use_case_catalog_build_export()
+    );
+}
+
+/**
  * Resolve the organization bucket (folder slug + id + display name) for an item.
  *
  * Prefers a linked organization reference (refId from the organization catalog)
@@ -1838,6 +1851,10 @@ function fides_use_case_catalog_handle_status_action(): void {
         fides_use_case_catalog_notify_published($id);
     }
 
+    if ($status === 'published' || fides_use_case_catalog_normalize_status($previous_status) === 'published') {
+        fides_use_case_catalog_trigger_github_sync();
+    }
+
     wp_safe_redirect(admin_url('tools.php?page=fides-use-case-submissions'));
     exit;
 }
@@ -1870,7 +1887,16 @@ function fides_use_case_catalog_handle_delete_action(): void {
         wp_die('Invalid nonce.');
     }
 
+    $previous_status = (string) $wpdb->get_var(
+        $wpdb->prepare("SELECT status FROM {$table} WHERE id = %d", $id)
+    );
+    $was_published = fides_use_case_catalog_normalize_status($previous_status) === 'published';
+
     $wpdb->delete($table, array('id' => $id), array('%d'));
+
+    if ($was_published) {
+        fides_use_case_catalog_trigger_github_sync();
+    }
 
     wp_safe_redirect(add_query_arg('deleted', '1', admin_url('tools.php?page=fides-use-case-submissions')));
     exit;
@@ -2026,6 +2052,13 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
     }
 
     $wpdb->update($table, $update_data, array('id' => $id));
+
+    $current_status = (string) $wpdb->get_var(
+        $wpdb->prepare("SELECT status FROM {$table} WHERE id = %d", $id)
+    );
+    if (fides_use_case_catalog_normalize_status($current_status) === 'published') {
+        fides_use_case_catalog_trigger_github_sync();
+    }
 
     wp_safe_redirect(
         add_query_arg(
