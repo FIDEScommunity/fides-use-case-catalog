@@ -45,6 +45,8 @@ const CONFIG = {
 };
 
 const SCHEMA_REF = 'https://fides.community/schemas/use-case-catalog/v1';
+/** Shared UA for all FIDES catalog automation HTTP calls (CI, crawlers, invalidate). */
+const AUTOMATION_USER_AGENT = 'FIDES-Catalog-Automation/1.0';
 
 function log(msg: string): void {
   // eslint-disable-next-line no-console
@@ -78,10 +80,9 @@ async function writeJson(file: string, data: unknown): Promise<void> {
 }
 
 /**
- * Fetch the WordPress export with a browser-like User-Agent and a small retry
- * loop. Managed WP hosts sometimes serve an HTML challenge / cached HTML page
- * to unknown clients on the first hit (the JSON arrives once a session cookie
- * is set), so a single text/html response should not fail the whole sync.
+ * Fetch the WordPress export with the shared automation User-Agent and a small
+ * retry loop. Managed WP hosts sometimes serve an HTML challenge on the first
+ * hit, so a single text/html response should not fail the whole sync.
  */
 async function fetchExport(url: string): Promise<WordPressExport> {
   const maxAttempts = 4;
@@ -95,10 +96,7 @@ async function fetchExport(url: string): Promise<WordPressExport> {
     const res = await fetch(target.toString(), {
       headers: {
         Accept: 'application/json',
-        // A realistic UA avoids bot/HTML-challenge interstitials on managed hosts.
-        'User-Agent':
-          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ' +
-          'Chrome/124.0 Safari/537.36 fides-use-case-crawler',
+        'User-Agent': AUTOMATION_USER_AGENT,
         'Cache-Control': 'no-cache',
       },
       redirect: 'follow',
