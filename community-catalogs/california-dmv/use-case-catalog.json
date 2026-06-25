@@ -12,8 +12,8 @@
       "organizationName": "California DMV",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-11T05:06:28+00:00",
-      "publishedAt": "2026-06-10T05:08:24+00:00",
+      "updatedAt": "2026-06-25T16:52:42+00:00",
+      "publishedAt": "2026-06-25T16:52:42+00:00",
       "tags": [
         "mdl",
         "passwordless-login",
@@ -50,7 +50,7 @@
         "credentials": [
           {
             "refId": "cred:iso:mdl-mdoc:mdoc",
-            "labelRaw": "credisomdl-mdocmdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
