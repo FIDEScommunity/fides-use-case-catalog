@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.8.1
+ * Version: 0.8.4
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.8.1');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.8.4');
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
 define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
@@ -1663,6 +1663,8 @@ function fides_use_case_catalog_render_form_shortcode(string $mode, array $extra
             'restNonce' => wp_create_nonce('wp_rest'),
             'preselectUseCaseId' => '',
             'countries' => array(),
+            'vocabularyUrl' => 'https://raw.githubusercontent.com/FIDEScommunity/fides-interop-profiles/main/data/vocabulary.json',
+            'vocabularyFallbackUrl' => FIDES_USE_CASE_CATALOG_URL . 'assets/vocabulary.json',
         ),
         $extra
     );

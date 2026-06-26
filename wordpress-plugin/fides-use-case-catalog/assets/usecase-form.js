@@ -12,6 +12,24 @@
   const contactEmail = String(config.contactEmail || "").trim();
   const restNonce = String(config.restNonce || "").trim();
   const countries = Array.isArray(config.countries) ? config.countries : [];
+  const VOCABULARY_URL = config.vocabularyUrl ? String(config.vocabularyUrl) : "";
+  const VOCABULARY_FALLBACK_URL = config.vocabularyFallbackUrl ? String(config.vocabularyFallbackUrl) : "";
+  let vocabulary = null;
+
+  const FORM_FIELD_TO_VOCAB = {
+    interactionModes: "interactionMode",
+    vcFormats: "vcFormat",
+    issuanceProtocols: "issuanceProtocol",
+    presentationProtocols: "presentationProtocol",
+    interopProfiles: "interopProfile"
+  };
+
+  /** Map form option slugs to vocabulary.json term keys (when they differ). */
+  const FORM_OPTION_TO_VOCAB = {
+    issuanceProtocols: {
+      oid4vci: "OpenID4VCI"
+    }
+  };
   let selectedUseCaseId = mode === "update" ? String(config.preselectUseCaseId || "").trim() : "";
   let selectedUseCaseLabel = "";
 
@@ -1215,4 +1233,197 @@
       setMessage("Submission failed due to a network error.", "error");
     }
   });
+
+  function isFidesLocalDevHost() {
+    try {
+      const host = window.location.hostname || "";
+      const href = window.location.href || "";
+      return host.includes(".local") || href.includes(".local");
+    } catch (_err) {
+      return false;
+    }
+  }
+
+  async function loadVocabulary(primaryUrl, fallbackUrl) {
+    let first = primaryUrl;
+    let second = fallbackUrl;
+    if (isFidesLocalDevHost() && primaryUrl && fallbackUrl) {
+      first = fallbackUrl;
+      second = primaryUrl;
+    }
+    const tryLoad = async (url) => {
+      const res = await fetch(url);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      return data.terms || null;
+    };
+    if (first) {
+      try {
+        return await tryLoad(first);
+      } catch (e) {
+        console.warn("Use case form vocabulary load failed (first):", e.message);
+      }
+    }
+    if (second) {
+      try {
+        return await tryLoad(second);
+      } catch (e) {
+        console.warn("Use case form vocabulary load failed (second):", e.message);
+      }
+    }
+    return null;
+  }
+
+  function hideVocabularyPopup() {
+    const overlay = document.querySelector(".fides-vocab-overlay");
+    const popup = document.querySelector(".fides-vocab-popup");
+    if (overlay) overlay.remove();
+    if (popup) popup.remove();
+  }
+
+  function formChoiceLabelText(label) {
+    const span = label.querySelector("span");
+    return span ? span.textContent.trim() : label.textContent.trim();
+  }
+
+  function taxonomyOptionLabel(fieldKey, value) {
+    const map = taxonomy[fieldKey];
+    return map && map[value] ? String(map[value]) : value;
+  }
+
+  function resolveFormOptionVocabKey(fieldKey, slug) {
+    const groupMap = FORM_OPTION_TO_VOCAB[fieldKey];
+    if (groupMap && groupMap[slug]) {
+      return groupMap[slug];
+    }
+    return slug;
+  }
+
+  function showFormVocabularyPopup(button, groupEl, fieldKey, vocabKey) {
+    hideVocabularyPopup();
+    if (!vocabulary) return;
+    const groupTerm = vocabulary[vocabKey];
+    const labelEl = groupEl.querySelector(".fides-form-label-with-info label, label");
+    const categoryName = labelEl ? labelEl.textContent.replace(/\s*\*$/, "").trim() : "";
+    let html = "";
+    if (categoryName) {
+      html += '<p class="fides-vocab-popup-title"><strong>' + escapeHtml(categoryName) + "</strong></p>";
+    }
+    if (groupTerm && groupTerm.description) {
+      html += '<p class="fides-vocab-popup-intro">' + escapeHtml(groupTerm.description) + "</p>";
+    }
+    const choicesEl = groupEl.querySelector(".fides-form-choices");
+    if (choicesEl) {
+      const labels = choicesEl.querySelectorAll("label.fides-form-choice");
+      if (labels.length > 0) {
+        const listItems = [];
+        labels.forEach((label) => {
+          const input = label.querySelector("input");
+          const value = input ? String(input.value || "").trim() : "";
+          let labelText = formChoiceLabelText(label);
+          if (!labelText || labelText === value) {
+            labelText = taxonomyOptionLabel(fieldKey, value);
+          }
+          const optionVocabKey = resolveFormOptionVocabKey(fieldKey, value);
+          const term = optionVocabKey ? vocabulary[optionVocabKey] : null;
+          const desc = term && term.description ? escapeHtml(term.description) : "";
+          if (desc) {
+            listItems.push({ labelText, desc });
+          }
+        });
+        if (listItems.length > 0) {
+          html += '<ul class="fides-vocab-popup-list">';
+          listItems.forEach((item) => {
+            html += "<li><strong>" + escapeHtml(item.labelText) + "</strong>: " + item.desc + "</li>";
+          });
+          html += "</ul>";
+        }
+      }
+    }
+    if (!html) html = "<p>No description available.</p>";
+
+    const popup = document.createElement("div");
+    popup.className = "fides-vocab-popup";
+    popup.setAttribute("role", "dialog");
+    popup.setAttribute("aria-label", "Field explanation");
+    popup.innerHTML = html;
+    const overlay = document.createElement("div");
+    overlay.className = "fides-vocab-overlay";
+    document.body.appendChild(overlay);
+    document.body.appendChild(popup);
+
+    const margin = 20;
+    const rect = button.getBoundingClientRect();
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const pw = popup.offsetWidth;
+    const ph = popup.offsetHeight;
+    const left = Math.max(margin, Math.min(rect.right + 40, w - pw - margin));
+    const top = Math.max(margin, Math.min((h - ph) / 2, h - ph - margin));
+    popup.style.left = left + "px";
+    popup.style.top = top + "px";
+
+    setTimeout(() => {
+      overlay.classList.add("visible");
+      popup.classList.add("visible");
+    }, 10);
+
+    const close = (e) => {
+      if (e && e.target.closest && e.target.closest(".fides-vocab-popup")) return;
+      hideVocabularyPopup();
+      document.removeEventListener("click", close, true);
+      document.removeEventListener("keydown", onKeydown);
+    };
+    function onKeydown(e) {
+      if (e.key === "Escape") close();
+    }
+    document.addEventListener("keydown", onKeydown);
+    setTimeout(() => document.addEventListener("click", close, true), 0);
+  }
+
+  function initFormVocabularyInfo(containerEl) {
+    if (!vocabulary) return;
+    hideVocabularyPopup();
+    containerEl.querySelectorAll(".fides-vocab-info").forEach((btn) => btn.remove());
+    containerEl.querySelectorAll(".fides-taxonomy-field[data-multi-field]").forEach((groupEl) => {
+      const fieldKey = groupEl.getAttribute("data-multi-field") || "";
+      const vocabKey = FORM_FIELD_TO_VOCAB[fieldKey] || fieldKey;
+      if (!vocabulary[vocabKey]) return;
+      const labelEl = groupEl.querySelector(":scope > label");
+      if (!labelEl) return;
+
+      const infoBtn = document.createElement("button");
+      infoBtn.type = "button";
+      infoBtn.className = "fides-vocab-info";
+      infoBtn.dataset.group = vocabKey;
+      infoBtn.setAttribute("aria-label", "Show help for this field");
+      infoBtn.setAttribute("title", "Show help");
+      infoBtn.textContent = "i";
+      infoBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        showFormVocabularyPopup(e.currentTarget, groupEl, fieldKey, vocabKey);
+      });
+
+      const parent = labelEl.parentNode;
+      if (parent && parent.classList && parent.classList.contains("fides-form-label-with-info")) {
+        parent.appendChild(infoBtn);
+        return;
+      }
+      const wrapper = document.createElement("div");
+      wrapper.className = "fides-form-label-with-info";
+      parent.insertBefore(wrapper, labelEl);
+      wrapper.appendChild(labelEl);
+      wrapper.appendChild(infoBtn);
+    });
+  }
+
+  if (VOCABULARY_URL || VOCABULARY_FALLBACK_URL) {
+    loadVocabulary(VOCABULARY_URL, VOCABULARY_FALLBACK_URL)
+      .then((terms) => {
+        vocabulary = terms;
+        if (vocabulary) initFormVocabularyInfo(root);
+      })
+      .catch(() => {});
+  }
 })();

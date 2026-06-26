@@ -50,6 +50,7 @@
 
 .fides-use-case-form .fides-form-row > label,
 .fides-use-case-form .fides-linked-field > label,
+.fides-use-case-form .fides-linked-field > .fides-form-label-with-info > label,
 .fides-use-case-form .fides-media-col > label {
   font-weight: 600;
   color: #0f172a;
@@ -1309,7 +1310,8 @@
   min-width: 0.5rem;
 }
 
-.fides-use-case-catalog .fides-vocab-info {
+.fides-use-case-catalog .fides-vocab-info,
+.fides-use-case-submission-root .fides-vocab-info {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1331,16 +1333,55 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-.fides-use-case-catalog .fides-vocab-info:hover {
+.fides-use-case-catalog .fides-vocab-info:hover,
+.fides-use-case-submission-root .fides-vocab-info:hover {
   color: #fff;
   background: var(--fides-accent);
   border-color: var(--fides-accent);
   transform: scale(1.05);
 }
 
-.fides-use-case-catalog .fides-vocab-info:focus {
+.fides-use-case-catalog .fides-vocab-info:focus,
+.fides-use-case-submission-root .fides-vocab-info:focus {
   outline: none;
   box-shadow: 0 0 0 2px var(--fides-accent);
+}
+
+.fides-use-case-form .fides-form-label-with-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.fides-use-case-form .fides-taxonomy-field > .fides-form-label-with-info > label {
+  margin-bottom: 0;
+}
+
+/* Subtle help trigger on submission forms (catalog filters use theme tokens). */
+.fides-use-case-submission-root .fides-vocab-info {
+  width: 1.125rem;
+  height: 1.125rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 50%;
+  background: #f8fafc;
+  color: #64748b;
+  font-family: inherit;
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1;
+  box-shadow: none;
+}
+
+.fides-use-case-submission-root .fides-vocab-info:hover {
+  color: #fff;
+  background: #0a6ef3;
+  border-color: #0a6ef3;
+}
+
+.fides-use-case-submission-root .fides-vocab-info:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(10, 110, 243, 0.35);
 }
 
 .fides-vocab-overlay {

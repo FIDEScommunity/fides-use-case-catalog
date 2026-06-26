@@ -2389,13 +2389,14 @@
           const labelText = filterCheckboxLabelTextWithoutCount(label);
           const term = vocabulary[value] || null;
           const desc = term && term.description ? escapeHtml(term.description) : "";
-          listItems.push({ labelText, desc });
+          if (desc) {
+            listItems.push({ labelText, desc });
+          }
         });
-        const hasAnyOptionDesc = listItems.some((item) => item.desc);
-        if (hasAnyOptionDesc) {
+        if (listItems.length > 0) {
           html += '<ul class="fides-vocab-popup-list">';
           listItems.forEach((item) => {
-            html += "<li><strong>" + escapeHtml(item.labelText) + "</strong>" + (item.desc ? ": " + item.desc : "") + "</li>";
+            html += "<li><strong>" + escapeHtml(item.labelText) + "</strong>: " + item.desc + "</li>";
           });
           html += "</ul>";
         }
