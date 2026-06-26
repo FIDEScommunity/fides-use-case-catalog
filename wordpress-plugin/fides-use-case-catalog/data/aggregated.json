@@ -1,10 +1,100 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-06-25T16:52:59.632Z",
+  "lastUpdated": "2026-06-26T05:24:49.784Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 4,
   "useCases": [
+    {
+      "id": "nijmegen-attribute-based-municipal-login",
+      "sector": "public_sector",
+      "title": "Municipal login with attribute-based credentials",
+      "summary": "Citizens log in to their municipal account and securely share only the personal attributes a service actually needs, using an attribute-based wallet. The municipality acts as the relying party and verifies the presented attributes over the IRMA protocol. This is one of the first production implementations of attribute-based authentication in Dutch municipal services, showing that privacy-friendly login at scale is possible today.",
+      "organizationName": "Gemeente Nijmegen",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-06-26T05:24:35+00:00",
+      "publishedAt": "2026-06-26T05:24:35+00:00",
+      "tags": [
+        "municipal-login",
+        "attribute-based",
+        "data-minimisation",
+        "irma",
+        "public-services"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "yivi",
+            "labelRaw": "Yivi",
+            "url": null,
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Yivi Issuer",
+            "url": "https://yivi.nijmegen.nl/login",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:nijmegen",
+            "labelRaw": "Gemeente Nijmegen",
+            "url": "https://www.nijmegen.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:caesar",
+            "labelRaw": "Caesar Groep",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:privacybydesign",
+            "labelRaw": "Privacy by Design Foundation",
+            "url": "https://privacybydesign.foundation",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "nijmegen-mijn-nijmegen-login",
+            "labelRaw": "Mijn Nijmegen - Yivi Login",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "idemix"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "IRMA Protocol"
+      ],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://yivi.app/img/inloggen-bestelproces.webp"
+      ],
+      "imageUrl": "https://yivi.app/img/inloggen-bestelproces.webp",
+      "moreInfoUrl": "https://mijn.nijmegen.nl/login",
+      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\n2) They open their municipal account and choose to log in with the wallet.\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\n4) The citizen reviews the request in the wallet and confirms disclosure.\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
+      "country": "NL"
+    },
     {
       "id": "ca-dmv-mdl-website-login",
       "sector": "public_sector",
@@ -94,89 +184,6 @@
       "moreInfoUrl": "https://www.dmv.ca.gov/portal/dmv-wallet/",
       "userJourney": "1) The resident already holds a mobile driver's license (mDL) issued by the DMV in a supported wallet.\r\n2) They open a government online service and choose to log in with their driver's license.\r\n3) The service (relying party) requests an mDL presentation over an ISO/IEC 18013-5 mdoc flow.\r\n4) The wallet shows exactly which attributes are requested; the resident approves.\r\n5) The relying party verifies the presentation and signs the resident in, without a password and without collecting more data than needed.",
       "country": "US"
-    },
-    {
-      "id": "nijmegen-attribute-based-municipal-login",
-      "sector": "public_sector",
-      "title": "Municipal login with attribute-based credentials",
-      "summary": "Citizens log in to their municipal account and securely share only the personal attributes a service actually needs, using an attribute-based wallet. The municipality acts as the relying party and verifies the presented attributes over the IRMA protocol. This is one of the first production implementations of attribute-based authentication in Dutch municipal services, showing that privacy-friendly login at scale is possible today.",
-      "organizationName": "Gemeente Nijmegen",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-06-11T08:22:32+00:00",
-      "publishedAt": "2026-06-11T08:22:32+00:00",
-      "tags": [
-        "municipal-login",
-        "attribute-based",
-        "data-minimisation",
-        "irma",
-        "public-services"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "yivi",
-            "labelRaw": "Yivi",
-            "url": null,
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Yivi Issuer",
-            "url": "https://yivi.nijmegen.nl/login",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": "org:nijmegen",
-            "labelRaw": "Gemeente Nijmegen",
-            "url": "https://www.nijmegen.nl",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:caesar",
-            "labelRaw": "Caesar Groep",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": "nijmegen-mijn-nijmegen-login",
-            "labelRaw": "Mijn Nijmegen - Yivi Login",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "idemix"
-      ],
-      "issuanceProtocols": [],
-      "presentationProtocols": [
-        "IRMA Protocol"
-      ],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://yivi.app/img/inloggen-bestelproces.webp"
-      ],
-      "imageUrl": "https://yivi.app/img/inloggen-bestelproces.webp",
-      "moreInfoUrl": "https://mijn.nijmegen.nl/login",
-      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\r\n2) They open their municipal account and choose to log in with the wallet.\r\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\r\n4) The citizen reviews the request in the wallet and confirms disclosure.\r\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
-      "country": "NL"
     },
     {
       "id": "age-verification-online-purchase",

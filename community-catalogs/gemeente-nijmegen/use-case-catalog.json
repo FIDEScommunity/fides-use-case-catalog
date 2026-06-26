@@ -12,8 +12,8 @@
       "organizationName": "Gemeente Nijmegen",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-06-11T08:22:32+00:00",
-      "publishedAt": "2026-06-11T08:22:32+00:00",
+      "updatedAt": "2026-06-26T05:24:35+00:00",
+      "publishedAt": "2026-06-26T05:24:35+00:00",
       "tags": [
         "municipal-login",
         "attribute-based",
@@ -56,6 +56,13 @@
             "url": null,
             "source": "catalog",
             "walletType": null
+          },
+          {
+            "refId": "org:privacybydesign",
+            "labelRaw": "Privacy by Design Foundation",
+            "url": "https://privacybydesign.foundation",
+            "source": "catalog",
+            "walletType": null
           }
         ],
         "rps": [
@@ -84,7 +91,7 @@
       ],
       "imageUrl": "https://yivi.app/img/inloggen-bestelproces.webp",
       "moreInfoUrl": "https://mijn.nijmegen.nl/login",
-      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\r\n2) They open their municipal account and choose to log in with the wallet.\r\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\r\n4) The citizen reviews the request in the wallet and confirms disclosure.\r\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
+      "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\n2) They open their municipal account and choose to log in with the wallet.\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\n4) The citizen reviews the request in the wallet and confirms disclosure.\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
       "country": "NL"
     }
   ]
