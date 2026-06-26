@@ -1,12 +1,19 @@
 (function () {
   const config = window.FIDES_USE_CASE_FORM_CONFIG || {};
-  const root = document.getElementById("fides-use-case-form-root");
+  const mode = config.mode === "update" ? "update" : "create";
+  const root =
+    document.getElementById(
+      mode === "update" ? "fides-use-case-update-form-root" : "fides-use-case-form-root"
+    ) || document.querySelector(".fides-use-case-submission-root");
   if (!root) return;
 
   const apiBase = String(config.apiBase || "").replace(/\/$/, "");
   const taxonomy = config.taxonomy || {};
   const contactEmail = String(config.contactEmail || "").trim();
   const restNonce = String(config.restNonce || "").trim();
+  const countries = Array.isArray(config.countries) ? config.countries : [];
+  let selectedUseCaseId = mode === "update" ? String(config.preselectUseCaseId || "").trim() : "";
+  let selectedUseCaseLabel = "";
 
   function escapeHtml(value) {
     return String(value)
@@ -30,6 +37,35 @@
     }
     return entries;
   }
+
+  function countryLabel(code) {
+    const upper = String(code || "").trim().toUpperCase();
+    const match = countries.find((entry) => String(entry.code || "").toUpperCase() === upper);
+    return match && match.label ? String(match.label) : upper;
+  }
+
+  function countrySelectHtml(selected) {
+    const sel = String(selected || "").trim().toUpperCase();
+    let html = '<option value="">Select...</option>';
+    countries.forEach((entry) => {
+      const code = String(entry.code || "").trim().toUpperCase();
+      if (!code) return;
+      const label = String(entry.label || code);
+      html += `<option value="${escapeHtml(code)}"${sel === code ? " selected" : ""}>${escapeHtml(label)} (${escapeHtml(code)})</option>`;
+    });
+    return html;
+  }
+
+  const updateCountryFieldHtml =
+    mode === "update"
+      ? `<div class="fides-form-row">
+              <label for="fides-country">Country *</label>
+              <p class="fides-help">Confirm the country for this use case. It is normally assigned during review; change it only when the country should be updated.</p>
+              <select id="fides-country" name="country" required>
+                ${countrySelectHtml("")}
+              </select>
+            </div>`
+      : "";
 
   function renderCheckboxGroup(label, fieldKey, optionsMap, required) {
     const entries = sortedOptionEntries(optionsMap);
@@ -68,15 +104,58 @@
   const howItWorksPlaceholder =
     "Walk through the process step by step from a user and organizational perspective. Explain how the different parties interact and where digital wallets and verifiable credentials are used throughout the flow.";
 
+  const sectionTitle = mode === "update" ? "Suggest an update" : "Use case overview";
+  const sectionIntroHtml =
+    mode === "update"
+      ? `<p class="fides-form-section-intro">Search for a published use case, review the pre-filled details, and submit your proposed changes for review.</p>`
+      : `<p class="fides-form-section-intro">Describe the use case, its sector, and who is submitting it.</p>`;
+  const sectionBadgeHtml =
+    mode === "create" ? `<span class="fides-form-accordion-badge">About 3 minutes</span>` : "";
+  const updatePickerHtml =
+    mode === "update"
+      ? `<div id="fides-use-case-update-picker" class="fides-form-section-body fides-use-case-update-picker-body">
+            <div id="fides-use-case-search-block" class="fides-linked-field">
+              <label for="fides-use-case-search">Find use case *</label>
+              <p class="fides-help">Search the published use case catalog by title or organization name.</p>
+              <div class="fides-linked-inputs">
+                <input id="fides-use-case-search" type="text" autocomplete="off" placeholder="Start typing…" />
+              </div>
+              <div class="fides-lookup-panel">
+                <p id="fides-use-case-lookup-hint" class="fides-lookup-hint" hidden></p>
+                <ul id="fides-use-case-lookup-results" class="fides-lookup-results" role="listbox" aria-label="Search results"></ul>
+              </div>
+            </div>
+            <div id="fides-use-case-update-banner" class="fides-update-banner-row" hidden>
+              <div class="fides-update-banner">
+                <span class="fides-update-banner-label">Updating:</span>
+                <strong id="fides-use-case-update-name"></strong>
+                <code id="fides-use-case-update-id"></code>
+              </div>
+              <button type="button" class="fides-secondary-btn" id="fides-use-case-change">Choose different</button>
+            </div>
+          </div>`
+      : "";
+
   root.innerHTML = `
     <section class="fides-use-case-card">
-      <form id="fides-use-case-form" class="fides-use-case-form">
+      <form id="fides-use-case-form" class="fides-use-case-form${mode === "update" ? " fides-use-case-form--update" : ""}">
+        ${
+          mode === "update"
+            ? `<section class="fides-form-section fides-form-section-first" aria-labelledby="fides-overview-section-title">
+          <div class="fides-form-accordion-heading">
+            <h3 id="fides-overview-section-title" class="fides-form-section-title">${escapeHtml(sectionTitle)}</h3>
+          </div>
+          ${sectionIntroHtml}
+          ${updatePickerHtml}
+          <div id="fides-use-case-fields-wrap" hidden aria-hidden="true">`
+            : `<div id="fides-use-case-fields-wrap">
         <section class="fides-form-section fides-form-section-first" aria-labelledby="fides-overview-section-title">
           <div class="fides-form-accordion-heading">
-            <h3 id="fides-overview-section-title" class="fides-form-section-title">Use case overview</h3>
-            <span class="fides-form-accordion-badge">About 3 minutes</span>
+            <h3 id="fides-overview-section-title" class="fides-form-section-title">${escapeHtml(sectionTitle)}</h3>
+            ${sectionBadgeHtml}
           </div>
-          <p class="fides-form-section-intro">Describe the use case, its sector, and who is submitting it.</p>
+          ${sectionIntroHtml}`
+        }
           <div class="fides-form-section-body">
             <div class="fides-form-row">
               <label for="fides-title">Use case title *</label>
@@ -112,6 +191,7 @@
                 </div>
               </div>
             </div>
+            ${updateCountryFieldHtml}
             <div class="fides-overview-orgs">
               <div id="fides-org-link-field"></div>
             </div>
@@ -159,7 +239,7 @@
               </div>
             </div>
           </div>
-        </section>
+        ${mode === "create" ? "</section>" : ""}
 
         <section class="fides-form-section" aria-labelledby="fides-media-section-title">
           <div class="fides-form-accordion-heading">
@@ -213,13 +293,17 @@
             <div id="fides-link-fields" class="fides-form-section-body"></div>
           </div>
         </details>
+        </div>
+        ${mode === "update" ? "</section>" : ""}
 
+        <div id="fides-use-case-submit-block" class="fides-use-case-submit-block"${mode === "update" ? ' hidden aria-hidden="true"' : ""}>
         <div class="fides-consent">
           <label><input type="checkbox" name="consentPublish" required /> I confirm this information may be published *</label>
         </div>
 
         <div class="fides-form-actions">
-          <button type="submit">Submit use case</button>
+          <button type="submit">${mode === "update" ? "Submit update proposal" : "Submit use case"}</button>
+        </div>
         </div>
         <p id="fides-form-message" class="fides-form-message" aria-live="polite"></p>
       </form>
@@ -228,6 +312,16 @@
 
   const form = root.querySelector("#fides-use-case-form");
   const messageEl = root.querySelector("#fides-form-message");
+  const fieldsWrap = root.querySelector("#fides-use-case-fields-wrap");
+  const submitBlock = root.querySelector("#fides-use-case-submit-block");
+  const searchInput = root.querySelector("#fides-use-case-search");
+  const lookupResults = root.querySelector("#fides-use-case-lookup-results");
+  const lookupHint = root.querySelector("#fides-use-case-lookup-hint");
+  const updateBanner = root.querySelector("#fides-use-case-update-banner");
+  const searchBlock = root.querySelector("#fides-use-case-search-block");
+  const updateNameEl = root.querySelector("#fides-use-case-update-name");
+  const updateIdEl = root.querySelector("#fides-use-case-update-id");
+  const changeUseCaseBtn = root.querySelector("#fides-use-case-change");
   const imageRowsEl = root.querySelector("#fides-image-rows");
   const videoRowsEl = root.querySelector("#fides-video-rows");
   const imageUploadStatusEl = root.querySelector("#fides-image-upload-status");
@@ -258,7 +352,9 @@
     { key: "rps", label: "Relying parties", lookupType: "rp" }
   ];
   const linkState = {};
+  const linkChipRefreshers = {};
   const submitterSelect = root.querySelector("#fides-organization-name");
+  const countrySelect = root.querySelector("#fides-country");
 
   function involvedOrganizationLabels() {
     const orgs = linkState.organizations || [];
@@ -300,6 +396,211 @@
   function setMessage(text, type) {
     messageEl.textContent = text || "";
     messageEl.className = `fides-form-message ${type ? `is-${type}` : ""}`.trim();
+  }
+
+  function submissionItemUrl(useCaseId) {
+    const id = String(useCaseId || "").trim();
+    if (!id || !/^[a-z0-9][a-z0-9._-]*$/.test(id)) {
+      return "";
+    }
+    return `${apiBase}/submissions/${encodeURIComponent(id)}`;
+  }
+
+  function showUpdateSelectionUi() {
+    const hasSelection = Boolean(selectedUseCaseId);
+    if (updateBanner) updateBanner.hidden = !hasSelection;
+    if (searchBlock) searchBlock.hidden = hasSelection;
+    if (submitBlock && mode === "update") submitBlock.hidden = !hasSelection;
+    if (!hasSelection) {
+      if (updateNameEl) updateNameEl.textContent = "";
+      if (updateIdEl) updateIdEl.textContent = "";
+      return;
+    }
+    if (updateNameEl) updateNameEl.textContent = selectedUseCaseLabel || selectedUseCaseId;
+    if (updateIdEl) updateIdEl.textContent = selectedUseCaseId;
+  }
+
+  function revealFields(show) {
+    if (fieldsWrap) {
+      fieldsWrap.hidden = !show;
+      if (show) {
+        fieldsWrap.removeAttribute("aria-hidden");
+      } else {
+        fieldsWrap.setAttribute("aria-hidden", "true");
+      }
+    }
+  }
+
+  function setMediaFromPayload(payload) {
+    const imageUrls = Array.isArray(payload.imageUrls)
+      ? payload.imageUrls.map((url) => String(url || "").trim()).filter(Boolean)
+      : [];
+    if (imageUrls.length === 0 && payload.imageUrl) {
+      imageUrls.push(String(payload.imageUrl).trim());
+    }
+    imageRowsState.length = 0;
+    (imageUrls.length ? imageUrls : [""]).forEach((url) => imageRowsState.push({ url }));
+    renderImageRows();
+
+    const videoUrls = [];
+    if (Array.isArray(payload.videos)) {
+      payload.videos.forEach((video) => {
+        if (video && video.url) videoUrls.push(String(video.url).trim());
+      });
+    }
+    if (Array.isArray(payload.videoUrls)) {
+      payload.videoUrls.forEach((url) => {
+        const trimmed = String(url || "").trim();
+        if (trimmed) videoUrls.push(trimmed);
+      });
+    }
+    if (videoUrls.length === 0 && payload.video && payload.video.url) {
+      videoUrls.push(String(payload.video.url).trim());
+    }
+    videoRowsState.length = 0;
+    (videoUrls.length ? videoUrls : [""]).forEach((url) => videoRowsState.push({ url }));
+    renderVideoRows();
+  }
+
+  function setCountryValue(code) {
+    if (!countrySelect) return;
+    const upper = String(code || "").trim().toUpperCase();
+    if (!upper) {
+      countrySelect.value = "";
+      return;
+    }
+    const hasOption = Array.from(countrySelect.options).some((opt) => opt.value === upper);
+    if (hasOption) {
+      countrySelect.value = upper;
+      return;
+    }
+    const option = document.createElement("option");
+    option.value = upper;
+    option.textContent = `${countryLabel(upper)} (${upper})`;
+    option.selected = true;
+    countrySelect.appendChild(option);
+  }
+
+  function fillForm(payload) {
+    const data = payload && typeof payload === "object" ? payload : {};
+    const titleEl = form.querySelector("#fides-title");
+    const summaryEl = form.querySelector("#fides-summary");
+    const sectorEl = form.querySelector("#fides-sector");
+    const userJourneyEl = form.querySelector("#fides-user-journey");
+    const tagsEl = form.querySelector("#fides-tags");
+    const moreInfoEl = form.querySelector("#fides-more-info-url");
+
+    if (titleEl) titleEl.value = String(data.title || "");
+    if (summaryEl) summaryEl.value = String(data.summary || "");
+    if (sectorEl) sectorEl.value = String(data.sector || "");
+    if (userJourneyEl) userJourneyEl.value = String(data.userJourney || "");
+    if (tagsEl) {
+      tagsEl.value = Array.isArray(data.tags) ? data.tags.join(", ") : "";
+    }
+    if (moreInfoEl) moreInfoEl.value = String(data.moreInfoUrl || "");
+    setCountryValue(data.country || "");
+
+    const production = String(data.productionDeployment || "").trim();
+    form.querySelectorAll('input[name="productionDeployment"]').forEach((input) => {
+      if (!(input instanceof HTMLInputElement)) return;
+      input.checked = production !== "" && input.value === production;
+    });
+
+    ["interactionModes", "vcFormats", "issuanceProtocols", "presentationProtocols", "interopProfiles"].forEach(
+      (fieldKey) => {
+        const values = Array.isArray(data[fieldKey]) ? data[fieldKey].map(String) : [];
+        form.querySelectorAll(`input[name="${fieldKey}"]`).forEach((input) => {
+          if (!(input instanceof HTMLInputElement)) return;
+          input.checked = values.includes(input.value);
+        });
+      }
+    );
+
+    Object.keys(linkState).forEach((key) => {
+      linkState[key] = [];
+    });
+    const links = data.links && typeof data.links === "object" ? data.links : {};
+    Object.keys(linkState).forEach((key) => {
+      const items = Array.isArray(links[key]) ? links[key] : [];
+      linkState[key] = items.map((item) => ({
+        refId: item && item.refId ? String(item.refId) : null,
+        labelRaw: item && item.labelRaw ? String(item.labelRaw) : null,
+        url: item && item.url ? String(item.url) : null,
+        source: item && item.source === "catalog" ? "catalog" : "manual",
+        walletType: item && item.walletType ? String(item.walletType) : null
+      }));
+    });
+
+    Object.values(linkChipRefreshers).forEach((refresh) => {
+      if (typeof refresh === "function") refresh();
+    });
+
+    if (submitterSelect && data.organizationName) {
+      submitterSelect.value = String(data.organizationName);
+    }
+    syncSubmittedByOrganizationSelect();
+
+    setMediaFromPayload(data);
+    const consentEl = form.querySelector('input[name="consentPublish"]');
+    if (consentEl instanceof HTMLInputElement) {
+      consentEl.checked = false;
+    }
+  }
+
+  async function loadItemPayload(useCaseId) {
+    const url = submissionItemUrl(useCaseId);
+    if (!url) {
+      setMessage("Invalid use case id.", "error");
+      return;
+    }
+    setMessage("Loading use case details…", "");
+    const headers = {};
+    if (restNonce) headers["X-WP-Nonce"] = restNonce;
+    try {
+      const response = await fetch(url, {
+        credentials: "same-origin",
+        headers
+      });
+      const json = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        setMessage(json.message || "Could not load use case details.", "error");
+        return;
+      }
+      fillForm(json.payload || {});
+      if (json.payload && json.payload.title) {
+        selectedUseCaseLabel = String(json.payload.title);
+        showUpdateSelectionUi();
+      }
+      revealFields(true);
+      setMessage("", "");
+    } catch (_err) {
+      setMessage("Could not load use case details due to a network error.", "error");
+    }
+  }
+
+  async function selectUseCase(item) {
+    selectedUseCaseId = String(item.id || "").trim();
+    selectedUseCaseLabel = String(item.label || selectedUseCaseId).trim();
+    if (lookupResults) lookupResults.innerHTML = "";
+    if (lookupHint) {
+      lookupHint.hidden = true;
+      lookupHint.textContent = "";
+    }
+    showUpdateSelectionUi();
+    await loadItemPayload(selectedUseCaseId);
+  }
+
+  function resetUpdateSelection() {
+    selectedUseCaseId = "";
+    selectedUseCaseLabel = "";
+    if (searchInput) {
+      searchInput.value = "";
+      searchInput.focus();
+    }
+    showUpdateSelectionUi();
+    revealFields(false);
+    fillForm({});
+    setMessage("", "");
   }
 
   function setImageUploadStatus(text) {
@@ -550,6 +851,7 @@
         syncSubmittedByOrganizationSelect();
       }
     }
+    linkChipRefreshers[fieldConfig.key] = refreshChips;
 
     function setLookupHint(message) {
       if (!hintEl) return;
@@ -676,6 +978,92 @@
   }
   linkTypes.forEach((fieldConfig) => addLinkField(fieldConfig, linkFieldsRoot));
 
+  if (mode === "update" && searchInput && lookupResults) {
+    showUpdateSelectionUi();
+    let debounceTimer = null;
+
+    function setLookupHint(message) {
+      if (!lookupHint) return;
+      if (!message) {
+        lookupHint.hidden = true;
+        lookupHint.textContent = "";
+        return;
+      }
+      lookupHint.hidden = false;
+      lookupHint.textContent = message;
+    }
+
+    function renderLookupOption(item, idx) {
+      const title = escapeHtml(item.label || "Unnamed");
+      const subtitle = item.subtitle ? escapeHtml(item.subtitle) : "";
+      return (
+        `<li><button type="button" class="fides-lookup-option" data-result-index="${idx}" ` +
+        `aria-label="Select ${title}${subtitle ? `, ${subtitle}` : ""}">` +
+        `<span class="fides-lookup-option-main">` +
+        `<span class="fides-lookup-option-title">${title}</span>` +
+        (subtitle ? `<span class="fides-lookup-option-subtitle">${subtitle}</span>` : "") +
+        `</span>` +
+        `<span class="fides-lookup-option-action">Select</span>` +
+        `</button></li>`
+      );
+    }
+
+    searchInput.addEventListener("input", () => {
+      const query = searchInput.value.trim();
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(async () => {
+        lookupResults.innerHTML = "";
+        setLookupHint("");
+        if (query.length < 2) return;
+        if (!apiBase) {
+          setLookupHint("Missing API configuration.");
+          return;
+        }
+        const headers = {};
+        if (restNonce) headers["X-WP-Nonce"] = restNonce;
+        try {
+          const response = await fetch(
+            `${apiBase}/lookups/usecase?q=${encodeURIComponent(query)}`,
+            { credentials: "same-origin", headers }
+          );
+          const json = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            setLookupHint(json.message || "Lookup failed.");
+            return;
+          }
+          const items = Array.isArray(json.content) ? json.content : [];
+          if (items.length === 0) {
+            setLookupHint("No matches. Check the spelling or contact us if the use case is missing.");
+            return;
+          }
+          const total = Number(json.totalMatches) || items.length;
+          setLookupHint(total === 1 ? "1 match — click to select" : `${total} matches — click to select`);
+          lookupResults.innerHTML = items.map((item, idx) => renderLookupOption(item, idx)).join("");
+          lookupResults.querySelectorAll("button[data-result-index]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const idx = Number(btn.getAttribute("data-result-index"));
+              const picked = items[idx];
+              if (picked) selectUseCase(picked);
+            });
+          });
+        } catch (_err) {
+          setLookupHint("Lookup failed due to a network error.");
+        }
+      }, 250);
+    });
+
+    if (changeUseCaseBtn) {
+      changeUseCaseBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        resetUpdateSelection();
+      });
+    }
+
+    if (selectedUseCaseId) {
+      selectUseCase({ id: selectedUseCaseId, label: selectedUseCaseId });
+    }
+  }
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!form.checkValidity()) {
@@ -706,6 +1094,10 @@
       setMessage("Your WordPress profile must have a valid email address before submitting.", "error");
       return;
     }
+    if (mode === "update" && !selectedUseCaseId) {
+      setMessage("Select a published use case before submitting an update proposal.", "error");
+      return;
+    }
 
     const organizationName = getValue("organizationName");
     if (involvedOrganizationLabels().length === 0) {
@@ -720,6 +1112,13 @@
     if (!productionDeployment) {
       setMessage("Select whether this use case is deployed in production.", "error");
       return;
+    }
+    if (mode === "update") {
+      const country = getValue("country");
+      if (!country) {
+        setMessage("Select a country.", "error");
+        return;
+      }
     }
 
     const payload = {
@@ -746,6 +1145,9 @@
       consentPublish: isChecked("consentPublish"),
       links: linkState
     };
+    if (mode === "update") {
+      payload.country = getValue("country").toUpperCase();
+    }
 
     if (!apiBase) {
       setMessage("Missing API configuration.", "error");
@@ -757,7 +1159,13 @@
       if (restNonce) {
         headers["X-WP-Nonce"] = restNonce;
       }
-      const response = await fetch(`${apiBase}/submissions`, {
+      const submitUrl =
+        mode === "update" ? submissionItemUrl(selectedUseCaseId) : `${apiBase}/submissions`;
+      if (!submitUrl) {
+        setMessage("Missing API configuration.", "error");
+        return;
+      }
+      const response = await fetch(submitUrl, {
         method: "POST",
         credentials: "same-origin",
         headers,
@@ -768,7 +1176,27 @@
         setMessage(json.message || "Submission failed.", "error");
         return;
       }
-      setMessage(`Submission received. Reference: ${json.id}`, "success");
+      const ref = json.id || (mode === "update" ? selectedUseCaseId : "") || "";
+      setMessage(
+        mode === "update"
+          ? `Update proposal received${ref ? ` for ${ref}` : ""}. It will be reviewed before publication.`
+          : `Submission received${ref ? ` (${ref})` : ""}. It will be reviewed before publication.`,
+        "success"
+      );
+      if (mode === "update") {
+        selectedUseCaseId = "";
+        selectedUseCaseLabel = "";
+        if (searchInput) searchInput.value = "";
+        if (lookupResults) lookupResults.innerHTML = "";
+        if (lookupHint) {
+          lookupHint.hidden = true;
+          lookupHint.textContent = "";
+        }
+        fillForm({});
+        revealFields(false);
+        showUpdateSelectionUi();
+        return;
+      }
       form.reset();
       resetMediaRows();
       Object.keys(linkState).forEach((key) => {

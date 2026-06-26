@@ -768,6 +768,120 @@
 
 }
 
+/* Update-form picker (aligned with organization update form). */
+.fides-use-case-form--update .fides-use-case-update-picker-body + #fides-use-case-fields-wrap:not([hidden]) {
+  margin-top: var(--fides-field-stack-gap);
+  padding-top: var(--fides-field-stack-gap);
+  border-top: 1px solid #e2e8f0;
+}
+
+.fides-use-case-form--update .fides-use-case-update-picker-body {
+  margin-bottom: 0;
+}
+
+.fides-use-case-form--update .fides-update-banner-row[hidden],
+.fides-use-case-form--update #fides-use-case-search-block[hidden],
+.fides-use-case-form--update .fides-use-case-submit-block[hidden] {
+  display: none !important;
+}
+
+.fides-use-case-form--update .fides-update-banner-row:not([hidden]) {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+  gap: 8px;
+  flex-wrap: nowrap;
+  margin-bottom: 4px;
+  box-sizing: border-box;
+}
+
+.fides-use-case-form--update .fides-update-banner {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 0.35em;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1e3a8a;
+  font-size: 14px;
+  line-height: 1.35;
+  box-sizing: border-box;
+}
+
+.fides-use-case-form--update .fides-update-banner-label {
+  flex-shrink: 0;
+}
+
+.fides-use-case-form--update .fides-update-banner-row .fides-secondary-btn {
+  flex: 0 0 auto;
+  align-self: stretch;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: 15px;
+  line-height: 1.35;
+  box-sizing: border-box;
+}
+
+.fides-use-case-form--update .fides-update-banner code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 0.15em;
+}
+
+/* Theme-safe colors (WP themes sometimes force white headings/inputs). */
+.fides-use-case-submission-root .fides-use-case-card,
+.fides-use-case-submission-root .fides-use-case-form,
+.fides-use-case-submission-root .fides-form-section {
+  color: #0f172a;
+}
+
+.fides-use-case-submission-root .fides-form-section-title,
+.fides-use-case-submission-root .fides-form-section h3,
+.fides-use-case-submission-root .fides-use-case-card h3 {
+  color: #0f172a !important;
+}
+
+.fides-use-case-submission-root .fides-use-case-form label,
+.fides-use-case-submission-root .fides-use-case-form .fides-form-label {
+  color: #0f172a !important;
+}
+
+.fides-use-case-submission-root .fides-use-case-form input:not([type="checkbox"]):not([type="radio"]),
+.fides-use-case-submission-root .fides-use-case-form select,
+.fides-use-case-submission-root .fides-use-case-form textarea,
+.fides-use-case-submission-root .fides-linked-inputs input,
+.fides-use-case-submission-root #fides-use-case-search {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  -webkit-text-fill-color: #0f172a !important;
+}
+
+.fides-use-case-submission-root .fides-use-case-form input::placeholder,
+.fides-use-case-submission-root .fides-use-case-form textarea::placeholder,
+.fides-use-case-submission-root .fides-linked-inputs input::placeholder,
+.fides-use-case-submission-root #fides-use-case-search::placeholder {
+  color: #64748b !important;
+  opacity: 1;
+  -webkit-text-fill-color: #64748b !important;
+}
+
+.fides-use-case-submission-root .fides-form-message.is-success {
+  color: #166534 !important;
+}
+
+.fides-use-case-submission-root .fides-form-message.is-error {
+  color: #b91c1c !important;
+}
+
 .fides-upload-btn {
   display: inline-flex;
   align-items: center;
@@ -3764,12 +3878,40 @@
     grid-column: 1;
   }
 
+  /*
+   * Narrow viewports: match the credential catalog — title + chevron on row 1,
+   * the "Open in catalog" CTA as a full-width button on row 2. A grid keeps the
+   * chevron from wrapping alone (flex-wrap misbehaves on iOS).
+   */
   .fides-modal-overlay .fides-accordion-header-bar {
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    gap: 0.35rem;
+    align-items: stretch;
+  }
+
+  .fides-modal-overlay .fides-accordion-header {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .fides-modal-overlay .fides-accordion-chevron-btn {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .fides-modal-overlay .fides-accordion-explore-link {
-    order: 3;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    justify-content: center;
+    justify-self: stretch;
     margin: 0 0.75rem 0.75rem;
   }
 

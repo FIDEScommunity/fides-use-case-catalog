@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.7.4
+ * Version: 0.8.0
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,24 +11,30 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.7.4');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.8.0');
+define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
+define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
 define('FIDES_USE_CASE_CATALOG_PATH', plugin_dir_path(__FILE__));
 define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_case_submissions');
-define('FIDES_USE_CASE_CATALOG_DB_VERSION', '1.6.0');
+define('FIDES_USE_CASE_CATALOG_DB_VERSION', '1.7.0');
 define('FIDES_USE_CASE_LOOKUP_LIMIT', 8);
 
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-taxonomy.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-notifications.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-catalog-ssr.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-catalog-submission-diff.php';
 
 // Boot the SSR/SEO renderer (no-op shim when the tiles base class is absent).
 Fides_Use_Case_Catalog_SSR::bootstrap();
 
 register_activation_hook(__FILE__, 'fides_use_case_catalog_activate');
 add_action('admin_init', 'fides_use_case_catalog_maybe_upgrade_schema');
+add_action('admin_init', 'fides_use_case_catalog_register_settings');
 add_action('init', 'fides_use_case_catalog_register_with_core', 5);
+add_action('init', 'fides_use_case_catalog_ensure_update_form_page', 15);
 add_action('admin_menu', 'fides_use_case_catalog_register_admin_page');
+add_action('admin_menu', 'fides_use_case_catalog_register_settings_page');
 add_action('admin_post_fides_use_case_set_status', 'fides_use_case_catalog_handle_status_action');
 add_action('admin_post_fides_use_case_save_submission', 'fides_use_case_catalog_handle_save_submission_action');
 add_action('admin_post_fides_use_case_refresh_github', 'fides_use_case_catalog_handle_refresh_github_action');
@@ -63,12 +69,16 @@ function fides_use_case_catalog_activate(): void {
         user_journey TEXT NULL,
         tags_json LONGTEXT NULL,
         links_json LONGTEXT NULL,
+        submission_action VARCHAR(16) NOT NULL DEFAULT 'create',
+        target_use_case_id VARCHAR(191) NULL,
         status VARCHAR(32) NOT NULL DEFAULT 'received',
         published_at DATETIME NULL,
         created_at DATETIME NOT NULL,
         updated_at DATETIME NOT NULL,
         PRIMARY KEY  (id),
-        UNIQUE KEY use_case_id (use_case_id),
+        KEY use_case_id_idx (use_case_id),
+        KEY target_use_case_idx (target_use_case_id),
+        KEY submission_action_idx (submission_action),
         KEY status_idx (status),
         KEY event_idx (event_key),
         KEY theme_idx (theme_key),
@@ -77,6 +87,7 @@ function fides_use_case_catalog_activate(): void {
 
     dbDelta($sql);
     update_option('fides_use_case_catalog_db_version', FIDES_USE_CASE_CATALOG_DB_VERSION);
+    fides_use_case_catalog_ensure_update_form_page();
 }
 
 function fides_use_case_catalog_maybe_upgrade_schema(): void {
@@ -89,6 +100,7 @@ function fides_use_case_catalog_maybe_upgrade_schema(): void {
     fides_use_case_catalog_migrate_awards_columns();
     fides_use_case_catalog_migrate_country_column();
     fides_use_case_catalog_migrate_media_column();
+    fides_use_case_catalog_migrate_update_proposal_columns();
     update_option('fides_use_case_catalog_db_version', FIDES_USE_CASE_CATALOG_DB_VERSION);
 }
 
@@ -250,6 +262,157 @@ function fides_use_case_catalog_catalog_urls(): array {
         'organizationCatalogUrl' => $use_local
             ? $base . '/organizations/'
             : 'https://fides.community/organizations/',
+    );
+}
+
+/**
+ * Sanitize optional URL: empty string allowed (means “use default behavior”).
+ *
+ * @param mixed $value Raw option value.
+ */
+function fides_use_case_catalog_sanitize_optional_url($value): string {
+    $value = is_string($value) ? trim($value) : '';
+    if ($value === '') {
+        return '';
+    }
+    return esc_url_raw($value);
+}
+
+function fides_use_case_catalog_register_settings(): void {
+    register_setting(
+        FIDES_USE_CASE_CATALOG_SETTINGS_GROUP,
+        'fides_use_case_catalog_update_form_url',
+        array(
+            'type'              => 'string',
+            'default'           => '',
+            'sanitize_callback' => 'fides_use_case_catalog_sanitize_optional_url',
+        )
+    );
+}
+
+function fides_use_case_catalog_register_settings_page(): void {
+    add_options_page(
+        'FIDES Use Case Catalog Settings',
+        'FIDES Use Case Catalog',
+        'manage_options',
+        'fides-use-case-catalog',
+        'fides_use_case_catalog_render_settings_page'
+    );
+}
+
+function fides_use_case_catalog_render_settings_page(): void {
+    if (! current_user_can('manage_options')) {
+        return;
+    }
+    ?>
+    <div class="wrap">
+        <h1><?php esc_html_e('FIDES Use Case Catalog', 'fides-use-case-catalog'); ?></h1>
+        <form method="post" action="options.php">
+            <?php settings_fields(FIDES_USE_CASE_CATALOG_SETTINGS_GROUP); ?>
+            <table class="form-table" role="presentation">
+                <tr>
+                    <th scope="row">
+                        <label for="fides_use_case_catalog_update_form_url"><?php esc_html_e('Use case update form page URL', 'fides-use-case-catalog'); ?></label>
+                    </th>
+                    <td>
+                        <input type="url" class="large-text code" id="fides_use_case_catalog_update_form_url"
+                               name="fides_use_case_catalog_update_form_url"
+                               value="<?php echo esc_attr(get_option('fides_use_case_catalog_update_form_url', '')); ?>"
+                               placeholder="<?php echo esc_attr(home_url(FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH)); ?>">
+                        <p class="description">
+                            <?php esc_html_e('Page with [fides_use_case_update_form]. Logged-in users see a “Suggest an update” icon in the use case modal linking here with ?usecase= pre-filled.', 'fides-use-case-catalog'); ?>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <?php submit_button(); ?>
+        </form>
+    </div>
+    <?php
+}
+
+function fides_use_case_catalog_update_form_url(): string {
+    $option = trim((string) get_option('fides_use_case_catalog_update_form_url', ''));
+    if ($option !== '') {
+        return esc_url_raw($option);
+    }
+    return home_url(FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH);
+}
+
+/**
+ * Ensure the default update-form page exists at /use-cases/update/.
+ */
+function fides_use_case_catalog_ensure_update_form_page(): void {
+    if (wp_installing()) {
+        return;
+    }
+
+    $stored_id = (int) get_option('fides_use_case_catalog_update_form_page_id', 0);
+    if ($stored_id > 0) {
+        $stored_post = get_post($stored_id);
+        if ($stored_post instanceof WP_Post && $stored_post->post_status !== 'trash') {
+            fides_use_case_catalog_maybe_fix_update_form_page_content($stored_post);
+            return;
+        }
+    }
+
+    $existing = get_page_by_path('use-cases/update', OBJECT, 'page');
+    if ($existing instanceof WP_Post) {
+        update_option('fides_use_case_catalog_update_form_page_id', (int) $existing->ID);
+        fides_use_case_catalog_maybe_fix_update_form_page_content($existing);
+        return;
+    }
+
+    $parent = get_page_by_path('use-cases', OBJECT, 'page');
+    if ($parent instanceof WP_Post) {
+        $parent_id = (int) $parent->ID;
+    } else {
+        $parent_id = wp_insert_post(
+            array(
+                'post_title'   => 'Use cases',
+                'post_name'    => 'use-cases',
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
+                'post_content' => '',
+            ),
+            true
+        );
+        if (is_wp_error($parent_id) || ! $parent_id) {
+            return;
+        }
+        $parent_id = (int) $parent_id;
+    }
+
+    $page_id = wp_insert_post(
+        array(
+            'post_title'   => 'Suggest a use case update',
+            'post_name'    => 'update',
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+            'post_parent'  => $parent_id,
+            'post_content' => '[fides_use_case_update_form]',
+        ),
+        true
+    );
+    if (is_wp_error($page_id) || ! $page_id) {
+        return;
+    }
+
+    update_option('fides_use_case_catalog_update_form_page_id', (int) $page_id);
+}
+
+/**
+ * @param WP_Post $post Update-form page.
+ */
+function fides_use_case_catalog_maybe_fix_update_form_page_content(WP_Post $post): void {
+    if (strpos((string) $post->post_content, '[fides_use_case_update_form]') !== false) {
+        return;
+    }
+    wp_update_post(
+        array(
+            'ID'           => (int) $post->ID,
+            'post_content' => '[fides_use_case_update_form]',
+        )
     );
 }
 
@@ -695,6 +858,366 @@ function fides_use_case_catalog_normalize_link_items($items): array {
     return $normalized;
 }
 
+/**
+ * Normalize submission action slug.
+ */
+function fides_use_case_catalog_normalize_submission_action(string $action): string {
+    $action = sanitize_key($action);
+    return in_array($action, array('create', 'update'), true) ? $action : 'create';
+}
+
+/**
+ * Whether a DB row represents an update proposal (not the canonical published entry).
+ *
+ * @param array<string, mixed> $row
+ */
+function fides_use_case_catalog_is_update_proposal_row(array $row): bool {
+    if (fides_use_case_catalog_normalize_submission_action((string) ($row['submission_action'] ?? '')) === 'update') {
+        return true;
+    }
+    if (trim((string) ($row['target_use_case_id'] ?? '')) !== '') {
+        return true;
+    }
+
+    return preg_match('/-upd-/i', (string) ($row['use_case_id'] ?? '')) === 1;
+}
+
+/**
+ * Browser confirm() message when deleting a submission row.
+ *
+ * @param array<string, mixed> $row
+ */
+function fides_use_case_catalog_delete_confirm_message(array $row): string {
+    $title = (string) ($row['title'] ?? '');
+    if (fides_use_case_catalog_is_update_proposal_row($row)) {
+        return sprintf(
+            /* translators: %s: use case title */
+            __('Delete this update proposal for “%s”? The published use case stays unchanged. This cannot be undone.', 'fides-use-case-catalog'),
+            $title
+        );
+    }
+
+    if (fides_use_case_catalog_normalize_status((string) ($row['status'] ?? '')) === 'published') {
+        return sprintf(
+            /* translators: %s: use case title */
+            __('Permanently delete “%s” from the public catalog? This cannot be undone.', 'fides-use-case-catalog'),
+            $title
+        );
+    }
+
+    return sprintf(
+        /* translators: %s: use case title */
+        __('Delete this submission for “%s”? It is not in the public catalog yet. This cannot be undone.', 'fides-use-case-catalog'),
+        $title
+    );
+}
+
+/**
+ * Sanitize a public use case id for REST paths and lookups.
+ */
+function fides_use_case_catalog_sanitize_use_case_id(string $raw): string {
+    $raw = sanitize_text_field(trim($raw));
+    if ($raw === '') {
+        return '';
+    }
+    if (! preg_match('/^[a-z0-9][a-z0-9._-]*$/i', $raw)) {
+        return '';
+    }
+    return strtolower($raw);
+}
+
+/**
+ * Published row in the local database for a canonical use case id.
+ *
+ * @return array<string, mixed>|null
+ */
+function fides_use_case_catalog_published_row_by_use_case_id(string $use_case_id): ?array {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    $row = $wpdb->get_row(
+        $wpdb->prepare(
+            "SELECT * FROM {$table} WHERE use_case_id = %s AND status = %s LIMIT 1",
+            $use_case_id,
+            'published'
+        ),
+        ARRAY_A
+    );
+    return is_array($row) ? $row : null;
+}
+
+/**
+ * Resolve a published catalog item by id (database first, then git community data).
+ *
+ * @return array<string, mixed>|null
+ */
+function fides_use_case_catalog_published_item_by_id(string $use_case_id): ?array {
+    $row = fides_use_case_catalog_published_row_by_use_case_id($use_case_id);
+    if (is_array($row)) {
+        return fides_use_case_catalog_row_to_item($row);
+    }
+    return fides_use_case_catalog_github_item_by_id($use_case_id, false);
+}
+
+/**
+ * Items eligible for the public update-form lookup (published DB rows + git-only community items).
+ *
+ * @return array<int, array<string, mixed>>
+ */
+function fides_use_case_catalog_published_lookup_items(): array {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    $rows = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT * FROM {$table} WHERE status = %s ORDER BY COALESCE(published_at, updated_at) DESC",
+            'published'
+        ),
+        ARRAY_A
+    );
+
+    $items = array();
+    $seen = array();
+    foreach ((array) $rows as $row) {
+        if (! is_array($row)) {
+            continue;
+        }
+        $item = fides_use_case_catalog_row_to_item($row);
+        $id = isset($item['id']) ? (string) $item['id'] : '';
+        if ($id === '') {
+            continue;
+        }
+        $seen[ $id ] = true;
+        $items[] = $item;
+    }
+
+    foreach (fides_use_case_catalog_github_items() as $gh_item) {
+        if (! is_array($gh_item)) {
+            continue;
+        }
+        $id = isset($gh_item['id']) ? (string) $gh_item['id'] : '';
+        if ($id === '' || isset($seen[ $id ])) {
+            continue;
+        }
+        $seen[ $id ] = true;
+        $items[] = $gh_item;
+    }
+
+    return $items;
+}
+
+/**
+ * Whether an open update proposal already exists for a published use case.
+ */
+function fides_use_case_catalog_has_pending_update_proposal(string $target_use_case_id): bool {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    $count = (int) $wpdb->get_var(
+        $wpdb->prepare(
+            "SELECT COUNT(*) FROM {$table}
+             WHERE target_use_case_id = %s
+               AND submission_action = %s
+               AND status IN ('received', 'approved')",
+            $target_use_case_id,
+            'update'
+        )
+    );
+    return $count > 0;
+}
+
+/**
+ * Validate a public submission payload shared by create and update proposal endpoints.
+ *
+ * @param array<string, mixed> $payload
+ * @return array{row: array<string, mixed>}|WP_REST_Response
+ */
+function fides_use_case_catalog_validate_submission_payload(array $payload, WP_User $user) {
+    $contact_email = sanitize_email((string) $user->user_email);
+    if (! is_email($contact_email)) {
+        return new WP_REST_Response(
+            array('message' => 'Your WordPress profile must have a valid email address before submitting.'),
+            400
+        );
+    }
+
+    $title = sanitize_text_field((string) ($payload['title'] ?? ''));
+    $summary = fides_use_case_catalog_normalize_multiline_text((string) ($payload['summary'] ?? ''));
+    $organization_name = sanitize_text_field((string) ($payload['organizationName'] ?? ''));
+    $production_deployment = fides_use_case_catalog_normalize_production_deployment(
+        sanitize_text_field((string) ($payload['productionDeployment'] ?? ''))
+    );
+    $more_info_url = esc_url_raw((string) ($payload['moreInfoUrl'] ?? ''));
+    $user_journey = fides_use_case_catalog_normalize_multiline_text((string) ($payload['userJourney'] ?? ''));
+    $consent_publish = ! empty($payload['consentPublish']);
+    $tags = is_array($payload['tags'] ?? null)
+        ? array_values(array_map('sanitize_text_field', $payload['tags']))
+        : array();
+
+    if (strlen($title) < 5 || strlen($summary) < 30 || $organization_name === '') {
+        return new WP_REST_Response(array('message' => 'Validation failed for required fields.'), 400);
+    }
+    if ($production_deployment === '') {
+        return new WP_REST_Response(array('message' => 'Production deployment is required.'), 400);
+    }
+    if ($user_journey === '') {
+        return new WP_REST_Response(array('message' => 'How it works is required.'), 400);
+    }
+    if (! $consent_publish) {
+        return new WP_REST_Response(array('message' => 'Publish consent is required.'), 400);
+    }
+
+    $sector = fides_use_case_catalog_normalize_sector($payload['sector'] ?? ($payload['sectors'] ?? ''));
+    if ($sector === '') {
+        return new WP_REST_Response(array('message' => 'Sector is required.'), 400);
+    }
+
+    $taxonomy = fides_use_case_catalog_normalize_taxonomy_payload($payload);
+
+    $video_validation_error = fides_use_case_catalog_validate_media_video_urls($payload);
+    if ($video_validation_error !== null) {
+        return new WP_REST_Response(array('message' => $video_validation_error), 400);
+    }
+
+    $media = fides_use_case_catalog_normalize_media_payload($payload);
+    $media_storage = fides_use_case_catalog_media_storage_fields($media);
+    $links = is_array($payload['links'] ?? null) ? $payload['links'] : array();
+    $normalized_links = fides_use_case_catalog_normalize_links_structure($links);
+    $country_code = fides_use_case_catalog_sanitize_country_code((string) ($payload['country'] ?? ''));
+
+    return array(
+        'row' => array(
+            'event_key' => '',
+            'theme_key' => '',
+            'sectors_json' => wp_json_encode(array($sector)),
+            'taxonomy_json' => wp_json_encode($taxonomy),
+            'title' => $title,
+            'summary' => $summary,
+            'organization_name' => $organization_name,
+            'country_code' => $country_code !== '' ? $country_code : null,
+            'contact_email' => $contact_email,
+            'production_deployment' => $production_deployment,
+            'video_url' => $media_storage['video_url'] !== '' ? $media_storage['video_url'] : null,
+            'video_provider' => $media_storage['video_provider'] !== '' ? $media_storage['video_provider'] : null,
+            'image_url' => $media_storage['image_url'] !== '' ? $media_storage['image_url'] : null,
+            'media_json' => $media_storage['media_json'] !== '' ? $media_storage['media_json'] : null,
+            'more_info_url' => $more_info_url !== '' ? $more_info_url : null,
+            'user_journey' => $user_journey,
+            'tags_json' => wp_json_encode($tags),
+            'links_json' => wp_json_encode($normalized_links),
+        ),
+    );
+}
+
+/**
+ * Import a git-only use case into the database as a published row.
+ *
+ * @return array<string, mixed>|null Published row on success.
+ */
+function fides_use_case_catalog_import_github_item_as_published(string $use_case_id): ?array {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    $use_case_id = fides_use_case_catalog_sanitize_use_case_id($use_case_id);
+    if ($use_case_id === '') {
+        return null;
+    }
+
+    $existing_id = (int) $wpdb->get_var(
+        $wpdb->prepare("SELECT id FROM {$table} WHERE use_case_id = %s LIMIT 1", $use_case_id)
+    );
+    if ($existing_id > 0) {
+        $existing_row = $wpdb->get_row(
+            $wpdb->prepare("SELECT * FROM {$table} WHERE id = %d LIMIT 1", $existing_id),
+            ARRAY_A
+        );
+        if (
+            is_array($existing_row)
+            && fides_use_case_catalog_normalize_status((string) $existing_row['status']) === 'published'
+        ) {
+            return $existing_row;
+        }
+        return null;
+    }
+
+    $item = fides_use_case_catalog_github_item_by_id($use_case_id, true);
+    if (! is_array($item)) {
+        return null;
+    }
+
+    $now  = current_time('mysql', true);
+    $data = fides_use_case_catalog_item_to_row_data($item);
+    $data['use_case_id']     = $use_case_id;
+    $data['contact_email']   = sanitize_email((string) get_option('admin_email'));
+    $data['status']          = 'published';
+    $data['published_at']    = $now;
+    $data['created_at']      = $now;
+    $data['updated_at']      = $now;
+    $data['submission_action'] = 'create';
+    $data['target_use_case_id'] = null;
+
+    if ($wpdb->insert($table, $data) === false) {
+        return null;
+    }
+
+    return fides_use_case_catalog_published_row_by_use_case_id($use_case_id);
+}
+
+/**
+ * Ensure a published DB row exists for merge targets (database first, GitHub import fallback).
+ *
+ * @return array<string, mixed>|null
+ */
+function fides_use_case_catalog_ensure_published_target_row(string $use_case_id): ?array {
+    $use_case_id = fides_use_case_catalog_sanitize_use_case_id($use_case_id);
+    if ($use_case_id === '') {
+        return null;
+    }
+
+    $row = fides_use_case_catalog_published_row_by_use_case_id($use_case_id);
+    if (is_array($row)) {
+        return $row;
+    }
+
+    return fides_use_case_catalog_import_github_item_as_published($use_case_id);
+}
+
+/**
+ * Merge an approved update proposal into its published target row.
+ */
+function fides_use_case_catalog_publish_update_proposal(int $proposal_id, array $proposal_row): bool {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    $target_use_case_id = fides_use_case_catalog_sanitize_use_case_id(
+        (string) ($proposal_row['target_use_case_id'] ?? '')
+    );
+    if ($target_use_case_id === '') {
+        return false;
+    }
+
+    $target_row = fides_use_case_catalog_ensure_published_target_row($target_use_case_id);
+    if (! is_array($target_row)) {
+        return false;
+    }
+
+    $item = fides_use_case_catalog_row_to_item($proposal_row);
+    $content = fides_use_case_catalog_item_to_row_data($item);
+    if (fides_use_case_catalog_normalize_country_code((string) ($content['country_code'] ?? '')) === '') {
+        $content['country_code'] = fides_use_case_catalog_normalize_country_code(
+            (string) ($target_row['country_code'] ?? '')
+        );
+    }
+    $content['contact_email'] = sanitize_email((string) ($proposal_row['contact_email'] ?? ''));
+    $content['updated_at'] = current_time('mysql', true);
+    $content['published_at'] = current_time('mysql', true);
+
+    $updated = $wpdb->update($table, $content, array('id' => (int) $target_row['id']));
+    if ($updated === false) {
+        return false;
+    }
+
+    $wpdb->delete($table, array('id' => $proposal_id), array('%d'));
+    fides_use_case_catalog_notify_published((int) $target_row['id']);
+
+    return true;
+}
+
 function fides_use_case_catalog_register_rest_routes(): void {
     fides_use_case_catalog_register_rest_route(
         '/taxonomy',
@@ -725,6 +1248,26 @@ function fides_use_case_catalog_register_rest_routes(): void {
                 } elseif ($raw_type === 'businesswallet' || $raw_type === 'business-wallet') {
                     $type = 'wallet';
                     $wallet_scope = 'business';
+                } elseif ($raw_type === 'usecase' || $raw_type === 'use-case') {
+                    if ($query === '') {
+                        return rest_ensure_response(array('content' => array()));
+                    }
+                    if (! is_user_logged_in()) {
+                        return new WP_REST_Response(array('message' => 'Sign in to search published use cases.'), 401);
+                    }
+                    $lookup = fides_use_case_catalog_map_lookup_items(
+                        fides_use_case_catalog_published_lookup_items(),
+                        $query
+                    );
+                    return rest_ensure_response(
+                        array(
+                            'content' => $lookup['content'],
+                            'totalMatches' => $lookup['totalMatches'],
+                            'limit' => $lookup['limit'],
+                            'truncated' => $lookup['truncated'],
+                            'source' => 'published-use-cases',
+                        )
+                    );
                 }
 
                 $lookup_key = $wallet_scope === 'personal'
@@ -785,86 +1328,27 @@ function fides_use_case_catalog_register_rest_routes(): void {
                 }
 
                 $user = wp_get_current_user();
-                $contact_email = sanitize_email((string) $user->user_email);
-                if (! is_email($contact_email)) {
-                    return new WP_REST_Response(
-                        array('message' => 'Your WordPress profile must have a valid email address before submitting.'),
-                        400
-                    );
+                $validated = fides_use_case_catalog_validate_submission_payload($payload, $user);
+                if ($validated instanceof WP_REST_Response) {
+                    return $validated;
                 }
 
-                $title = sanitize_text_field((string) ($payload['title'] ?? ''));
-                $summary = trim(wp_kses_post((string) ($payload['summary'] ?? '')));
-                $organization_name = sanitize_text_field((string) ($payload['organizationName'] ?? ''));
-                $production_deployment = fides_use_case_catalog_normalize_production_deployment(sanitize_text_field((string) ($payload['productionDeployment'] ?? '')));
-                $video_url = esc_url_raw((string) ($payload['videoUrl'] ?? ''));
-                $image_url = esc_url_raw((string) ($payload['imageUrl'] ?? ''));
-                $more_info_url = esc_url_raw((string) ($payload['moreInfoUrl'] ?? ''));
-                $user_journey = trim(wp_kses_post((string) ($payload['userJourney'] ?? '')));
-                $consent_publish = ! empty($payload['consentPublish']);
-                $tags = is_array($payload['tags'] ?? null) ? array_values(array_map('sanitize_text_field', $payload['tags'])) : array();
-
-                if (strlen($title) < 5 || strlen($summary) < 30 || $organization_name === '') {
-                    return new WP_REST_Response(array('message' => 'Validation failed for required fields.'), 400);
-                }
-                if ($production_deployment === '') {
-                    return new WP_REST_Response(array('message' => 'Production deployment is required.'), 400);
-                }
-                if ($user_journey === '') {
-                    return new WP_REST_Response(array('message' => 'How it works is required.'), 400);
-                }
-                if (! $consent_publish) {
-                    return new WP_REST_Response(array('message' => 'Publish consent is required.'), 400);
-                }
-
-                $sector = fides_use_case_catalog_normalize_sector($payload['sector'] ?? ($payload['sectors'] ?? ''));
-                if ($sector === '') {
-                    return new WP_REST_Response(array('message' => 'Sector is required.'), 400);
-                }
-
-                $taxonomy = fides_use_case_catalog_normalize_taxonomy_payload($payload);
-
-                $video_validation_error = fides_use_case_catalog_validate_media_video_urls($payload);
-                if ($video_validation_error !== null) {
-                    return new WP_REST_Response(array('message' => $video_validation_error), 400);
-                }
-
-                $media = fides_use_case_catalog_normalize_media_payload($payload);
-                $media_storage = fides_use_case_catalog_media_storage_fields($media);
-                $video_url = $media_storage['video_url'];
-                $video_provider = $media_storage['video_provider'];
-                $image_url = $media_storage['image_url'];
-                $media_json = $media_storage['media_json'];
-
-                $links = is_array($payload['links'] ?? null) ? $payload['links'] : array();
-                $normalized_links = fides_use_case_catalog_normalize_links_structure($links);
-
-                $use_case_id = fides_use_case_catalog_slugify($title) . '-' . wp_generate_password(6, false, false);
+                $row_data = $validated['row'];
+                $use_case_id = fides_use_case_catalog_slugify((string) $row_data['title'])
+                    . '-' . wp_generate_password(6, false, false);
                 $now = current_time('mysql', true);
                 $inserted = $wpdb->insert(
                     $table,
-                    array(
-                        'use_case_id' => $use_case_id,
-                        'event_key' => '',
-                        'theme_key' => '',
-                        'sectors_json' => wp_json_encode(array($sector)),
-                        'taxonomy_json' => wp_json_encode($taxonomy),
-                        'title' => $title,
-                        'summary' => $summary,
-                        'organization_name' => $organization_name,
-                        'contact_email' => $contact_email,
-                        'production_deployment' => $production_deployment,
-                        'video_url' => $video_url !== '' ? $video_url : null,
-                        'video_provider' => $video_provider !== '' ? $video_provider : null,
-                        'image_url' => $image_url !== '' ? $image_url : null,
-                        'media_json' => $media_json !== '' ? $media_json : null,
-                        'more_info_url' => $more_info_url !== '' ? $more_info_url : null,
-                        'user_journey' => $user_journey,
-                        'tags_json' => wp_json_encode($tags),
-                        'links_json' => wp_json_encode($normalized_links),
-                        'status' => 'received',
-                        'created_at' => $now,
-                        'updated_at' => $now,
+                    array_merge(
+                        $row_data,
+                        array(
+                            'use_case_id' => $use_case_id,
+                            'submission_action' => 'create',
+                            'target_use_case_id' => null,
+                            'status' => 'received',
+                            'created_at' => $now,
+                            'updated_at' => $now,
+                        )
                     )
                 );
 
@@ -875,9 +1359,9 @@ function fides_use_case_catalog_register_rest_routes(): void {
                 fides_use_case_catalog_notify_submission(
                     (int) $wpdb->insert_id,
                     $use_case_id,
-                    $title,
-                    $organization_name,
-                    $contact_email
+                    (string) $row_data['title'],
+                    (string) $row_data['organization_name'],
+                    (string) $row_data['contact_email']
                 );
 
                 return rest_ensure_response(
@@ -885,9 +1369,120 @@ function fides_use_case_catalog_register_rest_routes(): void {
                         'ok' => true,
                         'id' => $use_case_id,
                         'status' => 'received',
+                        'submissionAction' => 'create',
                     )
                 );
             },
+        )
+    );
+
+    fides_use_case_catalog_register_rest_route(
+        '/submissions/(?P<use_case_id>[a-z0-9][a-z0-9._-]*)',
+        array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'permission_callback' => static function (): bool {
+                    return is_user_logged_in();
+                },
+                'callback' => function (WP_REST_Request $request) {
+                    $use_case_id = fides_use_case_catalog_sanitize_use_case_id(
+                        (string) $request->get_param('use_case_id')
+                    );
+                    if ($use_case_id === '') {
+                        return new WP_REST_Response(array('message' => 'Invalid use case id.'), 400);
+                    }
+
+                    $item = fides_use_case_catalog_published_item_by_id($use_case_id);
+                    if (! is_array($item)) {
+                        return new WP_REST_Response(array('message' => 'Published use case not found.'), 404);
+                    }
+
+                    return rest_ensure_response(
+                        array(
+                            'id' => $use_case_id,
+                            'payload' => $item,
+                        )
+                    );
+                },
+            ),
+            array(
+                'methods' => WP_REST_Server::CREATABLE,
+                'permission_callback' => static function (): bool {
+                    return is_user_logged_in();
+                },
+                'callback' => function (WP_REST_Request $request) {
+                    global $wpdb;
+                    $table = FIDES_USE_CASE_CATALOG_TABLE;
+                    $target_use_case_id = fides_use_case_catalog_sanitize_use_case_id(
+                        (string) $request->get_param('use_case_id')
+                    );
+                    if ($target_use_case_id === '') {
+                        return new WP_REST_Response(array('message' => 'Invalid use case id.'), 400);
+                    }
+
+                    if (! is_array(fides_use_case_catalog_published_item_by_id($target_use_case_id))) {
+                        return new WP_REST_Response(array('message' => 'Published use case not found.'), 404);
+                    }
+
+                    if (fides_use_case_catalog_has_pending_update_proposal($target_use_case_id)) {
+                        return new WP_REST_Response(
+                            array('message' => 'An update proposal for this use case is already awaiting review.'),
+                            409
+                        );
+                    }
+
+                    $payload = $request->get_json_params();
+                    if (! is_array($payload)) {
+                        return new WP_REST_Response(array('message' => 'Invalid JSON body.'), 400);
+                    }
+
+                    $user = wp_get_current_user();
+                    $validated = fides_use_case_catalog_validate_submission_payload($payload, $user);
+                    if ($validated instanceof WP_REST_Response) {
+                        return $validated;
+                    }
+
+                    $row_data = $validated['row'];
+                    $proposal_id = $target_use_case_id . '-upd-' . wp_generate_password(6, false, false);
+                    $now = current_time('mysql', true);
+                    $inserted = $wpdb->insert(
+                        $table,
+                        array_merge(
+                            $row_data,
+                            array(
+                                'use_case_id' => $proposal_id,
+                                'submission_action' => 'update',
+                                'target_use_case_id' => $target_use_case_id,
+                                'status' => 'received',
+                                'created_at' => $now,
+                                'updated_at' => $now,
+                            )
+                        )
+                    );
+
+                    if (! $inserted) {
+                        return new WP_REST_Response(array('message' => 'Failed to store update proposal.'), 500);
+                    }
+
+                    fides_use_case_catalog_notify_submission(
+                        (int) $wpdb->insert_id,
+                        $proposal_id,
+                        (string) $row_data['title'],
+                        (string) $row_data['organization_name'],
+                        (string) $row_data['contact_email']
+                    );
+
+                    return rest_ensure_response(
+                        array(
+                            'ok' => true,
+                            'id' => $proposal_id,
+                            'targetUseCaseId' => $target_use_case_id,
+                            'status' => 'received',
+                            'submissionAction' => 'update',
+                        )
+                    );
+                },
+            ),
         )
     );
 
@@ -1117,16 +1712,16 @@ function fides_use_case_catalog_enqueue_assets(): void {
 }
 add_action('wp_enqueue_scripts', 'fides_use_case_catalog_enqueue_assets');
 
-function fides_use_case_catalog_form_shortcode(array $atts = array()): string {
+function fides_use_case_catalog_render_form_shortcode(string $mode, array $extra = array()): string {
     if (! is_user_logged_in()) {
-        // Enqueue the stylesheet here too, otherwise the .fides-use-case-card
-        // message renders unstyled and inherits the theme's (white) text color
-        // on a white page — i.e. invisible.
         wp_enqueue_style('fides-use-case-catalog-style');
         $login_url = fides_use_case_catalog_form_login_url();
+        $message = $mode === 'update'
+            ? __('You must be signed in to suggest a use case update.', 'fides-use-case-catalog')
+            : __('You must be signed in to submit a use case.', 'fides-use-case-catalog');
         return sprintf(
             '<div class="fides-use-case-card"><p>%s</p><p><a class="fides-form-login-link" href="%s">%s</a></p></div>',
-            esc_html__('You must be signed in to submit a use case.', 'fides-use-case-catalog'),
+            esc_html($message),
             esc_url($login_url),
             esc_html__('Sign in to continue', 'fides-use-case-catalog')
         );
@@ -1136,14 +1731,31 @@ function fides_use_case_catalog_form_shortcode(array $atts = array()): string {
     wp_enqueue_script('fides-use-case-catalog-form');
 
     $user = wp_get_current_user();
-    $config = array(
-        'apiBase' => esc_url_raw(rest_url(fides_use_case_catalog_rest_namespace())),
-        'taxonomy' => fides_use_case_catalog_taxonomy_options(),
-        'productionDeploymentOptions' => fides_use_case_catalog_production_deployment_options(),
-        'isLoggedIn' => true,
-        'contactEmail' => sanitize_email((string) $user->user_email),
-        'restNonce' => wp_create_nonce('wp_rest'),
+    $config = array_merge(
+        array(
+            'mode' => $mode === 'update' ? 'update' : 'create',
+            'apiBase' => esc_url_raw(rest_url(fides_use_case_catalog_rest_namespace())),
+            'taxonomy' => fides_use_case_catalog_taxonomy_options(),
+            'productionDeploymentOptions' => fides_use_case_catalog_production_deployment_options(),
+            'isLoggedIn' => true,
+            'contactEmail' => sanitize_email((string) $user->user_email),
+            'restNonce' => wp_create_nonce('wp_rest'),
+            'preselectUseCaseId' => '',
+            'countries' => array(),
+        ),
+        $extra
     );
+
+    if ($mode === 'update') {
+        $country_entries = array();
+        foreach (fides_use_case_catalog_country_options() as $code => $label) {
+            $country_entries[] = array(
+                'code'  => $code,
+                'label' => $label,
+            );
+        }
+        $config['countries'] = $country_entries;
+    }
 
     wp_add_inline_script(
         'fides-use-case-catalog-form',
@@ -1151,9 +1763,40 @@ function fides_use_case_catalog_form_shortcode(array $atts = array()): string {
         'before'
     );
 
-    return '<div id="fides-use-case-form-root"></div>';
+    $root_id = $mode === 'update' ? 'fides-use-case-update-form-root' : 'fides-use-case-form-root';
+    return '<div id="' . esc_attr($root_id) . '" class="fides-use-case-submission-root"></div>';
+}
+
+function fides_use_case_catalog_form_shortcode(array $atts = array()): string {
+    return fides_use_case_catalog_render_form_shortcode('create');
+}
+
+function fides_use_case_catalog_normalize_usecase_query_param(string $raw): string {
+    return fides_use_case_catalog_sanitize_use_case_id($raw);
+}
+
+function fides_use_case_catalog_update_form_shortcode(array $atts = array()): string {
+    $atts = shortcode_atts(
+        array(
+            'usecase' => '',
+        ),
+        $atts,
+        'fides_use_case_update_form'
+    );
+    $preselect = fides_use_case_catalog_normalize_usecase_query_param((string) $atts['usecase']);
+    if ($preselect === '' && isset($_GET['usecase'])) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $preselect = fides_use_case_catalog_normalize_usecase_query_param((string) wp_unslash($_GET['usecase']));
+    }
+    return fides_use_case_catalog_render_form_shortcode(
+        'update',
+        array(
+            'preselectUseCaseId' => $preselect,
+        )
+    );
 }
 add_shortcode('fides_use_case_form', 'fides_use_case_catalog_form_shortcode');
+add_shortcode('fides_use_case_update_form', 'fides_use_case_catalog_update_form_shortcode');
 
 function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
     $atts = shortcode_atts(
@@ -1196,6 +1839,8 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             'ratingsNonce' => wp_create_nonce('wp_rest'),
             'ratingsIsLoggedIn' => is_user_logged_in(),
             'ratingsLoginUrl' => $ratings_login_url,
+            'updateFormUrl' => fides_use_case_catalog_update_form_url(),
+            'isLoggedIn' => is_user_logged_in(),
         ),
         fides_use_case_catalog_catalog_urls()
     );
@@ -1416,6 +2061,16 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <p><?php esc_html_e('Cannot publish without a country. Open the submission, select a country, save, then publish.', 'fides-use-case-catalog'); ?></p>
             </div>
         <?php endif; ?>
+        <?php if (! empty($_GET['publish_merge_failed'])) : ?>
+            <div class="notice notice-error is-dismissible">
+                <p><?php esc_html_e('Could not publish this update proposal. The target use case must exist as a published row (import it from GitHub first if it is git-only).', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
+        <?php if (! empty($_GET['update_merged'])) : ?>
+            <div class="notice notice-success is-dismissible">
+                <p><?php esc_html_e('Update proposal merged into the published use case. The proposal row was removed from this list.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
         <?php if (! empty($_GET['saved'])) : ?>
             <div class="notice notice-success is-dismissible">
                 <p><?php esc_html_e('Submission details saved.', 'fides-use-case-catalog'); ?></p>
@@ -1483,6 +2138,9 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <div class="inside">
                     <h2 style="margin-top: 0;">Submission details</h2>
                     <p><strong>Status:</strong> <?php echo esc_html(fides_use_case_catalog_normalize_status((string) $selected_submission['status'])); ?></p>
+                    <?php if (class_exists('Fides_Use_Case_Catalog_Submission_Diff')) : ?>
+                        <?php Fides_Use_Case_Catalog_Submission_Diff::render_admin_section($selected_submission); ?>
+                    <?php endif; ?>
 
                     <?php if (fides_use_case_catalog_normalize_status((string) $selected_submission['status']) === 'published') : ?>
                         <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" style="margin: 0 0 12px;">
@@ -1669,13 +2327,7 @@ function fides_use_case_catalog_render_admin_page(): void {
                             <a class="button button-secondary" href="<?php echo esc_url(admin_url('tools.php?page=fides-use-case-submissions')); ?>">Cancel</a>
                             <?php
                             $detail_delete_url = admin_url('admin-post.php?action=fides_use_case_delete&id=' . (int) $selected_submission['id'] . '&_wpnonce=' . wp_create_nonce('fides_use_case_delete_' . (int) $selected_submission['id']));
-                            $detail_delete_confirm = esc_js(
-                                sprintf(
-                                    /* translators: %s: use case title */
-                                    __('Permanently delete “%s”? This cannot be undone.', 'fides-use-case-catalog'),
-                                    (string) $selected_submission['title']
-                                )
-                            );
+                            $detail_delete_confirm = esc_js(fides_use_case_catalog_delete_confirm_message($selected_submission));
                             ?>
                             <a class="button button-link-delete" style="float:right; color:#b32d2e;" href="<?php echo esc_url($detail_delete_url); ?>" onclick="return confirm('<?php echo $detail_delete_confirm; ?>');"><?php esc_html_e('Delete permanently', 'fides-use-case-catalog'); ?></a>
                         </p>
@@ -1759,7 +2411,17 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <?php else : ?>
                     <?php foreach ($rows as $row) : ?>
                         <tr>
-                            <td><strong><?php echo esc_html($row['title']); ?></strong><br><code><?php echo esc_html($row['use_case_id']); ?></code></td>
+                            <td><strong><?php echo esc_html($row['title']); ?></strong><br><code><?php echo esc_html($row['use_case_id']); ?></code>
+                                <?php if (fides_use_case_catalog_normalize_submission_action((string) ($row['submission_action'] ?? '')) === 'update') : ?>
+                                    <br><span class="description"><?php
+                                    printf(
+                                        /* translators: %s: canonical published use case id */
+                                        esc_html__('Update proposal for %s', 'fides-use-case-catalog'),
+                                        esc_html((string) ($row['target_use_case_id'] ?? ''))
+                                    );
+                                    ?></span>
+                                <?php endif; ?>
+                            </td>
                             <td><?php echo esc_html(fides_use_case_catalog_sector_label(fides_use_case_catalog_row_sector($row)) ?: '—'); ?></td>
                             <td><?php echo esc_html($row['organization_name']); ?></td>
                             <td><?php echo esc_html(fides_use_case_catalog_normalize_status((string) $row['status'])); ?></td>
@@ -1770,13 +2432,7 @@ function fides_use_case_catalog_render_admin_page(): void {
                                 $nonce = wp_create_nonce('fides_use_case_set_status_' . (int) $row['id']);
                                 $view_url = admin_url('tools.php?page=fides-use-case-submissions&submission=' . (int) $row['id']);
                                 $delete_url = admin_url('admin-post.php?action=fides_use_case_delete&id=' . (int) $row['id'] . '&_wpnonce=' . wp_create_nonce('fides_use_case_delete_' . (int) $row['id']));
-                                $delete_confirm = esc_js(
-                                    sprintf(
-                                        /* translators: %s: use case title */
-                                        __('Permanently delete “%s”? This cannot be undone.', 'fides-use-case-catalog'),
-                                        (string) $row['title']
-                                    )
-                                );
+                                $delete_confirm = esc_js(fides_use_case_catalog_delete_confirm_message($row));
                                 ?>
                                 <a class="button button-small" href="<?php echo esc_url($view_url); ?>">View</a>
                                 <a class="button button-small" href="<?php echo esc_url($base . '&status=approved&_wpnonce=' . $nonce); ?>">Approve</a>
@@ -1817,6 +2473,57 @@ function fides_use_case_catalog_handle_status_action(): void {
     $previous_status = (string) $wpdb->get_var(
         $wpdb->prepare("SELECT status FROM {$table} WHERE id = %d", $id)
     );
+
+    $proposal_row = $wpdb->get_row(
+        $wpdb->prepare("SELECT * FROM {$table} WHERE id = %d", $id),
+        ARRAY_A
+    );
+    if (! is_array($proposal_row)) {
+        wp_safe_redirect(admin_url('tools.php?page=fides-use-case-submissions'));
+        exit;
+    }
+
+    if (
+        $status === 'published'
+        && fides_use_case_catalog_normalize_submission_action((string) ($proposal_row['submission_action'] ?? '')) === 'update'
+    ) {
+        $sector = fides_use_case_catalog_row_sector($proposal_row);
+        if ($sector === 'other') {
+            wp_safe_redirect(
+                admin_url('tools.php?page=fides-use-case-submissions&submission=' . $id . '&sector_pending=1')
+            );
+            exit;
+        }
+        $country_code = fides_use_case_catalog_normalize_country_code((string) ($proposal_row['country_code'] ?? ''));
+        if ($country_code === '') {
+            $target_id = fides_use_case_catalog_sanitize_use_case_id(
+                (string) ($proposal_row['target_use_case_id'] ?? '')
+            );
+            $target_row = $target_id !== '' ? fides_use_case_catalog_published_row_by_use_case_id($target_id) : null;
+            if (is_array($target_row)) {
+                $country_code = fides_use_case_catalog_normalize_country_code(
+                    (string) ($target_row['country_code'] ?? '')
+                );
+            }
+        }
+        if ($country_code === '') {
+            wp_safe_redirect(
+                admin_url('tools.php?page=fides-use-case-submissions&submission=' . $id . '&country_pending=1')
+            );
+            exit;
+        }
+
+        if (! fides_use_case_catalog_publish_update_proposal($id, $proposal_row)) {
+            wp_safe_redirect(
+                add_query_arg('publish_merge_failed', '1', admin_url('tools.php?page=fides-use-case-submissions'))
+            );
+            exit;
+        }
+
+        fides_use_case_catalog_trigger_github_sync();
+        wp_safe_redirect(add_query_arg('update_merged', '1', admin_url('tools.php?page=fides-use-case-submissions')));
+        exit;
+    }
 
     $data = array(
         'status' => $status,
@@ -1932,25 +2639,13 @@ function fides_use_case_catalog_handle_import_github_action(): void {
         exit;
     }
 
-    $item = fides_use_case_catalog_github_item_by_id($use_case_id, true);
-    if (! is_array($item)) {
+    $target_row = fides_use_case_catalog_import_github_item_as_published($use_case_id);
+    if (! is_array($target_row)) {
         wp_safe_redirect(add_query_arg('import_missing', '1', $redirect));
         exit;
     }
 
-    $now = current_time('mysql', true);
-    $data = fides_use_case_catalog_item_to_row_data($item);
-    $data['use_case_id']  = $use_case_id;
-    $data['contact_email'] = sanitize_email((string) get_option('admin_email'));
-    $data['status']       = 'published';
-    $data['published_at'] = $now;
-    $data['created_at']   = $now;
-    $data['updated_at']   = $now;
-
-    $wpdb->insert($table, $data);
-    $new_id = (int) $wpdb->insert_id;
-
-    wp_safe_redirect(add_query_arg(array('submission' => $new_id, 'imported' => '1'), $redirect));
+    wp_safe_redirect(add_query_arg(array('submission' => (int) $target_row['id'], 'imported' => '1'), $redirect));
     exit;
 }
 

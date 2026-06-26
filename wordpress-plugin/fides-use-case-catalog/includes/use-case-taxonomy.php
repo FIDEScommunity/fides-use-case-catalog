@@ -248,6 +248,17 @@ function fides_use_case_catalog_normalize_sector($value): string {
 }
 
 /**
+ * Normalize multiline catalog text for storage and diff comparison.
+ *
+ * Collapses Windows/Mac line endings to LF so textarea round-trips do not
+ * register as content changes when the visible text is unchanged.
+ */
+function fides_use_case_catalog_normalize_multiline_text(string $text): string {
+    $text = str_replace(array("\r\n", "\r"), "\n", $text);
+    return trim(wp_kses_post($text));
+}
+
+/**
  * @param mixed $payload
  * @return array<string, array<int, string>>
  */
@@ -438,7 +449,7 @@ function fides_use_case_catalog_item_to_row_data(array $item): array {
         'sectors_json'          => wp_json_encode($sector !== '' ? array($sector) : array()),
         'taxonomy_json'         => wp_json_encode($taxonomy),
         'title'                 => sanitize_text_field((string) ($item['title'] ?? '')),
-        'summary'               => trim(wp_kses_post((string) ($item['summary'] ?? ''))),
+        'summary'               => fides_use_case_catalog_normalize_multiline_text((string) ($item['summary'] ?? '')),
         'organization_name'     => sanitize_text_field((string) ($item['organizationName'] ?? '')),
         'country_code'          => $country,
         'production_deployment' => fides_use_case_catalog_normalize_production_deployment((string) ($item['productionDeployment'] ?? '')),
@@ -447,7 +458,9 @@ function fides_use_case_catalog_item_to_row_data(array $item): array {
         'image_url'             => $media_storage['image_url'] !== '' ? $media_storage['image_url'] : null,
         'media_json'            => $media_storage['media_json'] !== '' ? $media_storage['media_json'] : null,
         'more_info_url'         => isset($item['moreInfoUrl']) && $item['moreInfoUrl'] !== '' ? esc_url_raw((string) $item['moreInfoUrl']) : null,
-        'user_journey'          => isset($item['userJourney']) && $item['userJourney'] !== '' ? trim(wp_kses_post((string) $item['userJourney'])) : null,
+        'user_journey'          => isset($item['userJourney']) && $item['userJourney'] !== ''
+            ? fides_use_case_catalog_normalize_multiline_text((string) $item['userJourney'])
+            : null,
         'tags_json'             => wp_json_encode($tags),
         'links_json'            => wp_json_encode($links),
     );
@@ -985,5 +998,70 @@ function fides_use_case_catalog_migrate_awards_columns(): void {
         if (! empty($update)) {
             $wpdb->update($table, $update, array('id' => (int) $row['id']));
         }
+    }
+}
+
+/**
+ * Add update-proposal columns and replace the unique use_case_id constraint with a
+ * non-unique index so proposals can use their own ids while pointing at a target.
+ */
+function fides_use_case_catalog_migrate_update_proposal_columns(): void {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $action_column = $wpdb->get_results("SHOW COLUMNS FROM {$table} LIKE 'submission_action'", ARRAY_A);
+    if (empty($action_column)) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query("ALTER TABLE {$table} ADD COLUMN submission_action VARCHAR(16) NOT NULL DEFAULT 'create' AFTER links_json");
+    }
+
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $target_column = $wpdb->get_results("SHOW COLUMNS FROM {$table} LIKE 'target_use_case_id'", ARRAY_A);
+    if (empty($target_column)) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query("ALTER TABLE {$table} ADD COLUMN target_use_case_id VARCHAR(191) NULL AFTER submission_action");
+    }
+
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $indexes = $wpdb->get_results("SHOW INDEX FROM {$table}", ARRAY_A);
+    $has_unique_use_case = false;
+    $has_use_case_idx = false;
+    $has_target_idx = false;
+    $has_action_idx = false;
+    if (is_array($indexes)) {
+        foreach ($indexes as $index_row) {
+            $key_name = (string) ($index_row['Key_name'] ?? '');
+            $non_unique = (int) ($index_row['Non_unique'] ?? 1);
+            if ($key_name === 'use_case_id' && $non_unique === 0) {
+                $has_unique_use_case = true;
+            }
+            if ($key_name === 'use_case_id_idx') {
+                $has_use_case_idx = true;
+            }
+            if ($key_name === 'target_use_case_idx') {
+                $has_target_idx = true;
+            }
+            if ($key_name === 'submission_action_idx') {
+                $has_action_idx = true;
+            }
+        }
+    }
+
+    if ($has_unique_use_case) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query("ALTER TABLE {$table} DROP INDEX use_case_id");
+    }
+    if (! $has_use_case_idx) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query("ALTER TABLE {$table} ADD KEY use_case_id_idx (use_case_id)");
+    }
+    if (! $has_target_idx) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query("ALTER TABLE {$table} ADD KEY target_use_case_idx (target_use_case_id)");
+    }
+    if (! $has_action_idx) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query("ALTER TABLE {$table} ADD KEY submission_action_idx (submission_action)");
     }
 }

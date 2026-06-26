@@ -33,6 +33,8 @@
   const RATINGS_NONCE = config.ratingsNonce ? String(config.ratingsNonce) : "";
   const RATINGS_IS_LOGGED_IN = !!config.ratingsIsLoggedIn;
   const RATINGS_LOGIN_URL = config.ratingsLoginUrl ? String(config.ratingsLoginUrl) : "";
+  const UPDATE_FORM_URL = config.updateFormUrl ? String(config.updateFormUrl).trim() : "";
+  const IS_LOGGED_IN = !!config.isLoggedIn;
   const RATINGS_BATCH_LIMIT = 100;
   const RATINGS_TYPE = "usecase";
   const root = document.getElementById("fides-use-case-catalog-root");
@@ -139,6 +141,8 @@
       '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M8 5v14l11-7z"/></svg>',
     share:
       '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>',
+    pencil:
+      '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg>',
     server:
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>',
     wallet:
@@ -1448,6 +1452,23 @@
     `;
   }
 
+  function useCaseUpdateFormUrl(useCaseId) {
+    if (!IS_LOGGED_IN || !UPDATE_FORM_URL || !useCaseId) return "";
+    try {
+      const url = new URL(UPDATE_FORM_URL, window.location.origin);
+      url.searchParams.set("usecase", useCaseId);
+      return url.toString();
+    } catch {
+      return "";
+    }
+  }
+
+  function renderModalEditAction(item) {
+    const href = useCaseUpdateFormUrl(item?.id);
+    if (!href) return "";
+    return `<a href="${escapeHtml(href)}" class="fides-modal-copy-link fides-modal-edit-link" aria-label="Suggest an update" title="Suggest an update">${icons.pencil}</a>`;
+  }
+
   function renderUseCaseModal() {
     if (!selectedUseCase) return "";
     const item = selectedUseCase;
@@ -1480,6 +1501,7 @@
               </div>
             </div>
             <div class="fides-modal-header-actions">
+              ${renderModalEditAction(item)}
               <button type="button" class="fides-modal-copy-link" id="fides-modal-copy-link" aria-label="Copy link to this use case" title="Copy link to this use case">
                 ${icons.share}
               </button>
@@ -1992,7 +2014,7 @@
         <div>Use case</div>
         <div class="fides-list-col-likes"></div>
         <div>Country</div>
-        <div>Production deployment</div>
+        <div>Production</div>
         <div>Sector</div>
         <div style="padding-left:0.75rem">Updated</div>
       </div>
