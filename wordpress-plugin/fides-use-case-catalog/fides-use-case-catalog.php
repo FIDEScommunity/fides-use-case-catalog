@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.8.0
+ * Version: 0.8.1
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.8.0');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.8.1');
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
 define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
@@ -32,7 +32,6 @@ register_activation_hook(__FILE__, 'fides_use_case_catalog_activate');
 add_action('admin_init', 'fides_use_case_catalog_maybe_upgrade_schema');
 add_action('admin_init', 'fides_use_case_catalog_register_settings');
 add_action('init', 'fides_use_case_catalog_register_with_core', 5);
-add_action('init', 'fides_use_case_catalog_ensure_update_form_page', 15);
 add_action('admin_menu', 'fides_use_case_catalog_register_admin_page');
 add_action('admin_menu', 'fides_use_case_catalog_register_settings_page');
 add_action('admin_post_fides_use_case_set_status', 'fides_use_case_catalog_handle_status_action');
@@ -87,7 +86,6 @@ function fides_use_case_catalog_activate(): void {
 
     dbDelta($sql);
     update_option('fides_use_case_catalog_db_version', FIDES_USE_CASE_CATALOG_DB_VERSION);
-    fides_use_case_catalog_ensure_update_form_page();
 }
 
 function fides_use_case_catalog_maybe_upgrade_schema(): void {
@@ -320,7 +318,7 @@ function fides_use_case_catalog_render_settings_page(): void {
                                value="<?php echo esc_attr(get_option('fides_use_case_catalog_update_form_url', '')); ?>"
                                placeholder="<?php echo esc_attr(home_url(FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH)); ?>">
                         <p class="description">
-                            <?php esc_html_e('Page with [fides_use_case_update_form]. Logged-in users see a “Suggest an update” icon in the use case modal linking here with ?usecase= pre-filled.', 'fides-use-case-catalog'); ?>
+                            <?php esc_html_e('Create a WordPress page with the [fides_use_case_update_form] shortcode and paste its URL here. Logged-in users see a “Suggest an update” icon in the use case modal linking here with ?usecase= pre-filled. The plugin does not create this page for you.', 'fides-use-case-catalog'); ?>
                         </p>
                     </td>
                 </tr>
@@ -337,83 +335,6 @@ function fides_use_case_catalog_update_form_url(): string {
         return esc_url_raw($option);
     }
     return home_url(FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH);
-}
-
-/**
- * Ensure the default update-form page exists at /use-cases/update/.
- */
-function fides_use_case_catalog_ensure_update_form_page(): void {
-    if (wp_installing()) {
-        return;
-    }
-
-    $stored_id = (int) get_option('fides_use_case_catalog_update_form_page_id', 0);
-    if ($stored_id > 0) {
-        $stored_post = get_post($stored_id);
-        if ($stored_post instanceof WP_Post && $stored_post->post_status !== 'trash') {
-            fides_use_case_catalog_maybe_fix_update_form_page_content($stored_post);
-            return;
-        }
-    }
-
-    $existing = get_page_by_path('use-cases/update', OBJECT, 'page');
-    if ($existing instanceof WP_Post) {
-        update_option('fides_use_case_catalog_update_form_page_id', (int) $existing->ID);
-        fides_use_case_catalog_maybe_fix_update_form_page_content($existing);
-        return;
-    }
-
-    $parent = get_page_by_path('use-cases', OBJECT, 'page');
-    if ($parent instanceof WP_Post) {
-        $parent_id = (int) $parent->ID;
-    } else {
-        $parent_id = wp_insert_post(
-            array(
-                'post_title'   => 'Use cases',
-                'post_name'    => 'use-cases',
-                'post_status'  => 'publish',
-                'post_type'    => 'page',
-                'post_content' => '',
-            ),
-            true
-        );
-        if (is_wp_error($parent_id) || ! $parent_id) {
-            return;
-        }
-        $parent_id = (int) $parent_id;
-    }
-
-    $page_id = wp_insert_post(
-        array(
-            'post_title'   => 'Suggest a use case update',
-            'post_name'    => 'update',
-            'post_status'  => 'publish',
-            'post_type'    => 'page',
-            'post_parent'  => $parent_id,
-            'post_content' => '[fides_use_case_update_form]',
-        ),
-        true
-    );
-    if (is_wp_error($page_id) || ! $page_id) {
-        return;
-    }
-
-    update_option('fides_use_case_catalog_update_form_page_id', (int) $page_id);
-}
-
-/**
- * @param WP_Post $post Update-form page.
- */
-function fides_use_case_catalog_maybe_fix_update_form_page_content(WP_Post $post): void {
-    if (strpos((string) $post->post_content, '[fides_use_case_update_form]') !== false) {
-        return;
-    }
-    wp_update_post(
-        array(
-            'ID'           => (int) $post->ID,
-            'post_content' => '[fides_use_case_update_form]',
-        )
-    );
 }
 
 function fides_use_case_catalog_lookup_sources(): array {
