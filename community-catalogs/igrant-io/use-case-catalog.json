@@ -145,7 +145,7 @@
       "organizationName": "iGrant.io",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-01T16:48:53+01:00",
+      "updatedAt": "2026-07-02T09:26:09+01:00",
       "publishedAt": "2026-07-01T16:48:53+01:00",
       "tags": [
         "identity",
@@ -321,7 +321,7 @@
       },
       "moreInfoUrl": "https://www.igrant.io/demo/merchant-led-payments-with-receipts-boardingpass.html",
       "userJourney": "1. Visit Fast Ferries and select a trip\r\n2. Select the \"FAST CHECKOUT VIA EUDI WALLET\" option\r\n3. Scan QR code to initiate the secure, identity-validated payment process, confirming and presenting:\r\n    - PhotoID: For Personal Identification Details\r\n    - Student ID (or Loyalty Card Credential from Fast Ferries): Discount-related credentials Credential\r\n    - Visa card credential: Pre-authorize a €25 payment to Cyclades Fast Ferries (CFF) \r\n4. Fill out passenger and contact information in Fast Ferries\r\n5. Fill card details and confirm to make your booking (receive an eReceipt and Boarding Pass to your EUDI Wallet)",
-      "country": "SE"
+      "country": "GR"
     }
   ]
 }
