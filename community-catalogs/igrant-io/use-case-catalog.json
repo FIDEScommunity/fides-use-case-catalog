@@ -5,6 +5,140 @@
   "orgName": "iGrant.io",
   "useCases": [
     {
+      "id": "open-bank-account-Ejx887",
+      "sector": "finance",
+      "title": "Open Bank Account (with KYC, Consent, Digital Signing, SCA and Passwordless Login)",
+      "summary": "Open a new bank account using your EUDI Wallet. This iGrant.io demo showcases privacy-preserving KYC identity verification and document signing for financial onboarding, leveraging the EU Digital Identity Wallet and SD-JWT verifiable credentials via OpenID4VP.",
+      "organizationName": "iGrant.io",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-07-02T13:44:15+01:00",
+      "publishedAt": "2026-07-02T13:44:15+01:00",
+      "tags": [
+        "identity",
+        "pid (person identification data)",
+        "document signing",
+        "qesac (qualified electronic signature access credential)",
+        "bank authenticator",
+        "id proof",
+        "account opening",
+        "kyc",
+        "identity verification",
+        "SCA"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "igrant-data-wallet",
+            "labelRaw": "Data Wallet by iGrant.io",
+            "url": "https://igrant.io/datawallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "igrant-organization-wallet",
+            "labelRaw": "Organisation Wallet Suite by iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:igrant:demo:test",
+            "labelRaw": "iGrant.io Demo Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "QESAC (Qualified Electronic Signature Access Credential)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bank Authenticator",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:igrant",
+            "labelRaw": "iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:intesi-group",
+            "labelRaw": "Intesi Group",
+            "url": "https://www.intesigroup.com/en/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "igrant-open-bank-account-demo",
+            "labelRaw": "Open Bank Account",
+            "url": "https://www.igrant.io/demo/open-bank-account.html",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "EWC v3",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://img.youtube.com/vi/3VktTStWHs8/maxresdefault.jpg"
+      ],
+      "imageUrl": "https://img.youtube.com/vi/3VktTStWHs8/maxresdefault.jpg",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=3VktTStWHs8",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=3VktTStWHs8",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.igrant.io/demo/open-bank-account.html",
+      "userJourney": "1. Share PID (Person Identification Data) for KYC identity verification\n2. Review terms and conditions\n3. Sign terms and conditions with QESAC (Qualified Electronic Signature Access Credential)\n4. Receive Bank Authenticator\n5. Log in to the bank portal by sharing the Bank Authenticator credentials \n\nOnce logged in, the individual can enable SCA for payments via existing payment rails (via Visa, Worldline, etc)",
+      "country": "SE"
+    },
+    {
       "id": "fast-ferries-payments-with-eudi-wallets-UwPvFq",
       "sector": "finance",
       "title": "Payments with EUDI Wallets using SCA",
@@ -189,139 +323,6 @@
       "moreInfoUrl": "https://www.igrant.io/demo/merchant-led-payments-with-receipts-boardingpass.html",
       "userJourney": "1. Visit Fast Ferries and select a trip\n2. Select the \"FAST CHECKOUT VIA EUDI WALLET\" option\n3. Scan QR code to initiate the secure, identity-validated payment process, confirming and presenting:\n    - PhotoID: For Personal Identification Details\n    - Student ID (or Loyalty Card Credential from Fast Ferries): Discount-related credentials Credential\n    - Visa card credential: Pre-authorize a €25 payment to Cyclades Fast Ferries (CFF) \n4. Fill out passenger and contact information in Fast Ferries\n5. Fill card details and confirm to make your booking (receive an eReceipt and Boarding Pass to your EUDI Wallet)",
       "country": "GR"
-    },
-    {
-      "id": "open-bank-account-Ejx887",
-      "sector": "finance",
-      "title": "Open Bank Account",
-      "summary": "Open a new bank account using your EUDI Wallet. This iGrant.io demo showcases privacy-preserving KYC identity verification and document signing for financial onboarding, leveraging the EU Digital Identity Wallet and SD-JWT verifiable credentials via OpenID4VP.",
-      "organizationName": "iGrant.io",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-07-01T16:51:31+01:00",
-      "publishedAt": "2026-07-01T16:51:31+01:00",
-      "tags": [
-        "identity",
-        "pid (person identification data)",
-        "document signing",
-        "qesac (qualified electronic signature access credential)",
-        "bank authenticator",
-        "id proof",
-        "account opening",
-        "kyc",
-        "identity verification"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "igrant-data-wallet",
-            "labelRaw": "Data Wallet by iGrant.io",
-            "url": "https://igrant.io/datawallet",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "igrant-organization-wallet",
-            "labelRaw": "Organisation Wallet Suite by iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": "issuer:igrant:demo:test",
-            "labelRaw": "iGrant.io Demo Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "QESAC (Qualified Electronic Signature Access Credential)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bank Authenticator",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:igrant",
-            "labelRaw": "iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:intesi-group",
-            "labelRaw": "Intesi Group",
-            "url": "https://www.intesigroup.com/en/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": "igrant-open-bank-account-demo",
-            "labelRaw": "Open Bank Account",
-            "url": "https://www.igrant.io/demo/open-bank-account.html",
-            "source": "catalog",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "EWC v3",
-        "HAIP v1"
-      ],
-      "imageUrls": [
-        "https://img.youtube.com/vi/3VktTStWHs8/maxresdefault.jpg"
-      ],
-      "imageUrl": "https://img.youtube.com/vi/3VktTStWHs8/maxresdefault.jpg",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=3VktTStWHs8",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=3VktTStWHs8",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.igrant.io/demo/open-bank-account.html",
-      "userJourney": "1. Share PID (Person Identification Data) for KYC identity verification\r\n2. Review terms and conditions\r\n3. Sign terms and conditions with QESAC (Qualified Electronic Signature Access Credential)\r\n4. Receive Bank Authenticator\r\n5. Log in to bank portal by sharing Bank Authenticator credential",
-      "country": "SE"
     }
   ]
 }
