@@ -576,7 +576,18 @@
     if (!value) return "—";
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return "—";
-    return date.toLocaleDateString("en-US");
+    return date.toLocaleDateString(undefined);
+  }
+
+  function renderModalLastUpdatedHtml(item) {
+    if (window.FidesCatalogUI && typeof window.FidesCatalogUI.buildModalLastUpdatedHtml === "function") {
+      return window.FidesCatalogUI.buildModalLastUpdatedHtml(item, ["updatedAt", "updated", "fetchedAt"]);
+    }
+    const date = item && item.updatedAt ? new Date(item.updatedAt) : null;
+    if (!date || Number.isNaN(date.getTime())) return "";
+    const label = date.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+    const iso = date.toISOString().slice(0, 10);
+    return `<div class="fides-modal-last-updated">Last updated <time datetime="${escapeHtml(iso)}">${escapeHtml(label)}</time></div>`;
   }
 
   function getLinkItems(item, linksKey) {
@@ -1440,10 +1451,6 @@
               <span class="fides-kv-key">Submitted by</span>
               <span class="fides-kv-val">${escapeHtml(item.organizationName || "—")}</span>
             </div>
-            <div class="fides-kv-row">
-              <span class="fides-kv-key">Last updated</span>
-              <span class="fides-kv-val">${escapeHtml(formatDateLabel(item.updatedAt))}</span>
-            </div>
             ${
               item.publishedAt
                 ? `<div class="fides-kv-row"><span class="fides-kv-key">Published</span><span class="fides-kv-val">${escapeHtml(formatDateLabel(item.publishedAt))}</span></div>`
@@ -1532,6 +1539,7 @@
               ${renderUseCaseTechnicalAccordion(item)}
               ${renderUseCaseDetailsAccordion(item)}
             </div>
+            ${renderModalLastUpdatedHtml(item)}
           </div>
         </div>
       </div>
