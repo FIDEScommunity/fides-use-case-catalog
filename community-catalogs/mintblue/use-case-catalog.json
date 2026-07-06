@@ -1,0 +1,110 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:mintblue",
+  "orgName": "mintBlue",
+  "useCases": [
+    {
+      "id": "tax-splitter-real-time-vat-collection-with-verifiable-organisational-identity-ZQey1U",
+      "sector": "public_sector",
+      "title": "Tax Splitter: real-time VAT collection with verifiable organisational identity",
+      "summary": "The European Commission estimates the annual EU VAT gap at EUR 128 billion (2023). At the same time, Dutch entrepreneurs spend 30 to 40 hours per year on VAT administration. Both problems share a root cause: tax compliance happens after the fact, through declarations, reconciliation and audits.\r\n\r\nTax Splitter turns that around. Every transaction automatically splits the VAT amount and transfers it directly to the tax authority at the moment of payment. A business owner no longer needs to reserve, calculate or declare VAT. The invoice is the return.\r\n\r\nThe mechanism is digital trust. Organisations hold verifiable credentials (issued by Credenco) in organisational wallets, so every payment starts with an identity lookup: is the counterparty a real, registered business or a shell company? The payment itself carries a cryptographic reference to the invoice, creating an audit trail that all parties can verify without exposing the underlying data: proofs are shared, not the records themselves. Each party keeps control of its own data; the infrastructure moves sealed envelopes, it never looks inside. Parties that don't share databases share cryptographic proof instead.\r\n\r\nThe system was developed over two years by the Dutch Tax Authority (Directorate Control and Finance, problem owner), mintBlue (infrastructure and development) and Credenco (verifiable credentials and digital identity), through a Design Sprint and two completed development phases. It runs as a proof of concept with a working end-to-end demonstration: visitors buy a product at a point-of-sale system, pay with a wallet, and watch the VAT split and settle in real-time. A pilot with real entrepreneurs is in preparation, and the tax authority has driven the project itself at every step, from the design sprint to the working demonstration.\r\n\r\nIn March 2026, Tax Splitter won the Innovation Award of the Dutch Ministry of Finance. The OECD cites the project in its Tax Administration Series as an inspiring example of real-time tax collection. Where the EU's ViDA legislation (VAT in the Digital Age) introduces real-time reporting from 2028, Tax Splitter goes one step further and collects the tax as the payment happens.\r\n\r\nThe same pattern applies to any predictable levy. The partners are exploring gambling tax, property transfer tax, excise duties, tourist levies and cross-border VAT, where the tax automatically reaches the tax authority of the right country. The approach is drawing interest from tax authorities in the United Kingdom and Scandinavia.",
+      "organizationName": "mintBlue",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-07-06T13:25:50+01:00",
+      "publishedAt": "2026-07-06T13:25:50+01:00",
+      "tags": [
+        "real-time taxation",
+        "VAT",
+        "split payments",
+        "verifiable credentials",
+        "organisational wallet",
+        "compliance by design",
+        "public sector"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": null,
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:fides:credential-issuer:test",
+            "labelRaw": "FIDES Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "DigitalAssetIdentifier",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:mintblue",
+            "labelRaw": "mintBlue",
+            "url": "https://mintblue.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bd",
+            "labelRaw": "Belastingdienst",
+            "url": "https://www.belastingdienst.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:credenco",
+            "labelRaw": "Credenco",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4"
+      ],
+      "videos": [
+        {
+          "url": "https://youtu.be/yxopjff8BRU",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/yxopjff8BRU",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://seamlesstaxation.com",
+      "userJourney": "1. In the proof of concept, a seller issues an invoice. Before any money moves, the buyer's system performs an identity lookup on the seller's verifiable organisational credential, issued by Credenco. The check rejects shell companies before the payment can start.\r\n\r\n2. The buyer pays from an organisational wallet, at a point-of-sale terminal or online. The wallet holds the organisation's credentials, so every payment is bound to a verified legal identity.\r\n\r\n3. At the moment of payment the amount splits automatically: the net amount settles with the seller, the VAT portion transfers directly to the tax authority's wallet. No one has to set money aside or file anything.\r\n\r\n4. The payment carries a cryptographic reference to the underlying invoice. Invoice and payment are verifiably linked in a single audit trail that all parties can check without exposing the underlying business data to anyone else.\r\n\r\n5. The tax authority follows VAT flows in real-time through its portal and handles settlement and refunds over the same infrastructure. Discrepancies surface immediately instead of months after a quarterly declaration.\r\n\r\n6. The entrepreneur does nothing: no reserving, no calculating, no declaring. The invoice is the return.\r\n\r\nThe demonstration is a simplified consumer version of this business-to-business flow: at a physical point-of-sale setup, visitors buy a product, pay with a demonstration wallet, and see the VAT reach the tax authority's wallet on the spot.",
+      "country": "NL"
+    }
+  ]
+}
