@@ -1,10 +1,196 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-07-06T12:26:08.754Z",
+  "lastUpdated": "2026-07-06T12:26:43.552Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 6,
   "useCases": [
+    {
+      "id": "fast-ferries-payments-with-eudi-wallets-UwPvFq",
+      "sector": "finance",
+      "title": "Payments with EUDI Wallets using SCA",
+      "summary": "Purchase ferry tickets from Cyclades Fast Ferries using your EUDI Wallet in a merchant-led payment flow. Powered by iGrant.io, this is the first live EUDI Wallet payment in production, combining Strong Customer Authentication (SCA) with verifiable credentials via 3D Secure and OpenID4VC, using the Visa/Worldline network with Banca Transilvania.",
+      "organizationName": "iGrant.io",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-06T13:26:25+01:00",
+      "publishedAt": "2026-07-06T13:26:25+01:00",
+      "tags": [
+        "identity",
+        "payment",
+        "sca (strong customer authentication)",
+        "loyalty card",
+        "id proof",
+        "multiple data during payments"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "igrant-data-wallet",
+            "labelRaw": "Data Wallet by iGrant.io",
+            "url": "https://igrant.io/datawallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "igrant-organization-wallet",
+            "labelRaw": "Organisation Wallet Suite by iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:igrant:demo:test",
+            "labelRaw": "iGrant.io Demo Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "eReceipt",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Boarding Pass",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "PhotoID",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Student ID",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Loyalty Card credential",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Payment Authenticator",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:igrant",
+            "labelRaw": "iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Fast Ferries",
+            "url": "https://fastferries.com.gr/en/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Visa",
+            "url": "https://www.visa.se/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Worldline",
+            "url": "https://worldline.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Banca Transilvania",
+            "url": "https://www.bancatransilvania.ro/en/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "UAegean",
+            "url": "https://www.aegean.gr/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "BPC",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "igrant-fast-ferries-merchant-payments",
+            "labelRaw": "Fast Ferries – Payments with EUDI Wallets",
+            "url": "https://www.igrant.io/demo/merchant-led-payments.html",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "EWC v3",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://img.youtube.com/vi/6GwCxyofSVE/maxresdefault.jpg"
+      ],
+      "imageUrl": "https://img.youtube.com/vi/6GwCxyofSVE/maxresdefault.jpg",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=6GwCxyofSVE",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=6GwCxyofSVE",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.igrant.io/demo/merchant-led-payments-with-receipts-boardingpass.html",
+      "userJourney": "1. Visit Fast Ferries and select a trip\n2. Select the \"FAST CHECKOUT VIA EUDI WALLET\" option\n3. Scan QR code to initiate the secure, identity-validated payment process, confirming and presenting:\n    - PhotoID: For Personal Identification Details\n    - Student ID (or Loyalty Card Credential from Fast Ferries): Discount-related credentials Credential\n    - Visa card credential: Pre-authorize a €25 payment to Cyclades Fast Ferries (CFF) \n4. Fill out passenger and contact information in Fast Ferries\n5. Fill card details and confirm to make your booking (receive an eReceipt and Boarding Pass to your EUDI Wallet)",
+      "country": "SE"
+    },
     {
       "id": "tax-splitter-real-time-vat-collection-with-verifiable-organisational-identity-ZQey1U",
       "sector": "public_sector",
@@ -240,192 +426,6 @@
       "moreInfoUrl": "https://www.igrant.io/demo/open-bank-account.html",
       "userJourney": "1. Share PID (Person Identification Data) for KYC identity verification\n2. Review terms and conditions\n3. Sign terms and conditions with QESAC (Qualified Electronic Signature Access Credential)\n4. Receive Bank Authenticator\n5. Log in to the bank portal by sharing the Bank Authenticator credentials \n\nOnce logged in, the individual can enable SCA for payments via existing payment rails (via Visa, Worldline, etc)",
       "country": "SE"
-    },
-    {
-      "id": "fast-ferries-payments-with-eudi-wallets-UwPvFq",
-      "sector": "finance",
-      "title": "Payments with EUDI Wallets using SCA",
-      "summary": "Purchase ferry tickets from Cyclades Fast Ferries using your EUDI Wallet in a merchant-led payment flow. Powered by iGrant.io, this is the first live EUDI Wallet payment in production, combining Strong Customer Authentication (SCA) with verifiable credentials via 3D Secure and OpenID4VC, using the Visa/Worldline network with Banca Transilvania.",
-      "organizationName": "iGrant.io",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-07-02T13:39:38+01:00",
-      "publishedAt": "2026-07-02T13:39:38+01:00",
-      "tags": [
-        "identity",
-        "payment",
-        "sca (strong customer authentication)",
-        "loyalty card",
-        "id proof",
-        "multiple data during payments"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "igrant-data-wallet",
-            "labelRaw": "Data Wallet by iGrant.io",
-            "url": "https://igrant.io/datawallet",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "igrant-organization-wallet",
-            "labelRaw": "Organisation Wallet Suite by iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": "issuer:igrant:demo:test",
-            "labelRaw": "iGrant.io Demo Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "eReceipt",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Boarding Pass",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "PhotoID",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Student ID",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Loyalty Card credential",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Payment Authenticator",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:igrant",
-            "labelRaw": "iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Fast Ferries",
-            "url": "https://fastferries.com.gr/en/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Visa",
-            "url": "https://www.visa.se/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Worldline",
-            "url": "https://worldline.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Banca Transilvania",
-            "url": "https://www.bancatransilvania.ro/en/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "UAegean",
-            "url": "https://www.aegean.gr/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "BPC",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": "igrant-fast-ferries-merchant-payments",
-            "labelRaw": "Fast Ferries – Payments with EUDI Wallets",
-            "url": "https://www.igrant.io/demo/merchant-led-payments.html",
-            "source": "catalog",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "EWC v3",
-        "HAIP v1"
-      ],
-      "imageUrls": [
-        "https://img.youtube.com/vi/6GwCxyofSVE/maxresdefault.jpg"
-      ],
-      "imageUrl": "https://img.youtube.com/vi/6GwCxyofSVE/maxresdefault.jpg",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=6GwCxyofSVE",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=6GwCxyofSVE",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.igrant.io/demo/merchant-led-payments-with-receipts-boardingpass.html",
-      "userJourney": "1. Visit Fast Ferries and select a trip\n2. Select the \"FAST CHECKOUT VIA EUDI WALLET\" option\n3. Scan QR code to initiate the secure, identity-validated payment process, confirming and presenting:\n    - PhotoID: For Personal Identification Details\n    - Student ID (or Loyalty Card Credential from Fast Ferries): Discount-related credentials Credential\n    - Visa card credential: Pre-authorize a €25 payment to Cyclades Fast Ferries (CFF) \n4. Fill out passenger and contact information in Fast Ferries\n5. Fill card details and confirm to make your booking (receive an eReceipt and Boarding Pass to your EUDI Wallet)",
-      "country": "GR"
     },
     {
       "id": "nijmegen-attribute-based-municipal-login",
