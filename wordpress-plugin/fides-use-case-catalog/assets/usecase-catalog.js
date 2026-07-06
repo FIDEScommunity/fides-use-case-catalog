@@ -1,5 +1,8 @@
 (function () {
   const config = window.FIDES_USE_CASE_LIST_CONFIG || {};
+  const ECOSYSTEM_EXPLORER_URL = config.ecosystemExplorerUrl
+    ? String(config.ecosystemExplorerUrl).trim()
+    : "https://fides.community/topics/ecosystem-explorer/";
   const apiBase = String(config.apiBase || "").replace(/\/$/, "");
   // Primary data source = git-versioned aggregated.json on GitHub (the source
   // organizations can amend via pull request). REST /catalog stays as the
@@ -164,6 +167,15 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
+  }
+
+  function buildEcosystemExplainLinkHtml() {
+    if (!ECOSYSTEM_EXPLORER_URL) return "";
+    return (
+      '<a href="' +
+      escapeHtml(ECOSYSTEM_EXPLORER_URL) +
+      '" class="fides-eco-explain-link" target="_blank" rel="noopener" onclick="event.stopPropagation();" aria-label="Explain the FIDES Ecosystem Model">Explain</a>'
+    );
   }
 
   function debounce(fn, delay) {
@@ -695,8 +707,9 @@
 
     return `
       <div class="fides-accordion fides-modal-section" id="fides-use-case-ecosystem">
-        <div class="fides-accordion-header fides-modal-section-header">
+        <div class="fides-accordion-header fides-modal-section-header fides-modal-section-header--with-link">
           <span class="fides-accordion-title">${icons.wallet} FIDES Ecosystem Model</span>
+          ${buildEcosystemExplainLinkHtml()}
         </div>
         <div class="fides-accordion-body fides-modal-ecosystem-body">
           <div class="fides-modal-ecosystem">
@@ -1482,12 +1495,12 @@
     const countryText = item.country ? countryLabel(item) : "";
     const subtitleParts = [];
     if (sectorText) {
-      subtitleParts.push(`<span class="fides-modal-subtitle-item">${icons.building} ${escapeHtml(sectorText)}</span>`);
+      subtitleParts.push(`<span class="fides-modal-subtitle-item fides-modal-subtitle-item--sector">${icons.building} <span class="fides-meta-ellipsis">${escapeHtml(sectorText)}</span></span>`);
     }
     if (countryText) {
-      subtitleParts.push(`<span class="fides-modal-subtitle-item">${icons.globe} ${escapeHtml(countryText)}</span>`);
+      subtitleParts.push(`<span class="fides-modal-subtitle-item fides-modal-subtitle-item--country">${icons.globe} ${escapeHtml(countryText)}</span>`);
     }
-    const subtitleHtml = subtitleParts.join('<span class="fides-modal-subtitle-sep">|</span>');
+    const subtitleHtml = subtitleParts.join('<span class="fides-modal-subtitle-sep" aria-hidden="true">·</span>');
 
     return `
       <div class="fides-modal-overlay fides-modal-overlay--usecase" id="fides-modal-overlay" data-theme="${escapeHtml(currentTheme)}">
@@ -1497,7 +1510,7 @@
               <div class="fides-modal-logo-placeholder">${icons.globe}</div>
               <div class="fides-modal-title-wrap">
                 <h2 class="fides-modal-title" id="fides-modal-title">${escapeHtml(item.title || item.id)}</h2>
-                ${subtitleHtml ? `<p class="fides-modal-provider">${subtitleHtml}</p>` : ""}
+                ${subtitleHtml ? `<p class="fides-modal-provider fides-modal-provider--usecase">${subtitleHtml}</p>` : ""}
               </div>
             </div>
             <div class="fides-modal-header-actions">
@@ -2084,25 +2097,27 @@
               `
                   : ""
               }
-              <label class="fides-sort-label" for="fides-sort-select">
-                <span class="fides-sort-text">Sort by:</span>
-                <select id="fides-sort-select" class="fides-sort-select">
-                  <option value="likes_desc" ${filters.sortBy === "likes_desc" ? "selected" : ""}>Most liked</option>
-                  <option value="updated_desc" ${filters.sortBy === "updated_desc" ? "selected" : ""}>Most recent</option>
-                  <option value="title_asc" ${filters.sortBy === "title_asc" ? "selected" : ""}>A–Z</option>
-                </select>
-              </label>
-              ${
-                settings.showFilters
-                  ? `
-                <button class="fides-mobile-filter-toggle" id="fides-mobile-filter-toggle" type="button">
-                  ${icons.filter}
-                  <span>Filters</span>
-                  <span class="fides-filter-count ${getActiveFilterCount() > 0 ? "" : "hidden"}">${getActiveFilterCount() || 0}</span>
-                </button>
-              `
-                  : ""
-              }
+              <div class="fides-results-bar-actions">
+                ${
+                  settings.showFilters
+                    ? `
+                  <button class="fides-mobile-filter-toggle" id="fides-mobile-filter-toggle" type="button">
+                    ${icons.filter}
+                    <span>Filters</span>
+                    <span class="fides-filter-count ${getActiveFilterCount() > 0 ? "" : "hidden"}">${getActiveFilterCount() || 0}</span>
+                  </button>
+                `
+                    : ""
+                }
+                <label class="fides-sort-label" for="fides-sort-select">
+                  <span class="fides-sort-text">Sort by:</span>
+                  <select id="fides-sort-select" class="fides-sort-select">
+                    <option value="likes_desc" ${filters.sortBy === "likes_desc" ? "selected" : ""}>Most liked</option>
+                    <option value="updated_desc" ${filters.sortBy === "updated_desc" ? "selected" : ""}>Most recent</option>
+                    <option value="title_asc" ${filters.sortBy === "title_asc" ? "selected" : ""}>A–Z</option>
+                  </select>
+                </label>
+              </div>
               ${renderViewToggle()}
             </div>
             ${renderKpiCards(metrics)}

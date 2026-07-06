@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.8.4
+ * Version: 0.8.6
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.8.4');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.8.6');
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
 define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
@@ -260,6 +260,10 @@ function fides_use_case_catalog_catalog_urls(): array {
         'organizationCatalogUrl' => $use_local
             ? $base . '/organizations/'
             : 'https://fides.community/organizations/',
+        'ecosystemExplorerUrl' => get_option(
+            'fides_use_case_catalog_ecosystem_explorer_url',
+            'https://fides.community/topics/ecosystem-explorer/'
+        ),
     );
 }
 
