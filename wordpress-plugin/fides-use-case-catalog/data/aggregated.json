@@ -1,10 +1,118 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-07-13T15:43:32.802Z",
+  "lastUpdated": "2026-07-13T15:45:32.220Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 8,
+  "count": 9,
   "useCases": [
+    {
+      "id": "doctor-identity-verification-for-medical-practitioner-registration-ewroXC",
+      "sector": "healthcare",
+      "title": "Doctor Identity Verification for Medical Practitioner Registration",
+      "summary": "Medical councils verify doctors before granting registration to practise medicine. As part of the registration process, the Tamil Nadu Medical Council uses the Aadhaar App to verify the identity of MBBS graduates applying for a practitioner registration.\r\n\r\nApplicants present their Aadhaar identity information through the Aadhaar App, allowing the Council to verify that the person applying is the legitimate holder of the identity and credentials submitted. This helps prevent impersonation or the misuse of another person's academic certificates to obtain a medical practitioner registration. Aadhaar verification forms one part of the Council's broader registration and credential verification process.",
+      "organizationName": "Unique Identification Authority of India",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-13T16:45:17+01:00",
+      "publishedAt": "2026-07-13T16:45:17+01:00",
+      "tags": [
+        "healthcare",
+        "doctor verification",
+        "professional registration",
+        "identity verification",
+        "Aadhaar App",
+        "digital wallet",
+        "medical practitioners",
+        "impersonation prevention"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "aadhaar",
+            "labelRaw": "Aadhaar",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": "https://wallet.google.com/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Aadhaar",
+            "url": "http://uidai.gov.in",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "labelRaw": "Aadhaar Verifiable Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Tamil Nadu Medical Council",
+            "url": "https://www.tamilnadumedicalcouncil.org/info/history-of-tamil-nadu-medical-council",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Tamil Nadu Medical Council",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=qcodqTF-cZU",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=qcodqTF-cZU",
+        "provider": "youtube"
+      },
+      "userJourney": "An MBBS graduate applies for practitioner registration with the Tamil Nadu Medical Council. As part of the registration process, the applicant is asked to verify their identity using the Aadhaar App. The applicant presents their Aadhaar identity information and completes proof of presence through face verification. The Council verifies the presented identity and uses the verified information as part of its broader checks on the applicant's academic and professional credentials. Once the required checks are completed, the Council proceeds with the practitioner registration process.",
+      "country": "IN"
+    },
     {
       "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau",
       "sector": "mobility",
