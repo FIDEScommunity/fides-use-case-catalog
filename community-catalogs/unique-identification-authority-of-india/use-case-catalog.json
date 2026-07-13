@@ -5,6 +5,88 @@
   "orgName": "Unique Identification Authority of India",
   "useCases": [
     {
+      "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau",
+      "sector": "mobility",
+      "title": "Delivery Agent and Customer Identity Verification using the Aadhaar App",
+      "summary": "Digital platforms rely on large networks of gig workers to provide delivery and other doorstep services. Establishing trust between the platform, the gig worker, and the customer is particularly important when services are delivered at a customer's residence or when a transaction involves age-restricted or otherwise restricted items.\r\n\r\nThe Aadhaar App enables gig workers to verify their identity and share verifiable identity credentials with participating platforms. This allows the platform to confirm the identity of the delivery agent and maintain a verified profile before the worker undertakes deliveries or provides services.\r\n\r\nFor transactions involving restricted items, the same infrastructure can enable mutual identity verification. The delivery agent can present a verifiable identity credential to the customer, allowing the customer to confirm that the person arriving at their doorstep is the verified agent assigned by the platform. The customer can also present the required identity information from their Aadhaar App to establish eligibility to receive the restricted item.\r\n\r\nDigital wallets provide both the gig worker and the customer with a resident-controlled interface to pre",
+      "organizationName": "Unique Identification Authority of India",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-13T16:43:02+01:00",
+      "publishedAt": "2026-07-13T16:43:02+01:00",
+      "tags": [
+        "gig economy",
+        "gig workers",
+        "identity verification",
+        "mutual verification",
+        "digital identity",
+        "verifiable credentials",
+        "digital wallet",
+        "Aadhaar",
+        "selective disclosure",
+        "restricted items",
+        "trusted delivery"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Urban Company",
+            "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOooLwNw1EdLAYzFyBZHES9KUc0zNgmEq3goiXfkde4kfND08titJ",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Swiggy",
+            "url": "https://www.swiggy.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Halamobility",
+            "url": "http://halamobility.in/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
+      "videos": [
+        {
+          "url": "https://youtube.com/shorts/N0kSJ95NA6o?feature=share",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtube.com/shorts/N0kSJ95NA6o?feature=share",
+        "provider": "youtube"
+      },
+      "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\r\n\r\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
+      "country": "IN"
+    },
+    {
       "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
       "sector": "mobility",
       "title": "Delivery Agent and Customer Identity Verification using the Aadhaar App",
