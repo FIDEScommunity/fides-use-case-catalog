@@ -5,27 +5,27 @@
   "orgName": "Unique Identification Authority of India",
   "useCases": [
     {
-      "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau",
-      "sector": "mobility",
-      "title": "Delivery Agent and Customer Identity Verification using the Aadhaar App",
-      "summary": "Digital platforms rely on large networks of gig workers to provide delivery and other doorstep services. Establishing trust between the platform, the gig worker, and the customer is particularly important when services are delivered at a customer's residence or when a transaction involves age-restricted or otherwise restricted items.\n\nThe Aadhaar App enables gig workers to verify their identity and share verifiable identity credentials with participating platforms. This allows the platform to confirm the identity of the delivery agent and maintain a verified profile before the worker undertakes deliveries or provides services.\n\nFor transactions involving restricted items, the same infrastructure can enable mutual identity verification. The delivery agent can present a verifiable identity credential to the customer, allowing the customer to confirm that the person arriving at their doorstep is the verified agent assigned by the platform. The customer can also present the required identity information from their Aadhaar App to establish eligibility to receive the restricted item.\n\nDigital wallets provide both the gig worker and the customer with a resident-controlled interface to pre",
+      "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
+      "sector": "digital",
+      "title": "Social Media Profile Verification using Digital Identity Wallets",
+      "summary": "Social media and messaging platforms allow users to create profiles and interact with others without requiring formal identity verification. While this enables easy access to digital services, platforms and users may have limited assurance that a profile is associated with a verified individual.\n\nRTI enables users to optionally verify their profile using the Aadhaar App or another compatible digital identity wallet. Users can continue to access the platform and use messaging services without verification. However, users who choose to verify their identity can securely present a verifiable identity credential from their wallet.\n\nOnce the credential is successfully verified, the user's profile displays a verified status indicating that the profile has been verified using a trusted digital identity credential. This provides an additional trust signal to other users without requiring the platform to collect or store copies of identity documents.\n\nThe use case demonstrates how digital identity wallets and verifiable credentials can introduce optional, privacy-preserving identity assurance into social platforms while preserving user choice and open access.",
       "organizationName": "Unique Identification Authority of India",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-14T16:37:10+01:00",
-      "publishedAt": "2026-07-14T16:37:10+01:00",
+      "updatedAt": "2026-07-14T17:02:12+01:00",
+      "publishedAt": "2026-07-14T17:02:12+01:00",
       "tags": [
-        "gig economy",
-        "gig workers",
-        "identity verification",
-        "mutual verification",
+        "social media",
+        "profile verification",
         "digital identity",
         "verifiable credentials",
         "digital wallet",
         "Aadhaar",
-        "selective disclosure",
-        "restricted items",
-        "trusted delivery"
+        "Aadhaar App",
+        "optional verification",
+        "trusted profiles",
+        "identity assurance",
+        "privacy preserving verification"
       ],
       "links": {
         "personalWallets": [
@@ -38,16 +38,16 @@
           }
         ],
         "businessWallets": [],
-        "issuers": [],
-        "credentials": [
+        "issuers": [
           {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
-            "labelRaw": "Aadhaar Verifiable Credential",
-            "url": null,
-            "source": "catalog",
+            "refId": null,
+            "labelRaw": "UIDAI",
+            "url": "http://uidai.gov.in",
+            "source": "manual",
             "walletType": null
           }
         ],
+        "credentials": [],
         "organizations": [
           {
             "refId": "org:uidai",
@@ -58,22 +58,8 @@
           },
           {
             "refId": null,
-            "labelRaw": "Urban Company",
-            "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOooLwNw1EdLAYzFyBZHES9KUc0zNgmEq3goiXfkde4kfND08titJ",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Swiggy",
-            "url": "https://www.swiggy.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Halamobility",
-            "url": "http://halamobility.in/",
+            "labelRaw": "Arattai",
+            "url": "http://Arattai.in",
             "source": "manual",
             "walletType": null
           }
@@ -81,8 +67,8 @@
         "rps": [
           {
             "refId": null,
-            "labelRaw": "urban company",
-            "url": "https://www.urbancompany.com/mumbai?srsltid=AfmBOooOqbswwJtznY4i4UaNxXw3kXh1EXFp9I-vNMxLrZNTloSYnt40",
+            "labelRaw": "Arattai",
+            "url": "http://arattai.in",
             "source": "manual",
             "walletType": null
           }
@@ -102,20 +88,21 @@
       ],
       "interopProfiles": [],
       "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png"
+        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png"
       ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
+      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png",
       "videos": [
         {
-          "url": "https://youtube.com/shorts/N0kSJ95NA6o?feature=share",
+          "url": "https://youtu.be/mzxH9MwmcKQ",
           "provider": "youtube"
         }
       ],
       "video": {
-        "url": "https://youtube.com/shorts/N0kSJ95NA6o?feature=share",
+        "url": "https://youtu.be/mzxH9MwmcKQ",
         "provider": "youtube"
       },
-      "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\n\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
+      "moreInfoUrl": "https://www.arattai.in/",
+      "userJourney": "A user downloads Arattai, creates a profile, and can immediately access the platform's messaging and social features without completing identity verification.\n\nIf the user chooses to verify their profile, Arattai initiates an app-to-app verification request to the Aadhaar App or another compatible digital identity wallet, such as Google Wallet. The user reviews the identity request and provides consent to share the required credential.\n\nThe wallet presents a verifiable identity credential to Arattai. Arattai cryptographically verifies the credential and, once verification is successful, updates the user's profile to display a verified status.\n\nOther users can then see that the profile has been verified using a trusted digital identity credential. The verification provides an additional layer of assurance without requiring Arattai to collect or store copies of the user's identity document.",
       "country": "IN"
     },
     {
