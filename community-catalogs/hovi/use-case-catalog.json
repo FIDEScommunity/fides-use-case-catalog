@@ -1,0 +1,124 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:hovi",
+  "orgName": "Hovi",
+  "useCases": [
+    {
+      "id": "preventing-sim-swap-fraud-with-eudi-wallets-and-ai-voice-agents-FNAfeI",
+      "sector": "digital",
+      "title": "Preventing SIM Swap Fraud with EUDI Wallets and AI Voice Agents",
+      "summary": "Telcos handle some of the most sensitive account actions over the phone, especially SIM swaps, which are a primary vector for account takeover fraud. This usecase shows an AI voice agent that verifies a caller's identity against a digital wallet credential in real time, before any sensitive change is processed.\r\n\r\nSIM swap fraud, phishing, and account takeover attacks all depend on the same weak point: phone-based identity checks that rely on security questions, personal data, or callback procedures, all of which can be socially engineered or leaked. Call center agents have no reliable way to confirm that the person on the line is who they claim to be, and attackers exploit exactly that gap.\r\n\r\nFor the telco, this closes the fraud gap without adding friction for legitimate customers. Verification happens automatically, mid-conversation, with no extra steps for the caller and no manual escalation for the agent. For the customer, it means sensitive requests are protected without the hassle of extra security questions or callback delays. For the industry more broadly, it demonstrates a reusable pattern for binding any high-risk transaction to a verified identity in real time.",
+      "organizationName": "Hovi",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-07-15T15:36:37+01:00",
+      "publishedAt": "2026-07-15T15:36:37+01:00",
+      "tags": [
+        "identity",
+        "telecommunication",
+        "kyc",
+        "pid",
+        "eudiw"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "national-eudi-wallet-germany",
+            "labelRaw": "National EUDI Wallet (Germany)",
+            "url": "https://www.sprind.org/eudi-wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "hovi-business-wallet",
+            "labelRaw": "Hovi Business Wallet",
+            "url": "https://www.hovi.id",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:hovi:eudi-playground:test",
+            "labelRaw": "Hovi EUDI Playground",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:loyalty-mdoc:mdoc",
+            "labelRaw": "Loyalty (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:hovi",
+            "labelRaw": "Hovi",
+            "url": "https://www.hovi.id/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:germany",
+            "labelRaw": "German Government",
+            "url": "https://www.sprind.org/eudi-wallet",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v5",
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/1-1.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/1-1.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/evc65v1UhMY",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/evc65v1UhMY",
+        "provider": "youtube"
+      },
+      "userJourney": "1. Customer calls in. A customer contacts the telco to request a sensitive account change, for example a SIM swap.\r\n\r\n2. AI voice agent picks up. The agent handles the call naturally, like a normal support conversation, and asks for the details of the request.\r\n\r\n3. Identity binding happens mid-call. Before the agent proceeds, it binds the request to the customer's verified identity credential in real time. No security questions, no callback, no manual agent escalation.\r\n\r\n4. Dashboard tracks the call live. A real-time dashboard shows each stage of the interaction as it happens: call received, identity check triggered, verification result, outcome.\r\n\r\n5. Verification gates the outcome. If the identity check passes, the account change goes through. If it fails, the change is blocked on the spot, before any damage is done.\r\n\r\n6.Loyalty credential issued. Once verified, the customer receives a loyalty credential as a reward for completing a secure interaction.\r\n\r\nThis flow removes the exact weak point that SIM swap attacks, phishing, and account takeover fraud rely on: social engineering and leaked personal data used to impersonate a real customer over the phone.",
+      "country": "FI"
+    }
+  ]
+}
