@@ -1,0 +1,93 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:national-id-program",
+  "orgName": "National ID Program",
+  "useCases": [
+    {
+      "id": "faydapass-rP7gpJ",
+      "sector": "digital",
+      "title": "Faydapass",
+      "summary": "FaydaPass solves Ethiopia's fragmented, paper-based identity problem, where citizens repeatedly re-prove who they are to disconnected institutions, leaving services slow, exclusionary, and open to fraud and duplicate benefit claims. It creates value by letting NIDP anchor a trusted \"Fayda Credential\" from which institutions like Ministry of Education, Ethiopia Food and Drug Authority, banks, and Ministry of Health can issue and verify their own credentials giving citizens faster, safer access; institutions instant verification; and government a way to cut fraud and advance Digital Ethiopia 2030. The key roles are the Issuer (grants a credential), the Holder (the citizen or guardian), and the Verifier (checks a credential)  with the digital wallet as the citizen's interface for selectively sharing credentials, online or offline, and Verifiable Credentials as the tamper-proof proof objects that let any verifier trust a claim instantly, without contacting the original issuer.",
+      "organizationName": "National ID Program",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-15T14:36:36+01:00",
+      "publishedAt": "2026-07-15T14:36:36+01:00",
+      "tags": [
+        "credential",
+        "secure"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Health",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "National ID Program",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ethiopia Food and Drug Authority",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Education",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/faydapass-image.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/faydapass-image.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=c3WaauLeIso",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=c3WaauLeIso",
+        "provider": "youtube"
+      },
+      "userJourney": "NIDP enrolls the citizen once, outside the wallet, issuing their Fayda ID. The citizen installs FaydaPass and authenticates via eSignet (Fayda ID + OTP/biometric); the wallet requests the Fayda Credential (Anchor) over OpenID4VCI, and NIDP issues it bound to the device key, establishing the wallet's root of trust and enabling login/TOTP. Sector institutions (MoE, EFDA, MoH, Civil Service Commission, MoA/ATI, NBE) issue credentials on top of the anchor when the citizen requests them, resolving identity against the Fayda ID each time; issuance is citizen-initiated, issuer-authorized. At service points, the citizen scans the relying party's QR, reviews requested attributes, and consents to share only those  license validity without the registration number, online or offline. The verifier checks the signature, issuer trust, and holder binding without contacting the issuer, confirming revocation via a status endpoint or cached list offline. For portals, the citizen authenticates by wallet login: it redirects to eSignet, approves with biometric/PIN, and the portal receives only consented claims, no password. Issuers keep credentials current by re-issuing them when facts change, flagging",
+      "country": "ET"
+    }
+  ]
+}
