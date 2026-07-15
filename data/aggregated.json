@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-07-15T08:30:12.494Z",
+  "lastUpdated": "2026-07-15T13:36:03.324Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 10,
+  "count": 9,
   "useCases": [
     {
       "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau",
@@ -117,133 +117,6 @@
         "provider": "youtube"
       },
       "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\n\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
-      "country": "IN"
-    },
-    {
-      "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-qCwsra",
-      "sector": "retail",
-      "title": "Delivery Agent and Customer Identity Verification using the Aadhaar App",
-      "summary": "Digital delivery platforms rely on large networks of gig workers (10 to 12 million estimated) who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing platforms to activate verified profiles before they undertake deliveries.\r\n\r\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
-      "organizationName": "Unique Identification Authority of India",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-07-15T07:01:29+01:00",
-      "publishedAt": "2026-07-15T07:01:29+01:00",
-      "tags": [
-        "gig economy",
-        "gig workers",
-        "identity verification",
-        "mutual verification",
-        "digital identity",
-        "verifiable credentials",
-        "digital wallet",
-        "Aadhaar",
-        "selective disclosure",
-        "restricted items",
-        "trusted delivery"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "aadhaar",
-            "labelRaw": "Aadhaar",
-            "url": "https://uidai.gov.in/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "UIDAI",
-            "url": "http://uidai.gov.in",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
-            "labelRaw": "Aadhaar Verifiable Credential",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:uidai",
-            "labelRaw": "Unique Identification Authority of India",
-            "url": "https://uidai.gov.in/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Urban Company",
-            "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOoq-NQeQQdPrJmKvd2ScU_mRpvN0jbtHEHd9iNqdQuNqZFKq5WPR",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "swiggy",
-            "url": "https://www.swiggy.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Halamobility",
-            "url": "https://halamobility.in/",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "urbancompany",
-            "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOoq-NQeQQdPrJmKvd2ScU_mRpvN0jbtHEHd9iNqdQuNqZFKq5WPR",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "swiggy",
-            "url": "http://swiggy.in",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM-1.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM-1.png",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/shorts/N0kSJ95NA6o",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/shorts/N0kSJ95NA6o",
-        "provider": "youtube"
-      },
-      "userJourney": "The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate a verified profile before they undertake deliveries. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
       "country": "IN"
     },
     {
