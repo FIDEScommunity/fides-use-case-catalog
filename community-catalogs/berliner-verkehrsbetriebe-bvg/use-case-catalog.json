@@ -1,0 +1,75 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:berliner-verkehrsbetriebe-bvg",
+  "orgName": "Berliner Verkehrsbetriebe (BVG)",
+  "useCases": [
+    {
+      "id": "spheritys-digital-product-passports-for-bvgs-electric-bus-batteries-4sPEny",
+      "sector": "supply_chain",
+      "title": "Spherity’s Digital Product Passports for BVG’s Electric Bus Batteries",
+      "summary": "BVG, Berlin’s public transport operator, uses Spherity’s Digital Product Passport solution for batteries installed in its electric bus fleet. Each battery is connected to a digital passport containing standardized information on its composition, material sourcing, carbon footprint, regulatory documentation, performance, and lifecycle. The implementation supports transparent, machine-readable compliance reporting and gives BVG access to up-to-date information on battery health and environmental impact. The first buses equipped with these digital battery passports entered operation in December 2024, helping BVG prepare for the requirements of the EU Battery Regulation ahead of the 2027 deadline.",
+      "organizationName": "Berliner Verkehrsbetriebe (BVG)",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-15T15:38:36+01:00",
+      "publishedAt": "2026-07-15T15:38:36+01:00",
+      "tags": [
+        "Digital Product Passport",
+        "DPP",
+        "Battery Passport",
+        "Product Traceability",
+        "Circular Economy",
+        "Sustainability",
+        "Supply Chain Transparency",
+        "Regulatory Compliance",
+        "Product Data",
+        "Data Interoperability",
+        "Digital Identity"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Berliner Verkehrsbetriebe (BVG)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/Spherity_BVG-Battery-Passport-example.png",
+        "https://fides.community/app/uploads/2026/07/Spheritys-battery-passport-solution-3-4-2.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/Spherity_BVG-Battery-Passport-example.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/w5wVxY6BIuw?si=cTUpEqFBRZ_PJX84",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/playlist?list=PLnj6hp2xuFVLoo4bNt3-HjOlzub1jkRw7",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/w5wVxY6BIuw?si=cTUpEqFBRZ_PJX84",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.spherity.com/digital-product-passport",
+      "userJourney": "Battery and product data from the vehicle manufacturer and relevant technical systems is connected to Spherity’s DPP software. A unique digital passport is created for each battery unit and linked to the physical battery through a product identifier and QR code. The solution structures and validates information such as battery composition, sourcing, carbon footprint, regulatory documents, and operational performance. BVG can access this information during the battery’s use phase for compliance reporting, sustainability assessment, maintenance, and lifecycle management, while other authorised parties may provide or retrieve information relevant to their role. The passport can be updated as the battery is operated, serviced, reused, or recycled, creating a continuous and trusted record across its lifecycle.",
+      "country": "DE"
+    }
+  ]
+}
