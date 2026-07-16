@@ -5,6 +5,303 @@
   "orgName": "Unique Identification Authority of India",
   "useCases": [
     {
+      "id": "urban-company-service-professional-and-customer-identity-verification-0DW84B",
+      "sector": "digital",
+      "title": "Urban Company: Service Professional and Customer Identity Verification",
+      "summary": "Urban Company (Think Helpling, Taskrabbit, Bark etc) is one of Asia's leading technology platforms for 8.4 million users delivering home services, connecting customers with verified professionals across categories such as beauty, wellness, home cleaning, appliance repair, plumbing, electrical services, and home improvement.\r\n\r\nUrban Company uses the Aadhaar App to enable secure, consent-based identity verification for both service professionals and customers. Service professionals can instantly verify their identity during onboarding, periodic re-verification, or before undertaking services at customer premises. Customers can also verify their identity, where required, for high-value or sensitive services. Using digitally signed verifiable credentials, the Aadhaar App enables users to share only the information necessary for the transaction, eliminating the need for physical identity documents. This reduces impersonation and fraud, streamlines onboarding and service delivery, enhances trust between professionals and customers, and provides a seamless, privacy-preserving verification experience.",
+      "organizationName": "Unique Identification Authority of India",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-16T16:33:20+01:00",
+      "publishedAt": "2026-07-16T16:33:20+01:00",
+      "tags": [
+        "Gig Economy",
+        "Partner Onboarding",
+        "Identity Verification",
+        "Aadhaar App",
+        "Verifiable Credentials",
+        "Digital Wallet",
+        "Consent-Based Sharing",
+        "Paperless Verification",
+        "Fraud Prevention",
+        "App-to-App Integration"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "aadhaar",
+            "labelRaw": "Aadhaar",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "uidai",
+            "url": "http://uidai.gov.in",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:uncefact:dia:vcdm-2-0",
+            "labelRaw": "Digital Identity Anchor",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Urban Company",
+            "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOoqbuApFoYrpg0rayHWuWPv8Ohw--pjrQPwUvl7M42gB8CMpv_e6",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "urban company",
+            "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOookm-vkuOFeVuJBp4QWeU2xNltmF51DGNzFWy_zpD8RGJMje4_V",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_26_58-PM.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_26_58-PM.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/shorts/N0kSJ95NA6o",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/shorts/N0kSJ95NA6o",
+        "provider": "youtube"
+      },
+      "userJourney": "### How It Works\r\n\r\n1. A service professional begins onboarding through the Urban Company Partner App.\r\n\r\n2. As part of the onboarding journey, the Partner App initiates an identity verification request by invoking the Aadhaar App.\r\n\r\n3. The Aadhaar App opens and prompts the professional for consent to share the required identity information.\r\n\r\n4. Upon consent, the Aadhaar App securely retrieves the required Aadhaar-based verifiable credential from the wallet and generates a digitally signed presentation containing only the requested demographic attributes.\r\n\r\n5. The Aadhaar App returns the signed identity response directly to the Urban Company Partner App, which verifies the credential cryptographically using UIDAI's trust framework.\r\n\r\n6. Once verification is successful, the professional's identity is confirmed instantly, allowing the onboarding process to continue without requiring physical documents, manual data entry, or document uploads.\r\n\r\nThis seamless app-to-app interaction enables secure, privacy-preserving, and paperless onboarding while significantly reducing onboarding time and the risk of document fraud or impersonation.",
+      "country": "IN"
+    },
+    {
+      "id": "hala-mobility-verified-rider-onboarding-9MiDRu",
+      "sector": "mobility",
+      "title": "Hala Mobility: Verified Rider Onboarding",
+      "summary": "Hala Mobility is an electric mobility platform that manufactures and rents electric scooters to delivery partners, enabling last-mile logistics for food delivery, e-commerce, and quick commerce platforms. Similar to shared mobility providers such as Lime, Voi, and Tier in Europe, Hala Mobility enables riders to access vehicles without lengthy paperwork while ensuring a trusted onboarding process.\r\n\r\nBefore renting an electric scooter, Hala Mobility can use the Aadhaar App to perform secure, consent-based identity verification of delivery partners. Riders share a digitally signed verifiable credential from the Aadhaar App, allowing Hala Mobility to instantly verify their identity without requiring physical Aadhaar copies or manual document verification. This reduces onboarding time, prevents identity fraud, and enables a seamless, paperless rental experience while ensuring that only verified individuals are provided access to long-term vehicle rentals.",
+      "organizationName": "Unique Identification Authority of India",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-16T16:33:06+01:00",
+      "publishedAt": "2026-07-16T16:33:06+01:00",
+      "tags": [
+        "Electric Mobility",
+        "Gig Economy",
+        "Rider Onboarding",
+        "Identity Verification",
+        "Aadhaar App",
+        "Verifiable Credentials",
+        "App-to-App Integration",
+        "Consent-Based Sharing",
+        "Paperless Verification",
+        "Fraud Prevention"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "aadhaar",
+            "labelRaw": "Aadhaar",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "uidai",
+            "url": "http://uidai.gov.in",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Hala Mobility",
+            "url": "https://halamobility.in/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_46_35-PM.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_46_35-PM.png",
+      "moreInfoUrl": "https://www.youtube.com/watch?v=wo28NNYEvPY",
+      "userJourney": "How It Works\r\nA delivery partner applies to rent an electric scooter through the Hala Mobility application or onboarding portal.\r\nDuring onboarding, Hala Mobility initiates an identity verification request by invoking the Aadhaar App.\r\nThe Aadhaar App opens and requests the rider's consent to share the required demographic information for identity verification.\r\nUpon consent, the Aadhaar App generates a digitally signed verifiable credential containing only the requested identity attributes and securely shares it with the Hala Mobility application.\r\nHala Mobility verifies the credential cryptographically using UIDAI's trust framework, confirming that the identity information is authentic and has not been tampered with.\r\nOnce verification is successful, the rider's onboarding is completed, and the electric scooter can be rented to the verified individual for the agreed rental period.\r\n\r\nThis app-to-app verification flow enables fast, secure, and privacy-preserving rider onboarding while eliminating manual document verification and reducing the risk of identity fraud.",
+      "country": "IN"
+    },
+    {
+      "id": "doctor-identity-verification-for-medical-practitioner-registration-ewroXC",
+      "sector": "healthcare",
+      "title": "Tamil Nadu Medical Council: Doctor Identity Verification for Practitioner Registration",
+      "summary": "Tamil Nadu Medical councils verify doctors before granting registration to practise medicine in the state of Tamil Nadu India. As part of the registration process, the Tamil Nadu Medical Council uses the Aadhaar App to verify the identity of MBBS graduates applying for a practitioner registration.\n\nApplicants present their Aadhaar identity information through the Aadhaar App, allowing the Council to verify that the person applying is the legitimate holder of the identity and credentials submitted. This helps prevent impersonation or the misuse of another person's academic certificates to obtain a medical practitioner registration. Aadhaar verification forms one part of the Council's broader registration and credential verification process.",
+      "organizationName": "Unique Identification Authority of India",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-16T16:32:28+01:00",
+      "publishedAt": "2026-07-16T16:32:28+01:00",
+      "tags": [
+        "healthcare",
+        "doctor verification",
+        "professional registration",
+        "identity verification",
+        "Aadhaar App",
+        "digital wallet",
+        "medical practitioners",
+        "impersonation prevention"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "aadhaar",
+            "labelRaw": "Aadhaar",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": "https://wallet.google.com/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Aadhaar",
+            "url": "http://uidai.gov.in",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "labelRaw": "Aadhaar Verifiable Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Tamil Nadu Medical Council",
+            "url": "https://www.tamilnadumedicalcouncil.org/info/history-of-tamil-nadu-medical-council",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Tamil Nadu Medical Council",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=qcodqTF-cZU",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=qcodqTF-cZU",
+        "provider": "youtube"
+      },
+      "userJourney": "An MBBS graduate applies for practitioner registration with the Tamil Nadu Medical Council. As part of the registration process, the applicant is asked to verify their identity using the Aadhaar App. The applicant presents their Aadhaar identity information and completes proof of presence through face verification. The Council verifies the presented identity and uses the verified information as part of its broader checks on the applicant's academic and professional credentials. Once the required checks are completed, the Council proceeds with the practitioner registration process.",
+      "country": "IN"
+    },
+    {
       "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
       "sector": "digital",
       "title": "Arattai: Verified Social Media Profiles",
@@ -12,8 +309,8 @@
       "organizationName": "Unique Identification Authority of India",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-16T14:50:58+01:00",
-      "publishedAt": "2026-07-16T14:50:58+01:00",
+      "updatedAt": "2026-07-16T14:51:06+01:00",
+      "publishedAt": "2026-07-16T14:51:06+01:00",
       "tags": [
         "social media",
         "profile verification",
@@ -193,114 +490,6 @@
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
       "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\n\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
-      "country": "IN"
-    },
-    {
-      "id": "doctor-identity-verification-for-medical-practitioner-registration-ewroXC",
-      "sector": "healthcare",
-      "title": "Doctor Identity Verification for Medical Practitioner Registration",
-      "summary": "Medical councils verify doctors before granting registration to practise medicine. As part of the registration process, the Tamil Nadu Medical Council uses the Aadhaar App to verify the identity of MBBS graduates applying for a practitioner registration.\r\n\r\nApplicants present their Aadhaar identity information through the Aadhaar App, allowing the Council to verify that the person applying is the legitimate holder of the identity and credentials submitted. This helps prevent impersonation or the misuse of another person's academic certificates to obtain a medical practitioner registration. Aadhaar verification forms one part of the Council's broader registration and credential verification process.",
-      "organizationName": "Unique Identification Authority of India",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-07-13T16:45:17+01:00",
-      "publishedAt": "2026-07-13T16:45:17+01:00",
-      "tags": [
-        "healthcare",
-        "doctor verification",
-        "professional registration",
-        "identity verification",
-        "Aadhaar App",
-        "digital wallet",
-        "medical practitioners",
-        "impersonation prevention"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "aadhaar",
-            "labelRaw": "Aadhaar",
-            "url": "https://uidai.gov.in/",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "google-wallet",
-            "labelRaw": "Google Wallet",
-            "url": "https://wallet.google.com/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Aadhaar",
-            "url": "http://uidai.gov.in",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
-            "labelRaw": "Aadhaar Verifiable Credential",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:uidai",
-            "labelRaw": "Unique Identification Authority of India",
-            "url": "https://uidai.gov.in/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Tamil Nadu Medical Council",
-            "url": "https://www.tamilnadumedicalcouncil.org/info/history-of-tamil-nadu-medical-council",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Tamil Nadu Medical Council",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=qcodqTF-cZU",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=qcodqTF-cZU",
-        "provider": "youtube"
-      },
-      "userJourney": "An MBBS graduate applies for practitioner registration with the Tamil Nadu Medical Council. As part of the registration process, the applicant is asked to verify their identity using the Aadhaar App. The applicant presents their Aadhaar identity information and completes proof of presence through face verification. The Council verifies the presented identity and uses the verified information as part of its broader checks on the applicant's academic and professional credentials. Once the required checks are completed, the Council proceeds with the practitioner registration process.",
       "country": "IN"
     }
   ]
