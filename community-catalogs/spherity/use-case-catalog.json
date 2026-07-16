@@ -1,0 +1,153 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:spherity",
+  "orgName": "Spherity",
+  "useCases": [
+    {
+      "id": "spherity-trusted-ai-KMVBEw",
+      "sector": "mobility",
+      "title": "Spherity Trusted AI",
+      "summary": "Spherity Trusted AI enables autonomous AI agents to act securely within ecosystems such as Catena-X through cryptographically verifiable identities and machine-readable authorizations. It links each agent to a registered legal entity through an AI Service Passport, a narrowly scoped Power of Attorney, and a verified Corporate Identity. This creates a clear, auditable chain of accountability, allowing organisations such as Catena-X participants as well as others to verify who operates an agent, what it is permitted to do, and who is legally responsible. Aligned with eIDAS 2.0 and the EU AI Act, the service supports trusted agent interactions across industrial data spaces, regulated industries, and cross-company value chains.",
+      "organizationName": "Spherity",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-16T13:53:33+01:00",
+      "publishedAt": "2026-07-16T13:53:33+01:00",
+      "tags": [
+        "artificial intelligence",
+        "agentic commerce",
+        "identity",
+        "pharmacovigilance",
+        "supply chain",
+        "eIDAS 2.0",
+        "verifiable credentials"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [
+          {
+            "refId": "spherity-business-wallet",
+            "labelRaw": "Spherity European Business Wallet",
+            "url": "https://www.spherity.com/eida",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Bundesanzeiger Verlag",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "TrustNet e.V.",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Legal Person Identifier (LPID)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Power of Attorney (PoA)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "AI Service Passport (AISP)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "C2PA/CAWG Credentials",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "License to Operate",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Catena-X e.V.",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:spherity",
+            "labelRaw": "Spherity",
+            "url": "https://www.spherity.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Catena-X",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "energy data-X",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Large European Online Retailer",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png",
+      "moreInfoUrl": "https://www.spherity.com/eida",
+      "userJourney": "The end-user flow establishes a verifiable trust chain for Agent-to-Agent (A2A) interactions:\r\n\r\n1. Issuance: Authentic sources (e.g., the German Business Registry, Bundesanzeiger Verlag) issue verifiable credentials, such as a Legal Person Identifier (LPID), licenses, and market roles, to a company's European Business Wallet (EBW) under the eIDAS 2.0 trust framework. Further compliance credential issuers.\r\n\r\n2. Delegation: The company creates a Power of Attorney (PoA) credential to delegate authority to an AI Agent-Wallet, explicitly defining the agent's scope, permissions, and validity. An AI Service Passport (AISP) is also linked to provide verifiable lifecycle provenance and compliance data (TEVV).\r\n\r\n3. A2A Exchange: When initiating a transaction, the AI Service Agent requests and presents its credentials (LPID, PoA, AISP) via an A2A protocol to the Consumer Agent.\r\n\r\n4. Verification: The receiving agent uses a Policy Engine to verify cryptographic signatures, issuer trust, the PoA mandate, and revocation status in real-time. If valid, the automated interaction proceeds securely.",
+      "country": "DE"
+    }
+  ]
+}
