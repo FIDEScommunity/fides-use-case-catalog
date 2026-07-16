@@ -5,105 +5,15 @@
   "orgName": "Unique Identification Authority of India",
   "useCases": [
     {
-      "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau",
-      "sector": "mobility",
-      "title": "Swiggy: Delivery Agent and Customer Identity Verification",
-      "summary": "Swiggy (Think Ubereats, Just Eat, Wolt for an european comparison) is one of India's largest on-demand convenience platforms, serving 120 million customers across hundreds of cities through its food delivery, quick commerce, grocery, and logistics services.\n\nSwiggy uses the Aadhaar App to enable secure, consent-based identity verification for both delivery partners and customers. Delivery agents can instantly prove their identity during onboarding, periodic re-verification, or when collecting high-value or age-restricted orders. Similarly, customers can verify their identity, where required, before receiving sensitive deliveries. The Aadhaar App allows users to share only the necessary information through digitally signed verifiable credentials, eliminating the need for physical documents or photocopies. This ensures faster onboarding, reduces fraud and impersonation risks, improves trust between all parties, and delivers a seamless, privacy-preserving verification experience.",
-      "organizationName": "Unique Identification Authority of India",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-07-16T13:54:40+01:00",
-      "publishedAt": "2026-07-16T13:54:40+01:00",
-      "tags": [
-        "gig economy",
-        "gig workers",
-        "identity verification",
-        "mutual verification",
-        "digital identity",
-        "verifiable credentials",
-        "digital wallet",
-        "Aadhaar",
-        "selective disclosure",
-        "restricted items",
-        "trusted delivery"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "aadhaar",
-            "labelRaw": "Aadhaar",
-            "url": "https://uidai.gov.in/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [
-          {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
-            "labelRaw": "Aadhaar Verifiable Credential",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:uidai",
-            "labelRaw": "Unique Identification Authority of India",
-            "url": "https://uidai.gov.in/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Swiggy",
-            "url": "https://www.swiggy.com/",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "urban company",
-            "url": "https://www.urbancompany.com/mumbai?srsltid=AfmBOooOqbswwJtznY4i4UaNxXw3kXh1EXFp9I-vNMxLrZNTloSYnt40",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
-      "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\n\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
-      "country": "IN"
-    },
-    {
       "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
       "sector": "digital",
-      "title": "Social Media Profile Verification using Digital Identity Wallets",
-      "summary": "Social media and messaging platforms allow users to create profiles and interact with others without requiring formal identity verification. While this enables easy access to digital services, platforms and users may have limited assurance that a profile is associated with a verified individual.\n\nRTI enables users to optionally verify their profile using the Aadhaar App or another compatible digital identity wallet. Users can continue to access the platform and use messaging services without verification. However, users who choose to verify their identity can securely present a verifiable identity credential from their wallet.\n\nOnce the credential is successfully verified, the user's profile displays a verified status indicating that the profile has been verified using a trusted digital identity credential. This provides an additional trust signal to other users without requiring the platform to collect or store copies of identity documents.\n\nThe use case demonstrates how digital identity wallets and verifiable credentials can introduce optional, privacy-preserving identity assurance into social platforms while preserving user choice and open access.",
+      "title": "Arattai: Verified Social Media Profiles",
+      "summary": "Arattai is an Indian instant messaging and social networking platform (Like WhatsApp and Signal) with 8 million users that enables users to connect, communicate, and build trusted online communities. By integrating with the Aadhaar App, Arattai can offer users the option to verify their identity and receive a Verified Profile badge.\n\nUsers can securely share a digitally signed verifiable credential from the Aadhaar App with their explicit consent, allowing Arattai to confirm that the profile belongs to a real individual without storing or exposing unnecessary personal information. This helps reduce fake accounts, impersonation, bots, and identity fraud while enabling users to build credibility and trust on the platform. The verification is privacy-preserving, paperless, and based on cryptographically verifiable digital credentials, giving users greater control over their identity while fostering a safer and more authentic social media experience.",
       "organizationName": "Unique Identification Authority of India",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-14T17:02:12+01:00",
-      "publishedAt": "2026-07-14T17:02:12+01:00",
+      "updatedAt": "2026-07-16T14:50:58+01:00",
+      "publishedAt": "2026-07-16T14:50:58+01:00",
       "tags": [
         "social media",
         "profile verification",
@@ -193,6 +103,96 @@
       },
       "moreInfoUrl": "https://www.arattai.in/",
       "userJourney": "A user downloads Arattai, creates a profile, and can immediately access the platform's messaging and social features without completing identity verification.\n\nIf the user chooses to verify their profile, Arattai initiates an app-to-app verification request to the Aadhaar App or another compatible digital identity wallet, such as Google Wallet. The user reviews the identity request and provides consent to share the required credential.\n\nThe wallet presents a verifiable identity credential to Arattai. Arattai cryptographically verifies the credential and, once verification is successful, updates the user's profile to display a verified status.\n\nOther users can then see that the profile has been verified using a trusted digital identity credential. The verification provides an additional layer of assurance without requiring Arattai to collect or store copies of the user's identity document.",
+      "country": "IN"
+    },
+    {
+      "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau",
+      "sector": "mobility",
+      "title": "Swiggy: Delivery Agent and Customer Identity Verification",
+      "summary": "Swiggy (Think Ubereats, Just Eat, Wolt for an european comparison) is one of India's largest on-demand convenience platforms, serving 120 million customers across hundreds of cities through its food delivery, quick commerce, grocery, and logistics services.\n\nSwiggy uses the Aadhaar App to enable secure, consent-based identity verification for both delivery partners and customers. Delivery agents can instantly prove their identity during onboarding, periodic re-verification, or when collecting high-value or age-restricted orders. Similarly, customers can verify their identity, where required, before receiving sensitive deliveries. The Aadhaar App allows users to share only the necessary information through digitally signed verifiable credentials, eliminating the need for physical documents or photocopies. This ensures faster onboarding, reduces fraud and impersonation risks, improves trust between all parties, and delivers a seamless, privacy-preserving verification experience.",
+      "organizationName": "Unique Identification Authority of India",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-16T13:54:40+01:00",
+      "publishedAt": "2026-07-16T13:54:40+01:00",
+      "tags": [
+        "gig economy",
+        "gig workers",
+        "identity verification",
+        "mutual verification",
+        "digital identity",
+        "verifiable credentials",
+        "digital wallet",
+        "Aadhaar",
+        "selective disclosure",
+        "restricted items",
+        "trusted delivery"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "aadhaar",
+            "labelRaw": "Aadhaar",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [
+          {
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "labelRaw": "Aadhaar Verifiable Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Swiggy",
+            "url": "https://www.swiggy.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "urban company",
+            "url": "https://www.urbancompany.com/mumbai?srsltid=AfmBOooOqbswwJtznY4i4UaNxXw3kXh1EXFp9I-vNMxLrZNTloSYnt40",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
+      "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\n\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
       "country": "IN"
     },
     {
