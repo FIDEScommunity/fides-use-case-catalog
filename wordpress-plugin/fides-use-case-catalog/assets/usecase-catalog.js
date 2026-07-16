@@ -831,15 +831,14 @@
     `;
   }
 
-  function parseVimeoVideoId(url) {
-    try {
-      const u = new URL(String(url || ""));
-      const parts = u.pathname.split("/").filter(Boolean);
-      const id = parts.length ? parts[parts.length - 1] : "";
-      return /^\d+$/.test(id) ? id : "";
-    } catch (_err) {
-      return "";
-    }
+  function parseYoutubeVideoId(videoUrl) {
+    const match = String(videoUrl || "").match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/);
+    return match && match[1] ? match[1] : "";
+  }
+
+  function parseVimeoVideoId(videoUrl) {
+    const match = String(videoUrl || "").match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/);
+    return match && match[1] ? match[1] : "";
   }
 
   function itemVideos(item) {
@@ -869,7 +868,7 @@
     if (video.provider === "youtube") {
       const id = parseYoutubeVideoId(videoUrl);
       if (id) {
-        return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}`;
+        return `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?rel=0&modestbranding=1`;
       }
     }
 
@@ -1707,22 +1706,6 @@
     const useCaseId = new URLSearchParams(window.location.search).get("usecase");
     if (!useCaseId) return;
     openUseCaseById(useCaseId);
-  }
-
-  function parseYoutubeVideoId(url) {
-    try {
-      const u = new URL(String(url || ""));
-      const host = u.hostname.toLowerCase();
-      if (host.includes("youtu.be")) {
-        return u.pathname.replace(/^\/+/, "");
-      }
-      if (host.includes("youtube.com")) {
-        return u.searchParams.get("v") || "";
-      }
-    } catch (_err) {
-      return "";
-    }
-    return "";
   }
 
   function deriveCardImage(item) {

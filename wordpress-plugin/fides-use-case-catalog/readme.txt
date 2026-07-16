@@ -2,13 +2,16 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.8.7
+Stable tag: 0.8.8
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
 Use case catalog renderer and WordPress submission flow.
 
 == Changelog ==
+
+= 0.8.8 =
+* Modal media gallery: support YouTube Shorts URLs (and embed/youtu.be) using the same video ID parser as wallet/org catalogs.
 
 = 0.8.7 =
 * Use case detail modal: restore subtle Last updated footer; dates use the browser locale.
