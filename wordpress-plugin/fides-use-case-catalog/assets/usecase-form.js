@@ -269,7 +269,7 @@
             <div class="fides-form-grid fides-media-grid">
               <div class="fides-media-col">
                 <label>Cover images</label>
-                <p class="fides-help fides-media-col-help">Landscape images for the catalog (16:7). Upload or paste URLs. The first image is used on the card.</p>
+                <p class="fides-help fides-media-col-help">Landscape images work best (16:9). Upload or paste URLs. The first image is used on the card; the detail modal uses the same ratio.</p>
                 <div id="fides-image-rows" class="fides-media-rows" aria-live="polite"></div>
               </div>
               <div class="fides-media-col">

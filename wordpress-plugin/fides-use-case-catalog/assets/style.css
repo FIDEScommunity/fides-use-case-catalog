@@ -904,7 +904,7 @@
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 7;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
 }
 
@@ -2306,7 +2306,7 @@
 
 .fides-use-case-hero {
   position: relative;
-  min-height: 260px;
+  aspect-ratio: 16 / 9;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -2360,7 +2360,10 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 0.75rem;
-  min-height: 260px;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
   padding: 1rem 1.1rem 1.15rem;
 }
 
@@ -3082,9 +3085,9 @@
   margin-bottom: 0.5rem;
 }
 
-/* Compact media viewer + thumbnail strip */
+/* Compact media viewer + thumbnail strip (16:9 matches card + form guidance) */
 .fides-use-case-modal-media-wrap {
-  --fides-media-height: 240px;
+  --fides-media-aspect: 16 / 9;
 }
 
 .fides-use-case-modal-carousel {
@@ -3160,11 +3163,12 @@
   background: transparent;
 }
 
-/* Compact: cap both image and video to a fixed viewer height */
+/* Compact: image and video share a 16:9 viewer */
 .fides-use-case-modal-media-wrap .fides-use-case-modal-media-frame {
   position: relative;
   width: 100%;
-  height: var(--fides-media-height);
+  aspect-ratio: var(--fides-media-aspect);
+  height: auto;
   padding-top: 0;
 }
 
@@ -3177,7 +3181,8 @@
 }
 
 .fides-use-case-modal-media-wrap .fides-use-case-modal-media-image {
-  height: var(--fides-media-height);
+  aspect-ratio: var(--fides-media-aspect);
+  height: auto;
 }
 
 .fides-use-case-modal-media-wrap .fides-use-case-modal-media-image img {

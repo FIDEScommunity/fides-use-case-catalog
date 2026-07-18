@@ -790,7 +790,7 @@ function fides_use_case_catalog_render_admin_media_previews(array $image_urls): 
     $html = '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;">';
     foreach ($image_urls as $url) {
         $html .= sprintf(
-            '<a href="%1$s" target="_blank" rel="noopener noreferrer"><img src="%1$s" alt="" loading="lazy" style="width:160px;height:auto;aspect-ratio:16/7;object-fit:cover;border:1px solid #ccd0d4;border-radius:4px;background:#fff;" /></a>',
+            '<a href="%1$s" target="_blank" rel="noopener noreferrer"><img src="%1$s" alt="" loading="lazy" style="width:160px;height:auto;aspect-ratio:16/9;object-fit:cover;border:1px solid #ccd0d4;border-radius:4px;background:#fff;" /></a>',
             esc_url($url)
         );
     }

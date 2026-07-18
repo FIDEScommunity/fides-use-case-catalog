@@ -2,13 +2,16 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.8.8
+Stable tag: 0.8.9
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
 Use case catalog renderer and WordPress submission flow.
 
 == Changelog ==
+
+= 0.8.9 =
+* Media aspect ratio standardized to 16:9 across form preview, catalog cards, detail modal, and admin thumbs (was mixed 16:7 / fixed heights).
 
 = 0.8.8 =
 * Modal media gallery: support YouTube Shorts URLs (and embed/youtu.be) using the same video ID parser as wallet/org catalogs.
