@@ -2461,6 +2461,10 @@
   font-weight: 700;
   line-height: 1.2;
   color: #ffffff;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55), 0 2px 12px rgba(0, 0, 0, 0.45);
 }
 
@@ -2973,9 +2977,21 @@
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+
+  .fides-use-case-hero-title {
+    font-size: 1.125rem;
+  }
 }
 
 @media (max-width: 600px) {
+  .fides-use-case-hero-title {
+    font-size: 1.0625rem;
+  }
+
+  .fides-use-case-hero-summary {
+    display: none;
+  }
+
   /* KPI layout aligned with rp-catalog: keep 2 columns, value + label on one
      line to save vertical height. */
   .fides-use-case-catalog .fides-kpi-row {

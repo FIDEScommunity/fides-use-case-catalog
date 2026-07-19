@@ -2,13 +2,16 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.8.9
+Stable tag: 0.8.10
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
 Use case catalog renderer and WordPress submission flow.
 
 == Changelog ==
+
+= 0.8.10 =
+* Card hero titles: clamp to 3 lines with slightly smaller type on narrow viewports; hide card summaries on mobile so long titles stay inside the 16:9 media frame.
 
 = 0.8.9 =
 * Media aspect ratio standardized to 16:9 across form preview, catalog cards, detail modal, and admin thumbs (was mixed 16:7 / fixed heights).
