@@ -2,9 +2,11 @@
  * FIDES Use Case Catalog Crawler
  *
  * Pipeline:
- *   1. (optional) SYNC — inline JSON from WordPress push sync (primary), or HTTP
- *      pull on manual workflow_dispatch (recovery), materializing one
- *      `community-catalogs/<orgSlug>/use-case-catalog.json` per organization.
+ *   1. (optional) SYNC — from the committed `data/wp-export/use-case.json` file
+ *      that WordPress writes via the GitHub Contents API (primary), or inline
+ *      JSON on repository_dispatch, or an HTTP pull on manual workflow_dispatch
+ *      (recovery). Materializes one `community-catalogs/<orgSlug>/use-case-catalog.json`
+ *      per organization.
  *   2. READ — load every `community-catalogs/<org>/use-case-catalog.json`.
  *   3. VALIDATE — against schemas/use-case-catalog.schema.json (draft 2020-12).
  *   4. AGGREGATE — flatten, dedupe by id, sort newest-first.
@@ -40,6 +42,13 @@ const CONFIG = {
   ),
   schemaPath: path.join(ROOT, 'schemas', 'use-case-catalog.schema.json'),
   exportUrl: process.env.USE_CASE_EXPORT_URL || '',
+  // Committed export file (primary sync source). WordPress commits the full
+  // export here via the GitHub Contents API; the push triggers this crawl,
+  // which reads the file locally — no ~65 KB repository_dispatch payload cap
+  // and no HTTP pull (so no WAF). Overridable for local testing.
+  wpExportPath: process.env.USE_CASE_EXPORT_FILE
+    ? path.resolve(ROOT, process.env.USE_CASE_EXPORT_FILE)
+    : path.join(ROOT, 'data', 'wp-export', 'use-case.json'),
   schemaVersion: '1.0.0',
 };
 
@@ -214,6 +223,9 @@ function loadInlineExportPayload(): WordPressExport | null {
 
 function shouldSyncFromWordPress(): boolean {
   if (process.env.USE_CASE_EXPORT_JSON?.trim()) return true;
+  // Committed export file is the primary source: materialize community files
+  // from it on every run (idempotent) so the git tree mirrors the export.
+  if (existsSync(CONFIG.wpExportPath)) return true;
   const event = process.env.GITHUB_EVENT_NAME?.trim();
   if (event === 'repository_dispatch') return true;
   if (event === 'workflow_dispatch' && CONFIG.exportUrl) return true;
@@ -226,6 +238,17 @@ async function loadWordPressExport(): Promise<WordPressExport> {
   if (inline) {
     log('Using inline export payload (WordPress push sync).');
     return inline;
+  }
+
+  // Primary: the export file WordPress committed via the Contents API.
+  if (existsSync(CONFIG.wpExportPath)) {
+    const rel = path.relative(ROOT, CONFIG.wpExportPath);
+    log(`Using committed WordPress export ${rel}.`);
+    const data = await readJson<WordPressExport>(CONFIG.wpExportPath);
+    if (!data?.organizations || !Array.isArray(data.organizations)) {
+      throw new Error(`Committed export ${rel} is missing an "organizations" array.`);
+    }
+    return data;
   }
 
   const event = process.env.GITHUB_EVENT_NAME?.trim();

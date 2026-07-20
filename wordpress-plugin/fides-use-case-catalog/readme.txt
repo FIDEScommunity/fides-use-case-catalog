@@ -2,13 +2,17 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.8.10
+Stable tag: 0.9.0
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
 Use case catalog renderer and WordPress submission flow.
 
 == Changelog ==
+
+= 0.9.0 =
+* GitHub sync: publish/save now commits the full export to data/wp-export/use-case.json via the GitHub Contents API (requires fides-community-tools-tiles >= 1.8.24) instead of a repository_dispatch payload, removing the ~65 KB dispatch cap that silently blocked large use-case exports. Crawl workflow triggers on that commit and reads the file locally (no HTTP pull, no WAF).
+* GitHub sync failures (push sync disabled, missing PAT, export too large) now surface as an admin notice and error_log entry instead of failing silently.
 
 = 0.8.10 =
 * Card hero titles: clamp to 3 lines with slightly smaller type on narrow viewports; hide card summaries on mobile so long titles stay inside the 16:9 media frame.

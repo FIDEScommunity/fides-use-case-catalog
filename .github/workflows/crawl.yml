@@ -1,8 +1,11 @@
 name: Crawl
 
-# Push primary: repository_dispatch from WP publish/delete/save (use-case export JSON).
-# HTTP export pull only on workflow_dispatch (recovery). Re-aggregate on community-catalog
-# commits without calling WordPress. See fides-community-tools-tiles governance §14.1.
+# Push primary: WordPress commits data/wp-export/use-case.json via the GitHub
+# Contents API on publish/delete/save; that push triggers this crawl, which reads
+# the committed export locally (no ~65 KB repository_dispatch cap, no WAF).
+# repository_dispatch (inline JSON) and workflow_dispatch (HTTP pull) remain as
+# fallback/recovery. Re-aggregate on community-catalog commits without calling
+# WordPress. See fides-community-tools-tiles governance §14.1.
 
 on:
   repository_dispatch:
@@ -11,6 +14,7 @@ on:
   push:
     branches: [main]
     paths:
+      - 'data/wp-export/use-case.json'
       - 'community-catalogs/**/use-case-catalog.json'
 
 jobs:

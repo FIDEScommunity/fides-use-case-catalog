@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.8.10
+ * Version: 0.9.0
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.8.10');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.9.0');
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
 define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
@@ -37,6 +37,7 @@ add_action('admin_menu', 'fides_use_case_catalog_register_settings_page');
 add_action('admin_post_fides_use_case_set_status', 'fides_use_case_catalog_handle_status_action');
 add_action('admin_post_fides_use_case_save_submission', 'fides_use_case_catalog_handle_save_submission_action');
 add_action('admin_post_fides_use_case_refresh_github', 'fides_use_case_catalog_handle_refresh_github_action');
+add_action('admin_notices', 'fides_use_case_catalog_github_sync_admin_notice');
 add_action('admin_post_fides_use_case_delete', 'fides_use_case_catalog_handle_delete_action');
 add_action('admin_post_fides_use_case_import_github', 'fides_use_case_catalog_handle_import_github_action');
 add_action('rest_api_init', 'fides_use_case_catalog_register_rest_routes');
@@ -1512,14 +1513,59 @@ function fides_use_case_catalog_build_export(): array {
 
 /**
  * Push published use-case export to GitHub (requires tiles push sync ≥ 1.7.7).
+ *
+ * Prefers the Contents-API commit route (tiles ≥ 1.8.24), which stores the full
+ * export as a repo file and lets the push-triggered Crawl workflow read it. This
+ * scales past the ~65 KB repository_dispatch client_payload cap that silently
+ * blocked large use-case exports. Falls back to repository_dispatch on older
+ * tiles builds. Failures are surfaced via an admin notice instead of failing
+ * silently (the historical cause of "publish did not reach GitHub").
  */
 function fides_use_case_catalog_trigger_github_sync(): void {
     if (! class_exists('Fides_Catalog_Github_Sync')) {
         return;
     }
-    Fides_Catalog_Github_Sync::trigger_export_data(
-        'use-case',
-        fides_use_case_catalog_build_export()
+
+    $export = fides_use_case_catalog_build_export();
+
+    if (method_exists('Fides_Catalog_Github_Sync', 'commit_export')) {
+        $result = Fides_Catalog_Github_Sync::commit_export('use-case', $export);
+    } else {
+        $result = Fides_Catalog_Github_Sync::trigger_export_data('use-case', $export);
+    }
+
+    if (is_wp_error($result)) {
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+        error_log('FIDES use-case GitHub sync failed: ' . $result->get_error_message());
+        set_transient(
+            'fides_use_case_catalog_github_sync_error',
+            $result->get_error_message(),
+            5 * MINUTE_IN_SECONDS
+        );
+    } else {
+        delete_transient('fides_use_case_catalog_github_sync_error');
+    }
+}
+
+/**
+ * Surface the most recent GitHub sync failure to moderators so a blocked
+ * publish (e.g. push sync disabled, missing PAT, export too large) is never
+ * swallowed silently.
+ */
+function fides_use_case_catalog_github_sync_admin_notice(): void {
+    if (! current_user_can('manage_options')) {
+        return;
+    }
+
+    $message = get_transient('fides_use_case_catalog_github_sync_error');
+    if (! is_string($message) || $message === '') {
+        return;
+    }
+
+    printf(
+        '<div class="notice notice-error is-dismissible"><p><strong>%s</strong> %s</p></div>',
+        esc_html__('FIDES Use Case Catalog — GitHub sync failed:', 'fides-use-case-catalog'),
+        esc_html($message)
     );
 }
 
