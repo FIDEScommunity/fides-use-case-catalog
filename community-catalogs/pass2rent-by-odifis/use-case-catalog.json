@@ -1,0 +1,133 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:pass2rent-by-odifis",
+  "orgName": "PASS2RENT By Odifis",
+  "useCases": [
+    {
+      "id": "pass2rent-from-proof-of-age-to-open-door-car-rental-on-eudi-wallets-xMkRtD",
+      "sector": "mobility",
+      "title": "PASS2RENT: From Proof of Age to Open Door — Car Rental on EUDI Wallets",
+      "summary": "PASS2RENT demonstrates how EUDI Wallets can support an entire car-rental journey with privacy-preserving, interoperable credentials.\r\n\r\nAt booking, the driver proves the required age through the wallet. The rental platform receives only the driver's name and an age_over_18 result, not the birth date. At the vehicle, a mobile driving licence identifies the driver through a fresh, holder-bound presentation. No counter visit, photocopy or ID scan is required.\r\n\r\nOne in-house OpenID4VP verifier handles every interaction and accepted both France Identité and the European Commission's EUDI reference wallet without wallet-specific integration. Any birth date used to derive an age result is discarded within milliseconds and never reaches a database, API or webhook. The design also includes a tamper-evident audit trail with no personal data, encryption at rest, strict retention and erasure controls.\r\n\r\nDemonstrated end to end, the use case shows that EUDI Wallets can replace document collection with selective disclosure and reusable, standards-based verification across different wallets and credential types.",
+      "organizationName": "PASS2RENT By Odifis",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-07-20T08:34:04+01:00",
+      "publishedAt": "2026-07-20T08:34:04+01:00",
+      "tags": [
+        "age verification",
+        "car rental",
+        "mobility",
+        "eudi wallet",
+        "selective disclosure",
+        "data minimisation",
+        "mdl",
+        "pid",
+        "openid4vp",
+        "cross-border"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "france-identite",
+            "labelRaw": "France Identité",
+            "url": "https://france-identite.gouv.fr/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-reference-personal-wallet",
+            "labelRaw": "EUDI Wallet Reference Implementation",
+            "url": "https://github.com/eu-digital-identity-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "EUDIW Testing Issuer",
+            "url": "https://issuer.eudiw.dev/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "France Identité",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:pass2rent-by-odifis",
+            "labelRaw": "PASS2RENT By Odifis",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "pass2rent-car-rental-verifier",
+            "labelRaw": "PASS2RENT - Car rental Verifier",
+            "url": "https://api.playground.france-identite.gouv.fr/odifis/contactless-rent/en/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/contactless_eudi.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/contactless_eudi.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/bgZNJDrLdcU",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/bgZNJDrLdcU",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://playground.france-identite.gouv.fr/marketplace/verifiers/odifis/",
+      "userJourney": "https://api.playground.france-identite.gouv.fr/odifis/contactless-rent/en/\r\n\r\n1. Booking. The driver selects a car and scans a QR code with France Identité. The rental platform receives only age_over_18: true. Any birth date disclosed to the verifier is discarded within milliseconds and never reaches the platform, its database or an API.\r\n\r\n2. Identification. At the car, the driver presents a test mobile driving licence from the EU reference wallet, or uses the PID as a fallback. The same verifier checks the credential and shares only the structured claims needed for the rental—no scans or document images.\r\n\r\n3. Handover. A fresh, device-bound presentation answers a dynamic challenge. After verification, the platform issues a short-lived, replay-protected token. Only a pseudonymous handover record and the verification method are retained.\r\n\r\n4. Data minimisation. The database stores the age result, required rental claims and a pseudonymous attestation. It does not store a birth date, portrait, licence image or photocopy.\r\n\r\n5. Trust. Credentials are checked against recognised trust anchors and revocation sources. Unknown issuers are flagged, never silently accepted.",
+      "country": "LT"
+    }
+  ]
+}
