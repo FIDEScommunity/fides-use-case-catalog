@@ -1,10 +1,280 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-07-20T07:39:32.264Z",
+  "lastUpdated": "2026-07-20T18:46:56.567Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 18,
   "useCases": [
+    {
+      "id": "spherity-trusted-ai-KMVBEw",
+      "sector": "mobility",
+      "title": "Spherity's Trusted AI",
+      "summary": "Spherity Trusted AI enables autonomous AI agents to act securely within ecosystems such as Catena-X through cryptographically verifiable identities and machine-readable authorizations. It links each agent to a registered legal entity through an AI Service Passport, a narrowly scoped Power of Attorney, and a verified Corporate Identity. This creates a clear, auditable chain of accountability, allowing organisations such as Catena-X participants as well as others to verify who operates an agent, what it is permitted to do, and who is legally responsible. Aligned with eIDAS 2.0 and the EU AI Act, the service supports trusted agent interactions across industrial data spaces, regulated industries, and cross-company value chains.",
+      "organizationName": "Spherity",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-20T19:46:32+01:00",
+      "publishedAt": "2026-07-20T19:46:32+01:00",
+      "tags": [
+        "artificial intelligence",
+        "agentic commerce",
+        "identity",
+        "pharmacovigilance",
+        "supply chain",
+        "eIDAS 2.0",
+        "verifiable credentials"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [
+          {
+            "refId": "spherity-business-wallet",
+            "labelRaw": "Spherity European Business Wallet",
+            "url": "https://www.spherity.com/eida",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Bundesanzeiger Verlag",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "TrustNet e.V.",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Legal Person Identifier (LPID)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Power of Attorney (PoA)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "AI Service Passport (AISP)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "C2PA/CAWG Credentials",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "License to Operate",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Catena-X e.V.",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:spherity",
+            "labelRaw": "Spherity",
+            "url": "https://www.spherity.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Catena-X",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "energy data-X",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Large European Online Retailer",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png",
+      "moreInfoUrl": "https://www.spherity.com/eida",
+      "userJourney": "The end-user flow establishes a verifiable trust chain for Agent-to-Agent (A2A) interactions:\n\n1. Issuance: Authentic sources (e.g., the German Business Registry, Bundesanzeiger Verlag) issue verifiable credentials, such as a Legal Person Identifier (LPID), licenses, and market roles, to a company's European Business Wallet (EBW) under the eIDAS 2.0 trust framework. Further compliance credential issuers.\n\n2. Delegation: The company creates a Power of Attorney (PoA) credential to delegate authority to an AI Agent-Wallet, explicitly defining the agent's scope, permissions, and validity. An AI Service Passport (AISP) is also linked to provide verifiable lifecycle provenance and compliance data (TEVV).\n\n3. A2A Exchange: When initiating a transaction, the AI Service Agent requests and presents its credentials (LPID, PoA, AISP) via an A2A protocol to the Consumer Agent.\n\n4. Verification: The receiving agent uses a Policy Engine to verify cryptographic signatures, issuer trust, the PoA mandate, and revocation status in real-time. If valid, the automated interaction proceeds securely.",
+      "country": "DE"
+    },
+    {
+      "id": "verified-machine-safety-access-at-koning-willem-i-college-kw1c-6fShwI",
+      "sector": "manufacturing",
+      "title": "Verified machine safety access at Koning Willem I College (KW1C)",
+      "summary": "A student is trained on a high-risk workshop machine and receives a digital machine safety certificate. That same digital certificate lets the student book the machine online. Later, at the machine itself, the student holds their credential against the machine's reader. The same certificate is checked again, and only then does the physical lock release.\n\nMost digital identity projects stay online: a credential is shown, a screen confirms it, done. This case bridges the online world and the physical world with the same credential and the same EUDI and ISO standards. Only the physical check of the certificate at the machine decides whether it runs at all. The machine either starts, or it stays locked.",
+      "organizationName": "Sphereon",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-20T19:46:18+01:00",
+      "publishedAt": "2026-07-20T19:46:18+01:00",
+      "tags": [
+        "machine safety",
+        "physical access control",
+        "proximity unlock",
+        "digital-to-physical",
+        "mdoc",
+        "industry",
+        "education"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Edge Wallet",
+            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "sphereon-business-wallet",
+            "labelRaw": "Sphereon Business Wallet",
+            "url": "https://sphereon.com/solutions/sphereon-business-wallet/",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "sphereon-vdx-platform",
+            "labelRaw": "Sphereon VDX platform",
+            "url": "https://sphereon.com/sphereon-vdx-verifiable-data-exchange/",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Koning Willem I College (KW1C)",
+            "url": "https://www.kw1c.nl/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Machine Safety Certificate",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Koning Willem I College (KW1C)",
+            "url": "https://www.kw1c.nl/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:surf",
+            "labelRaw": "SURF",
+            "url": "https://www.surf.nl/en",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:sphereon",
+            "labelRaw": "Sphereon",
+            "url": "https://sphereon.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Simac Access Solutions",
+            "url": "https://www.simac.com/nl/access-solutions/oplossingen",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v5",
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg"
+      ],
+      "imageUrl": "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg",
+      "moreInfoUrl": "https://sphereon.com/content/uploads/PDF/FIDES_Innovation_Award.pdf",
+      "userJourney": "A student completes safety training for a high-risk machine. KW1C, using its Sphereon VDX business wallet, issues a machine safety certificate as an ISO 18013-5 mdoc to the student's personal wallet.\n\nTo reserve a machine, the student logs in with their SURF eduID, which confirms they are enrolled at KW1C, and presents the safety certificate online. VDX verifies it, and only a valid certificate allows the student to make a reservation via the business wallet.\n\nAt the reserved time, the student stands at the machine and holds the same credential against the reader. VDX verifies it again, now in person over NFC/BLE. No person checks it; the machine does. \nOn a successful check the existing Simac Pronto controller releases the physical lock. An unsuccessful check leaves the machine locked.\n\nThe innovation is the combination of digital and physical in one credential. The same certificate, issued once, is verified both ways: online when booking, and in person at the machine. Most digital identity stops at the screen. Here the digital reaches into the physical: it unlocks a real machine, or keeps it locked.",
+      "country": "NL"
+    },
     {
       "id": "pass2rent-from-proof-of-age-to-open-door-car-rental-on-eudi-wallets-xMkRtD",
       "sector": "mobility",
@@ -617,237 +887,6 @@
       "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
       "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\n\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
       "country": "IN"
-    },
-    {
-      "id": "spherity-trusted-ai-KMVBEw",
-      "sector": "mobility",
-      "title": "Spherity Trusted AI",
-      "summary": "Spherity Trusted AI enables autonomous AI agents to act securely within ecosystems such as Catena-X through cryptographically verifiable identities and machine-readable authorizations. It links each agent to a registered legal entity through an AI Service Passport, a narrowly scoped Power of Attorney, and a verified Corporate Identity. This creates a clear, auditable chain of accountability, allowing organisations such as Catena-X participants as well as others to verify who operates an agent, what it is permitted to do, and who is legally responsible. Aligned with eIDAS 2.0 and the EU AI Act, the service supports trusted agent interactions across industrial data spaces, regulated industries, and cross-company value chains.",
-      "organizationName": "Spherity",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-07-16T13:53:33+01:00",
-      "publishedAt": "2026-07-16T13:53:33+01:00",
-      "tags": [
-        "artificial intelligence",
-        "agentic commerce",
-        "identity",
-        "pharmacovigilance",
-        "supply chain",
-        "eIDAS 2.0",
-        "verifiable credentials"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [
-          {
-            "refId": "spherity-business-wallet",
-            "labelRaw": "Spherity European Business Wallet",
-            "url": "https://www.spherity.com/eida",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Bundesanzeiger Verlag",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "TrustNet e.V.",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Legal Person Identifier (LPID)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Power of Attorney (PoA)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "AI Service Passport (AISP)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "C2PA/CAWG Credentials",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "License to Operate",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "Catena-X e.V.",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:spherity",
-            "labelRaw": "Spherity",
-            "url": "https://www.spherity.com",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Catena-X",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "energy data-X",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Large European Online Retailer",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "DIDComm v2",
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png",
-      "moreInfoUrl": "https://www.spherity.com/eida",
-      "userJourney": "The end-user flow establishes a verifiable trust chain for Agent-to-Agent (A2A) interactions:\r\n\r\n1. Issuance: Authentic sources (e.g., the German Business Registry, Bundesanzeiger Verlag) issue verifiable credentials, such as a Legal Person Identifier (LPID), licenses, and market roles, to a company's European Business Wallet (EBW) under the eIDAS 2.0 trust framework. Further compliance credential issuers.\r\n\r\n2. Delegation: The company creates a Power of Attorney (PoA) credential to delegate authority to an AI Agent-Wallet, explicitly defining the agent's scope, permissions, and validity. An AI Service Passport (AISP) is also linked to provide verifiable lifecycle provenance and compliance data (TEVV).\r\n\r\n3. A2A Exchange: When initiating a transaction, the AI Service Agent requests and presents its credentials (LPID, PoA, AISP) via an A2A protocol to the Consumer Agent.\r\n\r\n4. Verification: The receiving agent uses a Policy Engine to verify cryptographic signatures, issuer trust, the PoA mandate, and revocation status in real-time. If valid, the automated interaction proceeds securely.",
-      "country": "DE"
-    },
-    {
-      "id": "verified-machine-safety-access-at-koning-willem-i-college-kw1c-6fShwI",
-      "sector": "manufacturing",
-      "title": "Verified machine safety access at Koning Willem I College (KW1C)",
-      "summary": "A student is trained on a high-risk workshop machine and receives a digital machine safety certificate. That same digital certificate lets the student book the machine online. Later, at the machine itself, the student holds their credential against the machine's reader. The same certificate is checked again, and only then does the physical lock release.\r\n\r\nMost digital identity projects stay online: a credential is shown, a screen confirms it, done. This case bridges the online world and the physical world with the same credential and the same EUDI and ISO standards. Only the physical check of the certificate at the machine decides whether it runs at all. The machine either starts, or it stays locked.",
-      "organizationName": "Sphereon",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-07-16T11:35:23+01:00",
-      "publishedAt": "2026-07-16T11:35:23+01:00",
-      "tags": [
-        "machine safety",
-        "physical access control",
-        "proximity unlock",
-        "digital-to-physical",
-        "mdoc",
-        "industry",
-        "education"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "Koning Willem I College (KW1C)",
-            "url": "https://www.kw1c.nl/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:surf",
-            "labelRaw": "SURF",
-            "url": "https://www.surf.nl/en",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:sphereon",
-            "labelRaw": "Sphereon",
-            "url": "https://sphereon.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Simac Access Solutions",
-            "url": "https://www.simac.com/nl/access-solutions/oplossingen",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "proximity",
-        "remote"
-      ],
-      "vcFormats": [
-        "mdoc",
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci",
-        "other"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-5",
-        "ISO 18013-7",
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "DIIP v5",
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/Machine-Safety-Image.jpg"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/Machine-Safety-Image.jpg",
-      "moreInfoUrl": "https://sphereon.com/content/uploads/PDF/FIDES_Innovation_Award.pdf",
-      "userJourney": "A student completes safety training for a high-risk machine. KW1C, using its Sphereon VDX business wallet, issues a machine safety certificate as an ISO 18013-5 mdoc to the student's personal wallet.\r\n\r\nTo reserve a machine, the student logs in with their SURF eduID, which confirms they are enrolled at KW1C, and presents the safety certificate online. VDX verifies it, and only a valid certificate allows the student to make a reservation via the business wallet.\r\n\r\nAt the reserved time, the student stands at the machine and holds the same credential against the reader. VDX verifies it again, now in person over NFC/BLE. No person checks it; the machine does. \r\nOn a successful check the existing Simac Pronto controller releases the physical lock. An unsuccessful check leaves the machine locked.\r\n\r\nThe innovation is the combination of digital and physical in one credential. The same certificate, issued once, is verified both ways: online when booking, and in person at the machine. Most digital identity stops at the screen. Here the digital reaches into the physical: it unlocks a real machine, or keeps it locked.",
-      "country": "NL"
     },
     {
       "id": "spheritys-digital-product-passports-for-bvgs-electric-bus-batteries-4sPEny",

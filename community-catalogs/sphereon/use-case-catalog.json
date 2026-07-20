@@ -8,12 +8,12 @@
       "id": "verified-machine-safety-access-at-koning-willem-i-college-kw1c-6fShwI",
       "sector": "manufacturing",
       "title": "Verified machine safety access at Koning Willem I College (KW1C)",
-      "summary": "A student is trained on a high-risk workshop machine and receives a digital machine safety certificate. That same digital certificate lets the student book the machine online. Later, at the machine itself, the student holds their credential against the machine's reader. The same certificate is checked again, and only then does the physical lock release.\r\n\r\nMost digital identity projects stay online: a credential is shown, a screen confirms it, done. This case bridges the online world and the physical world with the same credential and the same EUDI and ISO standards. Only the physical check of the certificate at the machine decides whether it runs at all. The machine either starts, or it stays locked.",
+      "summary": "A student is trained on a high-risk workshop machine and receives a digital machine safety certificate. That same digital certificate lets the student book the machine online. Later, at the machine itself, the student holds their credential against the machine's reader. The same certificate is checked again, and only then does the physical lock release.\n\nMost digital identity projects stay online: a credential is shown, a screen confirms it, done. This case bridges the online world and the physical world with the same credential and the same EUDI and ISO standards. Only the physical check of the certificate at the machine decides whether it runs at all. The machine either starts, or it stays locked.",
       "organizationName": "Sphereon",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-16T11:35:23+01:00",
-      "publishedAt": "2026-07-16T11:35:23+01:00",
+      "updatedAt": "2026-07-20T19:46:18+01:00",
+      "publishedAt": "2026-07-20T19:46:18+01:00",
       "tags": [
         "machine safety",
         "physical access control",
@@ -24,10 +24,49 @@
         "education"
       ],
       "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
+        "personalWallets": [
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Edge Wallet",
+            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "sphereon-business-wallet",
+            "labelRaw": "Sphereon Business Wallet",
+            "url": "https://sphereon.com/solutions/sphereon-business-wallet/",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "sphereon-vdx-platform",
+            "labelRaw": "Sphereon VDX platform",
+            "url": "https://sphereon.com/sphereon-vdx-verifiable-data-exchange/",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Koning Willem I College (KW1C)",
+            "url": "https://www.kw1c.nl/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Machine Safety Certificate",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
         "organizations": [
           {
             "refId": null,
@@ -83,11 +122,11 @@
         "HAIP v1"
       ],
       "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/Machine-Safety-Image.jpg"
+        "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg"
       ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/Machine-Safety-Image.jpg",
+      "imageUrl": "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg",
       "moreInfoUrl": "https://sphereon.com/content/uploads/PDF/FIDES_Innovation_Award.pdf",
-      "userJourney": "A student completes safety training for a high-risk machine. KW1C, using its Sphereon VDX business wallet, issues a machine safety certificate as an ISO 18013-5 mdoc to the student's personal wallet.\r\n\r\nTo reserve a machine, the student logs in with their SURF eduID, which confirms they are enrolled at KW1C, and presents the safety certificate online. VDX verifies it, and only a valid certificate allows the student to make a reservation via the business wallet.\r\n\r\nAt the reserved time, the student stands at the machine and holds the same credential against the reader. VDX verifies it again, now in person over NFC/BLE. No person checks it; the machine does. \r\nOn a successful check the existing Simac Pronto controller releases the physical lock. An unsuccessful check leaves the machine locked.\r\n\r\nThe innovation is the combination of digital and physical in one credential. The same certificate, issued once, is verified both ways: online when booking, and in person at the machine. Most digital identity stops at the screen. Here the digital reaches into the physical: it unlocks a real machine, or keeps it locked.",
+      "userJourney": "A student completes safety training for a high-risk machine. KW1C, using its Sphereon VDX business wallet, issues a machine safety certificate as an ISO 18013-5 mdoc to the student's personal wallet.\n\nTo reserve a machine, the student logs in with their SURF eduID, which confirms they are enrolled at KW1C, and presents the safety certificate online. VDX verifies it, and only a valid certificate allows the student to make a reservation via the business wallet.\n\nAt the reserved time, the student stands at the machine and holds the same credential against the reader. VDX verifies it again, now in person over NFC/BLE. No person checks it; the machine does. \nOn a successful check the existing Simac Pronto controller releases the physical lock. An unsuccessful check leaves the machine locked.\n\nThe innovation is the combination of digital and physical in one credential. The same certificate, issued once, is verified both ways: online when booking, and in person at the machine. Most digital identity stops at the screen. Here the digital reaches into the physical: it unlocks a real machine, or keeps it locked.",
       "country": "NL"
     }
   ]
