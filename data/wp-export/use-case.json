@@ -1,0 +1,2117 @@
+{
+    "schemaVersion": "1.0.0",
+    "catalogType": "use-case-catalog",
+    "generatedAt": "2026-07-20T07:33:43+00:00",
+    "organizations": [
+        {
+            "orgSlug": "air-new-zealand",
+            "orgId": "org:air-new-zealand",
+            "orgName": "Air New Zealand",
+            "useCases": [
+                {
+                    "id": "digital-travel-credential-check-in-boarding",
+                    "sector": "mobility",
+                    "title": "Digital travel credential at check-in and boarding",
+                    "summary": "Travellers move through check-in and boarding by presenting credentials from their wallet at a proximity touchpoint, instead of juggling paper documents. The airline acts as the relying party and verifies an ISO-based digital identity (Photo ID / mDL) together with IATA travel credentials such as a boarding pass and booking order. The same pattern is being demonstrated by multiple airlines and airports (e.g. Air New Zealand, British Airways, Japan Airlines, IndiGo, Hong Kong and Bengaluru airports), pointing to an interoperable, document-light travel journey.",
+                    "organizationName": "Air New Zealand",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-06-11T09:01:08+01:00",
+                    "publishedAt": "2026-06-10T06:08:16+01:00",
+                    "tags": [
+                        "travel",
+                        "digital-travel-credential",
+                        "boarding-pass",
+                        "proximity",
+                        "iso-18013-5"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "apple-wallet",
+                                "labelRaw": "Apple Wallet",
+                                "url": "https://www.apple.com/wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "google-wallet",
+                                "labelRaw": "Google Wallet",
+                                "url": "https://wallet.google",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "neoke-wallet",
+                                "labelRaw": "Neoke",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": "issuer:iata:air-new-zealand:production",
+                                "labelRaw": "Air New Zealand",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:iata:british-airways:production",
+                                "labelRaw": "British Airways",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:iata:indigo:production",
+                                "labelRaw": "IndiGo",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:iata:japan-airlines:production",
+                                "labelRaw": "Japan Airlines",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:iata:boarding-pass-mdoc:mdoc",
+                                "labelRaw": "Boarding Pass",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:iata:booking-order-mdoc:mdoc",
+                                "labelRaw": "Booking Order",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:air-new-zealand",
+                                "labelRaw": "Air New Zealand",
+                                "url": "https://www.airnewzealand.com",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:british-airways",
+                                "labelRaw": "British Airways",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org-hong-kong-international-airport",
+                                "labelRaw": "Hong Kong International Airport",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:indigo",
+                                "labelRaw": "IndiGo",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:japan-airlines",
+                                "labelRaw": "Japan Airlines",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:bengaluru-international-airport",
+                                "labelRaw": "Bengaluru International Airport",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": "air-new-zealand",
+                                "labelRaw": "Air New Zealand",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "bengaluru-international-airport",
+                                "labelRaw": "Bengaluru International Airport",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "british-airways",
+                                "labelRaw": "British Airways",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "hong-kong-international-airport",
+                                "labelRaw": "Hong Kong International Airport",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "indigo",
+                                "labelRaw": "IndiGo",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "japan-airlines",
+                                "labelRaw": "Japan Airlines",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "proximity"
+                    ],
+                    "vcFormats": [
+                        "mdoc"
+                    ],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [
+                        "ISO 18013-5"
+                    ],
+                    "interopProfiles": [],
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=6oKvezFzrx0&t=196s",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=6oKvezFzrx0&t=196s",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.airnewzealand.com",
+                    "userJourney": "1) The traveller holds a Photo ID / mDL and IATA travel credentials (boarding pass, booking order) in a supported wallet.\r\n2) At check-in or the boarding gate, a proximity reader requests the relevant credentials.\r\n3) The wallet shows the request; the traveller approves the presentation by tapping or scanning.\r\n4) The airline (relying party) verifies the digital identity and travel documents over an ISO/IEC 18013-5 flow.\r\n5) The traveller proceeds without presenting paper documents, sharing only what is needed for that step.",
+                    "country": "NZ"
+                }
+            ]
+        },
+        {
+            "orgSlug": "berliner-verkehrsbetriebe-bvg",
+            "orgId": "org:berliner-verkehrsbetriebe-bvg",
+            "orgName": "Berliner Verkehrsbetriebe (BVG)",
+            "useCases": [
+                {
+                    "id": "spheritys-digital-product-passports-for-bvgs-electric-bus-batteries-4sPEny",
+                    "sector": "supply_chain",
+                    "title": "Spherity’s Digital Product Passports for BVG’s Electric Bus Batteries",
+                    "summary": "BVG, Berlin’s public transport operator, uses Spherity’s Digital Product Passport solution for batteries installed in its electric bus fleet. Each battery is connected to a digital passport containing standardized information on its composition, material sourcing, carbon footprint, regulatory documentation, performance, and lifecycle. The implementation supports transparent, machine-readable compliance reporting and gives BVG access to up-to-date information on battery health and environmental impact. The first buses equipped with these digital battery passports entered operation in December 2024, helping BVG prepare for the requirements of the EU Battery Regulation ahead of the 2027 deadline.",
+                    "organizationName": "Berliner Verkehrsbetriebe (BVG)",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-15T15:38:36+01:00",
+                    "publishedAt": "2026-07-15T15:38:36+01:00",
+                    "tags": [
+                        "Digital Product Passport",
+                        "DPP",
+                        "Battery Passport",
+                        "Product Traceability",
+                        "Circular Economy",
+                        "Sustainability",
+                        "Supply Chain Transparency",
+                        "Regulatory Compliance",
+                        "Product Data",
+                        "Data Interoperability",
+                        "Digital Identity"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Berliner Verkehrsbetriebe (BVG)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [],
+                    "vcFormats": [],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/Spherity_BVG-Battery-Passport-example.png",
+                        "https://fides.community/app/uploads/2026/07/Spheritys-battery-passport-solution-3-4-2.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/Spherity_BVG-Battery-Passport-example.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/w5wVxY6BIuw?si=cTUpEqFBRZ_PJX84",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://www.youtube.com/playlist?list=PLnj6hp2xuFVLoo4bNt3-HjOlzub1jkRw7",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/w5wVxY6BIuw?si=cTUpEqFBRZ_PJX84",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.spherity.com/digital-product-passport",
+                    "userJourney": "Battery and product data from the vehicle manufacturer and relevant technical systems is connected to Spherity’s DPP software. A unique digital passport is created for each battery unit and linked to the physical battery through a product identifier and QR code. The solution structures and validates information such as battery composition, sourcing, carbon footprint, regulatory documents, and operational performance. BVG can access this information during the battery’s use phase for compliance reporting, sustainability assessment, maintenance, and lifecycle management, while other authorised parties may provide or retrieve information relevant to their role. The passport can be updated as the battery is operated, serviced, reused, or recycled, creating a continuous and trusted record across its lifecycle.",
+                    "country": "DE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "gemeente-nijmegen",
+            "orgId": "org:nijmegen",
+            "orgName": "Gemeente Nijmegen",
+            "useCases": [
+                {
+                    "id": "nijmegen-attribute-based-municipal-login",
+                    "sector": "public_sector",
+                    "title": "Municipal login with attribute-based credentials",
+                    "summary": "Citizens log in to their municipal account and securely share only the personal attributes a service actually needs, using an attribute-based wallet. The municipality acts as the relying party and verifies the presented attributes over the IRMA protocol. This is one of the first production implementations of attribute-based authentication in Dutch municipal services, showing that privacy-friendly login at scale is possible today.",
+                    "organizationName": "Gemeente Nijmegen",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-06-26T06:24:35+01:00",
+                    "publishedAt": "2026-06-26T06:24:35+01:00",
+                    "tags": [
+                        "municipal-login",
+                        "attribute-based",
+                        "data-minimisation",
+                        "irma",
+                        "public-services"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "yivi",
+                                "labelRaw": "Yivi",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Yivi Issuer",
+                                "url": "https://yivi.nijmegen.nl/login",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:nijmegen",
+                                "labelRaw": "Gemeente Nijmegen",
+                                "url": "https://www.nijmegen.nl",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:caesar",
+                                "labelRaw": "Caesar Groep",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:privacybydesign",
+                                "labelRaw": "Privacy by Design Foundation",
+                                "url": "https://privacybydesign.foundation",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": "nijmegen-mijn-nijmegen-login",
+                                "labelRaw": "Mijn Nijmegen - Yivi Login",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "idemix"
+                    ],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [
+                        "IRMA Protocol"
+                    ],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://yivi.app/img/inloggen-bestelproces.webp"
+                    ],
+                    "imageUrl": "https://yivi.app/img/inloggen-bestelproces.webp",
+                    "moreInfoUrl": "https://mijn.nijmegen.nl/login",
+                    "userJourney": "1) The citizen has loaded personal attributes (e.g. name, email, mobile number) into an attribute-based wallet.\n2) They open their municipal account and choose to log in with the wallet.\n3) The municipality (relying party) requests only the attributes required for the service over the IRMA protocol.\n4) The citizen reviews the request in the wallet and confirms disclosure.\n5) The municipality verifies the attributes and grants access, without storing more personal data than necessary.",
+                    "country": "NL"
+                }
+            ]
+        },
+        {
+            "orgSlug": "hovi",
+            "orgId": "org:hovi",
+            "orgName": "Hovi",
+            "useCases": [
+                {
+                    "id": "buy-age-restricted-goods-online-in-seconds-with-eudi-wallets-mTFVmp",
+                    "sector": "food",
+                    "title": "Buy Age-Restricted Goods Online in Seconds with EUDI Wallets",
+                    "summary": "Buying age-restricted products online, like alcohol, still typically means uploading a passport scan and waiting for manual review, a slow and privacy-invasive process for both the customer and the retailer. This demo shows how an EUDI Wallet turns that into a checkout step that takes seconds, without disclosing any private information like date of birth.\r\n\r\nOnline retailers selling age-restricted goods have no fast, reliable way to confirm a buyer's age at checkout. Manual document review is slow, costly to operate, and requires customers to hand over far more personal data (full passport scans) than the transaction actually needs, just to prove one fact: that they are over 18.\r\n\r\nFor the retailer, age verification becomes instant and automated, removing manual review costs and reducing checkout drop-off. For the customer, there are no forms, no document uploads, and no waiting, just a quick scan and confirmation. For the ecosystem, it shows that minimal-disclosure verification (proving only \"over 18\" rather than full identity) is achievable today with wallets already in production, like France Identité.",
+                    "organizationName": "Hovi",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-15T15:37:17+01:00",
+                    "publishedAt": "2026-07-15T15:37:17+01:00",
+                    "tags": [
+                        "identity",
+                        "age check",
+                        "eudiw",
+                        "selective disclosure"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "france-identite",
+                                "labelRaw": "France Identité",
+                                "url": "https://france-identite.gouv.fr/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": "hovi-business-wallet",
+                                "labelRaw": "Hovi Business Wallet",
+                                "url": "https://www.hovi.id",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "France Identité",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:eu:pid-mdoc:mdoc",
+                                "labelRaw": "PID (MSO Mdoc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:hovi",
+                                "labelRaw": "Hovi",
+                                "url": "https://www.hovi.id/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:france",
+                                "labelRaw": "French Government",
+                                "url": "https://france-identite.gouv.fr/",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Valko - An online alcohol store",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "proximity",
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc",
+                        "sd_jwt_vc",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "DIIP v5",
+                        "EUDI Wallet ARF",
+                        "HAIP v1"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/10-2.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/10-2.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/t4I6Fe_0sLo",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/t4I6Fe_0sLo",
+                        "provider": "youtube"
+                    },
+                    "userJourney": "1. Marie shops online. She adds gin and vodka, both age-restricted products, to her cart on an online store.\r\n\r\n2. Checkout triggers age verification. At checkout, the store requests proof that Marie is over 18 before the order can proceed.\r\n\r\n3. Marie scans a QR code. The store displays a QR code linked to the verification request.\r\n\r\n4. Marie completes the check in her wallet app. She scans the code with her France Identité EUDI Wallet, reviews the request, and approves sharing only her age attribute.\r\n\r\n5. Verification completes instantly. The wallet returns a verifiable proof of age to the retailer in real time.\r\n\r\n6. Order is confirmed. With age confirmed, the order goes through immediately, no forms, no document upload, no manual review wait.",
+                    "country": "FI"
+                },
+                {
+                    "id": "preventing-sim-swap-fraud-with-eudi-wallets-and-ai-voice-agents-FNAfeI",
+                    "sector": "digital",
+                    "title": "Preventing SIM Swap Fraud with EUDI Wallets and AI Voice Agents",
+                    "summary": "Telcos handle some of the most sensitive account actions over the phone, especially SIM swaps, which are a primary vector for account takeover fraud. This usecase shows an AI voice agent that verifies a caller's identity against a digital wallet credential in real time, before any sensitive change is processed.\r\n\r\nSIM swap fraud, phishing, and account takeover attacks all depend on the same weak point: phone-based identity checks that rely on security questions, personal data, or callback procedures, all of which can be socially engineered or leaked. Call center agents have no reliable way to confirm that the person on the line is who they claim to be, and attackers exploit exactly that gap.\r\n\r\nFor the telco, this closes the fraud gap without adding friction for legitimate customers. Verification happens automatically, mid-conversation, with no extra steps for the caller and no manual escalation for the agent. For the customer, it means sensitive requests are protected without the hassle of extra security questions or callback delays. For the industry more broadly, it demonstrates a reusable pattern for binding any high-risk transaction to a verified identity in real time.",
+                    "organizationName": "Hovi",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-07-15T15:36:37+01:00",
+                    "publishedAt": "2026-07-15T15:36:37+01:00",
+                    "tags": [
+                        "identity",
+                        "telecommunication",
+                        "kyc",
+                        "pid",
+                        "eudiw"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "national-eudi-wallet-germany",
+                                "labelRaw": "National EUDI Wallet (Germany)",
+                                "url": "https://www.sprind.org/eudi-wallet",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": "hovi-business-wallet",
+                                "labelRaw": "Hovi Business Wallet",
+                                "url": "https://www.hovi.id",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": "issuer:hovi:eudi-playground:test",
+                                "labelRaw": "Hovi EUDI Playground",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:eu:pid-mdoc:mdoc",
+                                "labelRaw": "PID (MSO Mdoc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:eu:loyalty-mdoc:mdoc",
+                                "labelRaw": "Loyalty (MSO Mdoc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:hovi",
+                                "labelRaw": "Hovi",
+                                "url": "https://www.hovi.id/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:germany",
+                                "labelRaw": "German Government",
+                                "url": "https://www.sprind.org/eudi-wallet",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc",
+                        "sd_jwt_vc",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "ISO 18013-7",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "DIIP v5",
+                        "EUDI Wallet ARF",
+                        "HAIP v1"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/1-1.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/1-1.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/evc65v1UhMY",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/evc65v1UhMY",
+                        "provider": "youtube"
+                    },
+                    "userJourney": "1. Customer calls in. A customer contacts the telco to request a sensitive account change, for example a SIM swap.\r\n\r\n2. AI voice agent picks up. The agent handles the call naturally, like a normal support conversation, and asks for the details of the request.\r\n\r\n3. Identity binding happens mid-call. Before the agent proceeds, it binds the request to the customer's verified identity credential in real time. No security questions, no callback, no manual agent escalation.\r\n\r\n4. Dashboard tracks the call live. A real-time dashboard shows each stage of the interaction as it happens: call received, identity check triggered, verification result, outcome.\r\n\r\n5. Verification gates the outcome. If the identity check passes, the account change goes through. If it fails, the change is blocked on the spot, before any damage is done.\r\n\r\n6.Loyalty credential issued. Once verified, the customer receives a loyalty credential as a reward for completing a secure interaction.\r\n\r\nThis flow removes the exact weak point that SIM swap attacks, phishing, and account takeover fraud rely on: social engineering and leaked personal data used to impersonate a real customer over the phone.",
+                    "country": "FI"
+                }
+            ]
+        },
+        {
+            "orgSlug": "igrant-io",
+            "orgId": "org:igrant",
+            "orgName": "iGrant.io",
+            "useCases": [
+                {
+                    "id": "fast-ferries-payments-with-eudi-wallets-UwPvFq",
+                    "sector": "finance",
+                    "title": "Payments with EUDI Wallets using SCA",
+                    "summary": "Purchase ferry tickets from Cyclades Fast Ferries using your EUDI Wallet in a merchant-led payment flow. Powered by iGrant.io, this is the first live EUDI Wallet payment in production, combining Strong Customer Authentication (SCA) with verifiable credentials via 3D Secure and OpenID4VC, using the Visa/Worldline network with Banca Transilvania.",
+                    "organizationName": "iGrant.io",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-06T13:26:25+01:00",
+                    "publishedAt": "2026-07-06T13:26:25+01:00",
+                    "tags": [
+                        "identity",
+                        "payment",
+                        "sca (strong customer authentication)",
+                        "loyalty card",
+                        "id proof",
+                        "multiple data during payments"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "igrant-data-wallet",
+                                "labelRaw": "Data Wallet by iGrant.io",
+                                "url": "https://igrant.io/datawallet",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": "igrant-organization-wallet",
+                                "labelRaw": "Organisation Wallet Suite by iGrant.io",
+                                "url": "https://igrant.io",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": "issuer:igrant:demo:test",
+                                "labelRaw": "iGrant.io Demo Issuer",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "eReceipt",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Boarding Pass",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "PhotoID",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Student ID",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Loyalty Card credential",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Payment Authenticator",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:igrant",
+                                "labelRaw": "iGrant.io",
+                                "url": "https://igrant.io",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Fast Ferries",
+                                "url": "https://fastferries.com.gr/en/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Visa",
+                                "url": "https://www.visa.se/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Worldline",
+                                "url": "https://worldline.com/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Banca Transilvania",
+                                "url": "https://www.bancatransilvania.ro/en/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "UAegean",
+                                "url": "https://www.aegean.gr/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "BPC",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": "igrant-fast-ferries-merchant-payments",
+                                "labelRaw": "Fast Ferries – Payments with EUDI Wallets",
+                                "url": "https://www.igrant.io/demo/merchant-led-payments.html",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF",
+                        "EWC v3",
+                        "HAIP v1"
+                    ],
+                    "imageUrls": [
+                        "https://img.youtube.com/vi/6GwCxyofSVE/maxresdefault.jpg"
+                    ],
+                    "imageUrl": "https://img.youtube.com/vi/6GwCxyofSVE/maxresdefault.jpg",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=6GwCxyofSVE",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=6GwCxyofSVE",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.igrant.io/demo/merchant-led-payments-with-receipts-boardingpass.html",
+                    "userJourney": "1. Visit Fast Ferries and select a trip\n2. Select the \"FAST CHECKOUT VIA EUDI WALLET\" option\n3. Scan QR code to initiate the secure, identity-validated payment process, confirming and presenting:\n    - PhotoID: For Personal Identification Details\n    - Student ID (or Loyalty Card Credential from Fast Ferries): Discount-related credentials Credential\n    - Visa card credential: Pre-authorize a €25 payment to Cyclades Fast Ferries (CFF) \n4. Fill out passenger and contact information in Fast Ferries\n5. Fill card details and confirm to make your booking (receive an eReceipt and Boarding Pass to your EUDI Wallet)",
+                    "country": "SE"
+                },
+                {
+                    "id": "open-bank-account-Ejx887",
+                    "sector": "finance",
+                    "title": "Open Bank Account (with KYC, Consent, Digital Signing, SCA and Passwordless Login)",
+                    "summary": "Open a new bank account using your EUDI Wallet. This iGrant.io demo showcases privacy-preserving KYC identity verification and document signing for financial onboarding, leveraging the EU Digital Identity Wallet and SD-JWT verifiable credentials via OpenID4VP.",
+                    "organizationName": "iGrant.io",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-07-02T13:44:15+01:00",
+                    "publishedAt": "2026-07-02T13:44:15+01:00",
+                    "tags": [
+                        "identity",
+                        "pid (person identification data)",
+                        "document signing",
+                        "qesac (qualified electronic signature access credential)",
+                        "bank authenticator",
+                        "id proof",
+                        "account opening",
+                        "kyc",
+                        "identity verification",
+                        "SCA"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "igrant-data-wallet",
+                                "labelRaw": "Data Wallet by iGrant.io",
+                                "url": "https://igrant.io/datawallet",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": "igrant-organization-wallet",
+                                "labelRaw": "Organisation Wallet Suite by iGrant.io",
+                                "url": "https://igrant.io",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": "issuer:igrant:demo:test",
+                                "labelRaw": "iGrant.io Demo Issuer",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+                                "labelRaw": "PID (SD-JWT VC)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "QESAC (Qualified Electronic Signature Access Credential)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Bank Authenticator",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:igrant",
+                                "labelRaw": "iGrant.io",
+                                "url": "https://igrant.io",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:intesi-group",
+                                "labelRaw": "Intesi Group",
+                                "url": "https://www.intesigroup.com/en/",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": "igrant-open-bank-account-demo",
+                                "labelRaw": "Open Bank Account",
+                                "url": "https://www.igrant.io/demo/open-bank-account.html",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF",
+                        "EWC v3",
+                        "HAIP v1"
+                    ],
+                    "imageUrls": [
+                        "https://img.youtube.com/vi/3VktTStWHs8/maxresdefault.jpg"
+                    ],
+                    "imageUrl": "https://img.youtube.com/vi/3VktTStWHs8/maxresdefault.jpg",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=3VktTStWHs8",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=3VktTStWHs8",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.igrant.io/demo/open-bank-account.html",
+                    "userJourney": "1. Share PID (Person Identification Data) for KYC identity verification\n2. Review terms and conditions\n3. Sign terms and conditions with QESAC (Qualified Electronic Signature Access Credential)\n4. Receive Bank Authenticator\n5. Log in to the bank portal by sharing the Bank Authenticator credentials \n\nOnce logged in, the individual can enable SCA for payments via existing payment rails (via Visa, Worldline, etc)",
+                    "country": "SE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "mintblue",
+            "orgId": "org:mintblue",
+            "orgName": "mintBlue",
+            "useCases": [
+                {
+                    "id": "tax-splitter-real-time-vat-collection-with-verifiable-organisational-identity-ZQey1U",
+                    "sector": "public_sector",
+                    "title": "Tax Splitter: real-time VAT collection with verifiable organisational identity",
+                    "summary": "The European Commission estimates the annual EU VAT gap at EUR 128 billion (2023). At the same time, Dutch entrepreneurs spend 30 to 40 hours per year on VAT administration. Both problems share a root cause: tax compliance happens after the fact, through declarations, reconciliation and audits.\r\n\r\nTax Splitter turns that around. Every transaction automatically splits the VAT amount and transfers it directly to the tax authority at the moment of payment. A business owner no longer needs to reserve, calculate or declare VAT. The invoice is the return.\r\n\r\nThe mechanism is digital trust. Organisations hold verifiable credentials (issued by Credenco) in organisational wallets, so every payment starts with an identity lookup: is the counterparty a real, registered business or a shell company? The payment itself carries a cryptographic reference to the invoice, creating an audit trail that all parties can verify without exposing the underlying data: proofs are shared, not the records themselves. Each party keeps control of its own data; the infrastructure moves sealed envelopes, it never looks inside. Parties that don't share databases share cryptographic proof instead.\r\n\r\nThe system was developed over two years by the Dutch Tax Authority (Directorate Control and Finance, problem owner), mintBlue (infrastructure and development) and Credenco (verifiable credentials and digital identity), through a Design Sprint and two completed development phases. It runs as a proof of concept with a working end-to-end demonstration: visitors buy a product at a point-of-sale system, pay with a wallet, and watch the VAT split and settle in real-time. A pilot with real entrepreneurs is in preparation, and the tax authority has driven the project itself at every step, from the design sprint to the working demonstration.\r\n\r\nIn March 2026, Tax Splitter won the Innovation Award of the Dutch Ministry of Finance. The OECD cites the project in its Tax Administration Series as an inspiring example of real-time tax collection. Where the EU's ViDA legislation (VAT in the Digital Age) introduces real-time reporting from 2028, Tax Splitter goes one step further and collects the tax as the payment happens.\r\n\r\nThe same pattern applies to any predictable levy. The partners are exploring gambling tax, property transfer tax, excise duties, tourist levies and cross-border VAT, where the tax automatically reaches the tax authority of the right country. The approach is drawing interest from tax authorities in the United Kingdom and Scandinavia.",
+                    "organizationName": "mintBlue",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-07-06T13:25:50+01:00",
+                    "publishedAt": "2026-07-06T13:25:50+01:00",
+                    "tags": [
+                        "real-time taxation",
+                        "VAT",
+                        "split payments",
+                        "verifiable credentials",
+                        "organisational wallet",
+                        "compliance by design",
+                        "public sector"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [
+                            {
+                                "refId": "credenco-business-wallet",
+                                "labelRaw": "Credenco Business Wallet",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": "issuer:fides:credential-issuer:test",
+                                "labelRaw": "FIDES Issuer",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "DigitalAssetIdentifier",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:mintblue",
+                                "labelRaw": "mintBlue",
+                                "url": "https://mintblue.com/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:bd",
+                                "labelRaw": "Belastingdienst",
+                                "url": "https://www.belastingdienst.nl",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:credenco",
+                                "labelRaw": "Credenco",
+                                "url": "https://www.credenco.com",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "DIIP v4"
+                    ],
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/yxopjff8BRU",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/yxopjff8BRU",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://seamlesstaxation.com",
+                    "userJourney": "1. In the proof of concept, a seller issues an invoice. Before any money moves, the buyer's system performs an identity lookup on the seller's verifiable organisational credential, issued by Credenco. The check rejects shell companies before the payment can start.\r\n\r\n2. The buyer pays from an organisational wallet, at a point-of-sale terminal or online. The wallet holds the organisation's credentials, so every payment is bound to a verified legal identity.\r\n\r\n3. At the moment of payment the amount splits automatically: the net amount settles with the seller, the VAT portion transfers directly to the tax authority's wallet. No one has to set money aside or file anything.\r\n\r\n4. The payment carries a cryptographic reference to the underlying invoice. Invoice and payment are verifiably linked in a single audit trail that all parties can check without exposing the underlying business data to anyone else.\r\n\r\n5. The tax authority follows VAT flows in real-time through its portal and handles settlement and refunds over the same infrastructure. Discrepancies surface immediately instead of months after a quarterly declaration.\r\n\r\n6. The entrepreneur does nothing: no reserving, no calculating, no declaring. The invoice is the return.\r\n\r\nThe demonstration is a simplified consumer version of this business-to-business flow: at a physical point-of-sale setup, visitors buy a product, pay with a demonstration wallet, and see the VAT reach the tax authority's wallet on the spot.",
+                    "country": "NL"
+                }
+            ]
+        },
+        {
+            "orgSlug": "national-id-program",
+            "orgId": "org:national-id-program",
+            "orgName": "National ID Program",
+            "useCases": [
+                {
+                    "id": "faydapass-rP7gpJ",
+                    "sector": "digital",
+                    "title": "Faydapass",
+                    "summary": "FaydaPass solves Ethiopia's fragmented, paper-based identity problem, where citizens repeatedly re-prove who they are to disconnected institutions, leaving services slow, exclusionary, and open to fraud and duplicate benefit claims. It creates value by letting NIDP anchor a trusted \"Fayda Credential\" from which institutions like Ministry of Education, Ethiopia Food and Drug Authority, banks, and Ministry of Health can issue and verify their own credentials giving citizens faster, safer access; institutions instant verification; and government a way to cut fraud and advance Digital Ethiopia 2030. The key roles are the Issuer (grants a credential), the Holder (the citizen or guardian), and the Verifier (checks a credential)  with the digital wallet as the citizen's interface for selectively sharing credentials, online or offline, and Verifiable Credentials as the tamper-proof proof objects that let any verifier trust a claim instantly, without contacting the original issuer.",
+                    "organizationName": "National ID Program",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-15T14:36:36+01:00",
+                    "publishedAt": "2026-07-15T14:36:36+01:00",
+                    "tags": [
+                        "credential",
+                        "secure"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Ministry of Health",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "National ID Program",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Ethiopia Food and Drug Authority",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Ministry of Education",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc",
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF",
+                        "HAIP v1"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/faydapass-image.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/faydapass-image.png",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=c3WaauLeIso",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=c3WaauLeIso",
+                        "provider": "youtube"
+                    },
+                    "userJourney": "NIDP enrolls the citizen once, outside the wallet, issuing their Fayda ID. The citizen installs FaydaPass and authenticates via eSignet (Fayda ID + OTP/biometric); the wallet requests the Fayda Credential (Anchor) over OpenID4VCI, and NIDP issues it bound to the device key, establishing the wallet's root of trust and enabling login/TOTP. Sector institutions (MoE, EFDA, MoH, Civil Service Commission, MoA/ATI, NBE) issue credentials on top of the anchor when the citizen requests them, resolving identity against the Fayda ID each time; issuance is citizen-initiated, issuer-authorized. At service points, the citizen scans the relying party's QR, reviews requested attributes, and consents to share only those  license validity without the registration number, online or offline. The verifier checks the signature, issuer trust, and holder binding without contacting the issuer, confirming revocation via a status endpoint or cached list offline. For portals, the citizen authenticates by wallet login: it redirects to eSignet, approves with biometric/PIN, and the portal receives only consented claims, no password. Issuers keep credentials current by re-issuing them when facts change, flagging",
+                    "country": "ET"
+                }
+            ]
+        },
+        {
+            "orgSlug": "neovo",
+            "orgId": "org:neovo",
+            "orgName": "Neovo",
+            "useCases": [
+                {
+                    "id": "age-verification-online-purchase",
+                    "sector": "retail",
+                    "title": "Age verification for online purchases",
+                    "summary": "An online shop confirms a customer is old enough to buy an age-restricted product before it can be added to the cart, without learning their date of birth or identity. The shop acts as the relying party and requests a simple over-18 proof from the customer's wallet over OpenID4VP. Because only the age attribute is disclosed, the flow is privacy-friendly by design and removes the friction of uploading ID documents during checkout.",
+                    "organizationName": "Neovo",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-06-11T09:16:05+01:00",
+                    "publishedAt": "2026-06-10T06:08:28+01:00",
+                    "tags": [
+                        "age-verification",
+                        "e-commerce",
+                        "data-minimisation",
+                        "retail",
+                        "openid4vp"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "swiyu-wallet",
+                                "labelRaw": "SWIYU Wallet",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Beta-ID Issuer",
+                                "url": "https://www.bcs.admin.ch/bcs-web/#/beta-id/create",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:swiyu:betaid-sdjwt:sd-jwt-vc",
+                                "labelRaw": "Beta-ID",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:neovo",
+                                "labelRaw": "Neovo",
+                                "url": "https://neovo.ch",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": "neovo-shop-playground",
+                                "labelRaw": "Neovo Brewing webshop demo",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://shop-api.playground.neovo.ch/assets/source/63/tide_6pack.png"
+                    ],
+                    "imageUrl": "https://shop-api.playground.neovo.ch/assets/source/63/tide_6pack.png",
+                    "moreInfoUrl": "https://shop.playground.neovo.ch/products/silent-tide",
+                    "userJourney": "1) The customer adds an age-restricted product to their basket in the web shop.\r\n2) Before checkout, the shop (relying party) requests proof that the customer is over the required age.\r\n3) The wallet presents only an over-18 attribute over OpenID4VP — no date of birth, no full identity.\r\n4) The shop verifies the proof and unlocks the purchase.\r\n5) The customer completes checkout without uploading ID documents or sharing unnecessary personal data.",
+                    "country": "CH"
+                }
+            ]
+        },
+        {
+            "orgSlug": "pass2rent-by-odifis",
+            "orgId": "org:pass2rent-by-odifis",
+            "orgName": "PASS2RENT By Odifis",
+            "useCases": [
+                {
+                    "id": "pass2rent-from-proof-of-age-to-open-door-car-rental-on-eudi-wallets-xMkRtD",
+                    "sector": "mobility",
+                    "title": "PASS2RENT: From Proof of Age to Open Door — Car Rental on EUDI Wallets",
+                    "summary": "PASS2RENT demonstrates how EUDI Wallets can support an entire car-rental journey with privacy-preserving, interoperable credentials.\r\n\r\nAt booking, the driver proves the required age through the wallet. The rental platform receives only the driver's name and an age_over_18 result, not the birth date. At the vehicle, a mobile driving licence identifies the driver through a fresh, holder-bound presentation. No counter visit, photocopy or ID scan is required.\r\n\r\nOne in-house OpenID4VP verifier handles every interaction and accepted both France Identité and the European Commission's EUDI reference wallet without wallet-specific integration. Any birth date used to derive an age result is discarded within milliseconds and never reaches a database, API or webhook. The design also includes a tamper-evident audit trail with no personal data, encryption at rest, strict retention and erasure controls.\r\n\r\nDemonstrated end to end, the use case shows that EUDI Wallets can replace document collection with selective disclosure and reusable, standards-based verification across different wallets and credential types.",
+                    "organizationName": "PASS2RENT By Odifis",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-07-20T08:33:43+01:00",
+                    "publishedAt": "2026-07-20T08:33:43+01:00",
+                    "tags": [
+                        "age verification",
+                        "car rental",
+                        "mobility",
+                        "eudi wallet",
+                        "selective disclosure",
+                        "data minimisation",
+                        "mdl",
+                        "pid",
+                        "openid4vp",
+                        "cross-border"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "france-identite",
+                                "labelRaw": "France Identité",
+                                "url": "https://france-identite.gouv.fr/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "eudi-reference-personal-wallet",
+                                "labelRaw": "EUDI Wallet Reference Implementation",
+                                "url": "https://github.com/eu-digital-identity-wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "EUDIW Testing Issuer",
+                                "url": "https://issuer.eudiw.dev/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "France Identité",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:eu:pid-mdoc:mdoc",
+                                "labelRaw": "PID (MSO Mdoc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:iso:mdl-mdoc:mdoc",
+                                "labelRaw": "mDL (MSO Mdoc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:pass2rent-by-odifis",
+                                "labelRaw": "PASS2RENT By Odifis",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": "pass2rent-car-rental-verifier",
+                                "labelRaw": "PASS2RENT - Car rental Verifier",
+                                "url": "https://api.playground.france-identite.gouv.fr/odifis/contactless-rent/en/",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc",
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [
+                        "ISO 18013-5",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF",
+                        "HAIP v1"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/contactless_eudi.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/contactless_eudi.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/bgZNJDrLdcU",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/bgZNJDrLdcU",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://playground.france-identite.gouv.fr/marketplace/verifiers/odifis/",
+                    "userJourney": "https://api.playground.france-identite.gouv.fr/odifis/contactless-rent/en/\r\n\r\n1. Booking. The driver selects a car and scans a QR code with France Identité. The rental platform receives only age_over_18: true. Any birth date disclosed to the verifier is discarded within milliseconds and never reaches the platform, its database or an API.\r\n\r\n2. Identification. At the car, the driver presents a test mobile driving licence from the EU reference wallet, or uses the PID as a fallback. The same verifier checks the credential and shares only the structured claims needed for the rental—no scans or document images.\r\n\r\n3. Handover. A fresh, device-bound presentation answers a dynamic challenge. After verification, the platform issues a short-lived, replay-protected token. Only a pseudonymous handover record and the verification method are retained.\r\n\r\n4. Data minimisation. The database stores the age result, required rental claims and a pseudonymous attestation. It does not store a birth date, portrait, licence image or photocopy.\r\n\r\n5. Trust. Credentials are checked against recognised trust anchors and revocation sources. Unknown issuers are flagged, never silently accepted.",
+                    "country": "LT"
+                }
+            ]
+        },
+        {
+            "orgSlug": "sphereon",
+            "orgId": "org:sphereon",
+            "orgName": "Sphereon",
+            "useCases": [
+                {
+                    "id": "verified-machine-safety-access-at-koning-willem-i-college-kw1c-6fShwI",
+                    "sector": "manufacturing",
+                    "title": "Verified machine safety access at Koning Willem I College (KW1C)",
+                    "summary": "A student is trained on a high-risk workshop machine and receives a digital machine safety certificate. That same digital certificate lets the student book the machine online. Later, at the machine itself, the student holds their credential against the machine's reader. The same certificate is checked again, and only then does the physical lock release.\r\n\r\nMost digital identity projects stay online: a credential is shown, a screen confirms it, done. This case bridges the online world and the physical world with the same credential and the same EUDI and ISO standards. Only the physical check of the certificate at the machine decides whether it runs at all. The machine either starts, or it stays locked.",
+                    "organizationName": "Sphereon",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-16T11:35:23+01:00",
+                    "publishedAt": "2026-07-16T11:35:23+01:00",
+                    "tags": [
+                        "machine safety",
+                        "physical access control",
+                        "proximity unlock",
+                        "digital-to-physical",
+                        "mdoc",
+                        "industry",
+                        "education"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Koning Willem I College (KW1C)",
+                                "url": "https://www.kw1c.nl/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:surf",
+                                "labelRaw": "SURF",
+                                "url": "https://www.surf.nl/en",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:sphereon",
+                                "labelRaw": "Sphereon",
+                                "url": "https://sphereon.com",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Simac Access Solutions",
+                                "url": "https://www.simac.com/nl/access-solutions/oplossingen",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "proximity",
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc",
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci",
+                        "other"
+                    ],
+                    "presentationProtocols": [
+                        "ISO 18013-5",
+                        "ISO 18013-7",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "DIIP v5",
+                        "EUDI Wallet ARF",
+                        "HAIP v1"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/Machine-Safety-Image.jpg"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/Machine-Safety-Image.jpg",
+                    "moreInfoUrl": "https://sphereon.com/content/uploads/PDF/FIDES_Innovation_Award.pdf",
+                    "userJourney": "A student completes safety training for a high-risk machine. KW1C, using its Sphereon VDX business wallet, issues a machine safety certificate as an ISO 18013-5 mdoc to the student's personal wallet.\r\n\r\nTo reserve a machine, the student logs in with their SURF eduID, which confirms they are enrolled at KW1C, and presents the safety certificate online. VDX verifies it, and only a valid certificate allows the student to make a reservation via the business wallet.\r\n\r\nAt the reserved time, the student stands at the machine and holds the same credential against the reader. VDX verifies it again, now in person over NFC/BLE. No person checks it; the machine does. \r\nOn a successful check the existing Simac Pronto controller releases the physical lock. An unsuccessful check leaves the machine locked.\r\n\r\nThe innovation is the combination of digital and physical in one credential. The same certificate, issued once, is verified both ways: online when booking, and in person at the machine. Most digital identity stops at the screen. Here the digital reaches into the physical: it unlocks a real machine, or keeps it locked.",
+                    "country": "NL"
+                }
+            ]
+        },
+        {
+            "orgSlug": "spherity",
+            "orgId": "org:spherity",
+            "orgName": "Spherity",
+            "useCases": [
+                {
+                    "id": "spherity-trusted-ai-KMVBEw",
+                    "sector": "mobility",
+                    "title": "Spherity Trusted AI",
+                    "summary": "Spherity Trusted AI enables autonomous AI agents to act securely within ecosystems such as Catena-X through cryptographically verifiable identities and machine-readable authorizations. It links each agent to a registered legal entity through an AI Service Passport, a narrowly scoped Power of Attorney, and a verified Corporate Identity. This creates a clear, auditable chain of accountability, allowing organisations such as Catena-X participants as well as others to verify who operates an agent, what it is permitted to do, and who is legally responsible. Aligned with eIDAS 2.0 and the EU AI Act, the service supports trusted agent interactions across industrial data spaces, regulated industries, and cross-company value chains.",
+                    "organizationName": "Spherity",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-16T13:53:33+01:00",
+                    "publishedAt": "2026-07-16T13:53:33+01:00",
+                    "tags": [
+                        "artificial intelligence",
+                        "agentic commerce",
+                        "identity",
+                        "pharmacovigilance",
+                        "supply chain",
+                        "eIDAS 2.0",
+                        "verifiable credentials"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [
+                            {
+                                "refId": "spherity-business-wallet",
+                                "labelRaw": "Spherity European Business Wallet",
+                                "url": "https://www.spherity.com/eida",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Bundesanzeiger Verlag",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "TrustNet e.V.",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Legal Person Identifier (LPID)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Power of Attorney (PoA)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "AI Service Passport (AISP)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "C2PA/CAWG Credentials",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "License to Operate",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Catena-X e.V.",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:spherity",
+                                "labelRaw": "Spherity",
+                                "url": "https://www.spherity.com",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Catena-X",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "energy data-X",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Large European Online Retailer",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "DIDComm v2",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png",
+                    "moreInfoUrl": "https://www.spherity.com/eida",
+                    "userJourney": "The end-user flow establishes a verifiable trust chain for Agent-to-Agent (A2A) interactions:\r\n\r\n1. Issuance: Authentic sources (e.g., the German Business Registry, Bundesanzeiger Verlag) issue verifiable credentials, such as a Legal Person Identifier (LPID), licenses, and market roles, to a company's European Business Wallet (EBW) under the eIDAS 2.0 trust framework. Further compliance credential issuers.\r\n\r\n2. Delegation: The company creates a Power of Attorney (PoA) credential to delegate authority to an AI Agent-Wallet, explicitly defining the agent's scope, permissions, and validity. An AI Service Passport (AISP) is also linked to provide verifiable lifecycle provenance and compliance data (TEVV).\r\n\r\n3. A2A Exchange: When initiating a transaction, the AI Service Agent requests and presents its credentials (LPID, PoA, AISP) via an A2A protocol to the Consumer Agent.\r\n\r\n4. Verification: The receiving agent uses a Policy Engine to verify cryptographic signatures, issuer trust, the PoA mandate, and revocation status in real-time. If valid, the automated interaction proceeds securely.",
+                    "country": "DE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "unique-identification-authority-of-india",
+            "orgId": "org:uidai",
+            "orgName": "Unique Identification Authority of India",
+            "useCases": [
+                {
+                    "id": "urban-company-service-professional-and-customer-identity-verification-0DW84B",
+                    "sector": "digital",
+                    "title": "Urban Company: Service Professional and Customer Identity Verification",
+                    "summary": "Urban Company (Think Helpling, Taskrabbit, Bark etc) is one of Asia's leading technology platforms for 8.4 million users delivering home services, connecting customers with verified professionals across categories such as beauty, wellness, home cleaning, appliance repair, plumbing, electrical services, and home improvement.\r\n\r\nUrban Company uses the Aadhaar App to enable secure, consent-based identity verification for both service professionals and customers. Service professionals can instantly verify their identity during onboarding, periodic re-verification, or before undertaking services at customer premises. Customers can also verify their identity, where required, for high-value or sensitive services. Using digitally signed verifiable credentials, the Aadhaar App enables users to share only the information necessary for the transaction, eliminating the need for physical identity documents. This reduces impersonation and fraud, streamlines onboarding and service delivery, enhances trust between professionals and customers, and provides a seamless, privacy-preserving verification experience.",
+                    "organizationName": "Unique Identification Authority of India",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-16T16:33:20+01:00",
+                    "publishedAt": "2026-07-16T16:33:20+01:00",
+                    "tags": [
+                        "Gig Economy",
+                        "Partner Onboarding",
+                        "Identity Verification",
+                        "Aadhaar App",
+                        "Verifiable Credentials",
+                        "Digital Wallet",
+                        "Consent-Based Sharing",
+                        "Paperless Verification",
+                        "Fraud Prevention",
+                        "App-to-App Integration"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "aadhaar",
+                                "labelRaw": "Aadhaar",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "uidai",
+                                "url": "http://uidai.gov.in",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:uncefact:dia:vcdm-2-0",
+                                "labelRaw": "Digital Identity Anchor",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:uidai",
+                                "labelRaw": "Unique Identification Authority of India",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Urban Company",
+                                "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOoqbuApFoYrpg0rayHWuWPv8Ohw--pjrQPwUvl7M42gB8CMpv_e6",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "urban company",
+                                "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOookm-vkuOFeVuJBp4QWeU2xNltmF51DGNzFWy_zpD8RGJMje4_V",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_26_58-PM.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_26_58-PM.png",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/shorts/N0kSJ95NA6o",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/shorts/N0kSJ95NA6o",
+                        "provider": "youtube"
+                    },
+                    "userJourney": "### How It Works\r\n\r\n1. A service professional begins onboarding through the Urban Company Partner App.\r\n\r\n2. As part of the onboarding journey, the Partner App initiates an identity verification request by invoking the Aadhaar App.\r\n\r\n3. The Aadhaar App opens and prompts the professional for consent to share the required identity information.\r\n\r\n4. Upon consent, the Aadhaar App securely retrieves the required Aadhaar-based verifiable credential from the wallet and generates a digitally signed presentation containing only the requested demographic attributes.\r\n\r\n5. The Aadhaar App returns the signed identity response directly to the Urban Company Partner App, which verifies the credential cryptographically using UIDAI's trust framework.\r\n\r\n6. Once verification is successful, the professional's identity is confirmed instantly, allowing the onboarding process to continue without requiring physical documents, manual data entry, or document uploads.\r\n\r\nThis seamless app-to-app interaction enables secure, privacy-preserving, and paperless onboarding while significantly reducing onboarding time and the risk of document fraud or impersonation.",
+                    "country": "IN"
+                },
+                {
+                    "id": "hala-mobility-verified-rider-onboarding-9MiDRu",
+                    "sector": "mobility",
+                    "title": "Hala Mobility: Verified Rider Onboarding",
+                    "summary": "Hala Mobility is an electric mobility platform that manufactures and rents electric scooters to delivery partners, enabling last-mile logistics for food delivery, e-commerce, and quick commerce platforms. Similar to shared mobility providers such as Lime, Voi, and Tier in Europe, Hala Mobility enables riders to access vehicles without lengthy paperwork while ensuring a trusted onboarding process.\r\n\r\nBefore renting an electric scooter, Hala Mobility can use the Aadhaar App to perform secure, consent-based identity verification of delivery partners. Riders share a digitally signed verifiable credential from the Aadhaar App, allowing Hala Mobility to instantly verify their identity without requiring physical Aadhaar copies or manual document verification. This reduces onboarding time, prevents identity fraud, and enables a seamless, paperless rental experience while ensuring that only verified individuals are provided access to long-term vehicle rentals.",
+                    "organizationName": "Unique Identification Authority of India",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-16T16:33:06+01:00",
+                    "publishedAt": "2026-07-16T16:33:06+01:00",
+                    "tags": [
+                        "Electric Mobility",
+                        "Gig Economy",
+                        "Rider Onboarding",
+                        "Identity Verification",
+                        "Aadhaar App",
+                        "Verifiable Credentials",
+                        "App-to-App Integration",
+                        "Consent-Based Sharing",
+                        "Paperless Verification",
+                        "Fraud Prevention"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "aadhaar",
+                                "labelRaw": "Aadhaar",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "uidai",
+                                "url": "http://uidai.gov.in",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:uidai",
+                                "labelRaw": "Unique Identification Authority of India",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Hala Mobility",
+                                "url": "https://halamobility.in/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_46_35-PM.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_46_35-PM.png",
+                    "moreInfoUrl": "https://www.youtube.com/watch?v=wo28NNYEvPY",
+                    "userJourney": "How It Works\r\nA delivery partner applies to rent an electric scooter through the Hala Mobility application or onboarding portal.\r\nDuring onboarding, Hala Mobility initiates an identity verification request by invoking the Aadhaar App.\r\nThe Aadhaar App opens and requests the rider's consent to share the required demographic information for identity verification.\r\nUpon consent, the Aadhaar App generates a digitally signed verifiable credential containing only the requested identity attributes and securely shares it with the Hala Mobility application.\r\nHala Mobility verifies the credential cryptographically using UIDAI's trust framework, confirming that the identity information is authentic and has not been tampered with.\r\nOnce verification is successful, the rider's onboarding is completed, and the electric scooter can be rented to the verified individual for the agreed rental period.\r\n\r\nThis app-to-app verification flow enables fast, secure, and privacy-preserving rider onboarding while eliminating manual document verification and reducing the risk of identity fraud.",
+                    "country": "IN"
+                },
+                {
+                    "id": "doctor-identity-verification-for-medical-practitioner-registration-ewroXC",
+                    "sector": "healthcare",
+                    "title": "Tamil Nadu Medical Council: Doctor Identity Verification for Practitioner Registration",
+                    "summary": "Tamil Nadu Medical councils verify doctors before granting registration to practise medicine in the state of Tamil Nadu India. As part of the registration process, the Tamil Nadu Medical Council uses the Aadhaar App to verify the identity of MBBS graduates applying for a practitioner registration.\n\nApplicants present their Aadhaar identity information through the Aadhaar App, allowing the Council to verify that the person applying is the legitimate holder of the identity and credentials submitted. This helps prevent impersonation or the misuse of another person's academic certificates to obtain a medical practitioner registration. Aadhaar verification forms one part of the Council's broader registration and credential verification process.",
+                    "organizationName": "Unique Identification Authority of India",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-16T16:32:28+01:00",
+                    "publishedAt": "2026-07-16T16:32:28+01:00",
+                    "tags": [
+                        "healthcare",
+                        "doctor verification",
+                        "professional registration",
+                        "identity verification",
+                        "Aadhaar App",
+                        "digital wallet",
+                        "medical practitioners",
+                        "impersonation prevention"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "aadhaar",
+                                "labelRaw": "Aadhaar",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "google-wallet",
+                                "labelRaw": "Google Wallet",
+                                "url": "https://wallet.google.com/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Aadhaar",
+                                "url": "http://uidai.gov.in",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+                                "labelRaw": "Aadhaar Verifiable Credential",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:uidai",
+                                "labelRaw": "Unique Identification Authority of India",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Tamil Nadu Medical Council",
+                                "url": "https://www.tamilnadumedicalcouncil.org/info/history-of-tamil-nadu-medical-council",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Tamil Nadu Medical Council",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=qcodqTF-cZU",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=qcodqTF-cZU",
+                        "provider": "youtube"
+                    },
+                    "userJourney": "An MBBS graduate applies for practitioner registration with the Tamil Nadu Medical Council. As part of the registration process, the applicant is asked to verify their identity using the Aadhaar App. The applicant presents their Aadhaar identity information and completes proof of presence through face verification. The Council verifies the presented identity and uses the verified information as part of its broader checks on the applicant's academic and professional credentials. Once the required checks are completed, the Council proceeds with the practitioner registration process.",
+                    "country": "IN"
+                },
+                {
+                    "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
+                    "sector": "digital",
+                    "title": "Arattai: Verified Social Media Profiles",
+                    "summary": "Arattai is an Indian instant messaging and social networking platform (Like WhatsApp and Signal) with 8 million users that enables users to connect, communicate, and build trusted online communities. By integrating with the Aadhaar App, Arattai can offer users the option to verify their identity and receive a Verified Profile badge.\n\nUsers can securely share a digitally signed verifiable credential from the Aadhaar App with their explicit consent, allowing Arattai to confirm that the profile belongs to a real individual without storing or exposing unnecessary personal information. This helps reduce fake accounts, impersonation, bots, and identity fraud while enabling users to build credibility and trust on the platform. The verification is privacy-preserving, paperless, and based on cryptographically verifiable digital credentials, giving users greater control over their identity while fostering a safer and more authentic social media experience.",
+                    "organizationName": "Unique Identification Authority of India",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-16T14:51:06+01:00",
+                    "publishedAt": "2026-07-16T14:51:06+01:00",
+                    "tags": [
+                        "social media",
+                        "profile verification",
+                        "digital identity",
+                        "verifiable credentials",
+                        "digital wallet",
+                        "Aadhaar",
+                        "Aadhaar App",
+                        "optional verification",
+                        "trusted profiles",
+                        "identity assurance",
+                        "privacy preserving verification"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "aadhaar",
+                                "labelRaw": "Aadhaar",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "UIDAI",
+                                "url": "http://uidai.gov.in",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:uidai",
+                                "labelRaw": "Unique Identification Authority of India",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Arattai",
+                                "url": "http://Arattai.in",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Arattai",
+                                "url": "http://arattai.in",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/mzxH9MwmcKQ",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/mzxH9MwmcKQ",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.arattai.in/",
+                    "userJourney": "A user downloads Arattai, creates a profile, and can immediately access the platform's messaging and social features without completing identity verification.\n\nIf the user chooses to verify their profile, Arattai initiates an app-to-app verification request to the Aadhaar App or another compatible digital identity wallet, such as Google Wallet. The user reviews the identity request and provides consent to share the required credential.\n\nThe wallet presents a verifiable identity credential to Arattai. Arattai cryptographically verifies the credential and, once verification is successful, updates the user's profile to display a verified status.\n\nOther users can then see that the profile has been verified using a trusted digital identity credential. The verification provides an additional layer of assurance without requiring Arattai to collect or store copies of the user's identity document.",
+                    "country": "IN"
+                },
+                {
+                    "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau",
+                    "sector": "mobility",
+                    "title": "Swiggy: Delivery Agent and Customer Identity Verification",
+                    "summary": "Swiggy (Think Ubereats, Just Eat, Wolt for an european comparison) is one of India's largest on-demand convenience platforms, serving 120 million customers across hundreds of cities through its food delivery, quick commerce, grocery, and logistics services.\n\nSwiggy uses the Aadhaar App to enable secure, consent-based identity verification for both delivery partners and customers. Delivery agents can instantly prove their identity during onboarding, periodic re-verification, or when collecting high-value or age-restricted orders. Similarly, customers can verify their identity, where required, before receiving sensitive deliveries. The Aadhaar App allows users to share only the necessary information through digitally signed verifiable credentials, eliminating the need for physical documents or photocopies. This ensures faster onboarding, reduces fraud and impersonation risks, improves trust between all parties, and delivers a seamless, privacy-preserving verification experience.",
+                    "organizationName": "Unique Identification Authority of India",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-07-16T13:54:40+01:00",
+                    "publishedAt": "2026-07-16T13:54:40+01:00",
+                    "tags": [
+                        "gig economy",
+                        "gig workers",
+                        "identity verification",
+                        "mutual verification",
+                        "digital identity",
+                        "verifiable credentials",
+                        "digital wallet",
+                        "Aadhaar",
+                        "selective disclosure",
+                        "restricted items",
+                        "trusted delivery"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "aadhaar",
+                                "labelRaw": "Aadhaar",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [
+                            {
+                                "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+                                "labelRaw": "Aadhaar Verifiable Credential",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:uidai",
+                                "labelRaw": "Unique Identification Authority of India",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Swiggy",
+                                "url": "https://www.swiggy.com/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "urban company",
+                                "url": "https://www.urbancompany.com/mumbai?srsltid=AfmBOooOqbswwJtznY4i4UaNxXw3kXh1EXFp9I-vNMxLrZNTloSYnt40",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
+                    "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\n\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
+                    "country": "IN"
+                }
+            ]
+        }
+    ]
+}
