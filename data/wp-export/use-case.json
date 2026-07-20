@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-07-20T18:46:19+00:00",
+    "generatedAt": "2026-07-20T18:46:33+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -1513,13 +1513,13 @@
                 {
                     "id": "spherity-trusted-ai-KMVBEw",
                     "sector": "mobility",
-                    "title": "Spherity Trusted AI",
+                    "title": "Spherity's Trusted AI",
                     "summary": "Spherity Trusted AI enables autonomous AI agents to act securely within ecosystems such as Catena-X through cryptographically verifiable identities and machine-readable authorizations. It links each agent to a registered legal entity through an AI Service Passport, a narrowly scoped Power of Attorney, and a verified Corporate Identity. This creates a clear, auditable chain of accountability, allowing organisations such as Catena-X participants as well as others to verify who operates an agent, what it is permitted to do, and who is legally responsible. Aligned with eIDAS 2.0 and the EU AI Act, the service supports trusted agent interactions across industrial data spaces, regulated industries, and cross-company value chains.",
                     "organizationName": "Spherity",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-07-16T13:53:33+01:00",
-                    "publishedAt": "2026-07-16T13:53:33+01:00",
+                    "updatedAt": "2026-07-20T19:46:32+01:00",
+                    "publishedAt": "2026-07-20T19:46:32+01:00",
                     "tags": [
                         "artificial intelligence",
                         "agentic commerce",
@@ -1652,7 +1652,7 @@
                     ],
                     "imageUrl": "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png",
                     "moreInfoUrl": "https://www.spherity.com/eida",
-                    "userJourney": "The end-user flow establishes a verifiable trust chain for Agent-to-Agent (A2A) interactions:\r\n\r\n1. Issuance: Authentic sources (e.g., the German Business Registry, Bundesanzeiger Verlag) issue verifiable credentials, such as a Legal Person Identifier (LPID), licenses, and market roles, to a company's European Business Wallet (EBW) under the eIDAS 2.0 trust framework. Further compliance credential issuers.\r\n\r\n2. Delegation: The company creates a Power of Attorney (PoA) credential to delegate authority to an AI Agent-Wallet, explicitly defining the agent's scope, permissions, and validity. An AI Service Passport (AISP) is also linked to provide verifiable lifecycle provenance and compliance data (TEVV).\r\n\r\n3. A2A Exchange: When initiating a transaction, the AI Service Agent requests and presents its credentials (LPID, PoA, AISP) via an A2A protocol to the Consumer Agent.\r\n\r\n4. Verification: The receiving agent uses a Policy Engine to verify cryptographic signatures, issuer trust, the PoA mandate, and revocation status in real-time. If valid, the automated interaction proceeds securely.",
+                    "userJourney": "The end-user flow establishes a verifiable trust chain for Agent-to-Agent (A2A) interactions:\n\n1. Issuance: Authentic sources (e.g., the German Business Registry, Bundesanzeiger Verlag) issue verifiable credentials, such as a Legal Person Identifier (LPID), licenses, and market roles, to a company's European Business Wallet (EBW) under the eIDAS 2.0 trust framework. Further compliance credential issuers.\n\n2. Delegation: The company creates a Power of Attorney (PoA) credential to delegate authority to an AI Agent-Wallet, explicitly defining the agent's scope, permissions, and validity. An AI Service Passport (AISP) is also linked to provide verifiable lifecycle provenance and compliance data (TEVV).\n\n3. A2A Exchange: When initiating a transaction, the AI Service Agent requests and presents its credentials (LPID, PoA, AISP) via an A2A protocol to the Consumer Agent.\n\n4. Verification: The receiving agent uses a Policy Engine to verify cryptographic signatures, issuer trust, the PoA mandate, and revocation status in real-time. If valid, the automated interaction proceeds securely.",
                     "country": "DE"
                 }
             ]
