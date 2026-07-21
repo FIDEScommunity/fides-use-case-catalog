@@ -1,0 +1,433 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:credenco",
+  "orgName": "Credenco",
+  "useCases": [
+    {
+      "id": "digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC",
+      "sector": "public_sector",
+      "title": "Digital Certificate of Good Conduct (VOG) as a Verifiable Credential",
+      "summary": "Every year, 1.8 million Certificates of Good Conduct (VOGs) are issued in the Netherlands. Over 350 large organizations and 26,000 sports clubs rely on the VOG to screen employees, trainers and volunteers — but the paper/PDF process is slow (1–7 weeks), manual and vulnerable to fraud.\r\n\r\nJustis, the screening authority of the Dutch Ministry of Justice and Security, is piloting the VOG as a verifiable credential together with Credenco. Citizens receive the VOG directly in their personal wallet; employers and clubs verify it instantly through the Credenco Business Wallet. Built on open standards (W3C Verifiable Credentials, EUDI Wallet ARF, DIIP v5) for interoperability with the NL-EUDI Wallet.\r\n\r\nSuccessfully piloted with sports associations: verification drops from weeks to seconds, fraud is prevented by cryptographic signatures, admin burden disappears — and Justis has a clear path to large-scale digital issuance from 2026 onward.",
+      "organizationName": "Credenco",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-21T12:43:46+01:00",
+      "publishedAt": "2026-07-21T12:43:46+01:00",
+      "tags": [
+        "identity",
+        "government",
+        "VOG",
+        "certificate of good conduct",
+        "screening",
+        "background check",
+        "EUDI wallet",
+        "eIDAS 2.0",
+        "HR",
+        "volunteers",
+        "sports"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "credenco-wallet",
+            "labelRaw": "Credenco Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Certificate of Good Conduct (VOG)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:credenco",
+            "labelRaw": "Credenco",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Justis (Ministery of Justice and Security)",
+            "url": "https://www.justis.nl/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "DIIP v5",
+        "EUDI Wallet ARF"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/fides-cover-vog.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/fides-cover-vog.jpg",
+      "moreInfoUrl": "https://www.credenco.com/case/vog",
+      "userJourney": "1. A citizen needs a VOG for a job or volunteer role. The requesting organization initiates the VOG application, as in the existing process.\r\n\r\n2. Justis performs the screening and, upon approval, issues the VOG as a cryptographically signed verifiable credential via Credenco's issuance platform (OpenID4VCI).\r\n\r\n3. The citizen receives the VOG in their personal wallet (VOG app, interoperable with DIIP v5 and NL-EUDI wallets) and keeps full control over their data.\r\n\r\n4. The citizen shares the VOG with the relying party (OpenID4VP): remotely via an emailed validation QR code/link, or in person via a QR scan at the point of entry.\r\n\r\n5. The relying party (employer, sports club, school) verifies the credential in real time through the Credenco Business Wallet: Justis' signature, validity and revocation status are checked automatically.\r\n\r\n6. Onboarding proceeds immediately — no paper, no manual checks. Verification drops from 1–7 weeks to seconds.",
+      "country": "NL"
+    },
+    {
+      "id": "establish-a-new-company-in-one-day-company-passport-IryaF9",
+      "sector": "trade",
+      "title": "Establish a New Company in One Day — Company Passport",
+      "summary": "Starting a company in the Netherlands takes about six weeks: a notary draws up the deed, KVK registers the company, the Belastingdienst issues a VAT number, and only then can a bank open a business account. Each step waits on paper from the last. Supplier onboarding is just as document-heavy: KVK extracts, tax statements, insurance and IBAN details exchanged as PDFs over email.\r\n\r\nThe Company Passport initiative — a Dutch public-private partnership of KVK, Belastingdienst, KNB (notaries), NVB and Betaalvereniging Nederland — replaces these documents with verifiable credentials issued directly by authoritative sources. Credenco delivers the sandbox, the eIDAS 2.0 / DIIP v5-compliant Business Wallet and the Issuer Portals that power the initiative.\r\n\r\nEach authority reads the credential issued by the previous one and completes its step the same day: incorporation drops from six weeks to one day, supplier onboarding from weeks to minutes, and falsified documents become technically impossible.",
+      "organizationName": "Credenco",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-07-21T12:43:37+01:00",
+      "publishedAt": "2026-07-21T12:43:37+01:00",
+      "tags": [
+        "business identity",
+        "company passport",
+        "KYC",
+        "supplier onboarding",
+        "procurement",
+        "incorporation",
+        "LPID",
+        "UBO",
+        "eIDAS 2.0",
+        "business wallet"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "credenco-wallet",
+            "labelRaw": "Credenco Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Belastingdienst",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "KVK",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Notary",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Tulip Trust Bank",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Deed of Incorporation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "KVK Registration extract (LPID & UBO)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "VAT / Tax Compliance",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "IBAN Attestation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:credenco",
+            "labelRaw": "Credenco",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Company Passport",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:bd",
+            "labelRaw": "Belastingdienst",
+            "url": "https://www.belastingdienst.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:kvk",
+            "labelRaw": "Kamer van Koophandel",
+            "url": "https://www.kvk.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "KNB",
+            "url": "http://Betaalvereniging%20Nederland",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Nederlandse Vereniging van Banken",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Tulip Trust Bank",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "DIIP v5",
+        "EUDI Wallet ARF"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/fides-cover-company.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/fides-cover-company.jpg",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=IIZ7dlF4gmM",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=IIZ7dlF4gmM",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.credenco.com/case/establish-new-company",
+      "userJourney": "1. The notary drafts the deed of incorporation, signs it cryptographically and issues it as a verifiable credential into the company's Credenco Business Wallet (OpenID4VCI).\r\n\r\n2. KVK reads the deed credential, registers the company the same day and issues the KVK Registration Extract (incl. LPID and UBO data) as a credential.\r\n\r\n3. The Belastingdienst reads the KVK extract and issues the VAT number / tax compliance credential.\r\n\r\n4. The bank reads all three credentials, opens the business account and issues an IBAN attestation.\r\n\r\n5. From then on, supplier onboarding is trivial: a procurement platform requests KVK, tax, VAT, IBAN and insurance credentials in a single flow (OpenID4VP). The supplier shares them in one tap from the Business Wallet, and the platform verifies the issuers' signatures in real time.\r\n\r\n6. Result: one source document, multiple readers, instant trust — six weeks becomes one day, and onboarding checks run without PDFs, email or manual review.",
+      "country": "NL"
+    },
+    {
+      "id": "in-person-pid-issuance-at-the-municipal-desk-gemeente-rotterdam-IbU5RQ",
+      "sector": "public_sector",
+      "title": "In-Person PID Issuance at the Municipal Desk — Gemeente Rotterdam",
+      "summary": "Under eIDAS 2.0, every EU citizen gets the right to a European Digital Identity Wallet — and every wallet needs a Person Identification Data (PID) credential at its core. Today no Dutch PID source is EUDI-compliant at assurance level \"high\": DigiD is a login, not a portable credential, and passport copies are insecure and easy to forge.\r\n\r\nFor Gemeente Rotterdam, Credenco and IN Groupe, with QTSP's Digidentity and Cleverbase, are piloting in-person PID issuance at the municipal desk. The citizen presents their passport on an OSIA-compliant enrollment station, scans a QR with their Personal Wallet and walks away with a verifiable PID, issued against the EWC PID Rulebook and ARF 2.1.\r\n\r\nFrom then on, citizens identify themselves online and in person via selective disclosure — never handing over a passport copy again. The PID is the root credential on which diplomas, permits and benefits can be layered.",
+      "organizationName": "Credenco",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-07-21T12:43:30+01:00",
+      "publishedAt": "2026-07-21T12:43:30+01:00",
+      "tags": [
+        "PID",
+        "EUDI wallet",
+        "eIDAS 2.0",
+        "identity",
+        "municipality",
+        "in-person issuance",
+        "ARF",
+        "EWC",
+        "EBSI",
+        "selective disclosure"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "digidentity-wallet",
+            "labelRaw": "Digidentity Wallet",
+            "url": "https://www.digidentity.com",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Gemeente Rotterdam",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Belastingdienst",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:ewc:pid-eudi-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID EUDI (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:credenco",
+            "labelRaw": "Credenco",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "IN Groupe",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:rotterdam",
+            "labelRaw": "Gemeente Rotterdam",
+            "url": "https://www.rotterdam.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:digidentity",
+            "labelRaw": "Digidentity",
+            "url": "https://www.digidentity.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:cleverbase-id",
+            "labelRaw": "Cleverbase ID",
+            "url": "https://cleverbase.com/en/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Gemeente Rotterdam",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "DIIP v5",
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/fides-cover-pid.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/fides-cover-pid.jpg",
+      "moreInfoUrl": "https://www.credenco.com/case/pid-provider",
+      "userJourney": "1. Enrol — the citizen presents their Dutch passport or ID card at the municipal desk on an IN Groupe OSIA-compliant enrollment station. The chip is read, the document authenticated, and the verified attributes are sent to the Identity Gateway.\r\n\r\n2. Authorize — the gateway forwards the attributes to Credenco's PID Issuer Portal, which generates a PID credential (EWC PID Rulebook, ARF 2.1) and displays a QR code. The citizen scans it with their Personal Wallet, consents, and the credential is delivered over OpenID4VCI and stored locally on their device.\r\n\r\n3. Identify — from then on the citizen presents the PID, or selective disclosures of it, to any relying party — government portals, banks, notaries, age-restricted services — over OpenID4VP, verified against trusted issuers registered on EBSI.\r\n\r\nHigh assurance stays face-to-face at the desk, as with a passport renewal — but the proof of that moment now travels with the citizen, digitally, for years.",
+      "country": "NL"
+    }
+  ]
+}
