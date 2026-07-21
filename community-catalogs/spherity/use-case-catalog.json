@@ -12,8 +12,8 @@
       "organizationName": "Spherity",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-20T19:46:32+01:00",
-      "publishedAt": "2026-07-20T19:46:32+01:00",
+      "updatedAt": "2026-07-21T16:05:59+01:00",
+      "publishedAt": "2026-07-21T16:05:59+01:00",
       "tags": [
         "artificial intelligence",
         "agentic commerce",
@@ -146,7 +146,7 @@
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png",
       "moreInfoUrl": "https://www.spherity.com/eida",
-      "userJourney": "The end-user flow establishes a verifiable trust chain for Agent-to-Agent (A2A) interactions:\n\n1. Issuance: Authentic sources (e.g., the German Business Registry, Bundesanzeiger Verlag) issue verifiable credentials, such as a Legal Person Identifier (LPID), licenses, and market roles, to a company's European Business Wallet (EBW) under the eIDAS 2.0 trust framework. Further compliance credential issuers.\n\n2. Delegation: The company creates a Power of Attorney (PoA) credential to delegate authority to an AI Agent-Wallet, explicitly defining the agent's scope, permissions, and validity. An AI Service Passport (AISP) is also linked to provide verifiable lifecycle provenance and compliance data (TEVV).\n\n3. A2A Exchange: When initiating a transaction, the AI Service Agent requests and presents its credentials (LPID, PoA, AISP) via an A2A protocol to the Consumer Agent.\n\n4. Verification: The receiving agent uses a Policy Engine to verify cryptographic signatures, issuer trust, the PoA mandate, and revocation status in real-time. If valid, the automated interaction proceeds securely.",
+      "userJourney": "The end-user flow establishes a verifiable trust chain for Agent-to-Agent (A2A) interactions in Catena-X ecosystems, as explored by the Catena-X Trusted AI Expert Group:\n\nIssuance: Trusted sources, such as official business registers or Bundesanzeiger Verlag, issue corporate identity credentials, including Legal Person Identifiers, licenses, or market roles, to a company’s European Business Wallet under the eIDAS 2.0 trust framework. Additional ecosystem credentials may be issued by trusted participants or authorities.\n\nDelegation: A company in Catena-X issues a Power of Attorney credential to an AI Agent Wallet, defining permitted actions, limitations, and validity. An AI Service Passport provides verifiable lifecycle, provenance, and compliance information.\n\nA2A Exchange: When interacting with another Catena-X participant, the AI service agent presents its corporate identity, Power of Attorney, and AI Service Passport credentials via the Catena-X DPS/DCP Protocol.\n\nVerification: The receiving agent verifies signatures, trusted issuers, delegated mandate, validity, and revocation status in real time. Once verified, the interaction can proceed securely and automatically.",
       "country": "DE"
     }
   ]
