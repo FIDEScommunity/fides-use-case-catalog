@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-07-20T18:46:33+00:00",
+    "generatedAt": "2026-07-21T04:41:34+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -392,12 +392,12 @@
                     "id": "buy-age-restricted-goods-online-in-seconds-with-eudi-wallets-mTFVmp",
                     "sector": "food",
                     "title": "Buy Age-Restricted Goods Online in Seconds with EUDI Wallets",
-                    "summary": "Buying age-restricted products online, like alcohol, still typically means uploading a passport scan and waiting for manual review, a slow and privacy-invasive process for both the customer and the retailer. This demo shows how an EUDI Wallet turns that into a checkout step that takes seconds, without disclosing any private information like date of birth.\r\n\r\nOnline retailers selling age-restricted goods have no fast, reliable way to confirm a buyer's age at checkout. Manual document review is slow, costly to operate, and requires customers to hand over far more personal data (full passport scans) than the transaction actually needs, just to prove one fact: that they are over 18.\r\n\r\nFor the retailer, age verification becomes instant and automated, removing manual review costs and reducing checkout drop-off. For the customer, there are no forms, no document uploads, and no waiting, just a quick scan and confirmation. For the ecosystem, it shows that minimal-disclosure verification (proving only \"over 18\" rather than full identity) is achievable today with wallets already in production, like France Identité.",
+                    "summary": "Buying age-restricted products online, like alcohol, still typically means uploading a passport scan and waiting for manual review, a slow and privacy-invasive process for both the customer and the retailer. This demo shows how an EUDI Wallet turns that into a checkout step that takes seconds, without disclosing any private information like date of birth.\n\nOnline retailers selling age-restricted goods have no fast, reliable way to confirm a buyer's age at checkout. Manual document review is slow, costly to operate, and requires customers to hand over far more personal data (full passport scans) than the transaction actually needs, just to prove one fact: that they are over 18.\n\nFor the retailer, age verification becomes instant and automated, removing manual review costs and reducing checkout drop-off. For the customer, there are no forms, no document uploads, and no waiting, just a quick scan and confirmation. For the ecosystem, it shows that minimal-disclosure verification (proving only \"over 18\" rather than full identity) is achievable today with wallets already in production, like France Identité.",
                     "organizationName": "Hovi",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-07-15T15:37:17+01:00",
-                    "publishedAt": "2026-07-15T15:37:17+01:00",
+                    "updatedAt": "2026-07-21T05:41:33+01:00",
+                    "publishedAt": "2026-07-21T05:41:33+01:00",
                     "tags": [
                         "identity",
                         "age check",
@@ -501,7 +501,8 @@
                         "url": "https://youtu.be/t4I6Fe_0sLo",
                         "provider": "youtube"
                     },
-                    "userJourney": "1. Marie shops online. She adds gin and vodka, both age-restricted products, to her cart on an online store.\r\n\r\n2. Checkout triggers age verification. At checkout, the store requests proof that Marie is over 18 before the order can proceed.\r\n\r\n3. Marie scans a QR code. The store displays a QR code linked to the verification request.\r\n\r\n4. Marie completes the check in her wallet app. She scans the code with her France Identité EUDI Wallet, reviews the request, and approves sharing only her age attribute.\r\n\r\n5. Verification completes instantly. The wallet returns a verifiable proof of age to the retailer in real time.\r\n\r\n6. Order is confirmed. With age confirmed, the order goes through immediately, no forms, no document upload, no manual review wait.",
+                    "moreInfoUrl": "https://valko.hovi.app/",
+                    "userJourney": "1. Marie shops online. She adds gin and vodka, both age-restricted products, to her cart on an online store.\n\n2. Checkout triggers age verification. At checkout, the store requests proof that Marie is over 18 before the order can proceed.\n\n3. Marie scans a QR code. The store displays a QR code linked to the verification request.\n\n4. Marie completes the check in her wallet app. She scans the code with her France Identité EUDI Wallet, reviews the request, and approves sharing only her age attribute.\n\n5. Verification completes instantly. The wallet returns a verifiable proof of age to the retailer in real time.\n\n6. Order is confirmed. With age confirmed, the order goes through immediately, no forms, no document upload, no manual review wait.",
                     "country": "FI"
                 },
                 {
