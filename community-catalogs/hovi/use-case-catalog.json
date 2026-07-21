@@ -5,15 +5,140 @@
   "orgName": "Hovi",
   "useCases": [
     {
-      "id": "buy-age-restricted-goods-online-in-seconds-with-eudi-wallets-mTFVmp",
-      "sector": "food",
-      "title": "Buy Age-Restricted Goods Online in Seconds with EUDI Wallets",
-      "summary": "Buying age-restricted products online, like alcohol, still typically means uploading a passport scan and waiting for manual review, a slow and privacy-invasive process for both the customer and the retailer. This demo shows how an EUDI Wallet turns that into a checkout step that takes seconds, without disclosing any private information like date of birth.\r\n\r\nOnline retailers selling age-restricted goods have no fast, reliable way to confirm a buyer's age at checkout. Manual document review is slow, costly to operate, and requires customers to hand over far more personal data (full passport scans) than the transaction actually needs, just to prove one fact: that they are over 18.\r\n\r\nFor the retailer, age verification becomes instant and automated, removing manual review costs and reducing checkout drop-off. For the customer, there are no forms, no document uploads, and no waiting, just a quick scan and confirmation. For the ecosystem, it shows that minimal-disclosure verification (proving only \"over 18\" rather than full identity) is achievable today with wallets already in production, like France Identité.",
+      "id": "preventing-sim-swap-fraud-with-eudi-wallets-and-ai-voice-agents-FNAfeI",
+      "sector": "digital",
+      "title": "Preventing SIM Swap Fraud with EUDI Wallets and AI Voice Agents",
+      "summary": "Telcos handle some of the most sensitive account actions over the phone, especially SIM swaps, which are a primary vector for account takeover fraud. This usecase shows an AI voice agent that verifies a caller's identity against a digital wallet credential in real time, before any sensitive change is processed.\n\nSIM swap fraud, phishing, and account takeover attacks all depend on the same weak point: phone-based identity checks that rely on security questions, personal data, or callback procedures, all of which can be socially engineered or leaked. Call center agents have no reliable way to confirm that the person on the line is who they claim to be, and attackers exploit exactly that gap.\n\nFor the telco, this closes the fraud gap without adding friction for legitimate customers. Verification happens automatically, mid-conversation, with no extra steps for the caller and no manual escalation for the agent. For the customer, it means sensitive requests are protected without the hassle of extra security questions or callback delays. For the industry more broadly, it demonstrates a reusable pattern for binding any high-risk transaction to a verified identity in real time.",
       "organizationName": "Hovi",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-15T15:37:17+01:00",
-      "publishedAt": "2026-07-15T15:37:17+01:00",
+      "updatedAt": "2026-07-21T05:41:36+01:00",
+      "publishedAt": "2026-07-21T05:41:36+01:00",
+      "tags": [
+        "identity",
+        "telecommunication",
+        "kyc",
+        "pid",
+        "eudiw"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "national-eudi-wallet-germany",
+            "labelRaw": "National EUDI Wallet (Germany)",
+            "url": "https://www.sprind.org/eudi-wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "hovi-business-wallet",
+            "labelRaw": "Hovi Business Wallet",
+            "url": "https://www.hovi.id",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:hovi:eudi-playground:test",
+            "labelRaw": "Hovi EUDI Playground",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:loyalty-mdoc:mdoc",
+            "labelRaw": "Loyalty (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:hovi",
+            "labelRaw": "Hovi",
+            "url": "https://www.hovi.id/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:germany",
+            "labelRaw": "German Government",
+            "url": "https://www.sprind.org/eudi-wallet",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Hovi - Dice Demo",
+            "url": "https://dice.hovi.app",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v5",
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/1-1.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/1-1.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/evc65v1UhMY",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/evc65v1UhMY",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://dice.hovi.app",
+      "userJourney": "1. Customer calls in. A customer contacts the telco to request a sensitive account change, for example a SIM swap.\n\n2. AI voice agent picks up. The agent handles the call naturally, like a normal support conversation, and asks for the details of the request.\n\n3. Identity binding happens mid-call. Before the agent proceeds, it binds the request to the customer's verified identity credential in real time. No security questions, no callback, no manual agent escalation.\n\n4. Dashboard tracks the call live. A real-time dashboard shows each stage of the interaction as it happens: call received, identity check triggered, verification result, outcome.\n\n5. Verification gates the outcome. If the identity check passes, the account change goes through. If it fails, the change is blocked on the spot, before any damage is done.\n\n6.Loyalty credential issued. Once verified, the customer receives a loyalty credential as a reward for completing a secure interaction.\n\nThis flow removes the exact weak point that SIM swap attacks, phishing, and account takeover fraud rely on: social engineering and leaked personal data used to impersonate a real customer over the phone.",
+      "country": "FI"
+    },
+    {
+      "id": "buy-age-restricted-goods-online-in-seconds-with-eudi-wallets-mTFVmp",
+      "sector": "food",
+      "title": "Buy Age-Restricted Goods Online in Seconds with EUDI Wallets",
+      "summary": "Buying age-restricted products online, like alcohol, still typically means uploading a passport scan and waiting for manual review, a slow and privacy-invasive process for both the customer and the retailer. This demo shows how an EUDI Wallet turns that into a checkout step that takes seconds, without disclosing any private information like date of birth.\n\nOnline retailers selling age-restricted goods have no fast, reliable way to confirm a buyer's age at checkout. Manual document review is slow, costly to operate, and requires customers to hand over far more personal data (full passport scans) than the transaction actually needs, just to prove one fact: that they are over 18.\n\nFor the retailer, age verification becomes instant and automated, removing manual review costs and reducing checkout drop-off. For the customer, there are no forms, no document uploads, and no waiting, just a quick scan and confirmation. For the ecosystem, it shows that minimal-disclosure verification (proving only \"over 18\" rather than full identity) is achievable today with wallets already in production, like France Identité.",
+      "organizationName": "Hovi",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-21T05:41:33+01:00",
+      "publishedAt": "2026-07-21T05:41:33+01:00",
       "tags": [
         "identity",
         "age check",
@@ -117,123 +242,8 @@
         "url": "https://youtu.be/t4I6Fe_0sLo",
         "provider": "youtube"
       },
-      "userJourney": "1. Marie shops online. She adds gin and vodka, both age-restricted products, to her cart on an online store.\r\n\r\n2. Checkout triggers age verification. At checkout, the store requests proof that Marie is over 18 before the order can proceed.\r\n\r\n3. Marie scans a QR code. The store displays a QR code linked to the verification request.\r\n\r\n4. Marie completes the check in her wallet app. She scans the code with her France Identité EUDI Wallet, reviews the request, and approves sharing only her age attribute.\r\n\r\n5. Verification completes instantly. The wallet returns a verifiable proof of age to the retailer in real time.\r\n\r\n6. Order is confirmed. With age confirmed, the order goes through immediately, no forms, no document upload, no manual review wait.",
-      "country": "FI"
-    },
-    {
-      "id": "preventing-sim-swap-fraud-with-eudi-wallets-and-ai-voice-agents-FNAfeI",
-      "sector": "digital",
-      "title": "Preventing SIM Swap Fraud with EUDI Wallets and AI Voice Agents",
-      "summary": "Telcos handle some of the most sensitive account actions over the phone, especially SIM swaps, which are a primary vector for account takeover fraud. This usecase shows an AI voice agent that verifies a caller's identity against a digital wallet credential in real time, before any sensitive change is processed.\r\n\r\nSIM swap fraud, phishing, and account takeover attacks all depend on the same weak point: phone-based identity checks that rely on security questions, personal data, or callback procedures, all of which can be socially engineered or leaked. Call center agents have no reliable way to confirm that the person on the line is who they claim to be, and attackers exploit exactly that gap.\r\n\r\nFor the telco, this closes the fraud gap without adding friction for legitimate customers. Verification happens automatically, mid-conversation, with no extra steps for the caller and no manual escalation for the agent. For the customer, it means sensitive requests are protected without the hassle of extra security questions or callback delays. For the industry more broadly, it demonstrates a reusable pattern for binding any high-risk transaction to a verified identity in real time.",
-      "organizationName": "Hovi",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-07-15T15:36:37+01:00",
-      "publishedAt": "2026-07-15T15:36:37+01:00",
-      "tags": [
-        "identity",
-        "telecommunication",
-        "kyc",
-        "pid",
-        "eudiw"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "national-eudi-wallet-germany",
-            "labelRaw": "National EUDI Wallet (Germany)",
-            "url": "https://www.sprind.org/eudi-wallet",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "hovi-business-wallet",
-            "labelRaw": "Hovi Business Wallet",
-            "url": "https://www.hovi.id",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": "issuer:hovi:eudi-playground:test",
-            "labelRaw": "Hovi EUDI Playground",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:eu:pid-mdoc:mdoc",
-            "labelRaw": "PID (MSO Mdoc)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:eu:loyalty-mdoc:mdoc",
-            "labelRaw": "Loyalty (MSO Mdoc)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:hovi",
-            "labelRaw": "Hovi",
-            "url": "https://www.hovi.id/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:germany",
-            "labelRaw": "German Government",
-            "url": "https://www.sprind.org/eudi-wallet",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "mdoc",
-        "sd_jwt_vc",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-7",
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "DIIP v5",
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/1-1.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/1-1.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/evc65v1UhMY",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/evc65v1UhMY",
-        "provider": "youtube"
-      },
-      "userJourney": "1. Customer calls in. A customer contacts the telco to request a sensitive account change, for example a SIM swap.\r\n\r\n2. AI voice agent picks up. The agent handles the call naturally, like a normal support conversation, and asks for the details of the request.\r\n\r\n3. Identity binding happens mid-call. Before the agent proceeds, it binds the request to the customer's verified identity credential in real time. No security questions, no callback, no manual agent escalation.\r\n\r\n4. Dashboard tracks the call live. A real-time dashboard shows each stage of the interaction as it happens: call received, identity check triggered, verification result, outcome.\r\n\r\n5. Verification gates the outcome. If the identity check passes, the account change goes through. If it fails, the change is blocked on the spot, before any damage is done.\r\n\r\n6.Loyalty credential issued. Once verified, the customer receives a loyalty credential as a reward for completing a secure interaction.\r\n\r\nThis flow removes the exact weak point that SIM swap attacks, phishing, and account takeover fraud rely on: social engineering and leaked personal data used to impersonate a real customer over the phone.",
+      "moreInfoUrl": "https://valko.hovi.app/",
+      "userJourney": "1. Marie shops online. She adds gin and vodka, both age-restricted products, to her cart on an online store.\n\n2. Checkout triggers age verification. At checkout, the store requests proof that Marie is over 18 before the order can proceed.\n\n3. Marie scans a QR code. The store displays a QR code linked to the verification request.\n\n4. Marie completes the check in her wallet app. She scans the code with her France Identité EUDI Wallet, reviews the request, and approves sharing only her age attribute.\n\n5. Verification completes instantly. The wallet returns a verifiable proof of age to the retailer in real time.\n\n6. Order is confirmed. With age confirmed, the order goes through immediately, no forms, no document upload, no manual review wait.",
       "country": "FI"
     }
   ]
