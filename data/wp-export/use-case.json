@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-07-21T11:43:31+00:00",
+    "generatedAt": "2026-07-21T11:43:38+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -291,6 +291,197 @@
             "orgId": "org:credenco",
             "orgName": "Credenco",
             "useCases": [
+                {
+                    "id": "establish-a-new-company-in-one-day-company-passport-IryaF9",
+                    "sector": "trade",
+                    "title": "Establish a New Company in One Day — Company Passport",
+                    "summary": "Starting a company in the Netherlands takes about six weeks: a notary draws up the deed, KVK registers the company, the Belastingdienst issues a VAT number, and only then can a bank open a business account. Each step waits on paper from the last. Supplier onboarding is just as document-heavy: KVK extracts, tax statements, insurance and IBAN details exchanged as PDFs over email.\r\n\r\nThe Company Passport initiative — a Dutch public-private partnership of KVK, Belastingdienst, KNB (notaries), NVB and Betaalvereniging Nederland — replaces these documents with verifiable credentials issued directly by authoritative sources. Credenco delivers the sandbox, the eIDAS 2.0 / DIIP v5-compliant Business Wallet and the Issuer Portals that power the initiative.\r\n\r\nEach authority reads the credential issued by the previous one and completes its step the same day: incorporation drops from six weeks to one day, supplier onboarding from weeks to minutes, and falsified documents become technically impossible.",
+                    "organizationName": "Credenco",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-07-21T12:43:37+01:00",
+                    "publishedAt": "2026-07-21T12:43:37+01:00",
+                    "tags": [
+                        "business identity",
+                        "company passport",
+                        "KYC",
+                        "supplier onboarding",
+                        "procurement",
+                        "incorporation",
+                        "LPID",
+                        "UBO",
+                        "eIDAS 2.0",
+                        "business wallet"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "credenco-wallet",
+                                "labelRaw": "Credenco Wallet",
+                                "url": "https://www.credenco.com",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": "credenco-business-wallet",
+                                "labelRaw": "Credenco Business Wallet",
+                                "url": "https://www.credenco.com",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Belastingdienst",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "KVK",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Notary",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Tulip Trust Bank",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Deed of Incorporation",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "KVK Registration extract (LPID & UBO)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "VAT / Tax Compliance",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "IBAN Attestation",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:credenco",
+                                "labelRaw": "Credenco",
+                                "url": "https://www.credenco.com",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Company Passport",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:bd",
+                                "labelRaw": "Belastingdienst",
+                                "url": "https://www.belastingdienst.nl",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:kvk",
+                                "labelRaw": "Kamer van Koophandel",
+                                "url": "https://www.kvk.nl",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "KNB",
+                                "url": "http://Betaalvereniging%20Nederland",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Nederlandse Vereniging van Banken",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Tulip Trust Bank",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "DIIP v4",
+                        "DIIP v5",
+                        "EUDI Wallet ARF"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/fides-cover-company.jpg"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/fides-cover-company.jpg",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=IIZ7dlF4gmM",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=IIZ7dlF4gmM",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.credenco.com/case/establish-new-company",
+                    "userJourney": "1. The notary drafts the deed of incorporation, signs it cryptographically and issues it as a verifiable credential into the company's Credenco Business Wallet (OpenID4VCI).\r\n\r\n2. KVK reads the deed credential, registers the company the same day and issues the KVK Registration Extract (incl. LPID and UBO data) as a credential.\r\n\r\n3. The Belastingdienst reads the KVK extract and issues the VAT number / tax compliance credential.\r\n\r\n4. The bank reads all three credentials, opens the business account and issues an IBAN attestation.\r\n\r\n5. From then on, supplier onboarding is trivial: a procurement platform requests KVK, tax, VAT, IBAN and insurance credentials in a single flow (OpenID4VP). The supplier shares them in one tap from the Business Wallet, and the platform verifies the issuers' signatures in real time.\r\n\r\n6. Result: one source document, multiple readers, instant trust — six weeks becomes one day, and onboarding checks run without PDFs, email or manual review.",
+                    "country": "NL"
+                },
                 {
                     "id": "in-person-pid-issuance-at-the-municipal-desk-gemeente-rotterdam-IbU5RQ",
                     "sector": "public_sector",
