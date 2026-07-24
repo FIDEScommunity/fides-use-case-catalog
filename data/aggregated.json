@@ -1,10 +1,196 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-07-22T09:55:43.256Z",
+  "lastUpdated": "2026-07-24T10:15:06.385Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 20,
+  "count": 21,
   "useCases": [
+    {
+      "id": "e-invoicing-fides-labs-small-scale-pilot-ZGdw7E",
+      "sector": "finance",
+      "title": "e-Invoicing — FIDES Labs Small Scale Pilot",
+      "summary": "Invoice fraud, IBAN manipulation and mismatched VAT numbers cost European businesses billions every year. Today's e-invoicing is only half-digital: invoices move as PDFs or XML, but the sender's identity is never cryptographically proven.\r\n\r\nThe FIDES Labs e-Invoicing pilot — with KVK, the Belastingdienst, Unifiedpost and Visma Yuki — was delivered as three projects. In projects 1 and 3, Credenco and Sphereon worked side by side, each with their own Business Wallet, proving true cross-vendor interoperability. Project 2, the FIDES Blue Pages — a decentralised catalogue of verifiable business identity — was delivered by Credenco.\r\n\r\nKVK and the Belastingdienst issue company credentials into the wallets, and every invoice travels wallet-to-wallet as an e-Invoice credential, cryptographically bound to the sender's KVK, VAT and IBAN. Receivers validate all three in a single check against EBSI — invoices enter the ERP pre-verified.",
+      "organizationName": "Credenco",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-24T11:14:52+01:00",
+      "publishedAt": "2026-07-24T11:14:52+01:00",
+      "tags": [
+        "e-invoicing",
+        "invoice fraud",
+        "business identity",
+        "KVK",
+        "VAT",
+        "IBAN",
+        "EBSI",
+        "blue pages",
+        "peppol",
+        "B2B finance"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "sphereon-business-wallet",
+            "labelRaw": "Sphereon Business Wallet",
+            "url": "https://sphereon.com/solutions/sphereon-business-wallet/",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Banqup",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Belastingdienst",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "KVK",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "CoC number & RSIN",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "VAT number & tax address",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "IBAN",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "e-Invoice credential",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:credenco",
+            "labelRaw": "Credenco",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bd",
+            "labelRaw": "Belastingdienst",
+            "url": "https://www.belastingdienst.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:fides",
+            "labelRaw": "FIDES Labs",
+            "url": "https://fides.community",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:banqup",
+            "labelRaw": "Banqup",
+            "url": "https://www.banqup.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Visma Yuki",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:kvk",
+            "labelRaw": "Kamer van Koophandel",
+            "url": "https://www.kvk.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:sphereon",
+            "labelRaw": "Sphereon",
+            "url": "https://sphereon.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Banqup",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Visma Yuki",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "DIIP v5",
+        "EUDI Wallet ARF"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/fides-cover-einvoicing.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/fides-cover-einvoicing.jpg",
+      "moreInfoUrl": "https://www.credenco.com/case/einvoicing",
+      "userJourney": "1. Onboarding — KVK issues the Chamber of Commerce number and RSIN, the Belastingdienst the VAT number and tax address, as verifiable credentials into each company's Credenco Business Wallet (OpenID4VCI). All parties are registered on the EBSI trust registry.\r\n\r\n2. Sending — from the supplier's ERP, the invoice is passed to the Business Wallet, which wraps it in an e-Invoice credential: signed and linked to the sender's KVK, VAT and IBAN credentials, with optional evidence documents.\r\n\r\n3. Transport — the Send Invoice API delivers the credential straight into the receiver's wallet inbox; OpenID4VP authorises the transfer. No shared mailboxes, no attachments.\r\n\r\n4. Receiving — the receiver's wallet verifies sender identity, VAT number and IBAN against trusted issuers on EBSI. The invoice enters the ERP pre-verified, ready for straight-through processing.\r\n\r\n5. Discovery — via FIDES Blue Pages (delivered by Credenco as project 2), organisations look up verifiable counterparty data, read from each entity's DID. In projects 1 and 3, Credenco and Sphereon Business Wallets exchanged credentials interoperably.",
+      "country": "NL"
+    },
     {
       "id": "spherity-trusted-ai-KMVBEw",
       "sector": "mobility",
