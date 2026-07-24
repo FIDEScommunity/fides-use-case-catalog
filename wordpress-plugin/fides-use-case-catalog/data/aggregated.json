@@ -1,10 +1,57 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-07-24T15:27:49.725Z",
+  "lastUpdated": "2026-07-24T15:48:56.949Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 23,
+  "count": 24,
   "useCases": [
+    {
+      "id": "transpareo-product-truth-anyone-can-verify-ckZpOe",
+      "sector": "supply_chain",
+      "title": "Transpareo - product truth anyone can verify",
+      "summary": "Every product makes claims - recycled, sustainable, ethically sourced, repairable - and today a shopper has no way to check any of them. Under the EU's new Digital Product Passport rules, every product will soon carry a digital record reachable from a QR code. But a record you cannot verify is just marketing with extra steps.\r\n\r\nTranspareo makes that record a verifiable credential. Each product passport is sealed with a W3C Data Integrity proof over Ed25519 and bound to the maker's own domain through a did:web identifier. There is no wallet app to install - the passport carries itself. Scan the QR code and our open-source viewer, the Transpareo Time Machine, verifies the signature right in the browser, offline, against nothing but a public key. You are not trusting the brand, and you are not trusting us. You are checking the maths.\r\n\r\nThe impact is social: shoppers can tell real sustainability claims from marketing, repairers and recyclers get data they can trust, and regulators verify independently. Every version is kept in a foundation-owned write-once archive, so the record outlives its issuer. Live demo: https://time-machine.transpareo.com/",
+      "organizationName": "Transpareo AG",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-07-24T16:48:32+01:00",
+      "publishedAt": "2026-07-24T16:48:32+01:00",
+      "tags": [
+        "digital product passport",
+        "verifiable credentials",
+        "did:web",
+        "circular economy",
+        "sustainability",
+        "ESPR",
+        "supply chain transparency",
+        "consumer trust"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Transpareo AG",
+            "url": "https://transpareo.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "moreInfoUrl": "https://github.com/transpareo/transpareo-time-machine",
+      "userJourney": "1. A maker (manufacturer or importer) creates a product passport in Transpareo and publishes it. Transpareo seals that version as a verifiable credential: a W3C Data Integrity proof over Ed25519, signed with a key bound to the maker's own domain via a did:web identifier. A GS1 Digital Link QR code on the product points to the passport.\r\n\r\n2. A shopper scans the QR code with their phone. Nothing is installed, no wallet, no account: the link opens our open-source viewer, the Transpareo Time Machine, in the browser.\r\n\r\n3. The viewer fetches the passport and its proof, resolves the maker's public key from the did:web identifier, and verifies the signature client-side, offline, against that key. A pass means the record is authentic and unaltered, and the shopper can verify every earlier version too.\r\n\r\n4. A repairer or recycler later scans the same code to read repair and material data, and verifies it the same way.\r\n\r\n5. A market-surveillance authority verifies the same passport independently through a dedicated Authority API, which logs an audit entry on every access. Each party checks from its own side, trusting the maths rather than the maker or Transpareo.",
+      "country": "CH"
+    },
     {
       "id": "samsung-sds-integrated-digital-wallet-Kcr9qB",
       "sector": "finance",
