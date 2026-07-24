@@ -1,10 +1,142 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-07-24T10:15:06.385Z",
+  "lastUpdated": "2026-07-24T10:16:55.110Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 21,
+  "count": 22,
   "useCases": [
+    {
+      "id": "digital-product-passport-applying-the-cirpass-structure-and-danube-business-wallet-gN4juB",
+      "sector": "supply_chain",
+      "title": "Digital Product Passport Applying the CIRPASS Structure and Danube Business Wallet",
+      "summary": "Textile, fashion, and various other manufacturers are using KSPTS (K4Security Passport Traceability System, k4-dpp.com), the flagship Digital Product Passport (DPP) platform of K4Security, to strengthen regulatory compliance and supply chain transparency. KSPTS has successfully completed a Proof of Concept (PoC) for the fashion brand Harlie-K, and has issued DPP samples and completed verification for a wide range of product categories across multiple companies.\r\nEach product registered on the KSPTS platform has its standardized data — including raw material sourcing origin, material composition, Carbon Footprint (CFP), regulatory certification documents, and Lifecycle information — linked to a digital passport. This solution supports machine-readable, transparent regulatory compliance reporting, enabling companies to track the environmental impact and product information across their entire supply chain in real time. Through KSPTS, K4Security provides an optimal solution that allows companies in the European Union (EU) to proactively respond to the Ecodesign for Sustainable Products Regulation (ESPR) and Digital Product Passport (DPP) mandatory requirements for sustainable products.",
+      "organizationName": "K4-Security",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-07-24T11:16:36+01:00",
+      "publishedAt": "2026-07-24T11:16:36+01:00",
+      "tags": [
+        "DPP",
+        "supply chain",
+        "sustainability",
+        "ESPR",
+        "traceability"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "ksid-wallet",
+            "labelRaw": "KSID Wallet",
+            "url": "https://www.k4-security.com/solution#ssi",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": null,
+            "labelRaw": "Danube Business Wallet",
+            "url": "https://danubetech.com/tech/danube-business-wallet",
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "K4-SECURITY",
+            "url": "https://www.k4-security.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Samsung SDS",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:uncefact:dpp:vcdm-2-0",
+            "labelRaw": "Digital Product Passport",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:uncefact:dfr:vcdm-2-0",
+            "labelRaw": "Digital Facility Record",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:uncefact:dte:vcdm-2-0",
+            "labelRaw": "Digital Traceability Event",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:uncefact:dia:vcdm-2-0",
+            "labelRaw": "Digital Identity Anchor",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:uncefact:dcc:vcdm-2-0",
+            "labelRaw": "Conformity Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:k4security",
+            "labelRaw": "K4-Security",
+            "url": "https://www.k4-security.com/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/2026-07-24-17-36-49.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/2026-07-24-17-36-49.png",
+      "videos": [
+        {
+          "url": "https://vimeo.com/1212593813?fl=ip&fe=ec",
+          "provider": "vimeo"
+        }
+      ],
+      "video": {
+        "url": "https://vimeo.com/1212593813?fl=ip&fe=ec",
+        "provider": "vimeo"
+      },
+      "moreInfoUrl": "http://k4-dpp.com/",
+      "userJourney": "[Overall process]\r\n① Onboarding (DID/Wallet) → ② Tier-specific VC issuance → ③ Attaching DPP·QR code → ④ Verification → ⑤ Consumer lookup\r\n\r\n1. Onboarding\r\n   - As a DPP Issuer, the required DID is pre-registered. When registering the wallet, UNTP VC signing is requested from the Wallet.\r\n\r\n2. Role issuance\r\n   - A server-side wallet is issued to the Actor, and a Role VC is issued.\r\n   - Through the Role VC, access rights to non-public data can be proven.\r\n\r\n3. UNTP VC (DPP) issuance\r\n   - Based on the product's raw data and materials, a source verification VC is generated.\r\n   - Based on the source verification VC, a UNTP DPP is issued.\r\n   - The DPP is published via the product's DID Document.\r\n\r\n4. DPP lookup\r\n   - Data is accessed and verified through the product's DID.\r\n   - When accessing linked non-public data (DCC or DTE, etc.) via the idr, authentication is performed.\r\n   - Access rights are verified through submission of a RoleVC issued by ID/PW or REO.\r\n   - Once access rights are confirmed, the non-public data can be viewed.",
+      "country": "KR"
+    },
     {
       "id": "e-invoicing-fides-labs-small-scale-pilot-ZGdw7E",
       "sector": "finance",
