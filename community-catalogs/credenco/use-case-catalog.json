@@ -7,13 +7,13 @@
     {
       "id": "e-invoicing-fides-labs-small-scale-pilot-ZGdw7E",
       "sector": "finance",
-      "title": "e-Invoicing Small Scale Pilot",
+      "title": "Direct e-Invoicing Small Scale Pilot",
       "summary": "Invoice fraud, IBAN manipulation and mismatched VAT numbers cost European businesses billions every year. Today's e-invoicing is only half-digital: invoices move as PDFs or XML, but the sender's identity is never cryptographically proven.\r\n\r\nThe e-Invoicing pilot coordinated by FIDES Labs — with KVK, the Belastingdienst, Unifiedpost and Visma Yuki — was delivered as three projects. In projects 1 and 3, Credenco and Sphereon worked side by side, each with their own Business Wallet, proving true cross-vendor interoperability. Project 2, the FIDES Blue Pages — a decentralised catalogue of verifiable business identity — was delivered by Credenco.\r\n\r\nKVK and the Belastingdienst issue company credentials into the wallets, and every invoice travels wallet-to-wallet as an e-Invoice credential, cryptographically bound to the sender's KVK, VAT and IBAN. Receivers validate all three in a single check against EBSI — invoices enter the ERP pre-verified.",
       "organizationName": "Credenco",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-25T06:50:40+01:00",
-      "publishedAt": "2026-07-24T11:14:52+01:00",
+      "updatedAt": "2026-07-25T06:52:19+01:00",
+      "publishedAt": "2026-07-25T06:52:19+01:00",
       "tags": [
         "e-invoicing",
         "invoice fraud",
