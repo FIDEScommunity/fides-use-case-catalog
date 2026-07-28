@@ -100,6 +100,18 @@
   };
   const LIST_BREAKPOINT = 1024;
   let viewMode = localStorage.getItem("fides-use-case-view") || "grid";
+  let mobileFiltersController = null;
+  function getMobileFilters() {
+    if (mobileFiltersController) return mobileFiltersController;
+    if (!window.FidesCatalogUI || typeof window.FidesCatalogUI.createMobileFiltersController !== "function") {
+      return null;
+    }
+    mobileFiltersController = window.FidesCatalogUI.createMobileFiltersController({
+      root: () => root,
+      breakpoint: LIST_BREAKPOINT
+    });
+    return mobileFiltersController;
+  }
 
   const icons = {
     search:
@@ -1593,7 +1605,12 @@
     const existing = document.getElementById("fides-modal-overlay");
     if (existing) existing.remove();
     document.removeEventListener("keydown", onUseCaseModalKeydown);
-    if (!root.querySelector(".fides-sidebar.mobile-open")) {
+    const ctrl = getMobileFilters();
+    if (ctrl) {
+      ctrl.syncScrollLock();
+    } else if (window.FidesCatalogUI && typeof window.FidesCatalogUI.syncCatalogBodyScrollLock === "function") {
+      window.FidesCatalogUI.syncCatalogBodyScrollLock({ root });
+    } else {
       document.body.style.overflow = "";
     }
   }
@@ -1753,6 +1770,39 @@
   function effectiveView() {
     return window.innerWidth < LIST_BREAKPOINT ? "grid" : viewMode;
   }
+
+  function updateFilterChrome() {
+    const count = getActiveFilterCount();
+    root.querySelectorAll(".fides-filter-count").forEach((el) => {
+      el.textContent = String(count || 0);
+      el.classList.toggle("hidden", count === 0);
+    });
+    const clearBtn = root.querySelector("#fides-clear");
+    if (clearBtn) clearBtn.classList.toggle("hidden", count === 0);
+    root.querySelectorAll(".fides-filter-group[data-filter-group]").forEach((group) => {
+      const key = group.dataset.filterGroup;
+      const hasActive = Array.isArray(filters[key]) && filters[key].length > 0;
+      group.classList.toggle("has-active", hasActive);
+    });
+  }
+
+  let lastEffectiveView = effectiveView();
+  window.addEventListener(
+    "resize",
+    debounce(() => {
+      getMobileFilters()?.onLeavingMobileViewport();
+      const currentView = effectiveView();
+      if (currentView === lastEffectiveView) return;
+      lastEffectiveView = currentView;
+      const viewToggle = root.querySelector(".fides-view-toggle");
+      if (viewToggle) {
+        viewToggle.classList.toggle("hidden", window.innerWidth < LIST_BREAKPOINT);
+      }
+      if (root.querySelector(".fides-results")) {
+        renderResultsOnly();
+      }
+    }, 150)
+  );
 
   function uniqueSorted(items, keyFn) {
     return [...new Set(items.map(keyFn).flat().filter(Boolean))].sort((a, b) =>
@@ -2067,6 +2117,7 @@
   }
 
   function render() {
+    const wasOpen = getMobileFilters()?.captureOpenState() ?? false;
     const filtered = getFilteredUseCases();
     const metrics = computeMetrics(filtered);
     root.innerHTML = `
@@ -2122,6 +2173,7 @@
     `;
 
     bindEvents();
+    getMobileFilters()?.applyAfterRender(wasOpen);
   }
 
   function linkedWalletSearchTerms(item) {
@@ -2256,18 +2308,12 @@
         } else {
           filters[group] = filters[group].filter((v) => v !== value);
         }
-        render();
+        updateFilterChrome();
+        renderResultsOnly();
       });
     });
 
-    root.querySelectorAll(".fides-filter-label-toggle").forEach((toggle) => {
-      toggle.addEventListener("click", () => {
-        const group = toggle.closest(".fides-filter-group")?.dataset.filterGroup;
-        if (!group || !(group in filterGroupState)) return;
-        filterGroupState[group] = !filterGroupState[group];
-        render();
-      });
-    });
+    getMobileFilters()?.bindCollapsibleToggles(filterGroupState);
 
     root.querySelectorAll(".fides-view-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -2284,36 +2330,7 @@
       });
     });
 
-    window.addEventListener(
-      "resize",
-      debounce(() => {
-        render();
-      }, 150)
-    );
-
-    const mobileToggle = root.querySelector("#fides-mobile-filter-toggle");
-    const sidebar = root.querySelector(".fides-sidebar");
-    const sidebarClose = root.querySelector("#fides-sidebar-close");
-    if (mobileToggle && sidebar) {
-      mobileToggle.addEventListener("click", () => {
-        sidebar.classList.add("mobile-open");
-        document.body.style.overflow = "hidden";
-      });
-    }
-    if (sidebarClose && sidebar) {
-      sidebarClose.addEventListener("click", () => {
-        sidebar.classList.remove("mobile-open");
-        document.body.style.overflow = "";
-      });
-    }
-    if (sidebar) {
-      sidebar.addEventListener("click", (e) => {
-        if (e.target === sidebar && sidebar.classList.contains("mobile-open")) {
-          sidebar.classList.remove("mobile-open");
-          document.body.style.overflow = "";
-        }
-      });
-    }
+    getMobileFilters()?.bindShell();
 
     bindUseCaseCardEvents();
     initVocabularyInfo(root);

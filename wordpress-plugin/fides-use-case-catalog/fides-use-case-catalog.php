@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.9.0
+ * Version: 0.9.1
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.9.0');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.9.1');
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
 define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
@@ -1658,11 +1658,23 @@ function fides_use_case_catalog_rest_upload_card_image(WP_REST_Request $request)
 }
 
 function fides_use_case_catalog_enqueue_assets(): void {
+    $plugin_dir = FIDES_USE_CASE_CATALOG_PATH;
+    $ui_lib_css_path = $plugin_dir . 'assets/lib/fides-catalog-ui.css';
+    $ui_lib_js_path = $plugin_dir . 'assets/lib/fides-catalog-ui.js';
+    $ui_lib_css_version = file_exists($ui_lib_css_path) ? filemtime($ui_lib_css_path) : FIDES_USE_CASE_CATALOG_VERSION;
+    $ui_lib_js_version = file_exists($ui_lib_js_path) ? filemtime($ui_lib_js_path) : FIDES_USE_CASE_CATALOG_VERSION;
+
     wp_register_style(
         'fides-use-case-catalog-style',
         FIDES_USE_CASE_CATALOG_URL . 'assets/style.css',
         array(),
         FIDES_USE_CASE_CATALOG_VERSION
+    );
+    wp_register_style(
+        'fides-use-case-catalog-ui-lib',
+        FIDES_USE_CASE_CATALOG_URL . 'assets/lib/fides-catalog-ui.css',
+        array(),
+        $ui_lib_css_version
     );
 
     wp_register_script(
@@ -1674,9 +1686,16 @@ function fides_use_case_catalog_enqueue_assets(): void {
     );
 
     wp_register_script(
+        'fides-use-case-catalog-ui-lib',
+        FIDES_USE_CASE_CATALOG_URL . 'assets/lib/fides-catalog-ui.js',
+        array(),
+        $ui_lib_js_version,
+        true
+    );
+    wp_register_script(
         'fides-use-case-catalog-list',
         FIDES_USE_CASE_CATALOG_URL . 'assets/usecase-catalog.js',
-        array(),
+        array('fides-use-case-catalog-ui-lib'),
         FIDES_USE_CASE_CATALOG_VERSION,
         true
     );
@@ -1782,6 +1801,7 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
     $columns = in_array($atts['columns'], array('2', '3', '4'), true) ? $atts['columns'] : '3';
 
     wp_enqueue_style('fides-use-case-catalog-style');
+    wp_enqueue_style('fides-use-case-catalog-ui-lib');
     wp_enqueue_script('fides-use-case-catalog-list');
 
     $current_request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
