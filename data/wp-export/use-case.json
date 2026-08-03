@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-03T13:01:16+00:00",
+    "generatedAt": "2026-08-03T13:02:04+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -16,7 +16,7 @@
                     "organizationName": "Air New Zealand",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-06-11T09:01:08+01:00",
+                    "updatedAt": "2026-08-03T14:02:04+01:00",
                     "publishedAt": "2026-06-10T06:08:16+01:00",
                     "tags": [
                         "travel",
@@ -112,7 +112,7 @@
                                 "walletType": null
                             },
                             {
-                                "refId": "org-hong-kong-international-airport",
+                                "refId": "org:hong-kong-international-airport",
                                 "labelRaw": "Hong Kong International Airport",
                                 "url": null,
                                 "source": "catalog",
