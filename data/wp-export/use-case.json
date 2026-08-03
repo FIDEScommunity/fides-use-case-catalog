@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-03T14:26:30+00:00",
+    "generatedAt": "2026-08-03T14:27:11+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -214,7 +214,7 @@
         },
         {
             "orgSlug": "berliner-verkehrsbetriebe-bvg",
-            "orgId": "org:berliner-verkehrsbetriebe-bvg",
+            "orgId": "org:bvg",
             "orgName": "Berliner Verkehrsbetriebe (BVG)",
             "useCases": [
                 {
@@ -225,7 +225,7 @@
                     "organizationName": "Berliner Verkehrsbetriebe (BVG)",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-07-15T15:38:36+01:00",
+                    "updatedAt": "2026-08-03T15:27:11+01:00",
                     "publishedAt": "2026-07-15T15:38:36+01:00",
                     "tags": [
                         "Digital Product Passport",
@@ -247,10 +247,10 @@
                         "credentials": [],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:bvg",
                                 "labelRaw": "Berliner Verkehrsbetriebe (BVG)",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
