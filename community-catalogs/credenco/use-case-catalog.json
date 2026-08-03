@@ -198,7 +198,7 @@
       "organizationName": "Credenco",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-21T12:43:46+01:00",
+      "updatedAt": "2026-08-03T15:22:05+01:00",
       "publishedAt": "2026-07-21T12:43:46+01:00",
       "tags": [
         "identity",
@@ -251,10 +251,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:justis",
             "labelRaw": "Justis (Ministery of Justice and Security)",
             "url": "https://www.justis.nl/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
