@@ -1,0 +1,245 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:bd",
+  "orgName": "Kamer van Koophandel",
+  "useCases": [
+    {
+      "id": "green-lane-verified-wallet-based-company-formation-and-registration-VUXbMJ",
+      "sector": "public_sector",
+      "title": "Green Lane Verified: Wallet-Based Company Formation and Registration",
+      "summary": "Green Lane is a voluntary digital route for registering a sole proprietorship with KVK or incorporating a legal entity, such as a BV, through a civil-law notary.\nEntrepreneurs retrieve verified identity and evidence data from authoritative sources into an eIDAS-compliant personal wallet and share only the data needed for a specific purpose. This reduces repeated document requests, manual checks and corrections, while giving entrepreneurs more control over their data.\nKVK and notaries remain responsible for all legal, professional and risk-based assessments and may request additional information. Green Lane does not guarantee approval, registration or trustworthiness. Its status only confirms that an agreed data set was verifiably supplied and met defined quality criteria. Verified business data may later be reused through a business wallet for KYC, onboarding and other business relationships.\n\nSubmitted on behalf of the Green Lane collaboration. Pre-pilot fase.",
+      "organizationName": "Kamer van Koophandel",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-03T12:54:37+01:00",
+      "publishedAt": "2026-08-03T12:54:37+01:00",
+      "tags": [
+        "Trade",
+        "Public sector",
+        "Finance",
+        "Digital identity",
+        "KYC",
+        "KYB"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "igrant-data-wallet",
+            "labelRaw": "Data Wallet by iGrant.io",
+            "url": "https://igrant.io/datawallet",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "heidi-wallet",
+            "labelRaw": "Heidi Wallet App",
+            "url": "https://ubique.ch",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "credenco-wallet",
+            "labelRaw": "Credenco Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Edge Wallet",
+            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "sphereon-business-wallet",
+            "labelRaw": "Sphereon Business Wallet",
+            "url": "https://sphereon.com/solutions/sphereon-business-wallet/",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:fides:mijnoverheid-issuer:test",
+            "labelRaw": "MijnOverheid issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:fides:credential-issuer:test",
+            "labelRaw": "FIDES Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:credenco:kvk:test",
+            "labelRaw": "KVK Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:credenco:belastingdienst:test",
+            "labelRaw": "Belastingdienst Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:fides:bri:sd-jwt-vc",
+            "labelRaw": "BRI Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:brp:sd-jwt-vc",
+            "labelRaw": "BRP Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:pid:sd-jwt-vc",
+            "labelRaw": "PID Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:green-lane:sd-jwt-vc",
+            "labelRaw": "Green Lane Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:company-roles:sd-jwt-vc",
+            "labelRaw": "Company Roles Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:iban:sd-jwt-vc",
+            "labelRaw": "IBAN Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:lpid:sd-jwt-vc",
+            "labelRaw": "LPID Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:contact-details:sd-jwt-vc",
+            "labelRaw": "Contact Details",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:bd",
+            "labelRaw": "Belastingdienst",
+            "url": "https://www.belastingdienst.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "RIEC Amsterdam-Amstelland",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Nederlandse Vereniging van Banken",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:fides",
+            "labelRaw": "FIDES Labs",
+            "url": "https://fides.community",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:kvk",
+            "labelRaw": "Kamer van Koophandel",
+            "url": "https://www.kvk.nl",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "kvk-frontoffice-sandbox",
+            "labelRaw": "Kamer van Koophandel Frontoffice",
+            "url": "https://kvk.fides.community/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "mijnoverheid-sandbox",
+            "labelRaw": "MijnOverheid",
+            "url": "https://mijnoverheid.fides.community/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "hak-rein-vos-notarissen-sandbox",
+            "labelRaw": "Hak & Rein Vos Notarissen",
+            "url": "https://hrv.fides.community/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "DIIP v5"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2025/12/mijnoverheid-scaled.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2025/12/mijnoverheid-scaled.png",
+      "userJourney": "The entrepreneur voluntarily chooses the Green Lane when registering a sole proprietorship with KVK or incorporating a legal entity through a civil-law notary.\nVerified personal data is retrieved into a digital wallet, while any missing business information is added by the entrepreneur. The wallet shows what data is requested, why it is needed, who receives it and whether it is verified or self-declared.\nAfter consent, KVK or the notary receives and validates the data, while remaining responsible for the legal and risk-based assessment. Missing or conflicting information may require additional review.\nOnce approved, the business is registered and a digital Green Lane statement may be issued. The data and status must be kept up to date.",
+      "country": "NL"
+    }
+  ]
+}
