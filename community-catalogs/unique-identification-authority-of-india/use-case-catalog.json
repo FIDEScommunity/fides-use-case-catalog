@@ -406,11 +406,11 @@
       "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau",
       "sector": "mobility",
       "title": "Swiggy: Delivery Agent and Customer Identity Verification",
-      "summary": "Swiggy (Think Ubereats, Just Eat, Wolt for an european comparison) is one of India's largest on-demand convenience platforms, serving 120 million customers across hundreds of cities through its food delivery, quick commerce, grocery, and logistics services.\n\nSwiggy uses the Aadhaar App to enable secure, consent-based identity verification for both delivery partners and customers. Delivery agents can instantly prove their identity during onboarding, periodic re-verification, or when collecting high-value or age-restricted orders. Similarly, customers can verify their identity, where required, before receiving sensitive deliveries. The Aadhaar App allows users to share only the necessary information through digitally signed verifiable credentials, eliminating the need for physical documents or photocopies. This ensures faster onboarding, reduces fraud and impersonation risks, improves trust between all parties, and delivers a seamless, privacy-preserving verification experience.",
+      "summary": "Swiggy (Think Ubereats, Just Eat, Wolt for an european comparison) is one of India's largest on-demand convenience platforms, serving 120 million customers across hundreds of cities through its food delivery, quick commerce, grocery, and logistics services.\r\n\r\nSwiggy uses the Aadhaar App to enable secure, consent-based identity verification for both delivery partners and customers. Delivery agents can instantly prove their identity during onboarding, periodic re-verification, or when collecting high-value or age-restricted orders. Similarly, customers can verify their identity, where required, before receiving sensitive deliveries. The Aadhaar App allows users to share only the necessary information through digitally signed verifiable credentials, eliminating the need for physical documents or photocopies. This ensures faster onboarding, reduces fraud and impersonation risks, improves trust between all parties, and delivers a seamless, privacy-preserving verification experience.",
       "organizationName": "Unique Identification Authority of India",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-16T13:54:40+01:00",
+      "updatedAt": "2026-08-03T15:29:35+01:00",
       "publishedAt": "2026-07-16T13:54:40+01:00",
       "tags": [
         "gig economy",
@@ -455,10 +455,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:swiggy",
             "labelRaw": "Swiggy",
             "url": "https://www.swiggy.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -489,7 +489,7 @@
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png"
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
-      "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\n\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
+      "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\r\n\r\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
       "country": "IN"
     }
   ]
