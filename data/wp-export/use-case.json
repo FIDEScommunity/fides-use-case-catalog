@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-03T11:54:38+00:00",
+    "generatedAt": "2026-08-03T13:01:16+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -2058,7 +2058,7 @@
                     "organizationName": "National ID Program",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-07-15T14:36:36+01:00",
+                    "updatedAt": "2026-08-03T14:01:16+01:00",
                     "publishedAt": "2026-07-15T14:36:36+01:00",
                     "tags": [
                         "credential",
@@ -2078,10 +2078,10 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:ethiopia",
                                 "labelRaw": "National ID Program",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
