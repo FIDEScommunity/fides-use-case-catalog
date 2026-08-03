@@ -108,7 +108,7 @@
             "walletType": null
           },
           {
-            "refId": "org:hong-kong-international-airport",
+            "refId": "org-hong-kong-international-airport",
             "labelRaw": "Hong Kong International Airport",
             "url": null,
             "source": "catalog",
