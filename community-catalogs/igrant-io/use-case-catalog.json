@@ -131,10 +131,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:uaegean",
             "labelRaw": "UAegean",
             "url": "https://www.aegean.gr/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
