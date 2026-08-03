@@ -12,7 +12,7 @@
       "organizationName": "Sphereon",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-03T15:23:22+01:00",
+      "updatedAt": "2026-08-03T15:25:11+01:00",
       "publishedAt": "2026-07-20T19:46:18+01:00",
       "tags": [
         "machine safety",
@@ -51,10 +51,10 @@
         ],
         "issuers": [
           {
-            "refId": null,
+            "refId": "org:kw1c",
             "labelRaw": "Koning Willem I College (KW1C)",
             "url": "https://www.kw1c.nl/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
