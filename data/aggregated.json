@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-03T14:21:03.899Z",
+  "lastUpdated": "2026-08-03T14:21:50.073Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 25,
   "useCases": [
@@ -378,11 +378,11 @@
       "id": "e-invoicing-fides-labs-small-scale-pilot-ZGdw7E",
       "sector": "finance",
       "title": "Direct e-Invoicing Small Scale Pilot",
-      "summary": "Invoice fraud, IBAN manipulation and mismatched VAT numbers cost European businesses billions every year. Today's e-invoicing is only half-digital: invoices move as PDFs or XML, but the sender's identity is never cryptographically proven.\n\nThe e-Invoicing pilot coordinated by FIDES Labs — with KVK, the Belastingdienst, Unifiedpost and Visma Yuki — was delivered as three projects. In projects 1 and 3, Credenco and Sphereon worked side by side, each with their own Business Wallet, proving true cross-vendor interoperability. Project 2, the FIDES Blue Pages — a decentralised catalogue of verifiable business identity — was delivered by Credenco.\n\nKVK and the Belastingdienst issue company credentials into the wallets, and every invoice travels wallet-to-wallet as an e-Invoice credential, cryptographically bound to the sender's KVK, VAT and IBAN. Receivers validate all three in a single check against EBSI — invoices enter the ERP pre-verified.",
+      "summary": "Invoice fraud, IBAN manipulation and mismatched VAT numbers cost European businesses billions every year. Today's e-invoicing is only half-digital: invoices move as PDFs or XML, but the sender's identity is never cryptographically proven.\r\n\r\nThe e-Invoicing pilot coordinated by FIDES Labs — with KVK, the Belastingdienst, Unifiedpost and Visma Yuki — was delivered as three projects. In projects 1 and 3, Credenco and Sphereon worked side by side, each with their own Business Wallet, proving true cross-vendor interoperability. Project 2, the FIDES Blue Pages — a decentralised catalogue of verifiable business identity — was delivered by Credenco.\r\n\r\nKVK and the Belastingdienst issue company credentials into the wallets, and every invoice travels wallet-to-wallet as an e-Invoice credential, cryptographically bound to the sender's KVK, VAT and IBAN. Receivers validate all three in a single check against EBSI — invoices enter the ERP pre-verified.",
       "organizationName": "Credenco",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-07-30T19:37:46+01:00",
+      "updatedAt": "2026-08-03T15:21:26+01:00",
       "publishedAt": "2026-07-30T19:37:46+01:00",
       "tags": [
         "e-invoicing",
@@ -497,10 +497,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:visma-yuki",
             "labelRaw": "Visma Yuki",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
@@ -557,7 +557,7 @@
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/07/fides-cover-einvoicing.jpg",
       "moreInfoUrl": "https://www.credenco.com/case/einvoicing",
-      "userJourney": "1. Onboarding — KVK issues the Chamber of Commerce number and RSIN, the Belastingdienst the VAT number and tax address, as verifiable credentials into each company's Credenco Business Wallet (OpenID4VCI). All parties are registered on the EBSI trust registry.\n\n2. Sending — from the supplier's ERP, the invoice is passed to the Business Wallet, which wraps it in an e-Invoice credential: signed and linked to the sender's KVK, VAT and IBAN credentials, with optional evidence documents.\n\n3. Transport — the Send Invoice API delivers the credential straight into the receiver's wallet inbox; OpenID4VP authorises the transfer. No shared mailboxes, no attachments.\n\n4. Receiving — the receiver's wallet verifies sender identity, VAT number and IBAN against trusted issuers on EBSI. The invoice enters the ERP pre-verified, ready for straight-through processing.\n\n5. Discovery — via FIDES Blue Pages (delivered by Credenco as project 2), organisations look up verifiable counterparty data, read from each entity's DID. In projects 1 and 3, Credenco and Sphereon Business Wallets exchanged credentials interoperably.",
+      "userJourney": "1. Onboarding — KVK issues the Chamber of Commerce number and RSIN, the Belastingdienst the VAT number and tax address, as verifiable credentials into each company's Credenco Business Wallet (OpenID4VCI). All parties are registered on the EBSI trust registry.\r\n\r\n2. Sending — from the supplier's ERP, the invoice is passed to the Business Wallet, which wraps it in an e-Invoice credential: signed and linked to the sender's KVK, VAT and IBAN credentials, with optional evidence documents.\r\n\r\n3. Transport — the Send Invoice API delivers the credential straight into the receiver's wallet inbox; OpenID4VP authorises the transfer. No shared mailboxes, no attachments.\r\n\r\n4. Receiving — the receiver's wallet verifies sender identity, VAT number and IBAN against trusted issuers on EBSI. The invoice enters the ERP pre-verified, ready for straight-through processing.\r\n\r\n5. Discovery — via FIDES Blue Pages (delivered by Credenco as project 2), organisations look up verifiable counterparty data, read from each entity's DID. In projects 1 and 3, Credenco and Sphereon Business Wallets exchanged credentials interoperably.",
       "country": "NL"
     },
     {
