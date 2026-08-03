@@ -32,7 +32,7 @@
             "walletType": null
           },
           {
-            "refId": "org:ethiopia",
+            "refId": null,
             "labelRaw": "National ID Program",
             "url": null,
             "source": "manual",
