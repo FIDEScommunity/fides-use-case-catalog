@@ -119,7 +119,7 @@
       "organizationName": "Unique Identification Authority of India",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-16T16:33:06+01:00",
+      "updatedAt": "2026-08-03T15:29:13+01:00",
       "publishedAt": "2026-07-16T16:33:06+01:00",
       "tags": [
         "Electric Mobility",
@@ -163,10 +163,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:hala-mobility",
             "labelRaw": "Hala Mobility",
             "url": "https://halamobility.in/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -305,11 +305,11 @@
       "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
       "sector": "digital",
       "title": "Arattai: Verified Social Media Profiles",
-      "summary": "Arattai is an Indian instant messaging and social networking platform (Like WhatsApp and Signal) with 8 million users that enables users to connect, communicate, and build trusted online communities. By integrating with the Aadhaar App, Arattai can offer users the option to verify their identity and receive a Verified Profile badge.\n\nUsers can securely share a digitally signed verifiable credential from the Aadhaar App with their explicit consent, allowing Arattai to confirm that the profile belongs to a real individual without storing or exposing unnecessary personal information. This helps reduce fake accounts, impersonation, bots, and identity fraud while enabling users to build credibility and trust on the platform. The verification is privacy-preserving, paperless, and based on cryptographically verifiable digital credentials, giving users greater control over their identity while fostering a safer and more authentic social media experience.",
+      "summary": "Arattai is an Indian instant messaging and social networking platform (Like WhatsApp and Signal) with 8 million users that enables users to connect, communicate, and build trusted online communities. By integrating with the Aadhaar App, Arattai can offer users the option to verify their identity and receive a Verified Profile badge.\r\n\r\nUsers can securely share a digitally signed verifiable credential from the Aadhaar App with their explicit consent, allowing Arattai to confirm that the profile belongs to a real individual without storing or exposing unnecessary personal information. This helps reduce fake accounts, impersonation, bots, and identity fraud while enabling users to build credibility and trust on the platform. The verification is privacy-preserving, paperless, and based on cryptographically verifiable digital credentials, giving users greater control over their identity while fostering a safer and more authentic social media experience.",
       "organizationName": "Unique Identification Authority of India",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-16T14:51:06+01:00",
+      "updatedAt": "2026-08-03T15:28:51+01:00",
       "publishedAt": "2026-07-16T14:51:06+01:00",
       "tags": [
         "social media",
@@ -354,10 +354,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:arattai",
             "labelRaw": "Arattai",
             "url": "http://Arattai.in",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -399,7 +399,7 @@
         "provider": "youtube"
       },
       "moreInfoUrl": "https://www.arattai.in/",
-      "userJourney": "A user downloads Arattai, creates a profile, and can immediately access the platform's messaging and social features without completing identity verification.\n\nIf the user chooses to verify their profile, Arattai initiates an app-to-app verification request to the Aadhaar App or another compatible digital identity wallet, such as Google Wallet. The user reviews the identity request and provides consent to share the required credential.\n\nThe wallet presents a verifiable identity credential to Arattai. Arattai cryptographically verifies the credential and, once verification is successful, updates the user's profile to display a verified status.\n\nOther users can then see that the profile has been verified using a trusted digital identity credential. The verification provides an additional layer of assurance without requiring Arattai to collect or store copies of the user's identity document.",
+      "userJourney": "A user downloads Arattai, creates a profile, and can immediately access the platform's messaging and social features without completing identity verification.\r\n\r\nIf the user chooses to verify their profile, Arattai initiates an app-to-app verification request to the Aadhaar App or another compatible digital identity wallet, such as Google Wallet. The user reviews the identity request and provides consent to share the required credential.\r\n\r\nThe wallet presents a verifiable identity credential to Arattai. Arattai cryptographically verifies the credential and, once verification is successful, updates the user's profile to display a verified status.\r\n\r\nOther users can then see that the profile has been verified using a trusted digital identity credential. The verification provides an additional layer of assurance without requiring Arattai to collect or store copies of the user's identity document.",
       "country": "IN"
     },
     {
