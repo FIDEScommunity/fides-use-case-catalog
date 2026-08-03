@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-03T14:30:02+00:00",
+    "generatedAt": "2026-08-03T14:30:27+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -2711,7 +2711,7 @@
                     "organizationName": "Unique Identification Authority of India",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-07-16T16:33:20+01:00",
+                    "updatedAt": "2026-08-03T15:30:27+01:00",
                     "publishedAt": "2026-07-16T16:33:20+01:00",
                     "tags": [
                         "Gig Economy",
@@ -2763,10 +2763,10 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:urban-company",
                                 "labelRaw": "Urban Company",
                                 "url": "https://www.urbancompany.com/bangalore?srsltid=AfmBOoqbuApFoYrpg0rayHWuWPv8Ohw--pjrQPwUvl7M42gB8CMpv_e6",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
