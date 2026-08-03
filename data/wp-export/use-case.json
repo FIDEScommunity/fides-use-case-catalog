@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-03T13:02:45+00:00",
+    "generatedAt": "2026-08-03T14:20:43+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -1124,7 +1124,7 @@
                     "organizationName": "iGrant.io",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-03T14:02:45+01:00",
+                    "updatedAt": "2026-08-03T15:20:43+01:00",
                     "publishedAt": "2026-07-06T13:26:25+01:00",
                     "tags": [
                         "identity",
@@ -1215,17 +1215,17 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:fast-ferries",
                                 "labelRaw": "Fast Ferries",
                                 "url": "https://fastferries.com.gr/en/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:visa",
                                 "labelRaw": "Visa",
                                 "url": "https://www.visa.se/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
@@ -1236,10 +1236,10 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:banca-transilvania",
                                 "labelRaw": "Banca Transilvania",
                                 "url": "https://www.bancatransilvania.ro/en/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
