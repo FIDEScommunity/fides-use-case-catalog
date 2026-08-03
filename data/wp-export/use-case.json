@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-03T14:29:35+00:00",
+    "generatedAt": "2026-08-03T14:30:02+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -2896,11 +2896,11 @@
                     "id": "doctor-identity-verification-for-medical-practitioner-registration-ewroXC",
                     "sector": "healthcare",
                     "title": "Tamil Nadu Medical Council: Doctor Identity Verification for Practitioner Registration",
-                    "summary": "Tamil Nadu Medical councils verify doctors before granting registration to practise medicine in the state of Tamil Nadu India. As part of the registration process, the Tamil Nadu Medical Council uses the Aadhaar App to verify the identity of MBBS graduates applying for a practitioner registration.\n\nApplicants present their Aadhaar identity information through the Aadhaar App, allowing the Council to verify that the person applying is the legitimate holder of the identity and credentials submitted. This helps prevent impersonation or the misuse of another person's academic certificates to obtain a medical practitioner registration. Aadhaar verification forms one part of the Council's broader registration and credential verification process.",
+                    "summary": "Tamil Nadu Medical councils verify doctors before granting registration to practise medicine in the state of Tamil Nadu India. As part of the registration process, the Tamil Nadu Medical Council uses the Aadhaar App to verify the identity of MBBS graduates applying for a practitioner registration.\r\n\r\nApplicants present their Aadhaar identity information through the Aadhaar App, allowing the Council to verify that the person applying is the legitimate holder of the identity and credentials submitted. This helps prevent impersonation or the misuse of another person's academic certificates to obtain a medical practitioner registration. Aadhaar verification forms one part of the Council's broader registration and credential verification process.",
                     "organizationName": "Unique Identification Authority of India",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-07-16T16:32:28+01:00",
+                    "updatedAt": "2026-08-03T15:30:02+01:00",
                     "publishedAt": "2026-07-16T16:32:28+01:00",
                     "tags": [
                         "healthcare",
@@ -2957,10 +2957,10 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:tamil-nadu-medical-council",
                                 "labelRaw": "Tamil Nadu Medical Council",
                                 "url": "https://www.tamilnadumedicalcouncil.org/info/history-of-tamil-nadu-medical-council",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
