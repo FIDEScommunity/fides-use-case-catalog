@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-03T13:02:22.353Z",
+  "lastUpdated": "2026-08-03T13:03:02.555Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 25,
   "useCases": [
@@ -2293,7 +2293,7 @@
       "organizationName": "iGrant.io",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-06T13:26:25+01:00",
+      "updatedAt": "2026-08-03T14:02:45+01:00",
       "publishedAt": "2026-07-06T13:26:25+01:00",
       "tags": [
         "identity",
@@ -2412,10 +2412,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:uaegean",
             "labelRaw": "UAegean",
             "url": "https://www.aegean.gr/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
@@ -2468,7 +2468,7 @@
         "provider": "youtube"
       },
       "moreInfoUrl": "https://www.igrant.io/demo/merchant-led-payments-with-receipts-boardingpass.html",
-      "userJourney": "1. Visit Fast Ferries and select a trip\n2. Select the \"FAST CHECKOUT VIA EUDI WALLET\" option\n3. Scan QR code to initiate the secure, identity-validated payment process, confirming and presenting:\n    - PhotoID: For Personal Identification Details\n    - Student ID (or Loyalty Card Credential from Fast Ferries): Discount-related credentials Credential\n    - Visa card credential: Pre-authorize a €25 payment to Cyclades Fast Ferries (CFF) \n4. Fill out passenger and contact information in Fast Ferries\n5. Fill card details and confirm to make your booking (receive an eReceipt and Boarding Pass to your EUDI Wallet)",
+      "userJourney": "1. Visit Fast Ferries and select a trip\r\n2. Select the \"FAST CHECKOUT VIA EUDI WALLET\" option\r\n3. Scan QR code to initiate the secure, identity-validated payment process, confirming and presenting:\r\n    - PhotoID: For Personal Identification Details\r\n    - Student ID (or Loyalty Card Credential from Fast Ferries): Discount-related credentials Credential\r\n    - Visa card credential: Pre-authorize a €25 payment to Cyclades Fast Ferries (CFF) \r\n4. Fill out passenger and contact information in Fast Ferries\r\n5. Fill card details and confirm to make your booking (receive an eReceipt and Boarding Pass to your EUDI Wallet)",
       "country": "SE"
     },
     {
