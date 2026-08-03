@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-03T14:27:29.302Z",
+  "lastUpdated": "2026-08-03T14:28:15.374Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 25,
   "useCases": [
@@ -683,7 +683,7 @@
       "organizationName": "Transpareo AG",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-24T16:48:32+01:00",
+      "updatedAt": "2026-08-03T15:27:52+01:00",
       "publishedAt": "2026-07-24T16:48:32+01:00",
       "tags": [
         "digital product passport",
@@ -702,10 +702,10 @@
         "credentials": [],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:transpareo",
             "labelRaw": "Transpareo AG",
             "url": "https://transpareo.com",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],

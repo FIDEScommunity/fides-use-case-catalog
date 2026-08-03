@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:transpareo-ag",
+  "orgId": "org:transpareo",
   "orgName": "Transpareo AG",
   "useCases": [
     {
@@ -12,7 +12,7 @@
       "organizationName": "Transpareo AG",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-07-24T16:48:32+01:00",
+      "updatedAt": "2026-08-03T15:27:52+01:00",
       "publishedAt": "2026-07-24T16:48:32+01:00",
       "tags": [
         "digital product passport",
@@ -31,10 +31,10 @@
         "credentials": [],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:transpareo",
             "labelRaw": "Transpareo AG",
             "url": "https://transpareo.com",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
