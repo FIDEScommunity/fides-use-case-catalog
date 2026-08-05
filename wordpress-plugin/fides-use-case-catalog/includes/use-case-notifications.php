@@ -29,7 +29,7 @@ function fides_use_case_catalog_notifications_enabled(): bool {
  * Public detail URL for a published use case.
  */
 function fides_use_case_catalog_detail_url(string $use_case_id): string {
-    $path = (string) apply_filters('fides_use_case_catalog_path', '/use-cases/');
+    $path = (string) apply_filters('fides_use_case_catalog_path', '/ecosystem-explorer/use-cases/');
     return add_query_arg('usecase', rawurlencode($use_case_id), home_url($path));
 }
 

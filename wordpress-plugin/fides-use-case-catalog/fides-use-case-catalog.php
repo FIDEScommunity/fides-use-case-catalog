@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.9.1
+ * Version: 0.9.2
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -186,7 +186,7 @@ function fides_use_case_catalog_register_with_core(): void {
             'logo_field'        => 'imageUrl',
             'detail_param'      => 'usecase',
             'pages'             => array(
-                'main' => apply_filters('fides_use_case_catalog_path', '/use-cases/'),
+                'main' => apply_filters('fides_use_case_catalog_path', '/ecosystem-explorer/use-cases/'),
             ),
             'jsonld_type'       => 'CreativeWork',
         )

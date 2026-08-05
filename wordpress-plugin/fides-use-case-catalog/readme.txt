@@ -2,13 +2,16 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.9.1
+Stable tag: 0.9.2
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
 Use case catalog renderer and WordPress submission flow.
 
 == Changelog ==
+
+= 0.9.2 =
+* Default catalog / detail path is `/ecosystem-explorer/use-cases/` (was `/use-cases/`), matching production.
 
 = 0.9.1 =
 * Mobile filters: keep the drawer open when expanding groups or selecting options; keep body scroll lock in sync via shared FidesCatalogUI mobile filters controller.

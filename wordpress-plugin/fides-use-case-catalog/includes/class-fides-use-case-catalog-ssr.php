@@ -88,7 +88,7 @@ if (! class_exists('Fides_Use_Case_Catalog_SSR')) {
              * -------------------------------------------------------------- */
 
             private static function listing_path(): string {
-                return (string) apply_filters('fides_use_case_catalog_path', '/use-cases/');
+                return (string) apply_filters('fides_use_case_catalog_path', '/ecosystem-explorer/use-cases/');
             }
 
             protected function listing_page_name(string $page_slug): string {
