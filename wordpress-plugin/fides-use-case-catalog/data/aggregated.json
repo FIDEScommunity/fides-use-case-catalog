@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-07T18:59:16.756Z",
+  "lastUpdated": "2026-08-07T20:52:35.541Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 27,
   "useCases": [
@@ -9,12 +9,12 @@
       "id": "vesta-appliances-from-impostors-to-proof-of-trust-ATYNCN",
       "sector": "manufacturing",
       "title": "Vesta Appliances: from impostors to Proof-of-Trust",
-      "summary": "Vesta Appliances is a fictional Swiss manufacturer with a very real problem: forty years of brand trust and no way to prove it online. Customers chat with fake support agents trading on Vesta's name, impostor technicians ring doorbells in Vesta livery, and nothing distinguishes the real services from the fakes.\r\n\r\nThe use case shows how Vesta becomes verifiable on the Verana Network, a public decentralized registry of registries. Its support chatbot and staff portal present ECS Service and Organization credentials as Linked Verifiable Presentations in their DID Documents, employees carry verifiable badges, repair partners hold Authorized Repairer accreditations issued under Vesta's own ecosystem governance. Anyone can resolve a Vesta service and see Proof-of-Trust before connecting: TRUSTED is earned from the credential chain, never just claimed.\r\n\r\nIt all runs live on the Verana testnet playground as an interactive story with runnable demos: verify the support chat from a personal wallet (Hologram Messaging), check a technician's accreditation at the front door, and sign into the portal with a badge credential. Services are hosted by VS Agent, Verana's open-source business wallet.",
+      "summary": "Vesta Appliances is a fictional Swiss manufacturer with a very real problem: forty years of brand trust and no way to prove it online. Customers chat with fake support agents trading on Vesta's name, impostor technicians ring doorbells in Vesta livery, and nothing distinguishes the real services from the fakes.\n\nThe use case shows how Vesta becomes verifiable on the Verana Network, a public decentralized registry of registries. Its support chatbot and staff portal present ECS Service and Organization credentials as Linked Verifiable Presentations in their DID Documents, employees carry verifiable badges, repair partners hold Authorized Repairer accreditations issued under Vesta's own ecosystem governance. Anyone can resolve a Vesta service and see Proof-of-Trust before connecting: TRUSTED is earned from the credential chain, never just claimed.\n\nIt all runs live on the Verana testnet playground as an interactive story with runnable demos: verify the support chat from a personal wallet, check a technician's accreditation at the front door, and sign into the portal with a badge credential. Services are hosted by VS Agent, Verana's open-source business wallet.",
       "organizationName": "Verana",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-07T19:58:48+01:00",
-      "publishedAt": "2026-08-07T19:58:48+01:00",
+      "updatedAt": "2026-08-07T21:52:18+01:00",
+      "publishedAt": "2026-08-07T21:52:18+01:00",
       "tags": [
         "verifiable trust",
         "proof-of-trust",
@@ -82,6 +82,20 @@
             "refId": "altme-wallet",
             "labelRaw": "Altme",
             "url": "https://altme.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "wwwallet",
+            "labelRaw": "wwWallet",
+            "url": "https://wwwallet.org",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "bc-wallet",
+            "labelRaw": "BC Wallet",
+            "url": "https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet",
             "source": "catalog",
             "walletType": "personal"
           }
@@ -182,6 +196,20 @@
             "url": "https://talao.io",
             "source": "catalog",
             "walletType": null
+          },
+          {
+            "refId": "org:bcgov",
+            "labelRaw": "Government of British Columbia",
+            "url": "https://www2.gov.bc.ca/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:wwwallet",
+            "labelRaw": "wwWallet.org",
+            "url": "https://wwwallet.org",
+            "source": "catalog",
+            "walletType": null
           }
         ],
         "rps": []
@@ -204,11 +232,11 @@
       ],
       "interopProfiles": [],
       "imageUrls": [
-        "https://playground.testnet.verana.network/images/factory.webp"
+        "https://playground.testnet.verana.network/images/vesta-verana-cover.webp"
       ],
-      "imageUrl": "https://playground.testnet.verana.network/images/factory.webp",
+      "imageUrl": "https://playground.testnet.verana.network/images/vesta-verana-cover.webp",
       "moreInfoUrl": "https://playground.testnet.verana.network/usecases/vesta",
-      "userJourney": "Organization journey (Marc, CTO of Vesta): Marc deploys Vesta's Business Wallet (VS Agent) and anchors the company DID on the Verana Network. He completes KYB with an accredited issuer to obtain the ECS-Organization credential, then self-issues Service credentials so every Vesta service presents its identity as Linked VPs in its DID Document. He makes Vesta an ECS-Badge issuer for its ~200 employees and accredits a login service to verify those badges. Vesta's ISO 9001 certification becomes a verifiable credential, no re-certifying. Finally Marc builds the Vesta Repair Network, Vesta's own ecosystem with its own governance, issuing Authorized Repairer credentials that work at portal login and at the customer's front door.\r\n\r\nUser journey (runnable demos): choose a personal wallet, obtain an ECS-Badge from the demo issuer, log in to the staff portal as a repair employee with that badge instead of a password, then search the public directory of Authorized Repairers and check any repairer's Proof-of-Trust before opening the door.",
+      "userJourney": "Organization journey (Marc, CTO of Vesta): Marc deploys Vesta's Business Wallet (VS Agent) and anchors the company DID on the Verana Network. He completes KYB with an accredited issuer to obtain the ECS-Organization credential, then self-issues Service credentials so every Vesta service presents its identity as Linked VPs in its DID Document. He makes Vesta an ECS-Badge issuer for its ~200 employees and accredits a login service to verify those badges. Vesta's ISO 9001 certification becomes a verifiable credential, no re-certifying. Finally Marc builds the Vesta Repair Network, Vesta's own ecosystem with its own governance, issuing Authorized Repairer credentials that work at portal login and at the customer's front door.\n\nUser journey (runnable demos): choose a personal wallet, obtain an ECS-Badge from the demo issuer, log in to the staff portal as a repair employee with that badge instead of a password, then search the public directory of Authorized Repairers and check any repairer's Proof-of-Trust before opening the door.",
       "country": "CH"
     },
     {
