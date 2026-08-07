@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-07T07:56:19+00:00",
+    "generatedAt": "2026-08-07T18:58:48+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -3332,6 +3332,219 @@
                     "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
                     "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\r\n\r\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
                     "country": "IN"
+                }
+            ]
+        },
+        {
+            "orgSlug": "verana",
+            "orgId": "org:verana",
+            "orgName": "Verana",
+            "useCases": [
+                {
+                    "id": "vesta-appliances-from-impostors-to-proof-of-trust-ATYNCN",
+                    "sector": "manufacturing",
+                    "title": "Vesta Appliances: from impostors to Proof-of-Trust",
+                    "summary": "Vesta Appliances is a fictional Swiss manufacturer with a very real problem: forty years of brand trust and no way to prove it online. Customers chat with fake support agents trading on Vesta's name, impostor technicians ring doorbells in Vesta livery, and nothing distinguishes the real services from the fakes.\r\n\r\nThe use case shows how Vesta becomes verifiable on the Verana Network, a public decentralized registry of registries. Its support chatbot and staff portal present ECS Service and Organization credentials as Linked Verifiable Presentations in their DID Documents, employees carry verifiable badges, repair partners hold Authorized Repairer accreditations issued under Vesta's own ecosystem governance. Anyone can resolve a Vesta service and see Proof-of-Trust before connecting: TRUSTED is earned from the credential chain, never just claimed.\r\n\r\nIt all runs live on the Verana testnet playground as an interactive story with runnable demos: verify the support chat from a personal wallet (Hologram Messaging), check a technician's accreditation at the front door, and sign into the portal with a badge credential. Services are hosted by VS Agent, Verana's open-source business wallet.",
+                    "organizationName": "Verana",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-07T19:58:48+01:00",
+                    "publishedAt": "2026-08-07T19:58:48+01:00",
+                    "tags": [
+                        "verifiable trust",
+                        "proof-of-trust",
+                        "trust registry",
+                        "brand protection",
+                        "agentic support",
+                        "employee badge",
+                        "authorized repairer",
+                        "anti-impersonation",
+                        "DIDComm",
+                        "Verana"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "inji-wallet",
+                                "labelRaw": "Inji Wallet",
+                                "url": "https://www.mosip.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "eudi-reference-personal-wallet",
+                                "labelRaw": "EUDI Wallet Reference Implementation",
+                                "url": "https://github.com/eu-digital-identity-wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "paradym-wallet",
+                                "labelRaw": "Paradym Wallet",
+                                "url": "https://paradym.id",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "procivis-one-wallet",
+                                "labelRaw": "Procivis One Wallet",
+                                "url": "https://www.procivis.ch",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "hologram-messaging",
+                                "labelRaw": "Hologram Messaging",
+                                "url": "https://2060.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "sphereon-wallet",
+                                "labelRaw": "Sphereon Edge Wallet",
+                                "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "swiyu-wallet",
+                                "labelRaw": "SWIYU Wallet",
+                                "url": "https://www.swiyu.admin.ch/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "altme-wallet",
+                                "labelRaw": "Altme",
+                                "url": "https://altme.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": "vs-agent-verana-business-wallet",
+                                "labelRaw": "VS Agent - Verana Business Wallet",
+                                "url": "https://playground.testnet.verana.network/business-wallets",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [],
+                        "credentials": [
+                            {
+                                "refId": "cred:verana:ecs-badge:vcdm-2-0",
+                                "labelRaw": "ECS Badge Credential",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:verana:ecs-organization:vcdm-2-0",
+                                "labelRaw": "ECS Organization Credential",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:verana:ecs-service:vcdm-2-0",
+                                "labelRaw": "ECS Service Credential",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:verana",
+                                "labelRaw": "Verana",
+                                "url": "https://verana.io",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:mosip",
+                                "labelRaw": "MOSIP",
+                                "url": "https://www.mosip.io",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:eu",
+                                "labelRaw": "European Commission - Government",
+                                "url": "https://github.com/eu-digital-identity-wallet",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:animo",
+                                "labelRaw": "Animo Solutions",
+                                "url": "https://animo.id",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:procivis",
+                                "labelRaw": "Procivis",
+                                "url": "https://www.procivis.ch",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:2060",
+                                "labelRaw": "2060.io",
+                                "url": "https://2060.io",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:sphereon",
+                                "labelRaw": "Sphereon",
+                                "url": "https://sphereon.com",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:swiyu",
+                                "labelRaw": "Swiss Confederation",
+                                "url": "https://www.eid.admin.ch/en",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:talao",
+                                "labelRaw": "Talao",
+                                "url": "https://talao.io",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "proximity",
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "anoncreds",
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci",
+                        "other"
+                    ],
+                    "presentationProtocols": [
+                        "DIDComm v2",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://playground.testnet.verana.network/images/factory.webp"
+                    ],
+                    "imageUrl": "https://playground.testnet.verana.network/images/factory.webp",
+                    "moreInfoUrl": "https://playground.testnet.verana.network/usecases/vesta",
+                    "userJourney": "Organization journey (Marc, CTO of Vesta): Marc deploys Vesta's Business Wallet (VS Agent) and anchors the company DID on the Verana Network. He completes KYB with an accredited issuer to obtain the ECS-Organization credential, then self-issues Service credentials so every Vesta service presents its identity as Linked VPs in its DID Document. He makes Vesta an ECS-Badge issuer for its ~200 employees and accredits a login service to verify those badges. Vesta's ISO 9001 certification becomes a verifiable credential, no re-certifying. Finally Marc builds the Vesta Repair Network, Vesta's own ecosystem with its own governance, issuing Authorized Repairer credentials that work at portal login and at the customer's front door.\r\n\r\nUser journey (runnable demos): choose a personal wallet, obtain an ECS-Badge from the demo issuer, log in to the staff portal as a repair employee with that badge instead of a password, then search the public directory of Authorized Repairers and check any repairer's Proof-of-Trust before opening the door.",
+                    "country": "CH"
                 }
             ]
         }
