@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-06T15:30:13.233Z",
+  "lastUpdated": "2026-08-07T07:56:38.013Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 26,
   "useCases": [
@@ -9,12 +9,12 @@
       "id": "cross-border-micro-credentials-the-eu-ace-chain-eu-ch-MUUYsm",
       "sector": "education",
       "title": "Cross-Border Micro-Credentials: The EU.ACE Chain (EU - CH)",
-      "summary": "1. Delivery. Participants complete a 1 ECTS programme (EQF 6-7; 60% pass grade, 80% attendance).\r\n\r\n2. Modelling. SAPIO models it in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes. The template is reusable across the alliance.\r\n\r\n3. Issuer identity. The university is registered as a trusted entity via institutional DID and X.509, making it the cryptographic root of trust rather than the platform.\r\n\r\n4. Issuance. The academic coordinator supplies the eligible cohort; SAPIO generates OID4VCI offers. Opt-in — declining carries no academic consequence.\r\n\r\n5. Retrieval. The learner accepts in a standards-compliant wallet. No proprietary app, no SAPIO account, no personal data retained afterwards.\r\n\r\n6. Presentation. The learner presents over OID4VP, disclosing only the claims the verifier needs.\r\n\r\n7. Verification. The relying party validates against the university's key material in seconds — with no relationship to SAPIO, no prior agreement with the university, and no marginal cost per re-verification.",
+      "summary": "A student completes a university programme and receives a digital credential in their wallet. Instead of a PDF that another institution or employer has to check manually, the credential can be presented and verified directly.\n\nIn the EU.ACE pilot, participating universities used SAPIO to issue learning achievements as structured, verifiable credentials. The university remains the issuer, the learner keeps the credential in their own wallet, and another organisation can verify it without contacting SAPIO or the university.\n\nThe goal is simple: make academic achievements easier to carry, share and trust across institutions and countries.",
       "organizationName": "SAPIO GMBH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-06T16:29:53+01:00",
-      "publishedAt": "2026-08-06T16:29:53+01:00",
+      "updatedAt": "2026-08-07T08:56:19+01:00",
+      "publishedAt": "2026-08-07T08:56:19+01:00",
       "tags": [
         "education",
         "micro-credentials",
@@ -97,10 +97,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:sapio-gmbh",
             "labelRaw": "SAPIO GMBH",
             "url": "http://www.sapio.id",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -137,8 +137,8 @@
         "provider": "youtube"
       },
       "moreInfoUrl": "https://www.sapio.id/use-cases/",
-      "userJourney": "1. Programme delivery. Participants complete \"Education for All — Empowering Higher Education through Quality Micro-Credentials\" (16-27 March 2026, English, 1 ECTS, EQF 6-7). Academic requirements: 60% pass grade, 80% attendance.\r\n\r\n2. Credential modelling. SAPIO models the programme in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes under Knowledge, Skills and Competences. The template is programme-agnostic and reusable across the alliance without redesign.\r\n\r\n3. Issuer identity. The awarding institution is established as an institutional DID with an X.509 certificate, registered as a trusted entity. From here the university, not the platform, is the cryptographic root of trust.\r\n\r\n4. Issuance. The academic coordinator supplies the list of participants who met the criteria. SAPIO generates OID4VCI credential offers. Participation is voluntary and opt-in; declining has no effect on academic standing.\r\n\r\n5. Wallet retrieval. The learner accepts the offer in a standards-compliant wallet of their choice. No proprietary holder app, no account with SAPIO. From this point the credential lives in the learner's wallet and SAPIO retains no pe",
-      "country": "DE"
+      "userJourney": "1. Programme delivery. Participants complete \"Education for All — Empowering Higher Education through Quality Micro-Credentials\" (16-27 March 2026, English, 1 ECTS, EQF 6-7). Academic requirements: 60% pass grade, 80% attendance.\n\n2. Credential modelling. SAPIO models the programme in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes under Knowledge, Skills and Competences. The template is programme-agnostic and reusable across the alliance without redesign.\n\n3. Issuer identity. The awarding institution is established as an institutional DID with an X.509 certificate, registered as a trusted entity. From here the university, not the platform, is the cryptographic root of trust.\n\n4. Issuance. The academic coordinator supplies the list of participants who met the criteria. SAPIO generates OID4VCI credential offers. Participation is voluntary and opt-in; declining has no effect on academic standing.\n\n5. Wallet retrieval. The learner accepts the offer in a standards-compliant wallet of their choice. No proprietary holder app, no account with SAPIO. From this point the credential lives in the learner's wallet and SAPIO retains no pe",
+      "country": "CH"
     },
     {
       "id": "green-lane-verified-wallet-based-company-formation-and-registration-VUXbMJ",
