@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-07T20:52:19+00:00",
+    "generatedAt": "2026-08-09T13:56:29+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -2357,6 +2357,77 @@
                     "moreInfoUrl": "https://playground.france-identite.gouv.fr/marketplace/verifiers/odifis/",
                     "userJourney": "https://api.playground.france-identite.gouv.fr/odifis/contactless-rent/en/\r\n\r\n1. Booking. The driver selects a car and scans a QR code with France Identité. The rental platform receives only age_over_18: true. Any birth date disclosed to the verifier is discarded within milliseconds and never reaches the platform, its database or an API.\r\n\r\n2. Identification. At the car, the driver presents a test mobile driving licence from the EU reference wallet, or uses the PID as a fallback. The same verifier checks the credential and shares only the structured claims needed for the rental—no scans or document images.\r\n\r\n3. Handover. A fresh, device-bound presentation answers a dynamic challenge. After verification, the platform issues a short-lived, replay-protected token. Only a pseudonymous handover record and the verification method are retained.\r\n\r\n4. Data minimisation. The database stores the age result, required rental claims and a pseudonymous attestation. It does not store a birth date, portrait, licence image or photocopy.\r\n\r\n5. Trust. Credentials are checked against recognised trust anchors and revocation sources. Unknown issuers are flagged, never silently accepted.",
                     "country": "LT"
+                }
+            ]
+        },
+        {
+            "orgSlug": "reeco",
+            "orgId": "org:reeco",
+            "orgName": "Reeco",
+            "useCases": [
+                {
+                    "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
+                    "sector": "supply_chain",
+                    "title": "Reeco Textile DPP : the supply chain verified independently of the brand's systems",
+                    "summary": "Textile passports today publish what a brand exports from its PLM. A signature makes that tamper-evident, not true. Reeco verifies the chain itself, from outside the brand's systems: every supplier lodges its documents directly with Reeco, and a proprietary mass balance, carrying the indices and the PEF calculation, bounds each claim to its certified evidence. No signed claim survives in excess of what the certificates cover.\r\nThe passport is issued from that result: a W3C Verifiable Credential from did:web:ia.reeco.eco, delivered over OpenID4VCI to an organisational or personal wallet, presented back over OpenID4VP and verified against the published DID document, eleven checks including holder key binding. Verification is the product; the passport is what verification leaves behind.\r\nThere is a date on this. From 27 September 2026, Directive (EU) 2024/825 makes a generic environmental claim an unfair practice: only specific, substantiated claims survive, and substantiation is not a publishing problem.\r\nNo textile DPP can be conforming yet: the delegated act is not adopted and service providers cannot register. This is a pilot, and says so. The stack is live and public.",
+                    "organizationName": "Reeco",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-09T14:56:28+01:00",
+                    "publishedAt": "2026-08-09T14:56:28+01:00",
+                    "tags": [
+                        "Digital Product Passport",
+                        "DPP",
+                        "Textiles",
+                        "Supply Chain Transparency",
+                        "Product Traceability",
+                        "Mass Balance",
+                        "Verifiable Credentials",
+                        "Sustainability",
+                        "Regulatory Compliance",
+                        "Circular Economy",
+                        "ESPR",
+                        "UNTP",
+                        "GS1 Digital Link",
+                        "Data Interoperability"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:reeco",
+                                "labelRaw": "Reeco",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "imageUrls": [
+                        "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp"
+                    ],
+                    "imageUrl": "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp",
+                    "moreInfoUrl": "https://doi.org/10.5281/zenodo.21825740",
+                    "userJourney": "1. A brand declares the composition and sustainability claims for a production lot and\r\n   supplies the supply-chain documents for each tier.\r\n2. Before anything is signed, Reeco checks the declared claim against the certified\r\n   evidence. If the evidence does not support the claim, the passport is not issued at the\r\n   declared value.\r\n3. The passport is issued as a UNTP 0.7.0 Verifiable Credential signed with Ed25519, with\r\n   a GS1 Digital Link identifier at unit level (AI 01 / 10 / 21) as its subject id.\r\n4. A consumer scans the QR on the garment. The GS1 Digital Link resolver returns the\r\n   passport in a plain-language view; the credential status is resolved live, so a\r\n   superseded or revoked claim never reads as valid.\r\n5. A repairer or recycler reads material and end-of-life data from the same identifier.\r\n6. A market surveillance authority retrieves the same passport, verifies the signature\r\n   against the published DID document, and can retrieve the archived version from the\r\n   independent back-up service if the primary is unavailable.",
+                    "country": "IT"
                 }
             ]
         },
