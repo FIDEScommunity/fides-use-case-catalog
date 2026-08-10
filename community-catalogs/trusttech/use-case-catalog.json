@@ -1,0 +1,63 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:trusttech",
+  "orgName": "TrustTech",
+  "useCases": [
+    {
+      "id": "making-the-european-business-wallet-real-ebw-trial-for-national-healthcare-data-exchange-kik-v-zBr2RW",
+      "sector": "healthcare",
+      "title": "Making the European Business Wallet real: EBW trial for national healthcare data exchange (KIK-V)",
+      "summary": "Together with Zorginstituut Nederland (the Dutch National Health Care Institute), TrustTech designed, built and demonstrated a complete European Business Wallet chain for data exchange between organisations, from business identity and machine-readable mandates to qualified seals and registered, non-repudiable delivery. The context is KIK-V, the national programme for system-to-system exchange of accountability data between thousands of care providers and public bodies. Trust there was implicit, anchored in contracts and accounts rather than in the transactions. Wallets and verifiable credentials move that trust into the transaction. Organisation identification is issued as a qualified attestation (QEAA) aligned with emerging LPID/EBWOID formats, mandates prove who acts on behalf of the organisation, and employees sign in with their personal EUDI wallet. Nothing was rebuilt: the existing decentralised exchange stayed intact and every EBW capability docked onto it. The chain was demonstrated in 12 weeks and the findings adopted nationally.",
+      "organizationName": "TrustTech",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-10T18:26:40+01:00",
+      "publishedAt": "2026-08-10T18:26:40+01:00",
+      "tags": [
+        "European Business Wallet",
+        "EBW",
+        "eIDAS 2.0",
+        "healthcare",
+        "verifiable credentials",
+        "mandates",
+        "QSeal",
+        "QERDS",
+        "LPID",
+        "OpenID4VCI",
+        "OpenID4VP",
+        "SD-JWT VC"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:trusttech",
+            "labelRaw": "TrustTech",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Zorginstituut Nederland",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "userJourney": "An employee signs in to the organisation's business wallet with their personal EUDI wallet; organisational credentials belong to the company, the access pass to the person.\r\nThe organisation identifies itself with a qualified attestation (QEAA) aligned with LPID/EBWOID formats: one identity, reusable across every chain.\r\nA machine-readable mandate credential proves the person or system acts on behalf of the organisation; differentiated per process, instantly revocable, verified at the moment of the transaction.\r\nThe submission is sealed machine-to-machine with a qualified electronic seal (QSeal, JAdES-LTA, eIDAS art. 35) via a qualified trust service provider, then delivered to the receiving public body through QERDS (ETSI TS 119 522) with a qualified timestamp.\r\nQERDS logs evidence events for submission, acceptance and delivery in a searchable audit trail, and the receiver acknowledges receipt. Both parties hold non-repudiable proof: the sender can prove it delivered on time and unaltered, the receiver what it received, registered mail, machine-to-machine.",
+      "country": "NL"
+    }
+  ]
+}
