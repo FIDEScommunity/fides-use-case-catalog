@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-10T07:52:42+00:00",
+    "generatedAt": "2026-08-10T17:26:41+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -3014,6 +3014,68 @@
                     "moreInfoUrl": "https://github.com/transpareo/transpareo-time-machine",
                     "userJourney": "1. A maker (manufacturer or importer) creates a product passport in Transpareo and publishes it. Transpareo seals that version as a verifiable credential: a W3C Data Integrity proof over Ed25519, signed with a key bound to the maker's own domain via a did:web identifier. A GS1 Digital Link QR code on the product points to the passport.\r\n\r\n2. A shopper scans the QR code with their phone. Nothing is installed, no wallet, no account: the link opens our open-source viewer, the Transpareo Time Machine, in the browser.\r\n\r\n3. The viewer fetches the passport and its proof, resolves the maker's public key from the did:web identifier, and verifies the signature client-side, offline, against that key. A pass means the record is authentic and unaltered, and the shopper can verify every earlier version too.\r\n\r\n4. A repairer or recycler later scans the same code to read repair and material data, and verifies it the same way.\r\n\r\n5. A market-surveillance authority verifies the same passport independently through a dedicated Authority API, which logs an audit entry on every access. Each party checks from its own side, trusting the maths rather than the maker or Transpareo.",
                     "country": "CH"
+                }
+            ]
+        },
+        {
+            "orgSlug": "trusttech",
+            "orgId": "org:trusttech",
+            "orgName": "TrustTech",
+            "useCases": [
+                {
+                    "id": "making-the-european-business-wallet-real-ebw-trial-for-national-healthcare-data-exchange-kik-v-zBr2RW",
+                    "sector": "healthcare",
+                    "title": "Making the European Business Wallet real: EBW trial for national healthcare data exchange (KIK-V)",
+                    "summary": "Together with Zorginstituut Nederland (the Dutch National Health Care Institute), TrustTech designed, built and demonstrated a complete European Business Wallet chain for data exchange between organisations, from business identity and machine-readable mandates to qualified seals and registered, non-repudiable delivery. The context is KIK-V, the national programme for system-to-system exchange of accountability data between thousands of care providers and public bodies. Trust there was implicit, anchored in contracts and accounts rather than in the transactions. Wallets and verifiable credentials move that trust into the transaction. Organisation identification is issued as a qualified attestation (QEAA) aligned with emerging LPID/EBWOID formats, mandates prove who acts on behalf of the organisation, and employees sign in with their personal EUDI wallet. Nothing was rebuilt: the existing decentralised exchange stayed intact and every EBW capability docked onto it. The chain was demonstrated in 12 weeks and the findings adopted nationally.",
+                    "organizationName": "TrustTech",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-10T18:26:40+01:00",
+                    "publishedAt": "2026-08-10T18:26:40+01:00",
+                    "tags": [
+                        "European Business Wallet",
+                        "EBW",
+                        "eIDAS 2.0",
+                        "healthcare",
+                        "verifiable credentials",
+                        "mandates",
+                        "QSeal",
+                        "QERDS",
+                        "LPID",
+                        "OpenID4VCI",
+                        "OpenID4VP",
+                        "SD-JWT VC"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:trusttech",
+                                "labelRaw": "TrustTech",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Zorginstituut Nederland",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [],
+                    "vcFormats": [],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [],
+                    "interopProfiles": [],
+                    "userJourney": "An employee signs in to the organisation's business wallet with their personal EUDI wallet; organisational credentials belong to the company, the access pass to the person.\r\nThe organisation identifies itself with a qualified attestation (QEAA) aligned with LPID/EBWOID formats: one identity, reusable across every chain.\r\nA machine-readable mandate credential proves the person or system acts on behalf of the organisation; differentiated per process, instantly revocable, verified at the moment of the transaction.\r\nThe submission is sealed machine-to-machine with a qualified electronic seal (QSeal, JAdES-LTA, eIDAS art. 35) via a qualified trust service provider, then delivered to the receiving public body through QERDS (ETSI TS 119 522) with a qualified timestamp.\r\nQERDS logs evidence events for submission, acceptance and delivery in a searchable audit trail, and the receiver acknowledges receipt. Both parties hold non-repudiable proof: the sender can prove it delivered on time and unaltered, the receiver what it received, registered mail, machine-to-machine.",
+                    "country": "NL"
                 }
             ]
         },
