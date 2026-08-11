@@ -293,7 +293,7 @@
       "organizationName": "Credenco",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-03T15:22:41+01:00",
+      "updatedAt": "2026-08-11T05:36:53+01:00",
       "publishedAt": "2026-07-21T12:43:37+01:00",
       "tags": [
         "business identity",
@@ -418,7 +418,7 @@
           {
             "refId": "org:knb",
             "labelRaw": "KNB",
-            "url": "http://Betaalvereniging%20Nederland",
+            "url": null,
             "source": "catalog",
             "walletType": null
           },
@@ -427,6 +427,13 @@
             "labelRaw": "Nederlandse Vereniging van Banken",
             "url": null,
             "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Betaalvereniging Nederland",
+            "url": "https://www.betaalvereniging.nl/",
+            "source": "manual",
             "walletType": null
           }
         ],
