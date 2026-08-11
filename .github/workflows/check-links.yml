@@ -1,0 +1,104 @@
+name: Check Links
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+jobs:
+  check-links:
+    name: Linkcheck
+    runs-on: ubuntu-latest
+    if: github.repository == 'FIDEScommunity/fides-use-case-catalog'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linkcheck
+        run: npm run check-links
+
+      - name: Upload linkcheck report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Linkcheck report - ${{ github.run_id }}
+          path: |
+            data/linkcheck-report.json
+            data/linkcheck-summary.md
+
+      - name: Update Broken links report issue
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'data/linkcheck-report.json';
+            const summaryPath = 'data/linkcheck-summary.md';
+            let body = 'Weekly linkcheck run: ' + new Date().toISOString().slice(0, 10) + '\n\n';
+            if (fs.existsSync(reportPath)) {
+              const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+              if (typeof report.totalCatalogUrls === 'number') {
+                body += `- Catalog URLs collected: ${report.totalCatalogUrls}\n`;
+              }
+              if (report.skippedCount > 0) {
+                body += `- Skipped (excluded): ${report.skippedCount}\n`;
+              }
+              body += `- URLs checked: ${report.totalUrls}\n`;
+              if (report.softOkCount > 0) {
+                body += `- Soft-OK (401/403/429/503 soft): ${report.softOkCount}\n`;
+              }
+              body += `- Broken: ${report.brokenCount}\n\n`;
+              if (fs.existsSync(summaryPath)) {
+                body += fs.readFileSync(summaryPath, 'utf8');
+              }
+            } else {
+              body += 'No report generated (run may have failed before writing).\n';
+            }
+            // GitHub issue body max is ~65536; keep a usable report if huge.
+            if (body.length > 60000) {
+              body = body.slice(0, 60000) + '\n\n…(truncated; see workflow artifact for full report)\n';
+            }
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              per_page: 100,
+            });
+            const title = 'Broken links report';
+            let issue = issues.find(i => i.title === title);
+            if (!issue) {
+              const created = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+              });
+              issue = created.data;
+            } else {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body,
+              });
+            }
+            console.log('Issue number:', issue.number);
+
+      # Posts use-case IDs + broken URLs only. WordPress looks up contact_email
+      # in the DB and sends mail (emails never enter git / GitHub artifacts).
+      - name: Notify submitters via WordPress
+        if: success()
+        env:
+          LINKCHECK_NOTIFY_URL: ${{ vars.LINKCHECK_NOTIFY_URL }}
+          LINKCHECK_NOTIFY_SECRET: ${{ secrets.LINKCHECK_NOTIFY_SECRET }}
+        run: npm run notify-broken-links

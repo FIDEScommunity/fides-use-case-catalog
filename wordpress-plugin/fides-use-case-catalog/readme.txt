@@ -2,13 +2,21 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.9.2
+Stable tag: 0.9.4
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
 Use case catalog renderer and WordPress submission flow.
 
 == Changelog ==
+
+= 0.9.4 =
+* Submission form: character counters on Description and How it works (same pattern as organization catalog).
+* Sync shared FidesCatalogUI stylesheet from canonical source.
+* Linkcheck notify: secret REST route `POST /linkcheck-notify` emails submitters about broken links (contact emails stay in the WordPress DB; never exported to GitHub).
+
+= 0.9.3 =
+* Fix KPI strip layout: add `display: grid` on `.fides-kpi-row` so stats stay in a row without relying on credential-catalog CSS loaded site-wide.
 
 = 0.9.2 =
 * Default catalog / detail path is `/ecosystem-explorer/use-cases/` (was `/use-cases/`), matching production.

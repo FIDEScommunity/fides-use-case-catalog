@@ -390,6 +390,9 @@ function fides_use_case_catalog_row_to_item(array $row): array {
         $item['country'] = $country;
     }
 
+    // Intentionally omit contact_email: it must stay in the WordPress DB only
+    // (GDPR). Broken-link notices look it up server-side via a secret REST route.
+
     return $item;
 }
 

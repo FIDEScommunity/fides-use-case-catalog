@@ -182,6 +182,9 @@
             <div class="fides-form-row">
               <label for="fides-summary">Description *</label>
               <textarea id="fides-summary" name="summary" minlength="30" maxlength="1200" required placeholder="${escapeHtml(descriptionPlaceholder)}"></textarea>
+              <div class="fides-field-meta">
+                <p class="fides-description-counter" id="fides-summary-counter" aria-live="polite"></p>
+              </div>
             </div>
             <div class="fides-form-grid fides-form-grid-pair fides-form-grid-pair--aligned">
               <div class="fides-form-row">
@@ -245,6 +248,9 @@
                 required
                 placeholder="${escapeHtml(howItWorksPlaceholder)}"
               ></textarea>
+              <div class="fides-field-meta">
+                <p class="fides-description-counter" id="fides-user-journey-counter" aria-live="polite"></p>
+              </div>
             </div>
             <div class="fides-form-grid fides-form-grid-pair">
               <div class="fides-form-row">
@@ -416,6 +422,24 @@
     messageEl.className = `fides-form-message ${type ? `is-${type}` : ""}`.trim();
   }
 
+  function updateSummaryCounter() {
+    const descEl = root.querySelector("#fides-summary");
+    const counterEl = root.querySelector("#fides-summary-counter");
+    if (!descEl || !counterEl) return;
+    const maxLen = Number(descEl.maxLength) || 1200;
+    const len = String(descEl.value || "").length;
+    counterEl.textContent = `${len.toLocaleString("en-US")} / ${maxLen.toLocaleString("en-US")} characters`;
+  }
+
+  function updateUserJourneyCounter() {
+    const descEl = root.querySelector("#fides-user-journey");
+    const counterEl = root.querySelector("#fides-user-journey-counter");
+    if (!descEl || !counterEl) return;
+    const maxLen = Number(descEl.maxLength) || 1200;
+    const len = String(descEl.value || "").length;
+    counterEl.textContent = `${len.toLocaleString("en-US")} / ${maxLen.toLocaleString("en-US")} characters`;
+  }
+
   function submissionItemUrl(useCaseId) {
     const id = String(useCaseId || "").trim();
     if (!id || !/^[a-z0-9][a-z0-9._-]*$/.test(id)) {
@@ -512,6 +536,8 @@
     if (summaryEl) summaryEl.value = String(data.summary || "");
     if (sectorEl) sectorEl.value = String(data.sector || "");
     if (userJourneyEl) userJourneyEl.value = String(data.userJourney || "");
+    updateSummaryCounter();
+    updateUserJourneyCounter();
     if (tagsEl) {
       tagsEl.value = Array.isArray(data.tags) ? data.tags.join(", ") : "";
     }
@@ -740,6 +766,17 @@
 
   renderImageRows();
   renderVideoRows();
+
+  const summaryInput = root.querySelector("#fides-summary");
+  if (summaryInput) {
+    summaryInput.addEventListener("input", updateSummaryCounter);
+  }
+  const userJourneyInput = root.querySelector("#fides-user-journey");
+  if (userJourneyInput) {
+    userJourneyInput.addEventListener("input", updateUserJourneyCounter);
+  }
+  updateSummaryCounter();
+  updateUserJourneyCounter();
 
   if (imageRowsEl) {
     imageRowsEl.addEventListener("input", (event) => {

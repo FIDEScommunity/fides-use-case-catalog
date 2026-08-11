@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.9.2
+ * Version: 0.9.4
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.9.1');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.9.4');
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
 define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
@@ -1450,6 +1450,7 @@ function fides_use_case_catalog_register_rest_routes(): void {
     );
 
     // Per-organization export consumed by the git/crawler publishing pipeline.
+    // contact_email is intentionally NOT included (GDPR — stays in WP DB only).
     fides_use_case_catalog_register_rest_route(
         '/export',
         array(
@@ -1457,6 +1458,35 @@ function fides_use_case_catalog_register_rest_routes(): void {
             'permission_callback' => '__return_true',
             'callback' => function () {
                 return rest_ensure_response(fides_use_case_catalog_build_export());
+            },
+        )
+    );
+
+    // Secret-protected: CI posts a linkcheck report (use-case IDs + broken URLs,
+    // never emails). WordPress resolves contact_email from the DB and notifies.
+    fides_use_case_catalog_register_rest_route(
+        '/linkcheck-notify',
+        array(
+            'methods' => WP_REST_Server::CREATABLE,
+            'permission_callback' => 'fides_use_case_catalog_linkcheck_notify_permission',
+            'callback' => function (WP_REST_Request $request) {
+                $payload = $request->get_json_params();
+                if (! is_array($payload)) {
+                    return new WP_Error(
+                        'fides_use_case_invalid_payload',
+                        __('Invalid JSON payload.', 'fides-use-case-catalog'),
+                        array('status' => 400)
+                    );
+                }
+                $result = fides_use_case_catalog_notify_broken_links($payload);
+                return rest_ensure_response(
+                    array(
+                        'ok' => true,
+                        'sent' => (int) ($result['sent'] ?? 0),
+                        'skipped' => (int) ($result['skipped'] ?? 0),
+                        'errors' => array_values((array) ($result['errors'] ?? array())),
+                    )
+                );
             },
         )
     );

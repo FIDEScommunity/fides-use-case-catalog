@@ -64,7 +64,11 @@ fides-use-case-catalog/
 │   └── crawler/index.ts               # sync + validate + aggregate pipeline
 ├── .github/workflows/
 │   ├── crawl.yml                      # pull export → crawl → commit
-│   └── validate.yml                   # schema-validate source files on PR/push
+│   ├── validate.yml                   # schema-validate source files on PR/push
+│   └── check-links.yml                # weekly broken-link check + WP notify
+├── scripts/
+│   ├── check-links.ts                 # HEAD→GET linkcheck with retries
+│   └── notify-broken-links.ts         # POST report to WordPress (no emails in payload)
 └── wordpress-plugin/
     └── fides-use-case-catalog/        # submission form, catalog UI, SSR, admin
 ```
@@ -76,6 +80,8 @@ npm install
 npm run crawl     # read community-catalogs/**, validate, write data/aggregated.json
 npm run sync      # also pull the WordPress /export endpoint first (needs env)
 npm run validate  # ajv-validate the per-organization source files
+npm run check-links           # check URLs in data/aggregated.json
+npm run notify-broken-links   # POST report to WP (needs URL+secret; or LINKCHECK_DRY_RUN=1)
 ```
 
 The crawler pulls from WordPress when `USE_CASE_EXPORT_URL` is set (or `USE_CASE_SYNC=1`):
@@ -87,24 +93,55 @@ USE_CASE_EXPORT_URL="https://www.fides.community/wp-json/fides-use-case/v1/expor
 It writes `data/aggregated.json` and a bundled copy inside the WordPress plugin
 (`wordpress-plugin/fides-use-case-catalog/data/aggregated.json`).
 
-## GitHub Action
+## GitHub Actions
 
-`.github/workflows/crawl.yml` runs daily (and on push to the per-organization source
-files). To enable the WordPress pull, set the repository variable:
+### Crawl
+
+`.github/workflows/crawl.yml` runs on push to the export / per-organization source
+files (and can be triggered manually). To enable a recovery HTTP pull, set the
+repository variable:
 
 - `USE_CASE_EXPORT_URL` → e.g. `https://www.fides.community/wp-json/fides-use-case/v1/export`
 
 Without it the job still re-aggregates whatever is already committed.
+
+### Check links
+
+`.github/workflows/check-links.yml` runs every Monday (and on `workflow_dispatch`).
+It:
+
+1. Checks unique HTTP(S) URLs from `data/aggregated.json` (moreInfo, images, videos, linked entities).
+2. Uploads a report artifact and updates/creates the open GitHub issue **Broken links report** (organization names + URLs only — **no email addresses**).
+3. POSTs the report to WordPress `POST /wp-json/fides-use-case/v1/linkcheck-notify`. WordPress looks up each submitter’s `contact_email` in the DB and sends mail with FIDES in CC via `wp_mail`.
+
+**GDPR:** submitter emails never appear in git, `aggregated.json`, GitHub issues, or CI artifacts. They stay in the WordPress database.
+
+False-positive mitigations: HEAD with GET fallback, up to 3 retries on transient
+errors, browser-like User-Agent, `Range: bytes=0-0` on GET, treating HTTP
+401/403 as reachable (many CDNs/WAFs block bots), and treating persistent
+429/503 after retries as soft-OK (temporary outage / throttle).
+
+To enable submitter notify from Actions:
+
+| Where | Name | Purpose |
+| --- | --- | --- |
+| GitHub **variable** | `LINKCHECK_NOTIFY_URL` | e.g. `https://fides.community/wp-json/fides-use-case/v1/linkcheck-notify` |
+| GitHub **secret** | `LINKCHECK_NOTIFY_SECRET` | Shared secret (must match WordPress) |
+| WordPress | `FIDES_USE_CASE_LINKCHECK_NOTIFY_SECRET` in `wp-config.php` **or** option `fides_use_case_catalog_linkcheck_notify_secret` | Same secret |
+
+CC defaults to `catalog@fides.community` (filter: `fides_use_case_catalog_linkcheck_cc_email`).
+
+Without the URL/secret, linkcheck + the GitHub issue still run; notify is skipped.
 
 ## WordPress plugin
 
 The plugin under `wordpress-plugin/fides-use-case-catalog/`:
 
 - renders the submission form and the catalog (list + grid + detail modal);
-- exposes REST routes under `fides-use-case/v1` (`/catalog`, `/export`, `/submissions`, …);
+- exposes REST routes under `fides-use-case/v1` (`/catalog`, `/export`, `/submissions`, `/linkcheck-notify`, …);
 - server-side renders detail pages for SEO (`Fides_Catalog_SSR_Renderer` subclass),
   contributes to the shared sitemap, and enriches schema.org JSON-LD;
-- sends email notifications on submission and publication;
+- sends email notifications on submission, publication, and (secret) linkcheck;
 - lets moderators refresh a published use case from the GitHub source.
 
 It depends on `fides-community-tools-tiles ≥ 1.6.2` for the shared catalog core
