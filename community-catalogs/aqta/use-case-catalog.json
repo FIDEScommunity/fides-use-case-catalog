@@ -8,12 +8,12 @@
       "id": "independent-review-of-ai-decision-evidence-lf3fYX",
       "sector": "digital",
       "title": "Independent review of AI decision evidence",
-      "summary": "Organisations using AI for consequential decisions face a structural problem: when a decision is questioned, the only record is often a log written by the party under review. Seal signs a receipt at the moment the decision is made, offline-verifiable against its published key (open ATTESTATION-v1 format, documented in an Informational IETF Internet-Draft). This use case adds an independent review step: a reviewer opens a docket, the question under examination, and countersigns their verdict with a credential from their Yivi wallet, as an IRMA attribute-based signature over the receipt hash, question hash, decision and timestamp. The reviewer never creates an account with the organisation under review. The evidence pack holds three independently verifiable objects from three issuers: the receipt, the credential presentation, the countersignature. The prototype discloses a verified email as a placeholder credential; the receipt itself is deliberately not a Verifiable Credential",
+      "summary": "Organisations using AI for consequential decisions face a structural problem: when a decision is questioned, the only record is often a log written by the party under review. Seal signs a receipt at the moment the decision is made, offline-verifiable against its published key (open ATTESTATION-v1 format, documented in an Informational IETF Internet-Draft). This use case adds an independent review step: a reviewer opens a docket, the question under examination, and countersigns their verdict with a credential from their Yivi wallet, as an IRMA attribute-based signature over the receipt hash, question hash, decision and timestamp. The reviewer never creates an account with the organisation under review. The evidence pack holds three verifiable objects from three issuers: the receipt, the credential presentation, the countersignature. The prototype discloses a verified email as a placeholder credential; the receipt itself is deliberately not a Verifiable Credential",
       "organizationName": "Aqta",
-      "productionDeployment": "yes",
+      "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-11T05:21:35+01:00",
-      "publishedAt": "2026-08-11T05:21:35+01:00",
+      "updatedAt": "2026-08-11T17:07:21+01:00",
+      "publishedAt": "2026-08-11T17:07:21+01:00",
       "tags": [
         "ai-evidence",
         "independent-review",
@@ -76,8 +76,18 @@
         "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review."
       ],
       "imageUrl": "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review.",
+      "videos": [
+        {
+          "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
+        "provider": "youtube"
+      },
       "moreInfoUrl": "https://review.aqta.ai",
-      "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\r\n2. An independent reviewer opens a docket: the specific question under examination, with the receipt attached. The question is hashed into what will be signed\r\n3. The reviewer chooses accept or decline\r\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\r\n5. The reviewer signs it by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\r\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library. The signature carries a timestamp anchored by the Yivi timestamp service\r\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
+      "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: the specific question under examination, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer chooses accept or decline\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs it by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library. The signature carries a timestamp anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
       "country": "IE"
     }
   ]
