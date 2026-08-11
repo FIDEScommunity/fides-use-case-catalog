@@ -8,12 +8,12 @@
       "id": "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-t2LpAh",
       "sector": "manufacturing",
       "title": "Cryptographically Verifiable Digital Product Passports for EU Battery Regulation Compliance",
-      "summary": "European manufacturers must issue Digital Product Passports (EU Battery Regulation\r\n2023/1542, from 18 February 2027, with the ESPR extending this to further\r\ncategories). Today the data those passports need lives in unstructured PDF\r\ndatasheets, and manufacturers have no way to prove a downstream party has not\r\naltered the file after publication.\r\n\r\nAAS Studio turns a datasheet into a conformant Asset Administration Shell (IDTA,\r\nIEC 63278-1:2023), then issues a W3C Verifiable Credential (VCDM 2.0, JWT-VC, and\r\nan SD-JWT-VC variant with selective disclosure) committing to a canonical hash of\r\nthe passport content. The manufacturer is the issuer, signing with a tenant-scoped\r\nES256 key. Any verifier — regulator, recycler, supply-chain partner — checks the\r\ncredential against a public JWKS with no account and no call back to AAS Studio:\r\nverification is fully offline. Revocation is enforced via a Bitstring/Token Status\r\nList.",
+      "summary": "European manufacturers must issue Digital Product Passports (EU Battery Regulation\n2023/1542, from 18 February 2027, with the ESPR extending this to further\ncategories). Today the data those passports need lives in unstructured PDF\ndatasheets, and manufacturers have no way to prove a downstream party has not\naltered the file after publication.\n\nAAS Studio turns a datasheet into a conformant Asset Administration Shell (IDTA,\nIEC 63278-1:2023), then issues a W3C Verifiable Credential (VCDM 2.0, JWT-VC, and\nan SD-JWT-VC variant with selective disclosure) committing to a canonical hash of\nthe passport content. The manufacturer is the issuer, signing with a tenant-scoped\nES256 key. Any verifier — regulator, recycler, supply-chain partner — checks the\ncredential against a public JWKS with no account and no call back to AAS Studio:\nverification is fully offline. Revocation is enforced via a Bitstring/Token Status\nList.",
       "organizationName": "AAS-Studio",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-11T05:24:34+01:00",
-      "publishedAt": "2026-08-11T05:24:34+01:00",
+      "updatedAt": "2026-08-11T21:51:26+01:00",
+      "publishedAt": "2026-08-11T21:51:26+01:00",
       "tags": [
         "digital-product-passport",
         "verifiable-credentials",
@@ -67,8 +67,30 @@
       ],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/homepage.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/homepage.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=ATS0oWPEf_g",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/playlist?list=PLalPBeAf1XCg",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
+        "provider": "youtube"
+      },
       "moreInfoUrl": "https://aas-studio.eu/verify",
-      "userJourney": "1. Manufacturer uploads a PDF datasheet; AAS Studio extracts the regulatory fields\r\n   with an LLM ensemble and maps them onto a conformant Asset Administration Shell,\r\n   validated against the official IDTA test engine.\r\n2. AAS Studio computes a canonical hash of the passport content and issues a W3C\r\n   Verifiable Credential signed with the manufacturer's own ES256 key, optionally\r\n   as an SD-JWT-VC for selective disclosure.\r\n3. If issued as revocable, a Bitstring/Token Status List slot is allocated; the\r\n   manufacturer can revoke it later, effective immediately for any verifier.\r\n4. The holder presents the credential's JWT to a relying party by any channel.\r\n5. The relying party verifies it fully offline: it fetches the public JWKS and\r\n   re-derives the proof itself, including the status-list check, so the verdict\r\n   never depends on trusting AAS Studio's server.",
+      "userJourney": "1. Manufacturer uploads a PDF datasheet; AAS Studio extracts the regulatory fields\n   with an LLM ensemble and maps them onto a conformant Asset Administration Shell,\n   validated against the official IDTA test engine.\n2. AAS Studio computes a canonical hash of the passport content and issues a W3C\n   Verifiable Credential signed with the manufacturer's own ES256 key, optionally\n   as an SD-JWT-VC for selective disclosure.\n3. If issued as revocable, a Bitstring/Token Status List slot is allocated; the\n   manufacturer can revoke it later, effective immediately for any verifier.\n4. The holder presents the credential's JWT to a relying party by any channel.\n5. The relying party verifies it fully offline: it fetches the public JWKS and\n   re-derives the proof itself, including the status-list check, so the verdict\n   never depends on trusting AAS Studio's server.",
       "country": "PT"
     }
   ]
