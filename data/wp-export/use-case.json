@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-10T17:26:41+00:00",
+    "generatedAt": "2026-08-11T04:18:55+00:00",
     "organizations": [
         {
             "orgSlug": "air-new-zealand",
@@ -2463,6 +2463,85 @@
                     "moreInfoUrl": "https://playground.france-identite.gouv.fr/marketplace/verifiers/odifis/",
                     "userJourney": "https://api.playground.france-identite.gouv.fr/odifis/contactless-rent/en/\r\n\r\n1. Booking. The driver selects a car and scans a QR code with France Identité. The rental platform receives only age_over_18: true. Any birth date disclosed to the verifier is discarded within milliseconds and never reaches the platform, its database or an API.\r\n\r\n2. Identification. At the car, the driver presents a test mobile driving licence from the EU reference wallet, or uses the PID as a fallback. The same verifier checks the credential and shares only the structured claims needed for the rental—no scans or document images.\r\n\r\n3. Handover. A fresh, device-bound presentation answers a dynamic challenge. After verification, the platform issues a short-lived, replay-protected token. Only a pseudonymous handover record and the verification method are retained.\r\n\r\n4. Data minimisation. The database stores the age result, required rental claims and a pseudonymous attestation. It does not store a birth date, portrait, licence image or photocopy.\r\n\r\n5. Trust. Credentials are checked against recognised trust anchors and revocation sources. Unknown issuers are flagged, never silently accepted.",
                     "country": "LT"
+                }
+            ]
+        },
+        {
+            "orgSlug": "recept",
+            "orgId": "org:recept",
+            "orgName": "Recept",
+            "useCases": [
+                {
+                    "id": "portable-volunteer-credentials-turning-fragmented-volunteer-records-into-trusted-learner-owned-proof-with-a-neutral-t-oAVKbU",
+                    "sector": "public_sector",
+                    "title": "Portable Volunteer Credentials — Turning Fragmented Volunteer Records into Trusted, Learner-Owned Proof with a Neutral T",
+                    "summary": "In Japan, proof of volunteer activity is scattered across paper rosters, spreadsheets, and each organization's own ledgers. Volunteers rarely keep durable evidence of what they contributed, and the schools, universities, and employers who increasingly value civic engagement have no reliable way to confirm that a submitted record is genuine.\r\n\r\nThis use case solves that with verifiable credentials. JAVO (NPO JAPAN Volunteer Association), a nonprofit whose mission is to make volunteering a normal part of life in Japan, acts as a neutral third-party issuing authority: it independently reviews and approves the content of each volunteer certificate, giving it credibility that reaches beyond any single organization. Recept provides the technical infrastructure through its DID/VC platform proovy (delivered to JAVO on an OEM basis).\r\n\r\nVolunteers receive a verifiable volunteer certificate directly into the proovy wallet on their smartphone and own it for life. They can present it — with selective disclosure — to universities for admissions, to employers during hiring, or to other programs, and any verifier can instantly confirm both the content and that JAVO stands behind it. Applications span",
+                    "organizationName": "Recept",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-11T05:18:54+01:00",
+                    "publishedAt": "2026-08-11T05:18:54+01:00",
+                    "tags": [],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": null,
+                                "labelRaw": "proovy",
+                                "url": "https://play.google.com/store/apps/details?id=com.proovyreactnative&hl=ja",
+                                "source": "manual",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "proovy",
+                                "url": "https://proovy.jp/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Javo",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Recept",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/proovy_DIF.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/proovy_DIF.png",
+                    "userJourney": "1. Activity record. A volunteer takes part in an activity (community service, environmental work, disaster preparedness, education, etc.); the host organization submits the participation record to JAVO.\r\n2. Independent review. JAVO, as a neutral third party, reviews and approves the content of the certificate — establishing trust beyond any single organization.\r\n3. Issuance. JAVO issues a verifiable volunteer certificate to the volunteer through the proovy platform (OpenID4VCI).\r\n4. Hold in the wallet. The volunteer stores the credential in the proovy wallet on their smartphone and owns it permanently, independent of any single organization's records.\r\n5. Present with selective disclosure. When applying to a university, a job, or another program, the volunteer presents the credential (OpenID4VP), sharing only the attributes needed.\r\n6. Instant verification. The relying party cryptographically verifies the credential and confirms JAVO's third-party endorsement — no phone calls, no paper, no doubt about authenticity.",
+                    "country": "JP"
                 }
             ]
         },
