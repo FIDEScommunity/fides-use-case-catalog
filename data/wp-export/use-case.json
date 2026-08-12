@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-12T17:03:36+00:00",
+    "generatedAt": "2026-08-12T17:04:02+00:00",
     "organizations": [
         {
             "orgSlug": "aas-studio",
@@ -4191,8 +4191,8 @@
                     "organizationName": "Verana",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-12T13:26:06+01:00",
-                    "publishedAt": "2026-08-12T13:26:06+01:00",
+                    "updatedAt": "2026-08-12T18:04:01+01:00",
+                    "publishedAt": "2026-08-12T18:04:01+01:00",
                     "tags": [
                         "verifiable trust",
                         "proof-of-trust",
@@ -4250,13 +4250,6 @@
                                 "walletType": "personal"
                             },
                             {
-                                "refId": "swiyu-wallet",
-                                "labelRaw": "SWIYU Wallet",
-                                "url": "https://www.swiyu.admin.ch/",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
                                 "refId": "altme-wallet",
                                 "labelRaw": "Altme",
                                 "url": "https://altme.io",
@@ -4274,6 +4267,20 @@
                                 "refId": "bc-wallet",
                                 "labelRaw": "BC Wallet",
                                 "url": "https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "national-eudi-wallet-netherlands",
+                                "labelRaw": "NL Wallet (Netherlands)",
+                                "url": "https://www.nldigitalgovernment.nl/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "authbound-wallet",
+                                "labelRaw": "Authbound Wallet",
+                                "url": "https://authbound.io",
                                 "source": "catalog",
                                 "walletType": "personal"
                             }
@@ -4362,13 +4369,6 @@
                                 "walletType": null
                             },
                             {
-                                "refId": "org:swiyu",
-                                "labelRaw": "Swiss Confederation",
-                                "url": "https://www.eid.admin.ch/en",
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
                                 "refId": "org:talao",
                                 "labelRaw": "Talao",
                                 "url": "https://talao.io",
@@ -4386,6 +4386,20 @@
                                 "refId": "org:wwwallet",
                                 "labelRaw": "wwWallet.org",
                                 "url": "https://wwwallet.org",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:bzk",
+                                "labelRaw": "Ministerie van Binnenlandse Zaken en Koninkrijksrelaties",
+                                "url": "https://www.rijksoverheid.nl/ministeries/ministerie-van-binnenlandse-zaken-en-koninkrijksrelaties",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:authbound",
+                                "labelRaw": "Authbound",
+                                "url": "https://authbound.io",
                                 "source": "catalog",
                                 "walletType": null
                             }
