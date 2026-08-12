@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-12T12:25:30+00:00",
+    "generatedAt": "2026-08-12T12:26:06+00:00",
     "organizations": [
         {
             "orgSlug": "aas-studio",
@@ -4051,8 +4051,8 @@
                     "organizationName": "Verana",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-07T21:52:18+01:00",
-                    "publishedAt": "2026-08-07T21:52:18+01:00",
+                    "updatedAt": "2026-08-12T13:26:06+01:00",
+                    "publishedAt": "2026-08-12T13:26:06+01:00",
                     "tags": [
                         "verifiable trust",
                         "proof-of-trust",
@@ -4275,7 +4275,7 @@
                     "imageUrl": "https://playground.testnet.verana.network/images/vesta-verana-cover.webp",
                     "moreInfoUrl": "https://playground.testnet.verana.network/usecases/vesta",
                     "userJourney": "Organization journey (Marc, CTO of Vesta): Marc deploys Vesta's Business Wallet (VS Agent) and anchors the company DID on the Verana Network. He completes KYB with an accredited issuer to obtain the ECS-Organization credential, then self-issues Service credentials so every Vesta service presents its identity as Linked VPs in its DID Document. He makes Vesta an ECS-Badge issuer for its ~200 employees and accredits a login service to verify those badges. Vesta's ISO 9001 certification becomes a verifiable credential, no re-certifying. Finally Marc builds the Vesta Repair Network, Vesta's own ecosystem with its own governance, issuing Authorized Repairer credentials that work at portal login and at the customer's front door.\n\nUser journey (runnable demos): choose a personal wallet, obtain an ECS-Badge from the demo issuer, log in to the staff portal as a repair employee with that badge instead of a password, then search the public directory of Authorized Repairers and check any repairer's Proof-of-Trust before opening the door.",
-                    "country": "CH"
+                    "country": "EE"
                 }
             ]
         }
