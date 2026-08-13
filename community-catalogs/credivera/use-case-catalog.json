@@ -1,0 +1,87 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:credivera",
+  "orgName": "Credivera",
+  "useCases": [
+    {
+      "id": "from-pilot-to-proven-crediveras-global-adoption-Wza0As",
+      "sector": "healthcare",
+      "title": "From Pilot to Proven: Credivera’s Global Adoption",
+      "summary": "Credivera is proving verifiable credentials are no longer a pilot. Our network spans 30+ countries, has enabled 3M+ verifiable credentials, and connects to 10,000+ authoritative credential sources. Transactions have grown 4X and revenue 3X, demonstrating sustained adoption.\r\nAdoption is deepest in two safety-critical sectors. In healthcare (e.g. TruMerit &amp; Inteleos), nurses, physicians, and allied health professionals use portable credentials across education, certification, licensing, immigration, and employment. In skilled trades (e.g. Oliu &amp; BCRSP), construction and energy employers use credentials for safety certifications, licensing, testing, and workforce readiness.\r\nThe ecosystem connects workers, employers, regulators, associations, educators, certification bodies, and credential issuers, reducing manual verification and accelerating workforce mobility. Verification can move from weeks to seconds, while reducing fraud risk, accelerating onboarding, and strengthening compliance.\r\nSOC 2 Type II audited and Government of Canada approved, Credivera demonstrates enterprise and regulatory readiness. It is a global workforce trust ecosystem already operating at meaningful scale.",
+      "organizationName": "Credivera",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-13T08:05:08+01:00",
+      "publishedAt": "2026-08-13T08:05:08+01:00",
+      "tags": [
+        "Digital Trust",
+        "Verifiable Credentials",
+        "Digital Wallet",
+        "Workforce Readiness",
+        "Credential Verification",
+        "Fit to Work",
+        "Compliance",
+        "Competency Management",
+        "Workforce Mobility",
+        "Trusted Credentials"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "TruMerit",
+            "url": "https://www.trumerit.org/verifiable-digital-credentials/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Inteleos",
+            "url": "https://www.inteleos.org/beyond/credivera-digital-wallet/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Oliu",
+            "url": "https://oliu.ca/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "BCRSP",
+            "url": "https://bcrsp.ca/en",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:credivera",
+            "labelRaw": "Credivera",
+            "url": "https://www.credivera.com/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-163734.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-163734.png",
+      "moreInfoUrl": "https://www.credivera.com/",
+      "userJourney": "Organizations define compliance or competency workflows that specify what a professional must prove to be fit to work, fit to practice, or eligible to participate. These workflows generate verifiable presentation requests, asking individuals to provide trusted proof of required licenses, certifications, training records, employment attestations, education, or compliance credentials. Professionals respond directly from their secure digital wallet, sharing verifiable credentials they already hold. Credivera checks those credentials against the organization’s requirements and confirms what is valid, current, trusted, and complete. If a required credential is missing, the professional can request it from Credivera’s issuer network. Trusted issuers, such as regulators, certification bodies, educators, employers, associations, or training providers, issue the missing credential as a verifiable credential directly to the individual’s wallet. The result is a connected ecosystem where organizations get verified proof instead of documents and professionals control and reuse their credentials, and issuers deliver trusted records.",
+      "country": "CA"
+    }
+  ]
+}
