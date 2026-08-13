@@ -1,10 +1,74 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-13T07:05:33.961Z",
+  "lastUpdated": "2026-08-13T07:14:17.618Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 38,
+  "count": 39,
   "useCases": [
+    {
+      "id": "dppskop-digital-product-passport-platform-for-espr-compliance-QAZbov",
+      "sector": "manufacturing",
+      "title": "DPPskop – Digital Product Passport Platform for ESPR Compliance",
+      "summary": "DPPskop is a Software-as-a-Service (SaaS) platform that enables manufacturers to create, manage, validate, and publish Digital Product Passports (DPPs) in preparation for the European Union Ecodesign for Sustainable Products Regulation (ESPR).\r\n\r\nThe platform centralizes product information, sustainability data, supply chain documentation, carbon footprint records, repairability information, compliance documents, and Digital Product Passport content into a single structured digital identity.\r\n\r\nManufacturers can collaborate with suppliers, collect verified product data, publish QR-code-enabled Digital Product Passports, and continuously maintain product information throughout the product lifecycle.\r\n\r\nDPPskop is designed to support interoperability with emerging European Digital Product Passport standards and validation initiatives, helping organizations prepare for future regulatory requirements while improving transparency across the value chain.",
+      "organizationName": "DPPskop Digital Product Passport",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-13T08:13:58+01:00",
+      "publishedAt": "2026-08-13T08:13:58+01:00",
+      "tags": [
+        "Digital Product Passport",
+        "ESPR",
+        "Sustainability",
+        "Circular Economy",
+        "Supply Chain",
+        "Manufacturing",
+        "QR Code",
+        "GS1 Digital Link",
+        "Product Traceability",
+        "Compliance",
+        "Digital Identity",
+        "Product Data",
+        "Interoperability"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "DPPskop Digital Product Passport",
+            "url": "https://dppskop.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "DPPskop",
+            "url": "https://dppskop.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/g7023.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/g7023.png",
+      "moreInfoUrl": "https://dppskop.com",
+      "userJourney": "Manufacturers create Digital Product Passports using DPPskop by entering product information, sustainability metrics, technical documentation, and supply chain data.\r\n\r\nSuppliers can securely contribute product-specific information through dedicated supplier portals, reducing manual data collection and improving data quality.\r\n\r\nOnce the required information is completed, the platform evaluates completeness and compliance, generates a Digital Product Passport, and publishes it through a QR code or GS1 Digital Link.\r\n\r\nDifferent stakeholder groups—including consumers, business customers, recyclers, service providers, and regulatory authorities—can access different information views according to their authorization level.\r\n\r\nThe platform also supports continuous updates throughout the product lifecycle, allowing manufacturers to maintain accurate and up-to-date Digital Product Passports.",
+      "country": "TR"
+    },
     {
       "id": "from-pilot-to-proven-crediveras-global-adoption-Wza0As",
       "sector": "healthcare",
