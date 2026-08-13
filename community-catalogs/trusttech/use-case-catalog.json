@@ -12,8 +12,8 @@
       "organizationName": "TrustTech",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-12T18:03:03+01:00",
-      "publishedAt": "2026-08-12T18:03:03+01:00",
+      "updatedAt": "2026-08-13T10:53:42+01:00",
+      "publishedAt": "2026-08-13T10:53:42+01:00",
       "tags": [
         "European Business Wallet",
         "EBW",
@@ -158,6 +158,10 @@
       "interopProfiles": [
         "EUDI Wallet ARF"
       ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Presentatie1-1.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Presentatie1-1.jpg",
       "userJourney": "An employee signs in to the organisation's business wallet with their personal EUDI wallet; organisational credentials belong to the company, the access pass to the person.\nThe organisation identifies itself with a qualified attestation (QEAA) aligned with LPID/EBWOID formats: one identity, reusable across every chain.\nA machine-readable mandate credential proves the person or system acts on behalf of the organisation; differentiated per process, instantly revocable, verified at the moment of the transaction.\nThe submission is sealed machine-to-machine with a qualified electronic seal (QSeal, JAdES-LTA, eIDAS art. 35) via a qualified trust service provider, then delivered to the receiving public body through QERDS (ETSI TS 119 522) with a qualified timestamp.\nQERDS logs evidence events for submission, acceptance and delivery in a searchable audit trail, and the receiver acknowledges receipt. Both parties hold non-repudiable proof: the sender can prove it delivered on time and unaltered, the receiver what it received, registered mail, machine-to-machine.",
       "country": "NL"
     }
