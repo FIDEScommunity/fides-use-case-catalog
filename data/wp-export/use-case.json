@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-13T09:53:43+00:00",
+    "generatedAt": "2026-08-13T09:55:04+00:00",
     "organizations": [
         {
             "orgSlug": "aas-studio",
@@ -3400,7 +3400,7 @@
         },
         {
             "orgSlug": "recept",
-            "orgId": "org:recept",
+            "orgId": "org:javo",
             "orgName": "Recept",
             "useCases": [
                 {
@@ -3411,8 +3411,8 @@
                     "organizationName": "Recept",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-11T11:48:49+01:00",
-                    "publishedAt": "2026-08-11T11:48:49+01:00",
+                    "updatedAt": "2026-08-13T10:55:03+01:00",
+                    "publishedAt": "2026-08-13T10:55:03+01:00",
                     "tags": [],
                     "links": {
                         "personalWallets": [
@@ -3437,17 +3437,17 @@
                         "credentials": [],
                         "organizations": [
                             {
-                                "refId": null,
-                                "labelRaw": "Javo",
-                                "url": null,
-                                "source": "manual",
+                                "refId": "org:javo",
+                                "labelRaw": "NPO JAPAN Volunteer Association (JAVO)",
+                                "url": "https://javo.or.jp/",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:recept",
                                 "labelRaw": "Recept",
-                                "url": null,
-                                "source": "manual",
+                                "url": "https://recept.earth",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
