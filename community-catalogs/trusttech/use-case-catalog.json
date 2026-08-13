@@ -12,8 +12,8 @@
       "organizationName": "TrustTech",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-13T10:53:42+01:00",
-      "publishedAt": "2026-08-13T10:53:42+01:00",
+      "updatedAt": "2026-08-13T10:59:39+01:00",
+      "publishedAt": "2026-08-13T10:59:39+01:00",
       "tags": [
         "European Business Wallet",
         "EBW",
@@ -102,10 +102,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:zorginstituut-nederland",
             "labelRaw": "Zorginstituut Nederland",
-            "url": null,
-            "source": "manual",
+            "url": "https://www.zorginstituutnederland.nl/",
+            "source": "catalog",
             "walletType": null
           }
         ],
