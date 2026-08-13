@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.9.4
+ * Version: 0.9.5
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,9 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.9.4');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.9.5');
+/** Admin list page size for Tools → Use Case Submissions. */
+define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
 define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings');
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
@@ -217,6 +219,136 @@ function fides_use_case_catalog_normalize_status(string $status): string {
         return 'published';
     }
     return 'received';
+}
+
+/**
+ * Allowed Tools → Use Case Submissions list views.
+ *
+ * @return string[]
+ */
+function fides_use_case_catalog_admin_views(): array {
+    return array('pending', 'received', 'approved', 'published', 'all');
+}
+
+/**
+ * Normalize admin list view slug. Default is pending review.
+ */
+function fides_use_case_catalog_normalize_admin_view(string $view): string {
+    $view = sanitize_key($view);
+    if (in_array($view, fides_use_case_catalog_admin_views(), true)) {
+        return $view;
+    }
+    return 'pending';
+}
+
+/**
+ * Statuses included in an admin list view. Null means no status filter (all).
+ *
+ * @return string[]|null
+ */
+function fides_use_case_catalog_statuses_for_admin_view(string $view): ?array {
+    $view = fides_use_case_catalog_normalize_admin_view($view);
+    switch ($view) {
+        case 'received':
+            return array('received');
+        case 'approved':
+            return array('approved');
+        case 'published':
+            return array('published');
+        case 'all':
+            return null;
+        case 'pending':
+        default:
+            return array('received', 'approved');
+    }
+}
+
+/**
+ * Admin list URL helper (preserves filter query args).
+ *
+ * @param array<string, scalar> $args
+ */
+function fides_use_case_catalog_admin_page_url(array $args = array()): string {
+    return add_query_arg($args, admin_url('tools.php?page=fides-use-case-submissions'));
+}
+
+/**
+ * Lean admin list: metadata columns only (no LONGTEXT payloads), with pagination.
+ *
+ * @param array<string, mixed> $args {
+ *     @type string $view     pending|received|approved|published|all.
+ *     @type int    $page     1-based page number.
+ *     @type int    $per_page Rows per page (1–100).
+ * }
+ * @return array{
+ *   rows: array<int, array<string, mixed>>,
+ *   total: int,
+ *   page: int,
+ *   per_page: int,
+ *   pages: int,
+ *   view: string
+ * }
+ */
+function fides_use_case_catalog_list_for_admin(array $args = array()): array {
+    global $wpdb;
+
+    $view     = fides_use_case_catalog_normalize_admin_view(isset($args['view']) ? (string) $args['view'] : 'pending');
+    $statuses = fides_use_case_catalog_statuses_for_admin_view($view);
+    $per_page = isset($args['per_page']) ? (int) $args['per_page'] : FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE;
+    $per_page = max(1, min(100, $per_page));
+    $page     = isset($args['page']) ? (int) $args['page'] : 1;
+    $page     = max(1, $page);
+
+    $where  = array('1=1');
+    $params = array();
+
+    if (is_array($statuses) && $statuses !== array()) {
+        $placeholders = implode(', ', array_fill(0, count($statuses), '%s'));
+        $where[]      = 'status IN (' . $placeholders . ')';
+        foreach ($statuses as $status) {
+            $params[] = $status;
+        }
+    }
+
+    $where_sql = implode(' AND ', $where);
+    $table     = FIDES_USE_CASE_CATALOG_TABLE;
+
+    $count_sql = "SELECT COUNT(*) FROM {$table} WHERE {$where_sql}";
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+    $total = (int) ($params !== array()
+        ? $wpdb->get_var($wpdb->prepare($count_sql, ...$params))
+        : $wpdb->get_var($count_sql));
+
+    $pages = max(1, (int) ceil($total / $per_page));
+    if ($page > $pages) {
+        $page = $pages;
+    }
+    $offset = ($page - 1) * $per_page;
+
+    // Omit LONGTEXT fields (links_json, taxonomy_json, media_json, …) for the list.
+    $select_sql = 'SELECT id, use_case_id, title, organization_name, status, updated_at,'
+        . ' submission_action, target_use_case_id, sectors_json, theme_key'
+        . " FROM {$table} WHERE {$where_sql}"
+        . ' ORDER BY updated_at DESC LIMIT %d OFFSET %d';
+
+    $list_params   = $params;
+    $list_params[] = $per_page;
+    $list_params[] = $offset;
+
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+    $rows = $wpdb->get_results($wpdb->prepare($select_sql, ...$list_params), ARRAY_A);
+    if (! is_array($rows)) {
+        $rows = array();
+    }
+
+    return array(
+        'rows'     => $rows,
+        'total'    => $total,
+        'page'     => $page,
+        'per_page' => $per_page,
+        'pages'    => $pages,
+        'view'     => $view,
+    );
 }
 
 function fides_use_case_catalog_is_local_site(): bool {
@@ -2025,6 +2157,14 @@ function fides_use_case_catalog_render_admin_page(): void {
     }
     global $wpdb;
     $table = FIDES_USE_CASE_CATALOG_TABLE;
+
+    // Default view = pending (received + approved). Explicit ?view= required for published/all.
+    $filter_view = isset($_GET['view'])
+        ? fides_use_case_catalog_normalize_admin_view((string) wp_unslash($_GET['view']))
+        : 'pending';
+    $filter_page = isset($_GET['paged']) ? max(1, (int) $_GET['paged']) : 1;
+    $list_query_args = array('view' => $filter_view);
+
     $selected_id = isset($_GET['submission']) ? (int) $_GET['submission'] : 0;
     $selected_submission = null;
     if ($selected_id > 0) {
@@ -2058,7 +2198,18 @@ function fides_use_case_catalog_render_admin_page(): void {
         }
     }
 
-    $rows = $wpdb->get_results("SELECT * FROM {$table} ORDER BY updated_at DESC LIMIT 250", ARRAY_A);
+    $list = fides_use_case_catalog_list_for_admin(array(
+        'view'     => $filter_view,
+        'page'     => $filter_page,
+        'per_page' => FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE,
+    ));
+    $rows        = $list['rows'];
+    $filter_page = (int) $list['page'];
+    $total       = (int) $list['total'];
+    $pages       = (int) $list['pages'];
+    $per_page    = (int) $list['per_page'];
+    $from        = $total === 0 ? 0 : (($filter_page - 1) * $per_page) + 1;
+    $to          = min($total, $filter_page * $per_page);
     ?>
     <div class="wrap">
         <h1>Use Case Submissions</h1>
@@ -2073,6 +2224,23 @@ function fides_use_case_catalog_render_admin_page(): void {
             <span class="description" style="margin-left:.5em;">
                 <?php esc_html_e('Manual backup of all published use cases, grouped per organization (same data the crawler publishes to git).', 'fides-use-case-catalog'); ?>
             </span>
+        </p>
+        <p>
+            <?php
+            $view_labels = array(
+                'pending'   => __('Pending review', 'fides-use-case-catalog'),
+                'received'  => __('Received', 'fides-use-case-catalog'),
+                'approved'  => __('Approved', 'fides-use-case-catalog'),
+                'published' => __('Published', 'fides-use-case-catalog'),
+                'all'       => __('All statuses', 'fides-use-case-catalog'),
+            );
+            foreach ($view_labels as $view_slug => $view_label) :
+                ?>
+                <a class="button<?php echo $filter_view === $view_slug ? ' button-primary' : ''; ?>"
+                   href="<?php echo esc_url(fides_use_case_catalog_admin_page_url(array('view' => $view_slug))); ?>">
+                    <?php echo esc_html($view_label); ?>
+                </a>
+            <?php endforeach; ?>
         </p>
         <?php if (! empty($_GET['sector_pending'])) : ?>
             <div class="notice notice-warning is-dismissible">
@@ -2347,7 +2515,7 @@ function fides_use_case_catalog_render_admin_page(): void {
 
                         <p>
                             <button class="button button-secondary" type="submit">Save details</button>
-                            <a class="button button-secondary" href="<?php echo esc_url(admin_url('tools.php?page=fides-use-case-submissions')); ?>">Cancel</a>
+                            <a class="button button-secondary" href="<?php echo esc_url(fides_use_case_catalog_admin_page_url($list_query_args)); ?>">Cancel</a>
                             <?php
                             $detail_delete_url = admin_url('admin-post.php?action=fides_use_case_delete&id=' . (int) $selected_submission['id'] . '&_wpnonce=' . wp_create_nonce('fides_use_case_delete_' . (int) $selected_submission['id']));
                             $detail_delete_confirm = esc_js(fides_use_case_catalog_delete_confirm_message($selected_submission));
@@ -2362,9 +2530,12 @@ function fides_use_case_catalog_render_admin_page(): void {
         // Community use cases that live only in git (GitHub aggregated.json) and
         // are not yet in the local database. Importing creates a published row so
         // moderators can maintain them through the form.
+        // Query all IDs (not just the current filtered page) so importable list stays accurate.
         $existing_use_case_ids = array();
-        foreach ((array) $rows as $existing_row) {
-            $existing_use_case_ids[(string) $existing_row['use_case_id']] = true;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $existing_ids = $wpdb->get_col("SELECT use_case_id FROM {$table}");
+        foreach ((array) $existing_ids as $existing_id) {
+            $existing_use_case_ids[(string) $existing_id] = true;
         }
         $importable_items = array();
         if (function_exists('fides_use_case_catalog_github_items')) {
@@ -2417,6 +2588,23 @@ function fides_use_case_catalog_render_admin_page(): void {
                 </div>
             </div>
         <?php endif; ?>
+        <p class="description" style="margin:12px 0;">
+            <?php
+            if ($total === 0) {
+                esc_html_e('No submissions match this filter.', 'fides-use-case-catalog');
+            } else {
+                printf(
+                    /* translators: 1: first row number, 2: last row number, 3: total rows, 4: current page, 5: total pages */
+                    esc_html__('Showing %1$d–%2$d of %3$d · Page %4$d of %5$d', 'fides-use-case-catalog'),
+                    $from,
+                    $to,
+                    $total,
+                    $filter_page,
+                    $pages
+                );
+            }
+            ?>
+        </p>
         <table class="widefat striped">
             <thead>
                 <tr>
@@ -2430,9 +2618,10 @@ function fides_use_case_catalog_render_admin_page(): void {
             </thead>
             <tbody>
                 <?php if (empty($rows)) : ?>
-                    <tr><td colspan="6">No submissions found.</td></tr>
+                    <tr><td colspan="6"><?php esc_html_e('No submissions found.', 'fides-use-case-catalog'); ?></td></tr>
                 <?php else : ?>
                     <?php foreach ($rows as $row) : ?>
+                        <?php $row_status = fides_use_case_catalog_normalize_status((string) $row['status']); ?>
                         <tr>
                             <td><strong><?php echo esc_html($row['title']); ?></strong><br><code><?php echo esc_html($row['use_case_id']); ?></code>
                                 <?php if (fides_use_case_catalog_normalize_submission_action((string) ($row['submission_action'] ?? '')) === 'update') : ?>
@@ -2447,19 +2636,27 @@ function fides_use_case_catalog_render_admin_page(): void {
                             </td>
                             <td><?php echo esc_html(fides_use_case_catalog_sector_label(fides_use_case_catalog_row_sector($row)) ?: '—'); ?></td>
                             <td><?php echo esc_html($row['organization_name']); ?></td>
-                            <td><?php echo esc_html(fides_use_case_catalog_normalize_status((string) $row['status'])); ?></td>
+                            <td><?php echo esc_html($row_status); ?></td>
                             <td><?php echo esc_html(get_date_from_gmt((string) $row['updated_at'], 'Y-m-d H:i')); ?></td>
                             <td>
                                 <?php
                                 $base = admin_url('admin-post.php?action=fides_use_case_set_status&id=' . (int) $row['id']);
                                 $nonce = wp_create_nonce('fides_use_case_set_status_' . (int) $row['id']);
-                                $view_url = admin_url('tools.php?page=fides-use-case-submissions&submission=' . (int) $row['id']);
+                                $view_args = array_merge($list_query_args, array('submission' => (int) $row['id']));
+                                if ($filter_page > 1) {
+                                    $view_args['paged'] = $filter_page;
+                                }
+                                $view_url = fides_use_case_catalog_admin_page_url($view_args);
                                 $delete_url = admin_url('admin-post.php?action=fides_use_case_delete&id=' . (int) $row['id'] . '&_wpnonce=' . wp_create_nonce('fides_use_case_delete_' . (int) $row['id']));
                                 $delete_confirm = esc_js(fides_use_case_catalog_delete_confirm_message($row));
                                 ?>
                                 <a class="button button-small" href="<?php echo esc_url($view_url); ?>">View</a>
-                                <a class="button button-small" href="<?php echo esc_url($base . '&status=approved&_wpnonce=' . $nonce); ?>">Approve</a>
-                                <a class="button button-small button-primary" href="<?php echo esc_url($base . '&status=published&_wpnonce=' . $nonce); ?>">Publish</a>
+                                <?php if ($row_status !== 'approved') : ?>
+                                    <a class="button button-small" href="<?php echo esc_url($base . '&status=approved&_wpnonce=' . $nonce); ?>">Approve</a>
+                                <?php endif; ?>
+                                <?php if ($row_status !== 'published') : ?>
+                                    <a class="button button-small button-primary" href="<?php echo esc_url($base . '&status=published&_wpnonce=' . $nonce); ?>">Publish</a>
+                                <?php endif; ?>
                                 <a class="button button-small button-link-delete" style="color:#b32d2e;" href="<?php echo esc_url($delete_url); ?>" onclick="return confirm('<?php echo $delete_confirm; ?>');">Delete</a>
                             </td>
                         </tr>
@@ -2467,6 +2664,20 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <?php endif; ?>
             </tbody>
         </table>
+        <?php if ($pages > 1) : ?>
+            <p style="margin-top:12px;">
+                <?php if ($filter_page > 1) : ?>
+                    <a class="button" href="<?php echo esc_url(fides_use_case_catalog_admin_page_url(array_merge($list_query_args, array('paged' => $filter_page - 1)))); ?>">
+                        <?php esc_html_e('← Previous', 'fides-use-case-catalog'); ?>
+                    </a>
+                <?php endif; ?>
+                <?php if ($filter_page < $pages) : ?>
+                    <a class="button" href="<?php echo esc_url(fides_use_case_catalog_admin_page_url(array_merge($list_query_args, array('paged' => $filter_page + 1)))); ?>">
+                        <?php esc_html_e('Next →', 'fides-use-case-catalog'); ?>
+                    </a>
+                <?php endif; ?>
+            </p>
+        <?php endif; ?>
     </div>
     <?php
 }

@@ -2,13 +2,17 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.9.4
+Stable tag: 0.9.5
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
 Use case catalog renderer and WordPress submission flow.
 
 == Changelog ==
+
+= 0.9.5 =
+* Admin submissions list: default to Pending review (received + approved), with filters for Received / Approved / Published / All statuses, lean column queries, and pagination (50 per page) — same pattern as Catalog Submissions.
+* Hide Approve / Publish action buttons when the submission already has that status.
 
 = 0.9.4 =
 * Submission form: character counters on Description and How it works (same pattern as organization catalog).
