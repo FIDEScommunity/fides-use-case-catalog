@@ -8,12 +8,12 @@
       "id": "establish-a-new-company-in-one-day-company-passport-IryaF9",
       "sector": "trade",
       "title": "Establish a New Company in One Day — Company Passport",
-      "summary": "Starting a company in the Netherlands takes about six weeks: a notary draws up the deed, KVK registers the company, the Belastingdienst issues a VAT number, and only then can a bank open a business account. Each step waits on paper from the last. Supplier onboarding is just as document-heavy: KVK extracts, tax statements, insurance and IBAN details exchanged as PDFs over email.\r\n\r\nThe Company Passport initiative — a Dutch public-private partnership of KVK, Belastingdienst, KNB (notaries), NVB and Betaalvereniging Nederland — replaces these documents with verifiable credentials issued directly by authoritative sources. Credenco delivers the sandbox, the eIDAS 2.0 / DIIP v5-compliant Business Wallet and the Issuer Portals that power the initiative.\r\n\r\nEach authority reads the credential issued by the previous one and completes its step the same day: incorporation drops from six weeks to one day, supplier onboarding from weeks to minutes, and falsified documents become technically impossible.",
+      "summary": "Starting a company in the Netherlands takes about six weeks: a notary draws up the deed, KVK registers the company, the Belastingdienst issues a VAT number, and only then can a bank open a business account. Each step waits on paper from the last. Supplier onboarding is just as document-heavy: KVK extracts, tax statements, insurance and IBAN details exchanged as PDFs over email.\n\nThe Company Passport initiative — a Dutch public-private partnership of KVK, Belastingdienst, KNB (notaries), NVB and Betaalvereniging Nederland — replaces these documents with verifiable credentials issued directly by authoritative sources. Credenco delivers the sandbox, the eIDAS 2.0 / DIIP v5-compliant Business Wallet and the Issuer Portals that power the initiative.\n\nEach authority reads the credential issued by the previous one and completes its step the same day: incorporation drops from six weeks to one day, supplier onboarding from weeks to minutes, and falsified documents become technically impossible.",
       "organizationName": "Credenco",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-11T05:37:12+01:00",
-      "publishedAt": "2026-08-11T05:37:12+01:00",
+      "updatedAt": "2026-08-13T10:57:38+01:00",
+      "publishedAt": "2026-08-13T10:57:38+01:00",
       "tags": [
         "business identity",
         "company passport",
@@ -149,10 +149,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:betaalvereniging-nederland",
             "labelRaw": "Betaalvereniging Nederland",
             "url": "https://www.betaalvereniging.nl/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -199,7 +199,7 @@
         "provider": "youtube"
       },
       "moreInfoUrl": "https://www.credenco.com/case/establish-new-company",
-      "userJourney": "1. The notary drafts the deed of incorporation, signs it cryptographically and issues it as a verifiable credential into the company's Credenco Business Wallet (OpenID4VCI).\r\n\r\n2. KVK reads the deed credential, registers the company the same day and issues the KVK Registration Extract (incl. LPID and UBO data) as a credential.\r\n\r\n3. The Belastingdienst reads the KVK extract and issues the VAT number / tax compliance credential.\r\n\r\n4. The bank reads all three credentials, opens the business account and issues an IBAN attestation.\r\n\r\n5. From then on, supplier onboarding is trivial: a procurement platform requests KVK, tax, VAT, IBAN and insurance credentials in a single flow (OpenID4VP). The supplier shares them in one tap from the Business Wallet, and the platform verifies the issuers' signatures in real time.\r\n\r\n6. Result: one source document, multiple readers, instant trust — six weeks becomes one day, and onboarding checks run without PDFs, email or manual review.",
+      "userJourney": "1. The notary drafts the deed of incorporation, signs it cryptographically and issues it as a verifiable credential into the company's Credenco Business Wallet (OpenID4VCI).\n\n2. KVK reads the deed credential, registers the company the same day and issues the KVK Registration Extract (incl. LPID and UBO data) as a credential.\n\n3. The Belastingdienst reads the KVK extract and issues the VAT number / tax compliance credential.\n\n4. The bank reads all three credentials, opens the business account and issues an IBAN attestation.\n\n5. From then on, supplier onboarding is trivial: a procurement platform requests KVK, tax, VAT, IBAN and insurance credentials in a single flow (OpenID4VP). The supplier shares them in one tap from the Business Wallet, and the platform verifies the issuers' signatures in real time.\n\n6. Result: one source document, multiple readers, instant trust — six weeks becomes one day, and onboarding checks run without PDFs, email or manual review.",
       "country": "NL"
     },
     {
