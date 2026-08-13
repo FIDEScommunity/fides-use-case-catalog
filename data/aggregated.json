@@ -1,274 +1,20 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-13T18:21:19.706Z",
+  "lastUpdated": "2026-08-13T20:15:47.875Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 42,
   "useCases": [
     {
-      "id": "trusted-caller-identity-aGtyqn",
-      "sector": "digital",
-      "title": "Trusted Caller Identity",
-      "summary": "Call centre authentication still relies on security questions and SMS OTPs, which can be stolen, spoofed or defeated by SIM swap. Customers must disclose personal data to agents who have no need to see it.\n\nTrusted Caller Identity replaces this with a verifiable credential. Telefónica issues a credential proving phone number ownership, secured by its Number Verify and SIM Swap network APIs. When a customer calls, the contact centre opens an encrypted DIDComm channel to their wallet and the customer confirms biometrically on their own device. Selective disclosure returns only a yes/no answer, so no personal data reaches the agent. Verification time reduces &gt;4times.\n\nFour organisations across telecoms, identity and standards built it: Telefónica Tech (issuer, network signals), Dock Labs/Truvera (credential infrastructure), TMT ID (identity data), GSMA (coordination). The customer holds the credential, the contact centre verifies it, and no party sits in the middle.\n\nIt uses open verifiable credential and DIDComm standards, and Telefónica's network APIs sit within GSMA Open Gateway, so the model can scale to any operator rather than stay proprietary. Demonstrated at M",
-      "organizationName": "Dock Labs AG",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-13T19:21:04+01:00",
-      "publishedAt": "2026-08-13T19:21:04+01:00",
-      "tags": [
-        "identity",
-        "telecommunications",
-        "authentication"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "truvera-wallet",
-            "labelRaw": "Truvera Wallet",
-            "url": "https://www.truvera.io/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "VMO2",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Vodafone",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Movistar",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Contract Owner",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:docklabs",
-            "labelRaw": "Dock Labs AG",
-            "url": "https://www.dock.io/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:gsma",
-            "labelRaw": "GSMA",
-            "url": "https://www.gsma.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:telefonica-tech",
-            "labelRaw": "Telefonica Tech",
-            "url": "https://telefonicatech.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:tmt-id",
-            "labelRaw": "TMT ID",
-            "url": "https://tmtid.com",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Call Center",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/V9x6F3AqJzc",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/V9x6F3AqJzc",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.gsma.com/solutions-and-impact/technologies/security/scams/gsma_resources/gsma-telefonica-tech-tmt-id-dock-labs-call-centre-authentication/",
-      "userJourney": "Setup, once\n1. Telefónica verifies the customer's number and device via its Number Verify and SIM Swap APIs, confirming control of the number and that no recent SIM change occurred.\n2. It issues a verifiable credential proving phone number ownership.\n3. The credential is delivered to the customer's wallet and stored on device, not in a central database. In production the wallet will sit inside the operator's existing app.\n\nOn the call\n4. The customer calls; the agent or IVR triggers authentication.\n5. The contact centre, as verifier, sends an encrypted DIDComm request straight to the customer's wallet.\n6. The customer gets a push notification and approves biometrically on their own device. The biometric never leaves the phone.\n7. The wallet returns a cryptographic proof. Selective disclosure means only a yes/no reaches the agent, no personal data.\n8. The contact centre verifies against Telefónica's issuer key without contacting the operator, so the operator learns nothing about where the customer authenticates. Done in 15-20 seconds.",
-      "country": "CH"
-    },
-    {
-      "id": "ingo-digital-verifiable-and-secure-subcontractor-management-including-physical-access-ZHHRjx",
-      "sector": "construction",
-      "title": "inGo - Digital, Verifiable and Secure Subcontractor Management Including Physical Access",
-      "summary": "Checking documents, monitoring deadlines, and granting site access for subcontractors is still often handled manually, with paper folders and spreadsheets - on construction sites, in logistics, and in technical services alike.\r\ninGo digitalizes this process using decentralized identities (DIDs), digital wallets, and Verifiable Credentials (VCs), built on open standards (OpenID4VCI/VP, EUDI Wallet ARF) so it interoperates with other EUDI-ARF-conformant wallets rather than locking participants into a single vendor.\r\nEmployees receive credentials - such as site certificates, ID cards, work permits, or safety training - directly in their personal wallet. Using selective disclosure (SD-JWT VC), they can prove only what's required for a check, e.g. a valid access permit, without revealing unrelated personal data.\r\nGeneral contractors gain a real-time, cryptographically verifiable overview of credentials, deadlines, and site access. Subcontractors manage documents and credentials for their employees once and reuse them across projects - replacing manual paper checks with instant, auditable verification, on a secure, privacy-preserving, GDPR-compliant foundation.",
-      "organizationName": "esatus AG",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-13T19:20:42+01:00",
-      "publishedAt": "2026-08-13T19:20:42+01:00",
-      "tags": [
-        "construction",
-        "subcontractor management",
-        "access control",
-        "verifiable credentials",
-        "EUDI wallet",
-        "compliance",
-        "business wallet"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": null,
-            "labelRaw": "inGo Wallet App",
-            "url": "https://www.ingo-id.com/",
-            "source": "manual",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": null,
-            "labelRaw": "inGo Business Wallet",
-            "url": "https://www.ingo-id.com/",
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "General contractors and subcontractors (issuing site and access credentials); external trusted issuers such as government authorities, insurance companies, or certification bodies (planned)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Site Certificate, ID Card, Work Allowance, Visa, Social Security, Minimum Wage. The inGo system allows additional credential types like Safety Training and many more.",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "esatus AG",
-            "url": "https://esatus.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "tibe.io GmbH",
-            "url": "https://www.tibe.io/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Lindner Group KG",
-            "url": "https://www.lindner-group.com/",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "General contractors / site management, access control systems (turnstiles), authorities/customs during inspections",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "anoncreds",
-        "mdoc",
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci",
-        "other"
-      ],
-      "presentationProtocols": [
-        "DIDComm v2",
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Logo_inGo_BG_Large-3.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Logo_inGo_BG_Large-3.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/aJ6J79Vj2LI?si=T9zN2YeRuiKyzGsw",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/aJ6J79Vj2LI?si=T9zN2YeRuiKyzGsw",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.ingo-id.com",
-      "userJourney": "inGo enables a range of processes built on wallets and Verifiable Credentials: \r\n1.\tOnboarding: General contractors and subcontractors set up business wallets to manage employees and share project access.\r\n2.\tIssuance: Subcontractors and general contractors issue credentials (site certificates, ID cards, work permits, safety training) as Verifiable Credentials into each employee's personal wallet.\r\n3.\tVerification: The credentials are used to gain a verified site access, at site entrances (e.g. turnstiles) or during inspections inGo can tell if all required documents are available and valid in seconds - no paper, no manual lookup.\r\n4.\tSelective disclosure: Employees share only the specific attribute needed (e.g. \"valid access permit: yes\"), not full documents.\r\n5.\tAudit trail: Every verification is logged in an auditable, GDPR-compliant record.\r\nExternal trusted issuers - e.g. government authorities, insurance companies, or certification bodies - are planned as additional issuers (e.g. state-verified identity, insurance proof).",
-      "country": "DE"
-    },
-    {
       "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
       "sector": "finance",
       "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
-      "summary": "Use Case: This End-to-End Digital Business Workflow automates and secures high-assurance corporate onboarding across the entire business lifecycle, covering Know Your Business (KYB), Know Your Customer (KYC) for the financial sector, and Know Your Supplier (KYS) in a single, reusable process.\r\nProblem: Manual corporate verification is slow, costly, and high-friction. Gathering nested corporate data to comply with the new EU reegulation ( AMLR , GWG, Submission,etc),periodic review and preventing invoice fraud are critical pain points.\r\nValue: Dramatically reduces onboarding times, minimizes administrative overhead, and mitigates transaction risks. Credentials are issued once and seamlessly reused across the EU.\r\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (Account Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder), and legal representatives (personal EUDI &amp; signers).\r\nWallets &amp; VCs: EU Business Wallets (Procivis/Spheerity) secure corporate credentials (EBWOID, EUCC, IBAN,etc ) using OpenID4VCI/VP and SD-JWT standards. This replaces paper checks with high-assurance, tamper-proof, decentralized identity verification that is fully eIDAS 2.0 compliant.",
+      "summary": "Use Case: This End-to-End Digital Business Workflow automates and secures high-assurance corporate onboarding across the entire business lifecycle, covering Know Your Business (KYB), Know Your Customer (KYC) for the financial sector, and Know Your Supplier (KYS) in a single, reusable process.\nProblem: Manual corporate verification is slow, costly, and high-friction. Gathering nested corporate data to comply with the new EU reegulation ( AMLR , GWG, Submission,etc),periodic review and preventing invoice fraud are critical pain points.\nValue: Dramatically reduces onboarding times, minimizes administrative overhead, and mitigates transaction risks. Credentials are issued once and seamlessly reused across the EU.\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (Account Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder), and legal representatives (personal EUDI &amp; signers).\nWallets &amp; VCs: EU Business Wallets (Procivis/Spheerity) secure corporate credentials (EBWOID, EUCC, IBAN,etc ) using OpenID4VCI/VP and SD-JWT standards. This replaces paper checks with high-assurance, tamper-proof, decentralized identity verification that is fully eIDAS 2.0 compliant.",
       "organizationName": "Robert Bosch GmbH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-13T19:19:49+01:00",
-      "publishedAt": "2026-08-13T19:19:49+01:00",
+      "updatedAt": "2026-08-13T21:15:27+01:00",
+      "publishedAt": "2026-08-13T21:15:27+01:00",
       "tags": [
         "#EBWOID",
         "#EUCC",
@@ -578,7 +324,261 @@
         "https://github.com/flo0x/GDC-Demos/raw/refs/heads/main/End2End_DigitalBusinessWorkflows.mp4"
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
-      "userJourney": "Phase 1: KYB Setup (Bosch Representative &amp; Bundesanzeiger)\r\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (Spherity platform).\r\n2. Bundesanzeiger verifies official registry records and issues the EBWOID and EU Company Credential (EUCC) to the Bosch Business Wallet (Procivis).\r\nPhase 2: KYC Bank Onboarding (Bosch &amp; Deutsche Bank)\r\n3. Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO profiles) to Deutsche Bank (Procivis).\r\n4. Deutsche Bank automatically processes these datasets to trace and identify UBOs under EU AMLR rules.\r\n5. UBO verifies identity via EUDI Wallet, signs the contract using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Attestation to Bosch.\r\nPhase 3: Supplier Cycle (SBB &amp; Bosch)\r\n6. SBB (Spherity) runs Phases 1 and 2 to establish its verified identity.\r\n7. SBB presents its credentials to Bosch for instant, automated KYS onboarding.\r\n8. SBB delivers ordered parts and issues a cryptographically signed eInvoice directly to Bosch.",
+      "userJourney": "Phase 1: KYB - Foundation : Bosch Obtaining  EBWOID and EUCC from Bundesanzeiger\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (EBW Spherity).\n2.Bundesanzeiger verifies and check against official registry records and issues the EBWOID to  Bosch EBW (Procivis Desk)\n3.Bosch presents the EBWOID and issue EU Company Credential (EUCC) to Bosch EBW.\n\nPhase 2: KYC-Finance:  Onboarding Bosch at Deutsche Bank)\n3. KYC Process: Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO, CompanyInfo, ...) to Deutsche Bank (EBW Procivis).\n4. Deutsche Bank verify the presented proofs and additionally  verify the identity of calculated UBOs under EU AMLR rules (EUDI  Wallet)\n5. Contract signinng is trigger using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Owner Attestation to Bosch EBW.\n\nPhase 3: KYS - Self Supplier onboarding of SBB at Bosch and start deliver\n6. SBB EBW runs Phases 1 and 2 to establish its verified identity.\n7. SBB EBW presents all required credentials to Bosch for instant, automated KYS onboarding.\n8. SBB EBW delivers ordered parts and issues an eInvoice directly to Bosch EBW.",
+      "country": "DE"
+    },
+    {
+      "id": "trusted-caller-identity-aGtyqn",
+      "sector": "digital",
+      "title": "Trusted Caller Identity",
+      "summary": "Call centre authentication still relies on security questions and SMS OTPs, which can be stolen, spoofed or defeated by SIM swap. Customers must disclose personal data to agents who have no need to see it.\n\nTrusted Caller Identity replaces this with a verifiable credential. Telefónica issues a credential proving phone number ownership, secured by its Number Verify and SIM Swap network APIs. When a customer calls, the contact centre opens an encrypted DIDComm channel to their wallet and the customer confirms biometrically on their own device. Selective disclosure returns only a yes/no answer, so no personal data reaches the agent. Verification time reduces &gt;4times.\n\nFour organisations across telecoms, identity and standards built it: Telefónica Tech (issuer, network signals), Dock Labs/Truvera (credential infrastructure), TMT ID (identity data), GSMA (coordination). The customer holds the credential, the contact centre verifies it, and no party sits in the middle.\n\nIt uses open verifiable credential and DIDComm standards, and Telefónica's network APIs sit within GSMA Open Gateway, so the model can scale to any operator rather than stay proprietary. Demonstrated at M",
+      "organizationName": "Dock Labs AG",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-13T19:21:04+01:00",
+      "publishedAt": "2026-08-13T19:21:04+01:00",
+      "tags": [
+        "identity",
+        "telecommunications",
+        "authentication"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "truvera-wallet",
+            "labelRaw": "Truvera Wallet",
+            "url": "https://www.truvera.io/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "VMO2",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Vodafone",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Movistar",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Contract Owner",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:docklabs",
+            "labelRaw": "Dock Labs AG",
+            "url": "https://www.dock.io/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:gsma",
+            "labelRaw": "GSMA",
+            "url": "https://www.gsma.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:telefonica-tech",
+            "labelRaw": "Telefonica Tech",
+            "url": "https://telefonicatech.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:tmt-id",
+            "labelRaw": "TMT ID",
+            "url": "https://tmtid.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Call Center",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/V9x6F3AqJzc",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/V9x6F3AqJzc",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.gsma.com/solutions-and-impact/technologies/security/scams/gsma_resources/gsma-telefonica-tech-tmt-id-dock-labs-call-centre-authentication/",
+      "userJourney": "Setup, once\n1. Telefónica verifies the customer's number and device via its Number Verify and SIM Swap APIs, confirming control of the number and that no recent SIM change occurred.\n2. It issues a verifiable credential proving phone number ownership.\n3. The credential is delivered to the customer's wallet and stored on device, not in a central database. In production the wallet will sit inside the operator's existing app.\n\nOn the call\n4. The customer calls; the agent or IVR triggers authentication.\n5. The contact centre, as verifier, sends an encrypted DIDComm request straight to the customer's wallet.\n6. The customer gets a push notification and approves biometrically on their own device. The biometric never leaves the phone.\n7. The wallet returns a cryptographic proof. Selective disclosure means only a yes/no reaches the agent, no personal data.\n8. The contact centre verifies against Telefónica's issuer key without contacting the operator, so the operator learns nothing about where the customer authenticates. Done in 15-20 seconds.",
+      "country": "CH"
+    },
+    {
+      "id": "ingo-digital-verifiable-and-secure-subcontractor-management-including-physical-access-ZHHRjx",
+      "sector": "construction",
+      "title": "inGo - Digital, Verifiable and Secure Subcontractor Management Including Physical Access",
+      "summary": "Checking documents, monitoring deadlines, and granting site access for subcontractors is still often handled manually, with paper folders and spreadsheets - on construction sites, in logistics, and in technical services alike.\r\ninGo digitalizes this process using decentralized identities (DIDs), digital wallets, and Verifiable Credentials (VCs), built on open standards (OpenID4VCI/VP, EUDI Wallet ARF) so it interoperates with other EUDI-ARF-conformant wallets rather than locking participants into a single vendor.\r\nEmployees receive credentials - such as site certificates, ID cards, work permits, or safety training - directly in their personal wallet. Using selective disclosure (SD-JWT VC), they can prove only what's required for a check, e.g. a valid access permit, without revealing unrelated personal data.\r\nGeneral contractors gain a real-time, cryptographically verifiable overview of credentials, deadlines, and site access. Subcontractors manage documents and credentials for their employees once and reuse them across projects - replacing manual paper checks with instant, auditable verification, on a secure, privacy-preserving, GDPR-compliant foundation.",
+      "organizationName": "esatus AG",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-13T19:20:42+01:00",
+      "publishedAt": "2026-08-13T19:20:42+01:00",
+      "tags": [
+        "construction",
+        "subcontractor management",
+        "access control",
+        "verifiable credentials",
+        "EUDI wallet",
+        "compliance",
+        "business wallet"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "inGo Wallet App",
+            "url": "https://www.ingo-id.com/",
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": null,
+            "labelRaw": "inGo Business Wallet",
+            "url": "https://www.ingo-id.com/",
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "General contractors and subcontractors (issuing site and access credentials); external trusted issuers such as government authorities, insurance companies, or certification bodies (planned)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Site Certificate, ID Card, Work Allowance, Visa, Social Security, Minimum Wage. The inGo system allows additional credential types like Safety Training and many more.",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "esatus AG",
+            "url": "https://esatus.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "tibe.io GmbH",
+            "url": "https://www.tibe.io/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Lindner Group KG",
+            "url": "https://www.lindner-group.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "General contractors / site management, access control systems (turnstiles), authorities/customs during inspections",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "anoncreds",
+        "mdoc",
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Logo_inGo_BG_Large-3.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Logo_inGo_BG_Large-3.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/aJ6J79Vj2LI?si=T9zN2YeRuiKyzGsw",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/aJ6J79Vj2LI?si=T9zN2YeRuiKyzGsw",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.ingo-id.com",
+      "userJourney": "inGo enables a range of processes built on wallets and Verifiable Credentials: \r\n1.\tOnboarding: General contractors and subcontractors set up business wallets to manage employees and share project access.\r\n2.\tIssuance: Subcontractors and general contractors issue credentials (site certificates, ID cards, work permits, safety training) as Verifiable Credentials into each employee's personal wallet.\r\n3.\tVerification: The credentials are used to gain a verified site access, at site entrances (e.g. turnstiles) or during inspections inGo can tell if all required documents are available and valid in seconds - no paper, no manual lookup.\r\n4.\tSelective disclosure: Employees share only the specific attribute needed (e.g. \"valid access permit: yes\"), not full documents.\r\n5.\tAudit trail: Every verification is logged in an auditable, GDPR-compliant record.\r\nExternal trusted issuers - e.g. government authorities, insurance companies, or certification bodies - are planned as additional issuers (e.g. state-verified identity, insurance proof).",
       "country": "DE"
     },
     {
