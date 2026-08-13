@@ -12,8 +12,8 @@
       "organizationName": "Kamer van Koophandel",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-13T05:56:18+01:00",
-      "publishedAt": "2026-08-13T05:56:18+01:00",
+      "updatedAt": "2026-08-13T10:50:36+01:00",
+      "publishedAt": "2026-08-13T10:50:36+01:00",
       "tags": [
         "Wallet",
         "AI",
@@ -72,24 +72,24 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:dictu",
             "labelRaw": "Dienst ICT Uitvoering (DICTU)",
-            "url": null,
-            "source": "manual",
+            "url": "https://www.dictu.nl/",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:rvo",
             "labelRaw": "Rijksdienst voor Ondernemend Nederland (RVO)",
-            "url": null,
-            "source": "manual",
+            "url": "https://www.rvo.nl/",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:nvwa",
             "labelRaw": "Nederlandse Voedsel- en Warenautoriteit (NVWA)",
-            "url": null,
-            "source": "manual",
+            "url": "https://www.nvwa.nl/",
+            "source": "catalog",
             "walletType": null
           }
         ],
