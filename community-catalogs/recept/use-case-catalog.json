@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:recept",
+  "orgId": "org:javo",
   "orgName": "Recept",
   "useCases": [
     {
@@ -12,8 +12,8 @@
       "organizationName": "Recept",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-11T11:48:49+01:00",
-      "publishedAt": "2026-08-11T11:48:49+01:00",
+      "updatedAt": "2026-08-13T10:55:03+01:00",
+      "publishedAt": "2026-08-13T10:55:03+01:00",
       "tags": [],
       "links": {
         "personalWallets": [
@@ -38,17 +38,17 @@
         "credentials": [],
         "organizations": [
           {
-            "refId": null,
-            "labelRaw": "Javo",
-            "url": null,
-            "source": "manual",
+            "refId": "org:javo",
+            "labelRaw": "NPO JAPAN Volunteer Association (JAVO)",
+            "url": "https://javo.or.jp/",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:recept",
             "labelRaw": "Recept",
-            "url": null,
-            "source": "manual",
+            "url": "https://recept.earth",
+            "source": "catalog",
             "walletType": null
           }
         ],
