@@ -1,10 +1,137 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-13T18:21:01.963Z",
+  "lastUpdated": "2026-08-13T18:21:19.706Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 42,
   "useCases": [
+    {
+      "id": "trusted-caller-identity-aGtyqn",
+      "sector": "digital",
+      "title": "Trusted Caller Identity",
+      "summary": "Call centre authentication still relies on security questions and SMS OTPs, which can be stolen, spoofed or defeated by SIM swap. Customers must disclose personal data to agents who have no need to see it.\n\nTrusted Caller Identity replaces this with a verifiable credential. Telefónica issues a credential proving phone number ownership, secured by its Number Verify and SIM Swap network APIs. When a customer calls, the contact centre opens an encrypted DIDComm channel to their wallet and the customer confirms biometrically on their own device. Selective disclosure returns only a yes/no answer, so no personal data reaches the agent. Verification time reduces &gt;4times.\n\nFour organisations across telecoms, identity and standards built it: Telefónica Tech (issuer, network signals), Dock Labs/Truvera (credential infrastructure), TMT ID (identity data), GSMA (coordination). The customer holds the credential, the contact centre verifies it, and no party sits in the middle.\n\nIt uses open verifiable credential and DIDComm standards, and Telefónica's network APIs sit within GSMA Open Gateway, so the model can scale to any operator rather than stay proprietary. Demonstrated at M",
+      "organizationName": "Dock Labs AG",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-13T19:21:04+01:00",
+      "publishedAt": "2026-08-13T19:21:04+01:00",
+      "tags": [
+        "identity",
+        "telecommunications",
+        "authentication"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "truvera-wallet",
+            "labelRaw": "Truvera Wallet",
+            "url": "https://www.truvera.io/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "VMO2",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Vodafone",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Movistar",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Contract Owner",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:docklabs",
+            "labelRaw": "Dock Labs AG",
+            "url": "https://www.dock.io/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:gsma",
+            "labelRaw": "GSMA",
+            "url": "https://www.gsma.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:telefonica-tech",
+            "labelRaw": "Telefonica Tech",
+            "url": "https://telefonicatech.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:tmt-id",
+            "labelRaw": "TMT ID",
+            "url": "https://tmtid.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Call Center",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/V9x6F3AqJzc",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/V9x6F3AqJzc",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.gsma.com/solutions-and-impact/technologies/security/scams/gsma_resources/gsma-telefonica-tech-tmt-id-dock-labs-call-centre-authentication/",
+      "userJourney": "Setup, once\n1. Telefónica verifies the customer's number and device via its Number Verify and SIM Swap APIs, confirming control of the number and that no recent SIM change occurred.\n2. It issues a verifiable credential proving phone number ownership.\n3. The credential is delivered to the customer's wallet and stored on device, not in a central database. In production the wallet will sit inside the operator's existing app.\n\nOn the call\n4. The customer calls; the agent or IVR triggers authentication.\n5. The contact centre, as verifier, sends an encrypted DIDComm request straight to the customer's wallet.\n6. The customer gets a push notification and approves biometrically on their own device. The biometric never leaves the phone.\n7. The wallet returns a cryptographic proof. Selective disclosure means only a yes/no reaches the agent, no personal data.\n8. The contact centre verifies against Telefónica's issuer key without contacting the operator, so the operator learns nothing about where the customer authenticates. Done in 15-20 seconds.",
+      "country": "CH"
+    },
     {
       "id": "ingo-digital-verifiable-and-secure-subcontractor-management-including-physical-access-ZHHRjx",
       "sector": "construction",
@@ -1710,133 +1837,6 @@
       },
       "userJourney": "For a complete walk though of the end-user's flow, please refer to the demo video available on YouTube (https://youtu.be/nYZhjH3czps). \n\n1.User visits government website (RVO)\n2.User clicks “Go to app” button and arrives within the subsidy orientation page, including 1) a button to find your subsidy with AI, 2) a section that covers subsidies to choose from and 3) an AI chatbot section. \n3.User clicks “find your subsidy with AI” and gets information and instructions on how to chat with AI.\n4.The AI initiates a conversation with a new message in the chatbot section, user has been informed in step 3 to continue the conversation.\n5.At the end of the conversation, a profile is generated based on the conversation. The profile is used to mark how well each subsidy matches the profile with colors: green (great match), yellow (slightly match) and grey (no match).\n6.User selects a subsidy to request, user clicks to go to the request form of the subsidy\n7.User is directed to the login page, login occurs with the personal wallet",
       "country": "NL"
-    },
-    {
-      "id": "trusted-caller-identity-aGtyqn",
-      "sector": "digital",
-      "title": "Trusted Caller Identity",
-      "summary": "Call centre authentication still relies on security questions and SMS OTPs, which can be stolen, spoofed or defeated by SIM swap. Customers must disclose personal data to agents who have no need to see it.\n\nTrusted Caller Identity replaces this with a verifiable credential. Telefónica issues a credential proving phone number ownership, secured by its Number Verify and SIM Swap network APIs. When a customer calls, the contact centre opens an encrypted DIDComm channel to their wallet and the customer confirms biometrically on their own device. Selective disclosure returns only a yes/no answer, so no personal data reaches the agent. Verification time reduces &gt;4times.\n\nFour organisations across telecoms, identity and standards built it: Telefónica Tech (issuer, network signals), Dock Labs/Truvera (credential infrastructure), TMT ID (identity data), GSMA (coordination). The customer holds the credential, the contact centre verifies it, and no party sits in the middle.\n\nIt uses open verifiable credential and DIDComm standards, and Telefónica's network APIs sit within GSMA Open Gateway, so the model can scale to any operator rather than stay proprietary. Demonstrated at M",
-      "organizationName": "Dock Labs AG",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-13T10:49:16+01:00",
-      "publishedAt": "2026-08-13T10:49:16+01:00",
-      "tags": [
-        "identity",
-        "telecommunications",
-        "authentication"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "truvera-wallet",
-            "labelRaw": "Truvera Wallet",
-            "url": "https://www.truvera.io/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "VMO2",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Vodafone",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Movistar",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Contract Owner",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:docklabs",
-            "labelRaw": "Dock Labs AG",
-            "url": "https://www.dock.io/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:gsma",
-            "labelRaw": "GSMA",
-            "url": "https://www.gsma.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:telefonica-tech",
-            "labelRaw": "Telefonica Tech",
-            "url": "https://telefonicatech.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:tmt-id",
-            "labelRaw": "TMT ID",
-            "url": "https://tmtid.com",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Call Center",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/V9x6F3AqJzc",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/V9x6F3AqJzc",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.gsma.com/solutions-and-impact/technologies/security/scams/gsma_resources/gsma-telefonica-tech-tmt-id-dock-labs-call-centre-authentication/",
-      "userJourney": "Setup, once\n1. Telefónica verifies the customer's number and device via its Number Verify and SIM Swap APIs, confirming control of the number and that no recent SIM change occurred.\n2. It issues a verifiable credential proving phone number ownership.\n3. The credential is delivered to the customer's wallet and stored on device, not in a central database. In production the wallet will sit inside the operator's existing app.\n\nOn the call\n4. The customer calls; the agent or IVR triggers authentication.\n5. The contact centre, as verifier, sends an encrypted DIDComm request straight to the customer's wallet.\n6. The customer gets a push notification and approves biometrically on their own device. The biometric never leaves the phone.\n7. The wallet returns a cryptographic proof. Selective disclosure means only a yes/no reaches the agent, no personal data.\n8. The contact centre verifies against Telefónica's issuer key without contacting the operator, so the operator learns nothing about where the customer authenticates. Done in 15-20 seconds.",
-      "country": "CH"
     },
     {
       "id": "dppskop-trusted-digital-product-passports-for-global-manufacturing-and-european-regulatory-compliance-KIIXN0",
