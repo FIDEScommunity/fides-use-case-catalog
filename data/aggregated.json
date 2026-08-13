@@ -1,10 +1,103 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-13T09:59:59.671Z",
+  "lastUpdated": "2026-08-13T10:01:37.706Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 40,
   "useCases": [
+    {
+      "id": "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-m8I1pS",
+      "sector": "manufacturing",
+      "title": "Cryptographically Verifiable Digital Product Passports for EU Battery Regulation Compliance",
+      "summary": "AAS Studio helps manufacturers comply with the EU Battery Regulation (2023/1542) and wider Digital Product Passport requirements by turning existing PDF datasheets into a signed, verifiable product passport. The problem: OEMs and battery makers already hold the required data, but not in the IDTA Asset Administration Shell format regulators expect, and building that tooling from scratch is a multi-month integration project. AAS Studio extracts and maps the data with AI, lets an engineer review it, and issues a W3C Verifiable Credential (VCDM 2.0, JWT-VC and SD-JWT-VC) with a cryptographic hash anchored to the passport content. The organization (manufacturer) is the issuer. The credential has no personal holder: the product itself is what the passport describes, resolved via a GS1 Digital Link URL rather than carried in a personal wallet. Verifiers are regulators, recyclers, and downstream supply-chain partners, who check the signature offline against a public JWKS with no account and no callback to AAS Studio. Revocation runs on a Bitstring/Token Status List.",
+      "organizationName": "AAS-Studio",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-13T11:01:13+01:00",
+      "publishedAt": "2026-08-13T11:01:13+01:00",
+      "tags": [
+        "digital-product-passport",
+        "verifiable-credentials",
+        "battery-regulation",
+        "manufacturing",
+        "supply-chain",
+        "sustainability"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [
+          {
+            "refId": null,
+            "labelRaw": "AAS-Studio",
+            "url": null,
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "AAS-Studio",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "DigitalProductPassportCredential",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:aas-studio",
+            "labelRaw": "AAS-Studio",
+            "url": "https://aas-studio.eu",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "jwt_vc",
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/fides-homepage.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/fides-homepage.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=ATS0oWPEf_g",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://aas-studio.eu/verify",
+      "userJourney": "A manufacturer uploads an existing product datasheet (PDF) into AAS Studio. The AI extracts the relevant fields and maps them onto the IDTA Asset Administration Shell submodel required for the target regulation (Battery Passport, EU Machinery, or Catena-X SerialPart). An engineer at the organization reviews the mapped data and approves it, since the tool never signs anything unreviewed. On approval, AAS Studio computes a canonical content hash and issues a W3C Verifiable Credential (ES256-signed JWT-VC and SD-JWT-VC), and allocates a revocation slot on a Bitstring/Token Status List. The signed record and a QR code resolving via GS1 Digital Link are handed to the manufacturer to attach to the product or packaging. Any downstream party who needs to check the passport (a regulator, a recycler, a supply-chain partner) scans or opens the link and verifies the signature entirely offline against a public JWKS, with no account and no server round-trip required. There is no personal wallet step: the organization issues directly to a public verifier via API, matching the \"business wallet\" pattern Harmen described.",
+      "country": "PT"
+    },
     {
       "id": "making-the-european-business-wallet-real-ebw-trial-for-national-healthcare-data-exchange-kik-v-zBr2RW",
       "sector": "healthcare",
@@ -1521,99 +1614,6 @@
       "moreInfoUrl": "https://www.credivera.com/",
       "userJourney": "Organizations define compliance or competency workflows that specify what a professional must prove to be fit to work, fit to practice, or eligible to participate. These workflows generate verifiable presentation requests, asking individuals to provide trusted proof of required licenses, certifications, training records, employment attestations, education, or compliance credentials. Professionals respond directly from their secure digital wallet, sharing verifiable credentials they already hold. Credivera checks those credentials against the organization’s requirements and confirms what is valid, current, trusted, and complete. If a required credential is missing, the professional can request it from Credivera’s issuer network. Trusted issuers, such as regulators, certification bodies, educators, employers, associations, or training providers, issue the missing credential as a verifiable credential directly to the individual’s wallet. The result is a connected ecosystem where organizations get verified proof instead of documents and professionals control and reuse their credentials, and issuers deliver trusted records.",
       "country": "CA"
-    },
-    {
-      "id": "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-m8I1pS",
-      "sector": "manufacturing",
-      "title": "Cryptographically Verifiable Digital Product Passports for EU Battery Regulation Compliance",
-      "summary": "AAS Studio helps manufacturers comply with the EU Battery Regulation (2023/1542) and wider Digital Product Passport requirements by turning existing PDF datasheets into a signed, verifiable product passport. The problem: OEMs and battery makers already hold the required data, but not in the IDTA Asset Administration Shell format regulators expect, and building that tooling from scratch is a multi-month integration project. AAS Studio extracts and maps the data with AI, lets an engineer review it, and issues a W3C Verifiable Credential (VCDM 2.0, JWT-VC and SD-JWT-VC) with a cryptographic hash anchored to the passport content. The organization (manufacturer) is the issuer. The credential has no personal holder: the product itself is what the passport describes, resolved via a GS1 Digital Link URL rather than carried in a personal wallet. Verifiers are regulators, recyclers, and downstream supply-chain partners, who check the signature offline against a public JWKS with no account and no callback to AAS Studio. Revocation runs on a Bitstring/Token Status List.",
-      "organizationName": "AAS-Studio",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-13T08:03:35+01:00",
-      "publishedAt": "2026-08-13T08:03:35+01:00",
-      "tags": [
-        "digital-product-passport",
-        "verifiable-credentials",
-        "battery-regulation",
-        "manufacturing",
-        "supply-chain",
-        "sustainability"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [
-          {
-            "refId": null,
-            "labelRaw": "AAS-Studio",
-            "url": null,
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "AAS-Studio",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "DigitalProductPassportCredential",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "AAS-Studio",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "jwt_vc",
-        "sd_jwt_vc",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/fides-homepage.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/fides-homepage.png",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
-          "provider": "youtube"
-        },
-        {
-          "url": "https://www.youtube.com/watch?v=ATS0oWPEf_g",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://aas-studio.eu/verify",
-      "userJourney": "A manufacturer uploads an existing product datasheet (PDF) into AAS Studio. The AI extracts the relevant fields and maps them onto the IDTA Asset Administration Shell submodel required for the target regulation (Battery Passport, EU Machinery, or Catena-X SerialPart). An engineer at the organization reviews the mapped data and approves it, since the tool never signs anything unreviewed. On approval, AAS Studio computes a canonical content hash and issues a W3C Verifiable Credential (ES256-signed JWT-VC and SD-JWT-VC), and allocates a revocation slot on a Bitstring/Token Status List. The signed record and a QR code resolving via GS1 Digital Link are handed to the manufacturer to attach to the product or packaging. Any downstream party who needs to check the passport (a regulator, a recycler, a supply-chain partner) scans or opens the link and verifies the signature entirely offline against a public JWKS, with no account and no server round-trip required. There is no personal wallet step: the organization issues directly to a public verifier via API, matching the \"business wallet\" pattern Harmen described.",
-      "country": "PT"
     },
     {
       "id": "vesta-appliances-from-impostors-to-proof-of-trust-ATYNCN",
