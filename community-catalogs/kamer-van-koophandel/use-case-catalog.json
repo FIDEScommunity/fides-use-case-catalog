@@ -1,137 +1,9 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:kvk",
+  "orgId": "org:bd",
   "orgName": "Kamer van Koophandel",
   "useCases": [
-    {
-      "id": "smart-government-applications-powered-by-digital-wallets-HCB5DD",
-      "sector": "public_sector",
-      "title": "Smart Government Applications Powered by Digital Wallets",
-      "summary": "Our award‑winning Wallet‑Centric Public‑Service Platform proves that modern G2B service delivery in the Netherlands is achievable today. Built with real governmental issuers and relying parties, it uses a Key Life‑Event architecture and provides validated feasibility, reusable components, and a funded roadmap.\n\nThe platform brings together core public actors and applies digital business and personal wallets with responsible agentic AI. Its modular, wallet‑agnostic design enables scalable innovation.\n\nThe first use case helps entrepreneurs find and apply for subsidies and funding as one recurring life event. Secure wallets and AI guidance reduce complexity, errors, and incomplete submissions.\n\nThe governance model began in a Public‑Private‑Academic hackathon (2025) and now advances through a governmental partnership supported by the Digital Government Innovation Budget grant (2026).\n\nThe solution prevents fragmented information, repeated data entry, and non‑compliant applications. Entrepreneurs gain faster, accurate support and control over verified data; government agencies receive complete, reliable submissions and fewer manual processes. The approach is transferable across domain",
-      "organizationName": "Kamer van Koophandel",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-13T10:50:36+01:00",
-      "publishedAt": "2026-08-13T10:50:36+01:00",
-      "tags": [
-        "Wallet",
-        "AI",
-        "subsidy application"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": null,
-            "labelRaw": "NP Wallet - KVK (dummy wallet)",
-            "url": null,
-            "source": "manual",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": null,
-            "labelRaw": "BusinessWallet - KVK (dummy wallet)",
-            "url": null,
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "KVK",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Nederlandse Voedsel- en Warenautoriteit (NVWA)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:eu:ehic-sd-jwt-vc:sd-jwt-vc",
-            "labelRaw": "EHIC (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:kvk",
-            "labelRaw": "Kamer van Koophandel",
-            "url": "https://www.kvk.nl",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:dictu",
-            "labelRaw": "Dienst ICT Uitvoering (DICTU)",
-            "url": "https://www.dictu.nl/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:rvo",
-            "labelRaw": "Rijksdienst voor Ondernemend Nederland (RVO)",
-            "url": "https://www.rvo.nl/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:nvwa",
-            "labelRaw": "Nederlandse Voedsel- en Warenautoriteit (NVWA)",
-            "url": "https://www.nvwa.nl/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Nederlandse Voedsel- en Warenautoriteit (NVWA)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Rijksdienst voor Ondernemend Nederland (RVO)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [],
-      "vcFormats": [],
-      "issuanceProtocols": [],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/afbeelding.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/afbeelding.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/nYZhjH3czps",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/nYZhjH3czps",
-        "provider": "youtube"
-      },
-      "userJourney": "For a complete walk though of the end-user's flow, please refer to the demo video available on YouTube (https://youtu.be/nYZhjH3czps). \n\n1.User visits government website (RVO)\n2.User clicks “Go to app” button and arrives within the subsidy orientation page, including 1) a button to find your subsidy with AI, 2) a section that covers subsidies to choose from and 3) an AI chatbot section. \n3.User clicks “find your subsidy with AI” and gets information and instructions on how to chat with AI.\n4.The AI initiates a conversation with a new message in the chatbot section, user has been informed in step 3 to continue the conversation.\n5.At the end of the conversation, a profile is generated based on the conversation. The profile is used to mark how well each subsidy matches the profile with colors: green (great match), yellow (slightly match) and grey (no match).\n6.User selects a subsidy to request, user clicks to go to the request form of the subsidy\n7.User is directed to the login page, login occurs with the personal wallet",
-      "country": "NL"
-    },
     {
       "id": "green-lane-verified-wallet-based-company-formation-and-registration-VUXbMJ",
       "sector": "public_sector",
@@ -140,8 +12,8 @@
       "organizationName": "Kamer van Koophandel",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-13T05:55:39+01:00",
-      "publishedAt": "2026-08-13T05:55:39+01:00",
+      "updatedAt": "2026-08-13T10:58:41+01:00",
+      "publishedAt": "2026-08-13T10:58:41+01:00",
       "tags": [
         "Trade",
         "Public sector",
@@ -301,13 +173,6 @@
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "Nederlandse Vereniging van Banken",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
             "refId": "org:fides",
             "labelRaw": "FIDES Labs",
             "url": "https://fides.community",
@@ -318,6 +183,13 @@
             "refId": "org:kvk",
             "labelRaw": "Kamer van Koophandel",
             "url": "https://www.kvk.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:nvb",
+            "labelRaw": "Nederlandse Vereniging van Banken",
+            "url": "https://www.nvb.nl/",
             "source": "catalog",
             "walletType": null
           }
@@ -368,6 +240,134 @@
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/08/20251208-Poortwachters-Eindpresentatie.png",
       "userJourney": "The entrepreneur voluntarily chooses the Green Lane when registering a sole proprietorship with KVK or incorporating a legal entity through a civil-law notary.\nVerified personal data is retrieved into a digital wallet, while any missing business information is added by the entrepreneur. The wallet shows what data is requested, why it is needed, who receives it and whether it is verified or self-declared.\nAfter consent, KVK or the notary receives and validates the data, while remaining responsible for the legal and risk-based assessment. Missing or conflicting information may require additional review.\nOnce approved, the business is registered and a digital Green Lane statement may be issued. The data and status must be kept up to date.",
+      "country": "NL"
+    },
+    {
+      "id": "smart-government-applications-powered-by-digital-wallets-HCB5DD",
+      "sector": "public_sector",
+      "title": "Smart Government Applications Powered by Digital Wallets",
+      "summary": "Our award‑winning Wallet‑Centric Public‑Service Platform proves that modern G2B service delivery in the Netherlands is achievable today. Built with real governmental issuers and relying parties, it uses a Key Life‑Event architecture and provides validated feasibility, reusable components, and a funded roadmap.\n\nThe platform brings together core public actors and applies digital business and personal wallets with responsible agentic AI. Its modular, wallet‑agnostic design enables scalable innovation.\n\nThe first use case helps entrepreneurs find and apply for subsidies and funding as one recurring life event. Secure wallets and AI guidance reduce complexity, errors, and incomplete submissions.\n\nThe governance model began in a Public‑Private‑Academic hackathon (2025) and now advances through a governmental partnership supported by the Digital Government Innovation Budget grant (2026).\n\nThe solution prevents fragmented information, repeated data entry, and non‑compliant applications. Entrepreneurs gain faster, accurate support and control over verified data; government agencies receive complete, reliable submissions and fewer manual processes. The approach is transferable across domain",
+      "organizationName": "Kamer van Koophandel",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-13T10:50:36+01:00",
+      "publishedAt": "2026-08-13T10:50:36+01:00",
+      "tags": [
+        "Wallet",
+        "AI",
+        "subsidy application"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "NP Wallet - KVK (dummy wallet)",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": null,
+            "labelRaw": "BusinessWallet - KVK (dummy wallet)",
+            "url": null,
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "KVK",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Nederlandse Voedsel- en Warenautoriteit (NVWA)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:ehic-sd-jwt-vc:sd-jwt-vc",
+            "labelRaw": "EHIC (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:kvk",
+            "labelRaw": "Kamer van Koophandel",
+            "url": "https://www.kvk.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:dictu",
+            "labelRaw": "Dienst ICT Uitvoering (DICTU)",
+            "url": "https://www.dictu.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:rvo",
+            "labelRaw": "Rijksdienst voor Ondernemend Nederland (RVO)",
+            "url": "https://www.rvo.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:nvwa",
+            "labelRaw": "Nederlandse Voedsel- en Warenautoriteit (NVWA)",
+            "url": "https://www.nvwa.nl/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Nederlandse Voedsel- en Warenautoriteit (NVWA)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Rijksdienst voor Ondernemend Nederland (RVO)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/afbeelding.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/afbeelding.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/nYZhjH3czps",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/nYZhjH3czps",
+        "provider": "youtube"
+      },
+      "userJourney": "For a complete walk though of the end-user's flow, please refer to the demo video available on YouTube (https://youtu.be/nYZhjH3czps). \n\n1.User visits government website (RVO)\n2.User clicks “Go to app” button and arrives within the subsidy orientation page, including 1) a button to find your subsidy with AI, 2) a section that covers subsidies to choose from and 3) an AI chatbot section. \n3.User clicks “find your subsidy with AI” and gets information and instructions on how to chat with AI.\n4.The AI initiates a conversation with a new message in the chatbot section, user has been informed in step 3 to continue the conversation.\n5.At the end of the conversation, a profile is generated based on the conversation. The profile is used to mark how well each subsidy matches the profile with colors: green (great match), yellow (slightly match) and grey (no match).\n6.User selects a subsidy to request, user clicks to go to the request form of the subsidy\n7.User is directed to the login page, login occurs with the personal wallet",
       "country": "NL"
     }
   ]
