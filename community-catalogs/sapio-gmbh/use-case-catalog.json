@@ -12,8 +12,8 @@
       "organizationName": "SAPIO GMBH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-07T08:56:19+01:00",
-      "publishedAt": "2026-08-07T08:56:19+01:00",
+      "updatedAt": "2026-08-13T10:53:12+01:00",
+      "publishedAt": "2026-08-13T10:53:12+01:00",
       "tags": [
         "education",
         "micro-credentials",
@@ -75,30 +75,30 @@
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "HSLU",
-            "url": "https://www.hslu.ch/de-ch/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Universitatea „1 Decembrie 1918” din Alba Iulia",
-            "url": "https://uab.ro",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "University for Continuing Education Krems",
-            "url": "https://donau-uni.ac.at",
-            "source": "manual",
-            "walletType": null
-          },
-          {
             "refId": "org:sapio-gmbh",
             "labelRaw": "SAPIO GMBH",
             "url": "http://www.sapio.id",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:hslu",
+            "labelRaw": "Lucerne University of Applied Sciences and Arts (HSLU)",
+            "url": "https://www.hslu.ch/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:alba-iulia-university",
+            "labelRaw": "Universitatea „1 Decembrie 1918” din Alba Iulia",
+            "url": "https://uab.ro",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:university-krems",
+            "labelRaw": "University for Continuing Education Krems",
+            "url": "https://www.donau-uni.ac.at/",
             "source": "catalog",
             "walletType": null
           }
