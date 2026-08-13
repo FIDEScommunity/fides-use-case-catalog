@@ -12,8 +12,8 @@
       "organizationName": "Dock Labs AG",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-12T18:03:35+01:00",
-      "publishedAt": "2026-08-12T18:03:35+01:00",
+      "updatedAt": "2026-08-13T10:49:16+01:00",
+      "publishedAt": "2026-08-13T10:49:16+01:00",
       "tags": [
         "identity",
         "telecommunications",
@@ -71,24 +71,24 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:gsma",
             "labelRaw": "GSMA",
-            "url": "http://gsma.com",
-            "source": "manual",
+            "url": "https://www.gsma.com/",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:telefonica-tech",
             "labelRaw": "Telefonica Tech",
-            "url": "http://telefonicatech.com",
-            "source": "manual",
+            "url": "https://telefonicatech.com",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:tmt-id",
             "labelRaw": "TMT ID",
-            "url": "http://tmtid.com",
-            "source": "manual",
+            "url": "https://tmtid.com",
+            "source": "catalog",
             "walletType": null
           }
         ],
