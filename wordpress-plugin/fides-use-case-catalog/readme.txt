@@ -2,13 +2,16 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.9.5
+Stable tag: 0.9.6
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
 Use case catalog renderer and WordPress submission flow.
 
 == Changelog ==
+
+= 0.9.6 =
+* Submission review notices use Settings → FIDES Catalog SEO → Submission notify emails (comma-separated To + CC) when fides-community-tools-tiles ≥ 1.9.12 is present; empty option still falls back to admin_email. Filter fides_use_case_catalog_admin_notification_email still accepts a single address or a comma-separated list.
 
 = 0.9.5 =
 * Admin submissions list: default to Pending review (received + approved), with filters for Received / Approved / Published / All statuses, lean column queries, and pagination (50 per page) — same pattern as Catalog Submissions.

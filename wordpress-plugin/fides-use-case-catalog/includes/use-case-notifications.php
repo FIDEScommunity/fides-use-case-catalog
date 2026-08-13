@@ -3,12 +3,18 @@
  * Email notifications for the FIDES Use Case Catalog.
  *
  * Moments that trigger mail:
- *   1. A new submission is stored (status "received"): the site admin gets a
- *      review notice and the submitter gets a confirmation.
+ *   1. A new submission is stored (status "received"): reviewers get a review
+ *      notice and the submitter gets a confirmation.
  *   2. A submission is published: the submitter is told it is now live.
  *   3. Weekly linkcheck (CI → secret REST): submitters get broken-link notices
  *      with FIDES in CC. Contact emails are looked up from the DB only and are
  *      never exported to GitHub (GDPR).
+ *
+ * Reviewer inboxes come from Settings → FIDES Catalog SEO → Submission notify
+ * emails (`fides_catalog_submission_notify_emails`) when tiles is available,
+ * otherwise WordPress `admin_email`. Override with
+ * `fides_use_case_catalog_admin_notification_email` (single address or
+ * comma-separated list).
  *
  * All sending is gated behind the `fides_use_case_catalog_send_notifications`
  * filter so a site can disable it wholesale, and individual recipients /
@@ -44,6 +50,54 @@ function fides_use_case_catalog_admin_review_url(int $row_id): string {
 }
 
 /**
+ * Parse a comma-separated email list into unique valid addresses.
+ *
+ * Prefers the shared tiles helper when available.
+ *
+ * @param string $raw Comma-separated addresses.
+ * @return list<string>
+ */
+function fides_use_case_catalog_parse_email_list(string $raw): array {
+    if (function_exists('fides_catalog_parse_email_list')) {
+        return fides_catalog_parse_email_list($raw);
+    }
+    $out  = array();
+    $seen = array();
+    foreach (preg_split('/\s*,\s*/', $raw) ?: array() as $addr) {
+        $addr = sanitize_email(trim((string) $addr));
+        if ($addr === '' || ! is_email($addr)) {
+            continue;
+        }
+        $key = strtolower($addr);
+        if (isset($seen[$key])) {
+            continue;
+        }
+        $seen[$key] = true;
+        $out[]      = $addr;
+    }
+    return $out;
+}
+
+/**
+ * Reviewer inboxes for new use-case form submissions.
+ *
+ * @param string $use_case_id Use case id (passed to the override filter).
+ * @return list<string>
+ */
+function fides_use_case_catalog_admin_notification_emails(string $use_case_id = ''): array {
+    $emails = function_exists('fides_catalog_submission_notify_emails')
+        ? fides_catalog_submission_notify_emails()
+        : fides_use_case_catalog_parse_email_list((string) get_option('admin_email'));
+    $raw    = implode(', ', $emails);
+    $raw    = (string) apply_filters(
+        'fides_use_case_catalog_admin_notification_email',
+        $raw,
+        $use_case_id
+    );
+    return fides_use_case_catalog_parse_email_list($raw);
+}
+
+/**
  * Thin wrapper around wp_mail with a plain-text content type.
  *
  * @param string               $to      Primary recipient.
@@ -66,7 +120,7 @@ function fides_use_case_catalog_send_email(string $to, string $subject, string $
 }
 
 /**
- * Notify the admin and the submitter that a new use case has been received.
+ * Notify reviewers and the submitter that a new use case has been received.
  */
 function fides_use_case_catalog_notify_submission(
     int $row_id,
@@ -82,13 +136,8 @@ function fides_use_case_catalog_notify_submission(
     $site = wp_specialchars_decode((string) get_bloginfo('name'), ENT_QUOTES);
 
     // --- Admin review notice -------------------------------------------------
-    $admin_email = (string) get_option('admin_email');
-    $admin_email = (string) apply_filters(
-        'fides_use_case_catalog_admin_notification_email',
-        $admin_email,
-        $use_case_id
-    );
-    if (is_email($admin_email)) {
+    $admin_emails = fides_use_case_catalog_admin_notification_emails($use_case_id);
+    if (! empty($admin_emails)) {
         /* translators: 1: site name, 2: use case title */
         $subject = sprintf(__('[%1$s] New use case submission: %2$s', 'fides-use-case-catalog'), $site, $title);
         $body = implode("\n", array(
@@ -103,7 +152,7 @@ function fides_use_case_catalog_notify_submission(
         ));
         $subject = (string) apply_filters('fides_use_case_catalog_admin_email_subject', $subject, $use_case_id, $title);
         $body    = (string) apply_filters('fides_use_case_catalog_admin_email_body', $body, $use_case_id, $title);
-        fides_use_case_catalog_send_email($admin_email, $subject, $body);
+        fides_use_case_catalog_send_email($admin_emails[0], $subject, $body, array_slice($admin_emails, 1));
     }
 
     // --- Submitter confirmation ---------------------------------------------

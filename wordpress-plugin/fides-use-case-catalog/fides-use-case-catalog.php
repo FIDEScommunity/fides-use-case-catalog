@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.9.5
+ * Version: 0.9.6
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
