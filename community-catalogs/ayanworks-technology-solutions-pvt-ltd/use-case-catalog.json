@@ -8,12 +8,12 @@
       "id": "credebl-an-open-source-digital-trust-infrastructure-enabling-trusted-digital-ecosystems-AWG8qU",
       "sector": "public_sector",
       "title": "CREDEBL: An Open-Source Digital Trust Infrastructure Enabling Trusted Digital Ecosystems",
-      "summary": "CREDEBL is an open-source Digital Public Good contributed by AYANWORKS under LFDT.\r\n\r\nA. Bhutan NDI:\r\nBhutan NDI, led by Druk Holding &amp; Investments Limited (DHI), enables citizens to receive, store &amp; share digital credentials. Bhutan faced long travel distances, paper identity, manual verification &amp; limited interoperability. Bhutan NDI adopted CREDEBL as its foundational layer for National Digital Identity Foundational Credentials &amp; Verifiable Credentials. Citizens use digital wallets to share required information with consent, while service providers verify credentials. Built on W3C and OpenID4VC standards, CREDEBL enables interoperable, privacy-preserving trust. Bhutan NDI serves 525000+ users.\r\n\r\nB. Digi Yatra:\r\nDigi Yatra Foundation’s IATA Contactless Travel PoC with IndiGo, SITA &amp; BLR Airport demonstrated International e-Passport Digital Travel Credentials on CREDEBL. Digi Yatra enables paperless airport travel using digital identity. CREDEBL provides the foundational layer for secure issuance, sharing &amp; verification, ensuring privacy, cryptographic trust and global interoperability. The PoC aligned with IATA standards &amp; produced the first International e-Passport credential holder.",
+      "summary": "CREDEBL is an open-source Digital Public Good contributed by AYANWORKS under LFDT.\n\nA. Bhutan NDI:\nBhutan NDI, led by Druk Holding &amp; Investments Limited (DHI), enables citizens to receive, store &amp; share digital credentials. Bhutan faced long travel distances, paper identity, manual verification &amp; limited interoperability. Bhutan NDI adopted CREDEBL as its foundational layer for National Digital Identity Foundational Credentials &amp; Verifiable Credentials. Citizens use digital wallets to share required information with consent, while service providers verify credentials. Built on W3C and OpenID4VC standards, CREDEBL enables interoperable, privacy-preserving trust. Bhutan NDI serves 525000+ users.\n\nB. Digi Yatra:\nDigi Yatra Foundation’s IATA Contactless Travel PoC with IndiGo, SITA &amp; BLR Airport demonstrated International e-Passport Digital Travel Credentials on CREDEBL. Digi Yatra enables paperless airport travel using digital identity. CREDEBL provides the foundational layer for secure issuance, sharing &amp; verification, ensuring privacy, cryptographic trust and global interoperability. The PoC aligned with IATA standards &amp; produced the first International e-Passport credential holder.",
       "organizationName": "AyanWorks Technology Solutions Pvt. Ltd.",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-12T20:08:52+01:00",
-      "publishedAt": "2026-08-12T20:08:52+01:00",
+      "updatedAt": "2026-08-13T10:56:44+01:00",
+      "publishedAt": "2026-08-13T10:56:44+01:00",
       "tags": [
         "Digital Identity",
         "National Digital Identity",
@@ -155,13 +155,6 @@
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "Bhutan NDI",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
             "refId": "org:iata",
             "labelRaw": "International Air Transport Association",
             "url": "https://www.iata.org",
@@ -179,6 +172,13 @@
             "refId": "org:bengaluru-international-airport",
             "labelRaw": "Bengaluru International Airport",
             "url": "https://www.bengaluruairport.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bhutan-ndi",
+            "labelRaw": "Bhutan NDI",
+            "url": "https://bhutanndi.com",
             "source": "catalog",
             "walletType": null
           }
@@ -233,7 +233,7 @@
       ],
       "imageUrl": "https://credebl.id/",
       "moreInfoUrl": "https://credebl.id/",
-      "userJourney": "A. Bhutan National Digital Identity (NDI)\r\nCitizens complete onboarding and verification through Bhutan NDI. Foundational credentials are issued.\r\nTrusted organizations issue Verifiable Credentials through CREDEBL, stored in the citizen’s digital wallet.\r\nFor a service, the provider requests required information. The citizen approves sharing in the wallet.\r\nThe provider cryptographically verifies the credential, removing manual checks.\r\nCredentials enable faster services and reuse across government and private services.\r\nB. Digi Yatra International Digital Travel Credential\r\nThe traveller verifies identity through the Digi Yatra App. An International e-Passport Digital Travel Credential is issued using VC standards.\r\nThe traveller manages it in the App. CREDEBL is the core backend layer for secure issuance, sharing and verification, ensuring privacy, trust and global interoperability.\r\nAirlines, airports and partners request required identity information.\r\nThe traveller approves sharing in the App. Credentials are cryptographically verified without centralized storage.\r\nThe PoC demonstrated IATA alignment and globally interoperable travel credentials.",
+      "userJourney": "A. Bhutan National Digital Identity (NDI)\nCitizens complete onboarding and verification through Bhutan NDI. Foundational credentials are issued.\nTrusted organizations issue Verifiable Credentials through CREDEBL, stored in the citizen’s digital wallet.\nFor a service, the provider requests required information. The citizen approves sharing in the wallet.\nThe provider cryptographically verifies the credential, removing manual checks.\nCredentials enable faster services and reuse across government and private services.\nB. Digi Yatra International Digital Travel Credential\nThe traveller verifies identity through the Digi Yatra App. An International e-Passport Digital Travel Credential is issued using VC standards.\nThe traveller manages it in the App. CREDEBL is the core backend layer for secure issuance, sharing and verification, ensuring privacy, trust and global interoperability.\nAirlines, airports and partners request required identity information.\nThe traveller approves sharing in the App. Credentials are cryptographically verified without centralized storage.\nThe PoC demonstrated IATA alignment and globally interoperable travel credentials.",
       "country": "IN"
     }
   ]
