@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-13T18:21:04+00:00",
+    "generatedAt": "2026-08-13T20:15:27+00:00",
     "organizations": [
         {
             "orgSlug": "aas-studio",
@@ -3691,12 +3691,12 @@
                     "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
                     "sector": "finance",
                     "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
-                    "summary": "Use Case: This End-to-End Digital Business Workflow automates and secures high-assurance corporate onboarding across the entire business lifecycle, covering Know Your Business (KYB), Know Your Customer (KYC) for the financial sector, and Know Your Supplier (KYS) in a single, reusable process.\r\nProblem: Manual corporate verification is slow, costly, and high-friction. Gathering nested corporate data to comply with the new EU reegulation ( AMLR , GWG, Submission,etc),periodic review and preventing invoice fraud are critical pain points.\r\nValue: Dramatically reduces onboarding times, minimizes administrative overhead, and mitigates transaction risks. Credentials are issued once and seamlessly reused across the EU.\r\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (Account Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder), and legal representatives (personal EUDI &amp; signers).\r\nWallets &amp; VCs: EU Business Wallets (Procivis/Spheerity) secure corporate credentials (EBWOID, EUCC, IBAN,etc ) using OpenID4VCI/VP and SD-JWT standards. This replaces paper checks with high-assurance, tamper-proof, decentralized identity verification that is fully eIDAS 2.0 compliant.",
+                    "summary": "Use Case: This End-to-End Digital Business Workflow automates and secures high-assurance corporate onboarding across the entire business lifecycle, covering Know Your Business (KYB), Know Your Customer (KYC) for the financial sector, and Know Your Supplier (KYS) in a single, reusable process.\nProblem: Manual corporate verification is slow, costly, and high-friction. Gathering nested corporate data to comply with the new EU reegulation ( AMLR , GWG, Submission,etc),periodic review and preventing invoice fraud are critical pain points.\nValue: Dramatically reduces onboarding times, minimizes administrative overhead, and mitigates transaction risks. Credentials are issued once and seamlessly reused across the EU.\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (Account Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder), and legal representatives (personal EUDI &amp; signers).\nWallets &amp; VCs: EU Business Wallets (Procivis/Spheerity) secure corporate credentials (EBWOID, EUCC, IBAN,etc ) using OpenID4VCI/VP and SD-JWT standards. This replaces paper checks with high-assurance, tamper-proof, decentralized identity verification that is fully eIDAS 2.0 compliant.",
                     "organizationName": "Robert Bosch GmbH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-13T19:19:49+01:00",
-                    "publishedAt": "2026-08-13T19:19:49+01:00",
+                    "updatedAt": "2026-08-13T21:15:27+01:00",
+                    "publishedAt": "2026-08-13T21:15:27+01:00",
                     "tags": [
                         "#EBWOID",
                         "#EUCC",
@@ -4006,7 +4006,7 @@
                         "https://github.com/flo0x/GDC-Demos/raw/refs/heads/main/End2End_DigitalBusinessWorkflows.mp4"
                     ],
                     "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
-                    "userJourney": "Phase 1: KYB Setup (Bosch Representative &amp; Bundesanzeiger)\r\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (Spherity platform).\r\n2. Bundesanzeiger verifies official registry records and issues the EBWOID and EU Company Credential (EUCC) to the Bosch Business Wallet (Procivis).\r\nPhase 2: KYC Bank Onboarding (Bosch &amp; Deutsche Bank)\r\n3. Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO profiles) to Deutsche Bank (Procivis).\r\n4. Deutsche Bank automatically processes these datasets to trace and identify UBOs under EU AMLR rules.\r\n5. UBO verifies identity via EUDI Wallet, signs the contract using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Attestation to Bosch.\r\nPhase 3: Supplier Cycle (SBB &amp; Bosch)\r\n6. SBB (Spherity) runs Phases 1 and 2 to establish its verified identity.\r\n7. SBB presents its credentials to Bosch for instant, automated KYS onboarding.\r\n8. SBB delivers ordered parts and issues a cryptographically signed eInvoice directly to Bosch.",
+                    "userJourney": "Phase 1: KYB - Foundation : Bosch Obtaining  EBWOID and EUCC from Bundesanzeiger\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (EBW Spherity).\n2.Bundesanzeiger verifies and check against official registry records and issues the EBWOID to  Bosch EBW (Procivis Desk)\n3.Bosch presents the EBWOID and issue EU Company Credential (EUCC) to Bosch EBW.\n\nPhase 2: KYC-Finance:  Onboarding Bosch at Deutsche Bank)\n3. KYC Process: Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO, CompanyInfo, ...) to Deutsche Bank (EBW Procivis).\n4. Deutsche Bank verify the presented proofs and additionally  verify the identity of calculated UBOs under EU AMLR rules (EUDI  Wallet)\n5. Contract signinng is trigger using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Owner Attestation to Bosch EBW.\n\nPhase 3: KYS - Self Supplier onboarding of SBB at Bosch and start deliver\n6. SBB EBW runs Phases 1 and 2 to establish its verified identity.\n7. SBB EBW presents all required credentials to Bosch for instant, automated KYS onboarding.\n8. SBB EBW delivers ordered parts and issues an eInvoice directly to Bosch EBW.",
                     "country": "DE"
                 }
             ]
