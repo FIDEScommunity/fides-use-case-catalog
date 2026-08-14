@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-14T08:58:27+00:00",
+    "generatedAt": "2026-08-14T08:59:36+00:00",
     "organizations": [
         {
             "orgSlug": "aas-studio",
@@ -3786,12 +3786,12 @@
                     "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
                     "sector": "finance",
                     "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
-                    "summary": "Use Case: This End-to-End Digital Business Workflow automates and secures high-assurance corporate onboarding across the entire business lifecycle, covering Know Your Business (KYB), Know Your Customer (KYC) for the financial sector, and Know Your Supplier (KYS) in a single, reusable process.\nProblem: Manual corporate verification is slow, costly, and high-friction. Gathering nested corporate data to comply with the new EU reegulation ( AMLR , GWG, Submission,etc),periodic review and preventing invoice fraud are critical pain points.\nValue: Dramatically reduces onboarding times, minimizes administrative overhead, and mitigates transaction risks. Credentials are issued once and seamlessly reused across the EU.\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (Account Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder), and legal representatives (personal EUDI &amp; signers).\nWallets &amp; VCs: EU Business Wallets (Procivis/Spheerity) secure corporate credentials (EBWOID, EUCC, IBAN,etc ) using OpenID4VCI/VP and SD-JWT standards. This replaces paper checks with high-assurance, tamper-proof, decentralized identity verification that is fully eIDAS 2.0 compliant.",
+                    "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n-Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
                     "organizationName": "Robert Bosch GmbH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-13T21:15:27+01:00",
-                    "publishedAt": "2026-08-13T21:15:27+01:00",
+                    "updatedAt": "2026-08-14T09:59:36+01:00",
+                    "publishedAt": "2026-08-14T09:59:36+01:00",
                     "tags": [
                         "#EBWOID",
                         "#EUCC",
@@ -3879,6 +3879,13 @@
                             {
                                 "refId": null,
                                 "labelRaw": "Supplier/Procurer",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Robert Bosch GmbH",
                                 "url": null,
                                 "source": "manual",
                                 "walletType": null
