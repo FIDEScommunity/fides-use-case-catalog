@@ -29,6 +29,7 @@ export interface UseCase {
   productionDeployment?: 'yes' | 'no' | '';
   status?: string;
   country?: string;
+  themes?: string[];
   updatedAt?: string;
   publishedAt?: string | null;
   moreInfoUrl?: string;

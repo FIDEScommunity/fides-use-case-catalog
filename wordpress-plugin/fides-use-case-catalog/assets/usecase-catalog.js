@@ -9,6 +9,17 @@
   // same-origin fallback for local/empty/unreachable situations.
   const aggregatedUrl = String(config.aggregatedUrl || "").trim();
   const taxonomy = config.taxonomy || {};
+  const themeDiscovery = config.themeDiscovery || {};
+  const THEME_BUNDLES = Array.isArray(themeDiscovery.bundles) ? themeDiscovery.bundles : [];
+  const THEME_ASSIGNMENTS =
+    themeDiscovery.assignments && typeof themeDiscovery.assignments === "object"
+      ? themeDiscovery.assignments
+      : {};
+  const THEME_BUNDLES_BY_CODE = THEME_BUNDLES.reduce((map, bundle) => {
+    const code = String((bundle && bundle.code) || "");
+    if (code) map[code] = bundle;
+    return map;
+  }, {});
   const SECTOR_LABELS = taxonomy.sectors || {};
   const INTERACTION_MODE_LABELS = taxonomy.interactionModes || {};
   const VC_FORMAT_LABELS = taxonomy.vcFormats || {};
@@ -31,6 +42,11 @@
     issuanceProtocols: "issuanceProtocol",
     presentationProtocols: "presentationProtocol",
     interopProfiles: "interopProfile"
+  };
+  const FILTER_INFO_OVERRIDES = {
+    theme: {
+      description: "Themes group related use cases by the user need or outcome they support. A use case can belong to more than one theme."
+    }
   };
   const RATINGS_API_BASE = config.ratingsApiBase ? String(config.ratingsApiBase).trim().replace(/\/$/, "") : "";
   const RATINGS_NONCE = config.ratingsNonce ? String(config.ratingsNonce) : "";
@@ -98,6 +114,10 @@
     showSearch: true,
     columns: normalizeColumns(root.dataset.columns || config.columns)
   };
+  const requestedThemeCode = new URLSearchParams(window.location.search).get("theme") || "";
+  let activeThemeCode = Object.prototype.hasOwnProperty.call(THEME_BUNDLES_BY_CODE, requestedThemeCode)
+    ? requestedThemeCode
+    : "";
   const LIST_BREAKPOINT = 1024;
   let viewMode = localStorage.getItem("fides-use-case-view") || "grid";
   let mobileFiltersController = null;
@@ -1745,7 +1765,8 @@
   let currentItems = [];
   let filterFacets = null;
   const filterGroupState = {
-    sector: true,
+    theme: activeThemeCode !== "",
+    sector: activeThemeCode === "",
     country: false,
     productionDeployment: false,
     interactionModes: false,
@@ -1781,7 +1802,9 @@
     if (clearBtn) clearBtn.classList.toggle("hidden", count === 0);
     root.querySelectorAll(".fides-filter-group[data-filter-group]").forEach((group) => {
       const key = group.dataset.filterGroup;
-      const hasActive = Array.isArray(filters[key]) && filters[key].length > 0;
+      const hasActive = key === "theme"
+        ? activeThemeCode !== ""
+        : Array.isArray(filters[key]) && filters[key].length > 0;
       group.classList.toggle("has-active", hasActive);
     });
   }
@@ -1812,6 +1835,7 @@
 
   function getActiveFilterCount() {
     return (
+      (activeThemeCode ? 1 : 0) +
       filters.sector.length +
       filters.country.length +
       filters.interactionModes.length +
@@ -1901,6 +1925,37 @@
     `;
   }
 
+  function renderThemeFilterGroup() {
+    if (!THEME_BUNDLES.length) return "";
+    const expanded = filterGroupState.theme !== false;
+    const hasActive = activeThemeCode !== "";
+    const options = [
+      { code: "", title: "All themes", count: currentItems.length },
+      ...THEME_BUNDLES.map((bundle) => ({
+        code: String(bundle.code || ""),
+        title: String(bundle.title || bundle.code || ""),
+        count: currentItems.filter((item) => itemMatchesTheme(item, String(bundle.code || ""))).length
+      }))
+    ];
+    return `
+      <div class="fides-filter-group collapsible ${expanded ? "" : "collapsed"} ${hasActive ? "has-active" : ""}" data-filter-group="theme">
+        <button class="fides-filter-label-toggle" type="button" aria-expanded="${expanded ? "true" : "false"}">
+          <span class="fides-filter-label">Theme</span>
+          <span class="fides-filter-active-indicator"></span>
+          ${icons.chevronDown}
+        </button>
+        <div class="fides-filter-options">
+          ${options.map((option) => `
+            <label class="fides-filter-checkbox">
+              <input type="radio" name="fides-theme-filter" data-theme-code="${escapeHtml(option.code)}" value="${escapeHtml(option.code)}" ${activeThemeCode === option.code ? "checked" : ""}>
+              <span>${escapeHtml(option.title)}<span class="fides-filter-option-count">(${option.count})</span></span>
+            </label>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }
+
   function renderFiltersPanel() {
     if (!settings.showFilters) return "";
     const activeFilterCount = getActiveFilterCount();
@@ -1931,6 +1986,7 @@
           </div>
         </div>
         <div class="fides-sidebar-content">
+          ${renderThemeFilterGroup()}
           ${
             sectorOptions.length
               ? renderCheckboxGroup("Sector", "sector", sectorOptions, (value) => SECTOR_LABELS[value] || prettifyKey(value))
@@ -1977,6 +2033,38 @@
         <div class="fides-kpi-card"><span class="fides-kpi-value">${metrics.recent}</span><span class="fides-kpi-label">Updated last 30 days</span></div>
       </div>
     `;
+  }
+
+  function setThemeFilter(themeCode) {
+    activeThemeCode = Object.prototype.hasOwnProperty.call(THEME_BUNDLES_BY_CODE, themeCode)
+      ? themeCode
+      : "";
+    const url = new URL(window.location.href);
+    if (activeThemeCode) {
+      url.searchParams.set("theme", activeThemeCode);
+    } else {
+      url.searchParams.delete("theme");
+    }
+    window.history.replaceState({}, "", url.toString());
+  }
+
+  function clearThemeFilter() {
+    setThemeFilter("");
+  }
+
+  function itemMatchesTheme(item, themeCode) {
+    if (!themeCode) return true;
+    const bundle = THEME_BUNDLES_BY_CODE[themeCode];
+    const themeCodes = bundle && Array.isArray(bundle.themeCodes) ? bundle.themeCodes : [];
+    const embeddedThemes = item && Array.isArray(item.themes) ? item.themes : [];
+    const itemThemes = embeddedThemes.length
+      ? embeddedThemes
+      : (Array.isArray(THEME_ASSIGNMENTS[item && item.id]) ? THEME_ASSIGNMENTS[item.id] : []);
+    return themeCodes.some((code) => itemThemes.includes(code));
+  }
+
+  function itemMatchesActiveTheme(item) {
+    return itemMatchesTheme(item, activeThemeCode);
   }
 
   function renderViewToggle() {
@@ -2185,6 +2273,7 @@
   function getFilteredUseCases() {
     const list = currentItems
       .filter((item) => {
+        if (!itemMatchesActiveTheme(item)) return false;
         if (filters.search) {
           const haystack = [
             item.title,
@@ -2283,6 +2372,7 @@
     }
     if (clearBtn) {
       clearBtn.addEventListener("click", () => {
+        clearThemeFilter();
         filters.search = "";
         filters.sector = [];
         filters.country = [];
@@ -2296,6 +2386,13 @@
         render();
       });
     }
+    root.querySelectorAll("[data-theme-code]").forEach((input) => {
+      input.addEventListener("change", (e) => {
+        if (!e.target.checked) return;
+        setThemeFilter(String(e.target.dataset.themeCode || ""));
+        render();
+      });
+    });
 
     root.querySelectorAll('[data-filter-group]').forEach((input) => {
       if (input.tagName !== "INPUT") return;
@@ -2394,7 +2491,7 @@
   function showVocabularyPopup(button, groupEl, vocabKey) {
     hideVocabularyPopup();
     if (!vocabulary) return;
-    const groupTerm = vocabulary[vocabKey];
+    const groupTerm = FILTER_INFO_OVERRIDES[vocabKey] || vocabulary[vocabKey];
     const categoryName = (groupEl.querySelector(".fides-filter-label") || {}).textContent
       ? groupEl.querySelector(".fides-filter-label").textContent.trim()
       : "";
@@ -2410,7 +2507,9 @@
           const input = label.querySelector("input");
           const value = input ? input.dataset.value || input.value : "";
           const labelText = filterCheckboxLabelTextWithoutCount(label);
-          const term = vocabulary[value] || null;
+          const term = vocabKey === "theme"
+            ? THEME_BUNDLES_BY_CODE[value] || null
+            : vocabulary[value] || null;
           const desc = term && term.description ? escapeHtml(term.description) : "";
           if (desc) {
             listItems.push({ labelText, desc });
@@ -2472,7 +2571,7 @@
       if (!toggle || !labelSpan) return;
       const filterGroup = groupEl.dataset.filterGroup;
       const vocabKey = USE_CASE_FILTER_TO_VOCAB[filterGroup] || filterGroup;
-      if (!vocabulary[vocabKey]) return;
+      if (!vocabulary[vocabKey] && !FILTER_INFO_OVERRIDES[vocabKey]) return;
       const infoBtn = document.createElement("button");
       infoBtn.type = "button";
       infoBtn.className = "fides-vocab-info";

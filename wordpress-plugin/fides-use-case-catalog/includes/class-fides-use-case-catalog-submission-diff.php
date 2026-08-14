@@ -24,6 +24,7 @@ if (! class_exists('Fides_Use_Case_Catalog_Submission_Diff')) {
             'sector'                => 'Sector',
             'organizationName'      => 'Submitted by organization',
             'country'               => 'Country',
+            'themes'                => 'Themes',
             'productionDeployment'  => 'Production deployment',
             'userJourney'           => 'How it works',
             'tags'                  => 'Tags',

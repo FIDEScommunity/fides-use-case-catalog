@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "bundles": [
+    {
+      "code": "identity_access",
+      "title": "Identity & Access",
+      "description": "Personal identity, onboarding and secure access",
+      "icon": "identity",
+      "themeCodes": ["person_identity"]
+    },
+    {
+      "code": "business_authority",
+      "title": "Business & Authority",
+      "description": "Organizational identity, roles and representation",
+      "icon": "business",
+      "themeCodes": ["organizational_identity"]
+    },
+    {
+      "code": "payments_commerce",
+      "title": "Payments & Commerce",
+      "description": "Trusted payments and financial interactions",
+      "icon": "payments",
+      "themeCodes": ["payments"]
+    },
+    {
+      "code": "work_qualifications",
+      "title": "Work & Qualifications",
+      "description": "Education, skills and professional evidence",
+      "icon": "qualifications",
+      "themeCodes": ["education"]
+    },
+    {
+      "code": "products_trade_supply_chains",
+      "title": "Products, Trade & Supply Chains",
+      "description": "Trade documents, product passports and trusted data sharing",
+      "icon": "products",
+      "themeCodes": ["trade_documents", "digital_product_passports", "dataspaces"]
+    },
+    {
+      "code": "government_compliance",
+      "title": "Government & Compliance",
+      "description": "Public services, regulatory evidence and reporting",
+      "icon": "government",
+      "themeCodes": ["compliance_reporting"]
+    }
+  ],
+  "assignments": {
+    "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh": ["person_identity", "organizational_identity", "compliance_reporting", "trade_documents"],
+    "trusted-caller-identity-aGtyqn": ["person_identity"],
+    "ingo-digital-verifiable-and-secure-subcontractor-management-including-physical-access-ZHHRjx": ["person_identity", "organizational_identity", "education", "compliance_reporting"],
+    "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-m8I1pS": ["digital_product_passports", "compliance_reporting"],
+    "making-the-european-business-wallet-real-ebw-trial-for-national-healthcare-data-exchange-kik-v-zBr2RW": ["organizational_identity", "dataspaces", "compliance_reporting"],
+    "green-lane-verified-wallet-based-company-formation-and-registration-VUXbMJ": ["person_identity", "organizational_identity"],
+    "establish-a-new-company-in-one-day-company-passport-IryaF9": ["organizational_identity", "compliance_reporting"],
+    "credebl-an-open-source-digital-trust-infrastructure-enabling-trusted-digital-ecosystems-AWG8qU": ["person_identity"],
+    "portable-volunteer-credentials-turning-fragmented-volunteer-records-into-trusted-learner-owned-proof-with-a-neutral-t-oAVKbU": ["education"],
+    "cross-border-micro-credentials-the-eu-ace-chain-eu-ch-MUUYsm": ["education"],
+    "smart-government-applications-powered-by-digital-wallets-HCB5DD": ["organizational_identity", "agentic_ai"],
+    "dppskop-trusted-digital-product-passports-for-global-manufacturing-and-european-regulatory-compliance-KIIXN0": ["digital_product_passports", "compliance_reporting"],
+    "dppskop-digital-product-passport-platform-for-espr-compliance-QAZbov": ["digital_product_passports", "compliance_reporting"],
+    "from-pilot-to-proven-crediveras-global-adoption-Wza0As": ["education", "compliance_reporting"],
+    "vesta-appliances-from-impostors-to-proof-of-trust-ATYNCN": ["organizational_identity", "agentic_ai"],
+    "republic-of-verandia-citizen-ids-business-ids-and-legal-representation-on-one-open-trust-registry-WhRQPe": ["person_identity", "organizational_identity"],
+    "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-t2LpAh": ["digital_product_passports", "compliance_reporting"],
+    "independent-review-of-ai-decision-evidence-lf3fYX": ["compliance_reporting"],
+    "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV": ["digital_product_passports", "compliance_reporting"],
+    "digital-product-passport-applying-the-cirpass-structure-and-danube-business-wallet-gN4juB": ["digital_product_passports", "trade_documents", "compliance_reporting"],
+    "e-invoicing-fides-labs-small-scale-pilot-ZGdw7E": ["organizational_identity", "trade_documents"],
+    "samsung-sds-integrated-digital-wallet-b5dcHk": ["person_identity", "payments"],
+    "transpareo-product-truth-anyone-can-verify-ckZpOe": ["digital_product_passports", "compliance_reporting"],
+    "spherity-trusted-ai-KMVBEw": ["organizational_identity", "dataspaces", "compliance_reporting", "agentic_ai"],
+    "digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC": ["compliance_reporting"],
+    "preventing-sim-swap-fraud-with-eudi-wallets-and-ai-voice-agents-FNAfeI": ["person_identity", "agentic_ai"],
+    "buy-age-restricted-goods-online-in-seconds-with-eudi-wallets-mTFVmp": ["person_identity"],
+    "verified-machine-safety-access-at-koning-willem-i-college-kw1c-6fShwI": ["education", "compliance_reporting"],
+    "pass2rent-from-proof-of-age-to-open-door-car-rental-on-eudi-wallets-xMkRtD": ["person_identity"],
+    "urban-company-service-professional-and-customer-identity-verification-0DW84B": ["person_identity"],
+    "hala-mobility-verified-rider-onboarding-9MiDRu": ["person_identity"],
+    "doctor-identity-verification-for-medical-practitioner-registration-ewroXC": ["person_identity"],
+    "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P": ["person_identity"],
+    "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-p0mDau": ["person_identity"],
+    "spheritys-digital-product-passports-for-bvgs-electric-bus-batteries-4sPEny": ["digital_product_passports", "compliance_reporting"],
+    "faydapass-rP7gpJ": ["person_identity"],
+    "fast-ferries-payments-with-eudi-wallets-UwPvFq": ["person_identity", "payments"],
+    "tax-splitter-real-time-vat-collection-with-verifiable-organisational-identity-ZQey1U": ["organizational_identity", "payments", "compliance_reporting"],
+    "open-bank-account-Ejx887": ["person_identity", "payments"],
+    "nijmegen-attribute-based-municipal-login": ["person_identity"],
+    "age-verification-online-purchase": ["person_identity"],
+    "digital-travel-credential-check-in-boarding": ["person_identity"]
+  }
+}

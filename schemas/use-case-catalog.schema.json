@@ -28,6 +28,25 @@
         "productionDeployment": { "type": "string", "enum": ["yes", "no", ""] },
         "status": { "type": "string" },
         "country": { "type": "string" },
+        "themes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "person_identity",
+              "organizational_identity",
+              "payments",
+              "education",
+              "compliance_reporting",
+              "trade_documents",
+              "digital_product_passports",
+              "dataspaces",
+              "agentic_ai"
+            ]
+          }
+        },
         "updatedAt": { "type": "string" },
         "publishedAt": { "type": ["string", "null"] },
         "moreInfoUrl": { "type": "string" },
