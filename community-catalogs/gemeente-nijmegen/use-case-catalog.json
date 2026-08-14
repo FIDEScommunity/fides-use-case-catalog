@@ -86,6 +86,9 @@
         "IRMA Protocol"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://yivi.app/img/inloggen-bestelproces.webp"
       ],

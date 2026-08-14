@@ -92,6 +92,11 @@
       "interopProfiles": [
         "DIIP v4"
       ],
+      "themes": [
+        "organizational_identity",
+        "payments",
+        "compliance_reporting"
+      ],
       "videos": [
         {
           "url": "https://youtu.be/yxopjff8BRU",

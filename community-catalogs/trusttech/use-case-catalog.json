@@ -158,6 +158,11 @@
       "interopProfiles": [
         "EUDI Wallet ARF"
       ],
+      "themes": [
+        "organizational_identity",
+        "dataspaces",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/Presentatie1-1.jpg"
       ],

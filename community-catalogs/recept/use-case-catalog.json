@@ -69,6 +69,9 @@
       "interopProfiles": [
         "EUDI Wallet ARF"
       ],
+      "themes": [
+        "education"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/proovy_DIF.png"
       ],

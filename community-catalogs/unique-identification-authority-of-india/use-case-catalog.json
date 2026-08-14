@@ -94,6 +94,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_26_58-PM.png"
       ],
@@ -185,6 +188,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_46_35-PM.png"
       ],
@@ -284,6 +290,9 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png"
       ],
@@ -384,6 +393,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png"
       ],
@@ -485,6 +497,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png"
       ],

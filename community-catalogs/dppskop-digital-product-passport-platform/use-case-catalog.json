@@ -70,6 +70,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/dppskop_digital_product_passport-1.png",
         "https://fides.community/app/uploads/2026/07/dppskop_01.png",

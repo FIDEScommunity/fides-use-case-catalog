@@ -172,6 +172,10 @@
         "EWC v3",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity",
+        "payments"
+      ],
       "imageUrls": [
         "https://img.youtube.com/vi/6GwCxyofSVE/maxresdefault.jpg"
       ],
@@ -305,6 +309,10 @@
         "EUDI Wallet ARF",
         "EWC v3",
         "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "payments"
       ],
       "imageUrls": [
         "https://img.youtube.com/vi/3VktTStWHs8/maxresdefault.jpg"

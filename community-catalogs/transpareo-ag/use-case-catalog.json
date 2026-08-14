@@ -47,6 +47,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
       "moreInfoUrl": "https://github.com/transpareo/transpareo-time-machine",
       "userJourney": "1. A maker (manufacturer or importer) creates a product passport in Transpareo and publishes it. Transpareo seals that version as a verifiable credential: a W3C Data Integrity proof over Ed25519, signed with a key bound to the maker's own domain via a did:web identifier. A GS1 Digital Link QR code on the product points to the passport.\r\n\r\n2. A shopper scans the QR code with their phone. Nothing is installed, no wallet, no account: the link opens our open-source viewer, the Transpareo Time Machine, in the browser.\r\n\r\n3. The viewer fetches the passport and its proof, resolves the maker's public key from the did:web identifier, and verifies the signature client-side, offline, against that key. A pass means the record is authentic and unaltered, and the shopper can verify every earlier version too.\r\n\r\n4. A repairer or recycler later scans the same code to read repair and material data, and verifies it the same way.\r\n\r\n5. A market-surveillance authority verifies the same passport independently through a dedicated Authority API, which logs an audit entry on every access. Each party checks from its own side, trusting the maths rather than the maker or Transpareo.",
       "country": "CH"

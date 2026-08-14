@@ -75,6 +75,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "education",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-163734.png"
       ],

@@ -234,6 +234,10 @@
         "DIIP v4",
         "DIIP v5"
       ],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/20251208-Poortwachters-Eindpresentatie.png",
         "https://fides.community/app/uploads/2025/12/mijnoverheid-scaled.png"
@@ -353,6 +357,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "organizational_identity",
+        "agentic_ai"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/afbeelding.png"
       ],

@@ -318,6 +318,12 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "compliance_reporting",
+        "trade_documents"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
         "https://github.com/flo0x/GDC-Demos/raw/refs/heads/main/End2End_DigitalBusinessWorkflows.mp4"

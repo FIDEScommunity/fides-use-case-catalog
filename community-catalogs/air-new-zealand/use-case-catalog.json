@@ -192,6 +192,9 @@
         "ISO 18013-5"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "videos": [
         {
           "url": "https://www.youtube.com/watch?v=6oKvezFzrx0&t=196s",

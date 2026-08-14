@@ -48,6 +48,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/Spherity_BVG-Battery-Passport-example.png",
         "https://fides.community/app/uploads/2026/07/Spheritys-battery-passport-solution-3-4-2.png"

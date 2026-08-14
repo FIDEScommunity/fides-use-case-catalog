@@ -244,6 +244,10 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "organizational_identity",
+        "agentic_ai"
+      ],
       "imageUrls": [
         "https://playground.testnet.verana.network/images/factory-fides.jpg"
       ],
@@ -474,6 +478,10 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
       "imageUrls": [
         "https://playground.testnet.verana.network/images/verandia/hero-fides.jpg"
       ],

@@ -72,6 +72,9 @@
         "IRMA Protocol"
       ],
       "interopProfiles": [],
+      "themes": [
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review."
       ],

@@ -141,6 +141,12 @@
       "interopProfiles": [
         "EUDI Wallet ARF"
       ],
+      "themes": [
+        "organizational_identity",
+        "dataspaces",
+        "compliance_reporting",
+        "agentic_ai"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png"
       ],

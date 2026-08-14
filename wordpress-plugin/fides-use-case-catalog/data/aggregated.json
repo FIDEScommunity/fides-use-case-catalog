@@ -1,10 +1,88 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-14T08:57:08.767Z",
+  "lastUpdated": "2026-08-14T08:58:42.443Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 42,
   "useCases": [
+    {
+      "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
+      "sector": "supply_chain",
+      "title": "Reeco Textile DPP : the supply chain verified independently of the brand's systems",
+      "summary": "Textile passports today publish what a brand exports from its PLM. A signature makes that tamper-evident, not true. Reeco verifies the chain itself, from outside the brand's systems: every supplier lodges its documents directly with Reeco, and a proprietary mass balance, carrying the indices and the PEF calculation, bounds each claim to its certified evidence. No signed claim survives in excess of what the certificates cover.\nThe passport is issued from that result: a W3C Verifiable Credential from did:web:ia.reeco.eco, delivered over OpenID4VCI to an organisational or personal wallet, presented back over OpenID4VP and verified against the published DID document, eleven checks including holder key binding. Verification is the product; the passport is what verification leaves behind.\nThere is a date on this. From 27 September 2026, Directive (EU) 2024/825 makes a generic environmental claim an unfair practice: only specific, substantiated claims survive, and substantiation is not a publishing problem.\nNo textile DPP can be conforming yet: the delegated act is not adopted and service providers cannot register. This is a pilot, and says so. The stack is live and public.",
+      "organizationName": "Reeco",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-14T09:58:27+01:00",
+      "publishedAt": "2026-08-14T09:58:27+01:00",
+      "tags": [
+        "Digital Product Passport",
+        "DPP",
+        "Textiles",
+        "Supply Chain Transparency",
+        "Product Traceability",
+        "Mass Balance",
+        "Verifiable Credentials",
+        "Sustainability",
+        "Regulatory Compliance",
+        "Circular Economy",
+        "ESPR",
+        "UNTP",
+        "GS1 Digital Link",
+        "Data Interoperability"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:reeco",
+            "labelRaw": "Reeco",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp"
+      ],
+      "imageUrl": "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp",
+      "videos": [
+        {
+          "url": "https://youtu.be/iTgmqVRT2to",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/iTgmqVRT2to",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://doi.org/10.5281/zenodo.21825740",
+      "userJourney": "1. A brand declares the composition and sustainability claims for a production lot and\n   supplies the supply-chain documents for each tier.\n2. Before anything is signed, Reeco checks the declared claim against the certified\n   evidence. If the evidence does not support the claim, the passport is not issued at the\n   declared value.\n3. The passport is issued as a UNTP 0.7.0 Verifiable Credential signed with Ed25519, with\n   a GS1 Digital Link identifier at unit level (AI 01 / 10 / 21) as its subject id.\n4. A consumer scans the QR on the garment. The GS1 Digital Link resolver returns the\n   passport in a plain-language view; the credential status is resolved live, so a\n   superseded or revoked claim never reads as valid.\n5. A repairer or recycler reads material and end-of-life data from the same identifier.\n6. A market surveillance authority retrieves the same passport, verifies the signature\n   against the published DID document, and can retrieve the archived version from the\n   independent back-up service if the primary is unavailable.",
+      "country": "IT"
+    },
     {
       "id": "decentralized-phc-credentials-in-the-future-ai-era-LgFUSG",
       "sector": "digital",
@@ -385,6 +463,12 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "compliance_reporting",
+        "trade_documents"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
         "https://github.com/flo0x/GDC-Demos/raw/refs/heads/main/End2End_DigitalBusinessWorkflows.mp4"
@@ -502,6 +586,9 @@
       ],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png"
       ],
@@ -628,6 +715,12 @@
       "interopProfiles": [
         "EUDI Wallet ARF",
         "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "education",
+        "compliance_reporting"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/Logo_inGo_BG_Large-3.png"
@@ -800,6 +893,11 @@
       ],
       "interopProfiles": [
         "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "organizational_identity",
+        "dataspaces",
+        "compliance_reporting"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/Presentatie1-1.jpg"
@@ -1038,6 +1136,10 @@
         "DIIP v4",
         "DIIP v5"
       ],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/20251208-Poortwachters-Eindpresentatie.png",
         "https://fides.community/app/uploads/2025/12/mijnoverheid-scaled.png"
@@ -1225,6 +1327,10 @@
         "DIIP v4",
         "DIIP v5",
         "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "organizational_identity",
+        "compliance_reporting"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/fides-cover-company.jpg"
@@ -1468,6 +1574,9 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://credebl.id/"
       ],
@@ -1540,6 +1649,9 @@
       ],
       "interopProfiles": [
         "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "education"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/proovy_DIF.png"
@@ -1664,6 +1776,9 @@
       "interopProfiles": [
         "DIIP v4",
         "DIIP v5"
+      ],
+      "themes": [
+        "education"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/SAPIO_EUACE_cover_v2_1920x1080.png"
@@ -1794,6 +1909,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "organizational_identity",
+        "agentic_ai"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/afbeelding.png"
       ],
@@ -1877,6 +1996,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/dppskop_digital_product_passport-1.png",
         "https://fides.community/app/uploads/2026/07/dppskop_01.png",
@@ -1950,6 +2073,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/g7023.png"
       ],
@@ -2029,6 +2156,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "education",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-163734.png"
       ],
@@ -2277,6 +2408,10 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "organizational_identity",
+        "agentic_ai"
+      ],
       "imageUrls": [
         "https://playground.testnet.verana.network/images/factory-fides.jpg"
       ],
@@ -2507,6 +2642,10 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
       "imageUrls": [
         "https://playground.testnet.verana.network/images/verandia/hero-fides.jpg"
       ],
@@ -2578,6 +2717,10 @@
       ],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/homepage.png"
       ],
@@ -2672,6 +2815,9 @@
         "IRMA Protocol"
       ],
       "interopProfiles": [],
+      "themes": [
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review."
       ],
@@ -2689,70 +2835,6 @@
       "moreInfoUrl": "https://review.aqta.ai",
       "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: the specific question under examination, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer chooses accept or decline\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs it by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library. The signature carries a timestamp anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
       "country": "IE"
-    },
-    {
-      "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
-      "sector": "supply_chain",
-      "title": "Reeco Textile DPP : the supply chain verified independently of the brand's systems",
-      "summary": "Textile passports today publish what a brand exports from its PLM. A signature makes that tamper-evident, not true. Reeco verifies the chain itself, from outside the brand's systems: every supplier lodges its documents directly with Reeco, and a proprietary mass balance, carrying the indices and the PEF calculation, bounds each claim to its certified evidence. No signed claim survives in excess of what the certificates cover.\r\nThe passport is issued from that result: a W3C Verifiable Credential from did:web:ia.reeco.eco, delivered over OpenID4VCI to an organisational or personal wallet, presented back over OpenID4VP and verified against the published DID document, eleven checks including holder key binding. Verification is the product; the passport is what verification leaves behind.\r\nThere is a date on this. From 27 September 2026, Directive (EU) 2024/825 makes a generic environmental claim an unfair practice: only specific, substantiated claims survive, and substantiation is not a publishing problem.\r\nNo textile DPP can be conforming yet: the delegated act is not adopted and service providers cannot register. This is a pilot, and says so. The stack is live and public.",
-      "organizationName": "Reeco",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-09T14:56:28+01:00",
-      "publishedAt": "2026-08-09T14:56:28+01:00",
-      "tags": [
-        "Digital Product Passport",
-        "DPP",
-        "Textiles",
-        "Supply Chain Transparency",
-        "Product Traceability",
-        "Mass Balance",
-        "Verifiable Credentials",
-        "Sustainability",
-        "Regulatory Compliance",
-        "Circular Economy",
-        "ESPR",
-        "UNTP",
-        "GS1 Digital Link",
-        "Data Interoperability"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": "org:reeco",
-            "labelRaw": "Reeco",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp"
-      ],
-      "imageUrl": "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp",
-      "moreInfoUrl": "https://doi.org/10.5281/zenodo.21825740",
-      "userJourney": "1. A brand declares the composition and sustainability claims for a production lot and\r\n   supplies the supply-chain documents for each tier.\r\n2. Before anything is signed, Reeco checks the declared claim against the certified\r\n   evidence. If the evidence does not support the claim, the passport is not issued at the\r\n   declared value.\r\n3. The passport is issued as a UNTP 0.7.0 Verifiable Credential signed with Ed25519, with\r\n   a GS1 Digital Link identifier at unit level (AI 01 / 10 / 21) as its subject id.\r\n4. A consumer scans the QR on the garment. The GS1 Digital Link resolver returns the\r\n   passport in a plain-language view; the credential status is resolved live, so a\r\n   superseded or revoked claim never reads as valid.\r\n5. A repairer or recycler reads material and end-of-life data from the same identifier.\r\n6. A market surveillance authority retrieves the same passport, verifies the signature\r\n   against the published DID document, and can retrieve the archived version from the\r\n   independent back-up service if the primary is unavailable.",
-      "country": "IT"
     },
     {
       "id": "digital-product-passport-applying-the-cirpass-structure-and-danube-business-wallet-gN4juB",
@@ -2868,6 +2950,11 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "trade_documents",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/썸네일-2.png"
       ],
@@ -3064,6 +3151,10 @@
         "DIIP v5",
         "EUDI Wallet ARF"
       ],
+      "themes": [
+        "organizational_identity",
+        "trade_documents"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/fides-cover-einvoicing.jpg"
       ],
@@ -3169,6 +3260,10 @@
       "interopProfiles": [
         "EUDI Wallet ARF"
       ],
+      "themes": [
+        "person_identity",
+        "payments"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/integrated-wallet-thumbnail-en-2.png"
       ],
@@ -3230,6 +3325,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
       "moreInfoUrl": "https://github.com/transpareo/transpareo-time-machine",
       "userJourney": "1. A maker (manufacturer or importer) creates a product passport in Transpareo and publishes it. Transpareo seals that version as a verifiable credential: a W3C Data Integrity proof over Ed25519, signed with a key bound to the maker's own domain via a did:web identifier. A GS1 Digital Link QR code on the product points to the passport.\r\n\r\n2. A shopper scans the QR code with their phone. Nothing is installed, no wallet, no account: the link opens our open-source viewer, the Transpareo Time Machine, in the browser.\r\n\r\n3. The viewer fetches the passport and its proof, resolves the maker's public key from the did:web identifier, and verifies the signature client-side, offline, against that key. A pass means the record is authentic and unaltered, and the shopper can verify every earlier version too.\r\n\r\n4. A repairer or recycler later scans the same code to read repair and material data, and verifies it the same way.\r\n\r\n5. A market-surveillance authority verifies the same passport independently through a dedicated Authority API, which logs an audit entry on every access. Each party checks from its own side, trusting the maths rather than the maker or Transpareo.",
       "country": "CH"
@@ -3371,6 +3470,12 @@
       "interopProfiles": [
         "EUDI Wallet ARF"
       ],
+      "themes": [
+        "organizational_identity",
+        "dataspaces",
+        "compliance_reporting",
+        "agentic_ai"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/Spherity_Trusted-AI-Flow.png"
       ],
@@ -3465,6 +3570,9 @@
         "DIIP v4",
         "DIIP v5",
         "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "compliance_reporting"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/fides-cover-vog.jpg"
@@ -3580,6 +3688,10 @@
         "DIIP v5",
         "EUDI Wallet ARF",
         "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "agentic_ai"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/1-1.png"
@@ -3697,6 +3809,9 @@
         "DIIP v5",
         "EUDI Wallet ARF",
         "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/10-2.png"
@@ -3833,6 +3948,10 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "education",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg"
       ],
@@ -3948,6 +4067,9 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/contactless_eudi.png"
       ],
@@ -4056,6 +4178,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_26_58-PM.png"
       ],
@@ -4147,6 +4272,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-16-2026-06_46_35-PM.png"
       ],
@@ -4246,6 +4374,9 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-09_01_57-PM.png"
       ],
@@ -4346,6 +4477,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png"
       ],
@@ -4447,6 +4581,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png"
       ],
@@ -4498,6 +4635,10 @@
       "issuanceProtocols": [],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/Spherity_BVG-Battery-Passport-example.png",
         "https://fides.community/app/uploads/2026/07/Spheritys-battery-passport-solution-3-4-2.png"
@@ -4588,6 +4729,9 @@
       "interopProfiles": [
         "EUDI Wallet ARF",
         "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/faydapass-image.png"
@@ -4774,6 +4918,10 @@
         "EWC v3",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity",
+        "payments"
+      ],
       "imageUrls": [
         "https://img.youtube.com/vi/6GwCxyofSVE/maxresdefault.jpg"
       ],
@@ -4879,6 +5027,11 @@
       ],
       "interopProfiles": [
         "DIIP v4"
+      ],
+      "themes": [
+        "organizational_identity",
+        "payments",
+        "compliance_reporting"
       ],
       "videos": [
         {
@@ -5010,6 +5163,10 @@
         "EWC v3",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity",
+        "payments"
+      ],
       "imageUrls": [
         "https://img.youtube.com/vi/3VktTStWHs8/maxresdefault.jpg"
       ],
@@ -5110,6 +5267,9 @@
         "IRMA Protocol"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://yivi.app/img/inloggen-bestelproces.webp"
       ],
@@ -5194,6 +5354,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://shop-api.playground.neovo.ch/assets/source/63/tide_6pack.png"
       ],
@@ -5390,6 +5553,9 @@
         "ISO 18013-5"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "videos": [
         {
           "url": "https://www.youtube.com/watch?v=6oKvezFzrx0&t=196s",

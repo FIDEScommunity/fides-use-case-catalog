@@ -121,6 +121,9 @@
         "DIIP v4",
         "DIIP v5"
       ],
+      "themes": [
+        "education"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/SAPIO_EUACE_cover_v2_1920x1080.png"
       ],

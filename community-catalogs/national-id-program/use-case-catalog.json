@@ -72,6 +72,9 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/faydapass-image.png"
       ],

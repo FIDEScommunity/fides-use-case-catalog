@@ -80,6 +80,9 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://shop-api.playground.neovo.ch/assets/source/63/tide_6pack.png"
       ],

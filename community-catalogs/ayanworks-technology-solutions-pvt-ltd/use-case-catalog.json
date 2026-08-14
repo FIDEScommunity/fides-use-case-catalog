@@ -228,6 +228,9 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://credebl.id/"
       ],

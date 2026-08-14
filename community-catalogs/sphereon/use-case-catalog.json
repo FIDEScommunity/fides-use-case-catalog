@@ -121,6 +121,10 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "education",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg"
       ],

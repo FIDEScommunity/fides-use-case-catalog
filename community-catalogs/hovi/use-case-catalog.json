@@ -111,6 +111,10 @@
         "EUDI Wallet ARF",
         "HAIP v1"
       ],
+      "themes": [
+        "person_identity",
+        "agentic_ai"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/1-1.png"
       ],
@@ -227,6 +231,9 @@
         "DIIP v5",
         "EUDI Wallet ARF",
         "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/10-2.png"

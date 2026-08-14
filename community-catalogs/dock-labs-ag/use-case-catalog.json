@@ -113,6 +113,9 @@
       ],
       "presentationProtocols": [],
       "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png"
       ],

@@ -118,6 +118,11 @@
         "OpenID4VP"
       ],
       "interopProfiles": [],
+      "themes": [
+        "digital_product_passports",
+        "trade_documents",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/썸네일-2.png"
       ],
@@ -232,6 +237,10 @@
       ],
       "interopProfiles": [
         "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "payments"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/integrated-wallet-thumbnail-en-2.png"

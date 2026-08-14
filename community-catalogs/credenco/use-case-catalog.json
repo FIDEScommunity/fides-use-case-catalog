@@ -184,6 +184,10 @@
         "DIIP v5",
         "EUDI Wallet ARF"
       ],
+      "themes": [
+        "organizational_identity",
+        "compliance_reporting"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/fides-cover-company.jpg"
       ],
@@ -380,6 +384,10 @@
         "DIIP v5",
         "EUDI Wallet ARF"
       ],
+      "themes": [
+        "organizational_identity",
+        "trade_documents"
+      ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/fides-cover-einvoicing.jpg"
       ],
@@ -474,6 +482,9 @@
         "DIIP v4",
         "DIIP v5",
         "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "compliance_reporting"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/07/fides-cover-vog.jpg"
