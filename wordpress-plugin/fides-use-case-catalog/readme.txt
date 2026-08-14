@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.13.1
+Stable tag: 0.14.8
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -14,10 +14,44 @@ Homepage discovery:
 
 Renders dynamic use-case, country, organization and production counts; six
 theme links into the filtered Use Case Explorer; and a compact explanation of
-how use cases connect the other FIDES catalogs. Ask FIDES remains a separate
-shortcode.
+how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.14.8 =
+* Reduce excess vertical space inside two-column theme cards on narrow screens.
+
+= 0.14.7 =
+* Invert the Ask FIDES button on hover to a white surface with FIDES-blue text.
+
+= 0.14.6 =
+* Compact narrow-screen discovery with two-by-two KPIs, two-column theme cards,
+  a shorter Production label, and a right-aligned Credentials flow step.
+
+= 0.14.5 =
+* Use a use-case-specific placeholder when the listing opens Ask FIDES.
+
+= 0.14.4 =
+* Use the FIDES accent blue for the Ask FIDES button and simplify the separator
+  label from “…or” to “or”.
+
+= 0.14.3 =
+* Place “…or” outside the Ask FIDES control and use a filled compact button so
+  the action no longer resembles a text input.
+
+= 0.14.2 =
+* Give the Ask FIDES listing action a compact bordered button treatment while
+  preserving the homepage wordmark styling.
+
+= 0.14.1 =
+* Match the homepage Ask FIDES wordmark in the listing action with black text
+  and bold emphasis on “FIDES”.
+
+= 0.14.0 =
+* Added an “…or Ask FIDES” action beside the listing search field when the
+  FIDES Assistant plugin is active.
+* Reuses a launcher-free assistant instance and prefills the chat composer with
+  the current catalog search without submitting it automatically.
 
 = 0.13.1 =
 * Explain in the review screen that canonical themes feed the six visitor-friendly homepage bundles and preserve flexible future grouping.

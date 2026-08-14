@@ -52,6 +52,8 @@
   const RATINGS_NONCE = config.ratingsNonce ? String(config.ratingsNonce) : "";
   const RATINGS_IS_LOGGED_IN = !!config.ratingsIsLoggedIn;
   const RATINGS_LOGIN_URL = config.ratingsLoginUrl ? String(config.ratingsLoginUrl) : "";
+  const ASK_FIDES_AVAILABLE = !!config.askFidesAvailable;
+  const ASK_FIDES_PLACEHOLDER = String(config.askFidesPlaceholder || "Ask anything about use cases…");
   const UPDATE_FORM_URL = config.updateFormUrl ? String(config.updateFormUrl).trim() : "";
   const IS_LOGGED_IN = !!config.isLoggedIn;
   const RATINGS_BATCH_LIMIT = 100;
@@ -2217,12 +2219,19 @@
               ${
                 settings.showSearch
                   ? `
-                <div class="fides-topbar-search">
-                  <div class="fides-search-wrapper">
-                    <span class="fides-search-icon">${icons.search}</span>
-                    <input id="fides-search-input" class="fides-search-input" type="text" placeholder="Search..." value="${escapeHtml(filters.search)}" autocomplete="off">
-                    <button class="fides-search-clear ${filters.search ? "" : "hidden"}" id="fides-search-clear" type="button" aria-label="Clear search">${icons.xSmall}</button>
+                <div class="fides-search-actions">
+                  <div class="fides-topbar-search">
+                    <div class="fides-search-wrapper">
+                      <span class="fides-search-icon">${icons.search}</span>
+                      <input id="fides-search-input" class="fides-search-input" type="text" placeholder="Search..." value="${escapeHtml(filters.search)}" autocomplete="off">
+                      <button class="fides-search-clear ${filters.search ? "" : "hidden"}" id="fides-search-clear" type="button" aria-label="Clear search">${icons.xSmall}</button>
+                    </div>
                   </div>
+                  ${
+                    ASK_FIDES_AVAILABLE
+                      ? '<div class="fides-ask-fides-option"><span class="fides-ask-fides-separator">or</span><button class="fides-ask-fides-trigger" id="fides-ask-fides-trigger" type="button">Ask <strong>FIDES</strong></button></div>'
+                      : ""
+                  }
                 </div>
               `
                   : ""
@@ -2346,6 +2355,7 @@
   function bindEvents() {
     const searchInput = root.querySelector("#fides-search-input");
     const searchClear = root.querySelector("#fides-search-clear");
+    const askFidesTrigger = root.querySelector("#fides-ask-fides-trigger");
     const sortSelect = root.querySelector("#fides-sort-select");
     const clearBtn = root.querySelector("#fides-clear");
 
@@ -2362,6 +2372,15 @@
         if (searchInput) searchInput.value = "";
         searchClear.classList.add("hidden");
         renderResultsOnly();
+      });
+    }
+    if (askFidesTrigger) {
+      askFidesTrigger.addEventListener("click", () => {
+        if (!window.FidesAssistant || typeof window.FidesAssistant.open !== "function") return;
+        window.FidesAssistant.open({
+          prefill: searchInput ? String(searchInput.value || "").trim() : filters.search,
+          placeholder: ASK_FIDES_PLACEHOLDER
+        });
       });
     }
     if (sortSelect) {

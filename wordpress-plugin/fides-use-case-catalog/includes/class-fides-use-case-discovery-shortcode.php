@@ -267,7 +267,7 @@ final class Fides_Use_Case_Discovery_Shortcode {
                         <div class="fides-uc-discovery__kpi"><strong class="fides-ct-count" data-count="<?php echo esc_attr((string) $metrics['organizations']); ?>"><?php echo esc_html((string) $metrics['organizations']); ?></strong><span><?php esc_html_e('Organisations', 'fides-use-case-catalog'); ?></span></div>
                         <div class="fides-uc-discovery__kpi">
                             <strong class="fides-ct-count" data-count="<?php echo esc_attr((string) $metrics['production']); ?>"><?php echo esc_html((string) $metrics['production']); ?></strong>
-                            <span><?php esc_html_e('In Production', 'fides-use-case-catalog'); ?></span>
+                            <span><span class="fides-uc-discovery__production-prefix"><?php esc_html_e('In', 'fides-use-case-catalog'); ?> </span><?php esc_html_e('Production', 'fides-use-case-catalog'); ?></span>
                         </div>
                     </div>
                 </div>

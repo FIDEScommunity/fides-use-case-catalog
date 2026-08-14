@@ -67,7 +67,7 @@
   line-height: 1.15;
 }
 
-.fides-uc-discovery__kpi span {
+.fides-uc-discovery__kpi > span {
   margin-top: 0.15rem;
   color: var(--fides-uc-text);
   font-size: 0.78rem;
@@ -510,7 +510,7 @@
   }
 
   .fides-uc-discovery__components > li:nth-child(5) {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 2;
   }
 
@@ -537,14 +537,15 @@
 
   .fides-uc-discovery__components > li:nth-child(3)::after {
     top: 18px;
-    right: -0.45rem;
+    right: calc(-50% - 0.35rem);
     content: "→";
   }
 
   .fides-uc-discovery__components > li:nth-child(5)::after {
-    right: calc(50% - 0.45rem);
+    left: 50%;
     bottom: -0.75rem;
     content: "↓";
+    transform: translateX(-50%);
   }
 
   .fides-uc-discovery__components > li.is-wallet-group::after {
@@ -556,23 +557,64 @@
 
 @media (max-width: 520px) {
   .fides-uc-discovery__kpis {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.35rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, auto);
+    gap: 0.55rem;
   }
 
   .fides-uc-discovery__kpi {
-    min-height: 54px;
-    padding: 0.4rem 0.45rem;
+    min-height: 0;
+    padding: 0.55rem 0.7rem;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.4rem;
   }
 
   .fides-uc-discovery__kpi .fides-ct-count {
-    font-size: 1.15rem;
+    flex: 0 0 auto;
+    font-size: 1.25rem;
   }
 
-  .fides-uc-discovery__kpi span {
-    font-size: 0.64rem;
+  .fides-uc-discovery__kpi > span {
+    margin-top: 0;
+    font-size: 0.72rem;
+    line-height: 1.2;
   }
 
+  .fides-uc-discovery__production-prefix {
+    display: none;
+  }
+
+  .fides-uc-discovery__themes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .fides-uc-discovery__theme {
+    padding: 0.65rem;
+  }
+
+  .fides-uc-discovery__theme-copy {
+    min-height: 124px;
+  }
+
+  .fides-uc-discovery__theme-copy > strong {
+    font-size: 0.9rem;
+  }
+
+  .fides-uc-discovery__theme-copy > span:not(.fides-uc-discovery__theme-count) {
+    font-size: 0.74rem;
+    line-height: 1.35;
+  }
+
+  .fides-uc-discovery__theme-count {
+    padding-top: 0.45rem;
+    font-size: 0.74rem;
+  }
+}
+
+@media (max-width: 359px) {
   .fides-uc-discovery__themes {
     grid-template-columns: 1fr;
   }

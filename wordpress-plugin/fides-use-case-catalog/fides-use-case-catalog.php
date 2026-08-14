@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.13.1
+ * Version: 0.14.8
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.13.1');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.14.8');
 /** Admin list page size for Tools → Use Case Submissions. */
 define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
@@ -1982,9 +1982,13 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
         'fides_use_case_catalog'
     );
     $columns = in_array($atts['columns'], array('2', '3', '4'), true) ? $atts['columns'] : '3';
+    $ask_fides_available = has_action('fides_assistant_enqueue_headless') !== false;
 
     wp_enqueue_style('fides-use-case-catalog-style');
     wp_enqueue_style('fides-use-case-catalog-ui-lib');
+    if ($ask_fides_available) {
+        do_action('fides_assistant_enqueue_headless');
+    }
     wp_enqueue_script('fides-use-case-catalog-list');
 
     $current_request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash($_SERVER['REQUEST_URI']) : '';
@@ -2018,6 +2022,8 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             'updateFormUrl' => fides_use_case_catalog_update_form_url(),
             'isLoggedIn' => is_user_logged_in(),
             'themeDiscovery' => Fides_Use_Case_Discovery_Shortcode::theme_config(),
+            'askFidesAvailable' => $ask_fides_available,
+            'askFidesPlaceholder' => __('Ask anything about use cases…', 'fides-use-case-catalog'),
         ),
         fides_use_case_catalog_catalog_urls()
     );
