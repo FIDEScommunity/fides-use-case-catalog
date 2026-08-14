@@ -1,164 +1,20 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-14T08:58:42.443Z",
+  "lastUpdated": "2026-08-14T08:59:59.001Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 42,
   "useCases": [
     {
-      "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
-      "sector": "supply_chain",
-      "title": "Reeco Textile DPP : the supply chain verified independently of the brand's systems",
-      "summary": "Textile passports today publish what a brand exports from its PLM. A signature makes that tamper-evident, not true. Reeco verifies the chain itself, from outside the brand's systems: every supplier lodges its documents directly with Reeco, and a proprietary mass balance, carrying the indices and the PEF calculation, bounds each claim to its certified evidence. No signed claim survives in excess of what the certificates cover.\nThe passport is issued from that result: a W3C Verifiable Credential from did:web:ia.reeco.eco, delivered over OpenID4VCI to an organisational or personal wallet, presented back over OpenID4VP and verified against the published DID document, eleven checks including holder key binding. Verification is the product; the passport is what verification leaves behind.\nThere is a date on this. From 27 September 2026, Directive (EU) 2024/825 makes a generic environmental claim an unfair practice: only specific, substantiated claims survive, and substantiation is not a publishing problem.\nNo textile DPP can be conforming yet: the delegated act is not adopted and service providers cannot register. This is a pilot, and says so. The stack is live and public.",
-      "organizationName": "Reeco",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-14T09:58:27+01:00",
-      "publishedAt": "2026-08-14T09:58:27+01:00",
-      "tags": [
-        "Digital Product Passport",
-        "DPP",
-        "Textiles",
-        "Supply Chain Transparency",
-        "Product Traceability",
-        "Mass Balance",
-        "Verifiable Credentials",
-        "Sustainability",
-        "Regulatory Compliance",
-        "Circular Economy",
-        "ESPR",
-        "UNTP",
-        "GS1 Digital Link",
-        "Data Interoperability"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": "org:reeco",
-            "labelRaw": "Reeco",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "digital_product_passports",
-        "compliance_reporting"
-      ],
-      "imageUrls": [
-        "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp"
-      ],
-      "imageUrl": "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp",
-      "videos": [
-        {
-          "url": "https://youtu.be/iTgmqVRT2to",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/iTgmqVRT2to",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://doi.org/10.5281/zenodo.21825740",
-      "userJourney": "1. A brand declares the composition and sustainability claims for a production lot and\n   supplies the supply-chain documents for each tier.\n2. Before anything is signed, Reeco checks the declared claim against the certified\n   evidence. If the evidence does not support the claim, the passport is not issued at the\n   declared value.\n3. The passport is issued as a UNTP 0.7.0 Verifiable Credential signed with Ed25519, with\n   a GS1 Digital Link identifier at unit level (AI 01 / 10 / 21) as its subject id.\n4. A consumer scans the QR on the garment. The GS1 Digital Link resolver returns the\n   passport in a plain-language view; the credential status is resolved live, so a\n   superseded or revoked claim never reads as valid.\n5. A repairer or recycler reads material and end-of-life data from the same identifier.\n6. A market surveillance authority retrieves the same passport, verifies the signature\n   against the published DID document, and can retrieve the archived version from the\n   independent back-up service if the primary is unavailable.",
-      "country": "IT"
-    },
-    {
-      "id": "decentralized-phc-credentials-in-the-future-ai-era-LgFUSG",
-      "sector": "digital",
-      "title": "Decentralized PHC Credentials in the Future AI Era.",
-      "summary": "The primary motivation behind creating this proof of concept is to demonstrate how Zero-Knowledge Proofs (ZKPs) and Verifiable Credentials (VCs), aligned with W3C standards, can be integrated with on-chain blockchain technology i.e (CHEQD). This approach enables the deployment, storage, and verification of proof of human identity.\r\nWhat it does\r\n1.Government ID Issuance: A government agency issues an ID to the holder, which is required to obtain a PHC Verifiable Credential (VC).\r\n\r\n2.Presenting ID to PHC Provider: The holder presents their government-issued VC from their wallet to the PHC provider, a trusted authority.\r\n\r\n3.Fingerprint Biometric Capture: Once the government ID is verified, the user scans their fingerprint using PHC’s biometric infrastructure, which extracts unique fingerprint features.\r\n\r\n4.Online Authentication : When accessing an online service that requires PHC verification, the user shares the PHC credential from their wallet with the service.\r\n\r\n5.Verification Process: The service provider’s DIDComm v2 agent performs ZKP verification with the holder’s data. If verified, access is granted; otherwise, it is denied.",
-      "organizationName": "Digital Identity Foundation",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-14T09:56:51+01:00",
-      "publishedAt": "2026-08-14T09:56:51+01:00",
-      "tags": [
-        "identity",
-        "W3C",
-        "DID",
-        "SSI"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "Digital Identity Foundation",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "proximity"
-      ],
-      "vcFormats": [
-        "jwt_vc",
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [
-        "DIDComm v2"
-      ],
-      "interopProfiles": [
-        "DIIP v4"
-      ],
-      "imageUrls": [
-        "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg"
-      ],
-      "imageUrl": "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://devpost.com/software/test-7gtomq",
-      "userJourney": "The DIDComm v2 agent is implemented entirely in Python, enabling secure message exchange between the Issuer, Holder, and Verifier.\r\nDID:Peer protocol implementation and DID generation are also developed in Python.\r\nWe use the Universal DID Resolver/Registrar with cheqd to register and resolve DIDs on the cheqd testnet.\r\nThe complete Zero-Knowledge Proof (ZKP) circuit is written in Circom, with proofs generated using the Circom compiler.\r\n\r\nProof Generation Flow\r\n\r\nFeature Extraction: Fingerprint bifurcation and termination points are extracted, flattened, and combined into a single array.\r\n\r\nPoseidon Merkle Tree: The data is hashed into a Poseidon-based Merkle tree, producing the root commitment and 8 sibling hashes for efficient proof generation.\r\n\r\nProof Generation: The Circom circuit compiles using these hashes to generate the proof, verification key, and public inputs, which are signed by the issuer.\r\n\r\nVerification: The verifier extracts the proof and public inputs from the credential and validates them using zk-SNARKs, returning true or false.",
-      "country": "US"
-    },
-    {
       "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
       "sector": "finance",
       "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
-      "summary": "Use Case: This End-to-End Digital Business Workflow automates and secures high-assurance corporate onboarding across the entire business lifecycle, covering Know Your Business (KYB), Know Your Customer (KYC) for the financial sector, and Know Your Supplier (KYS) in a single, reusable process.\nProblem: Manual corporate verification is slow, costly, and high-friction. Gathering nested corporate data to comply with the new EU reegulation ( AMLR , GWG, Submission,etc),periodic review and preventing invoice fraud are critical pain points.\nValue: Dramatically reduces onboarding times, minimizes administrative overhead, and mitigates transaction risks. Credentials are issued once and seamlessly reused across the EU.\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (Account Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder), and legal representatives (personal EUDI &amp; signers).\nWallets &amp; VCs: EU Business Wallets (Procivis/Spheerity) secure corporate credentials (EBWOID, EUCC, IBAN,etc ) using OpenID4VCI/VP and SD-JWT standards. This replaces paper checks with high-assurance, tamper-proof, decentralized identity verification that is fully eIDAS 2.0 compliant.",
+      "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n-Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
       "organizationName": "Robert Bosch GmbH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-13T21:15:27+01:00",
-      "publishedAt": "2026-08-13T21:15:27+01:00",
+      "updatedAt": "2026-08-14T09:59:36+01:00",
+      "publishedAt": "2026-08-14T09:59:36+01:00",
       "tags": [
         "#EBWOID",
         "#EUCC",
@@ -246,6 +102,13 @@
           {
             "refId": null,
             "labelRaw": "Supplier/Procurer",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Robert Bosch GmbH",
             "url": null,
             "source": "manual",
             "walletType": null
@@ -476,6 +339,150 @@
       "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
       "userJourney": "Phase 1: KYB - Foundation : Bosch Obtaining  EBWOID and EUCC from Bundesanzeiger\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (EBW Spherity).\n2.Bundesanzeiger verifies and check against official registry records and issues the EBWOID to  Bosch EBW (Procivis Desk)\n3.Bosch presents the EBWOID and issue EU Company Credential (EUCC) to Bosch EBW.\n\nPhase 2: KYC-Finance:  Onboarding Bosch at Deutsche Bank)\n3. KYC Process: Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO, CompanyInfo, ...) to Deutsche Bank (EBW Procivis).\n4. Deutsche Bank verify the presented proofs and additionally  verify the identity of calculated UBOs under EU AMLR rules (EUDI  Wallet)\n5. Contract signinng is trigger using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Owner Attestation to Bosch EBW.\n\nPhase 3: KYS - Self Supplier onboarding of SBB at Bosch and start deliver\n6. SBB EBW runs Phases 1 and 2 to establish its verified identity.\n7. SBB EBW presents all required credentials to Bosch for instant, automated KYS onboarding.\n8. SBB EBW delivers ordered parts and issues an eInvoice directly to Bosch EBW.",
       "country": "DE"
+    },
+    {
+      "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
+      "sector": "supply_chain",
+      "title": "Reeco Textile DPP : the supply chain verified independently of the brand's systems",
+      "summary": "Textile passports today publish what a brand exports from its PLM. A signature makes that tamper-evident, not true. Reeco verifies the chain itself, from outside the brand's systems: every supplier lodges its documents directly with Reeco, and a proprietary mass balance, carrying the indices and the PEF calculation, bounds each claim to its certified evidence. No signed claim survives in excess of what the certificates cover.\r\nThe passport is issued from that result: a W3C Verifiable Credential from did:web:ia.reeco.eco, delivered over OpenID4VCI to an organisational or personal wallet, presented back over OpenID4VP and verified against the published DID document, eleven checks including holder key binding. Verification is the product; the passport is what verification leaves behind.\r\nThere is a date on this. From 27 September 2026, Directive (EU) 2024/825 makes a generic environmental claim an unfair practice: only specific, substantiated claims survive, and substantiation is not a publishing problem.\r\nNo textile DPP can be conforming yet: the delegated act is not adopted and service providers cannot register. This is a pilot, and says so. The stack is live and public.",
+      "organizationName": "Reeco",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-14T09:59:44+01:00",
+      "publishedAt": "2026-08-14T09:58:27+01:00",
+      "tags": [
+        "Digital Product Passport",
+        "DPP",
+        "Textiles",
+        "Supply Chain Transparency",
+        "Product Traceability",
+        "Mass Balance",
+        "Verifiable Credentials",
+        "Sustainability",
+        "Regulatory Compliance",
+        "Circular Economy",
+        "ESPR",
+        "UNTP",
+        "GS1 Digital Link",
+        "Data Interoperability"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:reeco",
+            "labelRaw": "Reeco",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "compliance_reporting",
+        "digital_product_passports"
+      ],
+      "imageUrls": [
+        "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp"
+      ],
+      "imageUrl": "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp",
+      "videos": [
+        {
+          "url": "https://youtu.be/iTgmqVRT2to",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/iTgmqVRT2to",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://doi.org/10.5281/zenodo.21825740",
+      "userJourney": "1. A brand declares the composition and sustainability claims for a production lot and\r\n   supplies the supply-chain documents for each tier.\r\n2. Before anything is signed, Reeco checks the declared claim against the certified\r\n   evidence. If the evidence does not support the claim, the passport is not issued at the\r\n   declared value.\r\n3. The passport is issued as a UNTP 0.7.0 Verifiable Credential signed with Ed25519, with\r\n   a GS1 Digital Link identifier at unit level (AI 01 / 10 / 21) as its subject id.\r\n4. A consumer scans the QR on the garment. The GS1 Digital Link resolver returns the\r\n   passport in a plain-language view; the credential status is resolved live, so a\r\n   superseded or revoked claim never reads as valid.\r\n5. A repairer or recycler reads material and end-of-life data from the same identifier.\r\n6. A market surveillance authority retrieves the same passport, verifies the signature\r\n   against the published DID document, and can retrieve the archived version from the\r\n   independent back-up service if the primary is unavailable.",
+      "country": "IT"
+    },
+    {
+      "id": "decentralized-phc-credentials-in-the-future-ai-era-LgFUSG",
+      "sector": "digital",
+      "title": "Decentralized PHC Credentials in the Future AI Era.",
+      "summary": "The primary motivation behind creating this proof of concept is to demonstrate how Zero-Knowledge Proofs (ZKPs) and Verifiable Credentials (VCs), aligned with W3C standards, can be integrated with on-chain blockchain technology i.e (CHEQD). This approach enables the deployment, storage, and verification of proof of human identity.\r\nWhat it does\r\n1.Government ID Issuance: A government agency issues an ID to the holder, which is required to obtain a PHC Verifiable Credential (VC).\r\n\r\n2.Presenting ID to PHC Provider: The holder presents their government-issued VC from their wallet to the PHC provider, a trusted authority.\r\n\r\n3.Fingerprint Biometric Capture: Once the government ID is verified, the user scans their fingerprint using PHC’s biometric infrastructure, which extracts unique fingerprint features.\r\n\r\n4.Online Authentication : When accessing an online service that requires PHC verification, the user shares the PHC credential from their wallet with the service.\r\n\r\n5.Verification Process: The service provider’s DIDComm v2 agent performs ZKP verification with the holder’s data. If verified, access is granted; otherwise, it is denied.",
+      "organizationName": "Digital Identity Foundation",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-14T09:56:51+01:00",
+      "publishedAt": "2026-08-14T09:56:51+01:00",
+      "tags": [
+        "identity",
+        "W3C",
+        "DID",
+        "SSI"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Digital Identity Foundation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "proximity"
+      ],
+      "vcFormats": [
+        "jwt_vc",
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2"
+      ],
+      "interopProfiles": [
+        "DIIP v4"
+      ],
+      "imageUrls": [
+        "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg"
+      ],
+      "imageUrl": "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://devpost.com/software/test-7gtomq",
+      "userJourney": "The DIDComm v2 agent is implemented entirely in Python, enabling secure message exchange between the Issuer, Holder, and Verifier.\r\nDID:Peer protocol implementation and DID generation are also developed in Python.\r\nWe use the Universal DID Resolver/Registrar with cheqd to register and resolve DIDs on the cheqd testnet.\r\nThe complete Zero-Knowledge Proof (ZKP) circuit is written in Circom, with proofs generated using the Circom compiler.\r\n\r\nProof Generation Flow\r\n\r\nFeature Extraction: Fingerprint bifurcation and termination points are extracted, flattened, and combined into a single array.\r\n\r\nPoseidon Merkle Tree: The data is hashed into a Poseidon-based Merkle tree, producing the root commitment and 8 sibling hashes for efficient proof generation.\r\n\r\nProof Generation: The Circom circuit compiles using these hashes to generate the proof, verification key, and public inputs, which are signed by the issuer.\r\n\r\nVerification: The verifier extracts the proof and public inputs from the credential and validates them using zk-SNARKs, returning true or false.",
+      "country": "US"
     },
     {
       "id": "trusted-caller-identity-aGtyqn",
