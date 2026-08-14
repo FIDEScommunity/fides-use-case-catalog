@@ -1,10 +1,114 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-14T11:14:32.304Z",
+  "lastUpdated": "2026-08-14T15:24:44.485Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 43,
   "useCases": [
+    {
+      "id": "independent-review-of-ai-decision-evidence-lf3fYX",
+      "sector": "digital",
+      "title": "Seal: independent review of AI decision evidence",
+      "summary": "Organisations using AI for consequential decisions face a structural problem: when a decision is questioned, the only record is often a log written by the party under review.\n\nSeal signs a receipt at the moment the decision is made, offline-verifiable against its published key. This use case adds an independent review step: a reviewer opens a docket showing the exact question under examination, and countersigns their verdict with a credential from their own Yivi wallet. They never create an account with the organisation under review, and IRMA's Idemix scheme makes that a property of the cryptography rather than a promise about our data handling.\n\nThe evidence pack holds three verifiable objects from three issuers: the receipt, the credential presentation, and the countersignature. No single party can create all three.\n\nScope, plainly: this establishes that a decision was recorded before the action, that the record has not changed, and that a reviewer holding a credential issued independently of the AI operator signed a verdict on it. It does not establish that the record matches the computation that actually ran. The ATTESTATION-v1 Internet-Draft states the same boundary",
+      "organizationName": "Aqta",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-14T16:24:28+01:00",
+      "publishedAt": "2026-08-14T16:24:28+01:00",
+      "tags": [
+        "ai-evidence",
+        "independent-review",
+        "digital-wallets",
+        "offline-verification",
+        "verifiable-credentials"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "yivi",
+            "labelRaw": "Yivi",
+            "url": "https://yivi.app",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Aqta",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Yivi",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Email address",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:aqta",
+            "labelRaw": "Aqta",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Aqta",
+            "url": "https://aqta.ai",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "idemix"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "IRMA Protocol"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "agentic_ai"
+      ],
+      "imageUrls": [
+        "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review."
+      ],
+      "imageUrl": "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review.",
+      "videos": [
+        {
+          "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://review.aqta.ai",
+      "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: the specific question under examination, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer chooses accept or decline\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs it by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library. The signature carries a timestamp anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
+      "country": "IE"
+    },
     {
       "id": "decentralized-phc-credentials-in-the-future-ai-era-LgFUSG",
       "sector": "digital",
@@ -2864,95 +2968,6 @@
       "moreInfoUrl": "https://aas-studio.eu/verify",
       "userJourney": "1. Manufacturer uploads a PDF datasheet; AAS Studio extracts the regulatory fields\n   with an LLM ensemble and maps them onto a conformant Asset Administration Shell,\n   validated against the official IDTA test engine.\n2. AAS Studio computes a canonical hash of the passport content and issues a W3C\n   Verifiable Credential signed with the manufacturer's own ES256 key, optionally\n   as an SD-JWT-VC for selective disclosure.\n3. If issued as revocable, a Bitstring/Token Status List slot is allocated; the\n   manufacturer can revoke it later, effective immediately for any verifier.\n4. The holder presents the credential's JWT to a relying party by any channel.\n5. The relying party verifies it fully offline: it fetches the public JWKS and\n   re-derives the proof itself, including the status-list check, so the verdict\n   never depends on trusting AAS Studio's server.",
       "country": "PT"
-    },
-    {
-      "id": "independent-review-of-ai-decision-evidence-lf3fYX",
-      "sector": "digital",
-      "title": "Independent review of AI decision evidence",
-      "summary": "Organisations using AI for consequential decisions face a structural problem: when a decision is questioned, the only record is often a log written by the party under review. Seal signs a receipt at the moment the decision is made, offline-verifiable against its published key (open ATTESTATION-v1 format, documented in an Informational IETF Internet-Draft). This use case adds an independent review step: a reviewer opens a docket, the question under examination, and countersigns their verdict with a credential from their Yivi wallet, as an IRMA attribute-based signature over the receipt hash, question hash, decision and timestamp. The reviewer never creates an account with the organisation under review. The evidence pack holds three verifiable objects from three issuers: the receipt, the credential presentation, the countersignature. The prototype discloses a verified email as a placeholder credential; the receipt itself is deliberately not a Verifiable Credential",
-      "organizationName": "Aqta",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-11T17:07:21+01:00",
-      "publishedAt": "2026-08-11T17:07:21+01:00",
-      "tags": [
-        "ai-evidence",
-        "independent-review",
-        "digital-wallets",
-        "offline-verification",
-        "verifiable-credentials"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "yivi",
-            "labelRaw": "Yivi",
-            "url": "https://yivi.app",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Email address",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:aqta",
-            "labelRaw": "Aqta",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Aqta",
-            "url": "https://aqta.ai",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "idemix"
-      ],
-      "issuanceProtocols": [],
-      "presentationProtocols": [
-        "IRMA Protocol"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "compliance_reporting"
-      ],
-      "imageUrls": [
-        "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review."
-      ],
-      "imageUrl": "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review.",
-      "videos": [
-        {
-          "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://review.aqta.ai",
-      "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: the specific question under examination, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer chooses accept or decline\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs it by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library. The signature carries a timestamp anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
-      "country": "IE"
     },
     {
       "id": "digital-product-passport-applying-the-cirpass-structure-and-danube-business-wallet-gN4juB",
