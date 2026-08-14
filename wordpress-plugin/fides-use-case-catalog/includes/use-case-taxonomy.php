@@ -332,6 +332,95 @@ function fides_use_case_catalog_row_taxonomy(array $row): array {
 }
 
 /**
+ * Canonical themes assigned by reviewers. Homepage bundles remain a separate
+ * presentation layer over these stable codes.
+ *
+ * @return array<string, string>
+ */
+function fides_use_case_catalog_theme_options(): array {
+    return array(
+        'person_identity'           => 'Person identity',
+        'organizational_identity'   => 'Organizational identity',
+        'payments'                  => 'Payments',
+        'education'                 => 'Education and qualifications',
+        'compliance_reporting'      => 'Compliance and reporting',
+        'trade_documents'           => 'Trade documents',
+        'digital_product_passports' => 'Digital product passports',
+        'dataspaces'                => 'Data spaces and trusted data sharing',
+        'agentic_ai'                => 'Agentic AI',
+    );
+}
+
+/**
+ * @param mixed $values Theme array or JSON-encoded theme array.
+ * @return list<string>
+ */
+function fides_use_case_catalog_normalize_themes($values): array {
+    if (is_string($values)) {
+        $decoded = json_decode($values, true);
+        $values  = is_array($decoded) ? $decoded : array($values);
+    }
+    if (! is_array($values)) {
+        return array();
+    }
+
+    $allowed = fides_use_case_catalog_theme_options();
+    $themes  = array();
+    foreach ($values as $value) {
+        $code = sanitize_key((string) $value);
+        if ($code !== '' && isset($allowed[ $code ])) {
+            $themes[ $code ] = true;
+        }
+    }
+    return array_keys($themes);
+}
+
+/**
+ * Legacy sidecar assignments used only for migration and compatibility while
+ * older GitHub records are being republished with their own themes field.
+ *
+ * @return array<string, list<string>>
+ */
+function fides_use_case_catalog_theme_assignments(): array {
+    static $assignments = null;
+    if (is_array($assignments)) {
+        return $assignments;
+    }
+
+    $path = defined('FIDES_USE_CASE_CATALOG_PATH')
+        ? FIDES_USE_CASE_CATALOG_PATH . 'data/use-case-theme-map.json'
+        : '';
+    $json = $path !== '' && is_readable($path) ? file_get_contents($path) : false;
+    $data = is_string($json) ? json_decode($json, true) : null;
+    $raw  = is_array($data) && is_array($data['assignments'] ?? null)
+        ? $data['assignments']
+        : array();
+
+    $assignments = array();
+    foreach ($raw as $id => $themes) {
+        $normalized = fides_use_case_catalog_normalize_themes($themes);
+        if ((string) $id !== '' && $normalized !== array()) {
+            $assignments[ (string) $id ] = $normalized;
+        }
+    }
+    return $assignments;
+}
+
+/**
+ * @param array<string, mixed> $row
+ * @return list<string>
+ */
+function fides_use_case_catalog_row_themes(array $row): array {
+    $themes = fides_use_case_catalog_normalize_themes($row['themes_json'] ?? '[]');
+    if ($themes !== array()) {
+        return $themes;
+    }
+    $id          = (string) ($row['use_case_id'] ?? '');
+    $assignments = fides_use_case_catalog_theme_assignments();
+    return isset($assignments[ $id ]) ? $assignments[ $id ] : array();
+}
+
+/**
  * @param array<string, mixed> $row
  * @return array<string, mixed>
  */
@@ -342,6 +431,7 @@ function fides_use_case_catalog_row_to_item(array $row): array {
     );
     $sector = fides_use_case_catalog_row_sector($row);
     $taxonomy = fides_use_case_catalog_row_taxonomy($row);
+    $themes = fides_use_case_catalog_row_themes($row);
 
     $item = array(
         'id' => (string) $row['use_case_id'],
@@ -361,6 +451,10 @@ function fides_use_case_catalog_row_to_item(array $row): array {
         'presentationProtocols' => $taxonomy['presentationProtocols'],
         'interopProfiles' => $taxonomy['interopProfiles'],
     );
+
+    if ($themes !== array()) {
+        $item['themes'] = $themes;
+    }
 
     $media = fides_use_case_catalog_media_from_row($row);
     if (! empty($media['images'])) {
@@ -410,6 +504,12 @@ function fides_use_case_catalog_row_to_item(array $row): array {
  */
 function fides_use_case_catalog_item_to_row_data(array $item): array {
     $sector = fides_use_case_catalog_normalize_sector($item['sector'] ?? '');
+    $themes = fides_use_case_catalog_normalize_themes($item['themes'] ?? array());
+    if ($themes === array()) {
+        $id          = (string) ($item['id'] ?? '');
+        $assignments = fides_use_case_catalog_theme_assignments();
+        $themes      = isset($assignments[ $id ]) ? $assignments[ $id ] : array();
+    }
 
     $taxonomy = fides_use_case_catalog_normalize_taxonomy_payload(
         array(
@@ -450,6 +550,7 @@ function fides_use_case_catalog_item_to_row_data(array $item): array {
         'event_key'             => '',
         'theme_key'             => '',
         'sectors_json'          => wp_json_encode($sector !== '' ? array($sector) : array()),
+        'themes_json'           => wp_json_encode($themes),
         'taxonomy_json'         => wp_json_encode($taxonomy),
         'title'                 => sanitize_text_field((string) ($item['title'] ?? '')),
         'summary'               => fides_use_case_catalog_normalize_multiline_text((string) ($item['summary'] ?? '')),
@@ -927,6 +1028,44 @@ function fides_use_case_catalog_migrate_country_column(): void {
 
     // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
     $wpdb->query("ALTER TABLE {$table} ADD COLUMN country_code VARCHAR(8) NULL DEFAULT NULL AFTER organization_name");
+}
+
+/**
+ * Add reviewer-managed themes and seed existing rows from the legacy sidecar.
+ */
+function fides_use_case_catalog_migrate_themes_column(): void {
+    global $wpdb;
+    $table = FIDES_USE_CASE_CATALOG_TABLE;
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $column = $wpdb->get_results("SHOW COLUMNS FROM {$table} LIKE 'themes_json'", ARRAY_A);
+    if (empty($column)) {
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+        $wpdb->query("ALTER TABLE {$table} ADD COLUMN themes_json LONGTEXT NULL DEFAULT NULL AFTER sectors_json");
+    }
+
+    $assignments = fides_use_case_catalog_theme_assignments();
+    if ($assignments === array()) {
+        return;
+    }
+
+    // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is a constant.
+    $rows = $wpdb->get_results("SELECT id, use_case_id, themes_json FROM {$table}", ARRAY_A);
+    foreach ((array) $rows as $row) {
+        if (fides_use_case_catalog_normalize_themes($row['themes_json'] ?? '[]') !== array()) {
+            continue;
+        }
+        $id = (string) ($row['use_case_id'] ?? '');
+        if (! isset($assignments[ $id ])) {
+            continue;
+        }
+        $wpdb->update(
+            $table,
+            array('themes_json' => wp_json_encode($assignments[ $id ])),
+            array('id' => (int) $row['id']),
+            array('%s'),
+            array('%d')
+        );
+    }
 }
 
 /**

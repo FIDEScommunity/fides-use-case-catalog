@@ -1283,7 +1283,8 @@
   color: var(--fides-text-primary);
 }
 
-.fides-use-case-catalog .fides-filter-checkbox input[type="checkbox"] {
+.fides-use-case-catalog .fides-filter-checkbox input[type="checkbox"],
+.fides-use-case-catalog .fides-filter-checkbox input[type="radio"] {
   width: 14px;
   height: 14px;
   margin: 0;
@@ -1291,7 +1292,8 @@
   cursor: pointer;
 }
 
-.fides-use-case-catalog .fides-filter-checkbox input[type="checkbox"]:checked + span {
+.fides-use-case-catalog .fides-filter-checkbox input[type="checkbox"]:checked + span,
+.fides-use-case-catalog .fides-filter-checkbox input[type="radio"]:checked + span {
   color: var(--fides-text-primary);
 }
 

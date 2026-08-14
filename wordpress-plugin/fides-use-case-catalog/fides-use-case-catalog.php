@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.9.6
+ * Version: 0.13.1
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.9.5');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.13.1');
 /** Admin list page size for Tools → Use Case Submissions. */
 define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
@@ -19,16 +19,18 @@ define('FIDES_USE_CASE_CATALOG_SETTINGS_GROUP', 'fides_use_case_catalog_settings
 define('FIDES_USE_CASE_CATALOG_URL', plugin_dir_url(__FILE__));
 define('FIDES_USE_CASE_CATALOG_PATH', plugin_dir_path(__FILE__));
 define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_case_submissions');
-define('FIDES_USE_CASE_CATALOG_DB_VERSION', '1.7.0');
+define('FIDES_USE_CASE_CATALOG_DB_VERSION', '1.8.0');
 define('FIDES_USE_CASE_LOOKUP_LIMIT', 8);
 
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-taxonomy.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-notifications.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-catalog-ssr.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-catalog-submission-diff.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-discovery-shortcode.php';
 
 // Boot the SSR/SEO renderer (no-op shim when the tiles base class is absent).
 Fides_Use_Case_Catalog_SSR::bootstrap();
+Fides_Use_Case_Discovery_Shortcode::bootstrap();
 
 register_activation_hook(__FILE__, 'fides_use_case_catalog_activate');
 add_action('admin_init', 'fides_use_case_catalog_maybe_upgrade_schema');
@@ -56,6 +58,7 @@ function fides_use_case_catalog_activate(): void {
         event_key VARCHAR(191) NOT NULL DEFAULT '',
         theme_key VARCHAR(191) NOT NULL DEFAULT '',
         sectors_json LONGTEXT NULL,
+        themes_json LONGTEXT NULL,
         taxonomy_json LONGTEXT NULL,
         title VARCHAR(191) NOT NULL,
         summary TEXT NOT NULL,
@@ -100,6 +103,7 @@ function fides_use_case_catalog_maybe_upgrade_schema(): void {
     fides_use_case_catalog_migrate_production_deployment_column();
     fides_use_case_catalog_migrate_awards_columns();
     fides_use_case_catalog_migrate_country_column();
+    fides_use_case_catalog_migrate_themes_column();
     fides_use_case_catalog_migrate_media_column();
     fides_use_case_catalog_migrate_update_proposal_columns();
     update_option('fides_use_case_catalog_db_version', FIDES_USE_CASE_CATALOG_DB_VERSION);
@@ -1145,6 +1149,7 @@ function fides_use_case_catalog_validate_submission_payload(array $payload, WP_U
             'event_key' => '',
             'theme_key' => '',
             'sectors_json' => wp_json_encode(array($sector)),
+            'themes_json' => null,
             'taxonomy_json' => wp_json_encode($taxonomy),
             'title' => $title,
             'summary' => $summary,
@@ -1260,6 +1265,9 @@ function fides_use_case_catalog_publish_update_proposal(int $proposal_id, array 
         $content['country_code'] = fides_use_case_catalog_normalize_country_code(
             (string) ($target_row['country_code'] ?? '')
         );
+    }
+    if (fides_use_case_catalog_normalize_themes($content['themes_json'] ?? '[]') === array()) {
+        $content['themes_json'] = wp_json_encode(fides_use_case_catalog_row_themes($target_row));
     }
     $content['contact_email'] = sanitize_email((string) ($proposal_row['contact_email'] ?? ''));
     $content['updated_at'] = current_time('mysql', true);
@@ -1838,6 +1846,12 @@ function fides_use_case_catalog_enqueue_assets(): void {
         array(),
         $ui_lib_css_version
     );
+    wp_register_style(
+        'fides-use-case-discovery',
+        FIDES_USE_CASE_CATALOG_URL . 'assets/usecase-discovery.css',
+        array(),
+        FIDES_USE_CASE_CATALOG_VERSION
+    );
 
     wp_register_script(
         'fides-use-case-catalog-form',
@@ -1858,6 +1872,13 @@ function fides_use_case_catalog_enqueue_assets(): void {
         'fides-use-case-catalog-list',
         FIDES_USE_CASE_CATALOG_URL . 'assets/usecase-catalog.js',
         array('fides-use-case-catalog-ui-lib'),
+        FIDES_USE_CASE_CATALOG_VERSION,
+        true
+    );
+    wp_register_script(
+        'fides-use-case-discovery',
+        FIDES_USE_CASE_CATALOG_URL . 'assets/usecase-discovery.js',
+        array(),
         FIDES_USE_CASE_CATALOG_VERSION,
         true
     );
@@ -1996,6 +2017,7 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             'ratingsLoginUrl' => $ratings_login_url,
             'updateFormUrl' => fides_use_case_catalog_update_form_url(),
             'isLoggedIn' => is_user_logged_in(),
+            'themeDiscovery' => Fides_Use_Case_Discovery_Shortcode::theme_config(),
         ),
         fides_use_case_catalog_catalog_urls()
     );
@@ -2252,6 +2274,11 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <p><?php esc_html_e('Cannot publish without a country. Open the submission, select a country, save, then publish.', 'fides-use-case-catalog'); ?></p>
             </div>
         <?php endif; ?>
+        <?php if (! empty($_GET['themes_pending'])) : ?>
+            <div class="notice notice-warning is-dismissible">
+                <p><?php esc_html_e('Cannot publish without a theme. Open the submission, select at least one theme, save, then publish.', 'fides-use-case-catalog'); ?></p>
+            </div>
+        <?php endif; ?>
         <?php if (! empty($_GET['publish_merge_failed'])) : ?>
             <div class="notice notice-error is-dismissible">
                 <p><?php esc_html_e('Could not publish this update proposal. The target use case must exist as a published row (import it from GitHub first if it is git-only).', 'fides-use-case-catalog'); ?></p>
@@ -2310,6 +2337,7 @@ function fides_use_case_catalog_render_admin_page(): void {
             );
             $taxonomy_options = fides_use_case_catalog_taxonomy_options();
             $selected_sector = fides_use_case_catalog_row_sector($selected_submission);
+            $selected_themes = fides_use_case_catalog_row_themes($selected_submission);
             $selected_taxonomy = fides_use_case_catalog_row_taxonomy($selected_submission);
             $save_nonce = wp_create_nonce('fides_use_case_save_submission_' . (int) $selected_submission['id']);
             $selected_country = fides_use_case_catalog_normalize_country_code((string) ($selected_submission['country_code'] ?? ''));
@@ -2370,6 +2398,13 @@ function fides_use_case_catalog_render_admin_page(): void {
                                             <p class="description"><?php esc_html_e('Submitter selected Other. Choose the correct sector from the list below before publishing.', 'fides-use-case-catalog'); ?></p>
                                         <?php endif; ?>
                                         <?php echo fides_use_case_catalog_render_admin_select_field('sector', fides_use_case_catalog_assignable_sectors(), $selected_sector === 'other' ? '' : $selected_sector, true); ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Themes *</th>
+                                    <td>
+                                        <?php echo fides_use_case_catalog_render_admin_checkbox_field('themes', fides_use_case_catalog_theme_options(), $selected_themes); ?>
+                                        <p class="description">These are the underlying canonical themes. The homepage combines them into six visitor-friendly themes, while the detailed classification keeps future grouping flexible. Select every theme that applies; at least one is required before publish.</p>
                                     </td>
                                 </tr>
                                 <tr>
@@ -2746,6 +2781,22 @@ function fides_use_case_catalog_handle_status_action(): void {
             );
             exit;
         }
+        $themes = fides_use_case_catalog_row_themes($proposal_row);
+        if ($themes === array()) {
+            $target_id = fides_use_case_catalog_sanitize_use_case_id(
+                (string) ($proposal_row['target_use_case_id'] ?? '')
+            );
+            $target_row = $target_id !== '' ? fides_use_case_catalog_published_row_by_use_case_id($target_id) : null;
+            if (is_array($target_row)) {
+                $themes = fides_use_case_catalog_row_themes($target_row);
+            }
+        }
+        if ($themes === array()) {
+            wp_safe_redirect(
+                admin_url('tools.php?page=fides-use-case-submissions&submission=' . $id . '&themes_pending=1')
+            );
+            exit;
+        }
 
         if (! fides_use_case_catalog_publish_update_proposal($id, $proposal_row)) {
             wp_safe_redirect(
@@ -2765,7 +2816,7 @@ function fides_use_case_catalog_handle_status_action(): void {
     );
     if ($status === 'published') {
         $row = $wpdb->get_row(
-            $wpdb->prepare("SELECT sectors_json, theme_key, country_code FROM {$table} WHERE id = %d", $id),
+            $wpdb->prepare("SELECT use_case_id, sectors_json, themes_json, theme_key, country_code FROM {$table} WHERE id = %d", $id),
             ARRAY_A
         );
         if (is_array($row) && fides_use_case_catalog_row_sector($row) === 'other') {
@@ -2780,6 +2831,12 @@ function fides_use_case_catalog_handle_status_action(): void {
         ) {
             wp_safe_redirect(
                 admin_url('tools.php?page=fides-use-case-submissions&submission=' . $id . '&country_pending=1')
+            );
+            exit;
+        }
+        if (is_array($row) && fides_use_case_catalog_row_themes($row) === array()) {
+            wp_safe_redirect(
+                admin_url('tools.php?page=fides-use-case-submissions&submission=' . $id . '&themes_pending=1')
             );
             exit;
         }
@@ -2900,6 +2957,7 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
     $title = sanitize_text_field((string) wp_unslash($_POST['title'] ?? ''));
     $summary = trim(wp_kses_post((string) wp_unslash($_POST['summary'] ?? '')));
     $sector = fides_use_case_catalog_normalize_sector(wp_unslash($_POST['sector'] ?? ($_POST['sectors'] ?? '')));
+    $themes = fides_use_case_catalog_normalize_themes(wp_unslash($_POST['themes'] ?? array()));
     $taxonomy = fides_use_case_catalog_normalize_taxonomy_payload(
         array(
             'interactionModes' => $_POST['interaction_modes'] ?? array(),
@@ -2924,11 +2982,12 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
         || $summary === ''
         || $sector === ''
         || $sector === 'other'
+        || $themes === array()
         || $organization_name === ''
         || $country_code === ''
         || ! is_email($contact_email)
     ) {
-        wp_die('Required fields are missing or invalid. Assign a sector other than Other and select a country before saving.');
+        wp_die('Required fields are missing or invalid. Assign a sector other than Other, at least one theme, and a country before saving.');
     }
 
     $media_payload = array(
@@ -2955,6 +3014,7 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
         'event_key' => '',
         'theme_key' => '',
         'sectors_json' => wp_json_encode(array($sector)),
+        'themes_json' => wp_json_encode($themes),
         'taxonomy_json' => wp_json_encode($taxonomy),
         'title' => $title,
         'summary' => $summary,
