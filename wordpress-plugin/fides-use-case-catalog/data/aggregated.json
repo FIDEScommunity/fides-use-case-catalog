@@ -1,9 +1,9 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-13T20:15:47.875Z",
+  "lastUpdated": "2026-08-14T04:59:01.059Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 42,
+  "count": 41,
   "useCases": [
     {
       "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
@@ -580,99 +580,6 @@
       "moreInfoUrl": "https://www.ingo-id.com",
       "userJourney": "inGo enables a range of processes built on wallets and Verifiable Credentials: \r\n1.\tOnboarding: General contractors and subcontractors set up business wallets to manage employees and share project access.\r\n2.\tIssuance: Subcontractors and general contractors issue credentials (site certificates, ID cards, work permits, safety training) as Verifiable Credentials into each employee's personal wallet.\r\n3.\tVerification: The credentials are used to gain a verified site access, at site entrances (e.g. turnstiles) or during inspections inGo can tell if all required documents are available and valid in seconds - no paper, no manual lookup.\r\n4.\tSelective disclosure: Employees share only the specific attribute needed (e.g. \"valid access permit: yes\"), not full documents.\r\n5.\tAudit trail: Every verification is logged in an auditable, GDPR-compliant record.\r\nExternal trusted issuers - e.g. government authorities, insurance companies, or certification bodies - are planned as additional issuers (e.g. state-verified identity, insurance proof).",
       "country": "DE"
-    },
-    {
-      "id": "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-m8I1pS",
-      "sector": "manufacturing",
-      "title": "Cryptographically Verifiable Digital Product Passports for EU Battery Regulation Compliance",
-      "summary": "AAS Studio helps manufacturers comply with the EU Battery Regulation (2023/1542) and wider Digital Product Passport requirements by turning existing PDF datasheets into a signed, verifiable product passport. The problem: OEMs and battery makers already hold the required data, but not in the IDTA Asset Administration Shell format regulators expect, and building that tooling from scratch is a multi-month integration project. AAS Studio extracts and maps the data with AI, lets an engineer review it, and issues a W3C Verifiable Credential (VCDM 2.0, JWT-VC and SD-JWT-VC) with a cryptographic hash anchored to the passport content. The organization (manufacturer) is the issuer. The credential has no personal holder: the product itself is what the passport describes, resolved via a GS1 Digital Link URL rather than carried in a personal wallet. Verifiers are regulators, recyclers, and downstream supply-chain partners, who check the signature offline against a public JWKS with no account and no callback to AAS Studio. Revocation runs on a Bitstring/Token Status List.",
-      "organizationName": "AAS-Studio",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-13T11:01:13+01:00",
-      "publishedAt": "2026-08-13T11:01:13+01:00",
-      "tags": [
-        "digital-product-passport",
-        "verifiable-credentials",
-        "battery-regulation",
-        "manufacturing",
-        "supply-chain",
-        "sustainability"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [
-          {
-            "refId": null,
-            "labelRaw": "AAS-Studio",
-            "url": null,
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "AAS-Studio",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "DigitalProductPassportCredential",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:aas-studio",
-            "labelRaw": "AAS-Studio",
-            "url": "https://aas-studio.eu",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "jwt_vc",
-        "sd_jwt_vc",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/fides-homepage.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/fides-homepage.png",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
-          "provider": "youtube"
-        },
-        {
-          "url": "https://www.youtube.com/watch?v=ATS0oWPEf_g",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://aas-studio.eu/verify",
-      "userJourney": "A manufacturer uploads an existing product datasheet (PDF) into AAS Studio. The AI extracts the relevant fields and maps them onto the IDTA Asset Administration Shell submodel required for the target regulation (Battery Passport, EU Machinery, or Catena-X SerialPart). An engineer at the organization reviews the mapped data and approves it, since the tool never signs anything unreviewed. On approval, AAS Studio computes a canonical content hash and issues a W3C Verifiable Credential (ES256-signed JWT-VC and SD-JWT-VC), and allocates a revocation slot on a Bitstring/Token Status List. The signed record and a QR code resolving via GS1 Digital Link are handed to the manufacturer to attach to the product or packaging. Any downstream party who needs to check the passport (a regulator, a recycler, a supply-chain partner) scans or opens the link and verifies the signature entirely offline against a public JWKS, with no account and no server round-trip required. There is no personal wallet step: the organization issues directly to a public verifier via API, matching the \"business wallet\" pattern Harmen described.",
-      "country": "PT"
     },
     {
       "id": "making-the-european-business-wallet-real-ebw-trial-for-national-healthcare-data-exchange-kik-v-zBr2RW",
