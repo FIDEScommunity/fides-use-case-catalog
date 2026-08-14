@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-14T08:59:44+00:00",
+    "generatedAt": "2026-08-14T10:22:32+00:00",
     "organizations": [
         {
             "orgSlug": "aas-studio",
@@ -4116,6 +4116,89 @@
                     "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
                     "userJourney": "Phase 1: KYB - Foundation : Bosch Obtaining  EBWOID and EUCC from Bundesanzeiger\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (EBW Spherity).\n2.Bundesanzeiger verifies and check against official registry records and issues the EBWOID to  Bosch EBW (Procivis Desk)\n3.Bosch presents the EBWOID and issue EU Company Credential (EUCC) to Bosch EBW.\n\nPhase 2: KYC-Finance:  Onboarding Bosch at Deutsche Bank)\n3. KYC Process: Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO, CompanyInfo, ...) to Deutsche Bank (EBW Procivis).\n4. Deutsche Bank verify the presented proofs and additionally  verify the identity of calculated UBOs under EU AMLR rules (EUDI  Wallet)\n5. Contract signinng is trigger using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Owner Attestation to Bosch EBW.\n\nPhase 3: KYS - Self Supplier onboarding of SBB at Bosch and start deliver\n6. SBB EBW runs Phases 1 and 2 to establish its verified identity.\n7. SBB EBW presents all required credentials to Bosch for instant, automated KYS onboarding.\n8. SBB EBW delivers ordered parts and issues an eInvoice directly to Bosch EBW.",
                     "country": "DE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "rtgs-global",
+            "orgId": "org:rtgs-global",
+            "orgName": "RTGS.global",
+            "useCases": [
+                {
+                    "id": "verifiable-participant-identity-for-cross-border-financial-messaging-JxVLHY",
+                    "sector": "finance",
+                    "title": "Verifiable Participant Identity for Cross-Border Financial Messaging",
+                    "summary": "RTGS.global is a live SaaS platform coordinating cross-border FX and payment workflows between participating financial institutions, including banks, fund controllers, financial market infrastructures and central banks across jurisdictions.\r\n\r\nRTGS.global provides the shared operating and messaging layer through which participants establish governed relationships and coordinate payment workflows. It operates without holding participant funds or acting as an authoritative settlement record; institutions maintain their own records and external settlement arrangements.\r\n\r\nThe trust challenge is ensuring that every institution communicating across the network is reliably identified and that all instructions are authenticated and tamper-evident. Traditional static certificates cannot satisfy this dynamically across distributed participants. RTGS.global solves this by embedding verifiable institutional identity into every communication and financial message across its network.",
+                    "organizationName": "RTGS.global",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-14T11:22:32+01:00",
+                    "publishedAt": "2026-08-14T11:22:32+01:00",
+                    "tags": [
+                        "digital identity",
+                        "verifiable credentials",
+                        "decentralised identifiers",
+                        "didcomm",
+                        "anoncreds",
+                        "institutional identity",
+                        "financial messaging",
+                        "cross-border payments",
+                        "message integrity",
+                        "hyperledger aries"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "RTGS.global",
+                                "url": "https://rtgs.global/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Indicio",
+                                "url": "https://indicio.tech/indicio-mainnet/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:owf",
+                                "labelRaw": "OpenWallet Foundation",
+                                "url": "https://openwallet.foundation/",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "anoncreds"
+                    ],
+                    "issuanceProtocols": [
+                        "other"
+                    ],
+                    "presentationProtocols": [],
+                    "interopProfiles": [],
+                    "themes": [
+                        "payments"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/RTGS.global-logo_16x9.jpg",
+                        "https://fides.community/app/uploads/2026/08/Onboarding_16x9.jpg",
+                        "https://fides.community/app/uploads/2026/08/Message_Verification_16x9.jpg"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/RTGS.global-logo_16x9.jpg",
+                    "moreInfoUrl": "https://developers.rtgs.global/technical-articles/reference/trusted-participant-identity/",
+                    "userJourney": "1. Onboarding: RTGS.global emails a single-use out-of-band invitation. The participant's managed Aries agent loads it at container startup to establish a peer-to-peer connection via DIDComm v1. DIDs and credential definitions are anchored on Hyperledger Indy.\r\n2. Credential issuance: RTGS.global issues an AnonCreds credential binding institutional attributes to the participant's managed agent wallet.\r\n3. Proof verification: The participant presents a zero-knowledge proof of credential possession. RTGS.global verifies the proof and checks revocation status before activating the connection.\r\n4. Message signing: Active connections use pairwise DIDs. Every enabled financial message is cryptographically signed by the sending agent using relationship-specific keys.\r\n5. Verification: The receiving service validates the signature against the connection key, confirming the authenticated sender and intended recipient before processing.\r\n6. Lifecycle: Trust maintenance is automated via scheduled and DIDComm-instructed key cycling, connection cleanup, credential updates and offboarding.",
+                    "country": "GB"
                 }
             ]
         },
