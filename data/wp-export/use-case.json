@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-14T04:58:42+00:00",
+    "generatedAt": "2026-08-14T08:56:51+00:00",
     "organizations": [
         {
             "orgSlug": "aas-studio",
@@ -1283,6 +1283,79 @@
                     "moreInfoUrl": "https://www.credivera.com/",
                     "userJourney": "Organizations define compliance or competency workflows that specify what a professional must prove to be fit to work, fit to practice, or eligible to participate. These workflows generate verifiable presentation requests, asking individuals to provide trusted proof of required licenses, certifications, training records, employment attestations, education, or compliance credentials. Professionals respond directly from their secure digital wallet, sharing verifiable credentials they already hold. Credivera checks those credentials against the organization’s requirements and confirms what is valid, current, trusted, and complete. If a required credential is missing, the professional can request it from Credivera’s issuer network. Trusted issuers, such as regulators, certification bodies, educators, employers, associations, or training providers, issue the missing credential as a verifiable credential directly to the individual’s wallet. The result is a connected ecosystem where organizations get verified proof instead of documents and professionals control and reuse their credentials, and issuers deliver trusted records.",
                     "country": "CA"
+                }
+            ]
+        },
+        {
+            "orgSlug": "digital-identity-foundation",
+            "orgId": "org:digital-identity-foundation",
+            "orgName": "Digital Identity Foundation",
+            "useCases": [
+                {
+                    "id": "decentralized-phc-credentials-in-the-future-ai-era-LgFUSG",
+                    "sector": "digital",
+                    "title": "Decentralized PHC Credentials in the Future AI Era.",
+                    "summary": "The primary motivation behind creating this proof of concept is to demonstrate how Zero-Knowledge Proofs (ZKPs) and Verifiable Credentials (VCs), aligned with W3C standards, can be integrated with on-chain blockchain technology i.e (CHEQD). This approach enables the deployment, storage, and verification of proof of human identity.\r\nWhat it does\r\n1.Government ID Issuance: A government agency issues an ID to the holder, which is required to obtain a PHC Verifiable Credential (VC).\r\n\r\n2.Presenting ID to PHC Provider: The holder presents their government-issued VC from their wallet to the PHC provider, a trusted authority.\r\n\r\n3.Fingerprint Biometric Capture: Once the government ID is verified, the user scans their fingerprint using PHC’s biometric infrastructure, which extracts unique fingerprint features.\r\n\r\n4.Online Authentication : When accessing an online service that requires PHC verification, the user shares the PHC credential from their wallet with the service.\r\n\r\n5.Verification Process: The service provider’s DIDComm v2 agent performs ZKP verification with the holder’s data. If verified, access is granted; otherwise, it is denied.",
+                    "organizationName": "Digital Identity Foundation",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-14T09:56:51+01:00",
+                    "publishedAt": "2026-08-14T09:56:51+01:00",
+                    "tags": [
+                        "identity",
+                        "W3C",
+                        "DID",
+                        "SSI"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Digital Identity Foundation",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "proximity"
+                    ],
+                    "vcFormats": [
+                        "jwt_vc",
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "other"
+                    ],
+                    "presentationProtocols": [
+                        "DIDComm v2"
+                    ],
+                    "interopProfiles": [
+                        "DIIP v4"
+                    ],
+                    "imageUrls": [
+                        "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg"
+                    ],
+                    "imageUrl": "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://devpost.com/software/test-7gtomq",
+                    "userJourney": "The DIDComm v2 agent is implemented entirely in Python, enabling secure message exchange between the Issuer, Holder, and Verifier.\r\nDID:Peer protocol implementation and DID generation are also developed in Python.\r\nWe use the Universal DID Resolver/Registrar with cheqd to register and resolve DIDs on the cheqd testnet.\r\nThe complete Zero-Knowledge Proof (ZKP) circuit is written in Circom, with proofs generated using the Circom compiler.\r\n\r\nProof Generation Flow\r\n\r\nFeature Extraction: Fingerprint bifurcation and termination points are extracted, flattened, and combined into a single array.\r\n\r\nPoseidon Merkle Tree: The data is hashed into a Poseidon-based Merkle tree, producing the root commitment and 8 sibling hashes for efficient proof generation.\r\n\r\nProof Generation: The Circom circuit compiles using these hashes to generate the proof, verification key, and public inputs, which are signed by the issuer.\r\n\r\nVerification: The verifier extracts the proof and public inputs from the credential and validates them using zk-SNARKs, returning true or false.",
+                    "country": "US"
                 }
             ]
         },
