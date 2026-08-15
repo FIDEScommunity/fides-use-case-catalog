@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-15T05:45:44+00:00",
+    "generatedAt": "2026-08-15T11:07:29+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -525,6 +525,96 @@
                     "moreInfoUrl": "https://review.aqta.ai",
                     "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: the specific question under examination, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer chooses accept or decline\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs it by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library. The signature carries a timestamp anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
                     "country": "IE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "authbound",
+            "orgId": "org:authbound",
+            "orgName": "Authbound",
+            "useCases": [
+                {
+                    "id": "aurora-bet-kyc-for-online-gambling-yyuVbE",
+                    "sector": "digital",
+                    "title": "Aurora Bet: KYC for online gambling",
+                    "summary": "Aurora Bet is a fictional sportsbook and casino. The licence still needs a named adult on the account before the first deposit. An over-18 gate (wine, cigarettes) is not enough here. The operator also needs to know who the player is and from which member state.\r\n\r\nThat check is where live operators lose signups. Aurora Bet is the full front door: live tables, jackpots, create-account, lobby. The player confirms in Authbound Wallet. The floor opens, the welcome bonus lands, and verified withdrawals unlock.\r\n\r\nAuthbound Wallet is the holder. Requested claims: given_name, family_name, nationality, age_over_18.",
+                    "organizationName": "Authbound",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-15T12:07:29+01:00",
+                    "publishedAt": "2026-08-15T12:07:29+01:00",
+                    "tags": [
+                        "igaming",
+                        "kyc",
+                        "identity",
+                        "eudi-wallet",
+                        "authbound-wallet"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "authbound-wallet",
+                                "labelRaw": "Authbound Wallet",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Authbound Playground",
+                                "url": "http://playground.authbound.io",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+                                "labelRaw": "PID (SD-JWT VC)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:authbound",
+                                "labelRaw": "Authbound",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF"
+                    ],
+                    "themes": [
+                        "person_identity"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/aurora-bet.webp"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/aurora-bet.webp",
+                    "moreInfoUrl": "https://authbound.io/showcase/aurora-bet",
+                    "userJourney": "1. Alex opens Aurora Bet and starts an account.\r\n\r\n2. The lobby stays closed until the licence check: name, nationality, over 18.\r\n\r\n3. Authbound Wallet shows those four claims. Alex accepts.\r\n\r\n4. The account is verified. Bonus attaches. Deposits and fast withdrawals unlock.",
+                    "country": "FI"
                 }
             ]
         },
