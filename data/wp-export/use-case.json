@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-15T16:07:47+00:00",
+    "generatedAt": "2026-08-15T16:16:18+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5127,12 +5127,12 @@
                     "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
                     "sector": "finance",
                     "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
-                    "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n-Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
+                    "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n- Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
                     "organizationName": "Robert Bosch GmbH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-15T06:29:23+01:00",
-                    "publishedAt": "2026-08-15T06:29:23+01:00",
+                    "updatedAt": "2026-08-15T17:16:18+01:00",
+                    "publishedAt": "2026-08-15T17:16:18+01:00",
                     "tags": [
                         "#EBWOID",
                         "#EUCC",
@@ -5154,6 +5154,13 @@
                                 "refId": "procivis-one-wallet",
                                 "labelRaw": "Procivis One Wallet",
                                 "url": "https://www.procivis.ch",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "eudi-reference-personal-wallet",
+                                "labelRaw": "EUDI Wallet Reference Implementation",
+                                "url": "https://github.com/eu-digital-identity-wallet/",
                                 "source": "catalog",
                                 "walletType": "personal"
                             }
@@ -5342,8 +5349,29 @@
                             },
                             {
                                 "refId": null,
+                                "labelRaw": "Robert Bosch GmbH",
+                                "url": "https://www.bosch.com/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:procivis",
+                                "labelRaw": "Procivis",
+                                "url": "https://www.procivis.ch",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
                                 "labelRaw": "Deutsche Bank",
                                 "url": "https://www.deutsche-bank.de",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Schweizerische Bundesbahnen",
+                                "url": "https://www.sbb.ch/en",
                                 "source": "manual",
                                 "walletType": null
                             },
@@ -5355,24 +5383,10 @@
                                 "walletType": null
                             },
                             {
-                                "refId": "org:procivis",
-                                "labelRaw": "Procivis",
-                                "url": "https://www.procivis.ch",
+                                "refId": "org:webuild",
+                                "labelRaw": "WE BUILD Consortium",
+                                "url": "https://www.webuildconsortium.eu/",
                                 "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "org:sbb",
-                                "labelRaw": "SBB",
-                                "url": "https://www.sbb.ch",
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "Robert Bosch GmbH",
-                                "url": "https://www.bosch.com/",
-                                "source": "manual",
                                 "walletType": null
                             }
                         ],
