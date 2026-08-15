@@ -5,6 +5,82 @@
   "orgName": "Authbound",
   "useCases": [
     {
+      "id": "apteekplus-the-prescription-made-easy-T0f5rY",
+      "sector": "healthcare",
+      "title": "ApteekPlus: The prescription made easy",
+      "summary": "ApteekPlus is a fictional Finnish pharmacy. We built it for the moment at the counter: the medicine is ready, and the pharmacist still has to be sure this is the patient the doctor wrote for.\r\n\r\nPaper slips get lost. Screenshots get forwarded. A relative walks in with someone else's printout. Cross-border, the national e-prescription app stays at home. The chain is left holding the liability if the bag goes to the wrong person.\r\n\r\nWe made ApteekPlus a pharmacy, not a QR widget, so a chain or a health ministry can walk the dispense and see the bag leave with the named patient. Authbound Wallet presents given_name, family_name, document_number, medication, dosage, prescribing_doctor, expiry, and holder_pid. A pass is a signed prescription bound to that holder. The pharmacist dispenses. Nobody printed a slip.",
+      "organizationName": "Authbound",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:14:42+01:00",
+      "publishedAt": "2026-08-15T12:14:42+01:00",
+      "tags": [
+        "pharmacy",
+        "e-prescription",
+        "healthcare",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "dataspaces"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/apteekplus.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/apteekplus.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/apteekplus",
+      "userJourney": "Anna has an e-prescription for Amoxicillin 500 mg from Dr. E. Saarinen, expiry 02 May 2026.\r\n\r\nShe walks into Keskustori Pharmacy, counter 3, and presents Authbound Wallet.\r\n\r\nIf Authbound ID or the Finnish e-Prescription is missing, the demo issues both first, then runs the same pickup.\r\n\r\nThe pharmacist scans. Authbound Wallet shows given_name, family_name, document_number, medication, dosage, prescribing_doctor, expiry, holder_pid. Anna accepts.\r\n\r\nPrescription verified. Dispense Amoxicillin 500 mg to Anna Example at counter 3.\r\n\r\nHand the bag to the patient.",
+      "country": "FI"
+    },
+    {
       "id": "roamline-car-rental-french-licence-finnish-locker-no-counter-3gaH00",
       "sector": "mobility",
       "title": "Roamline: Car rental - French licence, Finnish locker, no counter",
