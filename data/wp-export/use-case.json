@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-15T11:17:02+00:00",
+    "generatedAt": "2026-08-15T11:17:50+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -533,6 +533,82 @@
             "orgId": "org:authbound",
             "orgName": "Authbound",
             "useCases": [
+                {
+                    "id": "pulsepay-148-50-eur-to-this-shop-j68rcX",
+                    "sector": "trade",
+                    "title": "PulsePay: 148.50 EUR to this shop",
+                    "summary": "PulsePay is a fictional merchant payment rail. We built it for demo purposes only for the upcoming EUDI Wallet payment system.\r\n\r\nSMS codes get read to a caller. A push that says approve often does not show the payee. The merchant then fights a chargeback with a screenshot. The amount on the screen and the amount that settled are not the same thing.\r\n\r\nWe made PulsePay a merchant checkout, not an SCA explainer, so an acquirer can walk the tap and see the intent land afterwards. Authbound Wallet signs amount 148.50 EUR, payee Halcyon Cellars Oy, and reference INV-2026-0412. If either the amount or payee changes, that signature is invalid. The sale is a payment the merchant can keep, not a code that has already expired.",
+                    "organizationName": "Authbound",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-15T12:17:50+01:00",
+                    "publishedAt": "2026-08-15T12:17:50+01:00",
+                    "tags": [
+                        "payments",
+                        "sca",
+                        "merchant",
+                        "authbound-wallet",
+                        "finland"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "authbound-wallet",
+                                "labelRaw": "Authbound Wallet",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Authbound",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:authbound",
+                                "labelRaw": "Authbound",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF"
+                    ],
+                    "themes": [
+                        "person_identity",
+                        "payments"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/pulsepay.webp"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/pulsepay.webp",
+                    "moreInfoUrl": "https://authbound.io/showcase/pulsepay",
+                    "userJourney": "Halcyon Cellars Oy requests 148.50 EUR. Reference INV-2026-0412. 18 Apr 2026, 14:22. The intent expires in 5 minutes.\r\n\r\nAnna taps Pay 148.50 with wallet.\r\n\r\nAuthbound Wallet shows what she authorizes: amount 148.50 EUR, payee Halcyon Cellars Oy FI, reference INV-2026-0412.\r\n\r\nShe taps to confirm.\r\n\r\nBank confirming. Signature checked against the bound intent.\r\n\r\nPayment sent. 148.50 EUR authorized to Halcyon Cellars Oy. SEPA Instant. Signature 0x9F7…C82. Done.",
+                    "country": "FI"
+                },
                 {
                     "id": "onward-onboarding-anna-is-hired-GMrc9D",
                     "sector": "digital",
