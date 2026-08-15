@@ -5,6 +5,93 @@
   "orgName": "Authbound",
   "useCases": [
     {
+      "id": "nordhaus-open-a-bank-account-7LNUbC",
+      "sector": "finance",
+      "title": "Nordhaus: Open a Bank Account",
+      "summary": "Nordhaus is a fictional Nordic retail bank. We built it for the moment every licensed bank already has: you cannot issue an IBAN or a debit card until KYC is signed, and the customer is already halfway out the door.\r\n\r\nToday that moment is a liveness vendor and a waiting room. The bank pays per attempt, stores a pile of identity images, and still cannot prove much more than someone uploaded a photo. Drop-off is the product.\r\n\r\nWe made Nordhaus a full bank front, not a KYC widget, so a product or compliance lead can walk the journey and see the account exist afterwards. Authbound Wallet presents given_name, family_name, birth_date, nationality, and age_over_18. A pass is a signed KYC record. The same sitting mints the Finnish IBAN and the virtual debit, so the money is actually movable. That is the sale: cheaper onboarding, no document warehouse, and a customer who did not bounce.",
+      "organizationName": "Authbound",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:20:13+01:00",
+      "publishedAt": "2026-08-15T12:20:13+01:00",
+      "tags": [
+        "kyc",
+        "banking",
+        "iban",
+        "fintech",
+        "identity",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "compliance_reporting",
+        "dataspaces"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/nordhaus.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/nordhaus.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/nordhaus",
+      "userJourney": "Anna opens Nordhaus and taps Open account with EUDI Wallet.\r\n\r\nFlow title: Open Nordhaus account. Authbound Wallet shows given_name, family_name, birth_date, nationality, age_over_18. Anna accepts. If Authbound ID is missing, the demo issues it first.\r\n\r\nIdentity verified. KYC complete. IBAN and virtual debit card are ready to issue.\r\n\r\nConfirm identity details: Anna Example, born 1996-03-14, nationality FI.\r\n\r\nAccept IBAN FI73 1940 6X24. Activate debit card ending 4827.\r\n\r\nWelcome to Nordhaus, Anna. Account live. Open dashboard.",
+      "country": "FI"
+    },
+    {
       "id": "keystone-a-signed-lease-in-one-sitting-DtQIbQ",
       "sector": "retail",
       "title": "Keystone: A signed lease in one sitting",
