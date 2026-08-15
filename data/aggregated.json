@@ -1,10 +1,86 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-15T11:10:24.157Z",
+  "lastUpdated": "2026-08-15T11:11:27.064Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 48,
+  "count": 49,
   "useCases": [
+    {
+      "id": "cartiva-named-buyer-and-named-shop-GTdq5C",
+      "sector": "retail",
+      "title": "Cartiva: Named Buyer and Named Shop",
+      "summary": "Cartiva is a fictional peer-to-peer marketplace. We built it for the listing that hurts when it goes wrong: a restored Marantz for 480 EUR, shipped across the gulf, paid by someone the seller has never met.\r\n\r\nA card and a typed address are still the trust model. First-time buyers ghost. Shops impersonate a real storefront. Escrow holds money but does not know if the buyer is a named adult.\r\n\r\nWe made Cartiva a product page, not a fraud widget, so a marketplace can walk the purchase and see escrow fill afterwards. Authbound Wallet presents given_name, family_name, age_over_18, and nationality. HiFi Studio Tallinn is already a verified seller. A pass authorizes 480 EUR into Cartiva Trust until delivery. The seller ships to a person, not an inbox. The sale is to a named buyer and a named shop; then the money moves.",
+      "organizationName": "Authbound",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:11:09+01:00",
+      "publishedAt": "2026-08-15T12:11:09+01:00",
+      "tags": [
+        "marketplace",
+        "escrow",
+        "e-commerce",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/cartiva.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/cartiva.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/cartiva",
+      "userJourney": "Anna opens the Marantz 2238B Receiver, fully restored, 480 EUR, ships from Tallinn.\r\n\r\nSeller is HiFi Studio Tallinn OÜ, registry EE 14821-9, Tartu mnt 12. Verified by Authbound.\r\n\r\nShe starts Secure checkout. Authbound Wallet shows given_name, family_name, age_over_18, nationality. If Authbound ID is missing, the demo issues it first.\r\n\r\nBuyer verified. Age and identity verified. Authorize the 480 EUR escrow payment next.",
+      "country": "FI"
+    },
     {
       "id": "northstay-hotel-automatically-the-locker-412-opens-ya5rCS",
       "sector": "retail",
