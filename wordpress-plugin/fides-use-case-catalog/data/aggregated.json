@@ -1,10 +1,96 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-15T11:18:47.182Z",
+  "lastUpdated": "2026-08-15T11:19:44.790Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 56,
+  "count": 57,
   "useCases": [
+    {
+      "id": "keystone-a-signed-lease-in-one-sitting-DtQIbQ",
+      "sector": "retail",
+      "title": "Keystone: A signed lease in one sitting",
+      "summary": "Keystone is a fictional Finnish letting marketplace. We built it for the part of renting that still dies in email: prove who you are, prove you can pay, then get a signature that actually holds.\r\n\r\nLandlords still collect payslips anyone can edit, chase an HR letter, then either accept a click-to-sign or book a notary. The tenant has already found another flat. Agencies run those as three products. That is why applications stall and why a remote letting never quite closes.\r\n\r\nWe made Keystone a real listing, not a signature widget, so a landlord or agency can walk the journey and see the lease exist afterwards. Authbound Wallet presents identity, an employer income attestation, and current address. The same sitting signs the lease with a qualified electronic signature, the one that has the legal effect of wet ink. The landlord keeps an audit trail. The tenant gets the keys. Nobody stored a PDF of a payslip.",
+      "organizationName": "Authbound",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:19:24+01:00",
+      "publishedAt": "2026-08-15T12:19:24+01:00",
+      "tags": [
+        "rental",
+        "qes",
+        "proof-of-income",
+        "real-estate",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "compliance_reporting",
+        "dataspaces"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/keystone.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/keystone.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/keystone",
+      "userJourney": "Anna opens listing 412 in Kallio (Keystone Rentals Oy) and taps Apply with EUDI Wallet.\r\n\r\nAuthbound Wallet shares identity plus the proofs the landlord asked for.\r\n\r\nIncome attestation from Oy Metsä HR: permanent contract, 4,850 EUR gross per month.\r\n\r\nAddress proof from the DVV registry: Tampere, FI, valid since 2022-08-01.\r\n\r\nAnna signs the 12-month lease with a qualified electronic signature. Landlord Aino Koivu countersigns.\r\n\r\nWelcome home, Anna. Keys Monday 28 Apr at 09:00. Move-in 01 May 2026.",
+      "country": "FI"
+    },
     {
       "id": "gradus-verify-the-diploma-before-you-interview-obA7P8",
       "sector": "education",
