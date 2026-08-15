@@ -5,6 +5,81 @@
   "orgName": "Authbound",
   "useCases": [
     {
+      "id": "northstay-hotel-automatically-the-locker-412-opens-ya5rCS",
+      "sector": "retail",
+      "title": "Northstay: Hotel - Automatically the locker 412 opens",
+      "summary": "Northstay is a fictional Helsinki boutique hotel. We built it because Finnish hotels still have to register every guest, and that job still happens as a passport photocopy at the desk, at the hour everyone lands.\r\n\r\nThe hotel becomes the custodian of travel documents it is not equipped to protect. Night arrivals wait, or they cannot check in at all. Express check-in was a poster until the register was filled.\r\n\r\nWe made Northstay a hotel, not a KYC widget, so a general manager can walk the arrival and see locker 412 open afterwards. Authbound Wallet presents given_name, family_name, birth_date, and nationality. That is the guest register. The lobby iPad then matches the person standing there to Anna with face scan, and the key compartment opens. The sale to the hotel is a signed record for inspection and no drawer of passports. The desk is optional.",
+      "organizationName": "Authbound",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:10:06+01:00",
+      "publishedAt": "2026-08-15T12:10:06+01:00",
+      "tags": [
+        "hospitality",
+        "guest-registration",
+        "hotel",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/northstay.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/northstay.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/northstay",
+      "userJourney": "Anna has a Deluxe King, room 412, at Northstay Atelier, Helsinki, 19–22 Nov.\r\n\r\nShe starts Express check-in. Authbound Wallet shows given_name, family_name, birth_date, nationality.\r\n\r\nIdentity verified. Guest registration fields received. Continue with face match at the locker iPad.\r\n\r\nThe lobby iPad matches the person standing there. Face matched: you are Anna.\r\n\r\nLocker 412 opens. Take the key. Head upstairs.\r\n\r\nDigital key is active. Breakfast voucher is attached.",
+      "country": "FI"
+    },
+    {
       "id": "mandator-public-procurement-portal-0aYOCh",
       "sector": "finance",
       "title": "Mandator: Public procurement portal",
