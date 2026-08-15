@@ -1,0 +1,103 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:2060",
+  "orgName": "2060.io",
+  "useCases": [
+    {
+      "id": "hologram-a-browser-for-decentralized-ai-chatbot-services-self-hosted-and-verified-before-the-first-message-ArHzhO",
+      "sector": "digital",
+      "title": "Hologram: a browser for decentralized AI chatbot services, self-hosted and verified before the first message",
+      "summary": "Hologram Messaging turns the messenger into a browser for decentralized services: scan a QR and you are in an encrypted DIDComm chat with a self-hosted chatbot or AI agent, verified before the first message. It is built on Verana, the open public trust layer: every service is a Verifiable Service whose identity, operator and permissions any wallet can resolve. Five production services show the range: an Avatar credential issuer, a Passport issuer with NFC and liveness, AI agents for GitHub and Wise over MCP gated by your Avatar credential, and an X agent whose right to post is bound to verifiable credentials. Everything is open source and self-hosted from forkable repos: no app store, no platform, no vendor lock-in.",
+      "organizationName": "2060.io",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-15T06:45:44+01:00",
+      "publishedAt": "2026-08-15T06:45:44+01:00",
+      "tags": [
+        "FIDES Supporter",
+        "Trust Networks",
+        "Ecosystem Governance",
+        "Verifiable Trust"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "hologram-messaging",
+            "labelRaw": "Hologram Messaging",
+            "url": "https://2060.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "vs-agent-verana-business-wallet",
+            "labelRaw": "VS Agent - Verana Business Wallet",
+            "url": "https://playground.testnet.verana.network/business-wallets",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [],
+        "credentials": [
+          {
+            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "labelRaw": "ECS Organization Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "labelRaw": "ECS Service Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:2060",
+            "labelRaw": "2060.io",
+            "url": "https://2060.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:verana",
+            "labelRaw": "Verana",
+            "url": "https://verana.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "anoncreds",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/signal-2026-08-14-18-13-15-698.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/signal-2026-08-14-18-13-15-698.jpg",
+      "moreInfoUrl": "https://hologram.zone/demos",
+      "userJourney": "Hologram Messaging is an open-source messenger that doubles as a browser: scanning a QR opens an encrypted DIDComm chat with a self-hosted service. No app store, no platform account. Each demo runs from a forkable repo (GitHub Actions deploy to Kubernetes) behind an open-source Verana VS Agent. A self-hosted organization anchor obtains Organization and Service credentials, runs its own trust registry on the Verana Verifiable Public Registry, and accredits its child services, so the app can trust-resolve every service before the first message. The Avatar chatbot issues you an identity credential in conversation; the Passport issuer reads a government ID over NFC and verifies liveness on a video call. The GitHub and Wise agents are AI assistants over MCP: they authenticate you with your Avatar credential, then act on your own accounts with your own API token, inside the encrypted chat. The X Agent flips authority around: an Agent Pack policy binds the right to post in the account's name to verifiable credentials you choose, so every AI action is credential-gated and attributable.",
+      "country": "EE"
+    }
+  ]
+}
