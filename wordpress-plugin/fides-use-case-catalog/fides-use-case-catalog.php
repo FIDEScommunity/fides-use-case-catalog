@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.16.2
+ * Version: 0.20.2
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.16.2');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.2');
 /** Admin list page size for Tools → Use Case Submissions. */
 define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
@@ -353,6 +353,56 @@ function fides_use_case_catalog_list_for_admin(array $args = array()): array {
         'pages'    => $pages,
         'view'     => $view,
     );
+}
+
+/**
+ * Unique submitter contact emails for an admin list view (all matching rows, not just the current page).
+ * Sorted case-insensitively. Empty / invalid addresses are skipped.
+ *
+ * @return string[]
+ */
+function fides_use_case_catalog_contact_emails_for_admin_view(string $view): array {
+    global $wpdb;
+
+    $view     = fides_use_case_catalog_normalize_admin_view($view);
+    $statuses = fides_use_case_catalog_statuses_for_admin_view($view);
+    $table    = FIDES_USE_CASE_CATALOG_TABLE;
+
+    $where  = array("contact_email <> ''");
+    $params = array();
+
+    if (is_array($statuses) && $statuses !== array()) {
+        $placeholders = implode(', ', array_fill(0, count($statuses), '%s'));
+        $where[]      = 'status IN (' . $placeholders . ')';
+        foreach ($statuses as $status) {
+            $params[] = $status;
+        }
+    }
+
+    $where_sql = implode(' AND ', $where);
+    $sql       = "SELECT DISTINCT contact_email FROM {$table} WHERE {$where_sql}";
+
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
+    $raw = $params !== array()
+        ? $wpdb->get_col($wpdb->prepare($sql, ...$params))
+        : $wpdb->get_col($sql);
+
+    if (! is_array($raw)) {
+        return array();
+    }
+
+    $emails = array();
+    foreach ($raw as $addr) {
+        $addr = sanitize_email((string) $addr);
+        if ($addr === '' || ! is_email($addr)) {
+            continue;
+        }
+        $emails[strtolower($addr)] = $addr;
+    }
+
+    $list = array_values($emails);
+    natcasesort($list);
+    return array_values($list);
 }
 
 function fides_use_case_catalog_is_local_site(): bool {
@@ -2755,6 +2805,81 @@ function fides_use_case_catalog_render_admin_page(): void {
                 <?php endif; ?>
             </p>
         <?php endif; ?>
+        <?php
+        $subscriber_emails = fides_use_case_catalog_contact_emails_for_admin_view($filter_view);
+        $subscriber_emails_outlook = implode('; ', $subscriber_emails);
+        $subscriber_email_count = count($subscriber_emails);
+        ?>
+        <div class="postbox" style="max-width: 1200px; margin: 24px 0 0;">
+            <div class="inside">
+                <h2 style="margin-top: 0;"><?php esc_html_e('Submitter emails (current filter)', 'fides-use-case-catalog'); ?></h2>
+                <p class="description">
+                    <?php
+                    echo esc_html(
+                        sprintf(
+                            /* translators: %d: number of unique email addresses */
+                            _n(
+                                '%d unique contact email for submissions in this view. Copy into Outlook To/BCC (semicolon-separated).',
+                                '%d unique contact emails for submissions in this view. Copy into Outlook To/BCC (semicolon-separated).',
+                                $subscriber_email_count,
+                                'fides-use-case-catalog'
+                            ),
+                            $subscriber_email_count
+                        )
+                    );
+                    ?>
+                </p>
+                <p style="margin-bottom:0; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                    <label class="screen-reader-text" for="fides-uc-subscriber-emails">
+                        <?php esc_html_e('Submitter emails', 'fides-use-case-catalog'); ?>
+                    </label>
+                    <input
+                        type="text"
+                        id="fides-uc-subscriber-emails"
+                        class="regular-text code"
+                        style="flex:1 1 320px; min-width:200px; max-width:100%;"
+                        readonly
+                        value="<?php echo esc_attr($subscriber_emails_outlook); ?>"
+                        onclick="this.select();"
+                    >
+                    <button type="button" class="button button-secondary" id="fides-uc-copy-subscriber-emails"
+                        <?php disabled($subscriber_email_count === 0); ?>>
+                        <?php esc_html_e('Copy emails', 'fides-use-case-catalog'); ?>
+                    </button>
+                    <span id="fides-uc-copy-subscriber-emails-status" class="description" aria-live="polite"></span>
+                </p>
+            </div>
+        </div>
+        <script>
+        (function () {
+            var btn = document.getElementById('fides-uc-copy-subscriber-emails');
+            var field = document.getElementById('fides-uc-subscriber-emails');
+            var status = document.getElementById('fides-uc-copy-subscriber-emails-status');
+            if (!btn || !field) return;
+            btn.addEventListener('click', function () {
+                var text = field.value || '';
+                if (!text) return;
+                var done = function (ok) {
+                    if (status) {
+                        status.textContent = ok
+                            ? <?php echo wp_json_encode(__('Copied.', 'fides-use-case-catalog')); ?>
+                            : <?php echo wp_json_encode(__('Could not copy — select the field and copy manually.', 'fides-use-case-catalog')); ?>;
+                    }
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(function () { done(true); }).catch(function () {
+                        field.focus();
+                        field.select();
+                        try { done(document.execCommand('copy')); } catch (e) { done(false); }
+                    });
+                    return;
+                }
+                field.focus();
+                field.select();
+                try { done(document.execCommand('copy')); } catch (e) { done(false); }
+            });
+        })();
+        </script>
     </div>
     <?php
 }
