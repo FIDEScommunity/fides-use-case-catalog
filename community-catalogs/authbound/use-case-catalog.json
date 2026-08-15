@@ -5,6 +5,84 @@
   "orgName": "Authbound",
   "useCases": [
     {
+      "id": "mandator-public-procurement-portal-0aYOCh",
+      "sector": "finance",
+      "title": "Mandator: Public procurement portal",
+      "summary": "Mandator is a fictional EU public procurement portal. We built it for the question every buyer already has before they open a bid: can this person bind that company?\r\n\r\nToday the answer is a stack of PDFs. A registry extract, a board resolution, a power of attorney, often in a language the contracting authority does not read, and rarely rechecked before countersigning. A procurement lead either waits for the CEO or the bid goes unsigned.\r\n\r\nWe made Mandator a tender desk, not a mandate widget, so a contracting authority can walk a submission and see the company seal land afterwards. Authbound is the relying party. Matti Virtanen, CEO of Valo Construction Oy, signs a power of attorney into Authbound Wallet once. Anna Example, procurement lead, carries it: submit tenders up to 5M EUR, valid through 31 Dec 2026. Each bid then ships with a Qualified eSeal. The buyer sees authority, not a zip file of scans.",
+      "organizationName": "Authbound",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:09:33+01:00",
+      "publishedAt": "2026-08-15T12:09:33+01:00",
+      "tags": [
+        "procurement",
+        "mandates",
+        "qsealc",
+        "b2b",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "dataspaces"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/mandator.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/mandator.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/mandator",
+      "userJourney": "Anna is procurement lead for Valo Construction Oy (business ID 3189231-7, Helsinki).\r\n\r\nShe opens tender FI-2026-0314, Fleet leasing for Yampere transit, buyer Yssä Transit Oy, 4.2M EUR, closes 14 May. Status: mandate required.\r\n\r\nAuthbound Wallet proves she is Anna: given_name, family_name, dob, role.\r\n\r\nThe Power of Attorney is fetched: granted by Matti Virtanen, CEO, on 12 Jan 2026. Scope: submit tenders, limit 5M EUR, valid until 31 Dec 2026.\r\n\r\nShe seals the bid with QES.\r\n\r\nAnna just signed for Valo Construction. Receipt mnd_fi20260314. Back to tenders.",
+      "country": "FI"
+    },
+    {
       "id": "jevi-workpass-operations-console-bY8U3i",
       "sector": "construction",
       "title": "Jevi WorkPass: Operations console",
