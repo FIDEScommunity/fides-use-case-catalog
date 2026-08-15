@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.20.2
+ * Version: 0.20.4
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.2');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.4');
 /** Admin list page size for Tools → Use Case Submissions. */
 define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
@@ -330,7 +330,7 @@ function fides_use_case_catalog_list_for_admin(array $args = array()): array {
     $offset = ($page - 1) * $per_page;
 
     // Omit LONGTEXT fields (links_json, taxonomy_json, media_json, …) for the list.
-    $select_sql = 'SELECT id, use_case_id, title, organization_name, status, updated_at,'
+    $select_sql = 'SELECT id, use_case_id, title, organization_name, contact_email, status, updated_at,'
         . ' submission_action, target_use_case_id, sectors_json, theme_key'
         . " FROM {$table} WHERE {$where_sql}"
         . ' ORDER BY updated_at DESC LIMIT %d OFFSET %d';
@@ -1350,7 +1350,12 @@ function fides_use_case_catalog_publish_update_proposal(int $proposal_id, array 
     if (fides_use_case_catalog_normalize_themes($content['themes_json'] ?? '[]') === array()) {
         $content['themes_json'] = wp_json_encode(fides_use_case_catalog_row_themes($target_row));
     }
-    $content['contact_email'] = sanitize_email((string) ($proposal_row['contact_email'] ?? ''));
+    // Keep the original submitter on the published row. The update proposal
+    // carries the updater's email for review notifications only; merging must
+    // not replace the catalog contact. Moderators can still correct it in admin.
+    $original_email = sanitize_email((string) ($target_row['contact_email'] ?? ''));
+    $proposal_email = sanitize_email((string) ($proposal_row['contact_email'] ?? ''));
+    $content['contact_email'] = is_email($original_email) ? $original_email : $proposal_email;
     $content['updated_at'] = current_time('mysql', true);
     $content['published_at'] = current_time('mysql', true);
 
@@ -2523,7 +2528,12 @@ function fides_use_case_catalog_render_admin_page(): void {
                                 </tr>
                                 <tr>
                                     <th scope="row"><label for="uc-email">Contact email</label></th>
-                                    <td><input class="regular-text" id="uc-email" name="contact_email" type="email" required value="<?php echo esc_attr((string) $selected_submission['contact_email']); ?>"></td>
+                                    <td>
+                                        <input class="regular-text" id="uc-email" name="contact_email" type="email" required value="<?php echo esc_attr((string) $selected_submission['contact_email']); ?>">
+                                        <p class="description">
+                                            <?php esc_html_e('Original submitter contact. Editable here for corrections. Publishing an update proposal does not overwrite this address.', 'fides-use-case-catalog'); ?>
+                                        </p>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row"><label for="uc-user-journey">How it works</label></th>
@@ -2738,6 +2748,7 @@ function fides_use_case_catalog_render_admin_page(): void {
                     <th>Title</th>
                     <th>Sector</th>
                     <th>Organization</th>
+                    <th><?php esc_html_e('Submitter email', 'fides-use-case-catalog'); ?></th>
                     <th>Status</th>
                     <th>Updated</th>
                     <th>Actions</th>
@@ -2745,7 +2756,7 @@ function fides_use_case_catalog_render_admin_page(): void {
             </thead>
             <tbody>
                 <?php if (empty($rows)) : ?>
-                    <tr><td colspan="6"><?php esc_html_e('No submissions found.', 'fides-use-case-catalog'); ?></td></tr>
+                    <tr><td colspan="7"><?php esc_html_e('No submissions found.', 'fides-use-case-catalog'); ?></td></tr>
                 <?php else : ?>
                     <?php foreach ($rows as $row) : ?>
                         <?php $row_status = fides_use_case_catalog_normalize_status((string) $row['status']); ?>
@@ -2763,6 +2774,16 @@ function fides_use_case_catalog_render_admin_page(): void {
                             </td>
                             <td><?php echo esc_html(fides_use_case_catalog_sector_label(fides_use_case_catalog_row_sector($row)) ?: '—'); ?></td>
                             <td><?php echo esc_html($row['organization_name']); ?></td>
+                            <td>
+                                <?php
+                                $row_email = sanitize_email((string) ($row['contact_email'] ?? ''));
+                                if ($row_email !== '' && is_email($row_email)) {
+                                    echo '<a href="mailto:' . esc_attr($row_email) . '">' . esc_html($row_email) . '</a>';
+                                } else {
+                                    echo '—';
+                                }
+                                ?>
+                            </td>
                             <td><?php echo esc_html($row_status); ?></td>
                             <td><?php echo esc_html(get_date_from_gmt((string) $row['updated_at'], 'Y-m-d H:i')); ?></td>
                             <td>

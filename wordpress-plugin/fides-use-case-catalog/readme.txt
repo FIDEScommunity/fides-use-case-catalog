@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.2
+Stable tag: 0.20.4
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,14 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.4 =
+* Preserve the original submitter contact email when publishing an update
+  proposal; only fall back to the updater’s email if the published row has none.
+* Clarify in the admin form that Contact email is editable for corrections.
+
+= 0.20.3 =
+* Tools → Use Case Submissions list: show submitter email as a column.
 
 = 0.20.2 =
 * Tools → Use Case Submissions: show unique submitter contact emails for the
