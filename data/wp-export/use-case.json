@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-15T11:14:42+00:00",
+    "generatedAt": "2026-08-15T11:17:02+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -533,6 +533,84 @@
             "orgId": "org:authbound",
             "orgName": "Authbound",
             "useCases": [
+                {
+                    "id": "onward-onboarding-anna-is-hired-GMrc9D",
+                    "sector": "digital",
+                    "title": "Onward: Onboarding - Anna is hired.",
+                    "summary": "Onward is a fictional people-ops portal. We built it for the week before a start date, when HR is still chasing scans: identity, right to work, a diploma, a signed contract, an IBAN. Monday arrives, and the laptop is locked because one PDF never came.\r\n\r\nAn expired licence nobody rechecked is a liability. A contract signed from an email address is a shrug. The hire is already made. The bottleneck is day zero.\r\n\r\nWe made Onward a checklist, not an HR widget, so a people-ops lead can walk Anna's first day at Valo Construction and see Monday unlock afterwards. Authbound Wallet presents identity, work status, the diploma, a qualified signature on the contract, and a Nordhaus IBAN attestation. The sale is a hire who is actually ready, with evidence HR can keep.",
+                    "organizationName": "Authbound",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-15T12:17:02+01:00",
+                    "publishedAt": "2026-08-15T12:17:02+01:00",
+                    "tags": [
+                        "hr",
+                        "onboarding",
+                        "right-to-work",
+                        "qes",
+                        "authbound-wallet",
+                        "finland"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "authbound-wallet",
+                                "labelRaw": "Authbound Wallet",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Authbound",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:authbound",
+                                "labelRaw": "Authbound",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF"
+                    ],
+                    "themes": [
+                        "person_identity",
+                        "education",
+                        "compliance_reporting"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/onward.webp"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/onward.webp",
+                    "moreInfoUrl": "https://authbound.io/showcase/onward",
+                    "userJourney": "Anna Example is Day 0 at Valo Construction. First day is 22 April, 09:00. Laptop and badge wait at reception.\r\n\r\nIdentity from Authbound Wallet: given_name, family_name, dob, nationality. Anna Example, 1996-03-14, FI.\r\n\r\nRight to work: nationality, work_permit_valid, expires_in. Finnish citizen. No permit required.\r\n\r\nQualifications from the Gradus registry: degree, institution, graduation_year. B.Sc. Computer Science, Aalto University, 2023.\r\n\r\nSign the 24-page employment contract with a qualified electronic signature (contract_hash, qes_certificate).\r\n\r\nPayroll: iban_ownership, bic, tax_residence. FI21 1234 5600 0007 85, Nordhaus, NDEAFIHH. All set. See you Monday.",
+                    "country": "FI"
+                },
                 {
                     "id": "apteekplus-the-prescription-made-easy-T0f5rY",
                     "sector": "healthcare",
