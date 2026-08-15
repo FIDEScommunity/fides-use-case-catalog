@@ -5,6 +5,83 @@
   "orgName": "Authbound",
   "useCases": [
     {
+      "id": "gradus-verify-the-diploma-before-you-interview-obA7P8",
+      "sector": "education",
+      "title": "Gradus: verify the diploma before you interview",
+      "summary": "Gradus is a fictional employer-side hiring desk. We built it because a degree on a CV is still a PDF and a prayer. Cross-border hiring makes that worse: you email a registrar in another country, wait, and often hire before the reply comes, or you pay a background-check vendor to wait for you.\r\n\r\nDiploma mills and edited transcripts survive that process. The candidate who actually holds the degree loses the offer to the delay.\r\n\r\nWe made Gradus a recruiter tool, not a student portal, so an HR lead can post the role's required credentials and track the requisition's fill from the issuer. Authbound Wallet presents the diploma, the transcript, the Erasmus record, and the language certificate. Each row names the institution. A pass is evidence that the ATS can keep. Then you interview. A foreign qualification is no longer a three-week ticket.\r\n\r\n(Ask privately for the link to the EUDIW-compatible version)",
+      "organizationName": "Authbound",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:18:27+01:00",
+      "publishedAt": "2026-08-15T12:18:27+01:00",
+      "tags": [
+        "hiring",
+        "diplomas",
+        "education",
+        "cross-border",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "education"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/gradus.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/gradus.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/gradus",
+      "userJourney": "Laura Rinne (Acme HR) opens requisition for a senior engineer in Helsinki.\r\n\r\nRequired of the candidate: BSc in Computer Science, transcript (WA of at least 3.5/5), Erasmus if available, B2 English.\r\n\r\nAnna Example is in the pool. Laura starts a candidate scan. Authbound Wallet presents the four credentials.\r\n\r\nBachelor's, Computer Science, University of Helsinki, 2024, grade 4.3/5.\r\n\r\nTranscript of records, WA 3.9, signed by the registrar, June 2024. Erasmus at TU Delft, Spring 2023, 30 ECTS. Cambridge English B2, issued 2022.\r\n\r\n4 of 4 verified. Move Anna to interview.",
+      "country": "FI"
+    },
+    {
       "id": "pulsepay-148-50-eur-to-this-shop-j68rcX",
       "sector": "trade",
       "title": "PulsePay: 148.50 EUR to this shop",
