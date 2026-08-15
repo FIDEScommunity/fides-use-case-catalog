@@ -1,291 +1,10 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-14T15:24:44.485Z",
+  "lastUpdated": "2026-08-15T05:29:36.884Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 43,
   "useCases": [
-    {
-      "id": "independent-review-of-ai-decision-evidence-lf3fYX",
-      "sector": "digital",
-      "title": "Seal: independent review of AI decision evidence",
-      "summary": "Organisations using AI for consequential decisions face a structural problem: when a decision is questioned, the only record is often a log written by the party under review.\n\nSeal signs a receipt at the moment the decision is made, offline-verifiable against its published key. This use case adds an independent review step: a reviewer opens a docket showing the exact question under examination, and countersigns their verdict with a credential from their own Yivi wallet. They never create an account with the organisation under review, and IRMA's Idemix scheme makes that a property of the cryptography rather than a promise about our data handling.\n\nThe evidence pack holds three verifiable objects from three issuers: the receipt, the credential presentation, and the countersignature. No single party can create all three.\n\nScope, plainly: this establishes that a decision was recorded before the action, that the record has not changed, and that a reviewer holding a credential issued independently of the AI operator signed a verdict on it. It does not establish that the record matches the computation that actually ran. The ATTESTATION-v1 Internet-Draft states the same boundary",
-      "organizationName": "Aqta",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-14T16:24:28+01:00",
-      "publishedAt": "2026-08-14T16:24:28+01:00",
-      "tags": [
-        "ai-evidence",
-        "independent-review",
-        "digital-wallets",
-        "offline-verification",
-        "verifiable-credentials"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "yivi",
-            "labelRaw": "Yivi",
-            "url": "https://yivi.app",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Aqta",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Yivi",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Email address",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:aqta",
-            "labelRaw": "Aqta",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Aqta",
-            "url": "https://aqta.ai",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "idemix"
-      ],
-      "issuanceProtocols": [],
-      "presentationProtocols": [
-        "IRMA Protocol"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "agentic_ai"
-      ],
-      "imageUrls": [
-        "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review."
-      ],
-      "imageUrl": "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review.",
-      "videos": [
-        {
-          "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://review.aqta.ai",
-      "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: the specific question under examination, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer chooses accept or decline\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs it by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library. The signature carries a timestamp anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
-      "country": "IE"
-    },
-    {
-      "id": "decentralized-phc-credentials-in-the-future-ai-era-LgFUSG",
-      "sector": "digital",
-      "title": "Decentralized PHC Credentials in the Future AI Era.",
-      "summary": "The primary motivation behind creating this proof of concept is to demonstrate how Zero-Knowledge Proofs (ZKPs) and Verifiable Credentials (VCs), aligned with W3C standards, can be integrated with on-chain blockchain technology i.e (CHEQD). This approach enables the deployment, storage, and verification of proof of human identity.\nWhat it does\n1.Government ID Issuance: A government agency issues an ID to the holder, which is required to obtain a PHC Verifiable Credential (VC).\n\n2.Presenting ID to PHC Provider: The holder presents their government-issued VC from their wallet to the PHC provider, a trusted authority.\n\n3.Fingerprint Biometric Capture: Once the government ID is verified, the user scans their fingerprint using PHC’s biometric infrastructure, which extracts unique fingerprint features.\n\n4.Online Authentication : When accessing an online service that requires PHC verification, the user shares the PHC credential from their wallet with the service.\n\n5.Verification Process: The service provider’s DIDComm v2 agent performs ZKP verification with the holder’s data. If verified, access is granted; otherwise, it is denied.",
-      "organizationName": "Digital Identity Foundation",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-14T12:14:11+01:00",
-      "publishedAt": "2026-08-14T12:14:11+01:00",
-      "tags": [
-        "identity",
-        "W3C",
-        "DID",
-        "SSI"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": null,
-            "labelRaw": "Custom",
-            "url": null,
-            "source": "manual",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": null,
-            "labelRaw": "Custom",
-            "url": null,
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Test Goverment",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Selective Disclosure ZKP",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "Digital Identity Foundation",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "proximity"
-      ],
-      "vcFormats": [
-        "jwt_vc",
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [
-        "DIDComm v2"
-      ],
-      "interopProfiles": [
-        "DIIP v4"
-      ],
-      "themes": [
-        "person_identity"
-      ],
-      "imageUrls": [
-        "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg"
-      ],
-      "imageUrl": "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://devpost.com/software/test-7gtomq",
-      "userJourney": "The DIDComm v2 agent is implemented entirely in Python, enabling secure message exchange between the Issuer, Holder, and Verifier.\nDID:Peer protocol implementation and DID generation are also developed in Python.\nWe use the Universal DID Resolver/Registrar with cheqd to register and resolve DIDs on the cheqd testnet.\nThe complete Zero-Knowledge Proof (ZKP) circuit is written in Circom, with proofs generated using the Circom compiler.\n\nProof Generation Flow\n\nFeature Extraction: Fingerprint bifurcation and termination points are extracted, flattened, and combined into a single array.\n\nPoseidon Merkle Tree: The data is hashed into a Poseidon-based Merkle tree, producing the root commitment and 8 sibling hashes for efficient proof generation.\n\nProof Generation: The Circom circuit compiles using these hashes to generate the proof, verification key, and public inputs, which are signed by the issuer.\n\nVerification: The verifier extracts the proof and public inputs from the credential and validates them using zk-SNARKs, returning true or false.",
-      "country": "IN"
-    },
-    {
-      "id": "verifiable-participant-identity-for-cross-border-financial-messaging-JxVLHY",
-      "sector": "finance",
-      "title": "Verifiable Participant Identity for Cross-Border Financial Messaging",
-      "summary": "RTGS.global is a live SaaS platform coordinating cross-border FX and payment workflows between participating financial institutions, including banks, fund controllers, financial market infrastructures and central banks across jurisdictions.\r\n\r\nRTGS.global provides the shared operating and messaging layer through which participants establish governed relationships and coordinate payment workflows. It operates without holding participant funds or acting as an authoritative settlement record; institutions maintain their own records and external settlement arrangements.\r\n\r\nThe trust challenge is ensuring that every institution communicating across the network is reliably identified and that all instructions are authenticated and tamper-evident. Traditional static certificates cannot satisfy this dynamically across distributed participants. RTGS.global solves this by embedding verifiable institutional identity into every communication and financial message across its network.",
-      "organizationName": "RTGS.global",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-14T11:22:32+01:00",
-      "publishedAt": "2026-08-14T11:22:32+01:00",
-      "tags": [
-        "digital identity",
-        "verifiable credentials",
-        "decentralised identifiers",
-        "didcomm",
-        "anoncreds",
-        "institutional identity",
-        "financial messaging",
-        "cross-border payments",
-        "message integrity",
-        "hyperledger aries"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "RTGS.global",
-            "url": "https://rtgs.global/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Indicio",
-            "url": "https://indicio.tech/indicio-mainnet/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:owf",
-            "labelRaw": "OpenWallet Foundation",
-            "url": "https://openwallet.foundation/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "anoncreds"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "themes": [
-        "payments"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/RTGS.global-logo_16x9.jpg",
-        "https://fides.community/app/uploads/2026/08/Onboarding_16x9.jpg",
-        "https://fides.community/app/uploads/2026/08/Message_Verification_16x9.jpg"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/RTGS.global-logo_16x9.jpg",
-      "moreInfoUrl": "https://developers.rtgs.global/technical-articles/reference/trusted-participant-identity/",
-      "userJourney": "1. Onboarding: RTGS.global emails a single-use out-of-band invitation. The participant's managed Aries agent loads it at container startup to establish a peer-to-peer connection via DIDComm v1. DIDs and credential definitions are anchored on Hyperledger Indy.\r\n2. Credential issuance: RTGS.global issues an AnonCreds credential binding institutional attributes to the participant's managed agent wallet.\r\n3. Proof verification: The participant presents a zero-knowledge proof of credential possession. RTGS.global verifies the proof and checks revocation status before activating the connection.\r\n4. Message signing: Active connections use pairwise DIDs. Every enabled financial message is cryptographically signed by the sending agent using relationship-specific keys.\r\n5. Verification: The receiving service validates the signature against the connection key, confirming the authenticated sender and intended recipient before processing.\r\n6. Lifecycle: Trust maintenance is automated via scheduled and DIDComm-instructed key cycling, connection cleanup, credential updates and offboarding.",
-      "country": "GB"
-    },
     {
       "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
       "sector": "finance",
@@ -294,8 +13,8 @@
       "organizationName": "Robert Bosch GmbH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-14T09:59:36+01:00",
-      "publishedAt": "2026-08-14T09:59:36+01:00",
+      "updatedAt": "2026-08-15T06:29:23+01:00",
+      "publishedAt": "2026-08-15T06:29:23+01:00",
       "tags": [
         "#EBWOID",
         "#EUCC",
@@ -608,18 +327,305 @@
         "HAIP v1"
       ],
       "themes": [
-        "person_identity",
-        "organizational_identity",
-        "compliance_reporting",
-        "trade_documents"
+        "organizational_identity"
       ],
       "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
-        "https://github.com/flo0x/GDC-Demos/raw/refs/heads/main/End2End_DigitalBusinessWorkflows.mp4"
+        "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png"
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
+      "videos": [
+        {
+          "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
+          "provider": "vimeo"
+        }
+      ],
+      "video": {
+        "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
+        "provider": "vimeo"
+      },
       "userJourney": "Phase 1: KYB - Foundation : Bosch Obtaining  EBWOID and EUCC from Bundesanzeiger\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (EBW Spherity).\n2.Bundesanzeiger verifies and check against official registry records and issues the EBWOID to  Bosch EBW (Procivis Desk)\n3.Bosch presents the EBWOID and issue EU Company Credential (EUCC) to Bosch EBW.\n\nPhase 2: KYC-Finance:  Onboarding Bosch at Deutsche Bank)\n3. KYC Process: Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO, CompanyInfo, ...) to Deutsche Bank (EBW Procivis).\n4. Deutsche Bank verify the presented proofs and additionally  verify the identity of calculated UBOs under EU AMLR rules (EUDI  Wallet)\n5. Contract signinng is trigger using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Owner Attestation to Bosch EBW.\n\nPhase 3: KYS - Self Supplier onboarding of SBB at Bosch and start deliver\n6. SBB EBW runs Phases 1 and 2 to establish its verified identity.\n7. SBB EBW presents all required credentials to Bosch for instant, automated KYS onboarding.\n8. SBB EBW delivers ordered parts and issues an eInvoice directly to Bosch EBW.",
       "country": "DE"
+    },
+    {
+      "id": "independent-review-of-ai-decision-evidence-lf3fYX",
+      "sector": "digital",
+      "title": "Seal: independent review of AI decision evidence",
+      "summary": "Organisations using AI for consequential decisions face a structural problem: when a decision is questioned, the only record is often a log written by the party under review.\n\nSeal signs a receipt at the moment the decision is made, offline-verifiable against its published key. This use case adds an independent review step: a reviewer opens a docket showing the exact question under examination, and countersigns their verdict with a credential from their own Yivi wallet. They never create an account with the organisation under review, and IRMA's Idemix scheme makes that a property of the cryptography rather than a promise about our data handling.\n\nThe evidence pack holds three verifiable objects from three issuers: the receipt, the credential presentation, and the countersignature. No single party can create all three.\n\nScope, plainly: this establishes that a decision was recorded before the action, that the record has not changed, and that a reviewer holding a credential issued independently of the AI operator signed a verdict on it. It does not establish that the record matches the computation that actually ran. The ATTESTATION-v1 Internet-Draft states the same boundary",
+      "organizationName": "Aqta",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-14T16:24:28+01:00",
+      "publishedAt": "2026-08-14T16:24:28+01:00",
+      "tags": [
+        "ai-evidence",
+        "independent-review",
+        "digital-wallets",
+        "offline-verification",
+        "verifiable-credentials"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "yivi",
+            "labelRaw": "Yivi",
+            "url": "https://yivi.app",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Aqta",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Yivi",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Email address",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:aqta",
+            "labelRaw": "Aqta",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Aqta",
+            "url": "https://aqta.ai",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "idemix"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "IRMA Protocol"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "agentic_ai"
+      ],
+      "imageUrls": [
+        "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review."
+      ],
+      "imageUrl": "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review.",
+      "videos": [
+        {
+          "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/k1Bp4IlNJMw?si=c42OzgBcJPzrjjnl",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://review.aqta.ai",
+      "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: the specific question under examination, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer chooses accept or decline\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs it by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library. The signature carries a timestamp anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
+      "country": "IE"
+    },
+    {
+      "id": "decentralized-phc-credentials-in-the-future-ai-era-LgFUSG",
+      "sector": "digital",
+      "title": "Decentralized PHC Credentials in the Future AI Era.",
+      "summary": "The primary motivation behind creating this proof of concept is to demonstrate how Zero-Knowledge Proofs (ZKPs) and Verifiable Credentials (VCs), aligned with W3C standards, can be integrated with on-chain blockchain technology i.e (CHEQD). This approach enables the deployment, storage, and verification of proof of human identity.\nWhat it does\n1.Government ID Issuance: A government agency issues an ID to the holder, which is required to obtain a PHC Verifiable Credential (VC).\n\n2.Presenting ID to PHC Provider: The holder presents their government-issued VC from their wallet to the PHC provider, a trusted authority.\n\n3.Fingerprint Biometric Capture: Once the government ID is verified, the user scans their fingerprint using PHC’s biometric infrastructure, which extracts unique fingerprint features.\n\n4.Online Authentication : When accessing an online service that requires PHC verification, the user shares the PHC credential from their wallet with the service.\n\n5.Verification Process: The service provider’s DIDComm v2 agent performs ZKP verification with the holder’s data. If verified, access is granted; otherwise, it is denied.",
+      "organizationName": "Digital Identity Foundation",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-14T12:14:11+01:00",
+      "publishedAt": "2026-08-14T12:14:11+01:00",
+      "tags": [
+        "identity",
+        "W3C",
+        "DID",
+        "SSI"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "Custom",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": null,
+            "labelRaw": "Custom",
+            "url": null,
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Test Goverment",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Selective Disclosure ZKP",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Digital Identity Foundation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "proximity"
+      ],
+      "vcFormats": [
+        "jwt_vc",
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2"
+      ],
+      "interopProfiles": [
+        "DIIP v4"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg"
+      ],
+      "imageUrl": "https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/003/118/166/datas/medium.jpg",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=i6CHKm_8aEQ",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://devpost.com/software/test-7gtomq",
+      "userJourney": "The DIDComm v2 agent is implemented entirely in Python, enabling secure message exchange between the Issuer, Holder, and Verifier.\nDID:Peer protocol implementation and DID generation are also developed in Python.\nWe use the Universal DID Resolver/Registrar with cheqd to register and resolve DIDs on the cheqd testnet.\nThe complete Zero-Knowledge Proof (ZKP) circuit is written in Circom, with proofs generated using the Circom compiler.\n\nProof Generation Flow\n\nFeature Extraction: Fingerprint bifurcation and termination points are extracted, flattened, and combined into a single array.\n\nPoseidon Merkle Tree: The data is hashed into a Poseidon-based Merkle tree, producing the root commitment and 8 sibling hashes for efficient proof generation.\n\nProof Generation: The Circom circuit compiles using these hashes to generate the proof, verification key, and public inputs, which are signed by the issuer.\n\nVerification: The verifier extracts the proof and public inputs from the credential and validates them using zk-SNARKs, returning true or false.",
+      "country": "IN"
+    },
+    {
+      "id": "verifiable-participant-identity-for-cross-border-financial-messaging-JxVLHY",
+      "sector": "finance",
+      "title": "Verifiable Participant Identity for Cross-Border Financial Messaging",
+      "summary": "RTGS.global is a live SaaS platform coordinating cross-border FX and payment workflows between participating financial institutions, including banks, fund controllers, financial market infrastructures and central banks across jurisdictions.\r\n\r\nRTGS.global provides the shared operating and messaging layer through which participants establish governed relationships and coordinate payment workflows. It operates without holding participant funds or acting as an authoritative settlement record; institutions maintain their own records and external settlement arrangements.\r\n\r\nThe trust challenge is ensuring that every institution communicating across the network is reliably identified and that all instructions are authenticated and tamper-evident. Traditional static certificates cannot satisfy this dynamically across distributed participants. RTGS.global solves this by embedding verifiable institutional identity into every communication and financial message across its network.",
+      "organizationName": "RTGS.global",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-14T11:22:32+01:00",
+      "publishedAt": "2026-08-14T11:22:32+01:00",
+      "tags": [
+        "digital identity",
+        "verifiable credentials",
+        "decentralised identifiers",
+        "didcomm",
+        "anoncreds",
+        "institutional identity",
+        "financial messaging",
+        "cross-border payments",
+        "message integrity",
+        "hyperledger aries"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "RTGS.global",
+            "url": "https://rtgs.global/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Indicio",
+            "url": "https://indicio.tech/indicio-mainnet/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:owf",
+            "labelRaw": "OpenWallet Foundation",
+            "url": "https://openwallet.foundation/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "anoncreds"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "payments"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/RTGS.global-logo_16x9.jpg",
+        "https://fides.community/app/uploads/2026/08/Onboarding_16x9.jpg",
+        "https://fides.community/app/uploads/2026/08/Message_Verification_16x9.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/RTGS.global-logo_16x9.jpg",
+      "moreInfoUrl": "https://developers.rtgs.global/technical-articles/reference/trusted-participant-identity/",
+      "userJourney": "1. Onboarding: RTGS.global emails a single-use out-of-band invitation. The participant's managed Aries agent loads it at container startup to establish a peer-to-peer connection via DIDComm v1. DIDs and credential definitions are anchored on Hyperledger Indy.\r\n2. Credential issuance: RTGS.global issues an AnonCreds credential binding institutional attributes to the participant's managed agent wallet.\r\n3. Proof verification: The participant presents a zero-knowledge proof of credential possession. RTGS.global verifies the proof and checks revocation status before activating the connection.\r\n4. Message signing: Active connections use pairwise DIDs. Every enabled financial message is cryptographically signed by the sending agent using relationship-specific keys.\r\n5. Verification: The receiving service validates the signature against the connection key, confirming the authenticated sender and intended recipient before processing.\r\n6. Lifecycle: Trust maintenance is automated via scheduled and DIDComm-instructed key cycling, connection cleanup, credential updates and offboarding.",
+      "country": "GB"
     },
     {
       "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
