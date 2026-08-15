@@ -5,6 +5,83 @@
   "orgName": "Authbound",
   "useCases": [
     {
+      "id": "jevi-workpass-operations-console-bY8U3i",
+      "sector": "construction",
+      "title": "Jevi WorkPass: Operations console",
+      "summary": "Jevi WorkPass is a fictional municipal operations console for a construction site. We built it because the gate still runs on a folder: licences, medicals, hot-work tickets, photocopied, often expired, and checked by a person who has forty others waiting.\r\n\r\nA welder with no height medical still walks onto the span. The investigation then finds the binder. Revoking a ticket means calling every supervisor.\r\n\r\nWe made WorkPass a crew board, not a certificate widget, so a site manager can walk the morning and see the gate open only when the proofs are current. Authbound Wallet presents given_name, family_name, role, competence_certificate, medical_clearance, and substance_free. Elina Nummi sits on Proof needed until that scan. A pass clears her. The sale to the municipality is a gate that fails before anyone climbs, and a roster that is not a shared drive of scans.",
+      "organizationName": "Authbound",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:08:33+01:00",
+      "publishedAt": "2026-08-15T12:08:33+01:00",
+      "tags": [
+        "construction",
+        "site-access",
+        "occupational-health",
+        "municipality",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/jevi-workpass.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/jevi-workpass.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/jevi-workpass",
+      "userJourney": "The morning board shows crew on Bridge 14 and the depot. Elina Nummi, welder, crew A, East span, is marked Proof needed: height medical missing.\r\n\r\nThe gate operator runs a check on Elina. She presents Authbound Wallet.\r\n\r\nIf Authbound ID or the Jevi WorkPass is missing, the demo issues both first, then runs the same check.\r\n\r\nAuthbound Wallet shows given_name, family_name, role, competence_certificate, medical_clearance, substance_free. Elina accepts.\r\n\r\nElina Nummi cleared: role + competence + medical all valid. Gate opens.\r\n\r\nThe board flips her to On site.",
+      "country": "FI"
+    },
+    {
       "id": "aurora-bet-kyc-for-online-gambling-yyuVbE",
       "sector": "digital",
       "title": "Aurora Bet: KYC for online gambling",
