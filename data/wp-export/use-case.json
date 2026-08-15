@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-15T16:16:18+00:00",
+    "generatedAt": "2026-08-15T16:18:54+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5131,8 +5131,8 @@
                     "organizationName": "Robert Bosch GmbH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-15T17:16:18+01:00",
-                    "publishedAt": "2026-08-15T17:16:18+01:00",
+                    "updatedAt": "2026-08-15T17:18:54+01:00",
+                    "publishedAt": "2026-08-15T17:18:54+01:00",
                     "tags": [
                         "#EBWOID",
                         "#EUCC",
@@ -5241,66 +5241,10 @@
                         ],
                         "credentials": [
                             {
-                                "refId": null,
-                                "labelRaw": "EBWOID",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ebwoid",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "EUCC",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eucc",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "CompanyInfo",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-compnayinfo",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
                                 "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
                                 "labelRaw": "PID (SD-JWT VC)",
                                 "url": null,
                                 "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "ContactPerson",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-contactperson",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "VAT",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-vat",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "IBAN Ownership",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-iban-ov",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "PaymentTerms",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ipayment-terms",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "Ownership",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ownership",
-                                "source": "manual",
                                 "walletType": null
                             },
                             {
@@ -5312,30 +5256,86 @@
                             },
                             {
                                 "refId": null,
-                                "labelRaw": "UBO",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ubo",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
                                 "labelRaw": "EU PoA",
                                 "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eu-poa",
                                 "source": "manual",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
-                                "labelRaw": "eInvoice",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eInvoice",
-                                "source": "manual",
+                                "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
+                                "labelRaw": "EBW Owner Identification Data (EBW-OID)",
+                                "url": null,
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
-                                "labelRaw": "AuthorizedSignatories",
-                                "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-authorised-signatories",
-                                "source": "manual",
+                                "refId": "cred:webuild:eucc:sd-jwt-vc",
+                                "labelRaw": "EU Company Certificate",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:company-info:sd-jwt-vc",
+                                "labelRaw": "Company Info",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:contact-person:sd-jwt-vc",
+                                "labelRaw": "Contact Person",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:vat-id:sd-jwt-vc",
+                                "labelRaw": "EUDI VAT ID",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:iban-ov:sd-jwt-vc",
+                                "labelRaw": "IBAN Ownership Verification",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:payment-terms:sd-jwt-vc",
+                                "labelRaw": "Payment Terms",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:ownership:sd-jwt-vc",
+                                "labelRaw": "Ownership",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:ubo:sd-jwt-vc",
+                                "labelRaw": "Ultimate Beneficial Owner",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:einvoice:sd-jwt-vc",
+                                "labelRaw": "eInvoice",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:authorised-signatories:sd-jwt-vc",
+                                "labelRaw": "Authorised Signatories",
+                                "url": null,
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
