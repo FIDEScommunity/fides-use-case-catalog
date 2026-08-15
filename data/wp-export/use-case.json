@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-15T11:12:24+00:00",
+    "generatedAt": "2026-08-15T11:13:50+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -533,6 +533,83 @@
             "orgId": "org:authbound",
             "orgName": "Authbound",
             "useCases": [
+                {
+                    "id": "roamline-car-rental-french-licence-finnish-locker-no-counter-3gaH00",
+                    "sector": "mobility",
+                    "title": "Roamline: Car rental - French licence, Finnish locker, no counter",
+                    "summary": "Roamline is a fictional car rental company at Helsinki-Vantaa. We built it for the arrival that has no desk: the car is in a locker, and the company still has to know that this person is licensed to drive it.\r\n\r\nA foreign plastic card at a Finnish counter is a judgement call. Designs differ across member states, and the forgeries are good. Unattended pickup cannot photocopy anything. So either you staff a queue, or you skip the check.\r\n\r\nWe made Roamline a booking site, not a licence widget, so a rental brand can walk the trip and see the locker open afterwards. Authbound Wallet presents document_number, licence_categories, expiry_date, and issuing_country. A French licence can release a Finnish car in the same booking. Valid? The locker code lands before the plane does.",
+                    "organizationName": "Authbound",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-15T12:13:50+01:00",
+                    "publishedAt": "2026-08-15T12:13:50+01:00",
+                    "tags": [
+                        "car-rental",
+                        "driving-licence",
+                        "mobility",
+                        "cross-border",
+                        "authbound-wallet",
+                        "finland"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "authbound-wallet",
+                                "labelRaw": "Authbound Wallet",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Authbound",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:authbound",
+                                "labelRaw": "Authbound",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF"
+                    ],
+                    "themes": [
+                        "person_identity",
+                        "education"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/roamline.webp"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/roamline.webp",
+                    "moreInfoUrl": "https://authbound.io/showcase/roamline",
+                    "userJourney": "Anna books a Compact EV at HEL Airport Terminal 2, pickup 22 Apr 09:15, return 27 Apr.\r\n\r\nThe trip is FR to FI. The locker code stays locked until the licence check.\r\n\r\nAuthbound Wallet shows document_number, licence_categories, expiry_date, issuing_country. Anna accepts.\r\n\r\nLicence verified. Locker code 4827 is ready at HEL T2, spot B14, from 22 Apr 09:00.\r\n\r\nShe skips the counter and takes the car.",
+                    "country": "FI"
+                },
                 {
                     "id": "surepath-verified-humans-only-j0Wecg",
                     "sector": "digital",
