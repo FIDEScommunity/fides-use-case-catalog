@@ -5,6 +5,81 @@
   "orgName": "Authbound",
   "useCases": [
     {
+      "id": "civica-vote-one-resident-one-ballot-0Cu1Ub",
+      "sector": "public_sector",
+      "title": "Civica Vote: one resident, one ballot",
+      "summary": "Civica Vote is a fictional municipal ballot. We built it because participatory budgeting online still fails in two directions: anyone with a second email can vote twice, or the city collects names, and turnout dies.\r\n\r\nA bank login names every resident. A paper vote costs a polling station. Cities want the budget decided by people who actually live there, without publishing who backed which fountain.\r\n\r\nWe made Civica a city ballot, not an eligibility widget, so a municipal team can walk the vote and see a receipt land afterwards. Authbound Wallet presents municipality_of_residence. The DVV population register confirms that the holder lives in Yampere and is 16 or older. The ballot ID is then randomized, so the tally is one resident, one vote, and the city does not keep who picked what. The voter keeps a receipt.",
+      "organizationName": "Authbound",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:11:51+01:00",
+      "publishedAt": "2026-08-15T12:11:51+01:00",
+      "tags": [
+        "voting",
+        "municipality",
+        "participatory-budget",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/civica-vote.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/civica-vote.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/civica-vote",
+      "userJourney": "A Yampere resident opens Civica Vote for the 2026 participatory cycle and marks the ballot (public artwork plus yes/no on city projects).\r\n\r\nCasting requires a residency check. They present an Authbound Wallet.\r\n\r\nAuthbound Wallet shows municipality_of_residence. Value: Yampere. Issuer: DVV Population Register. 16+ and one-ballot are enforced.\r\n\r\nThe ballot ID is randomized so the vote is unlinked from the person.\r\n\r\nBallot recorded. Receipt 0xA72F · 8C14 · D1. Keep it for audit. It holds no name.\r\n\r\nClose the booth. The city publishes the tally after the window closes.",
+      "country": "FI"
+    },
+    {
       "id": "cartiva-named-buyer-and-named-shop-GTdq5C",
       "sector": "retail",
       "title": "Cartiva: Named Buyer and Named Shop",
