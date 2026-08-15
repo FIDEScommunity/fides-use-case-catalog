@@ -5,6 +5,81 @@
   "orgName": "Authbound",
   "useCases": [
     {
+      "id": "surepath-verified-humans-only-j0Wecg",
+      "sector": "digital",
+      "title": "Surepath: Verified humans only",
+      "summary": "Surepath is a fictional dating app. We built it because the inbox is still full of bots, stolen photos, and people who are not the age on the profile. The usual fix is a selfie next to a passport. The app then holds a library of identity images, which is a gift to whoever breaches it, and catfish still get through with a borrowed ID.\r\n\r\nWe made Surepath a dating product, not an age-check widget, so a product lead can walk the signup and see the badge land afterwards. Authbound is the relying party. Authbound Wallet presents age_over_18, given_name, and nationality. A pass marks the profile a verified human. Unverified accounts cannot see or message that profile. The birthday stays in the wallet. The sale is an adult in the pool, without a drawer of passports.",
+      "organizationName": "Authbound",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:12:24+01:00",
+      "publishedAt": "2026-08-15T12:12:24+01:00",
+      "tags": [
+        "dating",
+        "age-verification",
+        "verified-human",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/surepath.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/surepath.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/surepath",
+      "userJourney": "Anna opens Surepath. Discover already shows verified humans: Mira, 28, Helsinki; Iiro, Tampere; Sofie, Espoo; Aleks, Helsinki.\r\n\r\nShe taps Get my verified badge.\r\n\r\nIf Authbound ID is missing, the demo issues it first, then runs the same check.\r\n\r\nAuthbound Wallet shows age_over_18, given_name, nationality. Anna accepts.\r\n\r\nWelcome in. You are real. You are a verified human now. Bots and pretenders cannot see the profile or message it.\r\n\r\nThe verified badge is on.",
+      "country": "FI"
+    },
+    {
       "id": "civica-vote-one-resident-one-ballot-0Cu1Ub",
       "sector": "public_sector",
       "title": "Civica Vote: one resident, one ballot",
