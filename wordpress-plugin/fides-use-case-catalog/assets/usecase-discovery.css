@@ -90,6 +90,35 @@
   line-height: 1.3;
 }
 
+.fides-uc-discovery__themes-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.fides-uc-discovery__themes-heading .fides-uc-discovery__themes-title {
+  margin-bottom: 0;
+}
+
+.fides-uc-discovery__view-all {
+  flex: 0 0 auto;
+  color: var(--fides-uc-accent) !important;
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-decoration: none !important;
+  white-space: nowrap;
+}
+
+.fides-uc-discovery__view-all:hover,
+.fides-uc-discovery__view-all:focus-visible {
+  color: var(--fides-uc-accent) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 0.2em;
+}
+
 .fides-uc-discovery__themes {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

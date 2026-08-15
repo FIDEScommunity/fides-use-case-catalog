@@ -273,7 +273,21 @@ final class Fides_Use_Case_Discovery_Shortcode {
                 </div>
 
                 <div class="fides-uc-discovery__theme-overview">
-                    <h3 id="fides-uc-discovery-themes-title" class="fides-uc-discovery__themes-title"><?php esc_html_e('Explore by theme', 'fides-use-case-catalog'); ?></h3>
+                    <div class="fides-uc-discovery__themes-heading">
+                        <h3 id="fides-uc-discovery-themes-title" class="fides-uc-discovery__themes-title"><?php esc_html_e('Explore by theme', 'fides-use-case-catalog'); ?></h3>
+                        <a class="fides-uc-discovery__view-all"
+                           href="<?php echo esc_url($catalog_url); ?>"
+                           data-matomo-category="Use Case Discovery"
+                           data-matomo-action="View all use cases">
+                            <?php
+                            printf(
+                                esc_html(_n('View all %s use case', 'View all %s use cases', $metrics['total'], 'fides-use-case-catalog')),
+                                esc_html(number_format_i18n($metrics['total']))
+                            );
+                            ?>
+                            <span aria-hidden="true">→</span>
+                        </a>
+                    </div>
                     <div class="fides-uc-discovery__themes">
                         <?php foreach ($bundles as $bundle) : ?>
                             <?php

@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.14.8
+Stable tag: 0.16.2
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,50 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.16.2 =
+* Remove WordPress theme margin from the modal accordion stack when related
+  suggestions are disabled.
+
+= 0.16.1 =
+* Remove the extra modal footer spacing when related use case suggestions are
+  disabled.
+
+= 0.16.0 =
+* Add a WordPress setting to enable or disable related use case suggestions in
+  the modal.
+
+= 0.15.3 =
+* Keep the country next to the sector in the use-case modal header on smaller
+  screens.
+
+= 0.15.2 =
+* Rename the modal recommendation section to “You may also be interested in”.
+
+= 0.15.1 =
+* Separate similar use cases with a light-grey panel and show two compact
+  columns on mobile.
+
+= 0.15.0 =
+* Add three similar use cases at the bottom of the modal, ranked by shared
+  visitor theme, credential, wallet, organisation and sector.
+
+= 0.14.12 =
+* Keep the discovery “View all” link blue across WordPress themes and align the
+  theme cards with the KPI column.
+
+= 0.14.11 =
+* Add spacing between modal theme buttons and a dynamic “View all use cases”
+  link beside the discovery theme heading.
+
+= 0.14.10 =
+* Keep Submitted by directly after Sector, render modal themes as filter
+  buttons, and prefill themes for new and existing update proposals.
+
+= 0.14.9 =
+* Link the submitting organization to its catalog entry when a matching
+  organization reference is available, and show visitor-facing themes in use
+  case details.
 
 = 0.14.8 =
 * Reduce excess vertical space inside two-column theme cards on narrow screens.

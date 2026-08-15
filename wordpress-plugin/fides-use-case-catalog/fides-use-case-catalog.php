@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.14.8
+ * Version: 0.16.2
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.14.8');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.16.2');
 /** Admin list page size for Tools → Use Case Submissions. */
 define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
@@ -427,6 +427,15 @@ function fides_use_case_catalog_register_settings(): void {
             'sanitize_callback' => 'fides_use_case_catalog_sanitize_optional_url',
         )
     );
+    register_setting(
+        FIDES_USE_CASE_CATALOG_SETTINGS_GROUP,
+        'fides_use_case_catalog_show_similar_cases',
+        array(
+            'type'              => 'boolean',
+            'default'           => true,
+            'sanitize_callback' => 'rest_sanitize_boolean',
+        )
+    );
 }
 
 function fides_use_case_catalog_register_settings_page(): void {
@@ -463,6 +472,21 @@ function fides_use_case_catalog_render_settings_page(): void {
                         </p>
                     </td>
                 </tr>
+                <tr>
+                    <th scope="row"><?php esc_html_e('Related use case suggestions', 'fides-use-case-catalog'); ?></th>
+                    <td>
+                        <input type="hidden" name="fides_use_case_catalog_show_similar_cases" value="0">
+                        <label for="fides_use_case_catalog_show_similar_cases">
+                            <input type="checkbox" id="fides_use_case_catalog_show_similar_cases"
+                                   name="fides_use_case_catalog_show_similar_cases" value="1"
+                                   <?php checked(fides_use_case_catalog_similar_cases_enabled()); ?>>
+                            <?php esc_html_e('Show “You may also be interested in” at the bottom of use case modals', 'fides-use-case-catalog'); ?>
+                        </label>
+                        <p class="description">
+                            <?php esc_html_e('Suggestions are ranked by shared theme, credential, wallet, organisation and sector.', 'fides-use-case-catalog'); ?>
+                        </p>
+                    </td>
+                </tr>
             </table>
             <?php submit_button(); ?>
         </form>
@@ -476,6 +500,13 @@ function fides_use_case_catalog_update_form_url(): string {
         return esc_url_raw($option);
     }
     return home_url(FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH);
+}
+
+function fides_use_case_catalog_similar_cases_enabled(): bool {
+    $enabled = rest_sanitize_boolean(
+        get_option('fides_use_case_catalog_show_similar_cases', true)
+    );
+    return (bool) apply_filters('fides_use_case_catalog_show_similar_cases', $enabled);
 }
 
 function fides_use_case_catalog_lookup_sources(): array {
@@ -1486,7 +1517,8 @@ function fides_use_case_catalog_register_rest_routes(): void {
                         return new WP_REST_Response(array('message' => 'Invalid use case id.'), 400);
                     }
 
-                    if (! is_array(fides_use_case_catalog_published_item_by_id($target_use_case_id))) {
+                    $target_item = fides_use_case_catalog_published_item_by_id($target_use_case_id);
+                    if (! is_array($target_item)) {
                         return new WP_REST_Response(array('message' => 'Published use case not found.'), 404);
                     }
 
@@ -1509,6 +1541,9 @@ function fides_use_case_catalog_register_rest_routes(): void {
                     }
 
                     $row_data = $validated['row'];
+                    $row_data['themes_json'] = wp_json_encode(
+                        fides_use_case_catalog_normalize_themes($target_item['themes'] ?? array())
+                    );
                     $proposal_id = $target_use_case_id . '-upd-' . wp_generate_password(6, false, false);
                     $now = current_time('mysql', true);
                     $inserted = $wpdb->insert(
@@ -2021,6 +2056,7 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             'ratingsLoginUrl' => $ratings_login_url,
             'updateFormUrl' => fides_use_case_catalog_update_form_url(),
             'isLoggedIn' => is_user_logged_in(),
+            'showSimilarCases' => fides_use_case_catalog_similar_cases_enabled(),
             'themeDiscovery' => Fides_Use_Case_Discovery_Shortcode::theme_config(),
             'askFidesAvailable' => $ask_fides_available,
             'askFidesPlaceholder' => __('Ask anything about use cases…', 'fides-use-case-catalog'),

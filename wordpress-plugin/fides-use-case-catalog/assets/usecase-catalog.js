@@ -56,6 +56,7 @@
   const ASK_FIDES_PLACEHOLDER = String(config.askFidesPlaceholder || "Ask anything about use cases…");
   const UPDATE_FORM_URL = config.updateFormUrl ? String(config.updateFormUrl).trim() : "";
   const IS_LOGGED_IN = !!config.isLoggedIn;
+  const SHOW_SIMILAR_CASES = config.showSimilarCases !== false;
   const RATINGS_BATCH_LIMIT = 100;
   const RATINGS_TYPE = "usecase";
   const root = document.getElementById("fides-use-case-catalog-root");
@@ -1370,6 +1371,42 @@
     return "";
   }
 
+  function submittedByOrganizationHref(item) {
+    const organizationName = String((item && item.organizationName) || "").trim().toLocaleLowerCase();
+    if (!organizationName) return "";
+    const match = getLinkItems(item, "organizations").find((link) => {
+      const refId = link && link.refId ? String(link.refId).trim() : "";
+      return refId && linkItemLabel(link).trim().toLocaleLowerCase() === organizationName;
+    });
+    return match ? organizationChipHref(match) : "";
+  }
+
+  function renderSubmittedByValue(item) {
+    const label = String((item && item.organizationName) || "").trim();
+    if (!label) return "—";
+    const href = submittedByOrganizationHref(item);
+    if (!href) return escapeHtml(label);
+    return `<a href="${escapeHtml(href)}" class="fides-modal-link-inline" aria-label="View ${escapeHtml(label)} in the organization catalog" onclick="event.stopPropagation();">${escapeHtml(label)}</a>`;
+  }
+
+  function themeFilterHref(themeCode) {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("usecase");
+      url.searchParams.set("theme", themeCode);
+      return url.toString();
+    } catch {
+      return `?theme=${encodeURIComponent(themeCode)}`;
+    }
+  }
+
+  function renderThemeFilterButton(bundle) {
+    const code = String((bundle && bundle.code) || "");
+    const title = String((bundle && (bundle.title || bundle.code)) || "");
+    if (!code || !title) return "";
+    return `<a href="${escapeHtml(themeFilterHref(code))}" class="fides-use-case-theme-button" aria-label="Explore ${escapeHtml(title)} use cases" onclick="event.stopPropagation();"><span>${escapeHtml(title)}</span>${icons.chevronRight}</a>`;
+  }
+
   function renderUseCaseInvolvedOrganizations(item) {
     const orgs = getLinkItems(item, "organizations");
     if (orgs.length === 0) return "";
@@ -1449,6 +1486,7 @@
 
   function renderUseCaseDetailsAccordion(item) {
     const tags = Array.isArray(item.tags) ? item.tags : [];
+    const themeBundles = itemThemeBundles(item);
     const moreInfoUrl = item.moreInfoUrl ? String(item.moreInfoUrl) : "";
     const sector = itemSector(item);
     const readinessLabel = productionDeploymentLabel(item.productionDeployment);
@@ -1482,8 +1520,13 @@
             }
             <div class="fides-kv-row">
               <span class="fides-kv-key">Submitted by</span>
-              <span class="fides-kv-val">${escapeHtml(item.organizationName || "—")}</span>
+              <span class="fides-kv-val">${renderSubmittedByValue(item)}</span>
             </div>
+            ${
+              themeBundles.length > 0
+                ? `<div class="fides-kv-row fides-kv-row-wide"><span class="fides-kv-key">${themeBundles.length === 1 ? "Theme" : "Themes"}</span><span class="fides-kv-val fides-use-case-theme-buttons">${themeBundles.map(renderThemeFilterButton).join("")}</span></div>`
+                : ""
+            }
             ${
               item.publishedAt
                 ? `<div class="fides-kv-row"><span class="fides-kv-key">Published</span><span class="fides-kv-val">${escapeHtml(formatDateLabel(item.publishedAt))}</span></div>`
@@ -1522,6 +1565,118 @@
     return `<a href="${escapeHtml(href)}" class="fides-modal-copy-link fides-modal-edit-link" aria-label="Suggest an update" title="Suggest an update">${icons.pencil}</a>`;
   }
 
+  function itemThemeBundleCodes(item) {
+    return itemThemeBundles(item)
+      .map((bundle) => String((bundle && bundle.code) || ""))
+      .filter(Boolean);
+  }
+
+  function itemLinkRefIds(item, linksKeys) {
+    const keys = Array.isArray(linksKeys) ? linksKeys : [linksKeys];
+    return Array.from(
+      new Set(
+        keys.flatMap((key) =>
+          getLinkItems(item, key)
+            .map((link) => String((link && link.refId) || "").trim())
+            .filter(Boolean)
+        )
+      )
+    );
+  }
+
+  function sharedValues(left, right) {
+    const rightSet = new Set(right);
+    return left.filter((value) => rightSet.has(value));
+  }
+
+  function similarUseCaseMatch(source, candidate) {
+    const sharedThemes = sharedValues(itemThemeBundleCodes(source), itemThemeBundleCodes(candidate));
+    const sharedCredentials = sharedValues(
+      itemLinkRefIds(source, "credentials"),
+      itemLinkRefIds(candidate, "credentials")
+    );
+    const sharedWallets = sharedValues(
+      itemLinkRefIds(source, ["personalWallets", "businessWallets"]),
+      itemLinkRefIds(candidate, ["personalWallets", "businessWallets"])
+    );
+    const sharedOrganizations = sharedValues(
+      itemLinkRefIds(source, "organizations"),
+      itemLinkRefIds(candidate, "organizations")
+    );
+    const sharedSectors = sharedValues(itemSectorCodes(source), itemSectorCodes(candidate));
+    const rank = [
+      sharedThemes.length > 0 ? 1 : 0,
+      sharedCredentials.length > 0 ? 1 : 0,
+      sharedWallets.length > 0 ? 1 : 0,
+      sharedOrganizations.length > 0 ? 1 : 0,
+      sharedSectors.length > 0 ? 1 : 0,
+      sharedThemes.length,
+      sharedCredentials.length,
+      sharedWallets.length,
+      sharedOrganizations.length
+    ];
+    const hasMatch = rank.slice(0, 5).some(Boolean);
+    let reason = "";
+    if (sharedThemes.length > 0) {
+      const bundle = THEME_BUNDLES_BY_CODE[sharedThemes[0]];
+      reason = bundle ? `Shared theme: ${String(bundle.title || bundle.code)}` : "Shared theme";
+    } else if (sharedCredentials.length > 0) {
+      reason = sharedCredentials.length === 1 ? "Shared credential" : `${sharedCredentials.length} shared credentials`;
+    } else if (sharedWallets.length > 0) {
+      reason = sharedWallets.length === 1 ? "Shared wallet" : `${sharedWallets.length} shared wallets`;
+    } else if (sharedOrganizations.length > 0) {
+      reason = sharedOrganizations.length === 1 ? "Shared organisation" : `${sharedOrganizations.length} shared organisations`;
+    } else if (sharedSectors.length > 0) {
+      reason = `Same sector: ${sectorLabel(candidate)}`;
+    }
+    return { item: candidate, rank, reason, hasMatch };
+  }
+
+  function similarUseCases(item, limit = 3) {
+    return currentItems
+      .filter((candidate) => candidate && candidate.id && candidate.id !== item.id)
+      .map((candidate) => similarUseCaseMatch(item, candidate))
+      .filter((match) => match.hasMatch)
+      .sort((left, right) => {
+        for (let index = 0; index < left.rank.length; index += 1) {
+          if (left.rank[index] !== right.rank[index]) return right.rank[index] - left.rank[index];
+        }
+        const likeDifference = getUseCaseLikeCount(right.item) - getUseCaseLikeCount(left.item);
+        if (likeDifference !== 0) return likeDifference;
+        return String(left.item.title || "").localeCompare(String(right.item.title || ""), "en", {
+          sensitivity: "base"
+        });
+      })
+      .slice(0, limit);
+  }
+
+  function renderSimilarUseCases(item) {
+    if (!SHOW_SIMILAR_CASES) return "";
+    const matches = similarUseCases(item);
+    if (matches.length === 0) return "";
+    return `
+      <section class="fides-use-case-similar" aria-labelledby="fides-use-case-similar-title">
+        <div class="fides-use-case-similar__heading">
+          <h3 id="fides-use-case-similar-title">You may also be interested in</h3>
+        </div>
+        <div class="fides-use-case-similar__grid">
+          ${matches
+            .map(({ item: similarItem, reason }) => {
+              const href = useCaseModalDeepLink(similarItem.id);
+              return `
+                <a class="fides-use-case-similar__card" href="${escapeHtml(href)}" data-similar-use-case-id="${escapeHtml(similarItem.id)}">
+                  <span class="fides-use-case-similar__reason">${escapeHtml(reason)}</span>
+                  <strong>${escapeHtml(similarItem.title || similarItem.id)}</strong>
+                  <span class="fides-use-case-similar__link">View use case <span aria-hidden="true">→</span></span>
+                </a>
+              `;
+            })
+            .join("")}
+        </div>
+      </section>
+    `;
+  }
+
   function renderUseCaseModal() {
     if (!selectedUseCase) return "";
     const item = selectedUseCase;
@@ -1543,7 +1698,7 @@
     const subtitleHtml = subtitleParts.join('<span class="fides-modal-subtitle-sep" aria-hidden="true">·</span>');
 
     return `
-      <div class="fides-modal-overlay fides-modal-overlay--usecase" id="fides-modal-overlay" data-theme="${escapeHtml(currentTheme)}">
+      <div class="fides-modal-overlay fides-modal-overlay--usecase${SHOW_SIMILAR_CASES ? "" : " fides-modal-overlay--without-similar"}" id="fides-modal-overlay" data-theme="${escapeHtml(currentTheme)}">
         <div class="fides-modal" role="dialog" aria-modal="true" aria-labelledby="fides-modal-title">
           <div class="fides-modal-header">
             <div class="fides-modal-header-content">
@@ -1572,6 +1727,7 @@
               ${renderUseCaseTechnicalAccordion(item)}
               ${renderUseCaseDetailsAccordion(item)}
             </div>
+            ${renderSimilarUseCases(item)}
             ${renderModalLastUpdatedHtml(item)}
           </div>
         </div>
@@ -1695,6 +1851,15 @@
           toggle.setAttribute("aria-expanded", "true");
         });
         accordion.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      });
+    });
+
+    document.querySelectorAll("#fides-modal-overlay [data-similar-use-case-id]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        const useCaseId = link.getAttribute("data-similar-use-case-id") || "";
+        if (!useCaseId) return;
+        event.preventDefault();
+        openUseCaseById(useCaseId);
       });
     });
 
@@ -2058,11 +2223,24 @@
     if (!themeCode) return true;
     const bundle = THEME_BUNDLES_BY_CODE[themeCode];
     const themeCodes = bundle && Array.isArray(bundle.themeCodes) ? bundle.themeCodes : [];
+    const itemThemes = itemThemeCodes(item);
+    return themeCodes.some((code) => itemThemes.includes(code));
+  }
+
+  function itemThemeCodes(item) {
     const embeddedThemes = item && Array.isArray(item.themes) ? item.themes : [];
-    const itemThemes = embeddedThemes.length
+    return embeddedThemes.length
       ? embeddedThemes
       : (Array.isArray(THEME_ASSIGNMENTS[item && item.id]) ? THEME_ASSIGNMENTS[item.id] : []);
-    return themeCodes.some((code) => itemThemes.includes(code));
+  }
+
+  function itemThemeBundles(item) {
+    const itemThemes = itemThemeCodes(item);
+    if (!itemThemes.length) return [];
+    return THEME_BUNDLES.filter((bundle) => {
+      const themeCodes = bundle && Array.isArray(bundle.themeCodes) ? bundle.themeCodes : [];
+      return themeCodes.some((code) => itemThemes.includes(code));
+    });
   }
 
   function itemMatchesActiveTheme(item) {

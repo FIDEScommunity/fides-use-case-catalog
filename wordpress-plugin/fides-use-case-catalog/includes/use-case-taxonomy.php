@@ -415,7 +415,19 @@ function fides_use_case_catalog_row_themes(array $row): array {
     if ($themes !== array()) {
         return $themes;
     }
-    $id          = (string) ($row['use_case_id'] ?? '');
+
+    $target_id = (string) ($row['target_use_case_id'] ?? '');
+    if ($target_id !== '' && function_exists('fides_use_case_catalog_published_item_by_id')) {
+        $target_item = fides_use_case_catalog_published_item_by_id($target_id);
+        if (is_array($target_item)) {
+            $themes = fides_use_case_catalog_normalize_themes($target_item['themes'] ?? array());
+            if ($themes !== array()) {
+                return $themes;
+            }
+        }
+    }
+
+    $id          = $target_id !== '' ? $target_id : (string) ($row['use_case_id'] ?? '');
     $assignments = fides_use_case_catalog_theme_assignments();
     return isset($assignments[ $id ]) ? $assignments[ $id ] : array();
 }
