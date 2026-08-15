@@ -1,10 +1,365 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-15T16:08:04.369Z",
+  "lastUpdated": "2026-08-15T16:16:35.536Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 59,
   "useCases": [
+    {
+      "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
+      "sector": "finance",
+      "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
+      "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n- Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
+      "organizationName": "Robert Bosch GmbH",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T17:16:18+01:00",
+      "publishedAt": "2026-08-15T17:16:18+01:00",
+      "tags": [
+        "#EBWOID",
+        "#EUCC",
+        "#Corporate_Identity",
+        "#SupplyChain",
+        "#KYC_Financial",
+        "#AMLR_Compliance",
+        "#UBO_Verification",
+        "#IBAN_Attestation",
+        "#KYS_Onboarding",
+        "#Owner&Control",
+        "#UBO",
+        "#eInvoice",
+        "#Cross_Border_Interop #Procurement"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "procivis-one-wallet",
+            "labelRaw": "Procivis One Wallet",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-reference-personal-wallet",
+            "labelRaw": "EUDI Wallet Reference Implementation",
+            "url": "https://github.com/eu-digital-identity-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "procivis-one",
+            "labelRaw": "Procivis One",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "spherity-business-wallet",
+            "labelRaw": "Spherity's European Business Wallet",
+            "url": "https://www.spherity.com/eida",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Bundesanzeiger Verlag",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Deutsche Bank",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Banks",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Business Registries",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Economic Operators",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "SBB",
+            "url": "http://Robert%20Bosch%20GmbH",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Supplier/Procurer",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Robert Bosch GmbH",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "EBWOID",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ebwoid",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "EUCC",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eucc",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "CompanyInfo",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-compnayinfo",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ContactPerson",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-contactperson",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "VAT",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-vat",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "IBAN Ownership",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-iban-ov",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "PaymentTerms",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ipayment-terms",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ownership",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ownership",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Control",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-control",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "UBO",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ubo",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "EU PoA",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eu-poa",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "eInvoice",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eInvoice",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "AuthorizedSignatories",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-authorised-signatories",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:bundesanzeiger-verlag",
+            "labelRaw": "Bundesanzeiger Verlag",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Robert Bosch GmbH",
+            "url": "https://www.bosch.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:procivis",
+            "labelRaw": "Procivis",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Deutsche Bank",
+            "url": "https://www.deutsche-bank.de",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Schweizerische Bundesbahnen",
+            "url": "https://www.sbb.ch/en",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:spherity",
+            "labelRaw": "Spherity",
+            "url": "https://www.spherity.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:webuild",
+            "labelRaw": "WE BUILD Consortium",
+            "url": "https://www.webuildconsortium.eu/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Deutsche Bank",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Robert Bosch GmbH",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bundesanzeiger",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "SBB",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Banks",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Business Registries",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Economic Operators",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
+      "videos": [
+        {
+          "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
+          "provider": "vimeo"
+        }
+      ],
+      "video": {
+        "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
+        "provider": "vimeo"
+      },
+      "userJourney": "Phase 1: KYB - Foundation : Bosch Obtaining  EBWOID and EUCC from Bundesanzeiger\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (EBW Spherity).\n2.Bundesanzeiger verifies and check against official registry records and issues the EBWOID to  Bosch EBW (Procivis Desk)\n3.Bosch presents the EBWOID and issue EU Company Credential (EUCC) to Bosch EBW.\n\nPhase 2: KYC-Finance:  Onboarding Bosch at Deutsche Bank)\n3. KYC Process: Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO, CompanyInfo, ...) to Deutsche Bank (EBW Procivis).\n4. Deutsche Bank verify the presented proofs and additionally  verify the identity of calculated UBOs under EU AMLR rules (EUDI  Wallet)\n5. Contract signinng is trigger using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Owner Attestation to Bosch EBW.\n\nPhase 3: KYS - Self Supplier onboarding of SBB at Bosch and start deliver\n6. SBB EBW runs Phases 1 and 2 to establish its verified identity.\n7. SBB EBW presents all required credentials to Bosch for instant, automated KYS onboarding.\n8. SBB EBW delivers ordered parts and issues an eInvoice directly to Bosch EBW.",
+      "country": "DE"
+    },
     {
       "id": "tervion-digiclinic-lTkRt4",
       "sector": "healthcare",
@@ -1281,347 +1636,6 @@
       "moreInfoUrl": "https://hologram.zone/demos",
       "userJourney": "Hologram Messaging is an open-source messenger that doubles as a browser: scanning a QR opens an encrypted DIDComm chat with a self-hosted service. No app store, no platform account. Each demo runs from a forkable repo (GitHub Actions deploy to Kubernetes) behind an open-source Verana VS Agent. A self-hosted organization anchor obtains Organization and Service credentials, runs its own trust registry on the Verana Verifiable Public Registry, and accredits its child services, so the app can trust-resolve every service before the first message. The Avatar chatbot issues you an identity credential in conversation; the Passport issuer reads a government ID over NFC and verifies liveness on a video call. The GitHub and Wise agents are AI assistants over MCP: they authenticate you with your Avatar credential, then act on your own accounts with your own API token, inside the encrypted chat. The X Agent flips authority around: an Agent Pack policy binds the right to post in the account's name to verifiable credentials you choose, so every AI action is credential-gated and attributable.",
       "country": "EE"
-    },
-    {
-      "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
-      "sector": "finance",
-      "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
-      "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n-Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
-      "organizationName": "Robert Bosch GmbH",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-15T06:29:23+01:00",
-      "publishedAt": "2026-08-15T06:29:23+01:00",
-      "tags": [
-        "#EBWOID",
-        "#EUCC",
-        "#Corporate_Identity",
-        "#SupplyChain",
-        "#KYC_Financial",
-        "#AMLR_Compliance",
-        "#UBO_Verification",
-        "#IBAN_Attestation",
-        "#KYS_Onboarding",
-        "#Owner&Control",
-        "#UBO",
-        "#eInvoice",
-        "#Cross_Border_Interop #Procurement"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "procivis-one-wallet",
-            "labelRaw": "Procivis One Wallet",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "procivis-one",
-            "labelRaw": "Procivis One",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": "organizational"
-          },
-          {
-            "refId": "spherity-business-wallet",
-            "labelRaw": "Spherity's European Business Wallet",
-            "url": "https://www.spherity.com/eida",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Bundesanzeiger Verlag",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Deutsche Bank",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Banks",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Business Registries",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Economic Operators",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "SBB",
-            "url": "http://Robert%20Bosch%20GmbH",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Supplier/Procurer",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Robert Bosch GmbH",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "EBWOID",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ebwoid",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "EUCC",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eucc",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "CompanyInfo",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-compnayinfo",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "ContactPerson",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-contactperson",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "VAT",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-vat",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "IBAN Ownership",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-iban-ov",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "PaymentTerms",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ipayment-terms",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Ownership",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ownership",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Control",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-control",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "UBO",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-ubo",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "EU PoA",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eu-poa",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "eInvoice",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eInvoice",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "AuthorizedSignatories",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-authorised-signatories",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:bundesanzeiger-verlag",
-            "labelRaw": "Bundesanzeiger Verlag",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Deutsche Bank",
-            "url": "https://www.deutsche-bank.de",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:spherity",
-            "labelRaw": "Spherity",
-            "url": "https://www.spherity.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:procivis",
-            "labelRaw": "Procivis",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:sbb",
-            "labelRaw": "SBB",
-            "url": "https://www.sbb.ch",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Robert Bosch GmbH",
-            "url": "https://www.bosch.com/",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Deutsche Bank",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Robert Bosch GmbH",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bundesanzeiger",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "SBB",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Banks",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Business Registries",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Economic Operators",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "organizational_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
-      "videos": [
-        {
-          "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
-          "provider": "vimeo"
-        }
-      ],
-      "video": {
-        "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
-        "provider": "vimeo"
-      },
-      "userJourney": "Phase 1: KYB - Foundation : Bosch Obtaining  EBWOID and EUCC from Bundesanzeiger\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (EBW Spherity).\n2.Bundesanzeiger verifies and check against official registry records and issues the EBWOID to  Bosch EBW (Procivis Desk)\n3.Bosch presents the EBWOID and issue EU Company Credential (EUCC) to Bosch EBW.\n\nPhase 2: KYC-Finance:  Onboarding Bosch at Deutsche Bank)\n3. KYC Process: Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO, CompanyInfo, ...) to Deutsche Bank (EBW Procivis).\n4. Deutsche Bank verify the presented proofs and additionally  verify the identity of calculated UBOs under EU AMLR rules (EUDI  Wallet)\n5. Contract signinng is trigger using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Owner Attestation to Bosch EBW.\n\nPhase 3: KYS - Self Supplier onboarding of SBB at Bosch and start deliver\n6. SBB EBW runs Phases 1 and 2 to establish its verified identity.\n7. SBB EBW presents all required credentials to Bosch for instant, automated KYS onboarding.\n8. SBB EBW delivers ordered parts and issues an eInvoice directly to Bosch EBW.",
-      "country": "DE"
     },
     {
       "id": "independent-review-of-ai-decision-evidence-lf3fYX",
