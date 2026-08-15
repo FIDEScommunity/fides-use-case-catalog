@@ -1,10 +1,96 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-15T11:20:31.001Z",
+  "lastUpdated": "2026-08-15T11:21:20.194Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 58,
+  "count": 59,
   "useCases": [
+    {
+      "id": "tervion-digiclinic-lTkRt4",
+      "sector": "healthcare",
+      "title": "Tervion DigiClinic",
+      "summary": "Tervion Etäklinikka is a fictional Finnish telemedicine clinic. A video GP visit, a prescription renewal, or a care record still needs a high-assurance login before the call starts. In the Nordics, that login is usually BankID. A second country means a second national eID and a second contract. A patient who is not Finnish does not have BankID at all.\r\n\r\nTervion is the clinic as a site: six specialities, next GP in nine minutes. The clinic asks Authbound Wallet for given_name, family_name, and kela_card_number, because the record needs the Kela entitlement as well as the person. For foreigners, the requirements would differ. After that, the video room is the next screen. Anna sees the appointment on the dashboard, with two renewals waiting, records bound to that session.\r\n\r\nIf the visitor has no Kela card in the wallet yet, the demo issues an Authbound ID and a Kela Card first, then runs the same login.",
+      "organizationName": "Authbound",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-15T12:21:03+01:00",
+      "publishedAt": "2026-08-15T12:21:03+01:00",
+      "tags": [
+        "healthcare",
+        "telemedicine",
+        "kela",
+        "login",
+        "identity",
+        "authbound-wallet",
+        "finland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "authbound",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "dataspaces"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/tervion-etaklinikka.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/tervion-etaklinikka.webp",
+      "moreInfoUrl": "https://authbound.io/showcase/tervion-etaklinikka",
+      "userJourney": "Anna opens Tervion Etäklinikka and picks General practitioner.\r\n\r\nShe books Dr. Anni Mäkelä, live in 4 minutes. Login opens: Log in to your clinic record.\r\n\r\nAuthbound Wallet shows given_name, family_name, and kela_card_number. Anna accepts. If those credentials are missing, the demo issues Authbound ID and a Kela Card first.\r\n\r\nThe clinic session is live. Logged in securely, Anna. Dr. Mäkelä has your record. The video room opens at 14:20.\r\n\r\nDashboard: appointment in 4 minutes. Join now, two prescription renewals; care records locked to that login.",
+      "country": "FI"
+    },
     {
       "id": "nordhaus-open-a-bank-account-7LNUbC",
       "sector": "finance",
