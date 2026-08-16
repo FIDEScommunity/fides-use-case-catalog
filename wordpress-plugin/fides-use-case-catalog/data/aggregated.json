@@ -1,10 +1,119 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-16T13:05:43.726Z",
+  "lastUpdated": "2026-08-16T13:06:09.624Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 59,
   "useCases": [
+    {
+      "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
+      "sector": "supply_chain",
+      "title": "Reeco Textile DPP : the supply chain verified independently of the brand's systems",
+      "summary": "Textile passports today publish what a brand exports from its PLM. A signature makes that tamper-evident, not true. Reeco verifies the chain itself, from outside the brand's systems: every supplier lodges its documents directly with Reeco, and a proprietary mass balance, carrying the indices and the PEF calculation, bounds each claim to its certified evidence. No signed claim survives in excess of what the certificates cover.\nThe passport is issued from that result: a W3C Verifiable Credential from did:web:ia.reeco.eco, delivered over OpenID4VCI to an organisational or personal wallet, presented back over OpenID4VP and verified against the published DID document, eleven checks including holder key binding. Verification is the product; the passport is what verification leaves behind.\nThere is a date on this. From 27 September 2026, Directive (EU) 2024/825 makes a generic environmental claim an unfair practice: only specific, substantiated claims survive, and substantiation is not a publishing problem.\nNo textile DPP can be conforming yet: the delegated act is not adopted and service providers cannot register. This is a pilot, and says so. The stack is live and public.",
+      "organizationName": "Reeco",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-16T14:05:50+01:00",
+      "publishedAt": "2026-08-16T14:05:50+01:00",
+      "tags": [
+        "Digital Product Passport",
+        "DPP",
+        "Textiles",
+        "Supply Chain Transparency",
+        "Product Traceability",
+        "Mass Balance",
+        "Verifiable Credentials",
+        "Sustainability",
+        "Regulatory Compliance",
+        "Circular Economy",
+        "ESPR",
+        "UNTP",
+        "GS1 Digital Link",
+        "Data Interoperability"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": "issuer:thales:unfold:test",
+            "labelRaw": "Thales Unfold OID4VCI Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:ewc:epassport-sd-jwt:sd-jwt-vc",
+            "labelRaw": "ePassport (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:uncefact:dpp:vcdm-2-0",
+            "labelRaw": "Digital Product Passport",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:reeco",
+            "labelRaw": "Reeco",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "https://ia.reeco.eco/reeco",
+            "url": "https://ia.reeco.eco/reeco",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "compliance_reporting",
+        "digital_product_passports"
+      ],
+      "imageUrls": [
+        "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp"
+      ],
+      "imageUrl": "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp",
+      "videos": [
+        {
+          "url": "https://youtu.be/iTgmqVRT2to",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/iTgmqVRT2to",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://doi.org/10.5281/zenodo.21825740",
+      "userJourney": "1. A brand declares the composition and sustainability claims for a production lot and\n   supplies the supply-chain documents for each tier.\n2. Before anything is signed, Reeco checks the declared claim against the certified\n   evidence. If the evidence does not support the claim, the passport is not issued at the\n   declared value.\n3. The passport is issued as a UNTP 0.7.0 Verifiable Credential signed with Ed25519, with\n   a GS1 Digital Link identifier at unit level (AI 01 / 10 / 21) as its subject id.\n4. A consumer scans the QR on the garment. The GS1 Digital Link resolver returns the\n   passport in a plain-language view; the credential status is resolved live, so a\n   superseded or revoked claim never reads as valid.\n5. A repairer or recycler reads material and end-of-life data from the same identifier.\n6. A market surveillance authority retrieves the same passport, verifies the signature\n   against the published DID document, and can retrieve the archived version from the\n   independent back-up service if the primary is unavailable.",
+      "country": "IT"
+    },
     {
       "id": "independent-review-of-ai-decision-evidence-lf3fYX",
       "sector": "digital",
@@ -1916,84 +2025,6 @@
       "moreInfoUrl": "https://developers.rtgs.global/technical-articles/reference/trusted-participant-identity/",
       "userJourney": "1. Onboarding: RTGS.global emails a single-use out-of-band invitation. The participant's managed Aries agent loads it at container startup to establish a peer-to-peer connection via DIDComm v1. DIDs and credential definitions are anchored on Hyperledger Indy.\r\n2. Credential issuance: RTGS.global issues an AnonCreds credential binding institutional attributes to the participant's managed agent wallet.\r\n3. Proof verification: The participant presents a zero-knowledge proof of credential possession. RTGS.global verifies the proof and checks revocation status before activating the connection.\r\n4. Message signing: Active connections use pairwise DIDs. Every enabled financial message is cryptographically signed by the sending agent using relationship-specific keys.\r\n5. Verification: The receiving service validates the signature against the connection key, confirming the authenticated sender and intended recipient before processing.\r\n6. Lifecycle: Trust maintenance is automated via scheduled and DIDComm-instructed key cycling, connection cleanup, credential updates and offboarding.",
       "country": "GB"
-    },
-    {
-      "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
-      "sector": "supply_chain",
-      "title": "Reeco Textile DPP : the supply chain verified independently of the brand's systems",
-      "summary": "Textile passports today publish what a brand exports from its PLM. A signature makes that tamper-evident, not true. Reeco verifies the chain itself, from outside the brand's systems: every supplier lodges its documents directly with Reeco, and a proprietary mass balance, carrying the indices and the PEF calculation, bounds each claim to its certified evidence. No signed claim survives in excess of what the certificates cover.\r\nThe passport is issued from that result: a W3C Verifiable Credential from did:web:ia.reeco.eco, delivered over OpenID4VCI to an organisational or personal wallet, presented back over OpenID4VP and verified against the published DID document, eleven checks including holder key binding. Verification is the product; the passport is what verification leaves behind.\r\nThere is a date on this. From 27 September 2026, Directive (EU) 2024/825 makes a generic environmental claim an unfair practice: only specific, substantiated claims survive, and substantiation is not a publishing problem.\r\nNo textile DPP can be conforming yet: the delegated act is not adopted and service providers cannot register. This is a pilot, and says so. The stack is live and public.",
-      "organizationName": "Reeco",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-14T09:59:44+01:00",
-      "publishedAt": "2026-08-14T09:58:27+01:00",
-      "tags": [
-        "Digital Product Passport",
-        "DPP",
-        "Textiles",
-        "Supply Chain Transparency",
-        "Product Traceability",
-        "Mass Balance",
-        "Verifiable Credentials",
-        "Sustainability",
-        "Regulatory Compliance",
-        "Circular Economy",
-        "ESPR",
-        "UNTP",
-        "GS1 Digital Link",
-        "Data Interoperability"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": "org:reeco",
-            "labelRaw": "Reeco",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "compliance_reporting",
-        "digital_product_passports"
-      ],
-      "imageUrls": [
-        "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp"
-      ],
-      "imageUrl": "https://reeco.eco/assets/img/reeco-dpp-cover-v2.webp",
-      "videos": [
-        {
-          "url": "https://youtu.be/iTgmqVRT2to",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/iTgmqVRT2to",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://doi.org/10.5281/zenodo.21825740",
-      "userJourney": "1. A brand declares the composition and sustainability claims for a production lot and\r\n   supplies the supply-chain documents for each tier.\r\n2. Before anything is signed, Reeco checks the declared claim against the certified\r\n   evidence. If the evidence does not support the claim, the passport is not issued at the\r\n   declared value.\r\n3. The passport is issued as a UNTP 0.7.0 Verifiable Credential signed with Ed25519, with\r\n   a GS1 Digital Link identifier at unit level (AI 01 / 10 / 21) as its subject id.\r\n4. A consumer scans the QR on the garment. The GS1 Digital Link resolver returns the\r\n   passport in a plain-language view; the credential status is resolved live, so a\r\n   superseded or revoked claim never reads as valid.\r\n5. A repairer or recycler reads material and end-of-life data from the same identifier.\r\n6. A market surveillance authority retrieves the same passport, verifies the signature\r\n   against the published DID document, and can retrieve the archived version from the\r\n   independent back-up service if the primary is unavailable.",
-      "country": "IT"
     },
     {
       "id": "trusted-caller-identity-aGtyqn",
