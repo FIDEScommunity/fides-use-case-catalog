@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-16T05:32:17+00:00",
+    "generatedAt": "2026-08-16T13:05:29+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -426,12 +426,12 @@
                     "id": "independent-review-of-ai-decision-evidence-lf3fYX",
                     "sector": "digital",
                     "title": "Seal: independent review of AI decision evidence",
-                    "summary": "A bank declines a loan application. Six months later the customer's solicitor asks why. The only record of that decision is a log the bank wrote about itself.\n\nSeal removes that weakness by splitting the evidence across three independent issuers, so no single operator controls the complete evidence path: Seal signs the decision receipt, Yivi issues the reviewer's credential, and the reviewer signs the verdict.\n\nWhen a decision is questioned, a reviewer opens a docket showing one fixed question, set before the evidence is opened, so it cannot be adjusted to fit the answer. Their browser verifies every signature, and they record one of three verdicts: accepted, declined, or not enough to answer it. A public sample shows the flow at app.aqta.ai/review-packs/sample.\n\nWhat it establishes: Seal signed the stated record; its signed fields have not changed; a party holding a credential Aqta did not issue signed a verdict on a fixed question. What it does not establish: that the record matches the computation that actually ran, or that every decision was recorded. We would rather be checked than believed. The signing is production; this review flow is a prototype, and the page says so",
+                    "summary": "A bank declines a loan application. Six months later, the customer's solicitor asks why. The only record of that decision is a log written by the organisation under review.\n\nSeal addresses this by separating the evidence across three independent issuers: Seal signs the decision receipt, Yivi issues the reviewer's credential, and the reviewer signs the verdict. No single party controls the complete evidence path.\n\nWhen a decision is questioned, a reviewer opens a docket with one fixed question, set before evidence is opened so it cannot be adjusted to fit the answer. Their browser verifies every signature, and they record one of three verdicts: accepted, declined or not enough to answer. Walk the flow and tamper with a receipt yourself: app.aqta.ai/demo.\n\nWhat it establishes: Seal signed the stated record; signed fields have not changed; a reviewer holding a credential Aqta did not issue signed a verdict on a fixed question.\n\nWhat it does not establish: that the record matches the computation that actually ran, or that every decision was recorded.\n\nWe would rather be checked than believed. The signing is production; this review flow is a prototype, and the page says so",
                     "organizationName": "Aqta",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-16T06:32:17+01:00",
-                    "publishedAt": "2026-08-16T06:32:17+01:00",
+                    "updatedAt": "2026-08-16T14:05:29+01:00",
+                    "publishedAt": "2026-08-16T14:05:29+01:00",
                     "tags": [
                         "ai-evidence",
                         "independent-review",
@@ -518,19 +518,9 @@
                         "agentic_ai"
                     ],
                     "imageUrls": [
-                        "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review."
+                        "https://fides.community/app/uploads/2026/08/fides-cover-1280x720-2.png"
                     ],
-                    "imageUrl": "https://aqta.ai/api/og?title=When%20AI%20decisions%20are%20challenged.&sub=Signed%20evidence%20for%20independent%20review.",
-                    "videos": [
-                        {
-                            "url": "https://youtu.be/IrfscHv16bc",
-                            "provider": "youtube"
-                        }
-                    ],
-                    "video": {
-                        "url": "https://youtu.be/IrfscHv16bc",
-                        "provider": "youtube"
-                    },
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/fides-cover-1280x720-2.png",
                     "moreInfoUrl": "https://review.aqta.ai",
                     "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: one fixed question, set before the evidence is opened so it cannot be adjusted to fit the answer, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer verifies the evidence in their own browser, then chooses one of three verdicts: accept, decline, or not enough to answer it\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library, with the signing moment anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
                     "country": "IE"
