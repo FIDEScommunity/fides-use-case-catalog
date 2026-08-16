@@ -12,8 +12,8 @@
       "organizationName": "Robert Bosch GmbH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-16T20:54:04+01:00",
-      "publishedAt": "2026-08-16T20:54:04+01:00",
+      "updatedAt": "2026-08-16T20:57:48+01:00",
+      "publishedAt": "2026-08-16T20:57:48+01:00",
       "tags": [
         "#EBWOID",
         "#EUCC",
@@ -165,27 +165,6 @@
           },
           {
             "refId": null,
-            "labelRaw": "CompanyInfo",
-            "url": "https://registry.siros.org/webuild-consortium/company-info/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "ContactPerson",
-            "url": "https://registry.siros.org/webuild-consortium/contact-person/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "PaymentTerms",
-            "url": "https://registry.siros.org/webuild-consortium/payment-terms/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
             "labelRaw": "Control",
             "url": null,
             "source": "manual",
@@ -199,24 +178,52 @@
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "AuthorisedSignatories",
-            "url": "https://registry.siros.org/webuild-consortium/authorised-signatories/",
-            "source": "manual",
+            "refId": "cred:webuild:company-info:sd-jwt-vc",
+            "labelRaw": "Company Info",
+            "url": null,
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "IBAN Ownership",
-            "url": "https://registry.siros.org/webuild-consortium/iban-ov/",
-            "source": "manual",
+            "refId": "cred:webuild:contact-person:sd-jwt-vc",
+            "labelRaw": "Contact Person",
+            "url": null,
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "Ultimate Beneficial Owner (UBO)",
-            "url": "https://registry.siros.org/webuild-consortium/ubo/",
-            "source": "manual",
+            "refId": "cred:webuild:payment-terms:sd-jwt-vc",
+            "labelRaw": "Payment Terms",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:ownership:sd-jwt-vc",
+            "labelRaw": "Ownership",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:authorised-signatories:sd-jwt-vc",
+            "labelRaw": "Authorised Signatories",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:iban-ov:sd-jwt-vc",
+            "labelRaw": "IBAN Ownership Verification",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:ubo:sd-jwt-vc",
+            "labelRaw": "Ultimate Beneficial Owner",
+            "url": null,
+            "source": "catalog",
             "walletType": null
           }
         ],
