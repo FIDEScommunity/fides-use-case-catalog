@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.4
+Stable tag: 0.20.8
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,21 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.8 =
+* Vertically center mobile timeline numbers beside their corresponding rows.
+
+= 0.20.7 =
+* Remove the ampersand between personal and business wallets in the mobile
+  ecosystem timeline.
+
+= 0.20.6 =
+* Replace the compact mobile ecosystem diagram with a readable, numbered
+  vertical timeline that remains visually distinct from the theme cards.
+
+= 0.20.5 =
+* Improve mobile discovery readability with single-column theme cards and
+  larger KPI labels, descriptions, counts, and links. Desktop styling is unchanged.
 
 = 0.20.4 =
 * Preserve the original submitter contact email when publishing an update
