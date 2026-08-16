@@ -12,8 +12,8 @@
       "organizationName": "Robert Bosch GmbH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-15T17:18:54+01:00",
-      "publishedAt": "2026-08-15T17:18:54+01:00",
+      "updatedAt": "2026-08-16T20:54:04+01:00",
+      "publishedAt": "2026-08-16T20:54:04+01:00",
       "tags": [
         "#EBWOID",
         "#EUCC",
@@ -130,13 +130,6 @@
           },
           {
             "refId": null,
-            "labelRaw": "Control",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-control",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
             "labelRaw": "EU PoA",
             "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eu-poa",
             "source": "manual",
@@ -157,50 +150,8 @@
             "walletType": null
           },
           {
-            "refId": "cred:webuild:company-info:sd-jwt-vc",
-            "labelRaw": "Company Info",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:contact-person:sd-jwt-vc",
-            "labelRaw": "Contact Person",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
             "refId": "cred:webuild:vat-id:sd-jwt-vc",
             "labelRaw": "EUDI VAT ID",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:iban-ov:sd-jwt-vc",
-            "labelRaw": "IBAN Ownership Verification",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:payment-terms:sd-jwt-vc",
-            "labelRaw": "Payment Terms",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:ownership:sd-jwt-vc",
-            "labelRaw": "Ownership",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:ubo:sd-jwt-vc",
-            "labelRaw": "Ultimate Beneficial Owner",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -213,10 +164,59 @@
             "walletType": null
           },
           {
-            "refId": "cred:webuild:authorised-signatories:sd-jwt-vc",
-            "labelRaw": "Authorised Signatories",
+            "refId": null,
+            "labelRaw": "CompanyInfo",
+            "url": "https://registry.siros.org/webuild-consortium/company-info/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ContactPerson",
+            "url": "https://registry.siros.org/webuild-consortium/contact-person/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "PaymentTerms",
+            "url": "https://registry.siros.org/webuild-consortium/payment-terms/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Control",
             "url": null,
-            "source": "catalog",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ownership",
+            "url": "https://registry.siros.org/webuild-consortium/ownership/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "AuthorisedSignatories",
+            "url": "https://registry.siros.org/webuild-consortium/authorised-signatories/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "IBAN Ownership",
+            "url": "https://registry.siros.org/webuild-consortium/iban-ov/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ultimate Beneficial Owner (UBO)",
+            "url": "https://registry.siros.org/webuild-consortium/ubo/",
+            "source": "manual",
             "walletType": null
           }
         ],
@@ -356,7 +356,7 @@
         "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
         "provider": "vimeo"
       },
-      "userJourney": "Phase 1: KYB - Foundation : Bosch Obtaining  EBWOID and EUCC from Bundesanzeiger\n1. Bosch Representativ presents personal attributes via EUDI Wallet to Bundesanzeiger (EBW Spherity).\n2.Bundesanzeiger verifies and check against official registry records and issues the EBWOID to  Bosch EBW (Procivis Desk)\n3.Bosch presents the EBWOID and issue EU Company Credential (EUCC) to Bosch EBW.\n\nPhase 2: KYC-Finance:  Onboarding Bosch at Deutsche Bank)\n3. KYC Process: Bosch presents its EBWOID and EUCC alongside multi-source attestations (Ownership, Control, UBO, CompanyInfo, ...) to Deutsche Bank (EBW Procivis).\n4. Deutsche Bank verify the presented proofs and additionally  verify the identity of calculated UBOs under EU AMLR rules (EUDI  Wallet)\n5. Contract signinng is trigger using a wallet-bound QES, and Deutsche Bank issues a verified IBAN Owner Attestation to Bosch EBW.\n\nPhase 3: KYS - Self Supplier onboarding of SBB at Bosch and start deliver\n6. SBB EBW runs Phases 1 and 2 to establish its verified identity.\n7. SBB EBW presents all required credentials to Bosch for instant, automated KYS onboarding.\n8. SBB EBW delivers ordered parts and issues an eInvoice directly to Bosch EBW.",
+      "userJourney": "(1) KYB - Legal Entity Identification and info\n- A Bosch Representative presents their personal PID via EUDI Wallet to Bundesanzeiger Business Wallet (Spherity).\n- Bundesanzeiger issues the EU Business Wallet Owner Identification Data (EBWOID) \nand EU Company Credential (EUCC) attestations directly to the Bosch Business Wallet (Procivis).\n\n(2) KYC &amp; Financial Onboarding\n- Bosch presents its attestation (EBWOID, EUCC) alongside multi-source attestations (Ownership, VAT, UBO, etc.) \nto the Deutsche Bank Business Wallet (Procivis) .\n- The Ultimate Beneficial Owner's (UBO) identity is verified via their personal EUDI Wallet.\n- The corporate account contract is created and signed (skipped by demo).\n- Deutsche Bank issues an IBAN Owner (IBAN-OV) Attestation directly to the Bosch Business Wallet.\n\n(3) KYS &amp; Invoice Issuing\n- The supplier, SBB presents its corporate credentials (EBWOID, EUCC, VAT, etc.) for instant, automated KYS onboarding at Bosch.\n- Additionally, SBB’s commercial Payment Terms and bank-issued IBAN-OV attestations are presented to secure the payment triggering.\n- SBB delivers the ordered parts and issues a cryptographically signed eInvoice  to the Bosch Business Wallet",
       "country": "DE"
     }
   ]
