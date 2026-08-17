@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-16T19:57:48+00:00",
+    "generatedAt": "2026-08-17T08:40:39+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6777,6 +6777,137 @@
                     "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-13-2026-08_39_01-PM.png",
                     "userJourney": "Digital delivery platforms rely on large networks of gig workers who interact directly with customers. The Aadhaar App enables delivery partners to verify their identity during platform onboarding, allowing the platform to activate verified profiles before they undertake deliveries.\r\n\r\nFor regular deliveries, no additional identity verification is required. For restricted-item deliveries, the delivery partner and recipient can mutually verify each other using the Aadhaar App or any compatible digital identity wallet. The recipient can verify the assigned delivery partner, while the delivery partner can verify the required identity or eligibility attributes of the recipient before completing the delivery.",
                     "country": "IN"
+                }
+            ]
+        },
+        {
+            "orgSlug": "validant-ai",
+            "orgId": "org:validant-ai",
+            "orgName": "validant.ai",
+            "useCases": [
+                {
+                    "id": "verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J",
+                    "sector": "digital",
+                    "title": "Verifiable AI fairness: a seal for the system, a receipt for the person",
+                    "summary": "When an AI screens a job application, scores a loan or decides a benefit, the person affected gets a decision and no way to check whether it was fair. validant.ai issues two verifiable credentials that close that gap from both ends. The AI Fairness Seal is a credential whose subject is the AI system itself: a measurement engine cryptographically signs the fairness metrics, our server derives the verdict from those signed numbers, and the audited party never gets to assert its own result. The Decision Receipt is the person’s own credential, held in their wallet, naming which system decided, that it held a valid seal at the time, and optionally what would have had to change for a different outcome. The person presents it selectively to a third party, such as an ombudsman's office or a labor authority, revealing only what she chooses to reveal. Anyone can check a seal at validant.ai/verify without logging in or having an account. It runs on the same rails as the Swiss e-ID: SD-JWT VC, did:web and did:webvh, ES256, OpenID4VCI and OpenID4VP, with revocation on an IETF Token Status List.",
+                    "organizationName": "validant.ai",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-17T09:40:38+01:00",
+                    "publishedAt": "2026-08-17T09:40:38+01:00",
+                    "tags": [
+                        "ai-fairness",
+                        "ai-act",
+                        "algorithmic-accountability",
+                        "sd-jwt-vc",
+                        "openid4vp",
+                        "openid4vci",
+                        "did-web",
+                        "did-webvh",
+                        "swiyu",
+                        "selective-disclosure",
+                        "token-status-list",
+                        "verifiable-verdict",
+                        "hiring",
+                        "non-discrimination",
+                        "switzerland"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "swiyu-wallet",
+                                "labelRaw": "SWIYU Wallet",
+                                "url": "https://www.swiyu.admin.ch/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": null,
+                                "labelRaw": "SWIYU wallet",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "validant.ai AI Fairness Seal Issuer",
+                                "url": "https://issuer.validant.ai",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "AI Fairness Seal (SD-JWT VC)",
+                                "url": "urn:validant:ai-fairness-seal:1",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Decision Receipt (SD-JWT VC)",
+                                "url": "urn:validant:decision-receipt:1",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "validant.ai",
+                                "url": "https://validant.ai/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "validant.ai public Trust Seal verifier",
+                                "url": "https://validant.ai/verify",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "validant.ai Decision Receipt check",
+                                "url": "https://verifier.validant.ai",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "HAIP v1"
+                    ],
+                    "themes": [
+                        "compliance_reporting",
+                        "agentic_ai"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/validant_ai.jpeg"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/validant_ai.jpeg",
+                    "moreInfoUrl": "https://validant.ai",
+                    "userJourney": "1. An employer runs its CV-screening AI through validant.ai, self-service or commissioned, against a named, legally grounded fairness rule.\r\n2. The engine computes and signs the metrics (Ed25519) with the CI method, multiplicity correction and minimum detectable effect.\r\n3. validant.ai verifies the signature and derives the verdict itself; unsigned metrics are refused. A pass is earned, not claimed.\r\n4. The Fairness Seal is issued as an SD-JWT VC (ES256, did:web:validant.ai): system, owner, LEI, metric, threshold, result, status pointer.\r\n5. It arrives via OpenID4VCI in the employer's wallet; swiyu confirms the issuer.\r\n6. The AI rejects Maria; the rejection email carries the seal as a scannable code.\r\n7. She also gets a key-bound Decision Receipt in her swiyu wallet: which system decided, that its seal was valid, the decisive factors, and the smallest change that would have flipped it.\r\n8. She presents it selectively over OpenID4VP to an ombuds office, which re-verifies the seal.\r\n9. Anyone can verify a seal at validant.ai/verify, no login, in-browser, public key and status list.\r\n10. If the assessment is invalidated, the seal is revoked and every check reads Revoked within seconds.",
+                    "country": "CH"
                 }
             ]
         },
