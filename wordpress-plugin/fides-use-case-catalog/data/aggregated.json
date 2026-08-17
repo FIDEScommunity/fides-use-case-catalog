@@ -1,10 +1,239 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-17T15:05:19.083Z",
+  "lastUpdated": "2026-08-17T15:07:07.963Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 61,
+  "count": 62,
   "useCases": [
+    {
+      "id": "cexa-reusable-kyc-for-exchanges-and-banks-with-the-original-issuer-paid-on-every-reuse-cmd42L",
+      "sector": "finance",
+      "title": "CEXA: reusable KYC for exchanges and banks, with the original issuer paid on every reuse",
+      "summary": "Exchanges and banks run the same identity checks on the same customers, pay an IDV provider each time, and lose over half their sign-ups at the KYC wall. The Travel Rule adds a second redundancy: institutions must identify the counterparty behind every transfer, so each joins several directories and resubmits the same license.\r\n\r\nThe Crypto Exchange Association (demo) is a runnable answer built on Verana: a trust ecosystem founded by exchanges, open to the banks that serve them. It governs one reusable credential, CEXA-Kyc, on both sides: only accredited members may issue it, and only accredited members may ask a wallet for it. Asking for KYC data is a privileged, paid act. When a member accepts another member's credential, the protocol routes the reuse fee to the institution that paid for the original check: the KYC file becomes an asset, and the customer opens an account in about a minute. A second credential, CEXA-VerifiedCounterparty, published on each member's DID and free to verify, replaces N Travel Rule directory subscriptions with one membership.\r\n\r\nThe institutions are fictional. The infrastructure is not: run the full loop today with ten integrated open-source wallets.",
+      "organizationName": "Verana",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-17T16:06:52+01:00",
+      "publishedAt": "2026-08-17T16:06:52+01:00",
+      "tags": [
+        "Finance",
+        "Crypto",
+        "CEX",
+        "FIDES Supporter",
+        "Trust Networks",
+        "Ecosystem Governance",
+        "Verifiable Trust"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "inji-wallet",
+            "labelRaw": "Inji Wallet",
+            "url": "https://www.mosip.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-reference-personal-wallet",
+            "labelRaw": "EUDI Wallet Reference Implementation",
+            "url": "https://github.com/eu-digital-identity-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "paradym-wallet",
+            "labelRaw": "Paradym Wallet",
+            "url": "https://paradym.id",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "bc-wallet",
+            "labelRaw": "BC Wallet",
+            "url": "https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "wwwallet",
+            "labelRaw": "wwWallet",
+            "url": "https://wwwallet.org",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "hologram-messaging",
+            "labelRaw": "Hologram Messaging",
+            "url": "https://2060.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Edge Wallet",
+            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "altme-wallet",
+            "labelRaw": "Altme",
+            "url": "https://altme.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "national-eudi-wallet-netherlands",
+            "labelRaw": "NL Wallet (Netherlands)",
+            "url": "https://www.nldigitalgovernment.nl/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "vs-agent-verana-business-wallet",
+            "labelRaw": "VS Agent - Verana Business Wallet",
+            "url": "https://playground.testnet.verana.network/business-wallets",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [],
+        "credentials": [
+          {
+            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "labelRaw": "ECS Organization Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "labelRaw": "ECS Service Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:verana",
+            "labelRaw": "Verana",
+            "url": "https://verana.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:2060",
+            "labelRaw": "2060.io",
+            "url": "https://2060.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:authbound",
+            "labelRaw": "Authbound",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:mosip",
+            "labelRaw": "MOSIP",
+            "url": "https://www.mosip.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:eu",
+            "labelRaw": "European Commission",
+            "url": "https://commission.europa.eu/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:animo",
+            "labelRaw": "Animo Solutions",
+            "url": "https://animo.id",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bcgov",
+            "labelRaw": "Government of British Columbia",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:wwwallet",
+            "labelRaw": "wwWallet.org",
+            "url": "https://wwwallet.org",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:sphereon",
+            "labelRaw": "Sphereon",
+            "url": "https://sphereon.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:talao",
+            "labelRaw": "Talao",
+            "url": "https://talao.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bzk",
+            "labelRaw": "Ministerie van Binnenlandse Zaken en Koninkrijksrelaties",
+            "url": "https://www.rijksoverheid.nl/ministeries/ministerie-van-binnenlandse-zaken-en-koninkrijksrelaties",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "anoncreds",
+        "sd_jwt_vc",
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://playground.testnet.verana.network/images/cexa/hero-branded.webp"
+      ],
+      "imageUrl": "https://playground.testnet.verana.network/images/cexa/hero-branded.webp",
+      "moreInfoUrl": "https://playground.testnet.verana.network/usecases/cexa",
+      "userJourney": "1. The Association anchors its trust registry on Verana's Verifiable Public Registry: two schemas, a digest-anchored governance framework, and its fee schedule (fees are example values).\r\n\r\n2. Members join through vetted, paid, renewable on-chain onboarding. Validated members receive their CEXA-VerifiedCounterparty credential. Members must already be Verifiable Services: the Association issues memberships, not identity.\r\n\r\n3. The customer's first exchange runs one full IDV check, seals the evidence bundle into their wallet, digest-bound, and issues CEXA-Kyc for free.\r\n\r\n4. On reuse, the wallet trust-resolves the requester and checks its VERIFIER accreditation before presenting. The verifier re-binds the person (passport NFC plus face match), receives the sealed evidence as its own CDD file, and pays the protocol-split fee: 0.90 to the original issuer, 0.10 to the Association. No phone home: the issuer never learns where the customer went\r\n\r\n5. Travel Rule desks read the counterparty credential from the member's DID, free\r\n\r\n6. Failures fail closed: a verifiable exchange outside the Association resolves TRUSTED and is still refused; a revoked credential dies at every member at the next check",
+      "country": "EE"
+    },
     {
       "id": "recomputable-carbon-intensity-for-gold-dore-bars-hi7YCq",
       "sector": "trade",
