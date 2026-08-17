@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.8
+Stable tag: 0.20.10
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,12 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.10 =
+* After GitHub fails, use a 12-hour browser cache and the WP last-known-good aggregated feed before the bundled plugin snapshot.
+
+= 0.20.9 =
+* Show a dismissible notice when GitHub catalog data is unreachable and the plugin snapshot is used.
 
 = 0.20.8 =
 * Vertically center mobile timeline numbers beside their corresponding rows.

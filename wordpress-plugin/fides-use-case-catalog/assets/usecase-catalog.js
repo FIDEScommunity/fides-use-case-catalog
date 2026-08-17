@@ -61,6 +61,16 @@
   const RATINGS_TYPE = "usecase";
   const root = document.getElementById("fides-use-case-catalog-root");
   if (!root) return;
+  let catalogLoadMeta = { showStaleNotice: false, remoteFailed: false, snapshotDate: "" };
+
+  function applyStaleCatalogNotice() {
+    if (!window.FidesCatalogUI || typeof window.FidesCatalogUI.mountStaleCatalogNotice !== "function") return;
+    window.FidesCatalogUI.mountStaleCatalogNotice(root, {
+      showStaleNotice: catalogLoadMeta.showStaleNotice,
+      catalogType: "usecase",
+      snapshotDate: catalogLoadMeta.snapshotDate
+    });
+  }
 
   const PRODUCTION_DEPLOYMENT_LABELS = Object.assign(
     { no: "No", yes: "Yes" },
@@ -2449,6 +2459,7 @@
 
     bindEvents();
     getMobileFilters()?.applyAfterRender(wasOpen);
+    applyStaleCatalogNotice();
   }
 
   function linkedWalletSearchTerms(item) {
@@ -2808,12 +2819,38 @@
   // same-origin REST /catalog. The REST endpoint is also used when GitHub
   // returns an empty set (e.g. a local site with no published git data yet).
   async function loadUseCases() {
+    const ui = window.FidesCatalogUI;
+    const restUrl = apiBase ? `${apiBase}/catalog` : "";
+    if (ui && typeof ui.loadCatalogAggregatedJson === "function" && (aggregatedUrl || restUrl)) {
+      const loaded = await ui.loadCatalogAggregatedJson({
+        remoteUrl: aggregatedUrl,
+        cacheUrl: String(config.cacheDataUrl || "").trim(),
+        localUrl: restUrl
+      });
+      catalogLoadMeta.showStaleNotice = !!loaded.showStaleNotice;
+      catalogLoadMeta.remoteFailed = !!loaded.remoteFailed;
+      catalogLoadMeta.snapshotDate = loaded.snapshotDate || "";
+      if (loaded.ok && loaded.data) {
+        if (Array.isArray(loaded.data.useCases) && loaded.data.useCases.length > 0) {
+          return loaded.data.useCases;
+        }
+        if (Array.isArray(loaded.data) && loaded.data.length > 0) {
+          return loaded.data;
+        }
+      }
+      if (aggregatedUrl && restUrl && loaded.source === "github") {
+        return fetchUseCases(restUrl);
+      }
+      return [];
+    }
     if (aggregatedUrl) {
       try {
         const items = await fetchUseCases(aggregatedUrl, { cache: "no-cache" });
         if (items.length > 0) return items;
       } catch (githubError) {
         console.warn("Use case GitHub source unavailable, falling back to REST:", githubError.message);
+        catalogLoadMeta.showStaleNotice = true;
+        catalogLoadMeta.remoteFailed = true;
       }
     }
     if (apiBase) {
@@ -2851,6 +2888,8 @@
         ssrFallback.removeAttribute("aria-hidden");
         const spinner = root.querySelector('[data-fides-ssr-spinner="1"]');
         if (spinner) spinner.remove();
+        catalogLoadMeta.showStaleNotice = catalogLoadMeta.remoteFailed;
+        applyStaleCatalogNotice();
         return;
       }
       root.innerHTML = '<p class="fides-form-message is-error">Could not load catalog data.</p>';

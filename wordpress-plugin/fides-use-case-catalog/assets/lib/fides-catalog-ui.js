@@ -133,7 +133,8 @@
     apple: '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>',
     playStore: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.198l2.807 1.626a1 1 0 0 1 0 1.73l-2.808 1.626L15.206 12l2.492-2.491zM5.864 2.658L16.8 9.99l-2.302 2.302-8.634-8.634z"/></svg>',
     globeApp: '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>',
-    useCases: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>'
+    useCases: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg>',
+    alert: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>'
   };
 
   let currentModalMediaSlides = [];
@@ -3419,6 +3420,317 @@
     if (vocabularyOverlay) attachModalRating(vocabularyOverlay, 'vocabulary', term.id, options || {}, term);
   }
 
+  var CATALOG_SOURCE_TIMEOUT_MS = 4000;
+  var OUTAGE_CACHE_NAME = 'fides-catalog-outage-v1';
+  var OUTAGE_CACHE_MAX_AGE_MS = 12 * 60 * 60 * 1000;
+  var OUTAGE_CACHE_STORAGE_PREFIX = 'fides-catalog-outage:';
+
+  function isFidesLocalDevHost() {
+    try {
+      var host = window.location.hostname || '';
+      var href = window.location.href || '';
+      return host.indexOf('.local') !== -1 || href.indexOf('.local') !== -1;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function latestSnapshotDate(data) {
+    if (!data || typeof data !== 'object') return '';
+    var latest = '';
+    Object.keys(data).forEach(function (key) {
+      var value = data[key];
+      if (!Array.isArray(value)) return;
+      value.forEach(function (item) {
+        if (!item || typeof item !== 'object') return;
+        var stamp = item.fetchedAt || '';
+        if (stamp && String(stamp) > latest) latest = String(stamp);
+      });
+    });
+    return latest;
+  }
+
+  function formatSnapshotDate(value) {
+    if (!value) return '';
+    var date = new Date(value);
+    if (isNaN(date.getTime())) return '';
+    try {
+      return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+    } catch (err) {
+      return date.toISOString().slice(0, 10);
+    }
+  }
+
+  function fetchJsonWithTimeout(url, timeoutMs) {
+    timeoutMs = timeoutMs == null ? CATALOG_SOURCE_TIMEOUT_MS : Number(timeoutMs);
+    if (!url) {
+      return Promise.resolve({ ok: false, reason: 'empty url' });
+    }
+    var controller = new AbortController();
+    var timer = setTimeout(function () {
+      controller.abort();
+    }, timeoutMs);
+    return fetch(url, { signal: controller.signal })
+      .then(function (res) {
+        if (!res.ok) return { ok: false, reason: 'HTTP ' + res.status };
+        return res.json().then(function (data) {
+          return { ok: true, data: data };
+        });
+      })
+      .catch(function (err) {
+        var timedOut = err && err.name === 'AbortError';
+        return {
+          ok: false,
+          reason: timedOut ? ('timeout ' + timeoutMs + 'ms') : ((err && err.message) || 'network error')
+        };
+      })
+      .then(function (result) {
+        clearTimeout(timer);
+        return result;
+      });
+  }
+
+  function emptyCatalogLoadResult(reason, remoteFailed) {
+    return {
+      ok: false,
+      data: null,
+      source: null,
+      showStaleNotice: false,
+      remoteFailed: !!remoteFailed,
+      snapshotDate: '',
+      reason: reason || 'all sources failed'
+    };
+  }
+
+  function rememberGithubOutageCache(url, data) {
+    if (!url || !data) return;
+    var wrapper;
+    try {
+      wrapper = JSON.stringify({ cachedAt: Date.now(), payload: data });
+    } catch (err) {
+      return;
+    }
+    if (typeof caches !== 'undefined') {
+      try {
+        caches.open(OUTAGE_CACHE_NAME).then(function (cache) {
+          return cache.put(url, new Response(wrapper, {
+            headers: { 'Content-Type': 'application/json' }
+          }));
+        }).catch(function () {});
+        return;
+      } catch (err) {}
+    }
+    try {
+      if (window.localStorage) {
+        localStorage.setItem(OUTAGE_CACHE_STORAGE_PREFIX + url, wrapper);
+      }
+    } catch (err) {}
+  }
+
+  function parseOutageCacheWrapper(wrapper) {
+    if (!wrapper || !wrapper.payload) return null;
+    return {
+      data: wrapper.payload,
+      age: Date.now() - Number(wrapper.cachedAt || 0)
+    };
+  }
+
+  function readGithubOutageCache(url) {
+    if (!url) return Promise.resolve(null);
+    var fromStorage = function () {
+      try {
+        if (!window.localStorage) return null;
+        var raw = localStorage.getItem(OUTAGE_CACHE_STORAGE_PREFIX + url);
+        return raw ? parseOutageCacheWrapper(JSON.parse(raw)) : null;
+      } catch (err) {
+        return null;
+      }
+    };
+    if (typeof caches === 'undefined') {
+      return Promise.resolve(fromStorage());
+    }
+    return caches.open(OUTAGE_CACHE_NAME)
+      .then(function (cache) { return cache.match(url); })
+      .then(function (response) {
+        if (!response) return fromStorage();
+        return response.json().then(function (wrapper) {
+          return parseOutageCacheWrapper(wrapper) || fromStorage();
+        });
+      })
+      .catch(function () { return fromStorage(); });
+  }
+
+  function catalogCollectionSize(data) {
+    if (!data || typeof data !== 'object') return 0;
+    var keys = [
+      'wallets', 'relyingParties', 'issuers', 'organizations',
+      'credentials', 'useCases', 'profiles', 'terms'
+    ];
+    var max = 0;
+    for (var i = 0; i < keys.length; i++) {
+      var value = data[keys[i]];
+      if (Array.isArray(value) && value.length > max) max = value.length;
+    }
+    return max;
+  }
+
+  function isUsableCatalogPayload(data) {
+    return catalogCollectionSize(data) > 0;
+  }
+
+  /**
+   * Load aggregated JSON: GitHub/raw first, then 12h browser cache, then
+   * same-origin WP last-known-good, then local/plugin snapshot.
+   * On *.local hosts local is tried first and no stale notice is shown.
+   * Empty collections (e.g. upstream wipe) are skipped so a later source can win.
+   */
+  function loadCatalogAggregatedJson(options) {
+    options = options || {};
+    var remoteUrl = String(options.remoteUrl || '').trim();
+    var cacheUrl = String(options.cacheUrl || '').trim();
+    var localUrl = String(options.localUrl || '').trim();
+    var timeoutMs = options.timeoutMs == null ? CATALOG_SOURCE_TIMEOUT_MS : options.timeoutMs;
+    var preferLocal = options.preferLocal;
+    if (preferLocal == null) preferLocal = isFidesLocalDevHost();
+
+    var remote = remoteUrl ? { url: remoteUrl, source: 'github' } : null;
+    var cache = cacheUrl ? { url: cacheUrl, source: 'cache' } : null;
+    var local = localUrl ? { url: localUrl, source: 'local' } : null;
+    var order = (preferLocal ? [local, remote, cache] : [remote, cache, local]).filter(Boolean);
+    var remoteFailed = false;
+
+    function successResult(data, source) {
+      if ((source === 'github' || source === 'cache') && remoteUrl) {
+        rememberGithubOutageCache(remoteUrl, data);
+      }
+      var usedFallback = !preferLocal && remoteFailed && source !== 'github';
+      return {
+        ok: true,
+        data: data,
+        source: source,
+        showStaleNotice: usedFallback,
+        remoteFailed: remoteFailed,
+        snapshotDate: latestSnapshotDate(data),
+        reason: null
+      };
+    }
+
+    function tryExpiredBrowserCache() {
+      return readGithubOutageCache(remoteUrl).then(function (cached) {
+        if (cached && cached.data && isUsableCatalogPayload(cached.data)) {
+          return successResult(cached.data, 'cache');
+        }
+        return emptyCatalogLoadResult('all sources failed', remoteFailed);
+      });
+    }
+
+    function tryNext(index) {
+      if (index >= order.length) {
+        return tryExpiredBrowserCache();
+      }
+      var item = order[index];
+      return fetchJsonWithTimeout(item.url, timeoutMs).then(function (result) {
+        if (result.ok && result.data && isUsableCatalogPayload(result.data)) {
+          return successResult(result.data, item.source);
+        }
+        if (item.source === 'github') {
+          remoteFailed = true;
+          return readGithubOutageCache(remoteUrl).then(function (cached) {
+            if (cached && cached.data && isUsableCatalogPayload(cached.data) &&
+                cached.age <= OUTAGE_CACHE_MAX_AGE_MS) {
+              return successResult(cached.data, 'cache');
+            }
+            return tryNext(index + 1);
+          });
+        }
+        return tryNext(index + 1);
+      });
+    }
+
+    return tryNext(0);
+  }
+
+  function staleNoticeStorageKey(catalogType) {
+    return 'fides-stale-catalog-notice:' + (catalogType || 'catalog');
+  }
+
+  function isStaleNoticeDismissed(catalogType) {
+    try {
+      return sessionStorage.getItem(staleNoticeStorageKey(catalogType)) === '1';
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function dismissStaleNotice(catalogType) {
+    try {
+      sessionStorage.setItem(staleNoticeStorageKey(catalogType), '1');
+    } catch (err) {
+      /* ignore quota / private mode */
+    }
+  }
+
+  /**
+   * Insert a dismissible stale-data banner after a catalog render.
+   * No-op when showStaleNotice is false, on dismissed session, or without a container.
+   */
+  function mountStaleCatalogNotice(container, options) {
+    options = options || {};
+    if (!container) return;
+    var existing = container.querySelector('[data-fides-stale-catalog-notice]');
+    if (!existing && container.previousElementSibling &&
+        container.previousElementSibling.getAttribute('data-fides-stale-catalog-notice')) {
+      existing = container.previousElementSibling;
+    }
+    if (!options.showStaleNotice) {
+      if (existing) existing.remove();
+      return;
+    }
+    var catalogType = options.catalogType || 'catalog';
+    if (isStaleNoticeDismissed(catalogType)) {
+      if (existing) existing.remove();
+      return;
+    }
+    if (existing) return;
+
+    var snapshotLabel = formatSnapshotDate(options.snapshotDate);
+    var message = snapshotLabel
+      ? 'Live catalog data is temporarily unavailable. Showing a snapshot from ' + snapshotLabel + '.'
+      : 'Live catalog data is temporarily unavailable. This list may not include the latest entries.';
+
+    var banner = document.createElement('div');
+    banner.className = 'fides-stale-catalog-notice';
+    banner.setAttribute('data-fides-stale-catalog-notice', catalogType);
+    banner.setAttribute('role', 'status');
+    banner.innerHTML =
+      '<span class="fides-stale-catalog-notice-icon" aria-hidden="true">' + icons.alert + '</span>' +
+      '<p class="fides-stale-catalog-notice-text">' + escapeHtml(message) + '</p>' +
+      '<button type="button" class="fides-stale-catalog-notice-dismiss" aria-label="Dismiss">' +
+      icons.x + '</button>';
+
+    var dismissBtn = banner.querySelector('.fides-stale-catalog-notice-dismiss');
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', function () {
+        dismissStaleNotice(catalogType);
+        banner.remove();
+      });
+    }
+
+    var host = container.querySelector('.fides-main-content') ||
+      container.querySelector('.fides-content') ||
+      container.querySelector('.fides-interop-container') ||
+      container;
+    if (container.classList && container.classList.contains('fides-catalog-map') && container.parentNode) {
+      container.parentNode.insertBefore(banner, container);
+      return;
+    }
+    if (host === container) {
+      container.insertBefore(banner, container.firstChild);
+    } else {
+      host.insertBefore(banner, host.firstChild);
+    }
+  }
+
   window.FidesCatalogUI = {
     openWalletModal,
     openRpModal,
@@ -3426,6 +3738,11 @@
     openOrganizationModal,
     openVocabularyModal,
     closeModal,
+    isFidesLocalDevHost,
+    fetchJsonWithTimeout,
+    loadCatalogAggregatedJson,
+    mountStaleCatalogNotice,
+    CATALOG_SOURCE_TIMEOUT_MS,
     trackMatomoEvent,
     initMatomoLinkTracking,
     userCanEditCatalogItem,

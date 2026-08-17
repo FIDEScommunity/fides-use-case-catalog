@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.20.8
+ * Version: 0.20.10
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.8');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.10');
 /** Admin list page size for Tools → Use Case Submissions. */
 define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
@@ -2100,6 +2100,7 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             // (org-editable via pull request). REST /catalog (apiBase) is the
             // same-origin fallback for local/empty/unreachable situations.
             'aggregatedUrl' => esc_url_raw(fides_use_case_catalog_aggregated_url()),
+            'cacheDataUrl' => rest_url('fides-catalog/v1/aggregated/usecase'),
             'taxonomy' => fides_use_case_catalog_taxonomy_options(),
             'columns' => $columns,
             'productionDeploymentOptions' => fides_use_case_catalog_production_deployment_options(),
