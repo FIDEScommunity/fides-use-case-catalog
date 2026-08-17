@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-17T19:11:54+00:00",
+    "generatedAt": "2026-08-17T19:14:21+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -1729,7 +1729,7 @@
                     "organizationName": "AyanWorks Technology Solutions Pvt. Ltd.",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-17T19:08:17+01:00",
+                    "updatedAt": "2026-08-17T20:14:21+01:00",
                     "publishedAt": "2026-08-17T19:08:17+01:00",
                     "tags": [
                         "Digital Identity",
