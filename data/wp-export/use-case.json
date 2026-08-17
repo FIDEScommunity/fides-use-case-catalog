@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-17T08:40:39+00:00",
+    "generatedAt": "2026-08-17T08:55:42+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -4718,6 +4718,95 @@
                     },
                     "userJourney": "NIDP enrolls the citizen once, outside the wallet, issuing their Fayda ID. The citizen installs FaydaPass and authenticates via eSignet (Fayda ID + OTP/biometric); the wallet requests the Fayda Credential (Anchor) over OpenID4VCI, and NIDP issues it bound to the device key, establishing the wallet's root of trust and enabling login/TOTP. Sector institutions (MoE, EFDA, MoH, Civil Service Commission, MoA/ATI, NBE) issue credentials on top of the anchor when the citizen requests them, resolving identity against the Fayda ID each time; issuance is citizen-initiated, issuer-authorized. At service points, the citizen scans the relying party's QR, reviews requested attributes, and consents to share only those  license validity without the registration number, online or offline. The verifier checks the signature, issuer trust, and holder binding without contacting the issuer, confirming revocation via a status endpoint or cached list offline. For portals, the citizen authenticates by wallet login: it redirects to eSignet, approves with biometric/PIN, and the portal receives only consented claims, no password. Issuers keep credentials current by re-issuing them when facts change, flagging",
                     "country": "ET"
+                }
+            ]
+        },
+        {
+            "orgSlug": "natixar",
+            "orgId": "org:natixar",
+            "orgName": "NATIXAR",
+            "useCases": [
+                {
+                    "id": "recomputable-carbon-intensity-for-gold-dore-bars-hi7YCq",
+                    "sector": "trade",
+                    "title": "Recomputable carbon intensity for gold doré bars",
+                    "summary": "Gold leaves the mine as doré bars, and every buyer — refiner, trader, and soon every EU importer under CBAM — asks how much CO2 the bar embodies. Today the answer is a consultant's PDF: it can't be independently checked or partially disclosed.\r\n\r\nFor each doré bar we issue two SD-JWT verifiable credentials a third party can check without trusting the issuer: an origin credential (identity, mass, fineness, lot), self-issued by the mine (AGM, Aurora, Guyana) from a did:web on its own domain; and a carbon-intensity credential issued by Natixar (kgCO2e per kg fine gold), bound to it.\r\n\r\nThe holder discloses selectively — proving purity, mass or the carbon figure without revealing the site or commercial data. A public page resolves the issuer's key from its own domain, verifies the signature, the disclosed-data integrity and revocation status — no account, no call back to us. Tampered, revoked and replayed presentations are rejected.\r\n\r\nValue: a carbon figure that survives contradiction — the buyer checks it without trusting the calculator; the mine shows what a contract requires and no more.",
+                    "organizationName": "NATIXAR",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-17T09:55:42+01:00",
+                    "publishedAt": "2026-08-17T09:55:42+01:00",
+                    "tags": [
+                        "gold",
+                        "doré",
+                        "mining",
+                        "critical minerals",
+                        "carbon accounting",
+                        "carbon intensity",
+                        "CBAM",
+                        "supply chain traceability",
+                        "provenance",
+                        "verifiable credentials",
+                        "SD-JWT VC",
+                        "did:web",
+                        "selective disclosure",
+                        "ESG",
+                        "responsible sourcing"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "NATIXAR",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "ZIJING",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "HAIP v1"
+                    ],
+                    "themes": [
+                        "compliance_reporting",
+                        "trade_documents"
+                    ],
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/aL_4Qiu07wc",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/aL_4Qiu07wc",
+                        "provider": "youtube"
+                    },
+                    "userJourney": "•\t1. The mine’s operator signs in; a non-extractable key is generated in the browser; its public half is published in a did:web on the mine’s domain (append-only).\r\n•\t2. The mine self-issues the origin credential (SD-JWT VC) for a bar, from the bar’s own screen.\r\n•\t3. The mine requests the carbon certificate; Natixar’s signing service issues the CarbonIntensityCredential (SD-JWT VC), bound to the origin credential [re-computing from a signed extraction, if the matrix is built].\r\n•\t4. The credential is held in the OpenWallet-based business wallet.\r\n•\t5. The holder presents via QR, disclosing selected fields only (SD-JWT selective disclosure).\r\n•\t6. The verifier checks on a public page — DID resolution, signature, disclosed-data integrity, revocation status — no account, no call to Natixar. Tampered / revoked / replayed presentations are rejected.",
+                    "country": "FR"
                 }
             ]
         },
