@@ -1,10 +1,245 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-17T09:14:07.120Z",
+  "lastUpdated": "2026-08-17T12:47:31.553Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 61,
   "useCases": [
+    {
+      "id": "credebl-an-open-source-digital-trust-infrastructure-enabling-trusted-digital-ecosystems-AWG8qU",
+      "sector": "public_sector",
+      "title": "CREDEBL: An Open-Source Digital Trust Infrastructure Enabling Trusted Digital Ecosystems",
+      "summary": "CREDEBL is an open-source Digital Public Good contributed by AYANWORKS under LFDT.\n\nA. Bhutan NDI:\nBhutan NDI, led by Druk Holding &amp; Investments Limited (DHI), enables citizens to receive, store &amp; share digital credentials. Bhutan faced long travel distances, paper identity, manual verification &amp; limited interoperability. Bhutan NDI adopted CREDEBL as its foundational layer for National Digital Identity Foundational Credentials &amp; Verifiable Credentials. Citizens use digital wallets to share required information with consent, while service providers verify credentials. Built on W3C and OpenID4VC standards, CREDEBL enables interoperable, privacy-preserving trust. Bhutan NDI serves 525000+ users.\n\nB. Digi Yatra:\nDigi Yatra Foundation’s IATA Contactless Travel PoC with IndiGo, SITA &amp; BLR Airport demonstrated International e-Passport Digital Travel Credentials on CREDEBL. Digi Yatra enables paperless airport travel using digital identity. CREDEBL provides the foundational layer for secure issuance, sharing &amp; verification, ensuring privacy, cryptographic trust and global interoperability. The PoC aligned with IATA standards &amp; produced the first International e-Passport credential holder.",
+      "organizationName": "AyanWorks Technology Solutions Pvt. Ltd.",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-17T13:47:07+01:00",
+      "publishedAt": "2026-08-17T13:47:07+01:00",
+      "tags": [
+        "Digital Identity",
+        "National Digital Identity",
+        "Digital Trust",
+        "Verifiable Credentials",
+        "Decentralized Identity",
+        "W3C Verifiable Credentials",
+        "W3C DID",
+        "OpenID4VC",
+        "DIDComm",
+        "Digital Wallet",
+        "Government",
+        "Digital Public Infrastructure",
+        "Citizen Services",
+        "Privacy",
+        "Interoperability",
+        "Open Standards",
+        "Trust Infrastructure",
+        "Reusable Credentials",
+        "Self-Sovereign Identity",
+        "CREDEBL",
+        "Self Sovereign Identity",
+        "Travel Tech",
+        "Seamless Travel"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "bhutan-ndi-mobile-wallet",
+            "labelRaw": "Bhutan NDI Mobile Wallet",
+            "url": "https://bhutanndi.com/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "digiyatra",
+            "labelRaw": "DigiYatra",
+            "url": "https://www.digiyatra.org/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credebl-organizational-wallet",
+            "labelRaw": "CREDEBL",
+            "url": "https://credebl.id",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bhutan NDI",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": "organizational"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Digi Yatra Foundation",
+            "url": "https://digiyatrafoundation.com",
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Bhutan NDI",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Royal Government of Bhutan",
+            "url": "https://www.citizenservices.gov.bt/g2cportal/ListOfLifeEventComponent",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Digi Yatra Foundation",
+            "url": "https://digiyatrafoundation.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "labelRaw": "Aadhaar Verifiable Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
+            "labelRaw": "Boarding Pass (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "National Digital Identity",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Permanent Address",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:buthan",
+            "labelRaw": "Bhutan Government",
+            "url": "https://bhutanndi.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:ayanworks",
+            "labelRaw": "AyanWorks Technology Solutions Pvt. Ltd.",
+            "url": "https://credebl.id",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:digiyatra",
+            "labelRaw": "DigiYatra Foundation",
+            "url": "https://www.digiyatra.org/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:iata",
+            "labelRaw": "International Air Transport Association",
+            "url": "https://www.iata.org",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:indigo",
+            "labelRaw": "IndiGo",
+            "url": "https://www.goindigo.in",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bengaluru-international-airport",
+            "labelRaw": "Bengaluru International Airport",
+            "url": "https://www.bengaluruairport.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bhutan-ndi",
+            "labelRaw": "Bhutan NDI",
+            "url": "https://bhutanndi.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "KYC with Photo ID",
+            "url": "https://digiyatrafoundation.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "KYC",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "anoncreds",
+        "mdoc",
+        "jwt_vc",
+        "sd_jwt_vc",
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2",
+        "ISO 18013-5",
+        "ISO 18013-7",
+        "OpenID4VP",
+        "SIOPv2"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/FIDES-Award-Usecase-image.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/FIDES-Award-Usecase-image.png",
+      "moreInfoUrl": "https://credebl.id/",
+      "userJourney": "A. Bhutan National Digital Identity (NDI)\nCitizens complete onboarding and verification through Bhutan NDI. Foundational credentials are issued.\nTrusted organizations issue Verifiable Credentials through CREDEBL, stored in the citizen’s digital wallet.\nFor a service, the provider requests required information. The citizen approves sharing in the wallet.\nThe provider cryptographically verifies the credential, removing manual checks.\nCredentials enable faster services and reuse across government and private services.\nB. Digi Yatra International Digital Travel Credential\nThe traveller verifies identity through the Digi Yatra App. An International e-Passport Digital Travel Credential is issued using VC standards.\nThe traveller manages it in the App. CREDEBL is the core backend layer for secure issuance, sharing and verification, ensuring privacy, trust and global interoperability.\nAirlines, airports and partners request required identity information.\nThe traveller approves sharing in the App. Credentials are cryptographically verified without centralized storage.\nThe PoC demonstrated IATA alignment and globally interoperable travel credentials.",
+      "country": "IN"
+    },
     {
       "id": "verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J",
       "sector": "digital",
@@ -3111,241 +3346,6 @@
       "moreInfoUrl": "https://www.credenco.com/case/establish-new-company",
       "userJourney": "1. The notary drafts the deed of incorporation, signs it cryptographically and issues it as a verifiable credential into the company's Credenco Business Wallet (OpenID4VCI).\n\n2. KVK reads the deed credential, registers the company the same day and issues the KVK Registration Extract (incl. LPID and UBO data) as a credential.\n\n3. The Belastingdienst reads the KVK extract and issues the VAT number / tax compliance credential.\n\n4. The bank reads all three credentials, opens the business account and issues an IBAN attestation.\n\n5. From then on, supplier onboarding is trivial: a procurement platform requests KVK, tax, VAT, IBAN and insurance credentials in a single flow (OpenID4VP). The supplier shares them in one tap from the Business Wallet, and the platform verifies the issuers' signatures in real time.\n\n6. Result: one source document, multiple readers, instant trust — six weeks becomes one day, and onboarding checks run without PDFs, email or manual review.",
       "country": "NL"
-    },
-    {
-      "id": "credebl-an-open-source-digital-trust-infrastructure-enabling-trusted-digital-ecosystems-AWG8qU",
-      "sector": "public_sector",
-      "title": "CREDEBL: An Open-Source Digital Trust Infrastructure Enabling Trusted Digital Ecosystems",
-      "summary": "CREDEBL is an open-source Digital Public Good contributed by AYANWORKS under LFDT.\n\nA. Bhutan NDI:\nBhutan NDI, led by Druk Holding &amp; Investments Limited (DHI), enables citizens to receive, store &amp; share digital credentials. Bhutan faced long travel distances, paper identity, manual verification &amp; limited interoperability. Bhutan NDI adopted CREDEBL as its foundational layer for National Digital Identity Foundational Credentials &amp; Verifiable Credentials. Citizens use digital wallets to share required information with consent, while service providers verify credentials. Built on W3C and OpenID4VC standards, CREDEBL enables interoperable, privacy-preserving trust. Bhutan NDI serves 525000+ users.\n\nB. Digi Yatra:\nDigi Yatra Foundation’s IATA Contactless Travel PoC with IndiGo, SITA &amp; BLR Airport demonstrated International e-Passport Digital Travel Credentials on CREDEBL. Digi Yatra enables paperless airport travel using digital identity. CREDEBL provides the foundational layer for secure issuance, sharing &amp; verification, ensuring privacy, cryptographic trust and global interoperability. The PoC aligned with IATA standards &amp; produced the first International e-Passport credential holder.",
-      "organizationName": "AyanWorks Technology Solutions Pvt. Ltd.",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-13T10:56:44+01:00",
-      "publishedAt": "2026-08-13T10:56:44+01:00",
-      "tags": [
-        "Digital Identity",
-        "National Digital Identity",
-        "Digital Trust",
-        "Verifiable Credentials",
-        "Decentralized Identity",
-        "W3C Verifiable Credentials",
-        "W3C DID",
-        "OpenID4VC",
-        "DIDComm",
-        "Digital Wallet",
-        "Government",
-        "Digital Public Infrastructure",
-        "Citizen Services",
-        "Privacy",
-        "Interoperability",
-        "Open Standards",
-        "Trust Infrastructure",
-        "Reusable Credentials",
-        "Self-Sovereign Identity",
-        "CREDEBL",
-        "Self Sovereign Identity",
-        "Travel Tech",
-        "Seamless Travel"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "bhutan-ndi-mobile-wallet",
-            "labelRaw": "Bhutan NDI Mobile Wallet",
-            "url": "https://bhutanndi.com/",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "digiyatra",
-            "labelRaw": "DigiYatra",
-            "url": "https://www.digiyatra.org/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "credebl-organizational-wallet",
-            "labelRaw": "CREDEBL",
-            "url": "https://credebl.id",
-            "source": "catalog",
-            "walletType": "organizational"
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bhutan NDI",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": "organizational"
-          },
-          {
-            "refId": null,
-            "labelRaw": "Digi Yatra Foundation",
-            "url": "https://digiyatrafoundation.com",
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Bhutan NDI",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Royal Government of Bhutan",
-            "url": "https://www.citizenservices.gov.bt/g2cportal/ListOfLifeEventComponent",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Digi Yatra Foundation",
-            "url": "https://digiyatrafoundation.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
-            "labelRaw": "Aadhaar Verifiable Credential",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
-            "labelRaw": "Boarding Pass (MSO Mdoc)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "National Digital Identity",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Permanent Address",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:buthan",
-            "labelRaw": "Bhutan Government",
-            "url": "https://bhutanndi.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:ayanworks",
-            "labelRaw": "AyanWorks Technology Solutions Pvt. Ltd.",
-            "url": "https://credebl.id",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:digiyatra",
-            "labelRaw": "DigiYatra Foundation",
-            "url": "https://www.digiyatra.org/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:iata",
-            "labelRaw": "International Air Transport Association",
-            "url": "https://www.iata.org",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:indigo",
-            "labelRaw": "IndiGo",
-            "url": "https://www.goindigo.in",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:bengaluru-international-airport",
-            "labelRaw": "Bengaluru International Airport",
-            "url": "https://www.bengaluruairport.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:bhutan-ndi",
-            "labelRaw": "Bhutan NDI",
-            "url": "https://bhutanndi.com",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "KYC with Photo ID",
-            "url": "https://digiyatrafoundation.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "KYC",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "proximity",
-        "remote"
-      ],
-      "vcFormats": [
-        "anoncreds",
-        "mdoc",
-        "jwt_vc",
-        "sd_jwt_vc",
-        "vcdm_1_1",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci",
-        "other"
-      ],
-      "presentationProtocols": [
-        "DIDComm v2",
-        "ISO 18013-5",
-        "ISO 18013-7",
-        "OpenID4VP",
-        "SIOPv2"
-      ],
-      "interopProfiles": [
-        "DIIP v4",
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "person_identity"
-      ],
-      "imageUrls": [
-        "https://credebl.id/"
-      ],
-      "imageUrl": "https://credebl.id/",
-      "moreInfoUrl": "https://credebl.id/",
-      "userJourney": "A. Bhutan National Digital Identity (NDI)\nCitizens complete onboarding and verification through Bhutan NDI. Foundational credentials are issued.\nTrusted organizations issue Verifiable Credentials through CREDEBL, stored in the citizen’s digital wallet.\nFor a service, the provider requests required information. The citizen approves sharing in the wallet.\nThe provider cryptographically verifies the credential, removing manual checks.\nCredentials enable faster services and reuse across government and private services.\nB. Digi Yatra International Digital Travel Credential\nThe traveller verifies identity through the Digi Yatra App. An International e-Passport Digital Travel Credential is issued using VC standards.\nThe traveller manages it in the App. CREDEBL is the core backend layer for secure issuance, sharing and verification, ensuring privacy, trust and global interoperability.\nAirlines, airports and partners request required identity information.\nThe traveller approves sharing in the App. Credentials are cryptographically verified without centralized storage.\nThe PoC demonstrated IATA alignment and globally interoperable travel credentials.",
-      "country": "IN"
     },
     {
       "id": "portable-volunteer-credentials-turning-fragmented-volunteer-records-into-trusted-learner-owned-proof-with-a-neutral-t-oAVKbU",

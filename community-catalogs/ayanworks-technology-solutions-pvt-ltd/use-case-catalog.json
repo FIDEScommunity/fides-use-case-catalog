@@ -12,8 +12,8 @@
       "organizationName": "AyanWorks Technology Solutions Pvt. Ltd.",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-13T10:56:44+01:00",
-      "publishedAt": "2026-08-13T10:56:44+01:00",
+      "updatedAt": "2026-08-17T13:47:07+01:00",
+      "publishedAt": "2026-08-17T13:47:07+01:00",
       "tags": [
         "Digital Identity",
         "National Digital Identity",
@@ -232,9 +232,9 @@
         "person_identity"
       ],
       "imageUrls": [
-        "https://credebl.id/"
+        "https://fides.community/app/uploads/2026/08/FIDES-Award-Usecase-image.png"
       ],
-      "imageUrl": "https://credebl.id/",
+      "imageUrl": "https://fides.community/app/uploads/2026/08/FIDES-Award-Usecase-image.png",
       "moreInfoUrl": "https://credebl.id/",
       "userJourney": "A. Bhutan National Digital Identity (NDI)\nCitizens complete onboarding and verification through Bhutan NDI. Foundational credentials are issued.\nTrusted organizations issue Verifiable Credentials through CREDEBL, stored in the citizen’s digital wallet.\nFor a service, the provider requests required information. The citizen approves sharing in the wallet.\nThe provider cryptographically verifies the credential, removing manual checks.\nCredentials enable faster services and reuse across government and private services.\nB. Digi Yatra International Digital Travel Credential\nThe traveller verifies identity through the Digi Yatra App. An International e-Passport Digital Travel Credential is issued using VC standards.\nThe traveller manages it in the App. CREDEBL is the core backend layer for secure issuance, sharing and verification, ensuring privacy, trust and global interoperability.\nAirlines, airports and partners request required identity information.\nThe traveller approves sharing in the App. Credentials are cryptographically verified without centralized storage.\nThe PoC demonstrated IATA alignment and globally interoperable travel credentials.",
       "country": "IN"
