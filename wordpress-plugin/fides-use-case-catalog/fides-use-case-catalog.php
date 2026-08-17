@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.20.10
+ * Version: 0.20.16
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.10');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.16');
 /** Admin list page size for Tools → Use Case Submissions. */
 define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
@@ -3144,7 +3144,7 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
     }
 
     $title = sanitize_text_field((string) wp_unslash($_POST['title'] ?? ''));
-    $summary = trim(wp_kses_post((string) wp_unslash($_POST['summary'] ?? '')));
+    $summary = fides_use_case_catalog_normalize_multiline_text((string) wp_unslash($_POST['summary'] ?? ''));
     $sector = fides_use_case_catalog_normalize_sector(wp_unslash($_POST['sector'] ?? ($_POST['sectors'] ?? '')));
     $themes = fides_use_case_catalog_normalize_themes(wp_unslash($_POST['themes'] ?? array()));
     $taxonomy = fides_use_case_catalog_normalize_taxonomy_payload(
@@ -3163,7 +3163,7 @@ function fides_use_case_catalog_handle_save_submission_action(): void {
     $image_urls_text = isset($_POST['image_urls']) ? (string) wp_unslash($_POST['image_urls']) : '';
     $video_urls_text = isset($_POST['video_urls']) ? (string) wp_unslash($_POST['video_urls']) : '';
     $more_info_url = esc_url_raw((string) wp_unslash($_POST['more_info_url'] ?? ''));
-    $user_journey = trim(wp_kses_post((string) wp_unslash($_POST['user_journey'] ?? '')));
+    $user_journey = fides_use_case_catalog_normalize_multiline_text((string) wp_unslash($_POST['user_journey'] ?? ''));
     $tags_raw = sanitize_text_field((string) wp_unslash($_POST['tags'] ?? ''));
 
     if (

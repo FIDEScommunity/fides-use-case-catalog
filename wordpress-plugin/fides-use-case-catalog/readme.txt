@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.10
+Stable tag: 0.20.16
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,28 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.16 =
+* Keep the ecosystem explanation above the catalog flow at every viewport
+  width.
+
+= 0.20.15 =
+* Give the ecosystem connection block more desktop separation from the theme
+  grid (spacing, accent edge, soft gradient) so it reads like the mobile layout.
+
+= 0.20.14 =
+* Spell out the discovery KPI as Involved organisations.
+
+= 0.20.13 =
+* Store submission summary and How it works as plain text so ampersands are not
+  double-escaped as &amp; in the catalog modal.
+
+= 0.20.12 =
+* Place the At a glance KPIs above the theme grid on all screen sizes.
+
+= 0.20.11 =
+* Rename the Business & Authority theme to Business & Mandates and label the
+  discovery KPI as Involved orgs.
 
 = 0.20.10 =
 * After GitHub fails, use a 12-hour browser cache and the WP last-known-good aggregated feed before the bundled plugin snapshot.

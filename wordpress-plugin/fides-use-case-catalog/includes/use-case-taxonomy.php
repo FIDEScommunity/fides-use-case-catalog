@@ -252,10 +252,15 @@ function fides_use_case_catalog_normalize_sector($value): string {
  *
  * Collapses Windows/Mac line endings to LF so textarea round-trips do not
  * register as content changes when the visible text is unchanged.
+ *
+ * Stored as plain text: the catalog UI escapes on render (escapeHtml). Do not
+ * use wp_kses_post here — it turns "&" into "&amp;" and the UI then shows
+ * the literal entity. html_entity_decode repairs already-stored entities.
  */
 function fides_use_case_catalog_normalize_multiline_text(string $text): string {
     $text = str_replace(array("\r\n", "\r"), "\n", $text);
-    return trim(wp_kses_post($text));
+    $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    return trim(sanitize_textarea_field($text));
 }
 
 /**

@@ -10,8 +10,8 @@
     },
     {
       "code": "business_authority",
-      "title": "Business & Authority",
-      "description": "Organizational identity, roles and representation",
+      "title": "Business & Mandates",
+      "description": "Organizational identity, mandates and representation",
       "icon": "business",
       "themeCodes": ["organizational_identity"]
     },
