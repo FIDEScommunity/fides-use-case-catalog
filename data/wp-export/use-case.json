@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-17T08:55:42+00:00",
+    "generatedAt": "2026-08-17T09:13:49+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6882,8 +6882,8 @@
                     "organizationName": "validant.ai",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-17T09:40:38+01:00",
-                    "publishedAt": "2026-08-17T09:40:38+01:00",
+                    "updatedAt": "2026-08-17T10:13:49+01:00",
+                    "publishedAt": "2026-08-17T10:13:49+01:00",
                     "tags": [
                         "ai-fairness",
                         "ai-act",
@@ -6991,11 +6991,11 @@
                         "agentic_ai"
                     ],
                     "imageUrls": [
-                        "https://fides.community/app/uploads/2026/08/validant_ai.jpeg"
+                        "https://fides.community/app/uploads/2026/08/validant_ai_cover.jpg"
                     ],
-                    "imageUrl": "https://fides.community/app/uploads/2026/08/validant_ai.jpeg",
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/validant_ai_cover.jpg",
                     "moreInfoUrl": "https://validant.ai",
-                    "userJourney": "1. An employer runs its CV-screening AI through validant.ai, self-service or commissioned, against a named, legally grounded fairness rule.\r\n2. The engine computes and signs the metrics (Ed25519) with the CI method, multiplicity correction and minimum detectable effect.\r\n3. validant.ai verifies the signature and derives the verdict itself; unsigned metrics are refused. A pass is earned, not claimed.\r\n4. The Fairness Seal is issued as an SD-JWT VC (ES256, did:web:validant.ai): system, owner, LEI, metric, threshold, result, status pointer.\r\n5. It arrives via OpenID4VCI in the employer's wallet; swiyu confirms the issuer.\r\n6. The AI rejects Maria; the rejection email carries the seal as a scannable code.\r\n7. She also gets a key-bound Decision Receipt in her swiyu wallet: which system decided, that its seal was valid, the decisive factors, and the smallest change that would have flipped it.\r\n8. She presents it selectively over OpenID4VP to an ombuds office, which re-verifies the seal.\r\n9. Anyone can verify a seal at validant.ai/verify, no login, in-browser, public key and status list.\r\n10. If the assessment is invalidated, the seal is revoked and every check reads Revoked within seconds.",
+                    "userJourney": "1. An employer runs its CV-screening AI through validant.ai, self-service or commissioned, against a named, legally grounded fairness rule.\n2. The engine computes and signs the metrics (Ed25519) with the CI method, multiplicity correction and minimum detectable effect.\n3. validant.ai verifies the signature and derives the verdict itself; unsigned metrics are refused. A pass is earned, not claimed.\n4. The Fairness Seal is issued as an SD-JWT VC (ES256, did:web:validant.ai): system, owner, LEI, metric, threshold, result, status pointer.\n5. It arrives via OpenID4VCI in the employer's wallet; swiyu confirms the issuer.\n6. The AI rejects Maria; the rejection email carries the seal as a scannable code.\n7. She also gets a key-bound Decision Receipt in her swiyu wallet: which system decided, that its seal was valid, the decisive factors, and the smallest change that would have flipped it.\n8. She presents it selectively over OpenID4VP to an ombuds office, which re-verifies the seal.\n9. Anyone can verify a seal at validant.ai/verify, no login, in-browser, public key and status list.\n10. If the assessment is invalidated, the seal is revoked and every check reads Revoked within seconds.",
                     "country": "CH"
                 }
             ]
