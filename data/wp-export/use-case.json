@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-17T19:11:13+00:00",
+    "generatedAt": "2026-08-17T19:11:54+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -116,10 +116,10 @@
                     "title": "Cryptographically Verifiable Digital Product Passports for EU Battery Regulation Compliance",
                     "summary": "European manufacturers must issue Digital Product Passports (EU Battery Regulation\n2023/1542, from 18 February 2027, with the ESPR extending this to further\ncategories). Today the data those passports need lives in unstructured PDF\ndatasheets, and manufacturers have no way to prove a downstream party has not\naltered the file after publication.\n\nAAS Studio turns a datasheet into a conformant Asset Administration Shell (IDTA,\nIEC 63278-1:2023), then issues a W3C Verifiable Credential (VCDM 2.0, JWT-VC, and\nan SD-JWT-VC variant with selective disclosure) committing to a canonical hash of\nthe passport content. The manufacturer is the issuer, signing with a tenant-scoped\nES256 key. Any verifier — regulator, recycler, supply-chain partner — checks the\ncredential against a public JWKS with no account and no call back to AAS Studio:\nverification is fully offline. Revocation is enforced via a Bitstring/Token Status\nList.",
                     "organizationName": "AAS-Studio",
-                    "productionDeployment": "yes",
+                    "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-11T21:51:26+01:00",
-                    "publishedAt": "2026-08-11T21:51:26+01:00",
+                    "updatedAt": "2026-08-17T20:11:53+01:00",
+                    "publishedAt": "2026-08-17T20:11:53+01:00",
                     "tags": [
                         "digital-product-passport",
                         "verifiable-credentials",
