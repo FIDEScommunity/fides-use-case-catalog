@@ -1,10 +1,954 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-17T15:07:07.963Z",
+  "lastUpdated": "2026-08-17T19:11:30.878Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 62,
   "useCases": [
+    {
+      "id": "verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J",
+      "sector": "digital",
+      "title": "Verifiable AI fairness: a seal for the system, a receipt for the person",
+      "summary": "When an AI screens a job application, scores a loan or decides a benefit, the person affected gets a decision and no way to check whether it was fair. validant.ai issues two verifiable credentials that close that gap from both ends. The AI Fairness Seal is a credential whose subject is the AI system itself: a measurement engine cryptographically signs the fairness metrics, our server derives the verdict from those signed numbers, and the audited party never gets to assert its own result. The Decision Receipt is the person’s own credential, held in their wallet, naming which system decided, that it held a valid seal at the time, and optionally what would have had to change for a different outcome. The person presents it selectively to a third party, such as an ombudsman's office or a labor authority, revealing only what she chooses to reveal. Anyone can check a seal at validant.ai/verify without logging in or having an account. It runs on the same rails as the Swiss e-ID: SD-JWT VC, did:web and did:webvh, ES256, OpenID4VCI and OpenID4VP, with revocation on an IETF Token Status List.",
+      "organizationName": "validant.ai",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-17T20:11:13+01:00",
+      "publishedAt": "2026-08-17T20:11:13+01:00",
+      "tags": [
+        "ai-fairness",
+        "ai-act",
+        "algorithmic-accountability",
+        "sd-jwt-vc",
+        "openid4vp",
+        "openid4vci",
+        "did-web",
+        "did-webvh",
+        "swiyu",
+        "selective-disclosure",
+        "token-status-list",
+        "verifiable-verdict",
+        "hiring",
+        "non-discrimination",
+        "switzerland"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "swiyu-wallet",
+            "labelRaw": "SWIYU Wallet",
+            "url": "https://www.swiyu.admin.ch/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": null,
+            "labelRaw": "SWIYU wallet",
+            "url": null,
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "validant.ai AI Fairness Seal Issuer",
+            "url": "https://issuer.validant.ai",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "AI Fairness Seal (SD-JWT VC)",
+            "url": "urn:validant:ai-fairness-seal:1",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Decision Receipt (SD-JWT VC)",
+            "url": "urn:validant:decision-receipt:1",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "validant.ai",
+            "url": "https://validant.ai/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "validant.ai public Trust Seal verifier",
+            "url": "https://validant.ai/verify",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "validant.ai Decision Receipt check",
+            "url": "https://verifier.validant.ai",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "HAIP v1"
+      ],
+      "themes": [
+        "compliance_reporting",
+        "agentic_ai"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/validant_ai_cover.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/validant_ai_cover.jpg",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=tFxGlNaGq98",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=tFxGlNaGq98",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://validant.ai/trust-seal",
+      "userJourney": "1. An employer runs its CV-screening AI through validant.ai, self-service or commissioned, against a named, legally grounded fairness rule.\n2. The engine computes and signs the metrics (Ed25519) with the CI method, multiplicity correction and minimum detectable effect.\n3. validant.ai verifies the signature and derives the verdict itself; unsigned metrics are refused. A pass is earned, not claimed.\n4. The Fairness Seal is issued as an SD-JWT VC (ES256, did:web:validant.ai): system, owner, LEI, metric, threshold, result, status pointer.\n5. It arrives via OpenID4VCI in the employer's wallet; swiyu confirms the issuer.\n6. The AI rejects Maria; the rejection email carries the seal as a scannable code.\n7. She also gets a key-bound Decision Receipt in her swiyu wallet: which system decided, that its seal was valid, the decisive factors, and the smallest change that would have flipped it.\n8. She presents it selectively over OpenID4VP to an ombuds office, which re-verifies the seal.\n9. Anyone can verify a seal at validant.ai/verify, no login, in-browser, public key and status list.\n10. If the assessment is invalidated, the seal is revoked and every check reads Revoked within seconds.",
+      "country": "CH"
+    },
+    {
+      "id": "credebl-an-open-source-digital-trust-infrastructure-enabling-trusted-digital-ecosystems-AWG8qU",
+      "sector": "public_sector",
+      "title": "CREDEBL: An Open-Source Digital Trust Infrastructure Enabling Trusted Digital Ecosystems",
+      "summary": "CREDEBL is an open-source Digital Public Good contributed by AYANWORKS under LFDT.\n\nA. Bhutan NDI:\nBhutan NDI, led by Druk Holding & Investments Limited (DHI), enables citizens to receive, store & share digital credentials. Bhutan faced long travel distances, paper identity, manual verification & limited interoperability. Bhutan NDI adopted CREDEBL as its foundational layer for National Digital Identity Foundational Credentials & Verifiable Credentials. Citizens use digital wallets to share required information with consent, while service providers verify credentials. Built on W3C and OpenID4VC standards, CREDEBL enables interoperable, privacy-preserving trust. Bhutan NDI serves 525000+ users.\n\nB. Digi Yatra:\nDigi Yatra Foundation’s IATA Contactless Travel PoC with IndiGo, SITA & BLR Airport demonstrated International e-Passport Digital Travel Credentials on CREDEBL. Digi Yatra enables paperless airport travel using digital identity. CREDEBL provides the foundational layer for secure issuance, sharing & verification, ensuring privacy, cryptographic trust and global interoperability. The PoC aligned with IATA standards & produced the first International e-Passport credential holder.",
+      "organizationName": "AyanWorks Technology Solutions Pvt. Ltd.",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-17T19:08:17+01:00",
+      "publishedAt": "2026-08-17T19:08:17+01:00",
+      "tags": [
+        "Digital Identity",
+        "National Digital Identity",
+        "Digital Trust",
+        "Verifiable Credentials",
+        "Decentralized Identity",
+        "W3C Verifiable Credentials",
+        "W3C DID",
+        "OpenID4VC",
+        "DIDComm",
+        "Digital Wallet",
+        "Government",
+        "Digital Public Infrastructure",
+        "Citizen Services",
+        "Privacy",
+        "Interoperability",
+        "Open Standards",
+        "Trust Infrastructure",
+        "Reusable Credentials",
+        "Self-Sovereign Identity",
+        "CREDEBL",
+        "Self Sovereign Identity",
+        "Travel Tech",
+        "Seamless Travel"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "bhutan-ndi-mobile-wallet",
+            "labelRaw": "Bhutan NDI Mobile Wallet",
+            "url": "https://bhutanndi.com/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "digiyatra",
+            "labelRaw": "DigiYatra",
+            "url": "https://www.digiyatra.org/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credebl-organizational-wallet",
+            "labelRaw": "CREDEBL",
+            "url": "https://credebl.id",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bhutan NDI",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": "organizational"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Digi Yatra Foundation",
+            "url": "https://digiyatrafoundation.com",
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Bhutan NDI",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Royal Government of Bhutan",
+            "url": "https://www.citizenservices.gov.bt/g2cportal/ListOfLifeEventComponent",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Digi Yatra Foundation",
+            "url": "https://digiyatrafoundation.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "labelRaw": "Aadhaar Verifiable Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
+            "labelRaw": "Boarding Pass (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "National Digital Identity",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Permanent Address",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:buthan",
+            "labelRaw": "Bhutan Government",
+            "url": "https://bhutanndi.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:ayanworks",
+            "labelRaw": "AyanWorks Technology Solutions Pvt. Ltd.",
+            "url": "https://credebl.id",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:digiyatra",
+            "labelRaw": "DigiYatra Foundation",
+            "url": "https://www.digiyatra.org/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:iata",
+            "labelRaw": "International Air Transport Association",
+            "url": "https://www.iata.org",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:indigo",
+            "labelRaw": "IndiGo",
+            "url": "https://www.goindigo.in",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bengaluru-international-airport",
+            "labelRaw": "Bengaluru International Airport",
+            "url": "https://www.bengaluruairport.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bhutan-ndi",
+            "labelRaw": "Bhutan NDI",
+            "url": "https://bhutanndi.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "KYC with Photo ID",
+            "url": "https://digiyatrafoundation.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "KYC",
+            "url": "https://bhutanndi.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "anoncreds",
+        "mdoc",
+        "jwt_vc",
+        "sd_jwt_vc",
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2",
+        "ISO 18013-5",
+        "ISO 18013-7",
+        "OpenID4VP",
+        "SIOPv2"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/FIDES-Award-Usecase-image.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/FIDES-Award-Usecase-image.png",
+      "moreInfoUrl": "https://credebl.id/",
+      "userJourney": "A. Bhutan National Digital Identity (NDI)\nCitizens complete onboarding and verification through Bhutan NDI. Foundational credentials are issued.\nTrusted organizations issue Verifiable Credentials through CREDEBL, stored in the citizen’s digital wallet.\nFor a service, the provider requests required information. The citizen approves sharing in the wallet.\nThe provider cryptographically verifies the credential, removing manual checks.\nCredentials enable faster services and reuse across government and private services.\nB. Digi Yatra International Digital Travel Credential\nThe traveller verifies identity through the Digi Yatra App. An International e-Passport Digital Travel Credential is issued using VC standards.\nThe traveller manages it in the App. CREDEBL is the core backend layer for secure issuance, sharing and verification, ensuring privacy, trust and global interoperability.\nAirlines, airports and partners request required identity information.\nThe traveller approves sharing in the App. Credentials are cryptographically verified without centralized storage.\nThe PoC demonstrated IATA alignment and globally interoperable travel credentials.",
+      "country": "IN"
+    },
+    {
+      "id": "from-pilot-to-proven-crediveras-global-adoption-Wza0As",
+      "sector": "healthcare",
+      "title": "From Pilot to Proven: Credivera’s Global Adoption",
+      "summary": "Credivera is proving verifiable credentials are no longer a pilot. Our network spans 30+ countries, has enabled 3M+ verifiable credentials, and connects to 10,000+ authoritative credential sources. Transactions have grown 4X and revenue 3X, demonstrating sustained adoption.\nAdoption is deepest in two safety-critical sectors. In healthcare (e.g. TruMerit & Inteleos), nurses, physicians, and allied health professionals use portable credentials across education, certification, licensing, immigration, and employment. In skilled trades (e.g. Oliu & BCRSP), construction and energy employers use credentials for safety certifications, licensing, testing, and workforce readiness.\nThe ecosystem connects workers, employers, regulators, associations, educators, certification bodies, and credential issuers, reducing manual verification and accelerating workforce mobility. Verification can move from weeks to seconds, while reducing fraud risk, accelerating onboarding, and strengthening compliance.\nSOC 2 Type II audited and Government of Canada approved, Credivera demonstrates enterprise and regulatory readiness. It is a global workforce trust ecosystem already operating at meaningful scale.&",
+      "organizationName": "Credivera",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-17T19:08:04+01:00",
+      "publishedAt": "2026-08-17T19:08:04+01:00",
+      "tags": [
+        "Digital Trust",
+        "Verifiable Credentials",
+        "Digital Wallet",
+        "Workforce Readiness",
+        "Credential Verification",
+        "Fit to Work",
+        "Compliance",
+        "Competency Management",
+        "Workforce Mobility",
+        "Trusted Credentials"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "TruMerit",
+            "url": "https://www.trumerit.org/verifiable-digital-credentials/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Inteleos",
+            "url": "https://www.inteleos.org/beyond/credivera-digital-wallet/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Oliu",
+            "url": "https://oliu.ca/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "BCRSP",
+            "url": "https://bcrsp.ca/en",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:credivera",
+            "labelRaw": "Credivera",
+            "url": "https://www.credivera.com/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "education",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-163734.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-163734.png",
+      "moreInfoUrl": "https://www.credivera.com/",
+      "userJourney": "Organizations define compliance or competency workflows that specify what a professional must prove to be fit to work, fit to practice, or eligible to participate. These workflows generate verifiable presentation requests, asking individuals to provide trusted proof of required licenses, certifications, training records, employment attestations, education, or compliance credentials. Professionals respond directly from their secure digital wallet, sharing verifiable credentials they already hold. Credivera checks those credentials against the organization’s requirements and confirms what is valid, current, trusted, and complete. If a required credential is missing, the professional can request it from Credivera’s issuer network. Trusted issuers, such as regulators, certification bodies, educators, employers, associations, or training providers, issue the missing credential as a verifiable credential directly to the individual’s wallet. The result is a connected ecosystem where organizations get verified proof instead of documents and professionals control and reuse their credentials, and issuers deliver trusted records.",
+      "country": "CA"
+    },
+    {
+      "id": "trusted-caller-identity-aGtyqn",
+      "sector": "digital",
+      "title": "Trusted Caller Identity",
+      "summary": "Call centre authentication still relies on security questions and SMS OTPs, which can be stolen, spoofed or defeated by SIM swap. Customers must disclose personal data to agents who have no need to see it.\n\nTrusted Caller Identity replaces this with a verifiable credential. Telefónica issues a credential proving phone number ownership, secured by its Number Verify and SIM Swap network APIs. When a customer calls, the contact centre opens an encrypted DIDComm channel to their wallet and the customer confirms biometrically on their own device. Selective disclosure returns only a yes/no answer, so no personal data reaches the agent. Verification time reduces >4 times.\n\nFour organisations across telecoms, identity and standards built it: Telefónica Tech (issuer, network signals), Dock Labs/Truvera (credential infrastructure), TMT ID (identity data), GSMA (coordination). The customer holds the credential, the contact centre verifies it, and no party sits in the middle.\n\nIt uses open verifiable credential and DIDComm standards, and Telefónica's network APIs sit within GSMA Open Gateway, so the model can scale to any operator rather than stay proprietary. Demonstrated at M",
+      "organizationName": "Dock Labs AG",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-17T19:07:53+01:00",
+      "publishedAt": "2026-08-17T19:07:53+01:00",
+      "tags": [
+        "identity",
+        "telecommunications",
+        "authentication"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "truvera-wallet",
+            "labelRaw": "Truvera Wallet",
+            "url": "https://www.truvera.io/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "VMO2",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Vodafone",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Movistar",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Contract Owner",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:docklabs",
+            "labelRaw": "Dock Labs AG",
+            "url": "https://www.dock.io/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:gsma",
+            "labelRaw": "GSMA",
+            "url": "https://www.gsma.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:telefonica-tech",
+            "labelRaw": "Telefonica Tech",
+            "url": "https://telefonicatech.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:tmt-id",
+            "labelRaw": "TMT ID",
+            "url": "https://tmtid.com",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Call Center",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/V9x6F3AqJzc",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/V9x6F3AqJzc",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.gsma.com/solutions-and-impact/technologies/security/scams/gsma_resources/gsma-telefonica-tech-tmt-id-dock-labs-call-centre-authentication/",
+      "userJourney": "Setup, once\n1. Telefónica verifies the customer's number and device via its Number Verify and SIM Swap APIs, confirming control of the number and that no recent SIM change occurred.\n2. It issues a verifiable credential proving phone number ownership.\n3. The credential is delivered to the customer's wallet and stored on device, not in a central database. In production the wallet will sit inside the operator's existing app.\n\nOn the call\n4. The customer calls; the agent or IVR triggers authentication.\n5. The contact centre, as verifier, sends an encrypted DIDComm request straight to the customer's wallet.\n6. The customer gets a push notification and approves biometrically on their own device. The biometric never leaves the phone.\n7. The wallet returns a cryptographic proof. Selective disclosure means only a yes/no reaches the agent, no personal data.\n8. The contact centre verifies against Telefónica's issuer key without contacting the operator, so the operator learns nothing about where the customer authenticates. Done in 15-20 seconds.",
+      "country": "CH"
+    },
+    {
+      "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
+      "sector": "finance",
+      "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
+      "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n- Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
+      "organizationName": "Robert Bosch GmbH",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-17T19:07:32+01:00",
+      "publishedAt": "2026-08-17T19:07:32+01:00",
+      "tags": [
+        "#EBWOID",
+        "#EUCC",
+        "#Corporate_Identity",
+        "#SupplyChain",
+        "#KYC_Financial",
+        "#AMLR_Compliance",
+        "#UBO_Verification",
+        "#IBAN_Attestation",
+        "#KYS_Onboarding",
+        "#Owner&Control",
+        "#UBO",
+        "#eInvoice",
+        "#Cross_Border_Interop #Procurement"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "procivis-one-wallet",
+            "labelRaw": "Procivis One Wallet",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-reference-personal-wallet",
+            "labelRaw": "EUDI Wallet Reference Implementation",
+            "url": "https://github.com/eu-digital-identity-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "procivis-one",
+            "labelRaw": "Procivis One",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "spherity-business-wallet",
+            "labelRaw": "Spherity's European Business Wallet",
+            "url": "https://www.spherity.com/eida",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Bundesanzeiger Verlag",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Deutsche Bank",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Banks",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Business Registries",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Economic Operators",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "SBB",
+            "url": "http://Robert%20Bosch%20GmbH",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Supplier/Procurer",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Robert Bosch GmbH",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "EU PoA",
+            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eu-poa",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
+            "labelRaw": "EBW Owner Identification Data (EBW-OID)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:eucc:sd-jwt-vc",
+            "labelRaw": "EU Company Certificate",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:vat-id:sd-jwt-vc",
+            "labelRaw": "EUDI VAT ID",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:einvoice:sd-jwt-vc",
+            "labelRaw": "eInvoice",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Control",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ownership",
+            "url": "https://registry.siros.org/webuild-consortium/ownership/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:company-info:sd-jwt-vc",
+            "labelRaw": "Company Info",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:contact-person:sd-jwt-vc",
+            "labelRaw": "Contact Person",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:payment-terms:sd-jwt-vc",
+            "labelRaw": "Payment Terms",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:ownership:sd-jwt-vc",
+            "labelRaw": "Ownership",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:authorised-signatories:sd-jwt-vc",
+            "labelRaw": "Authorised Signatories",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:iban-ov:sd-jwt-vc",
+            "labelRaw": "IBAN Ownership Verification",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:ubo:sd-jwt-vc",
+            "labelRaw": "Ultimate Beneficial Owner",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:bundesanzeiger-verlag",
+            "labelRaw": "Bundesanzeiger Verlag",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Robert Bosch GmbH",
+            "url": "https://www.bosch.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:procivis",
+            "labelRaw": "Procivis",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Deutsche Bank",
+            "url": "https://www.deutsche-bank.de",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Schweizerische Bundesbahnen",
+            "url": "https://www.sbb.ch/en",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:spherity",
+            "labelRaw": "Spherity",
+            "url": "https://www.spherity.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:webuild",
+            "labelRaw": "WE BUILD Consortium",
+            "url": "https://www.webuildconsortium.eu/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Deutsche Bank",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Robert Bosch GmbH",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bundesanzeiger",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "SBB",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Banks",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Business Registries",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Economic Operators",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
+      "videos": [
+        {
+          "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
+          "provider": "vimeo"
+        }
+      ],
+      "video": {
+        "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
+        "provider": "vimeo"
+      },
+      "userJourney": "(1) KYB - Legal Entity Identification and info\n- A Bosch Representative presents their personal PID via EUDI Wallet to Bundesanzeiger Business Wallet (Spherity).\n- Bundesanzeiger issues the EU Business Wallet Owner Identification Data (EBWOID) \nand EU Company Credential (EUCC) attestations directly to the Bosch Business Wallet (Procivis).\n\n(2) KYC & Financial Onboarding\n- Bosch presents its attestation (EBWOID, EUCC) alongside multi-source attestations (Ownership, VAT, UBO, etc.) \nto the Deutsche Bank Business Wallet (Procivis) .\n- The Ultimate Beneficial Owner's (UBO) identity is verified via their personal EUDI Wallet.\n- The corporate account contract is created and signed (skipped by demo).\n- Deutsche Bank issues an IBAN Owner (IBAN-OV) Attestation directly to the Bosch Business Wallet.\n\n(3) KYS & Invoice Issuing\n- The supplier, SBB presents its corporate credentials (EBWOID, EUCC, VAT, etc.) for instant, automated KYS onboarding at Bosch.\n- Additionally, SBB’s commercial Payment Terms and bank-issued IBAN-OV attestations are presented to secure the payment triggering.\n- SBB delivers the ordered parts and issues a cryptographically signed eInvoice  to the Bosch Business Wallet&",
+      "country": "DE"
+    },
     {
       "id": "cexa-reusable-kyc-for-exchanges-and-banks-with-the-original-issuer-paid-on-every-reuse-cmd42L",
       "sector": "finance",
@@ -447,727 +1391,6 @@
       },
       "userJourney": "See the full user flow in our demo video:demo video: https://youtu.be/nYZhjH3czps.\n\nThe platform integrates seamlessly with existing processes, offering a smooth transition for users and government alike.\n1.\tStart at a familiar place\nUsers begin on a trusted government website (e.g., RVO’s subsidy portal), where they find a clear “Go to app” button.\n\n2.\tFind the right subsidy – fast\nOn the app’s orientation page, users choose how to explore:\nAI search: Get tailored recommendations via chat.\nManual search: Browse subsidies directly.\nAI chatbot: Ask questions in real time.\n\n3.\tAI guides the way\nThe chatbot asks simple questions to identify the best funding matches. No repetitive data entry—user details are securely stored in their profile.\n\n4.\tInstant match results\nFunding is color-coded by relevance:\nGreen: Great fit.\nYellow: Partial match.\nGrey: Bad fit.\n\n5.\tApply with confidence\nSelect a subsidy → click “Apply.”\nLog in securely with a personal wallet (no passwords).\nBusiness details and evidence are easily shared via the business wallet.\n\n6.\tAI-assisted completion\nThe AI walks users through the application step-by-step, ensuring accuracy and compliance—without overwhelming them.",
       "country": "NL"
-    },
-    {
-      "id": "credebl-an-open-source-digital-trust-infrastructure-enabling-trusted-digital-ecosystems-AWG8qU",
-      "sector": "public_sector",
-      "title": "CREDEBL: An Open-Source Digital Trust Infrastructure Enabling Trusted Digital Ecosystems",
-      "summary": "CREDEBL is an open-source Digital Public Good contributed by AYANWORKS under LFDT.\n\nA. Bhutan NDI:\nBhutan NDI, led by Druk Holding &amp; Investments Limited (DHI), enables citizens to receive, store &amp; share digital credentials. Bhutan faced long travel distances, paper identity, manual verification &amp; limited interoperability. Bhutan NDI adopted CREDEBL as its foundational layer for National Digital Identity Foundational Credentials &amp; Verifiable Credentials. Citizens use digital wallets to share required information with consent, while service providers verify credentials. Built on W3C and OpenID4VC standards, CREDEBL enables interoperable, privacy-preserving trust. Bhutan NDI serves 525000+ users.\n\nB. Digi Yatra:\nDigi Yatra Foundation’s IATA Contactless Travel PoC with IndiGo, SITA &amp; BLR Airport demonstrated International e-Passport Digital Travel Credentials on CREDEBL. Digi Yatra enables paperless airport travel using digital identity. CREDEBL provides the foundational layer for secure issuance, sharing &amp; verification, ensuring privacy, cryptographic trust and global interoperability. The PoC aligned with IATA standards &amp; produced the first International e-Passport credential holder.",
-      "organizationName": "AyanWorks Technology Solutions Pvt. Ltd.",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-17T13:47:07+01:00",
-      "publishedAt": "2026-08-17T13:47:07+01:00",
-      "tags": [
-        "Digital Identity",
-        "National Digital Identity",
-        "Digital Trust",
-        "Verifiable Credentials",
-        "Decentralized Identity",
-        "W3C Verifiable Credentials",
-        "W3C DID",
-        "OpenID4VC",
-        "DIDComm",
-        "Digital Wallet",
-        "Government",
-        "Digital Public Infrastructure",
-        "Citizen Services",
-        "Privacy",
-        "Interoperability",
-        "Open Standards",
-        "Trust Infrastructure",
-        "Reusable Credentials",
-        "Self-Sovereign Identity",
-        "CREDEBL",
-        "Self Sovereign Identity",
-        "Travel Tech",
-        "Seamless Travel"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "bhutan-ndi-mobile-wallet",
-            "labelRaw": "Bhutan NDI Mobile Wallet",
-            "url": "https://bhutanndi.com/",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "digiyatra",
-            "labelRaw": "DigiYatra",
-            "url": "https://www.digiyatra.org/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "credebl-organizational-wallet",
-            "labelRaw": "CREDEBL",
-            "url": "https://credebl.id",
-            "source": "catalog",
-            "walletType": "organizational"
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bhutan NDI",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": "organizational"
-          },
-          {
-            "refId": null,
-            "labelRaw": "Digi Yatra Foundation",
-            "url": "https://digiyatrafoundation.com",
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Bhutan NDI",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Royal Government of Bhutan",
-            "url": "https://www.citizenservices.gov.bt/g2cportal/ListOfLifeEventComponent",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Digi Yatra Foundation",
-            "url": "https://digiyatrafoundation.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
-            "labelRaw": "Aadhaar Verifiable Credential",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
-            "labelRaw": "Boarding Pass (MSO Mdoc)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "National Digital Identity",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Permanent Address",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:buthan",
-            "labelRaw": "Bhutan Government",
-            "url": "https://bhutanndi.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:ayanworks",
-            "labelRaw": "AyanWorks Technology Solutions Pvt. Ltd.",
-            "url": "https://credebl.id",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:digiyatra",
-            "labelRaw": "DigiYatra Foundation",
-            "url": "https://www.digiyatra.org/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:iata",
-            "labelRaw": "International Air Transport Association",
-            "url": "https://www.iata.org",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:indigo",
-            "labelRaw": "IndiGo",
-            "url": "https://www.goindigo.in",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:bengaluru-international-airport",
-            "labelRaw": "Bengaluru International Airport",
-            "url": "https://www.bengaluruairport.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:bhutan-ndi",
-            "labelRaw": "Bhutan NDI",
-            "url": "https://bhutanndi.com",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "KYC with Photo ID",
-            "url": "https://digiyatrafoundation.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "KYC",
-            "url": "https://bhutanndi.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "proximity",
-        "remote"
-      ],
-      "vcFormats": [
-        "anoncreds",
-        "mdoc",
-        "jwt_vc",
-        "sd_jwt_vc",
-        "vcdm_1_1",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci",
-        "other"
-      ],
-      "presentationProtocols": [
-        "DIDComm v2",
-        "ISO 18013-5",
-        "ISO 18013-7",
-        "OpenID4VP",
-        "SIOPv2"
-      ],
-      "interopProfiles": [
-        "DIIP v4",
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "person_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/FIDES-Award-Usecase-image.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/FIDES-Award-Usecase-image.png",
-      "moreInfoUrl": "https://credebl.id/",
-      "userJourney": "A. Bhutan National Digital Identity (NDI)\nCitizens complete onboarding and verification through Bhutan NDI. Foundational credentials are issued.\nTrusted organizations issue Verifiable Credentials through CREDEBL, stored in the citizen’s digital wallet.\nFor a service, the provider requests required information. The citizen approves sharing in the wallet.\nThe provider cryptographically verifies the credential, removing manual checks.\nCredentials enable faster services and reuse across government and private services.\nB. Digi Yatra International Digital Travel Credential\nThe traveller verifies identity through the Digi Yatra App. An International e-Passport Digital Travel Credential is issued using VC standards.\nThe traveller manages it in the App. CREDEBL is the core backend layer for secure issuance, sharing and verification, ensuring privacy, trust and global interoperability.\nAirlines, airports and partners request required identity information.\nThe traveller approves sharing in the App. Credentials are cryptographically verified without centralized storage.\nThe PoC demonstrated IATA alignment and globally interoperable travel credentials.",
-      "country": "IN"
-    },
-    {
-      "id": "verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J",
-      "sector": "digital",
-      "title": "Verifiable AI fairness: a seal for the system, a receipt for the person",
-      "summary": "When an AI screens a job application, scores a loan or decides a benefit, the person affected gets a decision and no way to check whether it was fair. validant.ai issues two verifiable credentials that close that gap from both ends. The AI Fairness Seal is a credential whose subject is the AI system itself: a measurement engine cryptographically signs the fairness metrics, our server derives the verdict from those signed numbers, and the audited party never gets to assert its own result. The Decision Receipt is the person’s own credential, held in their wallet, naming which system decided, that it held a valid seal at the time, and optionally what would have had to change for a different outcome. The person presents it selectively to a third party, such as an ombudsman's office or a labor authority, revealing only what she chooses to reveal. Anyone can check a seal at validant.ai/verify without logging in or having an account. It runs on the same rails as the Swiss e-ID: SD-JWT VC, did:web and did:webvh, ES256, OpenID4VCI and OpenID4VP, with revocation on an IETF Token Status List.",
-      "organizationName": "validant.ai",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-17T10:13:49+01:00",
-      "publishedAt": "2026-08-17T10:13:49+01:00",
-      "tags": [
-        "ai-fairness",
-        "ai-act",
-        "algorithmic-accountability",
-        "sd-jwt-vc",
-        "openid4vp",
-        "openid4vci",
-        "did-web",
-        "did-webvh",
-        "swiyu",
-        "selective-disclosure",
-        "token-status-list",
-        "verifiable-verdict",
-        "hiring",
-        "non-discrimination",
-        "switzerland"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "swiyu-wallet",
-            "labelRaw": "SWIYU Wallet",
-            "url": "https://www.swiyu.admin.ch/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": null,
-            "labelRaw": "SWIYU wallet",
-            "url": null,
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "validant.ai AI Fairness Seal Issuer",
-            "url": "https://issuer.validant.ai",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "AI Fairness Seal (SD-JWT VC)",
-            "url": "urn:validant:ai-fairness-seal:1",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Decision Receipt (SD-JWT VC)",
-            "url": "urn:validant:decision-receipt:1",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "validant.ai",
-            "url": "https://validant.ai/",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "validant.ai public Trust Seal verifier",
-            "url": "https://validant.ai/verify",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "validant.ai Decision Receipt check",
-            "url": "https://verifier.validant.ai",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "HAIP v1"
-      ],
-      "themes": [
-        "compliance_reporting",
-        "agentic_ai"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/validant_ai_cover.jpg"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/validant_ai_cover.jpg",
-      "moreInfoUrl": "https://validant.ai",
-      "userJourney": "1. An employer runs its CV-screening AI through validant.ai, self-service or commissioned, against a named, legally grounded fairness rule.\n2. The engine computes and signs the metrics (Ed25519) with the CI method, multiplicity correction and minimum detectable effect.\n3. validant.ai verifies the signature and derives the verdict itself; unsigned metrics are refused. A pass is earned, not claimed.\n4. The Fairness Seal is issued as an SD-JWT VC (ES256, did:web:validant.ai): system, owner, LEI, metric, threshold, result, status pointer.\n5. It arrives via OpenID4VCI in the employer's wallet; swiyu confirms the issuer.\n6. The AI rejects Maria; the rejection email carries the seal as a scannable code.\n7. She also gets a key-bound Decision Receipt in her swiyu wallet: which system decided, that its seal was valid, the decisive factors, and the smallest change that would have flipped it.\n8. She presents it selectively over OpenID4VP to an ombuds office, which re-verifies the seal.\n9. Anyone can verify a seal at validant.ai/verify, no login, in-browser, public key and status list.\n10. If the assessment is invalidated, the seal is revoked and every check reads Revoked within seconds.",
-      "country": "CH"
-    },
-    {
-      "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
-      "sector": "finance",
-      "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
-      "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n- Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
-      "organizationName": "Robert Bosch GmbH",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-16T20:57:48+01:00",
-      "publishedAt": "2026-08-16T20:57:48+01:00",
-      "tags": [
-        "#EBWOID",
-        "#EUCC",
-        "#Corporate_Identity",
-        "#SupplyChain",
-        "#KYC_Financial",
-        "#AMLR_Compliance",
-        "#UBO_Verification",
-        "#IBAN_Attestation",
-        "#KYS_Onboarding",
-        "#Owner&Control",
-        "#UBO",
-        "#eInvoice",
-        "#Cross_Border_Interop #Procurement"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "procivis-one-wallet",
-            "labelRaw": "Procivis One Wallet",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "eudi-reference-personal-wallet",
-            "labelRaw": "EUDI Wallet Reference Implementation",
-            "url": "https://github.com/eu-digital-identity-wallet/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "procivis-one",
-            "labelRaw": "Procivis One",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": "organizational"
-          },
-          {
-            "refId": "spherity-business-wallet",
-            "labelRaw": "Spherity's European Business Wallet",
-            "url": "https://www.spherity.com/eida",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Bundesanzeiger Verlag",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Deutsche Bank",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Banks",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Business Registries",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Economic Operators",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "SBB",
-            "url": "http://Robert%20Bosch%20GmbH",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Supplier/Procurer",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Robert Bosch GmbH",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "EU PoA",
-            "url": "https://github.com/webuild-consortium/webuild-attestation-rulebooks-catalog/tree/main/rulebooks/rb-eu-poa",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
-            "labelRaw": "EBW Owner Identification Data (EBW-OID)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:eucc:sd-jwt-vc",
-            "labelRaw": "EU Company Certificate",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:vat-id:sd-jwt-vc",
-            "labelRaw": "EUDI VAT ID",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:einvoice:sd-jwt-vc",
-            "labelRaw": "eInvoice",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Control",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Ownership",
-            "url": "https://registry.siros.org/webuild-consortium/ownership/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:company-info:sd-jwt-vc",
-            "labelRaw": "Company Info",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:contact-person:sd-jwt-vc",
-            "labelRaw": "Contact Person",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:payment-terms:sd-jwt-vc",
-            "labelRaw": "Payment Terms",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:ownership:sd-jwt-vc",
-            "labelRaw": "Ownership",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:authorised-signatories:sd-jwt-vc",
-            "labelRaw": "Authorised Signatories",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:iban-ov:sd-jwt-vc",
-            "labelRaw": "IBAN Ownership Verification",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:ubo:sd-jwt-vc",
-            "labelRaw": "Ultimate Beneficial Owner",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:bundesanzeiger-verlag",
-            "labelRaw": "Bundesanzeiger Verlag",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Robert Bosch GmbH",
-            "url": "https://www.bosch.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:procivis",
-            "labelRaw": "Procivis",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Deutsche Bank",
-            "url": "https://www.deutsche-bank.de",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Schweizerische Bundesbahnen",
-            "url": "https://www.sbb.ch/en",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:spherity",
-            "labelRaw": "Spherity",
-            "url": "https://www.spherity.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:webuild",
-            "labelRaw": "WE BUILD Consortium",
-            "url": "https://www.webuildconsortium.eu/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Deutsche Bank",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Robert Bosch GmbH",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bundesanzeiger",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "SBB",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Banks",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Business Registries",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Economic Operators",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "organizational_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
-      "videos": [
-        {
-          "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
-          "provider": "vimeo"
-        }
-      ],
-      "video": {
-        "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
-        "provider": "vimeo"
-      },
-      "userJourney": "(1) KYB - Legal Entity Identification and info\n- A Bosch Representative presents their personal PID via EUDI Wallet to Bundesanzeiger Business Wallet (Spherity).\n- Bundesanzeiger issues the EU Business Wallet Owner Identification Data (EBWOID) \nand EU Company Credential (EUCC) attestations directly to the Bosch Business Wallet (Procivis).\n\n(2) KYC &amp; Financial Onboarding\n- Bosch presents its attestation (EBWOID, EUCC) alongside multi-source attestations (Ownership, VAT, UBO, etc.) \nto the Deutsche Bank Business Wallet (Procivis) .\n- The Ultimate Beneficial Owner's (UBO) identity is verified via their personal EUDI Wallet.\n- The corporate account contract is created and signed (skipped by demo).\n- Deutsche Bank issues an IBAN Owner (IBAN-OV) Attestation directly to the Bosch Business Wallet.\n\n(3) KYS &amp; Invoice Issuing\n- The supplier, SBB presents its corporate credentials (EBWOID, EUCC, VAT, etc.) for instant, automated KYS onboarding at Bosch.\n- Additionally, SBB’s commercial Payment Terms and bank-issued IBAN-OV attestations are presented to secure the payment triggering.\n- SBB delivers the ordered parts and issues a cryptographically signed eInvoice  to the Bosch Business Wallet",
-      "country": "DE"
     },
     {
       "id": "reeco-textile-dpp-the-supply-chain-verified-independently-of-the-brands-systems-CH9jvV",
@@ -2836,136 +3059,6 @@
       "country": "GB"
     },
     {
-      "id": "trusted-caller-identity-aGtyqn",
-      "sector": "digital",
-      "title": "Trusted Caller Identity",
-      "summary": "Call centre authentication still relies on security questions and SMS OTPs, which can be stolen, spoofed or defeated by SIM swap. Customers must disclose personal data to agents who have no need to see it.\n\nTrusted Caller Identity replaces this with a verifiable credential. Telefónica issues a credential proving phone number ownership, secured by its Number Verify and SIM Swap network APIs. When a customer calls, the contact centre opens an encrypted DIDComm channel to their wallet and the customer confirms biometrically on their own device. Selective disclosure returns only a yes/no answer, so no personal data reaches the agent. Verification time reduces &gt;4times.\n\nFour organisations across telecoms, identity and standards built it: Telefónica Tech (issuer, network signals), Dock Labs/Truvera (credential infrastructure), TMT ID (identity data), GSMA (coordination). The customer holds the credential, the contact centre verifies it, and no party sits in the middle.\n\nIt uses open verifiable credential and DIDComm standards, and Telefónica's network APIs sit within GSMA Open Gateway, so the model can scale to any operator rather than stay proprietary. Demonstrated at M",
-      "organizationName": "Dock Labs AG",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-13T19:21:04+01:00",
-      "publishedAt": "2026-08-13T19:21:04+01:00",
-      "tags": [
-        "identity",
-        "telecommunications",
-        "authentication"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "truvera-wallet",
-            "labelRaw": "Truvera Wallet",
-            "url": "https://www.truvera.io/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "VMO2",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Vodafone",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Movistar",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Contract Owner",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:docklabs",
-            "labelRaw": "Dock Labs AG",
-            "url": "https://www.dock.io/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:gsma",
-            "labelRaw": "GSMA",
-            "url": "https://www.gsma.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:telefonica-tech",
-            "labelRaw": "Telefonica Tech",
-            "url": "https://telefonicatech.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:tmt-id",
-            "labelRaw": "TMT ID",
-            "url": "https://tmtid.com",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Call Center",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-at-12.38.44.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/V9x6F3AqJzc",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/V9x6F3AqJzc",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.gsma.com/solutions-and-impact/technologies/security/scams/gsma_resources/gsma-telefonica-tech-tmt-id-dock-labs-call-centre-authentication/",
-      "userJourney": "Setup, once\n1. Telefónica verifies the customer's number and device via its Number Verify and SIM Swap APIs, confirming control of the number and that no recent SIM change occurred.\n2. It issues a verifiable credential proving phone number ownership.\n3. The credential is delivered to the customer's wallet and stored on device, not in a central database. In production the wallet will sit inside the operator's existing app.\n\nOn the call\n4. The customer calls; the agent or IVR triggers authentication.\n5. The contact centre, as verifier, sends an encrypted DIDComm request straight to the customer's wallet.\n6. The customer gets a push notification and approves biometrically on their own device. The biometric never leaves the phone.\n7. The wallet returns a cryptographic proof. Selective disclosure means only a yes/no reaches the agent, no personal data.\n8. The contact centre verifies against Telefónica's issuer key without contacting the operator, so the operator learns nothing about where the customer authenticates. Done in 15-20 seconds.",
-      "country": "CH"
-    },
-    {
       "id": "ingo-digital-verifiable-and-secure-subcontractor-management-including-physical-access-ZHHRjx",
       "sector": "construction",
       "title": "inGo - Digital, Verifiable and Secure Subcontractor Management Including Physical Access",
@@ -4075,89 +4168,6 @@
       "moreInfoUrl": "https://dppskop.com",
       "userJourney": "Manufacturers create Digital Product Passports using DPPskop by entering product information, sustainability metrics, technical documentation, and supply chain data.\r\n\r\nSuppliers can securely contribute product-specific information through dedicated supplier portals, reducing manual data collection and improving data quality.\r\n\r\nOnce the required information is completed, the platform evaluates completeness and compliance, generates a Digital Product Passport, and publishes it through a QR code or GS1 Digital Link.\r\n\r\nDifferent stakeholder groups—including consumers, business customers, recyclers, service providers, and regulatory authorities—can access different information views according to their authorization level.\r\n\r\nThe platform also supports continuous updates throughout the product lifecycle, allowing manufacturers to maintain accurate and up-to-date Digital Product Passports.",
       "country": "TR"
-    },
-    {
-      "id": "from-pilot-to-proven-crediveras-global-adoption-Wza0As",
-      "sector": "healthcare",
-      "title": "From Pilot to Proven: Credivera’s Global Adoption",
-      "summary": "Credivera is proving verifiable credentials are no longer a pilot. Our network spans 30+ countries, has enabled 3M+ verifiable credentials, and connects to 10,000+ authoritative credential sources. Transactions have grown 4X and revenue 3X, demonstrating sustained adoption.\r\nAdoption is deepest in two safety-critical sectors. In healthcare (e.g. TruMerit &amp; Inteleos), nurses, physicians, and allied health professionals use portable credentials across education, certification, licensing, immigration, and employment. In skilled trades (e.g. Oliu &amp; BCRSP), construction and energy employers use credentials for safety certifications, licensing, testing, and workforce readiness.\r\nThe ecosystem connects workers, employers, regulators, associations, educators, certification bodies, and credential issuers, reducing manual verification and accelerating workforce mobility. Verification can move from weeks to seconds, while reducing fraud risk, accelerating onboarding, and strengthening compliance.\r\nSOC 2 Type II audited and Government of Canada approved, Credivera demonstrates enterprise and regulatory readiness. It is a global workforce trust ecosystem already operating at meaningful scale.",
-      "organizationName": "Credivera",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-13T08:05:08+01:00",
-      "publishedAt": "2026-08-13T08:05:08+01:00",
-      "tags": [
-        "Digital Trust",
-        "Verifiable Credentials",
-        "Digital Wallet",
-        "Workforce Readiness",
-        "Credential Verification",
-        "Fit to Work",
-        "Compliance",
-        "Competency Management",
-        "Workforce Mobility",
-        "Trusted Credentials"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "TruMerit",
-            "url": "https://www.trumerit.org/verifiable-digital-credentials/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Inteleos",
-            "url": "https://www.inteleos.org/beyond/credivera-digital-wallet/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Oliu",
-            "url": "https://oliu.ca/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "BCRSP",
-            "url": "https://bcrsp.ca/en",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:credivera",
-            "labelRaw": "Credivera",
-            "url": "https://www.credivera.com/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [],
-      "vcFormats": [],
-      "issuanceProtocols": [],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "themes": [
-        "education",
-        "compliance_reporting"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-163734.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-12-163734.png",
-      "moreInfoUrl": "https://www.credivera.com/",
-      "userJourney": "Organizations define compliance or competency workflows that specify what a professional must prove to be fit to work, fit to practice, or eligible to participate. These workflows generate verifiable presentation requests, asking individuals to provide trusted proof of required licenses, certifications, training records, employment attestations, education, or compliance credentials. Professionals respond directly from their secure digital wallet, sharing verifiable credentials they already hold. Credivera checks those credentials against the organization’s requirements and confirms what is valid, current, trusted, and complete. If a required credential is missing, the professional can request it from Credivera’s issuer network. Trusted issuers, such as regulators, certification bodies, educators, employers, associations, or training providers, issue the missing credential as a verifiable credential directly to the individual’s wallet. The result is a connected ecosystem where organizations get verified proof instead of documents and professionals control and reuse their credentials, and issuers deliver trusted records.",
-      "country": "CA"
     },
     {
       "id": "vesta-appliances-from-impostors-to-proof-of-trust-ATYNCN",
