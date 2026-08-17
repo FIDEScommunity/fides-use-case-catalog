@@ -1,10 +1,92 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-17T15:04:53.113Z",
+  "lastUpdated": "2026-08-17T15:05:19.083Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 61,
   "useCases": [
+    {
+      "id": "recomputable-carbon-intensity-for-gold-dore-bars-hi7YCq",
+      "sector": "trade",
+      "title": "Recomputable carbon intensity for gold doré bars",
+      "summary": "Gold leaves the mine as doré bars, and every buyer — refiner, trader, and soon every EU importer under CBAM — asks how much CO2 the bar embodies. Today the answer is a consultant's PDF: it can't be independently checked or partially disclosed.\n\nFor each doré bar we issue two SD-JWT verifiable credentials a third party can check without trusting the issuer: an origin credential (identity, mass, fineness, lot), self-issued by the mine (AGM, Aurora, Guyana) from a did:web on its own domain; and a carbon-intensity credential issued by Natixar (kgCO2e per kg fine gold), bound to it.\n\nThe holder discloses selectively — proving purity, mass or the carbon figure without revealing the site or commercial data. A public page resolves the issuer's key from its own domain, verifies the signature, the disclosed-data integrity and revocation status — no account, no call back to us. Tampered, revoked and replayed presentations are rejected.\n\nValue: a carbon figure that survives contradiction — the buyer checks it without trusting the calculator; the mine shows what a contract requires and no more.",
+      "organizationName": "NATIXAR",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-17T16:04:59+01:00",
+      "publishedAt": "2026-08-17T16:04:59+01:00",
+      "tags": [
+        "gold",
+        "doré",
+        "mining",
+        "critical minerals",
+        "carbon accounting",
+        "carbon intensity",
+        "CBAM",
+        "supply chain traceability",
+        "provenance",
+        "verifiable credentials",
+        "SD-JWT VC",
+        "did:web",
+        "selective disclosure",
+        "ESG",
+        "responsible sourcing"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "NATIXAR",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ZIJIN",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "HAIP v1"
+      ],
+      "themes": [
+        "compliance_reporting",
+        "trade_documents"
+      ],
+      "videos": [
+        {
+          "url": "https://youtu.be/aL_4Qiu07wc",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/aL_4Qiu07wc",
+        "provider": "youtube"
+      },
+      "userJourney": "•\t1. The mine’s operator signs in; a non-extractable key is generated in the browser; its public half is published in a did:web on the mine’s domain (append-only).\n•\t2. The mine self-issues the origin credential (SD-JWT VC) for a bar, from the bar’s own screen.\n•\t3. The mine requests the carbon certificate; Natixar’s signing service issues the CarbonIntensityCredential (SD-JWT VC), bound to the origin credential [re-computing from a signed extraction, if the matrix is built].\n•\t4. The credential is held in the OpenWallet-based business wallet.\n•\t5. The holder presents via QR, disclosing selected fields only (SD-JWT selective disclosure).\n•\t6. The verifier checks on a public page — DID resolution, signature, disclosed-data integrity, revocation status — no account, no call to Natixar. Tampered / revoked / replayed presentations are rejected.",
+      "country": "FR"
+    },
     {
       "id": "smart-government-applications-powered-by-digital-wallets-HCB5DD",
       "sector": "public_sector",
@@ -495,88 +577,6 @@
       "moreInfoUrl": "https://validant.ai",
       "userJourney": "1. An employer runs its CV-screening AI through validant.ai, self-service or commissioned, against a named, legally grounded fairness rule.\n2. The engine computes and signs the metrics (Ed25519) with the CI method, multiplicity correction and minimum detectable effect.\n3. validant.ai verifies the signature and derives the verdict itself; unsigned metrics are refused. A pass is earned, not claimed.\n4. The Fairness Seal is issued as an SD-JWT VC (ES256, did:web:validant.ai): system, owner, LEI, metric, threshold, result, status pointer.\n5. It arrives via OpenID4VCI in the employer's wallet; swiyu confirms the issuer.\n6. The AI rejects Maria; the rejection email carries the seal as a scannable code.\n7. She also gets a key-bound Decision Receipt in her swiyu wallet: which system decided, that its seal was valid, the decisive factors, and the smallest change that would have flipped it.\n8. She presents it selectively over OpenID4VP to an ombuds office, which re-verifies the seal.\n9. Anyone can verify a seal at validant.ai/verify, no login, in-browser, public key and status list.\n10. If the assessment is invalidated, the seal is revoked and every check reads Revoked within seconds.",
       "country": "CH"
-    },
-    {
-      "id": "recomputable-carbon-intensity-for-gold-dore-bars-hi7YCq",
-      "sector": "trade",
-      "title": "Recomputable carbon intensity for gold doré bars",
-      "summary": "Gold leaves the mine as doré bars, and every buyer — refiner, trader, and soon every EU importer under CBAM — asks how much CO2 the bar embodies. Today the answer is a consultant's PDF: it can't be independently checked or partially disclosed.\r\n\r\nFor each doré bar we issue two SD-JWT verifiable credentials a third party can check without trusting the issuer: an origin credential (identity, mass, fineness, lot), self-issued by the mine (AGM, Aurora, Guyana) from a did:web on its own domain; and a carbon-intensity credential issued by Natixar (kgCO2e per kg fine gold), bound to it.\r\n\r\nThe holder discloses selectively — proving purity, mass or the carbon figure without revealing the site or commercial data. A public page resolves the issuer's key from its own domain, verifies the signature, the disclosed-data integrity and revocation status — no account, no call back to us. Tampered, revoked and replayed presentations are rejected.\r\n\r\nValue: a carbon figure that survives contradiction — the buyer checks it without trusting the calculator; the mine shows what a contract requires and no more.",
-      "organizationName": "NATIXAR",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-17T09:55:42+01:00",
-      "publishedAt": "2026-08-17T09:55:42+01:00",
-      "tags": [
-        "gold",
-        "doré",
-        "mining",
-        "critical minerals",
-        "carbon accounting",
-        "carbon intensity",
-        "CBAM",
-        "supply chain traceability",
-        "provenance",
-        "verifiable credentials",
-        "SD-JWT VC",
-        "did:web",
-        "selective disclosure",
-        "ESG",
-        "responsible sourcing"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "NATIXAR",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "ZIJING",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "HAIP v1"
-      ],
-      "themes": [
-        "compliance_reporting",
-        "trade_documents"
-      ],
-      "videos": [
-        {
-          "url": "https://youtu.be/aL_4Qiu07wc",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/aL_4Qiu07wc",
-        "provider": "youtube"
-      },
-      "userJourney": "•\t1. The mine’s operator signs in; a non-extractable key is generated in the browser; its public half is published in a did:web on the mine’s domain (append-only).\r\n•\t2. The mine self-issues the origin credential (SD-JWT VC) for a bar, from the bar’s own screen.\r\n•\t3. The mine requests the carbon certificate; Natixar’s signing service issues the CarbonIntensityCredential (SD-JWT VC), bound to the origin credential [re-computing from a signed extraction, if the matrix is built].\r\n•\t4. The credential is held in the OpenWallet-based business wallet.\r\n•\t5. The holder presents via QR, disclosing selected fields only (SD-JWT selective disclosure).\r\n•\t6. The verifier checks on a public page — DID resolution, signature, disclosed-data integrity, revocation status — no account, no call to Natixar. Tampered / revoked / replayed presentations are rejected.",
-      "country": "FR"
     },
     {
       "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
