@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-17T15:06:52+00:00",
+    "generatedAt": "2026-08-17T19:11:13+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -1725,12 +1725,12 @@
                     "id": "credebl-an-open-source-digital-trust-infrastructure-enabling-trusted-digital-ecosystems-AWG8qU",
                     "sector": "public_sector",
                     "title": "CREDEBL: An Open-Source Digital Trust Infrastructure Enabling Trusted Digital Ecosystems",
-                    "summary": "CREDEBL is an open-source Digital Public Good contributed by AYANWORKS under LFDT.\n\nA. Bhutan NDI:\nBhutan NDI, led by Druk Holding &amp; Investments Limited (DHI), enables citizens to receive, store &amp; share digital credentials. Bhutan faced long travel distances, paper identity, manual verification &amp; limited interoperability. Bhutan NDI adopted CREDEBL as its foundational layer for National Digital Identity Foundational Credentials &amp; Verifiable Credentials. Citizens use digital wallets to share required information with consent, while service providers verify credentials. Built on W3C and OpenID4VC standards, CREDEBL enables interoperable, privacy-preserving trust. Bhutan NDI serves 525000+ users.\n\nB. Digi Yatra:\nDigi Yatra Foundation’s IATA Contactless Travel PoC with IndiGo, SITA &amp; BLR Airport demonstrated International e-Passport Digital Travel Credentials on CREDEBL. Digi Yatra enables paperless airport travel using digital identity. CREDEBL provides the foundational layer for secure issuance, sharing &amp; verification, ensuring privacy, cryptographic trust and global interoperability. The PoC aligned with IATA standards &amp; produced the first International e-Passport credential holder.",
+                    "summary": "CREDEBL is an open-source Digital Public Good contributed by AYANWORKS under LFDT.\n\nA. Bhutan NDI:\nBhutan NDI, led by Druk Holding & Investments Limited (DHI), enables citizens to receive, store & share digital credentials. Bhutan faced long travel distances, paper identity, manual verification & limited interoperability. Bhutan NDI adopted CREDEBL as its foundational layer for National Digital Identity Foundational Credentials & Verifiable Credentials. Citizens use digital wallets to share required information with consent, while service providers verify credentials. Built on W3C and OpenID4VC standards, CREDEBL enables interoperable, privacy-preserving trust. Bhutan NDI serves 525000+ users.\n\nB. Digi Yatra:\nDigi Yatra Foundation’s IATA Contactless Travel PoC with IndiGo, SITA & BLR Airport demonstrated International e-Passport Digital Travel Credentials on CREDEBL. Digi Yatra enables paperless airport travel using digital identity. CREDEBL provides the foundational layer for secure issuance, sharing & verification, ensuring privacy, cryptographic trust and global interoperability. The PoC aligned with IATA standards & produced the first International e-Passport credential holder.",
                     "organizationName": "AyanWorks Technology Solutions Pvt. Ltd.",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-17T13:47:07+01:00",
-                    "publishedAt": "2026-08-17T13:47:07+01:00",
+                    "updatedAt": "2026-08-17T19:08:17+01:00",
+                    "publishedAt": "2026-08-17T19:08:17+01:00",
                     "tags": [
                         "Digital Identity",
                         "National Digital Identity",
@@ -2542,12 +2542,12 @@
                     "id": "from-pilot-to-proven-crediveras-global-adoption-Wza0As",
                     "sector": "healthcare",
                     "title": "From Pilot to Proven: Credivera’s Global Adoption",
-                    "summary": "Credivera is proving verifiable credentials are no longer a pilot. Our network spans 30+ countries, has enabled 3M+ verifiable credentials, and connects to 10,000+ authoritative credential sources. Transactions have grown 4X and revenue 3X, demonstrating sustained adoption.\r\nAdoption is deepest in two safety-critical sectors. In healthcare (e.g. TruMerit &amp; Inteleos), nurses, physicians, and allied health professionals use portable credentials across education, certification, licensing, immigration, and employment. In skilled trades (e.g. Oliu &amp; BCRSP), construction and energy employers use credentials for safety certifications, licensing, testing, and workforce readiness.\r\nThe ecosystem connects workers, employers, regulators, associations, educators, certification bodies, and credential issuers, reducing manual verification and accelerating workforce mobility. Verification can move from weeks to seconds, while reducing fraud risk, accelerating onboarding, and strengthening compliance.\r\nSOC 2 Type II audited and Government of Canada approved, Credivera demonstrates enterprise and regulatory readiness. It is a global workforce trust ecosystem already operating at meaningful scale.",
+                    "summary": "Credivera is proving verifiable credentials are no longer a pilot. Our network spans 30+ countries, has enabled 3M+ verifiable credentials, and connects to 10,000+ authoritative credential sources. Transactions have grown 4X and revenue 3X, demonstrating sustained adoption.\nAdoption is deepest in two safety-critical sectors. In healthcare (e.g. TruMerit & Inteleos), nurses, physicians, and allied health professionals use portable credentials across education, certification, licensing, immigration, and employment. In skilled trades (e.g. Oliu & BCRSP), construction and energy employers use credentials for safety certifications, licensing, testing, and workforce readiness.\nThe ecosystem connects workers, employers, regulators, associations, educators, certification bodies, and credential issuers, reducing manual verification and accelerating workforce mobility. Verification can move from weeks to seconds, while reducing fraud risk, accelerating onboarding, and strengthening compliance.\nSOC 2 Type II audited and Government of Canada approved, Credivera demonstrates enterprise and regulatory readiness. It is a global workforce trust ecosystem already operating at meaningful scale.&",
                     "organizationName": "Credivera",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-13T08:05:08+01:00",
-                    "publishedAt": "2026-08-13T08:05:08+01:00",
+                    "updatedAt": "2026-08-17T19:08:04+01:00",
+                    "publishedAt": "2026-08-17T19:08:04+01:00",
                     "tags": [
                         "Digital Trust",
                         "Verifiable Credentials",
@@ -2740,12 +2740,12 @@
                     "id": "trusted-caller-identity-aGtyqn",
                     "sector": "digital",
                     "title": "Trusted Caller Identity",
-                    "summary": "Call centre authentication still relies on security questions and SMS OTPs, which can be stolen, spoofed or defeated by SIM swap. Customers must disclose personal data to agents who have no need to see it.\n\nTrusted Caller Identity replaces this with a verifiable credential. Telefónica issues a credential proving phone number ownership, secured by its Number Verify and SIM Swap network APIs. When a customer calls, the contact centre opens an encrypted DIDComm channel to their wallet and the customer confirms biometrically on their own device. Selective disclosure returns only a yes/no answer, so no personal data reaches the agent. Verification time reduces &gt;4times.\n\nFour organisations across telecoms, identity and standards built it: Telefónica Tech (issuer, network signals), Dock Labs/Truvera (credential infrastructure), TMT ID (identity data), GSMA (coordination). The customer holds the credential, the contact centre verifies it, and no party sits in the middle.\n\nIt uses open verifiable credential and DIDComm standards, and Telefónica's network APIs sit within GSMA Open Gateway, so the model can scale to any operator rather than stay proprietary. Demonstrated at M",
+                    "summary": "Call centre authentication still relies on security questions and SMS OTPs, which can be stolen, spoofed or defeated by SIM swap. Customers must disclose personal data to agents who have no need to see it.\n\nTrusted Caller Identity replaces this with a verifiable credential. Telefónica issues a credential proving phone number ownership, secured by its Number Verify and SIM Swap network APIs. When a customer calls, the contact centre opens an encrypted DIDComm channel to their wallet and the customer confirms biometrically on their own device. Selective disclosure returns only a yes/no answer, so no personal data reaches the agent. Verification time reduces >4 times.\n\nFour organisations across telecoms, identity and standards built it: Telefónica Tech (issuer, network signals), Dock Labs/Truvera (credential infrastructure), TMT ID (identity data), GSMA (coordination). The customer holds the credential, the contact centre verifies it, and no party sits in the middle.\n\nIt uses open verifiable credential and DIDComm standards, and Telefónica's network APIs sit within GSMA Open Gateway, so the model can scale to any operator rather than stay proprietary. Demonstrated at M",
                     "organizationName": "Dock Labs AG",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-13T19:21:04+01:00",
-                    "publishedAt": "2026-08-13T19:21:04+01:00",
+                    "updatedAt": "2026-08-17T19:07:53+01:00",
+                    "publishedAt": "2026-08-17T19:07:53+01:00",
                     "tags": [
                         "identity",
                         "telecommunications",
@@ -5250,8 +5250,8 @@
                     "organizationName": "Robert Bosch GmbH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-16T20:57:48+01:00",
-                    "publishedAt": "2026-08-16T20:57:48+01:00",
+                    "updatedAt": "2026-08-17T19:07:32+01:00",
+                    "publishedAt": "2026-08-17T19:07:32+01:00",
                     "tags": [
                         "#EBWOID",
                         "#EUCC",
@@ -5601,7 +5601,7 @@
                         "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
                         "provider": "vimeo"
                     },
-                    "userJourney": "(1) KYB - Legal Entity Identification and info\n- A Bosch Representative presents their personal PID via EUDI Wallet to Bundesanzeiger Business Wallet (Spherity).\n- Bundesanzeiger issues the EU Business Wallet Owner Identification Data (EBWOID) \nand EU Company Credential (EUCC) attestations directly to the Bosch Business Wallet (Procivis).\n\n(2) KYC &amp; Financial Onboarding\n- Bosch presents its attestation (EBWOID, EUCC) alongside multi-source attestations (Ownership, VAT, UBO, etc.) \nto the Deutsche Bank Business Wallet (Procivis) .\n- The Ultimate Beneficial Owner's (UBO) identity is verified via their personal EUDI Wallet.\n- The corporate account contract is created and signed (skipped by demo).\n- Deutsche Bank issues an IBAN Owner (IBAN-OV) Attestation directly to the Bosch Business Wallet.\n\n(3) KYS &amp; Invoice Issuing\n- The supplier, SBB presents its corporate credentials (EBWOID, EUCC, VAT, etc.) for instant, automated KYS onboarding at Bosch.\n- Additionally, SBB’s commercial Payment Terms and bank-issued IBAN-OV attestations are presented to secure the payment triggering.\n- SBB delivers the ordered parts and issues a cryptographically signed eInvoice  to the Bosch Business Wallet",
+                    "userJourney": "(1) KYB - Legal Entity Identification and info\n- A Bosch Representative presents their personal PID via EUDI Wallet to Bundesanzeiger Business Wallet (Spherity).\n- Bundesanzeiger issues the EU Business Wallet Owner Identification Data (EBWOID) \nand EU Company Credential (EUCC) attestations directly to the Bosch Business Wallet (Procivis).\n\n(2) KYC & Financial Onboarding\n- Bosch presents its attestation (EBWOID, EUCC) alongside multi-source attestations (Ownership, VAT, UBO, etc.) \nto the Deutsche Bank Business Wallet (Procivis) .\n- The Ultimate Beneficial Owner's (UBO) identity is verified via their personal EUDI Wallet.\n- The corporate account contract is created and signed (skipped by demo).\n- Deutsche Bank issues an IBAN Owner (IBAN-OV) Attestation directly to the Bosch Business Wallet.\n\n(3) KYS & Invoice Issuing\n- The supplier, SBB presents its corporate credentials (EBWOID, EUCC, VAT, etc.) for instant, automated KYS onboarding at Bosch.\n- Additionally, SBB’s commercial Payment Terms and bank-issued IBAN-OV attestations are presented to secure the payment triggering.\n- SBB delivers the ordered parts and issues a cryptographically signed eInvoice  to the Bosch Business Wallet&",
                     "country": "DE"
                 }
             ]
@@ -6882,8 +6882,8 @@
                     "organizationName": "validant.ai",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-17T10:13:49+01:00",
-                    "publishedAt": "2026-08-17T10:13:49+01:00",
+                    "updatedAt": "2026-08-17T20:11:13+01:00",
+                    "publishedAt": "2026-08-17T20:11:13+01:00",
                     "tags": [
                         "ai-fairness",
                         "ai-act",
@@ -6994,7 +6994,17 @@
                         "https://fides.community/app/uploads/2026/08/validant_ai_cover.jpg"
                     ],
                     "imageUrl": "https://fides.community/app/uploads/2026/08/validant_ai_cover.jpg",
-                    "moreInfoUrl": "https://validant.ai",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=tFxGlNaGq98",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=tFxGlNaGq98",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://validant.ai/trust-seal",
                     "userJourney": "1. An employer runs its CV-screening AI through validant.ai, self-service or commissioned, against a named, legally grounded fairness rule.\n2. The engine computes and signs the metrics (Ed25519) with the CI method, multiplicity correction and minimum detectable effect.\n3. validant.ai verifies the signature and derives the verdict itself; unsigned metrics are refused. A pass is earned, not claimed.\n4. The Fairness Seal is issued as an SD-JWT VC (ES256, did:web:validant.ai): system, owner, LEI, metric, threshold, result, status pointer.\n5. It arrives via OpenID4VCI in the employer's wallet; swiyu confirms the issuer.\n6. The AI rejects Maria; the rejection email carries the seal as a scannable code.\n7. She also gets a key-bound Decision Receipt in her swiyu wallet: which system decided, that its seal was valid, the decisive factors, and the smallest change that would have flipped it.\n8. She presents it selectively over OpenID4VP to an ombuds office, which re-verifies the seal.\n9. Anyone can verify a seal at validant.ai/verify, no login, in-browser, public key and status list.\n10. If the assessment is invalidated, the seal is revoked and every check reads Revoked within seconds.",
                     "country": "CH"
                 }
