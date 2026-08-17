@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-17T15:04:35+00:00",
+    "generatedAt": "2026-08-17T15:04:59+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -4730,12 +4730,12 @@
                     "id": "recomputable-carbon-intensity-for-gold-dore-bars-hi7YCq",
                     "sector": "trade",
                     "title": "Recomputable carbon intensity for gold doré bars",
-                    "summary": "Gold leaves the mine as doré bars, and every buyer — refiner, trader, and soon every EU importer under CBAM — asks how much CO2 the bar embodies. Today the answer is a consultant's PDF: it can't be independently checked or partially disclosed.\r\n\r\nFor each doré bar we issue two SD-JWT verifiable credentials a third party can check without trusting the issuer: an origin credential (identity, mass, fineness, lot), self-issued by the mine (AGM, Aurora, Guyana) from a did:web on its own domain; and a carbon-intensity credential issued by Natixar (kgCO2e per kg fine gold), bound to it.\r\n\r\nThe holder discloses selectively — proving purity, mass or the carbon figure without revealing the site or commercial data. A public page resolves the issuer's key from its own domain, verifies the signature, the disclosed-data integrity and revocation status — no account, no call back to us. Tampered, revoked and replayed presentations are rejected.\r\n\r\nValue: a carbon figure that survives contradiction — the buyer checks it without trusting the calculator; the mine shows what a contract requires and no more.",
+                    "summary": "Gold leaves the mine as doré bars, and every buyer — refiner, trader, and soon every EU importer under CBAM — asks how much CO2 the bar embodies. Today the answer is a consultant's PDF: it can't be independently checked or partially disclosed.\n\nFor each doré bar we issue two SD-JWT verifiable credentials a third party can check without trusting the issuer: an origin credential (identity, mass, fineness, lot), self-issued by the mine (AGM, Aurora, Guyana) from a did:web on its own domain; and a carbon-intensity credential issued by Natixar (kgCO2e per kg fine gold), bound to it.\n\nThe holder discloses selectively — proving purity, mass or the carbon figure without revealing the site or commercial data. A public page resolves the issuer's key from its own domain, verifies the signature, the disclosed-data integrity and revocation status — no account, no call back to us. Tampered, revoked and replayed presentations are rejected.\n\nValue: a carbon figure that survives contradiction — the buyer checks it without trusting the calculator; the mine shows what a contract requires and no more.",
                     "organizationName": "NATIXAR",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-17T09:55:42+01:00",
-                    "publishedAt": "2026-08-17T09:55:42+01:00",
+                    "updatedAt": "2026-08-17T16:04:59+01:00",
+                    "publishedAt": "2026-08-17T16:04:59+01:00",
                     "tags": [
                         "gold",
                         "doré",
@@ -4768,7 +4768,7 @@
                             },
                             {
                                 "refId": null,
-                                "labelRaw": "ZIJING",
+                                "labelRaw": "ZIJIN",
                                 "url": null,
                                 "source": "manual",
                                 "walletType": null
@@ -4805,7 +4805,7 @@
                         "url": "https://youtu.be/aL_4Qiu07wc",
                         "provider": "youtube"
                     },
-                    "userJourney": "•\t1. The mine’s operator signs in; a non-extractable key is generated in the browser; its public half is published in a did:web on the mine’s domain (append-only).\r\n•\t2. The mine self-issues the origin credential (SD-JWT VC) for a bar, from the bar’s own screen.\r\n•\t3. The mine requests the carbon certificate; Natixar’s signing service issues the CarbonIntensityCredential (SD-JWT VC), bound to the origin credential [re-computing from a signed extraction, if the matrix is built].\r\n•\t4. The credential is held in the OpenWallet-based business wallet.\r\n•\t5. The holder presents via QR, disclosing selected fields only (SD-JWT selective disclosure).\r\n•\t6. The verifier checks on a public page — DID resolution, signature, disclosed-data integrity, revocation status — no account, no call to Natixar. Tampered / revoked / replayed presentations are rejected.",
+                    "userJourney": "•\t1. The mine’s operator signs in; a non-extractable key is generated in the browser; its public half is published in a did:web on the mine’s domain (append-only).\n•\t2. The mine self-issues the origin credential (SD-JWT VC) for a bar, from the bar’s own screen.\n•\t3. The mine requests the carbon certificate; Natixar’s signing service issues the CarbonIntensityCredential (SD-JWT VC), bound to the origin credential [re-computing from a signed extraction, if the matrix is built].\n•\t4. The credential is held in the OpenWallet-based business wallet.\n•\t5. The holder presents via QR, disclosing selected fields only (SD-JWT selective disclosure).\n•\t6. The verifier checks on a public page — DID resolution, signature, disclosed-data integrity, revocation status — no account, no call to Natixar. Tampered / revoked / replayed presentations are rejected.",
                     "country": "FR"
                 }
             ]
