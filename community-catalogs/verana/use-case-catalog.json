@@ -5,6 +5,177 @@
   "orgName": "Verana",
   "useCases": [
     {
+      "id": "republic-of-verandia-citizen-ids-business-ids-and-legal-representation-on-one-open-trust-registry-WhRQPe",
+      "sector": "public_sector",
+      "title": "Republic of Verandia: citizen IDs, business IDs and legal representation on one open trust registry",
+      "summary": "A fictional democracy runs its own digital identity as sovereign infrastructure: every component is open source and self-hosted by its institutions, with no vendor to depend on. The Civil Registry operates its own issuing service for an eIDAS-2-compatible Citizen ID, the Business Registry issues verifiable Business IDs and Proofs of Legal Representation, and the Republic itself governs who may issue and who may verify, on a neutral public trust registry that a state can equally self-host. Citizens hold their credentials in the wallet they choose, from an open roster of independent open-source wallets, so no single app is ever mandated. One scan signs them in to the Tax Buro or their bank; an unauthorized lender's over-asking request and a fake refund portal are both refused, with proof.",
+      "organizationName": "Verana",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-18T05:27:27+01:00",
+      "publishedAt": "2026-08-18T05:27:27+01:00",
+      "tags": [
+        "verifiable trust",
+        "proof-of-trust",
+        "trust registry",
+        "digital identity",
+        "citizen ID",
+        "eIDAS 2",
+        "governed verification",
+        "KYB",
+        "legal representation",
+        "anti-phishing",
+        "DIDComm",
+        "Verana"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "inji-wallet",
+            "labelRaw": "Inji Wallet",
+            "url": "https://www.mosip.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-reference-personal-wallet",
+            "labelRaw": "EUDI Wallet Reference Implementation",
+            "url": "https://github.com/eu-digital-identity-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "authbound-wallet",
+            "labelRaw": "Authbound Wallet",
+            "url": "https://authbound.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "paradym-wallet",
+            "labelRaw": "Paradym Wallet",
+            "url": "https://paradym.id",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "bc-wallet",
+            "labelRaw": "BC Wallet",
+            "url": "https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "wwwallet",
+            "labelRaw": "wwWallet",
+            "url": "https://wwwallet.org",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "hologram-messaging",
+            "labelRaw": "Hologram Messaging",
+            "url": "https://2060.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Edge Wallet",
+            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "altme-wallet",
+            "labelRaw": "Altme",
+            "url": "https://altme.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "national-eudi-wallet-netherlands",
+            "labelRaw": "NL Wallet (Netherlands)",
+            "url": "https://www.nldigitalgovernment.nl/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "vs-agent-verana-business-wallet",
+            "labelRaw": "VS Agent - Verana Business Wallet",
+            "url": "https://playground.testnet.verana.network/business-wallets",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [],
+        "credentials": [
+          {
+            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "labelRaw": "ECS Organization Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "labelRaw": "ECS Service Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:verana",
+            "labelRaw": "Verana",
+            "url": "https://verana.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:2060",
+            "labelRaw": "2060.io",
+            "url": "https://2060.io",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "anoncreds",
+        "sd_jwt_vc",
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "DIDComm v2",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://playground.testnet.verana.network/images/verandia/hero-fides.jpg"
+      ],
+      "imageUrl": "https://playground.testnet.verana.network/images/verandia/hero-fides.jpg",
+      "moreInfoUrl": "https://playground.testnet.verana.network/usecases/verandia",
+      "userJourney": "The Republic anchors everything on a Verifiable Public Registry: an open, neutral registry of ecosystems, schemas and permissions that a state can equally self-host. The National Business Registry becomes an accredited issuer of Organization credentials, so proving a company's identity is a lookup, not paperwork. The National Civil Registry runs its own open-source issuing service and creates the Citizen ID ecosystem: it defines the eIDAS-2-inspired schema and holds the ISSUER permission, while relying parties like the Tax Buro and Meridian Bank must obtain VERIFIER permissions before wallets will share anything, the registry analog of eIDAS 2 relying-party registration. Citizens scan a QR and receive the Citizen ID in any wallet from the open roster, over AnonCreds/DIDComm or OpenID4VCI (SD-JWT VC). Companies attach Business IDs to self-hosted business wallets and publish services; representatives add a Proof of Legal Representation. Before anything is shared, the wallet trust-resolves the counterparty against the registry and renders a Proof-of-Trust. An unauthorized lender that over-asks and a fake refund portal both fail resolution and are refused, with proof.",
+      "country": "EE"
+    },
+    {
       "id": "cexa-reusable-kyc-for-exchanges-and-banks-with-the-original-issuer-paid-on-every-reuse-cmd42L",
       "sector": "finance",
       "title": "CEXA: reusable KYC for exchanges and banks, with the original issuer paid on every reuse",
@@ -483,240 +654,6 @@
       "imageUrl": "https://playground.testnet.verana.network/images/factory-fides.jpg",
       "moreInfoUrl": "https://playground.testnet.verana.network/usecases/vesta",
       "userJourney": "Organization journey (Marc, CTO of Vesta): Marc deploys Vesta's Business Wallet (VS Agent) and anchors the company DID on the Verana Network. He completes KYB with an accredited issuer to obtain the ECS-Organization credential, then self-issues Service credentials so every Vesta service presents its identity as Linked VPs in its DID Document. He makes Vesta an ECS-Badge issuer for its ~200 employees and accredits a login service to verify those badges. Vesta's ISO 9001 certification becomes a verifiable credential, no re-certifying. Finally Marc builds the Vesta Repair Network, Vesta's own ecosystem with its own governance, issuing Authorized Repairer credentials that work at portal login and at the customer's front door.\n\nUser journey (runnable demos): choose a personal wallet, obtain an ECS-Badge from the demo issuer, log in to the staff portal as a repair employee with that badge instead of a password, then search the public directory of Authorized Repairers and check any repairer's Proof-of-Trust before opening the door.",
-      "country": "EE"
-    },
-    {
-      "id": "republic-of-verandia-citizen-ids-business-ids-and-legal-representation-on-one-open-trust-registry-WhRQPe",
-      "sector": "public_sector",
-      "title": "Republic of Verandia: citizen IDs, business IDs and legal representation on one open trust registry",
-      "summary": "A fictional democracy runs its own digital identity as sovereign infrastructure: every component is open source and self-hosted by its institutions, with no vendor to depend on. The Civil Registry operates its own issuing service for an eIDAS-2-compatible Citizen ID, the Business Registry issues verifiable Business IDs and Proofs of Legal Representation, and the Republic itself governs who may issue and who may verify, on a neutral public trust registry that a state can equally self-host. Citizens hold their credentials in the wallet they choose, from an open roster of independent open-source wallets, so no single app is ever mandated. One scan signs them in to the Tax Buro or their bank; an unauthorized lender's over-asking request and a fake refund portal are both refused, with proof.",
-      "organizationName": "Verana",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-12T22:15:43+01:00",
-      "publishedAt": "2026-08-12T22:15:43+01:00",
-      "tags": [
-        "verifiable trust",
-        "proof-of-trust",
-        "trust registry",
-        "digital identity",
-        "citizen ID",
-        "eIDAS 2",
-        "governed verification",
-        "KYB",
-        "legal representation",
-        "anti-phishing",
-        "DIDComm",
-        "Verana"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "inji-wallet",
-            "labelRaw": "Inji Wallet",
-            "url": "https://www.mosip.io",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "eudi-reference-personal-wallet",
-            "labelRaw": "EUDI Wallet Reference Implementation",
-            "url": "https://github.com/eu-digital-identity-wallet/",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "authbound-wallet",
-            "labelRaw": "Authbound Wallet",
-            "url": "https://authbound.io",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "paradym-wallet",
-            "labelRaw": "Paradym Wallet",
-            "url": "https://paradym.id",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "bc-wallet",
-            "labelRaw": "BC Wallet",
-            "url": "https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "wwwallet",
-            "labelRaw": "wwWallet",
-            "url": "https://wwwallet.org",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "hologram-messaging",
-            "labelRaw": "Hologram Messaging",
-            "url": "https://2060.io",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "sphereon-wallet",
-            "labelRaw": "Sphereon Edge Wallet",
-            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "altme-wallet",
-            "labelRaw": "Altme",
-            "url": "https://altme.io",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "national-eudi-wallet-netherlands",
-            "labelRaw": "NL Wallet (Netherlands)",
-            "url": "https://www.nldigitalgovernment.nl/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "vs-agent-verana-business-wallet",
-            "labelRaw": "VS Agent - Verana Business Wallet",
-            "url": "https://playground.testnet.verana.network/business-wallets",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [],
-        "credentials": [
-          {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
-            "labelRaw": "ECS Organization Credential",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
-            "labelRaw": "ECS Service Credential",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:verana",
-            "labelRaw": "Verana",
-            "url": "https://verana.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:mosip",
-            "labelRaw": "MOSIP",
-            "url": "https://www.mosip.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:eu",
-            "labelRaw": "European Commission - Government",
-            "url": "https://github.com/eu-digital-identity-wallet",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:authbound",
-            "labelRaw": "Authbound",
-            "url": "https://authbound.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:animo",
-            "labelRaw": "Animo Solutions",
-            "url": "https://animo.id",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:bcgov",
-            "labelRaw": "Government of British Columbia",
-            "url": "https://www2.gov.bc.ca/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:wwwallet",
-            "labelRaw": "wwWallet.org",
-            "url": "https://wwwallet.org",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:2060",
-            "labelRaw": "2060.io",
-            "url": "https://2060.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:sphereon",
-            "labelRaw": "Sphereon",
-            "url": "https://sphereon.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:talao",
-            "labelRaw": "Talao",
-            "url": "https://talao.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:bzk",
-            "labelRaw": "Ministerie van Binnenlandse Zaken en Koninkrijksrelaties",
-            "url": "https://www.rijksoverheid.nl/ministeries/ministerie-van-binnenlandse-zaken-en-koninkrijksrelaties",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "anoncreds",
-        "sd_jwt_vc",
-        "vcdm_1_1",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci",
-        "other"
-      ],
-      "presentationProtocols": [
-        "DIDComm v2",
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity",
-        "organizational_identity"
-      ],
-      "imageUrls": [
-        "https://playground.testnet.verana.network/images/verandia/hero-fides.jpg"
-      ],
-      "imageUrl": "https://playground.testnet.verana.network/images/verandia/hero-fides.jpg",
-      "moreInfoUrl": "https://playground.testnet.verana.network/usecases/verandia",
-      "userJourney": "The Republic anchors everything on a Verifiable Public Registry: an open, neutral registry of ecosystems, schemas and permissions that a state can equally self-host. The National Business Registry becomes an accredited issuer of Organization credentials, so proving a company's identity is a lookup, not paperwork. The National Civil Registry runs its own open-source issuing service and creates the Citizen ID ecosystem: it defines the eIDAS-2-inspired schema and holds the ISSUER permission, while relying parties like the Tax Buro and Meridian Bank must obtain VERIFIER permissions before wallets will share anything, the registry analog of eIDAS 2 relying-party registration. Citizens scan a QR and receive the Citizen ID in any wallet from the open roster, over AnonCreds/DIDComm or OpenID4VCI (SD-JWT VC). Companies attach Business IDs to self-hosted business wallets and publish services; representatives add a Proof of Legal Representation. Before anything is shared, the wallet trust-resolves the counterparty against the registry and renders a Proof-of-Trust. An unauthorized lender that over-asks and a fake refund portal both fail resolution and are refused, with proof.",
       "country": "EE"
     }
   ]
