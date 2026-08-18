@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-18T18:17:43+00:00",
+    "generatedAt": "2026-08-18T18:18:33+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6175,12 +6175,12 @@
                     "id": "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh",
                     "sector": "finance",
                     "title": "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet",
-                    "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n- Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
+                    "summary": "Use Case: This end-to-end digital business workflow automates and secures high-assurance onboarding across the business lifecycle\n- Know Your Business (KYB): Foundation for obtaining the EBWOID and EUCC.\n- Know Your Customer (KYC): Financial-sector onboarding, including IBAN issuance.\n- Know Your Supplier (KYS): Supplier onboarding, including invoice submission.\n\nProblem: Manual corporate verification is slow, costly, and creates friction. Gathering complex corporate data to comply with EU \nregulations (AMLR, GwG, e-invoicing, etc.), conducting periodic reviews, and preventing invoice fraud are key pain points.\n\nValue: Dramatically reduces onboarding time and administrative effort while mitigating transaction risks. Issued once, reused across the EU, and shared through different channels.\n\nOrganizations: Bundesanzeiger Verlag (Identity Issuer), Deutsche Bank (IBAN Issuer/Verifier), Bosch (Holder/KYS Verifier), SBB (Supplier Holder/Invoice Issuer) and legal representatives (EUDI Wallet/authorized signatories).\n\nWallets: EU Business Wallets (Procivis/Spherity) securely store EBWOID, EUCC, Company Info, IBAN, and other attestations using OpenID4VCI/VP and SD-JWT standards.",
                     "organizationName": "Robert Bosch GmbH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-17T19:07:32+01:00",
-                    "publishedAt": "2026-08-17T19:07:32+01:00",
+                    "updatedAt": "2026-08-18T19:18:33+01:00",
+                    "publishedAt": "2026-08-18T19:18:33+01:00",
                     "tags": [
                         "#EBWOID",
                         "#EUCC",
@@ -6494,6 +6494,13 @@
                                 "url": null,
                                 "source": "manual",
                                 "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Robert Bosch BV",
+                                "url": "https://www.bosch.nl/",
+                                "source": "manual",
+                                "walletType": null
                             }
                         ]
                     },
@@ -6530,7 +6537,7 @@
                         "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
                         "provider": "vimeo"
                     },
-                    "userJourney": "(1) KYB - Legal Entity Identification and info\n- A Bosch Representative presents their personal PID via EUDI Wallet to Bundesanzeiger Business Wallet (Spherity).\n- Bundesanzeiger issues the EU Business Wallet Owner Identification Data (EBWOID) \nand EU Company Credential (EUCC) attestations directly to the Bosch Business Wallet (Procivis).\n\n(2) KYC & Financial Onboarding\n- Bosch presents its attestation (EBWOID, EUCC) alongside multi-source attestations (Ownership, VAT, UBO, etc.) \nto the Deutsche Bank Business Wallet (Procivis) .\n- The Ultimate Beneficial Owner's (UBO) identity is verified via their personal EUDI Wallet.\n- The corporate account contract is created and signed (skipped by demo).\n- Deutsche Bank issues an IBAN Owner (IBAN-OV) Attestation directly to the Bosch Business Wallet.\n\n(3) KYS & Invoice Issuing\n- The supplier, SBB presents its corporate credentials (EBWOID, EUCC, VAT, etc.) for instant, automated KYS onboarding at Bosch.\n- Additionally, SBB’s commercial Payment Terms and bank-issued IBAN-OV attestations are presented to secure the payment triggering.\n- SBB delivers the ordered parts and issues a cryptographically signed eInvoice  to the Bosch Business Wallet&",
+                    "userJourney": "(1) KYB - Legal Entity Identification and info\n- A Bosch Representative presents their personal PID via EUDI Wallet to Bundesanzeiger Business Wallet (Spherity).\n- Bundesanzeiger Verlag issues EU Business Wallet Owner Identification Data (EBWOID) and EU Company Credential (EUCC) attestations directly to Bosch Business Wallet (Procivis).\n\n(2) KYC & Financial Onboarding\n- Bosch presents its attestation (EBWOID, EUCC) alongside multi-source attestations (Ownership, VAT, UBO, etc.) \nto the Deutsche Bank Business Wallet (Procivis) .\n- The Ultimate Beneficial Owner's (UBO) identity is verified via their personal EUDI Wallet.\n- The corporate account contract is created and signed (skipped by demo).\n- Deutsche Bank issues an IBAN Owner (IBAN-OV) Attestation directly to the Bosch Business Wallet.\n\n(3) KYS & Invoice Issuing\n- The supplier, SBB presents its corporate credentials (EBWOID, EUCC, VAT, etc.) for instant, automated KYS onboarding at Bosch.\n- Additionally, SBB’s commercial Payment Terms and bank-issued IBAN-OV attestations are presented to secure the payment triggering.\n- SBB delivers the ordered parts and issues a cryptographically signed eInvoice  to the Bosch Business Wallet&",
                     "country": "DE"
                 }
             ]
