@@ -1,10 +1,110 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-18T05:04:16.535Z",
+  "lastUpdated": "2026-08-18T12:25:36.540Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 64,
+  "count": 65,
   "useCases": [
+    {
+      "id": "ssitizens-verifiable-social-aid-how-municipalities-merchants-and-citizens-exchange-trust-with-wallets-mU94V3",
+      "sector": "public_sector",
+      "title": "SSITIZENS — Verifiable social aid: how municipalities, merchants and citizens exchange trust with Wallets",
+      "summary": "Social aid programmes suffer from shared friction: citizens face paperwork to reach benefits they are entitled to, administrations run manual processes with limited traceability, and local merchants deal with heavy justification workflows to claim payments back.\n\nSSITIZENS redesigns this circuit with decentralized identity, verifiable credentials, and tokenized aid governed by smart contracts. Vulnerable citizens receive a verifiable credential attesting their right to benefit, hold it in a mobile wallet, and spend the aid at accredited local merchants using tokens backed by real money. Merchants get automatic, auditable reimbursement in euros. Administrations gain full traceability of every public euro spent.\n\nThe pilot ran with the City Council of Córdoba, the Uno a Uno social association and local merchants, each operating with its own digital identity. Results: 98% redemption rate, 90% less administrative workload. Selected under NGI TrustChain and awarded the 2025 Alastria Blockchain Award for Best Decentralized Digital Identity Project.",
+      "organizationName": "Izertis S.A.",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-18T13:25:20+01:00",
+      "publishedAt": "2026-08-18T13:25:20+01:00",
+      "tags": [],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "identfy-personal-wallet",
+            "labelRaw": "Identfy",
+            "url": "https://identfy.es/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "identfy-personal-wallet",
+            "labelRaw": "Identfy",
+            "url": "https://identfy.es/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "identfy-business-wallet",
+            "labelRaw": "Identfy Business Wallet",
+            "url": "https://identfy.es/",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:izertis",
+            "labelRaw": "Izertis S.A.",
+            "url": "https://www.izertis.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "City Council of Córdoba",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Uno a Uno social association",
+            "url": "http://Uno%20a%20Uno%20social%20association",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "payments"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/inicio.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/inicio.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=gTPwuvMB7hI&t=2s",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=gTPwuvMB7hI&t=2s",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.izertis.com/en/w/news/ssitizens-the-technology-that-makes-social-assistance-available-to-everyone",
+      "userJourney": "1. Municipality issues the credential. The City Council, as trusted issuer, signs a verifiable credential attesting the citizen's eligibility and delivers it to the citizen's mobile wallet via OID4VCI.\n\n2. Merchants join with a business identity. Each shop is accredited through its own business wallet and receives an organizational credential proving it is a valid party in the programme.\n\n3. Aid is minted as tokenized funds. The administration issues programmable tokens backed one-to-one by the budget. Smart contracts govern roles, scope, expiration and redemption.\n\n4. Citizen pays with a QR. At the point of sale, the citizen scans the merchant's QR. The wallet presents the credential (OID4VP) and the smart contract transfers tokens to the merchant. No card, no password.\n\n5. AI validates the purchase. The merchant uploads the receipt; an LLM-based module checks that items fall within eligible categories, with no manual review.\n\n6. Automatic reimbursement. The smart contract triggers reimbursement to the merchant's bank account in euros. The full trail is recorded on-chain for real-time auditing.",
+      "country": "ES"
+    },
     {
       "id": "samsung-sds-integrated-digital-wallet-b5dcHk",
       "sector": "finance",
