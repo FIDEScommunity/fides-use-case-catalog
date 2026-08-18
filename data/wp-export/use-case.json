@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-18T04:27:46+00:00",
+    "generatedAt": "2026-08-18T05:01:39+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -2033,6 +2033,121 @@
                     "moreInfoUrl": "https://www.spherity.com/digital-product-passport",
                     "userJourney": "Battery and product data from the vehicle manufacturer and relevant technical systems is connected to Spherity’s DPP software. A unique digital passport is created for each battery unit and linked to the physical battery through a product identifier and QR code. The solution structures and validates information such as battery composition, sourcing, carbon footprint, regulatory documents, and operational performance. BVG can access this information during the battery’s use phase for compliance reporting, sustainability assessment, maintenance, and lifecycle management, while other authorised parties may provide or retrieve information relevant to their role. The passport can be updated as the battery is operated, serviced, reused, or recycled, creating a continuous and trusted record across its lifecycle.",
                     "country": "DE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "california-community-colleges-technology-center",
+            "orgId": "org:ca-dmv",
+            "orgName": "California Community Colleges Technology Center",
+            "useCases": [
+                {
+                    "id": "reducing-fraud-shrinking-statewide-expenses-and-driving-digital-identity-value-in-california-Emoizu",
+                    "sector": "education",
+                    "title": "Reducing fraud, shrinking statewide expenses and driving digital identity value in California",
+                    "summary": "The California Community Colleges have been battling high volume attacks by fraudsters since 2018. These efforts were largely duplicative of the fraud fighting ecosystem at the California DMV, yet the systems lacked a point of integration to share data. When the California DMV made the digital identity stored in their mobile wallet available through the OpenCred platform, California Community Colleges rushed to adopt it. College bound students can now expedite their onboarding by verifying their identity upfront, providing assurance that their digital interactions are authentic. This expedites admissions, enrollment, and financial aid for students while also greatly reducing workload for college staff. The CCC Technology Center manages the OpenCred platform, now fully integrated with the statewide student account system, OpenCCC. In the first nine months, 160k individuals successfully verified their identity through the CCC/DMV integration, boosting the percentage of applicants who streamlined their journey via upfront identity verification by 12%.  Extending mDL to account recovery augmented this value, slashing administrative burden while protecting access for authentic students",
+                    "organizationName": "California Community Colleges Technology Center",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-18T06:01:39+01:00",
+                    "publishedAt": "2026-08-18T06:01:39+01:00",
+                    "tags": [
+                        "d fighting",
+                        "digital identity",
+                        "privacy",
+                        "efficiency",
+                        "government collaboration"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "ca-dmv-wallet",
+                                "labelRaw": "CA DMV Wallet",
+                                "url": "https://www.dmv.ca.gov/portal/ca-dmv-wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "CA DMV mobile wallet",
+                                "url": "https://www.dmv.ca.gov/portal/ca-dmv-wallet/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:ca-dmv",
+                                "labelRaw": "California Department of Motor Vehicles (CA DMV)",
+                                "url": "https://www.dmv.ca.gov/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "California Community Colleges Technology Center",
+                                "url": "https://ccctechcenter.org/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "California Community Colleges Technology Center",
+                                "url": "https://ccctechcenter.org/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc",
+                        "vcdm_1_1"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "ISO 18013-5",
+                        "ISO 18013-7",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "HAIP v1"
+                    ],
+                    "themes": [
+                        "person_identity",
+                        "education"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-17-at-8.32.32-AM.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-17-at-8.32.32-AM.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/V-bAnMAnNAM",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://youtu.be/VpD-E38BBNs",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/V-bAnMAnNAM",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://digitalfutures.cccco.edu/new-tools-to-strengthen-student-account-security/",
+                    "userJourney": "When a college bound student signs into, or creates their OpenCCC account, which is the first step in applying to a California Community College, they are prompted to verify their identity.  DMV mobile wallet is highlighted as the preferred option for anyone with a CA driver's license or ID card, and access to a smartphone.  New mDL users will download the app, scan their ID and do a selfie match.  mDL holders will only need to scan the QR code and accept the prompt to share information with the CCCs. Their OpenCCC account is then marked as verified, and they are prompted to continue with their application as a verified student. Colleges receiving the verified applications can then skip labor intensive local verification processes, and fastrack the student to enrollment/ financial aid.  OpenCCC users who lose access to their accounts can recover them using a similar mDL workflow: 1- scan the QR code, 2- accept data sharing, 3- confirm account details for a matched account, 4- gain access and reset their password.  5- use their verified account to submit a college admission application",
+                    "country": "US"
                 }
             ]
         },
