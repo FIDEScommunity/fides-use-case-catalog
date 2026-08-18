@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-18T18:18:33+00:00",
+    "generatedAt": "2026-08-18T20:36:09+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5736,6 +5736,174 @@
                     },
                     "userJourney": "•\t1. The mine’s operator signs in; a non-extractable key is generated in the browser; its public half is published in a did:web on the mine’s domain (append-only).\n•\t2. The mine self-issues the origin credential (SD-JWT VC) for a bar, from the bar’s own screen.\n•\t3. The mine requests the carbon certificate; Natixar’s signing service issues the CarbonIntensityCredential (SD-JWT VC), bound to the origin credential [re-computing from a signed extraction, if the matrix is built].\n•\t4. The credential is held in the OpenWallet-based business wallet.\n•\t5. The holder presents via QR, disclosing selected fields only (SD-JWT selective disclosure).\n•\t6. The verifier checks on a public page — DID resolution, signature, disclosed-data integrity, revocation status — no account, no call to Natixar. Tampered / revoked / replayed presentations are rejected.",
                     "country": "FR"
+                }
+            ]
+        },
+        {
+            "orgSlug": "neoflow-mavennet-inc",
+            "orgId": "org:neoflow-mavennet-inc",
+            "orgName": "Neoflow (Mavennet Inc.)",
+            "useCases": [
+                {
+                    "id": "neoflow-digital-energy-passport-for-cross-border-crude-oil-clearance-RZDhoP",
+                    "sector": "energy",
+                    "title": "Neoflow Digital Energy Passport for Cross-Border Crude Oil Clearance",
+                    "summary": "Neoflow operates a digital rail for energy traceability across the Canada-U.S. border. Every batch of crude oil crossing by pipeline now carries a verifiable Digital Passport built with a set of W3C verifiable credentials proving, in real time, who owns it, where it came from, what it is, and where it sits.  \n\nToday, a single batch of crude oil passes through 100-plus documents and 15-plus parties before clearing customs and it takes 45-90 days to do so, after the barrels have crossed the border. Furthermore, Importers who cannot prove USMCA origin may face tariffs.  \n\nNeoflow solves this by issuing and consolidating W3C verifiable credentials at the batch level across its lifecycle, built on open VCDM and DID standards. Companies issue their own data, Neoflow holds and presents it, CBP verifies. Every credential is cryptographically signed, so origin clears digitally and cuts tariff exposure. \n\nNeoflow is life since July 2nd, 2026 and accounting for close to 25% of all oil flows from Canada into the US allowing crude oil importers to seamlessly share information about their products with US Customs and Border Protection.",
+                    "organizationName": "Neoflow (Mavennet Inc.)",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-18T21:36:09+01:00",
+                    "publishedAt": "2026-08-18T21:36:09+01:00",
+                    "tags": [
+                        "verifiable credentials",
+                        "digital energy passport",
+                        "crude oil",
+                        "cross-border trade",
+                        "USMCA",
+                        "customs clearance",
+                        "proof of origin",
+                        "supply chain traceability",
+                        "W3C VCDM",
+                        "W3C DID",
+                        "oil and gas",
+                        "U.S. CBP"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Neoflow Wallet",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Neoflow (Mavennet Inc.)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Crude Oil Product Verifiable Credential (Digital Passport)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "post-arrival delivery credential",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "entry number credential",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "EPCIS Credentials",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Neoflow (Mavennet Inc.)",
+                                "url": "http://neoflow.energy",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "U.S. Customs and Border Protection (CBP)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "U.S. Department of Homeland Security",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Canada’s largest crude oil importers (25% of the whole market)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "U.S. Customs and Border Protection (CBP)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "licensed customs brokers",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "refineries",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "jwt_vc",
+                        "sd_jwt_vc",
+                        "vcdm_1_1",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "other"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "DIIP v4",
+                        "DIIP v5"
+                    ],
+                    "themes": [
+                        "compliance_reporting",
+                        "trade_documents",
+                        "digital_product_passports"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/Full-production-July-2026-Developed-and-launched-in-partnership-with-U.S.-CBP-Neoflow-is-the-digital-rail-for-the-OG-Industry-with-a-federal-mandate-for-digitizing-energy-flows-into-the-U.S.-Ou-13.png",
+                        "https://fides.community/app/uploads/2026/08/Full-production-July-2026-Developed-and-launched-in-partnership-with-U.S.-CBP-Neoflow-is-the-digital-rail-for-the-OG-Industry-with-a-federal-mandate-for-digitizing-energy-flows-into-the-U.S.-Ou-10.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/Full-production-July-2026-Developed-and-launched-in-partnership-with-U.S.-CBP-Neoflow-is-the-digital-rail-for-the-OG-Industry-with-a-federal-mandate-for-digitizing-energy-flows-into-the-U.S.-Ou-13.png",
+                    "moreInfoUrl": "https://www.neoflow.energy",
+                    "userJourney": "Neoflow gives each company in a cross-border energy shipment an agent to create assertions about oil shipments as verifiable credentials. As a shipment moves from origin to a US destination, each party contributes the facts it is responsible for. Neoflow turns these into credentials and assembles one Digital Passport per shipment, which CBP and stakeholders can check instead of waiting on paper.\n\nCompanies are the data source, so they issue credentials for their part. Neoflow holds and presents them on their behalf, and CBP verifies them. Each credential is cryptographically signed, and parties see only what is relevant to their role.\n\n1. Onboarding: A company joins once and registers identifying details as reusable credentials.\n2. Before arrival: Parties contribute data; Neoflow assembles the Passport and presents it to CBP before crossing for early visibility.\n3. In-transit and delivery: As the shipment moves and changes hands, each party adds its part and Neoflow updates the Passport in real time.\n4. Entry and clearance: The customs broker files the entry and links it on Neoflow. With origin and movement already proven, clearance is faster and no separate USMCA proof is needed.",
+                    "country": "CA"
                 }
             ]
         },
