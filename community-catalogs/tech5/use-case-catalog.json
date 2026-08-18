@@ -1,0 +1,181 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:tech5",
+  "orgName": "TECH5",
+  "useCases": [
+    {
+      "id": "honduras-billetera-electronica-nacional-bien-4-gob-authorities-issuing-into-one-citizen-controlled-wallet-YVNSXc",
+      "sector": "digital",
+      "title": "Honduras: Billetera Electronica Nacional (BIEN) - 4 gob authorities issuing into one citizen-controlled wallet",
+      "summary": "Honduras launched BIEN, a self-sovereign digital identity wallet letting citizens hold and present official state credentials from their phone. Four authorities issue into one wallet: RNP (biometric national ID, DNIB) and INM (residence card for foreign residents) are the foundational trust anchors; DNVT (driving licence) and DPI/National Police (firearms permit) build on that root of trust.\n\nBefore BIEN, each document came from a different authority and could only be verified in person. The real challenge was legal standing and institutional acceptance, not digitization. Resolution No. 37,196 gave the DNIB legal equivalence to the physical ID, and institutions were instructed to accept wallet credentials within a week of launch. In month one, roughly 200,000 credentials were issued across RNP, INM, DNVT and DPI, reaching Hondurans at home and in the US.\n\nBuilt on open standards (W3C Verifiable Credentials/DIDs, DIDComm v2, OIDC4VCI/VP, SD-JWT, ISO specs), BIEN stores credentials encrypted on-device, unlocked by face and password, and discloses only the fields a verifier needs. Any authority can verify offline via an encrypted 2D barcode, no internet required.",
+      "organizationName": "TECH5",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-18T17:17:36+01:00",
+      "publishedAt": "2026-08-18T17:17:36+01:00",
+      "tags": [
+        "identity",
+        "public sector",
+        "digital wallet",
+        "verifiable credentials",
+        "biometrics",
+        "offline verification",
+        "digital public infrastructure",
+        "Latin America",
+        "government credentials"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "BIEN - Billetera Electronica Nacional (Android and iOS, free, publisher: Direccion de Gestion por Resultados)",
+            "url": "https://play.google.com/store/apps/details?id=com.honduras.bien&pcampaignid=web_share",
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "RNP (Registro Nacional de las Personas",
+            "url": "https://www.rnp.hn/sites/rnpweb/Inicio",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "INM (Instituto Nacional de Migración",
+            "url": "https://inm.gob.hn",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "DNVT (Direccion Nacional de Vialidad y transporte)",
+            "url": "https://policianacional.gob.hn/dnvt/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "DPI (Dirección Policial de Investigaciones)",
+            "url": "https://policianacional.gob.hn/dpt-2/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "DIGER (Direccion de Gestion por Resultados) - Trust Authority: ecosystem operator and programme implementer",
+            "url": "https://www.diger.gob.hn/identidad-digital",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "DNIB - Documento Nacional de Identificacion Biometrico (RNP, Person Identification Data, PID)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "CDER- Carnet de Extranjero Residente(INM, Person Identification Data, PID)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "PCD (Permiso de Conducir Digital, PuB-EAA Public Attestation of Attributes)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "PPA (Permiso de Portación de Armas, PuB-EAA Public Attestation of Attributes)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:tech5",
+            "labelRaw": "TECH5",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Policia Nacional - officers required nationwide to accept credentials presented from the wallet at any checkpoint.",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "DIDComm v2",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/1.webp",
+        "https://fides.community/app/uploads/2026/08/2-1.webp",
+        "https://fides.community/app/uploads/2026/08/3-1.webp",
+        "https://fides.community/app/uploads/2026/08/4-1.webp"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/1.webp",
+      "videos": [
+        {
+          "url": "https://youtu.be/wKQxV9O-k64?si=XYW3QStIIVqQ5FmJ",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://youtube.com/shorts/j5EiM5PI3lA?si=INwcf5mSZn_F9W9f",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://youtube.com/shorts/d0cJPDWK61s?si=Lr18o_l0fCR7VlZd",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=aCgyC9P3T0Q&t=7s",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=QUmYI0f1c1E",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/wKQxV9O-k64?si=XYW3QStIIVqQ5FmJ",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.diger.gob.hn/identidad-digital",
+      "userJourney": "1. The citizen downloads BIEN free (Google Play/App Store) and registers a phone number and password.\n\n2. They select their identity provider: RNP for Honduran nationals, INM for legal foreign residents.\n\n3. They capture their face with the front camera. A liveness check runs first, then it's matched 1:1 against the issuing authority's own biometric record — the authority verifies the citizen, not the platform.\n\n4. The credential is issued into the wallet in seconds as a W3C Verifiable Credential paired with a 2D barcode carrying the signature and a biometric reference, enabling fully offline verification.\n\n5. Using that credential as proof of identity, DNVT (driving licence) and DPI/National Police (firearms permit) issue further credentials into the same wallet — no re-enrolment needed.\n\n6. To present a credential, the citizen unlocks the wallet with face and password, then shares it offline (2D barcode, no network needed), remotely (online transactions), or by proximity (NFC/BLE).\n\n7. The citizen sees which fields are requested and consents before sharing (selective disclosure); only needed data leaves the device. Digital and physical documents carry equal legal weight.",
+      "country": "HN"
+    }
+  ]
+}
