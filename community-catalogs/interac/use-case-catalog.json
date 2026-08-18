@@ -1,0 +1,121 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:interac",
+  "orgName": "Interac",
+  "useCases": [
+    {
+      "id": "from-repeated-verification-to-reusable-trust-re-imagining-the-real-estate-purchasing-journey-kS1jWN",
+      "sector": "digital",
+      "title": "From Repeated Verification to Reusable Trust: Re-imagining the Real Estate Purchasing Journey",
+      "summary": "Interac Verified™ credential service is Canada's reusable digital credential network, enabling consumers to verify their identity once and securely reuse it across multiple interactions. The solution addresses common challenges in high-assurance industries such as real estate: repetitive identity checks, fraud risk, compliance burden, and poor user experiences.\n\nIn this first-to-market use case, Interac issues a high-assurance credential and enables users to securely store it in the Interac Verified™ app. \n\nFCT, a leading real estate technology provider, embeds credential verification directly into existing real estate workflows, accelerating adoption and minimizing implementation effort.\n\nHomebuyers can securely share their credential with relying parties, including realtors, brokers, lenders, and lawyers. Consent-based sharing and selective disclosure ensure only the required information is shared.\n\nThe result is faster transactions, reduced fraud, improved privacy, and a better user experience. By replacing repeated verification with reusable trust, Interac and FCT are modernizing identity verification for one of Canada's most important financial transactions: purchasing a home.",
+      "organizationName": "Interac",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-18T15:38:52+01:00",
+      "publishedAt": "2026-08-18T15:38:52+01:00",
+      "tags": [
+        "identity",
+        "credentials",
+        "verification",
+        "real estate",
+        "high assurance"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "Interac Verified App",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Interac",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Interac Verified Credential",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Interac",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "First Canadian Title",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Fintracker",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "First Canadian Title",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "DIIP v5",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "videos": [
+        {
+          "url": "https://youtu.be/8xexvZ9CllA?si=Md7XxeD3QwsUkTsW",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/8xexvZ9CllA?si=Md7XxeD3QwsUkTsW",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.interac.ca/en/verification/business/interac-verified-credential-service/",
+      "userJourney": "Step 1: Download the Interac Verified™ App\n\nThe user receives a verification request from a relying party (e.g., realtor, broker, or lawyer) via email, SMS, or QR code. They download and register for the Interac Verified™ app, which supports secure passkey-based sign-in.\n\nStep 2: Create a Verified Credential\n\nThe user creates an Interac Verified™ Credential by completing two verification steps: authenticating with a participating Canadian financial institution and verifying their identity using a selfie and government-issued ID. Once completed, their credential is issued and securely stored on their device.\n\nStep 3: Share and Reuse\n\nWhen requested, the user consents to share their credential with a relying party. Through selective disclosure, only the required information is shared. The credential remains on the user's device for future use, enabling fast, secure verification across multiple transactions. Verify once, reuse many times.",
+      "country": "CA"
+    }
+  ]
+}
