@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-18T16:17:36+00:00",
+    "generatedAt": "2026-08-18T18:17:26+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -8132,8 +8132,8 @@
                     "organizationName": "Verana",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-18T06:02:01+01:00",
-                    "publishedAt": "2026-08-18T06:02:01+01:00",
+                    "updatedAt": "2026-08-18T19:17:25+01:00",
+                    "publishedAt": "2026-08-18T19:17:25+01:00",
                     "tags": [
                         "Finance",
                         "Crypto",
@@ -8214,6 +8214,13 @@
                                 "url": "https://www.nldigitalgovernment.nl/",
                                 "source": "catalog",
                                 "walletType": "personal"
+                            },
+                            {
+                                "refId": "swiyu-wallet",
+                                "labelRaw": "SWIYU Wallet",
+                                "url": "https://www.swiyu.admin.ch/",
+                                "source": "catalog",
+                                "walletType": "personal"
                             }
                         ],
                         "businessWallets": [
@@ -8225,7 +8232,36 @@
                                 "walletType": "organizational"
                             }
                         ],
-                        "issuers": [],
+                        "issuers": [
+                            {
+                                "refId": "issuer:verana:verana-playground-issuer-aurum:test",
+                                "labelRaw": "Aurum Exchange (demo) — cexa-kyc (CEXA-Kyc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:verana:verana-playground-cexa-association:test",
+                                "labelRaw": "Crypto Exchange Association (demo) — cexa-verified-counterparty (CEXA-VerifiedCounterparty)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:verana:verana-playground-issuer-novara:test",
+                                "labelRaw": "Novara Bank (demo) — cexa-kyc (CEXA-Kyc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:verana:verana-playground-helvetia-trust:test",
+                                "labelRaw": "Helvetia Trust (demo) — ecs-organization (ECS Organization Credential)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
                         "credentials": [
                             {
                                 "refId": "cred:verana:ecs-organization:vcdm-2-0",
@@ -8237,6 +8273,20 @@
                             {
                                 "refId": "cred:verana:ecs-service:vcdm-2-0",
                                 "labelRaw": "ECS Service Credential",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:verana:cexa-kyc:sd-jwt-vc",
+                                "labelRaw": "CEXA-Kyc",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:verana:cexa-verified-counterparty:vcdm-2-0",
+                                "labelRaw": "CEXA-VerifiedCounterparty",
                                 "url": null,
                                 "source": "catalog",
                                 "walletType": null
@@ -8258,7 +8308,36 @@
                                 "walletType": null
                             }
                         ],
-                        "rps": []
+                        "rps": [
+                            {
+                                "refId": "cexa-aurum",
+                                "labelRaw": "Aurum Exchange (demo)",
+                                "url": "https://aurum.cexa.playground.testnet.verana.network",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cexa-borealis",
+                                "labelRaw": "Borealis Markets (demo)",
+                                "url": "https://borealis.cexa.playground.testnet.verana.network",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cexa-darkpool",
+                                "labelRaw": "DarkPool Exchange (demo)",
+                                "url": "https://darkpool.cexa.playground.testnet.verana.network",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cexa-novara",
+                                "labelRaw": "Novara Bank (demo)",
+                                "url": "https://novara.cexa.playground.testnet.verana.network",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
                     },
                     "interactionModes": [
                         "remote"
