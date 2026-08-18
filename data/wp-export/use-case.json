@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-18T05:02:01+00:00",
+    "generatedAt": "2026-08-18T05:03:22+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -4504,8 +4504,8 @@
                     "organizationName": "K4-Security",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-03T06:37:08+01:00",
-                    "publishedAt": "2026-08-03T06:37:08+01:00",
+                    "updatedAt": "2026-08-18T06:03:22+01:00",
+                    "publishedAt": "2026-08-18T06:03:22+01:00",
                     "tags": [
                         "DPP",
                         "supply chain",
@@ -4592,6 +4592,55 @@
                                 "url": "https://www.k4-security.com/",
                                 "source": "catalog",
                                 "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "GS1/Korea",
+                                "url": "https://gs1kr.org/front/main/appl/main.asp",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "RFID/NURIDSM",
+                                "url": "https://www.nuridsm.com/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "EBW/Danube Tech",
+                                "url": "https://danubetech.com/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "DIF",
+                                "url": "https://identity.foundation/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "LEI/GLEIF",
+                                "url": "https://www.gleif.org/en",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "KUMHO TIRE",
+                                "url": "https://www.kumhotire.com/en/index.do",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Textile/Dyetec",
+                                "url": "https://www.dyetec.or.kr",
+                                "source": "manual",
+                                "walletType": null
                             }
                         ],
                         "rps": []
@@ -4609,7 +4658,9 @@
                     "presentationProtocols": [
                         "OpenID4VP"
                     ],
-                    "interopProfiles": [],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF"
+                    ],
                     "themes": [
                         "digital_product_passports",
                         "trade_documents",
