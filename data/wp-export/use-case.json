@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T20:14:47+00:00",
+    "generatedAt": "2026-08-19T20:15:29+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -7308,11 +7308,11 @@
                     "id": "verifiable-participant-identity-for-cross-border-financial-messaging-JxVLHY",
                     "sector": "finance",
                     "title": "Verifiable Participant Identity for Cross-Border Financial Messaging",
-                    "summary": "RTGS.global is a live SaaS platform coordinating cross-border FX and payment workflows between participating financial institutions, including banks, fund controllers, financial market infrastructures and central banks across jurisdictions.\r\n\r\nRTGS.global provides the shared operating and messaging layer through which participants establish governed relationships and coordinate payment workflows. It operates without holding participant funds or acting as an authoritative settlement record; institutions maintain their own records and external settlement arrangements.\r\n\r\nThe trust challenge is ensuring that every institution communicating across the network is reliably identified and that all instructions are authenticated and tamper-evident. Traditional static certificates cannot satisfy this dynamically across distributed participants. RTGS.global solves this by embedding verifiable institutional identity into every communication and financial message across its network.",
+                    "summary": "RTGS.global is a live SaaS platform coordinating cross-border FX and payment workflows between participating financial institutions, including banks, fund controllers, financial market infrastructures and central banks across jurisdictions.\n\nRTGS.global provides the shared operating and messaging layer through which participants establish governed relationships and coordinate payment workflows. It operates without holding participant funds or acting as an authoritative settlement record; institutions maintain their own records and external settlement arrangements.\n\nThe trust challenge is ensuring that every institution communicating across the network is reliably identified and that all instructions are authenticated and tamper-evident. Traditional static certificates cannot satisfy this dynamically across distributed participants. RTGS.global solves this by embedding verifiable institutional identity into every communication and financial message across its network.",
                     "organizationName": "RTGS.global",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-14T11:22:32+01:00",
+                    "updatedAt": "2026-08-19T21:15:29+01:00",
                     "publishedAt": "2026-08-14T11:22:32+01:00",
                     "tags": [
                         "digital identity",
@@ -7333,14 +7333,14 @@
                         "credentials": [],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:rtgs-global",
                                 "labelRaw": "RTGS.global",
                                 "url": "https://rtgs.global/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:indicio",
                                 "labelRaw": "Indicio",
                                 "url": "https://indicio.tech/indicio-mainnet/",
                                 "source": "manual",
@@ -7377,7 +7377,7 @@
                     ],
                     "imageUrl": "https://fides.community/app/uploads/2026/08/RTGS.global-logo_16x9.jpg",
                     "moreInfoUrl": "https://developers.rtgs.global/technical-articles/reference/trusted-participant-identity/",
-                    "userJourney": "1. Onboarding: RTGS.global emails a single-use out-of-band invitation. The participant's managed Aries agent loads it at container startup to establish a peer-to-peer connection via DIDComm v1. DIDs and credential definitions are anchored on Hyperledger Indy.\r\n2. Credential issuance: RTGS.global issues an AnonCreds credential binding institutional attributes to the participant's managed agent wallet.\r\n3. Proof verification: The participant presents a zero-knowledge proof of credential possession. RTGS.global verifies the proof and checks revocation status before activating the connection.\r\n4. Message signing: Active connections use pairwise DIDs. Every enabled financial message is cryptographically signed by the sending agent using relationship-specific keys.\r\n5. Verification: The receiving service validates the signature against the connection key, confirming the authenticated sender and intended recipient before processing.\r\n6. Lifecycle: Trust maintenance is automated via scheduled and DIDComm-instructed key cycling, connection cleanup, credential updates and offboarding.",
+                    "userJourney": "1. Onboarding: RTGS.global emails a single-use out-of-band invitation. The participant's managed Aries agent loads it at container startup to establish a peer-to-peer connection via DIDComm v1. DIDs and credential definitions are anchored on Hyperledger Indy.\n2. Credential issuance: RTGS.global issues an AnonCreds credential binding institutional attributes to the participant's managed agent wallet.\n3. Proof verification: The participant presents a zero-knowledge proof of credential possession. RTGS.global verifies the proof and checks revocation status before activating the connection.\n4. Message signing: Active connections use pairwise DIDs. Every enabled financial message is cryptographically signed by the sending agent using relationship-specific keys.\n5. Verification: The receiving service validates the signature against the connection key, confirming the authenticated sender and intended recipient before processing.\n6. Lifecycle: Trust maintenance is automated via scheduled and DIDComm-instructed key cycling, connection cleanup, credential updates and offboarding.",
                     "country": "GB"
                 }
             ]
