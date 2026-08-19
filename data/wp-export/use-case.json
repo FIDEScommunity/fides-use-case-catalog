@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T20:01:24+00:00",
+    "generatedAt": "2026-08-19T20:03:20+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5467,7 +5467,7 @@
                     "organizationName": "K4-Security",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-19T20:34:53+01:00",
+                    "updatedAt": "2026-08-19T21:03:20+01:00",
                     "publishedAt": "2026-08-19T06:35:56+01:00",
                     "tags": [
                         "DPP",
@@ -5557,31 +5557,31 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:gs1-korea",
                                 "labelRaw": "GS1/Korea",
                                 "url": "https://gs1kr.org/front/main/appl/main.asp",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:nuridsm",
                                 "labelRaw": "RFID/NURIDSM",
                                 "url": "https://www.nuridsm.com/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:danubetech",
                                 "labelRaw": "EBW/Danube Tech",
                                 "url": "https://danubetech.com/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:dif",
                                 "labelRaw": "DIF",
                                 "url": "https://identity.foundation/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
@@ -5592,17 +5592,17 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:kumho-tire",
                                 "labelRaw": "KUMHO TIRE",
                                 "url": "https://www.kumhotire.com/en/index.do",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:dyetec",
                                 "labelRaw": "Textile/Dyetec",
                                 "url": "https://www.dyetec.or.kr",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
