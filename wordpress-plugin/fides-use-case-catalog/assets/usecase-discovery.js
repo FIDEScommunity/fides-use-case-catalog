@@ -1,6 +1,7 @@
 /**
  * Count-up animation for the Use Case Discovery shortcode.
  * Matches the timing and easing used by FIDES Community Tools Tiles.
+ * Also wires Matomo events from data-matomo-* attributes on links.
  */
 (function () {
   "use strict";
@@ -16,6 +17,32 @@
       typeof window.matchMedia === "function" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches
     );
+  }
+
+  function trackMatomoEvent(category, action, name) {
+    if (typeof window._paq === "undefined") return;
+    if (navigator.doNotTrack === "1" || navigator.doNotTrack === "yes") return;
+    try {
+      if (name) {
+        window._paq.push(["trackEvent", category, action, name]);
+      } else {
+        window._paq.push(["trackEvent", category, action]);
+      }
+    } catch (_err) {
+      /* analytics must never break the page */
+    }
+  }
+
+  function bindMatomoClicks(container) {
+    container.addEventListener("click", (event) => {
+      const link = event.target.closest("a[data-matomo-category][data-matomo-action]");
+      if (!link || !container.contains(link)) return;
+      trackMatomoEvent(
+        link.getAttribute("data-matomo-category"),
+        link.getAttribute("data-matomo-action"),
+        link.getAttribute("data-matomo-name") || undefined
+      );
+    });
   }
 
   function animateValue(element, target) {
@@ -52,6 +79,8 @@
   function init() {
     const containers = document.querySelectorAll(".fides-uc-discovery");
     if (!containers.length) return;
+
+    containers.forEach(bindMatomoClicks);
 
     if (typeof window.IntersectionObserver !== "function") {
       containers.forEach(run);
