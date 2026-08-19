@@ -12,7 +12,7 @@
       "organizationName": "Robert Bosch GmbH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-18T19:18:33+01:00",
+      "updatedAt": "2026-08-19T20:36:54+01:00",
       "publishedAt": "2026-08-18T19:18:33+01:00",
       "tags": [
         "#EBWOID",
@@ -257,10 +257,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:sbb",
             "labelRaw": "Schweizerische Bundesbahnen",
             "url": "https://www.sbb.ch/en",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
