@@ -2317,68 +2317,127 @@
 .fides-modal-overlay .fides-modal-orgs {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  gap: 0.65rem;
+  margin: 0 0 1.35rem;
+  padding: 0.65rem 1rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(10, 110, 243, 0.18);
+  background: linear-gradient(180deg, rgba(10, 110, 243, 0.07) 0%, rgba(10, 110, 243, 0.03) 100%);
+}
+
+.fides-modal-overlay .fides-modal-orgs-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
 }
 
 .fides-modal-overlay .fides-modal-orgs-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.375rem;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--fides-text-secondary);
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.25;
+  text-transform: none;
+  color: var(--fides-text-primary);
 }
 
 .fides-modal-overlay .fides-modal-orgs-label svg {
-  width: 14px;
-  height: 14px;
+  width: 17px;
+  height: 17px;
+  color: #0A6EF3;
+}
+
+.fides-modal-overlay .fides-modal-orgs-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--fides-text-secondary);
 }
 
 .fides-modal-overlay .fides-modal-orgs-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.55rem;
 }
 
 .fides-modal-overlay .fides-modal-org-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.3rem 0.7rem 0.3rem 0.3rem;
+  padding: 0.35rem 0.75rem 0.35rem 0.35rem;
   border-radius: 9999px;
   border: 1px solid var(--fides-border);
-  background: var(--fides-surface, rgba(148, 163, 184, 0.08));
+  background: #fff;
   color: var(--fides-text-primary);
-  font-size: 0.8125rem;
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
-  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.fides-modal-overlay a.fides-modal-org-chip:hover {
-  border-color: rgba(10, 110, 243, 0.45);
-  background: rgba(10, 110, 243, 0.08);
+.fides-modal-overlay a.fides-modal-org-chip--catalog {
+  border-color: rgba(10, 110, 243, 0.35);
+  background: #ffffff;
+  color: #0f172a;
+  cursor: pointer;
+  padding-right: 0.6rem;
+  transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s, color 0.15s;
+}
+
+.fides-modal-overlay a.fides-modal-org-chip--catalog:hover {
+  border-color: #0A6EF3;
+  background: rgba(10, 110, 243, 0.06);
+  color: #0A6EF3;
+  box-shadow: 0 0 0 3px rgba(10, 110, 243, 0.3);
+}
+
+.fides-modal-overlay a.fides-modal-org-chip--catalog:hover .fides-modal-org-chip-arrow {
+  color: #0A6EF3;
+}
+
+.fides-modal-overlay .fides-modal-org-chip-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  margin-left: 0.1rem;
+  color: #0A6EF3;
+  transition: color 0.15s;
+}
+
+.fides-modal-overlay .fides-modal-org-chip-arrow svg {
+  width: 14px;
+  height: 14px;
 }
 
 .fides-modal-overlay .fides-modal-org-chip--static {
   cursor: default;
+  border-color: rgba(148, 163, 184, 0.45);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--fides-text-secondary);
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.fides-modal-overlay .fides-modal-org-chip--static .fides-modal-org-avatar {
+  background: rgba(148, 163, 184, 0.18);
+  color: var(--fides-text-secondary);
 }
 
 .fides-modal-overlay .fides-modal-org-avatar {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 26px;
+  height: 26px;
   flex: 0 0 auto;
   border-radius: 9999px;
-  background: rgba(10, 110, 243, 0.15);
+  background: rgba(10, 110, 243, 0.12);
   color: #0A6EF3;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 700;
   line-height: 1;
 }

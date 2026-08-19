@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.19
+Stable tag: 0.20.24
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,22 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.24 =
+* Tighten top padding in Organisations involved panel to match the bottom.
+
+= 0.20.23 =
+* Organisation chip hover matches ecosystem model (border ring, no lift).
+
+= 0.20.22 =
+* Fix organisation chips: light readable pills on the fides/light modal theme.
+
+= 0.20.21 =
+* Organisations involved block more visible: tinted panel, stronger catalog chips.
+
+= 0.20.20 =
+* Use case modal: clearer Organisations involved block with catalog chips (→)
+  first, non-catalog orgs last; Matomo Organisation Click funnel event.
 
 = 0.20.19 =
 * Official listing badge requires explicit catalogTier Pro; curated Community
