@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T19:37:08.332Z",
+  "lastUpdated": "2026-08-19T19:37:49.997Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -2861,7 +2861,7 @@
       "organizationName": "Interac",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-18T15:38:52+01:00",
+      "updatedAt": "2026-08-19T20:37:31+01:00",
       "publishedAt": "2026-08-18T15:38:52+01:00",
       "tags": [
         "identity",
@@ -2901,10 +2901,10 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:interac",
             "labelRaw": "Interac",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
