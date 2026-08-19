@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T19:38:48+00:00",
+    "generatedAt": "2026-08-19T19:40:22+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -3074,18 +3074,18 @@
         },
         {
             "orgSlug": "dppskop-digital-product-passport-platform",
-            "orgId": "org:dppskop-digital-product-passport-platform",
+            "orgId": "org:dppskop-digital-product-passport",
             "orgName": "DPPskop Digital Product Passport Platform",
             "useCases": [
                 {
                     "id": "dppskop-trusted-digital-product-passports-for-global-manufacturing-and-european-regulatory-compliance-KIIXN0",
                     "sector": "manufacturing",
                     "title": "DPPskop: Trusted Digital Product Passports for Global Manufacturing and European Regulatory Compliance",
-                    "summary": "As Europe implements the Ecodesign for Sustainable Products Regulation (ESPR), manufacturers need trusted, transparent and interoperable Digital Product Passports.\r\n\r\nDPPskop enables manufacturers to create and manage trusted Digital Product Passports by combining product data, supplier information, sustainability metrics and compliance documentation into a single digital product identity.\r\n\r\nBuilt around open standards, DPPskop supports GS1 Digital Link, AI-assisted data structuring and an Interoperability Lab to improve data quality and regulatory readiness.\r\n\r\nRecognised as a Good Practice by the European Circular Economy Stakeholder Platform (ECESP), DPPskop is currently being validated through pilot implementations with manufacturers and supported by academic expertise in environmental engineering.",
+                    "summary": "As Europe implements the Ecodesign for Sustainable Products Regulation (ESPR), manufacturers need trusted, transparent and interoperable Digital Product Passports.\n\nDPPskop enables manufacturers to create and manage trusted Digital Product Passports by combining product data, supplier information, sustainability metrics and compliance documentation into a single digital product identity.\n\nBuilt around open standards, DPPskop supports GS1 Digital Link, AI-assisted data structuring and an Interoperability Lab to improve data quality and regulatory readiness.\n\nRecognised as a Good Practice by the European Circular Economy Stakeholder Platform (ECESP), DPPskop is currently being validated through pilot implementations with manufacturers and supported by academic expertise in environmental engineering.",
                     "organizationName": "DPPskop Digital Product Passport Platform",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-13T08:15:48+01:00",
+                    "updatedAt": "2026-08-19T20:40:22+01:00",
                     "publishedAt": "2026-08-13T08:15:48+01:00",
                     "tags": [
                         "Digital Product Passport",
@@ -3106,10 +3106,10 @@
                         "credentials": [],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:dppskop-digital-product-passport",
                                 "labelRaw": "DPPskop Digital Product Passport Platform",
                                 "url": "https://dppskop.com",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
@@ -3144,8 +3144,8 @@
                     "presentationProtocols": [],
                     "interopProfiles": [],
                     "themes": [
-                        "digital_product_passports",
-                        "compliance_reporting"
+                        "compliance_reporting",
+                        "digital_product_passports"
                     ],
                     "imageUrls": [
                         "https://fides.community/app/uploads/2026/07/dppskop_digital_product_passport-1.png",
@@ -3161,7 +3161,7 @@
                     ],
                     "imageUrl": "https://fides.community/app/uploads/2026/07/dppskop_digital_product_passport-1.png",
                     "moreInfoUrl": "https://dppskop.com",
-                    "userJourney": "1. A manufacturer creates a new product in DPPskop and defines its core product information, sustainability attributes and compliance requirements.\r\n\r\n2. Suppliers securely provide material, component and sustainability data through structured collaboration workflows, ensuring that trusted information is collected directly from the source.\r\n\r\n3. DPPskop validates, structures and enriches the collected information using AI-assisted data processing while keeping all compliance decisions under human control.\r\n\r\n4. The completed Digital Product Passport is reviewed through DPPskop's Interoperability Lab to assess data quality, interoperability and readiness for the evolving European Digital Product Passport ecosystem.\r\n\r\n5. The Digital Product Passport is published using GS1 Digital Link, enabling manufacturers, supply chain partners, customers and future regulatory authorities to access trusted product information throughout the product lifecycle.",
+                    "userJourney": "1. A manufacturer creates a new product in DPPskop and defines its core product information, sustainability attributes and compliance requirements.\n\n2. Suppliers securely provide material, component and sustainability data through structured collaboration workflows, ensuring that trusted information is collected directly from the source.\n\n3. DPPskop validates, structures and enriches the collected information using AI-assisted data processing while keeping all compliance decisions under human control.\n\n4. The completed Digital Product Passport is reviewed through DPPskop's Interoperability Lab to assess data quality, interoperability and readiness for the evolving European Digital Product Passport ecosystem.\n\n5. The Digital Product Passport is published using GS1 Digital Link, enabling manufacturers, supply chain partners, customers and future regulatory authorities to access trusted product information throughout the product lifecycle.",
                     "country": "TR"
                 }
             ]
