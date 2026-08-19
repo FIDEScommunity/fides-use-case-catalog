@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T20:13:56.813Z",
+  "lastUpdated": "2026-08-19T20:15:05.677Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -2974,7 +2974,7 @@
       "organizationName": "Izertis S.A.",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-18T13:25:20+01:00",
+      "updatedAt": "2026-08-19T21:14:47+01:00",
       "publishedAt": "2026-08-18T13:25:20+01:00",
       "tags": [],
       "links": {
@@ -3014,10 +3014,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:ayuntamiento-cordoba",
             "labelRaw": "City Council of Córdoba",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
