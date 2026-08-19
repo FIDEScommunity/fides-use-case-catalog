@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:neoflow-mavennet-inc",
+  "orgId": "org:neoflow",
   "orgName": "Neoflow (Mavennet Inc.)",
   "useCases": [
     {
@@ -12,7 +12,7 @@
       "organizationName": "Neoflow (Mavennet Inc.)",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-18T21:36:09+01:00",
+      "updatedAt": "2026-08-19T21:04:23+01:00",
       "publishedAt": "2026-08-18T21:36:09+01:00",
       "tags": [
         "verifiable credentials",
@@ -80,24 +80,24 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:neoflow",
             "labelRaw": "Neoflow (Mavennet Inc.)",
             "url": "http://neoflow.energy",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:cbp",
             "labelRaw": "U.S. Customs and Border Protection (CBP)",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:dhs",
             "labelRaw": "U.S. Department of Homeland Security",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
