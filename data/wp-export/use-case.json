@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T20:09:59+00:00",
+    "generatedAt": "2026-08-19T20:11:52+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5100,7 +5100,7 @@
                     "organizationName": "Interac",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-19T20:37:31+01:00",
+                    "updatedAt": "2026-08-19T21:11:52+01:00",
                     "publishedAt": "2026-08-18T15:38:52+01:00",
                     "tags": [
                         "identity",
@@ -5147,10 +5147,10 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:first-canadian-title",
                                 "labelRaw": "First Canadian Title",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
