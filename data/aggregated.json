@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T19:04:32.881Z",
+  "lastUpdated": "2026-08-19T19:35:10.656Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -1127,7 +1127,7 @@
       "organizationName": "K4-Security",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-19T06:35:56+01:00",
+      "updatedAt": "2026-08-19T20:34:53+01:00",
       "publishedAt": "2026-08-19T06:35:56+01:00",
       "tags": [
         "DPP",
@@ -1148,10 +1148,10 @@
         ],
         "businessWallets": [
           {
-            "refId": null,
+            "refId": "org:danubetech",
             "labelRaw": "Danube Business Wallet",
             "url": "https://danubetech.com/tech/danube-business-wallet",
-            "source": "manual",
+            "source": "catalog",
             "walletType": "organizational"
           }
         ],
@@ -1245,10 +1245,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:gleif",
             "labelRaw": "LEI/GLEIF",
             "url": "https://www.gleif.org/en",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
@@ -1285,9 +1285,9 @@
         "EUDI Wallet ARF"
       ],
       "themes": [
-        "digital_product_passports",
+        "compliance_reporting",
         "trade_documents",
-        "compliance_reporting"
+        "digital_product_passports"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/썸네일-2.png"
