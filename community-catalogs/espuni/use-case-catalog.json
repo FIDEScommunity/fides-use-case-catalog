@@ -12,8 +12,8 @@
       "organizationName": "espuni",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-19T15:02:04+01:00",
-      "publishedAt": "2026-08-19T15:02:04+01:00",
+      "updatedAt": "2026-08-19T16:08:12+01:00",
+      "publishedAt": "2026-08-19T16:08:12+01:00",
       "tags": [
         "AgeVerification",
         "SaaS",
@@ -91,12 +91,13 @@
         "person_identity"
       ],
       "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/verified.jpg",
+        "https://fides.community/app/uploads/2026/08/espuni-obs-splash-integrator-start.png",
         "https://fides.community/app/uploads/2026/08/dcapi.jpg",
         "https://fides.community/app/uploads/2026/08/qr.jpg",
-        "https://fides.community/app/uploads/2026/08/wallet.jpg"
+        "https://fides.community/app/uploads/2026/08/wallet.jpg",
+        "https://fides.community/app/uploads/2026/08/verified-1.jpg"
       ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/verified.jpg",
+      "imageUrl": "https://fides.community/app/uploads/2026/08/espuni-obs-splash-integrator-start.png",
       "videos": [
         {
           "url": "https://www.youtube.com/watch?v=00CFMtszF10",
