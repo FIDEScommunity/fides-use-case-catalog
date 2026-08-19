@@ -12,7 +12,7 @@
       "organizationName": "California Community Colleges Technology Center",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-19T05:33:54+01:00",
+      "updatedAt": "2026-08-19T21:13:38+01:00",
       "publishedAt": "2026-08-19T05:33:54+01:00",
       "tags": [
         "d fighting",
@@ -51,10 +51,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:ccc-tech-center",
             "labelRaw": "California Community Colleges Technology Center",
             "url": "https://ccctechcenter.org/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
