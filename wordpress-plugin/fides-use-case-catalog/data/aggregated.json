@@ -1,10 +1,121 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T13:58:20.509Z",
+  "lastUpdated": "2026-08-19T14:02:20.041Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 70,
+  "count": 71,
   "useCases": [
+    {
+      "id": "age-verification-as-a-service-wallet-native-over-18-for-any-platform-via-an-intermediary-layer-WA8c3y",
+      "sector": "digital",
+      "title": "Age verification as a service: wallet-native \"over 18\" for any platform, via an intermediary layer",
+      "summary": "Online platforms must verify users are over 18 to comply with DSA Article 28 and national law — but the traditional route forces users to expose their identity to prove a single fact, and building a wallet-native verifier in-house is out of reach for most businesses.\n\nespuni is an independent intermediary layer that provides age verification as a service on top of EUDIPLO (OWF). Instead of each platform building and maintaining its own EUDI verifier, any service integrates once and lets espuni handle the wallet interaction, the trust-list validation, and the protocol complexity.\n\nThe user presents a proof-of-age credential from their EUDI Wallet; espuni requests only the \"over 18\" attribute, validates the issuer against the EU Age Verification Trusted List, and returns a yes/no. No name, no birthdate, no document reaches the platform.\nBuilt on open standards (OID4VP, ISO 18013-7) and open source, it supports the Digital Credentials API with QR fallback, and works across EUDI wallets. The intermediary model is what makes wallet-native age verification realistic for the small and mid-sized businesses that can't build it themselves — a practical on-ramp to the EUDI ecosystem.",
+      "organizationName": "espuni",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-19T15:02:04+01:00",
+      "publishedAt": "2026-08-19T15:02:04+01:00",
+      "tags": [
+        "AgeVerification",
+        "SaaS",
+        "Intermediary"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "eudi-age-verification-wallet",
+            "labelRaw": "EUDI Age Verification App (Reference)",
+            "url": "https://github.com/eu-digital-identity-wallet/av-app-ios-wallet-ui",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "france-identite",
+            "labelRaw": "France Identité",
+            "url": "https://france-identite.gouv.fr/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "altid",
+            "labelRaw": "AltID",
+            "url": "https://digst.dk/it-loesninger/altid/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": "issuer:eu:digital-credentials-issuer:test",
+            "labelRaw": "Digital Credentials Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:age-verification-mdoc:mdoc",
+            "labelRaw": "Age Verification (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:espuni",
+            "labelRaw": "espuni",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/verified.jpg",
+        "https://fides.community/app/uploads/2026/08/dcapi.jpg",
+        "https://fides.community/app/uploads/2026/08/qr.jpg",
+        "https://fides.community/app/uploads/2026/08/wallet.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/verified.jpg",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=00CFMtszF10",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=K55LZqx32z4",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=00CFMtszF10",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://app.espuni.com/en/demo-integrador",
+      "userJourney": "1 - A platform with an age-verification obligation (a shop, a streaming service, a gambling operator) integrates espuni once — a single integration instead of building an EUDI verifier from scratch.\n2 - A user reaches age-restricted content. Instead of uploading a document, they're offered \"Verify with your EUDI Wallet.\"\n3 - espuni sends a presentation request for the age_over_18 attribute only — via the Digital Credentials API by default, but falling back to QR code if DC API is not available or rejected by the user.\n4 - The user's EUDI Wallet shows exactly what's being requested — only \"over 18,\" nothing else — and the user approves.\nespuni receives the response, validates the issuer against the EU Age Verification Trusted List, and verifies the proof.\n5 - The platform receives a verified yes/no. It never sees the user's identity, and the wallet interaction, trust validation, and protocol handling all happened in the intermediary layer — invisible to both the platform and the user.\n\nThe platform gets compliance without building or maintaining identity infrastructure; the user proves age without exposing identity; the exchange leaves an auditable cryptographic record.",
+      "country": "ES"
+    },
     {
       "id": "independent-review-of-ai-decision-evidence-lf3fYX",
       "sector": "digital",
