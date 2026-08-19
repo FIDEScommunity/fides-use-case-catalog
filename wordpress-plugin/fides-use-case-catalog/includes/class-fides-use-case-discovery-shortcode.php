@@ -278,7 +278,8 @@ final class Fides_Use_Case_Discovery_Shortcode {
                         <a class="fides-uc-discovery__view-all"
                            href="<?php echo esc_url($catalog_url); ?>"
                            data-matomo-category="Use Case Discovery"
-                           data-matomo-action="View all use cases">
+                           data-matomo-action="View all use cases"
+                           data-matomo-name="view-all">
                             <?php
                             printf(
                                 esc_html(_n('View all %s use case', 'View all %s use cases', $metrics['total'], 'fides-use-case-catalog')),
