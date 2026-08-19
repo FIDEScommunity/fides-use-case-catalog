@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T20:15:44.656Z",
+  "lastUpdated": "2026-08-19T20:16:18.818Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -1067,7 +1067,7 @@
       "organizationName": "Global Legal Entity Identifier Foundation",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-19T06:43:51+01:00",
+      "updatedAt": "2026-08-19T21:16:03+01:00",
       "publishedAt": "2026-08-19T06:43:51+01:00",
       "tags": [
         "identity",
@@ -1095,10 +1095,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:sbi-xdc-network-apac",
             "labelRaw": "SBI XDC Network APAC",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
