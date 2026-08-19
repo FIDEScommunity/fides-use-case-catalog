@@ -5,155 +5,15 @@
   "orgName": "K4-Security",
   "useCases": [
     {
-      "id": "samsung-sds-integrated-digital-wallet-b5dcHk",
-      "sector": "finance",
-      "title": "Samsung SDS Unified Digital Wallet",
-      "summary": "Samsung SDS Unified Digital Wallet: Applying a Hierarchical Key Management Mechanism to Deliver Decentralized Identity, Security Token, and Stablecoin Services in a Single Digital Wallet\n\nThis use case designs an integrated key management structure that enables a financial holding company, together with its subsidiaries (bank, securities, capital, credit card company, etc.), to design and operate a wide range of services (STO, Stablecoin, DI, etc.).\n\nLeveraging W3C DID/VC, the solution provides not only user eKYC/IAM but also a kill switch (ON/OFF) capability for policy functions, so that the wallet can respond flexibly to changes in the service provider's service policies.\n\nIt further provides functions covering digital wallet issuance requests, issuance, and personalization (PID, RBAC, Service Policy, etc.); service key management (STO key, Stablecoin key, blockchain address, Account key, etc.); and security/audit handling in the event of wallet loss or damage.\n\nIn particular, the Root Wallet can control the functions of Sub Wallets through a Policy function, newly applying a Master-Slave hierarchical function inheritance model.",
-      "organizationName": "K4-Security",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-19T05:34:39+01:00",
-      "publishedAt": "2026-08-19T05:34:39+01:00",
-      "tags": [
-        "Digital Identity",
-        "Payment"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "ksid-wallet",
-            "labelRaw": "KSID Wallet",
-            "url": "https://www.k4-security.com/solution#ssi",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Samsung SDS",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": "org:k4security",
-            "labelRaw": "K4-Security",
-            "url": "https://www.k4-security.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Authentic source/Paju City",
-            "url": "https://www.paju.go.kr",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "RP(Payment) / ICBNET",
-            "url": "http://www.icbnet.co.kr",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "SP (Transport)/Seoul Neo Smartcard",
-            "url": "http://www.neosscc.co.kr",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Issuer/Samsung SDS",
-            "url": "http://www.samsungsds.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Samsung SDS",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Banks",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Securities Firms (Samsung securities)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "mdoc",
-        "jwt_vc",
-        "sd_jwt_vc",
-        "vcdm_1_1",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-5",
-        "ISO 18013-7",
-        "OpenID4VP",
-        "SIOPv2"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF"
-      ],
-      "themes": [
-        "person_identity",
-        "payments"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/integrated-wallet-thumbnail-en-2.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/integrated-wallet-thumbnail-en-2.png",
-      "videos": [
-        {
-          "url": "https://vimeo.com/1212264565?share=copy&fl=sv&fe=ci",
-          "provider": "vimeo"
-        }
-      ],
-      "video": {
-        "url": "https://vimeo.com/1212264565?share=copy&fl=sv&fe=ci",
-        "provider": "vimeo"
-      },
-      "moreInfoUrl": "https://i-wallet.globalwallet.kr",
-      "userJourney": "(1) Membership Registration\n- The user registers for the key custody service by submitting the required information with a PID (or vLEI for legal entities), which is used as a reference ID.\n\n(2) Digital Wallet Provisioning\n- A Master Wallet creates and assigns a Slave Wallet.\n- After approval, the user's wallet, cryptographic keys, and Authentication VC are generated and issued.\n\n(3) Wallet Activation\n- The Authentication VC enables access to services within the integrated wallet.\n\n(4) Service Usage\n- KYC is performed through W3C DID/VC using the Authentication VC.\n- For a new service (e.g., a Stablecoin wallet), the Authentication VC is presented for identity verification, and a Service VC is issued.\n- After approval, the backend updates the user profile, and the service Master Wallet creates and assigns a Slave Wallet.\n- During transactions, the Service VC is used as the primary credential for authorization. Additional VCs or approvals may be required.\n\n(5) Wallet Update\n- The user completes KYC, submits a change request with attestation, and receives a change code.\n- After verifying the code and authorization, wallet information (e.g., cryptographic keys) is updated.",
-      "country": "KR"
-    },
-    {
       "id": "digital-product-passport-applying-the-cirpass-structure-and-danube-business-wallet-gN4juB",
       "sector": "supply_chain",
       "title": "Digital Product Passport Applying the CIRPASS Structure and Danube Business Wallet",
       "summary": "Textile, fashion, and various other manufacturers are using KSPTS (K4Security Passport Traceability System, k4-dpp.com), the flagship Digital Product Passport (DPP) platform of K4Security, to strengthen regulatory compliance and supply chain transparency. KSPTS has successfully completed a Proof of Concept (PoC) for the fashion brand Harlie-K, and has issued DPP samples and completed verification for a wide range of product categories across multiple companies.\nEach product registered on the KSPTS platform has its standardized data — including raw material sourcing origin, material composition, Carbon Footprint (CFP), regulatory certification documents, and Lifecycle information — linked to a digital passport. This solution supports machine-readable, transparent regulatory compliance reporting, enabling companies to track the environmental impact and product information across their entire supply chain in real time. Through KSPTS, K4Security provides an optimal solution that allows companies in the European Union (EU) to proactively respond to the Ecodesign for Sustainable Products Regulation (ESPR) and Digital Product Passport (DPP) mandatory requirements for sustainable products.",
       "organizationName": "K4-Security",
-      "productionDeployment": "no",
+      "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-18T06:03:22+01:00",
-      "publishedAt": "2026-08-18T06:03:22+01:00",
+      "updatedAt": "2026-08-19T06:35:56+01:00",
+      "publishedAt": "2026-08-19T06:35:56+01:00",
       "tags": [
         "DPP",
         "supply chain",
@@ -330,6 +190,146 @@
       },
       "moreInfoUrl": "http://k4-dpp.com/",
       "userJourney": "[Overall process]\n① Onboarding (DID/Wallet) → ② Tier-specific VC issuance → ③ Attaching DPP·QR code → ④ Verification → ⑤ Consumer lookup\n\n1. Onboarding\n   - As a DPP Issuer, the required DID is pre-registered. When registering the wallet, UNTP VC signing is requested from the Wallet.\n\n2. Role issuance\n   - A server-side wallet is issued to the Actor, and a Role VC is issued.\n   - Through the Role VC, access rights to non-public data can be proven.\n\n3. UNTP VC (DPP) issuance\n   - Based on the product's raw data and materials, a source verification VC is generated.\n   - Based on the source verification VC, a UNTP DPP is issued.\n   - The DPP is published via the product's DID Document.\n\n4. DPP lookup\n   - Data is accessed and verified through the product's DID.\n   - When accessing linked non-public data (DCC or DTE, etc.) via the idr, authentication is performed.\n   - Access rights are verified through submission of a RoleVC issued by ID/PW or REO.\n   - Once access rights are confirmed, the non-public data can be viewed.",
+      "country": "KR"
+    },
+    {
+      "id": "samsung-sds-integrated-digital-wallet-b5dcHk",
+      "sector": "finance",
+      "title": "Samsung SDS Unified Digital Wallet",
+      "summary": "Samsung SDS Unified Digital Wallet: Applying a Hierarchical Key Management Mechanism to Deliver Decentralized Identity, Security Token, and Stablecoin Services in a Single Digital Wallet\n\nThis use case designs an integrated key management structure that enables a financial holding company, together with its subsidiaries (bank, securities, capital, credit card company, etc.), to design and operate a wide range of services (STO, Stablecoin, DI, etc.).\n\nLeveraging W3C DID/VC, the solution provides not only user eKYC/IAM but also a kill switch (ON/OFF) capability for policy functions, so that the wallet can respond flexibly to changes in the service provider's service policies.\n\nIt further provides functions covering digital wallet issuance requests, issuance, and personalization (PID, RBAC, Service Policy, etc.); service key management (STO key, Stablecoin key, blockchain address, Account key, etc.); and security/audit handling in the event of wallet loss or damage.\n\nIn particular, the Root Wallet can control the functions of Sub Wallets through a Policy function, newly applying a Master-Slave hierarchical function inheritance model.",
+      "organizationName": "K4-Security",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-19T05:34:39+01:00",
+      "publishedAt": "2026-08-19T05:34:39+01:00",
+      "tags": [
+        "Digital Identity",
+        "Payment"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "ksid-wallet",
+            "labelRaw": "KSID Wallet",
+            "url": "https://www.k4-security.com/solution#ssi",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Samsung SDS",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:k4security",
+            "labelRaw": "K4-Security",
+            "url": "https://www.k4-security.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Authentic source/Paju City",
+            "url": "https://www.paju.go.kr",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "RP(Payment) / ICBNET",
+            "url": "http://www.icbnet.co.kr",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "SP (Transport)/Seoul Neo Smartcard",
+            "url": "http://www.neosscc.co.kr",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Issuer/Samsung SDS",
+            "url": "http://www.samsungsds.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Samsung SDS",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Banks",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Securities Firms (Samsung securities)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "jwt_vc",
+        "sd_jwt_vc",
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "ISO 18013-7",
+        "OpenID4VP",
+        "SIOPv2"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity",
+        "payments"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/07/integrated-wallet-thumbnail-en-2.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/07/integrated-wallet-thumbnail-en-2.png",
+      "videos": [
+        {
+          "url": "https://vimeo.com/1212264565?share=copy&fl=sv&fe=ci",
+          "provider": "vimeo"
+        }
+      ],
+      "video": {
+        "url": "https://vimeo.com/1212264565?share=copy&fl=sv&fe=ci",
+        "provider": "vimeo"
+      },
+      "moreInfoUrl": "https://i-wallet.globalwallet.kr",
+      "userJourney": "(1) Membership Registration\n- The user registers for the key custody service by submitting the required information with a PID (or vLEI for legal entities), which is used as a reference ID.\n\n(2) Digital Wallet Provisioning\n- A Master Wallet creates and assigns a Slave Wallet.\n- After approval, the user's wallet, cryptographic keys, and Authentication VC are generated and issued.\n\n(3) Wallet Activation\n- The Authentication VC enables access to services within the integrated wallet.\n\n(4) Service Usage\n- KYC is performed through W3C DID/VC using the Authentication VC.\n- For a new service (e.g., a Stablecoin wallet), the Authentication VC is presented for identity verification, and a Service VC is issued.\n- After approval, the backend updates the user profile, and the service Master Wallet creates and assigns a Slave Wallet.\n- During transactions, the Service VC is used as the primary credential for authorization. Additional VCs or approvals may be required.\n\n(5) Wallet Update\n- The user completes KYC, submits a change request with attestation, and receives a change code.\n- After verifying the code and authorization, wallet information (e.g., cryptographic keys) is updated.",
       "country": "KR"
     }
   ]
