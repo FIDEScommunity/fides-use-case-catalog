@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:digital-identity-foundation",
+  "orgId": "org:dif",
   "orgName": "Digital Identity Foundation",
   "useCases": [
     {
@@ -12,7 +12,7 @@
       "organizationName": "Digital Identity Foundation",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-14T12:14:11+01:00",
+      "updatedAt": "2026-08-19T21:09:30+01:00",
       "publishedAt": "2026-08-14T12:14:11+01:00",
       "tags": [
         "identity",
@@ -59,10 +59,10 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:dif",
             "labelRaw": "Digital Identity Foundation",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T20:07:02.899Z",
+  "lastUpdated": "2026-08-19T20:09:45.553Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -5716,7 +5716,7 @@
       "organizationName": "Digital Identity Foundation",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-14T12:14:11+01:00",
+      "updatedAt": "2026-08-19T21:09:30+01:00",
       "publishedAt": "2026-08-14T12:14:11+01:00",
       "tags": [
         "identity",
@@ -5763,10 +5763,10 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:dif",
             "labelRaw": "Digital Identity Foundation",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
