@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T15:08:12+00:00",
+    "generatedAt": "2026-08-19T19:03:56+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -4620,6 +4620,135 @@
                     "moreInfoUrl": "https://hypersign.id/",
                     "userJourney": "1. Opportunity & Request: Sponsor A selects a sponsorship opportunity on BoostN, triggering a requirement for company KYB and representative KYC.\n\n2. Due Diligence: The representative submits company, UBO, and identity data via Hypermine. Hypermine conducts ownership analysis, sanctions/PEP screening, and risk checks against its verification policy.\n\n3. Credential Issuance: Upon approval, Hypermine issues a reusable W3C KYB Credential to Sponsor A’s Company Vault containing company identifiers, checks performed, policy version, validity period, and status mechanisms.\n\n4. Consent & Presentation: BoostN sends a purpose-bound request for onboarding evidence. Sponsor A reviews the request and authorizes presentation from its Company Vault.\n\n5. Verification & Decision: BoostN validates Hypermine’s signature, cryptographic integrity, policy adherence, freshness, and revocation status before making the onboarding decision.\n\n6. Reusability: Sponsor A retains the credential in its vault for instant reuse across other relying parties.",
                     "country": "DE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "ictu",
+            "orgId": "org:ictu",
+            "orgName": "ICTU",
+            "useCases": [
+                {
+                    "id": "flow-a-seamless-digital-journey-for-bereaved-people-jxUG78",
+                    "sector": "digital",
+                    "title": "Flow! - A seamless digital journey for bereaved people",
+                    "summary": "After a death, bereaved people face an overwhelming number of administrative obligations at a time when grief can reduce their cognitive capacity. Fragmented processes make this harder: information and proof must be repeatedly provided to government agencies, banks and insurers. Physical documents create an additional burden and can delay the settlement of an estate.\nFlow! explores how eIDAS 2.0 and the European Digital Identity Wallet can make this journey simpler, more user- and privacy-friendly. The project focuses on making two essential documents available in the wallet: the Death Certificate and the Certificate of Inheritance. This allows bereaved people to share only the data specifically required, instead of submitting complete documents. It reduces administrative burden while giving people greater control over their data.\nFlow! redesigns the entire journey, rather than simply adding a wallet to existing processes. The Death Certificate solution is ready for implementation, with a blueprint that municipalities can use to unlock other documents in the same way. The Certificate of Inheritance requires legislative and notarial process changes and is being further developed.",
+                    "organizationName": "ICTU",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-19T20:03:56+01:00",
+                    "publishedAt": "2026-08-19T20:03:56+01:00",
+                    "tags": [
+                        "identity",
+                        "public services",
+                        "life events",
+                        "administrative simplification",
+                        "data minimisation"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "yivi",
+                                "labelRaw": "Yivi",
+                                "url": "https://yivi.app",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "national-eudi-wallet-netherlands",
+                                "labelRaw": "NL Wallet (Netherlands)",
+                                "url": "https://www.nldigitalgovernment.nl/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "City of Nijmegen",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "ICTU",
+                                "url": "https://www.ictu.nl/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:nijmegen",
+                                "labelRaw": "City of Nijmegen",
+                                "url": "https://www.nijmegen.nl/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:ver-id",
+                                "labelRaw": "ver.ID",
+                                "url": "https://ver.id/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:innovalor",
+                                "labelRaw": "Innovalor",
+                                "url": "https://innovalor.nl/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:bzk",
+                                "labelRaw": "Ministerie van Binnenlandse Zaken en Koninkrijksrelaties",
+                                "url": "https://www.rijksoverheid.nl/ministeries/ministerie-van-binnenlandse-zaken-en-koninkrijksrelaties",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "anoncreds",
+                        "mdoc",
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci",
+                        "other"
+                    ],
+                    "presentationProtocols": [
+                        "IRMA Protocol",
+                        "ISO 18013-7",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF",
+                        "HAIP v1"
+                    ],
+                    "themes": [
+                        "person_identity"
+                    ],
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=TgqPvwqDiwA",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=TgqPvwqDiwA",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://id-wallets.nl/projecten/project-flow/",
+                    "userJourney": "The demo follows Froukje Jansen, a fictional bereaved person whose father, Jan Klaassen, has died. In the redesigned MijnOverheid, Froukje has one central place to manage both public and private matters related to the death.\nAfter logging in with her ID Wallet, she receives a clear step-by-step overview of what needs to be arranged. A condolence message and reassurance that no mandatory government actions are required during the first three months provide immediate peace of mind. Notifications and support can be switched on or off, giving Froukje control over the process.\nThe ID Wallet enables her to retrieve the Death Certificate and Certificate of Inheritance directly from the issuing authorities and store them digitally. She can then share only the minimum data required with organisations such as insurers and banks, eliminating paper documents, PDFs and lengthy forms.\nThe demo also shows how verified data can provide rapid access to vehicle registrations and enable funeral costs to be paid without unnecessary delay. Froukje can pause at any time and continue later, with her progress saved in MijnOverheid. This allows her to manage the process at her own pace, when she is ready.",
+                    "country": "NL"
                 }
             ]
         },
