@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T19:41:32.595Z",
+  "lastUpdated": "2026-08-19T20:01:44.432Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -3903,7 +3903,7 @@
       "organizationName": "Credivera",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-17T19:08:04+01:00",
+      "updatedAt": "2026-08-19T21:01:24+01:00",
       "publishedAt": "2026-08-17T19:08:04+01:00",
       "tags": [
         "Digital Trust",
@@ -3924,31 +3924,31 @@
         "credentials": [],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:trumerit",
             "labelRaw": "TruMerit",
             "url": "https://www.trumerit.org/verifiable-digital-credentials/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:inteleos",
             "labelRaw": "Inteleos",
             "url": "https://www.inteleos.org/beyond/credivera-digital-wallet/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:oliu",
             "labelRaw": "Oliu",
             "url": "https://oliu.ca/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:bcrsp",
             "labelRaw": "BCRSP",
             "url": "https://bcrsp.ca/en",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
