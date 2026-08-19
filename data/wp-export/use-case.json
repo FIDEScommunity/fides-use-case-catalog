@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T05:43:51+00:00",
+    "generatedAt": "2026-08-19T08:39:12+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -4250,8 +4250,8 @@
                     "organizationName": "iGrant.io",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-03T15:20:43+01:00",
-                    "publishedAt": "2026-07-06T13:26:25+01:00",
+                    "updatedAt": "2026-08-19T09:39:12+01:00",
+                    "publishedAt": "2026-08-19T09:39:12+01:00",
                     "tags": [
                         "identity",
                         "payment",
@@ -4429,7 +4429,7 @@
                         "provider": "youtube"
                     },
                     "moreInfoUrl": "https://www.igrant.io/demo/merchant-led-payments-with-receipts-boardingpass.html",
-                    "userJourney": "1. Visit Fast Ferries and select a trip\r\n2. Select the \"FAST CHECKOUT VIA EUDI WALLET\" option\r\n3. Scan QR code to initiate the secure, identity-validated payment process, confirming and presenting:\r\n    - PhotoID: For Personal Identification Details\r\n    - Student ID (or Loyalty Card Credential from Fast Ferries): Discount-related credentials Credential\r\n    - Visa card credential: Pre-authorize a €25 payment to Cyclades Fast Ferries (CFF) \r\n4. Fill out passenger and contact information in Fast Ferries\r\n5. Fill card details and confirm to make your booking (receive an eReceipt and Boarding Pass to your EUDI Wallet)",
+                    "userJourney": "1. Select the travel details on the Fast Ferries website.\n2. Choose “Fast Checkout via EUDI Wallet” and scan the QR code.\n3. Review the linked bank account and the requested credentials: Photo ID, Student ID, or loyalty card.\n4. Consent to share the required information and confirm the payment in the wallet (pre-authorise €25 payment)\n5. Fast Ferries verifies the identity and student status, applies the discount and retrieves the required billing and contact information.\n6. The bank-issued payment authenticator is used to authenticate the payment securely.\n7. A green tick confirms that the transaction was successful.\n8. The e-receipt and boarding pass are issued as digital credentials and stored in the wallet.",
                     "country": "SE"
                 },
                 {
