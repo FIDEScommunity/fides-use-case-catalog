@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T20:03:20+00:00",
+    "generatedAt": "2026-08-19T20:04:23+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6330,7 +6330,7 @@
         },
         {
             "orgSlug": "neoflow-mavennet-inc",
-            "orgId": "org:neoflow-mavennet-inc",
+            "orgId": "org:neoflow",
             "orgName": "Neoflow (Mavennet Inc.)",
             "useCases": [
                 {
@@ -6341,7 +6341,7 @@
                     "organizationName": "Neoflow (Mavennet Inc.)",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-18T21:36:09+01:00",
+                    "updatedAt": "2026-08-19T21:04:23+01:00",
                     "publishedAt": "2026-08-18T21:36:09+01:00",
                     "tags": [
                         "verifiable credentials",
@@ -6409,24 +6409,24 @@
                         ],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:neoflow",
                                 "labelRaw": "Neoflow (Mavennet Inc.)",
                                 "url": "http://neoflow.energy",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:cbp",
                                 "labelRaw": "U.S. Customs and Border Protection (CBP)",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:dhs",
                                 "labelRaw": "U.S. Department of Homeland Security",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
