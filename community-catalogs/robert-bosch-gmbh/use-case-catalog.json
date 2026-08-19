@@ -12,7 +12,7 @@
       "organizationName": "Robert Bosch GmbH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-19T20:36:54+01:00",
+      "updatedAt": "2026-08-19T21:05:38+01:00",
       "publishedAt": "2026-08-18T19:18:33+01:00",
       "tags": [
         "#EBWOID",
@@ -236,10 +236,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:bosch",
             "labelRaw": "Robert Bosch GmbH",
             "url": "https://www.bosch.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
@@ -250,10 +250,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:deutsche-bank",
             "labelRaw": "Deutsche Bank",
             "url": "https://www.deutsche-bank.de",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
