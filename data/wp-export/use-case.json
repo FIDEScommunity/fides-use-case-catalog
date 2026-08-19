@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T04:33:54+00:00",
+    "generatedAt": "2026-08-19T04:34:39+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -4745,8 +4745,8 @@
                     "organizationName": "K4-Security",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-18T06:03:58+01:00",
-                    "publishedAt": "2026-08-18T06:03:58+01:00",
+                    "updatedAt": "2026-08-19T05:34:39+01:00",
+                    "publishedAt": "2026-08-19T05:34:39+01:00",
                     "tags": [
                         "Digital Identity",
                         "Payment"
@@ -4782,36 +4782,29 @@
                             },
                             {
                                 "refId": null,
-                                "labelRaw": "Samsung SDS",
-                                "url": null,
+                                "labelRaw": "Authentic source/Paju City",
+                                "url": "https://www.paju.go.kr",
                                 "source": "manual",
                                 "walletType": null
                             },
                             {
                                 "refId": null,
-                                "labelRaw": "icbnet",
-                                "url": "https://www.icbnet.co.kr/",
+                                "labelRaw": "RP(Payment) / ICBNET",
+                                "url": "http://www.icbnet.co.kr",
                                 "source": "manual",
                                 "walletType": null
                             },
                             {
                                 "refId": null,
-                                "labelRaw": "Seoul Neo-Smartcard",
-                                "url": "https://www.neosscc.co.kr/",
+                                "labelRaw": "SP (Transport)/Seoul Neo Smartcard",
+                                "url": "http://www.neosscc.co.kr",
                                 "source": "manual",
                                 "walletType": null
                             },
                             {
                                 "refId": null,
-                                "labelRaw": "Meritz Securities",
-                                "url": "https://home.imeritz.com/index.jsp",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "Anyang City",
-                                "url": "https://anyang.go.kr/main/index.do",
+                                "labelRaw": "Issuer/Samsung SDS",
+                                "url": "http://www.samsungsds.com",
                                 "source": "manual",
                                 "walletType": null
                             }
