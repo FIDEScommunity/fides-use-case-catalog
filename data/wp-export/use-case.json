@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T08:39:12+00:00",
+    "generatedAt": "2026-08-19T13:52:12+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -8236,12 +8236,12 @@
                     "id": "verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J",
                     "sector": "digital",
                     "title": "Verifiable AI fairness: a seal for the system, a receipt for the person",
-                    "summary": "When an AI screens a job application, scores a loan or decides a benefit, the person affected gets a decision and no way to check whether it was fair. validant.ai issues two verifiable credentials that close that gap from both ends. The AI Fairness Seal is a credential whose subject is the AI system itself: a measurement engine cryptographically signs the fairness metrics, our server derives the verdict from those signed numbers, and the audited party never gets to assert its own result. The Decision Receipt is the person’s own credential, held in their wallet, naming which system decided, that it held a valid seal at the time, and optionally what would have had to change for a different outcome. The person presents it selectively to a third party, such as an ombudsman's office or a labor authority, revealing only what she chooses to reveal. Anyone can check a seal at validant.ai/verify without logging in or having an account. It runs on the same rails as the Swiss e-ID: SD-JWT VC, did:web and did:webvh, ES256, OpenID4VCI and OpenID4VP, with revocation on an IETF Token Status List.",
+                    "summary": "When an AI screens a job application, scores a loan or decides a benefit, the person affected gets a decision but often no way to verify whether it was fair or understand why. validant.ai closes this gap with two verifiable credentials.\n\nThe AI Fairness Seal is issued for the AI system. A resolver determines the appropriate fairness and explainability assessments for the jurisdiction and use case. A measurement engine calculates and cryptographically signs the results, and our server derives the verdict, so the audited party cannot assert its own outcome.\n\nThe Decision Receipt is the person’s credential, held in their wallet. It identifies the deciding system, confirms that it held a valid seal at the time, and can state what would have needed to change for a different outcome. It can be selectively presented to a third party, disclosing only what the person chooses.\n\nThe system is integrated with Switzerland’s swiyu trust infrastructure and uses SD-JWT VC, did:web and did:webvh, ES256, OpenID4VCI and OpenID4VP, with IETF Token Status List revocation. Anyone can verify a seal at validant.ai/verify without an account.\n\nProduction-ready and end-to-end validated in pre-production.",
                     "organizationName": "validant.ai",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-17T20:17:27+01:00",
-                    "publishedAt": "2026-08-17T20:17:27+01:00",
+                    "updatedAt": "2026-08-19T14:52:12+01:00",
+                    "publishedAt": "2026-08-19T14:52:12+01:00",
                     "tags": [
                         "ai-fairness",
                         "ai-act",
