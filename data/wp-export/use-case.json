@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T19:34:53+00:00",
+    "generatedAt": "2026-08-19T19:36:54+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6936,7 +6936,7 @@
                     "organizationName": "Robert Bosch GmbH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-18T19:18:33+01:00",
+                    "updatedAt": "2026-08-19T20:36:54+01:00",
                     "publishedAt": "2026-08-18T19:18:33+01:00",
                     "tags": [
                         "#EBWOID",
@@ -7181,10 +7181,10 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:sbb",
                                 "labelRaw": "Schweizerische Bundesbahnen",
                                 "url": "https://www.sbb.ch/en",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
