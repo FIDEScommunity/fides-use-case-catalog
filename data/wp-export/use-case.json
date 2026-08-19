@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T20:05:38+00:00",
+    "generatedAt": "2026-08-19T20:06:47+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -3427,7 +3427,7 @@
         },
         {
             "orgSlug": "finspot",
-            "orgId": "org:finspot",
+            "orgId": "org:ifc",
             "orgName": "Finspot",
             "useCases": [
                 {
@@ -3438,7 +3438,7 @@
                     "organizationName": "Finspot",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-19T15:48:53+01:00",
+                    "updatedAt": "2026-08-19T21:06:47+01:00",
                     "publishedAt": "2026-08-19T15:48:53+01:00",
                     "tags": [
                         "invoice financing",
@@ -3528,24 +3528,24 @@
                         ],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:ifc",
                                 "labelRaw": "IFC",
                                 "url": "https://www.ifc.org/en/home",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:world-bank",
                                 "labelRaw": "World Bank",
                                 "url": "https://www.worldbank.org/ext/en/home",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:finspot",
                                 "labelRaw": "Finspot",
                                 "url": "https://finspot.com/en/finspot-factoring/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
