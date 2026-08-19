@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T20:12:10.655Z",
+  "lastUpdated": "2026-08-19T20:12:39.087Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -13,7 +13,7 @@
       "organizationName": "Hypermine",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-19T20:04:14+01:00",
+      "updatedAt": "2026-08-19T21:12:23+01:00",
       "publishedAt": "2026-08-19T20:04:14+01:00",
       "tags": [
         "Finance",
@@ -34,10 +34,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:boostn",
             "labelRaw": "BoostN GMBH",
             "url": "https://boostn.team/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
