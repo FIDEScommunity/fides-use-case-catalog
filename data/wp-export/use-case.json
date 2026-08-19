@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T04:34:39+00:00",
+    "generatedAt": "2026-08-19T04:35:46+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -8314,8 +8314,8 @@
                     "organizationName": "Verana",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-18T19:17:43+01:00",
-                    "publishedAt": "2026-08-18T19:17:43+01:00",
+                    "updatedAt": "2026-08-19T05:35:46+01:00",
+                    "publishedAt": "2026-08-19T05:35:46+01:00",
                     "tags": [
                         "verifiable trust",
                         "proof-of-trust",
@@ -8404,6 +8404,13 @@
                                 "refId": "authbound-wallet",
                                 "labelRaw": "Authbound Wallet",
                                 "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "swiyu-wallet",
+                                "labelRaw": "SWIYU Wallet",
+                                "url": "https://www.swiyu.admin.ch/",
                                 "source": "catalog",
                                 "walletType": "personal"
                             }
