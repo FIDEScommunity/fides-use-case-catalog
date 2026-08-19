@@ -1,0 +1,187 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:finspot",
+  "orgName": "Finspot",
+  "useCases": [
+    {
+      "id": "difo-digital-invoice-financing-origination-for-smes-serbia-romania-pilot-8Wz2ga",
+      "sector": "finance",
+      "title": "DIFO - Digital Invoice Financing Origination for SMEs (Serbia & Romania pilot)",
+      "summary": "DIFO is an open-source protocol, developed in partnership with Finspot, IFC, World Bank, GLEIF and Global vLEI AB. It uses zero-knowledge proofs, verifiable credentials vLEI and other tech to make invoice due diligence independently verifiable - assess once, verifiable by all. Any investor can then verify the integrity and provenance of due diligence data, without dependency on specific platforms. It eliminates repeated identity and data verifications, shifting trust from the channel to the underlying source. It makes access to finance for small-ticket invoices more economical, extending supply of working capital to SMEs. Originators produce cryptographic proofs of origination facts  such as seller identity, buyer acceptance, sanctions, fraud prevention, and legal notice; raw documents never leave their systems. Proofs are anchored on-chain and issued as W3C VerCreds / KERI ACDC, with vLEI credentials anchoring organizational trust. A completed pilot verified 58 invoices from 24 SMEs across Serbia and Romania, issuing 200+ verifiable proofs; an international debt fund confirmed DIFO-verified portfolios merit a distinct asset class. Verification costs fall below $2 per invoice;",
+      "organizationName": "Finspot",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-19T15:48:53+01:00",
+      "publishedAt": "2026-08-19T15:48:53+01:00",
+      "tags": [
+        "invoice financing",
+        "verifiable credentials",
+        "zero-knowledge proofs",
+        "vLEI",
+        "SME finance",
+        "factoring",
+        "business wallet",
+        "KERI",
+        "ACDC",
+        "e-invoicing",
+        "trade finance",
+        "W3C VC",
+        "GLEIF",
+        "eIDAS",
+        "fraud prevention",
+        "double financing",
+        "AML",
+        "cross-border",
+        "open source",
+        "emerging markets"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [
+          {
+            "refId": null,
+            "labelRaw": "DIFO originator credential store (organizational wallet)",
+            "url": null,
+            "source": "manual",
+            "walletType": "organizational"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Global vLei Wallet",
+            "url": "https://wallet.globalvlei.com/",
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:gleif:vlei-root:production",
+            "labelRaw": "GLEIF vLEI Root Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Licensed issuers of Republic of Serbia",
+            "url": "https://mit.gov.rs/tekst/sr/583/registar-pruzalaca-kvalifikovanih-usluga-od-poverenja-.php",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:globalvlei:vlei:production",
+            "labelRaw": "Global vLEI Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:gleif:legal-entity-vlei:acdc",
+            "labelRaw": "vLEI - Legal Entity",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "National x509 company certificates",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "EIDAS qualified certificate for electronic signature",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "IFC",
+            "url": "https://www.ifc.org/en/home",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "World Bank",
+            "url": "https://www.worldbank.org/ext/en/home",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Finspot",
+            "url": "https://finspot.com/en/finspot-factoring/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:gleif",
+            "labelRaw": "Global Legal Entity Identifier Foundation",
+            "url": "https://www.gleif.org",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:global-vlei",
+            "labelRaw": "Global vLEI",
+            "url": "https://globalvlei.com/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Advanced Global Capital Debt Fund\\Pilot observer",
+            "url": "https://advanceglobalcap.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "acdc",
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-from-2026-08-19-16-41-08.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-from-2026-08-19-16-41-08.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/YYnDbQBrkq4",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/YYnDbQBrkq4",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://pilot.difo.world/",
+      "userJourney": "An SME requests early payment on an invoice from a licensed factoring originator (Finspot in Serbia, InvoiceCash in Romania). The originator uploads the invoice and its evidence to the DIFO instance: the qualified-signed invoice, the buyer's acceptance (signed national e-invoicing response or signed confirmation PDF), and the debtor notification email. DIFO then collects signed attestations from ecosystem issuers - a TSA-anchored AML screening response and a double-financing registry response signed with the Serbian Chamber of Commerce's vLEI via Global vLei wallet. For each of five facts (seller identity, buyer acceptance, sanctions, double financing, legal notice), a parser extracts properties at the originator's edge and a zero-knowledge prover generates a proof - raw data never leaves the originator. Proofs are verified on-chain and issued as W3C Verifiable Credentials / KERI ACDC, held in the originator's business wallet. A funder (AGC Capital in the pilot) verifies the credentials independently against public verifier contracts - no repeated due diligence, no raw documents. Verified invoices from multiple originators can then be pooled into one fundable portfolio.",
+      "country": "RS"
+    }
+  ]
+}
