@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T20:06:47+00:00",
+    "generatedAt": "2026-08-19T20:09:30+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -2754,7 +2754,7 @@
         },
         {
             "orgSlug": "digital-identity-foundation",
-            "orgId": "org:digital-identity-foundation",
+            "orgId": "org:dif",
             "orgName": "Digital Identity Foundation",
             "useCases": [
                 {
@@ -2765,7 +2765,7 @@
                     "organizationName": "Digital Identity Foundation",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-14T12:14:11+01:00",
+                    "updatedAt": "2026-08-19T21:09:30+01:00",
                     "publishedAt": "2026-08-14T12:14:11+01:00",
                     "tags": [
                         "identity",
@@ -2812,10 +2812,10 @@
                         ],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:dif",
                                 "labelRaw": "Digital Identity Foundation",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
