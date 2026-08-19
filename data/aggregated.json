@@ -1,10 +1,113 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T13:57:47.000Z",
+  "lastUpdated": "2026-08-19T13:58:20.509Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 70,
   "useCases": [
+    {
+      "id": "independent-review-of-ai-decision-evidence-lf3fYX",
+      "sector": "digital",
+      "title": "Seal: independent review of AI decision evidence",
+      "summary": "A bank declines a loan application. Six months later, the customer's solicitor asks why. The only record is a log written by the organisation under review. Seal separates the evidence across three independent parties: Seal signs the decision receipt, Yivi issues the reviewer's credential, and the reviewer signs the verdict. No single party controls the complete evidence path. A reviewer opens a docket with one fixed question, set before the evidence is opened so it cannot be adjusted to fit the answer, verifies the receipt against Seal's published key, and records one of three verdicts: accepted, declined, or not enough to answer. A reviewer outside Aqta, holding a credential we did not issue, has completed the prototype flow and signed a verdict. Walk it at review.aqta.ai or tamper with a receipt at app.aqta.ai/demo. What it establishes: Seal signed the stated record; signed fields have not changed; a reviewer signed a verdict on a fixed question. What it does not establish: that the record matches the computation that ran, or that every decision was recorded. We would rather be checked than believed. Signing is production; this review flow is a prototype and the page says so.",
+      "organizationName": "Aqta",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-19T14:58:03+01:00",
+      "publishedAt": "2026-08-19T14:58:03+01:00",
+      "tags": [
+        "ai-evidence",
+        "independent-review",
+        "digital-wallets",
+        "offline-verification",
+        "verifiable-credentials"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "yivi",
+            "labelRaw": "Yivi",
+            "url": "https://yivi.app",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Aqta",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Yivi",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Email address",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:aqta",
+            "labelRaw": "Aqta",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:yivi",
+            "labelRaw": "Yivi",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Aqta",
+            "url": "https://aqta.ai",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "idemix"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [
+        "IRMA Protocol"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "agentic_ai"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/fides-cover-1280x720-2.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/fides-cover-1280x720-2.png",
+      "moreInfoUrl": "https://review.aqta.ai",
+      "userJourney": "1. Seal signs an AI decision as it is made. The receipt is offline-verifiable against Seal's published Ed25519 key\n2. A reviewer opens a docket: one fixed question, set before the evidence is opened so it cannot be adjusted to fit the answer, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer verifies the receipt in their own browser against the published key, then chooses one of three verdicts: accept, decline, or not enough to answer\n4. The page requests an IRMA signature session. The reviewer's Yivi wallet shows the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs by disclosing a verified email credential from their wallet. No account is created with the relying party\n6. The relying party verifies that attribute-based signature with irmago, the open-source IRMA library, the moment anchored by the Yivi timestamp service\n7. The pack exports receipt, credential presentation and countersignature. Each verifies without contacting Aqta: the receipt with the open-source verifiers on npm and PyPI, the signature with irmago, since no browser Idemix verifier exists",
+      "country": "IE"
+    },
     {
       "id": "reusable-kyb-due-digital-due-diligence-for-financial-transactions-E06Xyi",
       "sector": "finance",
@@ -3914,109 +4017,6 @@
       "moreInfoUrl": "https://doi.org/10.5281/zenodo.21825740",
       "userJourney": "1. A brand declares the composition and sustainability claims for a production lot and\n   supplies the supply-chain documents for each tier.\n2. Before anything is signed, Reeco checks the declared claim against the certified\n   evidence. If the evidence does not support the claim, the passport is not issued at the\n   declared value.\n3. The passport is issued as a UNTP 0.7.0 Verifiable Credential signed with Ed25519, with\n   a GS1 Digital Link identifier at unit level (AI 01 / 10 / 21) as its subject id.\n4. A consumer scans the QR on the garment. The GS1 Digital Link resolver returns the\n   passport in a plain-language view; the credential status is resolved live, so a\n   superseded or revoked claim never reads as valid.\n5. A repairer or recycler reads material and end-of-life data from the same identifier.\n6. A market surveillance authority retrieves the same passport, verifies the signature\n   against the published DID document, and can retrieve the archived version from the\n   independent back-up service if the primary is unavailable.",
       "country": "IT"
-    },
-    {
-      "id": "independent-review-of-ai-decision-evidence-lf3fYX",
-      "sector": "digital",
-      "title": "Seal: independent review of AI decision evidence",
-      "summary": "A bank declines a loan application. Six months later, the customer's solicitor asks why. The only record of that decision is a log written by the organisation under review.\n\nSeal addresses this by separating the evidence across three independent issuers: Seal signs the decision receipt, Yivi issues the reviewer's credential, and the reviewer signs the verdict. No single party controls the complete evidence path.\n\nWhen a decision is questioned, a reviewer opens a docket with one fixed question, set before evidence is opened so it cannot be adjusted to fit the answer. Their browser verifies every signature, and they record one of three verdicts: accepted, declined or not enough to answer. Walk the flow and tamper with a receipt yourself: app.aqta.ai/demo.\n\nWhat it establishes: Seal signed the stated record; signed fields have not changed; a reviewer holding a credential Aqta did not issue signed a verdict on a fixed question.\n\nWhat it does not establish: that the record matches the computation that actually ran, or that every decision was recorded.\n\nWe would rather be checked than believed. The signing is production; this review flow is a prototype, and the page says so",
-      "organizationName": "Aqta",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-16T14:05:29+01:00",
-      "publishedAt": "2026-08-16T14:05:29+01:00",
-      "tags": [
-        "ai-evidence",
-        "independent-review",
-        "digital-wallets",
-        "offline-verification",
-        "verifiable-credentials"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "yivi",
-            "labelRaw": "Yivi",
-            "url": "https://yivi.app",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Aqta",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Yivi",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Email address",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:aqta",
-            "labelRaw": "Aqta",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:yivi",
-            "labelRaw": "Yivi",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Aqta",
-            "url": "https://aqta.ai",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "idemix"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [
-        "IRMA Protocol"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "agentic_ai"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/fides-cover-1280x720-2.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/fides-cover-1280x720-2.png",
-      "moreInfoUrl": "https://review.aqta.ai",
-      "userJourney": "1. An AI decision is signed by Seal at the moment it is made; the receipt is offline-verifiable against Seal's published Ed25519 key\n2. An independent reviewer opens a docket: one fixed question, set before the evidence is opened so it cannot be adjusted to fit the answer, with the receipt attached. The question is hashed into what will be signed\n3. The reviewer verifies the evidence in their own browser, then chooses one of three verdicts: accept, decline, or not enough to answer it\n4. The page requests an IRMA signature session; the reviewer's Yivi wallet displays the exact binding text: receipt hash, question hash, decision, timestamp\n5. The reviewer signs by disclosing a verified email credential from their wallet. No account is created with the relying party at any point\n6. The relying party verifies the attribute-based signature using irmago, the open-source IRMA verification library, with the signing moment anchored by the Yivi timestamp service\n7. The evidence pack exports: receipt, credential presentation, and countersignature. Each is independently verifiable without contacting Aqta",
-      "country": "IE"
     },
     {
       "id": "tervion-digiclinic-lTkRt4",
