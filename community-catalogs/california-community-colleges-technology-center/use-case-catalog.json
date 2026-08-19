@@ -12,8 +12,8 @@
       "organizationName": "California Community Colleges Technology Center",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-18T06:01:39+01:00",
-      "publishedAt": "2026-08-18T06:01:39+01:00",
+      "updatedAt": "2026-08-19T05:33:54+01:00",
+      "publishedAt": "2026-08-19T05:33:54+01:00",
       "tags": [
         "d fighting",
         "digital identity",
@@ -63,6 +63,20 @@
             "refId": null,
             "labelRaw": "California Community Colleges Technology Center",
             "url": "https://ccctechcenter.org/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Open CCC implementation URL",
+            "url": "https://account.cccmypath.org/auth/realms/OpenCCC/protocol/openid-connect/auth?client_id=account&redirect_uri=https%3A%2F%2Faccount.cccmypath.org%2Fauth%2Frealms%2FOpenCCC%2Faccount%2Flogin-redirect&state=0%2F363859dd-2a07-467c-b4aa-559260805b31&response_type=code&scope=openid",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "OpenCCC relying party URL",
+            "url": "https://opencred.ccctechcenter.org/.well-known/openid-configuration",
             "source": "manual",
             "walletType": null
           }
