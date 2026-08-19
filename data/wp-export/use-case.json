@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T20:09:30+00:00",
+    "generatedAt": "2026-08-19T20:09:59+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -4636,7 +4636,7 @@
                     "organizationName": "ICTU",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-19T20:03:56+01:00",
+                    "updatedAt": "2026-08-19T21:09:59+01:00",
                     "publishedAt": "2026-08-19T20:03:56+01:00",
                     "tags": [
                         "identity",
@@ -4675,10 +4675,10 @@
                         "credentials": [],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:ictu",
                                 "labelRaw": "ICTU",
                                 "url": "https://www.ictu.nl/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
