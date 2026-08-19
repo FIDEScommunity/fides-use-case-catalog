@@ -1,10 +1,70 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T05:36:09.259Z",
+  "lastUpdated": "2026-08-19T05:44:09.507Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 68,
+  "count": 69,
   "useCases": [
+    {
+      "id": "factoring-business-for-used-car-and-used-parts-export-transactionspoc-N88dqD",
+      "sector": "trade",
+      "title": "Factoring Business for Used Car and Used Parts Export Transactions(POC)",
+      "summary": "TOPPAN and SBI are planning an factoring business for the overseas export of used cars and used parts.\nThis initiative aims to digitize procedures and enhance the screening process process during credit screening.\nThis will serve as a specific business use case in the trade and financial sectors\nSome Japanese exporters are exporting second hand Japanese cars to overseas countries.\nUsually the exporters are SME, but it takes time for them to receive the payment\nbecause of the time required to transport a car by ship.\nThis concept involves an SBI affiliate—acting as an intermediary—facilitating access to funds by providing on-chain financing via blockchain technology during import-export processes, utilizing a stable coin known as XDC.\nTOPPAN, a Japanese leading printing company, issued vLEI to handle end-user authentication and to take on part of the KYB/KYC process during credit screening.\nSince these transactions frequently occur between SMEs across national borders,\nit is necessary to verify the creditworthiness of the counterparty.\nthis is where the system leverages the benefit of GLEIF,\nwhich enables corporate verification based on internationally standardized procedures.",
+      "organizationName": "Global Legal Entity Identifier Foundation",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-19T06:43:51+01:00",
+      "publishedAt": "2026-08-19T06:43:51+01:00",
+      "tags": [
+        "identity",
+        "payment",
+        "stable coin"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:gleif",
+            "labelRaw": "Global Legal Entity Identifier Foundation",
+            "url": "https://www.gleif.org",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:toppan",
+            "labelRaw": "Toppan",
+            "url": "https://www.toppan.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "SBI XDC Network APAC",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [
+        "acdc"
+      ],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "organizational_identity",
+        "payments"
+      ],
+      "moreInfoUrl": "https://www.holdings.toppan.com/en/news/2026/07/newsrelease260710_1.html",
+      "userJourney": "In this POC, they connected TOPPAN's corporate digital certificate vLEI, a verifiable credential solution offered by GLEIF,  with SBI XDC’s Trade Platform. Through this integration, they verified the automation of corporate identity confirmation and the authenticity of receivables information, targeting past transaction data from SS Trading Co., Ltd. (Head Office: Minato-ku, Tokyo; Representative Director: Takumi Shoda; hereinafter \"SS Trading\"), a company within the SBI Group that operates a used automobile and used auto parts export business. As a result, they confirmed that leveraging vLEI enables the entire factoring transaction process to be conducted online.",
+      "country": "JP"
+    },
     {
       "id": "digital-product-passport-applying-the-cirpass-structure-and-danube-business-wallet-gN4juB",
       "sector": "supply_chain",
