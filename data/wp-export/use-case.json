@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-19T20:12:23+00:00",
+    "generatedAt": "2026-08-19T20:13:01+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6252,7 +6252,7 @@
                     "organizationName": "NATIXAR",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-17T16:04:59+01:00",
+                    "updatedAt": "2026-08-19T21:13:01+01:00",
                     "publishedAt": "2026-08-17T16:04:59+01:00",
                     "tags": [
                         "gold",
@@ -6278,17 +6278,17 @@
                         "credentials": [],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:natixar",
                                 "labelRaw": "NATIXAR",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:zijin-mining",
                                 "labelRaw": "ZIJIN",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
