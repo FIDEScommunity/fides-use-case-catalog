@@ -1,0 +1,82 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:hypermine",
+  "orgName": "Hypermine",
+  "useCases": [
+    {
+      "id": "reusable-kyb-due-digital-due-diligence-for-financial-transactions-E06Xyi",
+      "sector": "finance",
+      "title": "Reusable KYB Due : Digital Due Diligence for Financial Transactions",
+      "summary": "Boostn is a Sports Fintech specialising in Funding-raising for The Bavaria Ice Hockey league, they provide their sponsors with a simple way to manage their tax submission. Hypermine and BoostN demonstrate a practical, privacy-preserving approach to reusable enhanced KYB:\n\nWhile business wallets establish basic company identity, robust Know Your Business (KYB) demands multi-layered due diligence—including UBO analysis, representative verification, PEP/sanctions screening, and lifecycle tracking.\n\nVerification & Issuance: A sponsor company and its representative complete full KYC/KYB via Hypermine. Upon approval, Hypermine issues a non-qualified W3C Verifiable Credential directly to the sponsor’s Company Vault.\n\nIndependent Relying-Party Validation: BoostN (as the relying party) requests onboarding evidence. The sponsor presents the credential, allowing BoostN to independently verify cryptographic integrity, issuer trust, freshness, revocation status, and policy rules before granting access.\n\nImpact: Eliminates repetitive onboarding and document sharing while maintaining strict enterprise control, relying-party sovereignty, and verifiable auditability. (Non-QTSP implementation.)",
+      "organizationName": "Hypermine",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-19T14:57:30+01:00",
+      "publishedAt": "2026-08-19T14:57:30+01:00",
+      "tags": [
+        "Finance",
+        "Fundraising",
+        "Sponsorships"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:hypermine",
+            "labelRaw": "Hypermine",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "BoostN GMBH",
+            "url": "https://boostn.team/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/flow.png",
+        "https://fides.community/app/uploads/2026/08/Fides1.png",
+        "https://fides.community/app/uploads/2026/08/Fides2.png",
+        "https://fides.community/app/uploads/2026/08/Fides3.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/flow.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/1hs8SGwUbOM",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/1hs8SGwUbOM",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://hypersign.id/",
+      "userJourney": "1. Opportunity & Request: Sponsor A selects a sponsorship opportunity on BoostN, triggering a requirement for company KYB and representative KYC.\n\n2. Due Diligence: The representative submits company, UBO, and identity data via Hypermine. Hypermine conducts ownership analysis, sanctions/PEP screening, and risk checks against its verification policy.\n\n3. Credential Issuance: Upon approval, Hypermine issues a reusable W3C KYB Credential to Sponsor A’s Company Vault containing company identifiers, checks performed, policy version, validity period, and status mechanisms.\n\n4. Consent & Presentation: BoostN sends a purpose-bound request for onboarding evidence. Sponsor A reviews the request and authorizes presentation from its Company Vault.\n\n5. Verification & Decision: BoostN validates Hypermine’s signature, cryptographic integrity, policy adherence, freshness, and revocation status before making the onboarding decision.\n\n6. Reusability: Sponsor A retains the credential in its vault for instant reuse across other relying parties.",
+      "country": "DE"
+    }
+  ]
+}
