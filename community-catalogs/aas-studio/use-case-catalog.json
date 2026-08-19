@@ -12,7 +12,7 @@
       "organizationName": "AAS-Studio",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-17T20:11:53+01:00",
+      "updatedAt": "2026-08-19T20:38:48+01:00",
       "publishedAt": "2026-08-17T20:11:53+01:00",
       "tags": [
         "digital-product-passport",
@@ -45,10 +45,10 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:aas-studio",
             "labelRaw": "AAS-Studio",
             "url": "http://aas-studio.eu",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -68,8 +68,8 @@
       "presentationProtocols": [],
       "interopProfiles": [],
       "themes": [
-        "digital_product_passports",
-        "compliance_reporting"
+        "compliance_reporting",
+        "digital_product_passports"
       ],
       "imageUrls": [
         "https://fides.community/app/uploads/2026/08/homepage.png"
