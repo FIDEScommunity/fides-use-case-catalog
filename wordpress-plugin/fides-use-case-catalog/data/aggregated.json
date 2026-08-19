@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-19T20:10:14.921Z",
+  "lastUpdated": "2026-08-19T20:12:10.655Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -2861,7 +2861,7 @@
       "organizationName": "Interac",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-19T20:37:31+01:00",
+      "updatedAt": "2026-08-19T21:11:52+01:00",
       "publishedAt": "2026-08-18T15:38:52+01:00",
       "tags": [
         "identity",
@@ -2908,10 +2908,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:first-canadian-title",
             "labelRaw": "First Canadian Title",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],

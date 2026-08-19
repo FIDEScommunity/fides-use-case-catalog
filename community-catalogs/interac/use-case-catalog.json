@@ -12,7 +12,7 @@
       "organizationName": "Interac",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-19T20:37:31+01:00",
+      "updatedAt": "2026-08-19T21:11:52+01:00",
       "publishedAt": "2026-08-18T15:38:52+01:00",
       "tags": [
         "identity",
@@ -59,10 +59,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:first-canadian-title",
             "labelRaw": "First Canadian Title",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
