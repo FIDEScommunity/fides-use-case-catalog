@@ -1,10 +1,384 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T13:39:51.641Z",
+  "lastUpdated": "2026-08-20T14:18:32.812Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 81,
+  "count": 82,
   "useCases": [
+    {
+      "id": "mobile-driving-licence-mdl-based-on-iso-iec-18013-5-b06ubj",
+      "sector": "mobility",
+      "title": "Mobile Driving Licence (mDL) based on ISO/IEC 18013-5",
+      "summary": "The mobile driving licence (mDL) is a digital version of a physical licence, held in a secure wallet on a smartphone. Built on ISO/IEC 18013-5, it enables trusted, privacy-preserving verification of licence data in person and, via ISO/IEC 18013-7, online. Selective disclosure lets holders share only requested data, while signatures, device binding, and holder authentication ensure the data is authentic and unaltered.\n\nSince 2014, experts have collaborated through 100+ ISO meetings on a generic, interoperable model for verifiable credentials, initially focused on mDLs. In 2018, AAMVA, eReg, and Austroads formalised cooperation in their first global summit. Stakeholders collaborate further in test events (15 held). ISO/IEC 18013-5 was published in 2021, and Part 7 in 2024. The mdoc model supports many credential types, with growing adoption of Photo IDs.\n\nThis work has driven policy adoption, including the US REAL ID Modernization Act, the DHS mDL Rule, implementing acts for the EUDI Wallet, and more. Millions of ISO-compliant mDLs are provisioned across 23 AAMVA jurisdictions, next to mdoc deployments in Japan, Australia, New Zealand, Philippines, India, Argentina and the EU.",
+      "organizationName": "A4Advisory",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T15:18:15+01:00",
+      "publishedAt": "2026-08-20T15:18:15+01:00",
+      "tags": [
+        "mDL",
+        "mobile driving licence",
+        "ISO/IEC 18013-5",
+        "ISO/IEC 18013-7",
+        "Photo ID",
+        "mdoc",
+        "verifiable credentials",
+        "digital wallet",
+        "digital identity",
+        "AAMVA",
+        "EReg",
+        "Austroads",
+        "EUDI Wallet",
+        "A4Advisory",
+        "interoperability",
+        "collaboration",
+        "RDW",
+        "Task Force 7",
+        "TF7",
+        "TF14",
+        "Travel Credentials"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "apple-wallet",
+            "labelRaw": "Apple Wallet",
+            "url": "https://www.apple.com/wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": "https://wallet.google.com/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "samsung-wallet",
+            "labelRaw": "Samsung Wallet",
+            "url": "https://www.samsung.com/us/apps/samsung-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "scytales-id-wallet",
+            "labelRaw": "Scytales ID Wallet",
+            "url": "https://scytales.com",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Multipaz",
+            "url": "https://www.multipaz.org/",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "RDW App",
+            "url": "https://play.google.com/store/apps/details?id=nl.rdw.voertuig&hl=nl",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "VeriMe",
+            "url": "https://ap.connect.panasonic.com/sg/en/case-studies/panasonic-connect-launches-new-service-verime",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Alaska Mobile ID",
+            "url": "https://dmv.alaska.gov/mid/",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": "toppan-wallet",
+            "labelRaw": "TOPPAN Wallet",
+            "url": "https://www.toppan.com",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "IDEMIA Mobile ID",
+            "url": "https://idemia-mobile-id.com/",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "GET Digital Wallet",
+            "url": "https://play.google.com/store/apps/details?id=com.getgroup.digital.wallet&hl=en",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": "mattr-go-hold",
+            "labelRaw": "MATTR Go | Hold",
+            "url": "https://mattr.global/products/go-hold",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "procivis-one-wallet",
+            "labelRaw": "Procivis One Wallet",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "france-identite",
+            "labelRaw": "France Identité",
+            "url": "https://france-identite.gouv.fr/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "VeriGo Mobile ID",
+            "url": "https://www.veridos.com/en/solutions/mobile-id/",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": "ca-dmv-wallet",
+            "labelRaw": "CA DMV Wallet",
+            "url": "https://www.dmv.ca.gov/portal/ca-dmv-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-age-verification-wallet",
+            "labelRaw": "EUDI Age Verification App (Reference)",
+            "url": "https://github.com/eu-digital-identity-wallet/av-app-ios-wallet-ui",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-reference-personal-wallet",
+            "labelRaw": "EUDI Wallet Reference Implementation",
+            "url": "https://github.com/eu-digital-identity-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "LA Wallet",
+            "url": "https://lawallet.com/",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": "national-eudi-wallet-austria",
+            "labelRaw": "eAusweise",
+            "url": "https://www.id-austria.gv.at/de/verwenden/eausweise",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "i-kfz",
+            "url": "https://play.google.com/store/apps/details?id=de.kba.ikfz",
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "And many more",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Many",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:age-verification-mdoc:mdoc",
+            "labelRaw": "Age Verification (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:iso:photoid-mdoc:mdoc",
+            "labelRaw": "Photo ID (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:iso:mvrc-mdoc:mdoc",
+            "labelRaw": "Vehicle Registration Certificate (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "And many more",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "AAMVA",
+            "url": "https://www.aamva.org/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Austroads",
+            "url": "https://austroads.gov.au/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "EReg",
+            "url": "https://www.ereg-association.eu/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "RDW",
+            "url": "https://www.rdw.nl/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "A4Advisory",
+            "url": "https://www.a4advisory.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "And many more",
+            "url": "https://www.taskforce7.net/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Task Force 7",
+            "url": "https://www.taskforce7.net/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Valid8",
+            "url": "https://valid8advisory.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "TSA",
+            "url": "https://www.tsa.gov/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "mdoc-web-verifier",
+            "labelRaw": "mDoc Web Verifier",
+            "url": "https://mdoc-web-verifier.stelau.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "ca-dmv-mdl-login-opencred",
+            "labelRaw": "CA DMV Website Login (mDL / mDoc)",
+            "url": "https://www.dmv.ca.gov/isam/sps/oidc/rp/dmv_rp/kickoff/opencred",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "eudi-test-relying-party",
+            "labelRaw": "EUDI Test Relying Party",
+            "url": "https://tester.relyingparty.eudiw.dev/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "And many more",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Cover-Image.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Cover-Image.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=cFoSvMabBaE",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=cFoSvMabBaE",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.taskforce7.net/",
+      "userJourney": "ISO/IEC 18013-5 defines three roles: an Issuer, a Holder's Wallet on a mobile device, and a Reader run by a Relying Party. The Issuer provisions the mDL into the Wallet using a standardised doctype and namespaces. To present it, the Holder opens the Wallet and connects to the Reader via QR code or NFC tap, then exchanges data over Bluetooth, Wi-Fi Aware or NFC. The Reader requests data elements; the Holder consents, and the Wallet returns only approved data, signed and bound to the device. This enables secure, selective, privacy-preserving offline verification of transaction data. ISO/IEC 18013-7 adds a remote, online mechanism. Since the mdoc model is generic, the same architecture extends to other credentials, such as Photo IDs.\n\nInteroperability test events were at the core of collaboration to internationally recognise mDLs. Since 2018, AAMVA, eReg and Austroads have endorsed test events that brought issuers, wallets and readers together, pairing real implementations from different countries and vendors device to device to run engagement, data exchange and verification live, identifying gaps and maturing the global mDL ecosystem.",
+      "country": "NL"
+    },
     {
       "id": "verifiable-work-completion-credentials-for-migrant-construction-workers-Nn1eez",
       "sector": "construction",
