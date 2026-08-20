@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T20:59:30.387Z",
+  "lastUpdated": "2026-08-20T21:00:14.467Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 94,
   "useCases": [
@@ -1861,7 +1861,7 @@
       "organizationName": "Ooru",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T13:19:19+01:00",
+      "updatedAt": "2026-08-20T21:59:53+01:00",
       "publishedAt": "2026-08-20T13:19:19+01:00",
       "tags": [
         "government",
@@ -1901,17 +1901,17 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:dgrn",
             "labelRaw": "DGRN",
             "url": "https://dgrn.gov.st/sobre.php",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:credissuer",
             "labelRaw": "CredIssuer",
             "url": "https://credissuer.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
