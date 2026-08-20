@@ -1,10 +1,112 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T17:39:38.197Z",
+  "lastUpdated": "2026-08-20T17:40:30.772Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 86,
+  "count": 87,
   "useCases": [
+    {
+      "id": "the-california-mdl-and-its-growing-use-and-ecosystem-of-stakeholders-YWJK3u",
+      "sector": "digital",
+      "title": "The California mDL and Its Growing Use and Ecosystem of Stakeholders",
+      "summary": "The California Department of Motor Vehicles (DMV) launched its mobile Driver’s License (mDL) for the DMV Wallet app in 2023 and is now the largest issuer of digital identity credentials in the United States. Over 2 million Californians have active mDLs, with 900 entities consuming the credentials for over 700K uses annually. This includes the California Community Colleges’ statewide application system, which is used by all 116 colleges in the state. Millions of applications are processed in this system each year, and measurable fraud prevention improvements were reported within one month of deployment.\n\nThe mDL enables verification for identity, age, and driving eligibility. It supports secure data sharing across industries such as travel, healthcare, telecom, finance, insurance, benefits delivery services and others.\n\nThe state also maintains an active and diverse adoption ecosystem which engages hundreds of stakeholders each year, from local businesses to global organizations. This ecosystem operates through hackathons, showcases, pilots with emergency services, a dedicated test credential program, and OpenCred opensource verification tooling.",
+      "organizationName": "California DMV",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T18:40:15+01:00",
+      "publishedAt": "2026-08-20T18:40:15+01:00",
+      "tags": [
+        "identity",
+        "transaction",
+        "privacy"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "California DMV",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "CA Community Colleges",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "California Emergency Medical Services Authority",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "900+ entities consuming the mDL",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "vcdm_1_1"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/mDL-Cover-2.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/mDL-Cover-2.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=PefdT7_InKg&t",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://youtu.be/IfV2htzIm2U",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://youtu.be/Y-pUwXusjPw",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://youtu.be/pRPAYYz5k_4",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=PefdT7_InKg&t",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.dmv.ca.gov/portal/california-mdl/",
+      "userJourney": "A resident downloads any supported wallet app (Apple, Google, the native CA DMV Wallet, etc.) and requests a California mDL. The credential can be shared in person by presenting it to an mDL reader or online by scanning a QR code. \n\nCalifornia offers multiple verifier options to support broad adoption: an mDL reader built into the DMV Wallet, a web-based verifier for online interactions, and OpenCred, an open-source toolkit that implementers can embed directly into their systems. California Community Colleges demonstrated rapid adoption by deploying OpenCred in under two weeks and moving from initial concept to full statewide production in just 14 weeks.\n\nThe mDL supports selective disclosure, allowing users to share only the necessary information such as age, identity, or driving privilege for a given transaction. When presented, the verifier receives a cryptographically protected data package that contains only what is required and validates it without contacting the DMV. This enables fast, secure, and privacy preserving interactions.\n\nThe DMV launched an online portal for mDL on its main website in 2024, offering customers a one-stop shop for information and issue resolution.",
+      "country": "US"
+    },
     {
       "id": "from-document-trust-to-digital-trust-verifiable-credentials-across-the-contract-lifecycle-w9egMf",
       "sector": "digital",
