@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T20:54:38+00:00",
+    "generatedAt": "2026-08-20T20:55:34+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -7606,7 +7606,7 @@
         },
         {
             "orgSlug": "melento-clm-platform-and-relying-party",
-            "orgId": "org:melento-clm-platform-and-relying-party",
+            "orgId": "org:melento",
             "orgName": "Melento - CLM platform and relying party",
             "useCases": [
                 {
@@ -7617,7 +7617,7 @@
                     "organizationName": "Melento - CLM platform and relying party",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-20T18:39:16+01:00",
+                    "updatedAt": "2026-08-20T21:55:34+01:00",
                     "publishedAt": "2026-08-20T18:39:16+01:00",
                     "tags": [
                         "Identity",
@@ -7639,17 +7639,10 @@
                         "credentials": [],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:melento",
                                 "labelRaw": "Melento - CLM platform and relying party",
                                 "url": null,
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "Melento - CLM platform and relying party",
-                                "url": "https://melento.ai/en-in/source-to-obligation",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
