@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T20:52:01.460Z",
+  "lastUpdated": "2026-08-20T20:52:34.832Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 94,
   "useCases": [
@@ -610,7 +610,7 @@
       "organizationName": "Trustlayer Foundation",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-20T20:34:46+01:00",
+      "updatedAt": "2026-08-20T21:52:18+01:00",
       "publishedAt": "2026-08-20T20:34:46+01:00",
       "tags": [
         "agent identity",
@@ -649,14 +649,14 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:trustlayer-foundation",
             "labelRaw": "Trustlayer Foundation",
             "url": "http://www.trustlayer.foundation",
             "source": "manual",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:tuno-labs",
             "labelRaw": "Tuno Labs",
             "url": "http://www.tuno.bar",
             "source": "manual",
