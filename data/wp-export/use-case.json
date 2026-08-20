@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T19:54:57+00:00",
+    "generatedAt": "2026-08-20T19:59:44+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -10189,7 +10189,7 @@
                     "organizationName": "Transportation Security Administration (TSA)",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-20T20:49:44+01:00",
+                    "updatedAt": "2026-08-20T20:59:44+01:00",
                     "publishedAt": "2026-08-20T20:49:44+01:00",
                     "tags": [
                         "mDL",
@@ -10356,6 +10356,11 @@
                     "themes": [
                         "person_identity"
                     ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/tsa1.png",
+                        "https://fides.community/app/uploads/2026/08/tsa2.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/tsa1.png",
                     "userJourney": "A participating state DMV or motor vehicle agency issues an mDL that stays in the same trust chain as the physical driver's license and can carry a REAL ID indicator. The credential is provisioned into a supported wallet: Apple Wallet, Google Wallet, Samsung Wallet, or a state-issued app such as Alaska Mobile ID, California DMV Wallet, LA Wallet, NY MiD, or VA MiD.\n\nAt a TSA checkpoint, the traveler presents the mDL from their smartphone instead of a physical license. TSA, as relying party, requests only the identity attributes needed for passenger screening and receives traveler consent before any data is shared. A TSA-approved reader authenticates the credential electronically. TSA Officers use the verified identity for screening, while automated authentication and biometric matching reduce manual visual inspection.\n\nThis proximity, contactless flow is in operation at 271 airports. Verification time is 6.83 seconds versus about 20 seconds for physical ID. The same standards-based mDL can later extend to other scenarios such as age verification and government services.",
                     "country": "US"
                 }
