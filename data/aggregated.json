@@ -1,10 +1,173 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T05:00:25.652Z",
+  "lastUpdated": "2026-08-20T07:09:18.486Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 73,
+  "count": 74,
   "useCases": [
+    {
+      "id": "business-wallet-based-kyb-financial-onboarding-Rzqouv",
+      "sector": "finance",
+      "title": "Business Wallet-Based KYB & Financial Onboarding",
+      "summary": "A company representative opens a business bank account in an EU member state where the company is not registered, using verified credentials from an EU Business Wallet instead of uploaded documents. \n\nKYB today is manual, document-based and national: banks chase register extracts across jurisdictions, verify signing authority and ownership by hand, onboarding runs to days or weeks at high cost and drop-off, and forged documents remain a fraud vector. Here the founder presents a Legal Person Identification Data credential and a European Company Certificate, plus a PID or mandate proving authority to act. Issuers are national business registers and competent authorities such as PRH in Finland; the holder is the company through an authorised representative; the verifier is the bank or fintech; Hovi provides the issuance and verification layer; supervisors and EU trust lists anchor trust. \n\nThe wallet is the consent point, showing who is asking and for what, and releasing only approved attributes through selective disclosure. The result is same-day onboarding, register-sourced data, a stronger AML audit trail and one pattern that works across all 27 member states.",
+      "organizationName": "Hovi",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-20T08:08:57+01:00",
+      "publishedAt": "2026-08-20T08:08:57+01:00",
+      "tags": [
+        "EU Business Wallet",
+        "EUDI Wallet",
+        "eIDAS 2.0",
+        "KYB",
+        "KYC",
+        "AML",
+        "LPID",
+        "European Company Certificate",
+        "Verifiable Credentials",
+        "Digital Identity",
+        "Bank Account Opening",
+        "Cross-Border Onboarding",
+        "Financial Services",
+        "Fintech",
+        "OID4VP",
+        "SD-JWT VC",
+        "Selective Disclosure",
+        "Regtech",
+        "Trust Infrastructure",
+        "Onboarding Automation"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "hovi-wallet",
+            "labelRaw": "Hovi Wallet",
+            "url": "https://www.hovi.id/wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "hovi-business-wallet",
+            "labelRaw": "Hovi Business Wallet",
+            "url": "https://www.hovi.id",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Kyckr",
+            "url": "https://kyckr.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "NGI Bank",
+            "url": "https://ngi.hovi.app",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "VREX",
+            "url": "https://vrex.hovi.app",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:fides:lpid:sd-jwt-vc",
+            "labelRaw": "LPID Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:eucc:sd-jwt-vc",
+            "labelRaw": "EU Company Certificate",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Kyckr",
+            "url": "https://kyckr.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:hovi",
+            "labelRaw": "Hovi",
+            "url": "https://www.hovi.id/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "VREX",
+            "url": "https://vrex.hovi.app",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "NGI Bank",
+            "url": "https://ngi.hovi.app",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Thumbnail-2.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Thumbnail-2.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/BvuMDnDXKrw",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/BvuMDnDXKrw",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://businesswallet.hovi.app",
+      "userJourney": "1. The founder starts a business account application on the bank or fintech platform and selects \"verify with EU Business Wallet\" instead of uploading documents.\n\n2. The platform sends a presentation request through Hovi's verification layer, specifying the attributes required for KYB and AML.\n\n3. The request reaches the wallet. Delivery can be triggered in-session by QR or deep link, or out of band by email or SMS, and can be combined with national eID authentication such as FTN or BankID where required.\n\n4. The founder reviews the request in the wallet: who is asking, which attributes, for what purpose.\n\n5. On approval, the wallet presents the LPID and ECC credentials, plus the representative's PID or mandate, over OID4VP in SD-JWT VC or mdoc format with selective disclosure.\n\n6. The verification layer checks issuer signatures, credential validity and revocation status, and the issuer's presence on the EU trust list, then returns a structured, verified result to the platform.\n\n7. The platform completes KYB, screens the disclosed ownership data against AML requirements, and provisions the account. The verification result is retained as an audit record.",
+      "country": "FI"
+    },
     {
       "id": "samsung-sds-integrated-digital-wallet-b5dcHk",
       "sector": "finance",
