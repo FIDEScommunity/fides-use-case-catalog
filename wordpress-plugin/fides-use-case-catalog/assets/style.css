@@ -3471,9 +3471,9 @@
   margin-bottom: 0.5rem;
 }
 
-/* Compact media viewer + thumbnail strip (16:9 matches card + form guidance) */
+/* Compact media viewer + thumbnail strip */
 .fides-use-case-modal-media-wrap {
-  --fides-media-aspect: 16 / 9;
+  --fides-media-height: 240px;
 }
 
 .fides-use-case-modal-carousel {
@@ -3549,12 +3549,11 @@
   background: transparent;
 }
 
-/* Compact: image and video share a 16:9 viewer */
+/* Keep modal media compact at every viewport width. */
 .fides-use-case-modal-media-wrap .fides-use-case-modal-media-frame {
   position: relative;
   width: 100%;
-  aspect-ratio: var(--fides-media-aspect);
-  height: auto;
+  height: var(--fides-media-height);
   padding-top: 0;
 }
 
@@ -3567,8 +3566,7 @@
 }
 
 .fides-use-case-modal-media-wrap .fides-use-case-modal-media-image {
-  aspect-ratio: var(--fides-media-aspect);
-  height: auto;
+  height: var(--fides-media-height);
 }
 
 .fides-use-case-modal-media-wrap .fides-use-case-modal-media-image img {
@@ -3576,6 +3574,12 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Preserve complete use-case artwork instead of cropping non-standard ratios. */
+.fides-modal-overlay--usecase .fides-use-case-modal-media-wrap .fides-use-case-modal-media-image img {
+  object-fit: contain;
+  background: #0f172a;
 }
 
 /* Edge navigation + counter overlay */

@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.33
+Stable tag: 0.20.34
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,9 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.34 =
+* Keep modal media at a compact 240 px height and show complete use-case images without cropping.
 
 = 0.20.33 =
 * Keep `?usecase=` on the update form: the share redirect now only runs on catalog listing URLs, so Suggest an update stays on `/update-use-case/`. Accept mixed-case use-case ids in the update form and REST lookup.
