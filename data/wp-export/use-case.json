@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T19:34:46+00:00",
+    "generatedAt": "2026-08-20T19:42:54+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5188,6 +5188,189 @@
                     "moreInfoUrl": "https://www.holdings.toppan.com/en/news/2026/07/newsrelease260710_1.html",
                     "userJourney": "In this POC, they connected TOPPAN's corporate digital certificate vLEI, a verifiable credential solution offered by GLEIF,  with SBI XDC’s Trade Platform. Through this integration, they verified the automation of corporate identity confirmation and the authenticity of receivables information, targeting past transaction data from SS Trading Co., Ltd. (Head Office: Minato-ku, Tokyo; Representative Director: Takumi Shoda; hereinafter \"SS Trading\"), a company within the SBI Group that operates a used automobile and used auto parts export business. As a result, they confirmed that leveraging vLEI enables the entire factoring transaction process to be conducted online.",
                     "country": "JP"
+                }
+            ]
+        },
+        {
+            "orgSlug": "government-of-british-columbia",
+            "orgId": "org:bcgov",
+            "orgName": "Government of British Columbia",
+            "useCases": [
+                {
+                    "id": "from-mine-permit-to-digital-product-passport-building-an-open-digital-trust-ecosystem-for-responsible-critical-minerals-c31nxy",
+                    "sector": "supply_chain",
+                    "title": "From Mine Permit to Digital Product Passport: Building an Open Digital Trust Ecosystem for Responsible Critical Minerals",
+                    "summary": "The Mines Digital Trust initiative shows how trusted digital credentials can connect regulatory, sustainability and supply-chain evidence without forcing organizations onto a proprietary platform. Critical-mineral evidence is spread across government, mining companies, assurance programs and technology providers, making it hard for buyers, regulators and investors to verify that claims are authentic, current and linked to the material.\n\nThe solution combines a production-issued British Columbia Mines Act Permit credential, a United Nations Transparency Protocol (UNTP) digital product passport, and verifiable sustainability credentials such as Towards Sustainable Mining and The Copper Mark. Together they form an interoperable evidence chain, independently verifiable with open standards.\n\nDigital wallets issue, hold, discover, exchange and verify credentials across platforms, including OrgBook BC and enterprise wallets. Verifiable Credentials prove origin, integrity, status and authority while each organization keeps control of its own data. The result is greater transparency, lower verification cost, better market access, privacy and a reusable digital-trust model for supply chains.",
+                    "organizationName": "Government of British Columbia",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-20T20:42:54+01:00",
+                    "publishedAt": "2026-08-20T20:42:54+01:00",
+                    "tags": [
+                        "Mines Digital Trust",
+                        "critical minerals",
+                        "UNTP",
+                        "digital product passport",
+                        "Mines Act Permit",
+                        "OrgBook BC",
+                        "Towards Sustainable Mining",
+                        "Copper Mark",
+                        "verifiable credentials"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [
+                            {
+                                "refId": null,
+                                "labelRaw": "OrgBook BC",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": "organizational"
+                            },
+                            {
+                                "refId": "orbit-enterprise",
+                                "labelRaw": "Orbit Enterprise",
+                                "url": "https://northernblock.io",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Government of British Columbia",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Ministry of Mining and Critical Minerals",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Mining Association of Canada",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "The Copper Mark",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Mines Act Permit",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Digital Product Passport",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Conformity Credential",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:bcgov",
+                                "labelRaw": "Government of British Columbia",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Ministry of Mining and Critical Minerals",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Quartech Systems Ltd.",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Pyx Global",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Northern Block",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Mining Association of Canada",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "The Copper Mark",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Hudbay Minerals",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "acdc",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "other"
+                    ],
+                    "presentationProtocols": [
+                        "DIDComm v2"
+                    ],
+                    "interopProfiles": [],
+                    "themes": [
+                        "organizational_identity",
+                        "compliance_reporting",
+                        "trade_documents",
+                        "digital_product_passports"
+                    ],
+                    "moreInfoUrl": "https://mining.ca",
+                    "userJourney": "The Government of British Columbia issues a digital Mines Act Permit credential with authoritative permit data and publishes it through OrgBook BC, so it can be independently verified while remaining under government authority.\n\nA mining company then creates a United Nations Transparency Protocol (UNTP) raw-material digital product passport. The passport does not copy the underlying records; it links to trusted credentials from the organizations that own them. Sustainability bodies such as Towards Sustainable Mining and The Copper Mark can add verifiable conformity credentials, forming one connected evidence chain. Each party keeps control of its own data.\n\nDigital wallets issue, publish, exchange, discover and manage these credentials across platforms, including OrgBook BC and enterprise wallets such as Northern Block Orbit.\n\nWhen a buyer, regulator, investor or supply-chain partner reviews the passport, a verifier application follows the links, confirms the issuer, checks the digital signature and integrity, and validates credential status. Government speaks for permits, mining companies for provenance, and assurance bodies for sustainability claims.",
+                    "country": "CA"
                 }
             ]
         },
