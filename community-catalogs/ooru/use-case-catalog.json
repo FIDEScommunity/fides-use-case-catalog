@@ -12,7 +12,7 @@
       "organizationName": "Ooru",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T16:53:00+01:00",
+      "updatedAt": "2026-08-20T21:56:38+01:00",
       "publishedAt": "2026-08-20T16:53:00+01:00",
       "tags": [
         "education",
@@ -57,17 +57,17 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:credissuer",
             "labelRaw": "CredIssuer",
             "url": "https://credissuer.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:iiit-bangalore",
             "labelRaw": "IIIT-Bangalore",
             "url": "https://www.iiitb.ac.in/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],

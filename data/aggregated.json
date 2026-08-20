@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T20:55:53.662Z",
+  "lastUpdated": "2026-08-20T20:56:57.372Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 94,
   "useCases": [
@@ -1124,7 +1124,7 @@
       "organizationName": "Vouched",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T16:56:36+01:00",
+      "updatedAt": "2026-08-20T21:56:02+01:00",
       "publishedAt": "2026-08-20T16:56:36+01:00",
       "tags": [
         "agent identity",
@@ -1143,10 +1143,10 @@
         "credentials": [],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:vouched",
             "labelRaw": "Vouched",
             "url": "https://www.vouched.id/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -1186,7 +1186,7 @@
       "organizationName": "Ooru",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T16:53:00+01:00",
+      "updatedAt": "2026-08-20T21:56:38+01:00",
       "publishedAt": "2026-08-20T16:53:00+01:00",
       "tags": [
         "education",
@@ -1231,17 +1231,17 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:credissuer",
             "labelRaw": "CredIssuer",
             "url": "https://credissuer.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:iiit-bangalore",
             "labelRaw": "IIIT-Bangalore",
             "url": "https://www.iiitb.ac.in/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],

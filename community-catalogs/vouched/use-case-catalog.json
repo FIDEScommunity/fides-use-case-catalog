@@ -12,7 +12,7 @@
       "organizationName": "Vouched",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T16:56:36+01:00",
+      "updatedAt": "2026-08-20T21:56:02+01:00",
       "publishedAt": "2026-08-20T16:56:36+01:00",
       "tags": [
         "agent identity",
@@ -31,10 +31,10 @@
         "credentials": [],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:vouched",
             "labelRaw": "Vouched",
             "url": "https://www.vouched.id/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
