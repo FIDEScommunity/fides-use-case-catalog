@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T21:00:37.600Z",
+  "lastUpdated": "2026-08-20T21:01:17.464Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 94,
   "useCases": [
@@ -2064,7 +2064,7 @@
       "organizationName": "Turing Space Inc.",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T13:14:47+01:00",
+      "updatedAt": "2026-08-20T22:00:56+01:00",
       "publishedAt": "2026-08-20T13:14:47+01:00",
       "tags": [
         "Digital Identity",
@@ -2097,10 +2097,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:hideez",
             "labelRaw": "Hideez Development LLC",
             "url": "https://hideez.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
