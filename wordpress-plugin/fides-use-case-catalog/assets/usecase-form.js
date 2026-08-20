@@ -442,7 +442,7 @@
 
   function submissionItemUrl(useCaseId) {
     const id = String(useCaseId || "").trim();
-    if (!id || !/^[a-z0-9][a-z0-9._-]*$/.test(id)) {
+    if (!id || !window.FidesUseCaseId || !window.FidesUseCaseId.isValidId(id)) {
       return "";
     }
     return `${apiBase}/submissions/${encodeURIComponent(id)}`;

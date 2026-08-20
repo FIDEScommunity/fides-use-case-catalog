@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.20.32
+ * Version: 0.20.33
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.32');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.33');
 /** Bump this when share rewrite rules change so existing sites flush once. */
 define('FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION', '0.20.30');
 /** Admin list page size for Tools → Use Case Submissions. */
@@ -24,6 +24,8 @@ define('FIDES_USE_CASE_CATALOG_TABLE', $GLOBALS['wpdb']->prefix . 'fides_use_cas
 define('FIDES_USE_CASE_CATALOG_DB_VERSION', '1.8.0');
 define('FIDES_USE_CASE_LOOKUP_LIMIT', 8);
 
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-id.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-share-url.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-taxonomy.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-notifications.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-catalog-ssr.php';
@@ -283,7 +285,8 @@ function fides_use_case_catalog_maybe_flush_share_rewrites(): void {
 }
 
 /**
- * LinkedIn ignores ?usecase= on the listing page. Send those URLs to the unique path.
+ * LinkedIn ignores ?usecase= on the listing page. Send those listing URLs to
+ * the unique path. Update/create forms also use ?usecase= and must not redirect.
  */
 function fides_use_case_catalog_redirect_query_share_urls(): void {
     if (is_admin() || wp_doing_ajax() || (function_exists('wp_is_json_request') && wp_is_json_request())) {
@@ -296,15 +299,18 @@ function fides_use_case_catalog_redirect_query_share_urls(): void {
     if (empty($_GET['usecase'])) {
         return;
     }
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash((string) $_SERVER['REQUEST_URI']) : '';
+    $path = wp_parse_url($request_uri, PHP_URL_PATH);
+    if (! fides_use_case_catalog_is_listing_request_path(is_string($path) ? $path : '')) {
+        return;
+    }
+    $share = fides_use_case_catalog_share_path();
+    if (is_string($path) && str_starts_with(trailingslashit($path), $share)) {
+        return;
+    }
     // phpcs:ignore WordPress.Security.NonceVerification.Recommended
     $id = sanitize_text_field(wp_unslash((string) $_GET['usecase']));
     if ($id === '' || strpos($id, '/') !== false) {
-        return;
-    }
-    $request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash((string) $_SERVER['REQUEST_URI']) : '';
-    $path = wp_parse_url($request_uri, PHP_URL_PATH);
-    $share = fides_use_case_catalog_share_path();
-    if (is_string($path) && str_starts_with(trailingslashit($path), $share)) {
         return;
     }
     wp_safe_redirect(home_url($share . rawurlencode($id) . '/'), 301);
@@ -1168,20 +1174,6 @@ function fides_use_case_catalog_delete_confirm_message(array $row): string {
 }
 
 /**
- * Sanitize a public use case id for REST paths and lookups.
- */
-function fides_use_case_catalog_sanitize_use_case_id(string $raw): string {
-    $raw = sanitize_text_field(trim($raw));
-    if ($raw === '') {
-        return '';
-    }
-    if (! preg_match('/^[a-z0-9][a-z0-9._-]*$/i', $raw)) {
-        return '';
-    }
-    return strtolower($raw);
-}
-
-/**
  * Published row in the local database for a canonical use case id.
  *
  * @return array<string, mixed>|null
@@ -1641,7 +1633,7 @@ function fides_use_case_catalog_register_rest_routes(): void {
     );
 
     fides_use_case_catalog_register_rest_route(
-        '/submissions/(?P<use_case_id>[a-z0-9][a-z0-9._-]*)',
+        '/submissions/(?P<use_case_id>' . FIDES_USE_CASE_ID_ROUTE_PATTERN . ')',
         array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -2056,9 +2048,16 @@ function fides_use_case_catalog_enqueue_assets(): void {
     );
 
     wp_register_script(
+        'fides-use-case-id',
+        FIDES_USE_CASE_CATALOG_URL . 'assets/use-case-id.js',
+        array(),
+        FIDES_USE_CASE_CATALOG_VERSION,
+        true
+    );
+    wp_register_script(
         'fides-use-case-catalog-form',
         FIDES_USE_CASE_CATALOG_URL . 'assets/usecase-form.js',
-        array(),
+        array('fides-use-case-id'),
         FIDES_USE_CASE_CATALOG_VERSION,
         true
     );
