@@ -1,10 +1,99 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T07:12:03.187Z",
+  "lastUpdated": "2026-08-20T08:08:18.705Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 76,
+  "count": 77,
   "useCases": [
+    {
+      "id": "company-compass-L9THKy",
+      "sector": "digital",
+      "title": "Company Compass",
+      "summary": "Company Compass guides the user through all the steps necessary to create a private limited company (besloten vennootschap, BV). \nFor many entrepreneurs, setting up a legal entity is a complex and time-consuming process due to the involvement of various bodies, such as the notary, the Chamber of Commerce, the tax authorities, banks and wallet providers. Due to the various routes, the fragmentation of systems and the lack of overview, business owners often lose track of things, make mistakes or experience unnecessary delays. \n\nThe Company Compass process guidance application can solve this problem by acting as a central guide that provides step-by-step guidance, validates data, automatically synchronises with various parties and thus minimises errors. This leads to greater efficiency, shorter lead times and a smooth start to the business.\n\nThe process guidance application was created within Company Passport, a public-private collaboration of KNB, KVK, Belastingdienst, NVB and Betaalvereniging Nederland. The application exists as a functional demo.",
+      "organizationName": "ECP",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-20T09:08:01+01:00",
+      "publishedAt": "2026-08-20T09:08:01+01:00",
+      "tags": [
+        "business",
+        "public-private",
+        "wallet"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:knb",
+            "labelRaw": "Koninklijke Notariële Beroepsorganisatie (KNB)",
+            "url": "https://www.knb.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:kvk",
+            "labelRaw": "Kamer van Koophandel",
+            "url": "https://www.kvk.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bd",
+            "labelRaw": "Belastingdienst",
+            "url": "https://www.belastingdienst.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:nvb",
+            "labelRaw": "Nederlandse Vereniging van Banken",
+            "url": "https://www.nvb.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:betaalvereniging-nederland",
+            "labelRaw": "Betaalvereniging Nederland",
+            "url": "https://www.betaalvereniging.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ABN AMRO",
+            "url": "https://www.abnamro.nl/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ECP",
+            "url": "https://ecp.nl/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/CP-logo-16-9.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/CP-logo-16-9.png",
+      "moreInfoUrl": "https://sandboxfe.companypassport.com/",
+      "userJourney": "To establish a business in his/her name, the user needs a personal wallet in which his/het verified identity is recorded. The wallet is then linked to Company Compass. This ensures a safe and efficient way to identify the user when retrieving business data. The app then guides the user through all steps necessary to create a private limited company (BV). The application never stores data; the required data is always retrieved from the users digital wallet(s).",
+      "country": "NL"
+    },
     {
       "id": "instant-paperless-rural-credit-using-verifiable-credentials-xUny3z",
       "sector": "agriculture",
