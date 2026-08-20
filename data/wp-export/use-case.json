@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T14:18:15+00:00",
+    "generatedAt": "2026-08-20T15:37:17+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -583,6 +583,71 @@
                     "moreInfoUrl": "https://aas-studio.eu/verify",
                     "userJourney": "1. Manufacturer uploads a PDF datasheet; AAS Studio extracts the regulatory fields\n   with an LLM ensemble and maps them onto a conformant Asset Administration Shell,\n   validated against the official IDTA test engine.\n2. AAS Studio computes a canonical hash of the passport content and issues a W3C\n   Verifiable Credential signed with the manufacturer's own ES256 key, optionally\n   as an SD-JWT-VC for selective disclosure.\n3. If issued as revocable, a Bitstring/Token Status List slot is allocated; the\n   manufacturer can revoke it later, effective immediately for any verifier.\n4. The holder presents the credential's JWT to a relying party by any channel.\n5. The relying party verifies it fully offline: it fetches the public JWKS and\n   re-derives the proof itself, including the status-list check, so the verdict\n   never depends on trusting AAS Studio's server.",
                     "country": "PT"
+                }
+            ]
+        },
+        {
+            "orgSlug": "agence-nationale-des-titres-securises",
+            "orgId": "org:france",
+            "orgName": "Agence Nationale des Titres Sécurisés",
+            "useCases": [
+                {
+                    "id": "aptitude-verifier-for-dtc-vc-in-photoid-format-supporting-various-experimentations-for-digital-border-crossing-F8H7cE",
+                    "sector": "mobility",
+                    "title": "Aptitude verifier for DTC-VC in PhotoID format - Supporting various experimentations for digital border crossing",
+                    "summary": "Within the European APTITUDE Large Scale Pilot, a dedicated verifier for border crossing demonstrates how a government-backed digital service can collect and verify a Digital Travel Credential - Virtual Component. The credential is derived from any passport and securely stored within a digital identity wallet (i.e. France Identité), its format is based ISO/IEC standard and can be shared for verification in proximity at border crossing.\nMultiple experimentations are and will be taking place over the next few months within APTITUDE consortium across the globe to support and enhance border crossings: Marseille Provence Airport, Coquelles Eurotunnel, Roissy Charles de Gaulle, Spain, Frankfurt, Helsinki, London, Hong-Kong.\nThe verifier serves travelers, border authorities, government agencies but also airports and airlines by enabling trusted, privacy-preserving identity verification using selective disclosure when needed. Through interoperability testing and real-world airport experiments, the solution demonstrates seamless credential exchange across multiple passport' nationalities, issuers, and verifiers from different countries.",
+                    "organizationName": "Agence Nationale des Titres Sécurisés",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-20T16:37:17+01:00",
+                    "publishedAt": "2026-08-20T16:37:17+01:00",
+                    "tags": [
+                        "EUDI Wallet ; ARF ; Border crossing ; DTC-VC ; seamless travel"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:france",
+                                "labelRaw": "French Government",
+                                "url": "https://france-identite.gouv.fr/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:agence-nationale-des-titres-securises",
+                                "labelRaw": "Agence Nationale des Titres Sécurisés",
+                                "url": "https://ants.gouv.fr/",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "proximity"
+                    ],
+                    "vcFormats": [
+                        "mdoc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "ISO 18013-5"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF"
+                    ],
+                    "themes": [
+                        "person_identity"
+                    ],
+                    "moreInfoUrl": "https://aptitude.digital-identity-wallet.eu/wallet-use/digital-travel-credentials/",
+                    "userJourney": "AHEAD OF BORDER CONTROL – USER – 2 min\n\n1 - The tester installs on his wallet a dedicated version of France Identité (or any compatible wallet with 18013-5 capabilities)\n2 - Using his passport, the tester presents the inside of the physical document for collecting chip access key using Optical Character Recognition\n3 - The digital identity wallet may now perform contactless reading of the passport chip through NFC\n4 - The collected data (mainly Data Group 1 and Data Group 2) are converted into mDOC format (PhotoID) and signed by a legitimate authority (i.e. France Titres)\n5 - The wallet home page is now showing a new credential (Digital Travel Document – Virtual Component) with a related engagement QR code\n\nAT BORDER CONTROL – USER & BORDER AUTHORITIES – 10 sec\n\n1 - Border police is equipped with a dedicated computer to access the DTC-VC verification service and a connected QR code reader\n2 - The traveler is asked to present is engagement QR code to the QR code reader\n3 - After Bluetooth connection is established, the traveler shares his consent within the wallet\n4 - The border police receives the Digital Travel Credential – Virtual Component derived from the traveler’s passport",
+                    "country": "FR"
                 }
             ]
         },
