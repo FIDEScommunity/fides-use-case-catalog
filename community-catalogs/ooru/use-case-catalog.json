@@ -122,7 +122,7 @@
       "organizationName": "Ooru",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T14:39:33+01:00",
+      "updatedAt": "2026-08-20T21:59:15+01:00",
       "publishedAt": "2026-08-20T14:39:33+01:00",
       "tags": [
         "migrant workers",
@@ -169,31 +169,31 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:credissuer",
             "labelRaw": "CredIssuer",
             "url": "https://credissuer.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:jan-sahas",
             "labelRaw": "Jan Sahas",
             "url": "https://jansahas.org/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:total-environment",
             "labelRaw": "Total Environment",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:ashiana-housing",
             "labelRaw": "Ashiana Housing Ltd.",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
