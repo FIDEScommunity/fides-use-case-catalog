@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.25
+Stable tag: 0.20.26
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,10 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.26 =
+* Matomo funnel: use-case modal opens send Modal Open with use_case_id; organisation
+  chips pass from=usecase:{id} and normalised Organisation Click names.
 
 = 0.20.25 =
 * Wire Matomo click tracking for Use Case Discovery (themes + view all).

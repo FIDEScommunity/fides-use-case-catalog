@@ -1371,13 +1371,28 @@
     return cleaned.charAt(0).toUpperCase();
   }
 
-  function organizationCatalogHref(link) {
+  function matomoSafePart(value) {
+    return String(value || "unknown")
+      .trim()
+      .toLowerCase()
+      .replace(/^org:/i, "")
+      .replace(/\|/g, "-")
+      .replace(/\s+/g, "-") || "unknown";
+  }
+
+  function organizationCatalogHref(link, useCaseId) {
     const refId = link && link.refId ? String(link.refId).trim() : "";
     const orgBase = CATALOG_URLS.organization;
-    if (refId && orgBase) {
-      return `${orgBase}/?org=${encodeURIComponent(refId)}`;
+    if (!refId || !orgBase) return "";
+    const fromUseCase = String(useCaseId || "").trim();
+    try {
+      const built = new URL(`${orgBase.replace(/\/$/, "")}/?org=${encodeURIComponent(refId)}`, window.location.origin);
+      if (fromUseCase) built.searchParams.set("from", `usecase:${fromUseCase}`);
+      return built.pathname + built.search + built.hash;
+    } catch (_err) {
+      const from = fromUseCase ? `&from=${encodeURIComponent(`usecase:${fromUseCase}`)}` : "";
+      return `${orgBase.replace(/\/$/, "")}/?org=${encodeURIComponent(refId)}${from}`;
     }
-    return "";
   }
 
   function isCatalogOrganizationLink(link) {
@@ -1388,9 +1403,14 @@
     return linkItemLabel(a).localeCompare(linkItemLabel(b), undefined, { sensitivity: "base" });
   }
 
+  function trackUseCaseModalOpen(useCaseId) {
+    if (!window.FidesCatalogUI || typeof window.FidesCatalogUI.trackMatomoEvent !== "function") return;
+    window.FidesCatalogUI.trackMatomoEvent("Use Case Catalog", "Modal Open", matomoSafePart(useCaseId));
+  }
+
   function trackUseCaseOrganisationClick(useCaseId, organisationId) {
     if (!window.FidesCatalogUI || typeof window.FidesCatalogUI.trackMatomoEvent !== "function") return;
-    const name = [String(useCaseId || "unknown").trim() || "unknown", String(organisationId || "unknown").trim() || "unknown"].join("|");
+    const name = [matomoSafePart(useCaseId), matomoSafePart(organisationId)].join("|");
     window.FidesCatalogUI.trackMatomoEvent("Use Case Catalog", "Organisation Click", name);
   }
 
@@ -1401,7 +1421,8 @@
       const refId = link && link.refId ? String(link.refId).trim() : "";
       return refId && linkItemLabel(link).trim().toLocaleLowerCase() === organizationName;
     });
-    return match ? organizationCatalogHref(match) : "";
+    const useCaseId = item && item.id ? String(item.id).trim() : "";
+    return match ? organizationCatalogHref(match, useCaseId) : "";
   }
 
   function renderSubmittedByValue(item) {
@@ -1409,7 +1430,19 @@
     if (!label) return "—";
     const href = submittedByOrganizationHref(item);
     if (!href) return escapeHtml(label);
-    return `<a href="${escapeHtml(href)}" class="fides-modal-link-inline" aria-label="View ${escapeHtml(label)} in the organization catalog" onclick="event.stopPropagation();">${escapeHtml(label)}</a>`;
+    const useCaseId = item && item.id ? String(item.id).trim() : "";
+    const organisationId = (() => {
+      const organizationName = label.toLocaleLowerCase();
+      const match = getLinkItems(item, "organizations").find((link) => {
+        const refId = link && link.refId ? String(link.refId).trim() : "";
+        return refId && linkItemLabel(link).trim().toLocaleLowerCase() === organizationName;
+      });
+      return match && match.refId ? String(match.refId).trim() : "";
+    })();
+    const funnelAttrs = organisationId
+      ? ` data-fides-funnel="use-case-organisation" data-use-case-id="${escapeHtml(useCaseId)}" data-organisation-id="${escapeHtml(organisationId)}"`
+      : "";
+    return `<a href="${escapeHtml(href)}" class="fides-modal-link-inline" aria-label="View ${escapeHtml(label)} in the organization catalog"${funnelAttrs} onclick="event.stopPropagation();">${escapeHtml(label)}</a>`;
   }
 
   function themeFilterHref(themeCode) {
@@ -1444,7 +1477,7 @@
         const avatar = `<span class="fides-modal-org-avatar" aria-hidden="true">${escapeHtml(orgInitial(label))}</span>`;
         const name = `<span class="fides-modal-org-name">${labelHtml}</span>`;
         if (isCatalogOrganizationLink(link)) {
-          const href = organizationCatalogHref(link);
+          const href = organizationCatalogHref(link, useCaseId);
           const organisationId = String(link.refId).trim();
           return `<a class="fides-modal-org-chip fides-modal-org-chip--catalog" href="${escapeHtml(href)}" data-fides-funnel="use-case-organisation" data-use-case-id="${escapeHtml(useCaseId)}" data-organisation-id="${escapeHtml(organisationId)}" aria-label="View ${labelHtml} in the organisation catalog" onclick="event.stopPropagation();">${avatar}${name}<span class="fides-modal-org-chip-arrow" aria-hidden="true">${icons.chevronRight}</span></a>`;
         }
@@ -1771,6 +1804,7 @@
     bindUseCaseModalEvents();
     initUseCaseModalMediaCarousels();
     if (selectedUseCase && selectedUseCase.id) {
+      trackUseCaseModalOpen(selectedUseCase.id);
       initUseCaseModalLike(selectedUseCase.id);
     }
     // Load community likes for linked entities in the background so the modal
@@ -1866,7 +1900,7 @@
       });
     });
 
-    document.querySelectorAll('#fides-modal-overlay a.fides-modal-org-chip[data-fides-funnel="use-case-organisation"]').forEach((chip) => {
+    document.querySelectorAll('#fides-modal-overlay a[data-fides-funnel="use-case-organisation"]').forEach((chip) => {
       chip.addEventListener("click", () => {
         trackUseCaseOrganisationClick(chip.getAttribute("data-use-case-id"), chip.getAttribute("data-organisation-id"));
       });
