@@ -12,7 +12,7 @@
       "organizationName": "Inji",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T08:10:18+01:00",
+      "updatedAt": "2026-08-20T22:04:53+01:00",
       "publishedAt": "2026-08-20T08:10:18+01:00",
       "tags": [
         "digital public infrastructure",
@@ -63,10 +63,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:igovtt",
             "labelRaw": "iGovTT",
             "url": "https://igovtt.tt/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
@@ -91,10 +91,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:deloitte",
             "labelRaw": "Deloitte",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
