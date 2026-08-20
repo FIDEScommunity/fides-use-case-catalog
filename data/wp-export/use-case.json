@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T20:52:18+00:00",
+    "generatedAt": "2026-08-20T20:53:29+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -2681,7 +2681,7 @@
                     "organizationName": "California Department of Motor Vehicles (CA DMV)",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-20T20:17:53+01:00",
+                    "updatedAt": "2026-08-20T21:53:29+01:00",
                     "publishedAt": "2026-08-20T20:17:53+01:00",
                     "tags": [
                         "identity",
@@ -2704,31 +2704,31 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:lahsa",
                                 "labelRaw": "Los Angeles Homeless Services Authority",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:city-of-san-francisco",
                                 "labelRaw": "City of San Francisco",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:cal-oes",
                                 "labelRaw": "California Office of Emergency Services",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:catholic-charities-california",
                                 "labelRaw": "Catholic Charities of California",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
