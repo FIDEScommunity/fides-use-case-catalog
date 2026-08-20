@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T07:10:18+00:00",
+    "generatedAt": "2026-08-20T07:11:44+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5400,6 +5400,154 @@
                     "moreInfoUrl": "https://verifytt.gov.tt/publication/verifytt-embedding-trust,%20https://verifytt.gov.tt/issuers%20,%20https://verify.verifytt.gov.tt/%20,%20https://verifytt.gov.tt/graduation",
                     "userJourney": "1. A credential issuer (e.g., a tertiary institution) generates a cryptographically signed credential using its controlled signing key via the Issuance Module (Inji Certify).\n2. The credential holder (student/graduate) receives the credential into a digital wallet or secure repository under their own control (Credential Store / Web Locker).\n3. When the holder needs to prove a qualification (e.g., to an employer), they present the credential from their wallet to the relying party.\n4. The verifier (employer, regulator, or other institution) uses the Verification Module to independently check the credential's cryptographic integrity, issuer authenticity, and revocation status against the Issuer Registry / Key Management service.\n5. Verification returns a real-time, machine-verifiable result without any need to contact the issuing institution directly, replacing manual document review and confirmation calls.\n6. The same modular components (Issuance, Wallet, Verification, Issuer Registry) can be reused for new sectors by defining new credential schemas, without re-engineering the underlying trust architecture.",
                     "country": "TT"
+                }
+            ]
+        },
+        {
+            "orgSlug": "inji-io",
+            "orgId": "org:inji-io",
+            "orgName": "inji.io",
+            "useCases": [
+                {
+                    "id": "instant-paperless-rural-credit-using-verifiable-credentials-xUny3z",
+                    "sector": "agriculture",
+                    "title": "Instant, Paperless Rural Credit Using Verifiable Credentials",
+                    "summary": "Rural credit in Brazil traditionally requires farmers to gather paper land and environmental documents for manual bank review, causing delays and limiting access, especially for smallholders. This use case digitizes that process: Banco do Brasil, the MIR App (a farmer wallet), and Brazil's MGI Verifiable Credentials DPI platform let farmers turn CAR, CAF, and CCIR registry documents into tamper-proof digital credentials. Farmers authenticate via Gov.BR SSO, request credentials in the MIR App, and share them with the bank under their own consent. This piloted successfully in Rio Grande do Sul, where farmer Adriele Ines Brandt completed Brazil's first real rural credit transaction using verifiable credentials, financing farm equipment through the Pronaf program. MGI operates the platform; Banco do Brasil is the relying institution; EMATER/RS supports rural extension; farmers are the credential holders. The MIR App wallet gives farmers on-demand, self-controlled access to their land records. Verifiable credentials replace paperwork with cryptographically signed, instantly checkable proof, cutting travel, delay, and fraud risk while expanding credit access for young and women farmers.",
+                    "organizationName": "inji.io",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-20T08:11:44+01:00",
+                    "publishedAt": "2026-08-20T08:11:44+01:00",
+                    "tags": [
+                        "verifiable credentials",
+                        "DPI",
+                        "rural credit",
+                        "agribusiness",
+                        "Banco do Brasil",
+                        "Inji Certify",
+                        "Inji Verify",
+                        "land registry",
+                        "ICP-BR",
+                        "financial inclusion",
+                        "Brazil"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "inji-wallet",
+                                "labelRaw": "Inji Wallet",
+                                "url": "https://www.mosip.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": "issuer:mosip:insurance:test",
+                                "labelRaw": "Inji Certify - Insurance Sandbox Issuer",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "inji.io",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Ministry of Management and Innovation",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Banco do Brasil (BB)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Cadastro Ambiental Rural (CAR)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Gov.Br",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Centre for Open Societal System",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Centre for Digital Public Infrastructure",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": "inji-web-verifier",
+                                "labelRaw": "Inji Web Verifier",
+                                "url": "https://injiverify.collab.mosip.net/",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "vcdm_1_1",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "themes": [
+                        "person_identity",
+                        "organizational_identity"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black-1.jpg"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black-1.jpg",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/C5Xk940BQVo?si=Qq8ao79SQY9KBRwQ",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/C5Xk940BQVo?si=Qq8ao79SQY9KBRwQ",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.gov.br/gestao/pt-br/assuntos/meu-imovel-rural",
+                    "userJourney": "1. The farmer logs into the MIR App using Gov.BR Single Sign-On (SSO) for authentication.\n2. The farmer requests a document (e.g., CAR, CAF, or CCIR) through the MIR App; the embedded Inji Mobile SDK sends the request to Inji Certify.\n3. Inji Certify retrieves the underlying document data from the relevant registries via a Data Exchange Layer, then generates and digitally signs the credential using ICP-BR-compliant PKI and the issuing authority's private keys.\n4. The signed Verifiable Credential (in JSON-LD, with an accompanying PDF where applicable) is returned to the MIR App and stored securely in the farmer's Wallet, under the farmer's own control.\n5. Separately, the farmer applies for a rural credit loan with Banco do Brasil via mobile or web client; BB requests the farmer's VCs from the MGI VCs DPI Verify backend, which returns an authorization link.\n6. BB sends the authorization link to the MIR App via a Firebase push notification; the farmer is prompted for consent before any credential is shared.\n7. Upon consent, the Wallet shares the VC as a JSON-LD Verifiable Presentation (for cryptographic proof) and a PDF (for BB's existing workflow).\n8. Verification is done by BB",
+                    "country": "BR"
                 }
             ]
         },
