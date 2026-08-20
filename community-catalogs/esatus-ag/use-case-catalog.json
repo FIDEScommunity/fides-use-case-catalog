@@ -1,18 +1,18 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:esatus-ag",
+  "orgId": "org:esatus",
   "orgName": "esatus AG",
   "useCases": [
     {
       "id": "ingo-digital-verifiable-and-secure-subcontractor-management-including-physical-access-ZHHRjx",
       "sector": "construction",
       "title": "inGo - Digital, Verifiable and Secure Subcontractor Management Including Physical Access",
-      "summary": "Checking documents, monitoring deadlines, and granting site access for subcontractors is still often handled manually, with paper folders and spreadsheets - on construction sites, in logistics, and in technical services alike.\r\ninGo digitalizes this process using decentralized identities (DIDs), digital wallets, and Verifiable Credentials (VCs), built on open standards (OpenID4VCI/VP, EUDI Wallet ARF) so it interoperates with other EUDI-ARF-conformant wallets rather than locking participants into a single vendor.\r\nEmployees receive credentials - such as site certificates, ID cards, work permits, or safety training - directly in their personal wallet. Using selective disclosure (SD-JWT VC), they can prove only what's required for a check, e.g. a valid access permit, without revealing unrelated personal data.\r\nGeneral contractors gain a real-time, cryptographically verifiable overview of credentials, deadlines, and site access. Subcontractors manage documents and credentials for their employees once and reuse them across projects - replacing manual paper checks with instant, auditable verification, on a secure, privacy-preserving, GDPR-compliant foundation.",
+      "summary": "Checking documents, monitoring deadlines, and granting site access for subcontractors is still often handled manually, with paper folders and spreadsheets - on construction sites, in logistics, and in technical services alike.\ninGo digitalizes this process using decentralized identities (DIDs), digital wallets, and Verifiable Credentials (VCs), built on open standards (OpenID4VCI/VP, EUDI Wallet ARF) so it interoperates with other EUDI-ARF-conformant wallets rather than locking participants into a single vendor.\nEmployees receive credentials - such as site certificates, ID cards, work permits, or safety training - directly in their personal wallet. Using selective disclosure (SD-JWT VC), they can prove only what's required for a check, e.g. a valid access permit, without revealing unrelated personal data.\nGeneral contractors gain a real-time, cryptographically verifiable overview of credentials, deadlines, and site access. Subcontractors manage documents and credentials for their employees once and reuse them across projects - replacing manual paper checks with instant, auditable verification, on a secure, privacy-preserving, GDPR-compliant foundation.",
       "organizationName": "esatus AG",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-13T19:20:42+01:00",
+      "updatedAt": "2026-08-20T22:07:12+01:00",
       "publishedAt": "2026-08-13T19:20:42+01:00",
       "tags": [
         "construction",
@@ -62,24 +62,24 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:esatus",
             "labelRaw": "esatus AG",
             "url": "https://esatus.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:tibe",
             "labelRaw": "tibe.io GmbH",
             "url": "https://www.tibe.io/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:lindner-group",
             "labelRaw": "Lindner Group KG",
             "url": "https://www.lindner-group.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -134,7 +134,7 @@
         "provider": "youtube"
       },
       "moreInfoUrl": "https://www.ingo-id.com",
-      "userJourney": "inGo enables a range of processes built on wallets and Verifiable Credentials: \r\n1.\tOnboarding: General contractors and subcontractors set up business wallets to manage employees and share project access.\r\n2.\tIssuance: Subcontractors and general contractors issue credentials (site certificates, ID cards, work permits, safety training) as Verifiable Credentials into each employee's personal wallet.\r\n3.\tVerification: The credentials are used to gain a verified site access, at site entrances (e.g. turnstiles) or during inspections inGo can tell if all required documents are available and valid in seconds - no paper, no manual lookup.\r\n4.\tSelective disclosure: Employees share only the specific attribute needed (e.g. \"valid access permit: yes\"), not full documents.\r\n5.\tAudit trail: Every verification is logged in an auditable, GDPR-compliant record.\r\nExternal trusted issuers - e.g. government authorities, insurance companies, or certification bodies - are planned as additional issuers (e.g. state-verified identity, insurance proof).",
+      "userJourney": "inGo enables a range of processes built on wallets and Verifiable Credentials: \n1.\tOnboarding: General contractors and subcontractors set up business wallets to manage employees and share project access.\n2.\tIssuance: Subcontractors and general contractors issue credentials (site certificates, ID cards, work permits, safety training) as Verifiable Credentials into each employee's personal wallet.\n3.\tVerification: The credentials are used to gain a verified site access, at site entrances (e.g. turnstiles) or during inspections inGo can tell if all required documents are available and valid in seconds - no paper, no manual lookup.\n4.\tSelective disclosure: Employees share only the specific attribute needed (e.g. \"valid access permit: yes\"), not full documents.\n5.\tAudit trail: Every verification is logged in an auditable, GDPR-compliant record.\nExternal trusted issuers - e.g. government authorities, insurance companies, or certification bodies - are planned as additional issuers (e.g. state-verified identity, insurance proof).",
       "country": "DE"
     }
   ]
