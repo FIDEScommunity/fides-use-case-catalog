@@ -1,10 +1,84 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T15:56:56.174Z",
+  "lastUpdated": "2026-08-20T17:39:38.197Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 85,
+  "count": 86,
   "useCases": [
+    {
+      "id": "from-document-trust-to-digital-trust-verifiable-credentials-across-the-contract-lifecycle-w9egMf",
+      "sector": "digital",
+      "title": "From Document Trust to Digital Trust: Verifiable Credentials Across the Contract Lifecycle",
+      "summary": "Melento transforms the contract lifecycle from a manual process into a cryptographically verified workflow. Organizations traditionally rely on PDFs, documents and manual KYC checks to establish counterparty identity and compliance, causing delays, overhead and fraud risks.\nMelento integrates Verifiable Credentials (VCs) and Digital Wallets into its Contract Lifecycle Management (CLM) platform, replacing document-based trust with cryptographic trust. Counterparties present verified identity or business credentials from their wallet. Melento verifies them against the issuer’s cryptographic proof, enabling automated onboarding and minimizing manual review.\nVerified attributes flow across identification, drafting, negotiation, execution and obligations. Signatories use their wallet to sign, linking signatures to verified identity. Updated credentials can verify ongoing compliance, such as certifications.\nUsers include legal, contract, procurement, operations and compliance/KYC teams, signatories and counterparties. It delivers faster contracting, lower effort, stronger fraud and compliance controls, and automated obligation verification.",
+      "organizationName": "Melento - CLM platform and relying party",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T18:39:16+01:00",
+      "publishedAt": "2026-08-20T18:39:16+01:00",
+      "tags": [
+        "Identity",
+        "Verifiable Credentials",
+        "Digital Wallet",
+        "Digital Trust",
+        "Contract Lifecycle Management",
+        "KYC",
+        "Compliance",
+        "eSign",
+        "Credential Verification",
+        "Business Identity",
+        "Obligation Management"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Melento - CLM platform and relying party",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Melento - CLM platform and relying party",
+            "url": "https://melento.ai/en-in/source-to-obligation",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "jwt_vc",
+        "sd_jwt_vc",
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP",
+        "SIOPv2"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "organizational_identity",
+        "compliance_reporting",
+        "trade_documents"
+      ],
+      "moreInfoUrl": "https://melento.ai/en-in/source-to-obligation",
+      "userJourney": "Contract Request & Identification: A business user initiates a contract in Melento CLM and identifies the counterparty. Instead of collecting documents, the counterparty presents Verifiable Credentials (VCs) from their digital wallet.\nCredential Presentation: The counterparty presents attributes such as legal entity name, registration details and tax ID.\nAutomated Verification: Melento CLM verifies the VC using the issuer’s cryptographic proof/public key, confirming authenticity without manual review.\nDrafting: Verified attributes populate contract templates, reducing data entry and errors.\nNegotiation: Parties collaborate in Melento CLM, with redlines tracked and negotiator identity linked to the verified counterparty.\nExecution: The authorized signatory uses their digital wallet to sign, linking the signature to their verified identity.\nCompliance & Obligations: Melento CLM tracks obligations. For requirements such as certifications, the counterparty presents an updated VC to prove continued compliance.\nContinuous Trust: Credentials can be verified throughout the contract lifecycle, creating continuous trust between the organization and its counterparty.",
+      "country": "IN"
+    },
     {
       "id": "agent-checkpoint-verified-delegation-for-ai-agents-9GVyo0",
       "sector": "digital",
