@@ -12,8 +12,8 @@
       "organizationName": "K4-Security",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-19T14:52:33+01:00",
-      "publishedAt": "2026-08-19T14:52:33+01:00",
+      "updatedAt": "2026-08-20T05:25:37+01:00",
+      "publishedAt": "2026-08-20T05:25:37+01:00",
       "tags": [
         "Digital Identity",
         "Payment"
@@ -127,9 +127,9 @@
         "payments"
       ],
       "imageUrls": [
-        "https://fides.community/app/uploads/2026/07/integrated-wallet-thumbnail-en-2.png"
+        "https://fides.community/app/uploads/2026/08/Fides-ENG.png"
       ],
-      "imageUrl": "https://fides.community/app/uploads/2026/07/integrated-wallet-thumbnail-en-2.png",
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Fides-ENG.png",
       "videos": [
         {
           "url": "https://vimeo.com/1212264565?share=copy&fl=sv&fe=ci",
