@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T15:53:00+00:00",
+    "generatedAt": "2026-08-20T15:56:36+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -11180,6 +11180,75 @@
                     "moreInfoUrl": "https://playground.testnet.verana.network/usecases/cexa",
                     "userJourney": "1. The Association anchors its trust registry on Verana's Verifiable Public Registry: two schemas, a digest-anchored governance framework, and its fee schedule (fees are example values).\n\n2. Members join through vetted, paid, renewable on-chain onboarding. Validated members receive their CEXA-VerifiedCounterparty credential. Members must already be Verifiable Services: the Association issues memberships, not identity.\n\n3. The customer's first exchange runs one full IDV check, seals the evidence bundle into their wallet, digest-bound, and issues CEXA-Kyc for free.\n\n4. On reuse, the wallet trust-resolves the requester and checks its VERIFIER accreditation before presenting. The verifier re-binds the person (passport NFC plus face match), receives the sealed evidence as its own CDD file, and pays the protocol-split fee: 0.90 to the original issuer, 0.10 to the Association. No phone home: the issuer never learns where the customer went\n\n5. Travel Rule desks read the counterparty credential from the member's DID, free\n\n6. Failures fail closed: a verifiable exchange outside the Association resolves TRUSTED and is still refused; a revoked credential dies at every member at the next check",
                     "country": "EE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "vouched",
+            "orgId": "org:vouched",
+            "orgName": "Vouched",
+            "useCases": [
+                {
+                    "id": "agent-checkpoint-verified-delegation-for-ai-agents-9GVyo0",
+                    "sector": "digital",
+                    "title": "Agent Checkpoint: Verified Delegation for AI Agents",
+                    "summary": "AI agents now act inside real people’s accounts: logging in, retrieving data, filling forms, transacting. Sites cannot tell a trusted agent from a malicious bot, so many block all automation and turn away legitimate customers. Agent traffic already runs 0.5% to 16% of customer traffic and grows monthly.\n\nVouched’s Agent Checkpoint ensures an agent only performs the actions its human authorized. Agent Checkpoint is built for agents: who is the human behind it, what did they permit, and an immutable audit trail proving what happened. Detect classifies agent traffic in real time. Enforce applies policy at the moment an agent acts: allow, step up authentication, or block. Govern records the delegation and consent chain.\n\nIt runs on KYA-OS, the open agent identity standard Vouched authored and donated to the Decentralized Identity Foundation with v1.0.0 in 2026.",
+                    "organizationName": "Vouched",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-20T16:56:36+01:00",
+                    "publishedAt": "2026-08-20T16:56:36+01:00",
+                    "tags": [
+                        "agent identity",
+                        "AI agents",
+                        "delegation",
+                        "verifiable credentials",
+                        "agentic commerce",
+                        "KYA",
+                        "audit trail",
+                        "identity verification"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Vouched",
+                                "url": "https://www.vouched.id/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "jwt_vc",
+                        "vcdm_1_1",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "other"
+                    ],
+                    "presentationProtocols": [
+                        "DIDComm v2"
+                    ],
+                    "interopProfiles": [],
+                    "themes": [
+                        "agentic_ai"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/Agent-Checkpoint-OG-image-2.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/Agent-Checkpoint-OG-image-2.png",
+                    "moreInfoUrl": "https://kya.vouched.id/",
+                    "userJourney": "A user asks an AI agent to pay an invoice. The agent calls the organisation's protected endpoint and is refused: needs_authorization, with a consent URL.\n\nThe human opens it and sees what's delegated: which agent (by DID), scope (payments.transfer), cap (10 CHEQ), 48h validity. On approval, the Responsible Party issues a W3C Verifiable Credential into the agent's wallet. The cap sits in the signed credential, not app code; a status-list entry is anchored on-chain.\n\nThe agent retries, its wallet signing a holder proof with the agent's did:key; the LLM holds no keys. The organisation verifies against the ledger: issuer DID document, status-list signature, purpose parity, expiry, holder binding, revocation bit, every call, ~0.8s. Payment executes from the organisation's own wallet, returning a detached-JWS receipt. Over-cap or stolen-credential attempts fail pre-handler.\n\nTo revoke, the human touches a FIDO2 key; the WebAuthn challenge is a hash of the revocation intent. An append-only status-list version publishes on-chain, so nobody can un-revoke quietly. Its next transfer is refused: CREDENTIAL_REVOKED.\n\nTwo wallets: the agent's credential wallet, the organisation's value wallet.",
+                    "country": "US"
                 }
             ]
         }
