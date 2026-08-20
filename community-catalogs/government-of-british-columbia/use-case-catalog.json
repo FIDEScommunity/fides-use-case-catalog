@@ -12,8 +12,8 @@
       "organizationName": "Government of British Columbia",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T20:42:54+01:00",
-      "publishedAt": "2026-08-20T20:42:54+01:00",
+      "updatedAt": "2026-08-20T20:54:57+01:00",
+      "publishedAt": "2026-08-20T20:54:57+01:00",
       "tags": [
         "Mines Digital Trust",
         "critical minerals",
@@ -176,6 +176,20 @@
         "trade_documents",
         "digital_product_passports"
       ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/image002.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/image002.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=XE3Tn_0xUAg&t=8s",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=XE3Tn_0xUAg&t=8s",
+        "provider": "youtube"
+      },
       "moreInfoUrl": "https://mining.ca",
       "userJourney": "The Government of British Columbia issues a digital Mines Act Permit credential with authoritative permit data and publishes it through OrgBook BC, so it can be independently verified while remaining under government authority.\n\nA mining company then creates a United Nations Transparency Protocol (UNTP) raw-material digital product passport. The passport does not copy the underlying records; it links to trusted credentials from the organizations that own them. Sustainability bodies such as Towards Sustainable Mining and The Copper Mark can add verifiable conformity credentials, forming one connected evidence chain. Each party keeps control of its own data.\n\nDigital wallets issue, publish, exchange, discover and manage these credentials across platforms, including OrgBook BC and enterprise wallets such as Northern Block Orbit.\n\nWhen a buyer, regulator, investor or supply-chain partner reviews the passport, a verifier application follows the links, confirms the issuer, checks the digital signature and integrity, and validates credential status. Government speaks for permits, mining companies for provenance, and assurance bodies for sustainability claims.",
       "country": "CA"
