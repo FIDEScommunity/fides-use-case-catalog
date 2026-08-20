@@ -69,6 +69,9 @@
   const UPDATE_FORM_URL = config.updateFormUrl ? String(config.updateFormUrl).trim() : "";
   const IS_LOGGED_IN = !!config.isLoggedIn;
   const SHOW_SIMILAR_CASES = config.showSimilarCases !== false;
+  const SHARE_PATH = String(config.sharePath || "/use-case/").replace(/\/?$/, "/");
+  const LISTING_PATH = String(config.listingPath || "").replace(/\/?$/, "/") || "";
+  let listingUrlWhenOpened = "";
   const RATINGS_BATCH_LIMIT = 100;
   const RATINGS_TYPE = "usecase";
   const root = document.getElementById("fides-use-case-catalog-root");
@@ -189,6 +192,8 @@
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>',
     link:
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+    linkedin:
+      '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.43v6.31zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.11 20.45H3.56V9h3.55v11.45zM22.23 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.73V1.73C24 .77 23.21 0 22.23 0z"/></svg>',
     eye:
       '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>',
     xLarge:
@@ -602,15 +607,159 @@
     }, 3000);
   }
 
+  function useCaseCanonicalUrl(useCaseId) {
+    const id = String(useCaseId || "").trim();
+    if (!id) return "";
+    try {
+      const url = new URL(SHARE_PATH + encodeURIComponent(id) + "/", window.location.origin);
+      url.search = "";
+      url.hash = "";
+      return url.toString();
+    } catch {
+      return window.location.origin + SHARE_PATH + encodeURIComponent(id) + "/";
+    }
+  }
+
+  function useCaseIdFromLocation() {
+    const fromQuery = new URLSearchParams(window.location.search).get("usecase");
+    if (fromQuery) return fromQuery;
+    const path = String(window.location.pathname || "").replace(/\/+$/, "") + "/";
+    if (path.indexOf(SHARE_PATH) !== 0) return "";
+    const rest = path.slice(SHARE_PATH.length).replace(/\/+$/, "");
+    if (!rest || rest.indexOf("/") !== -1) return "";
+    try {
+      return decodeURIComponent(rest);
+    } catch {
+      return rest;
+    }
+  }
+
+  function isUseCaseSharePath() {
+    return !!useCaseIdFromLocation() && String(window.location.pathname || "").indexOf(SHARE_PATH) === 0;
+  }
+
+  function useCaseLinkedInShareUrl(useCaseId) {
+    const canonical = useCaseCanonicalUrl(useCaseId);
+    if (!canonical) return "";
+    try {
+      const tracked = new URL(canonical);
+      tracked.searchParams.set("utm_source", "linkedin");
+      tracked.searchParams.set("utm_medium", "social");
+      tracked.searchParams.set("utm_campaign", "use_case_share");
+      return "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(tracked.toString());
+    } catch {
+      return "";
+    }
+  }
+
+  function shouldUseNativeShare() {
+    if (typeof navigator === "undefined" || typeof navigator.share !== "function") return false;
+    const coarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    const narrow = window.matchMedia && window.matchMedia("(max-width: 720px)").matches;
+    return !!(coarse || narrow);
+  }
+
+  function shareButtonEl() {
+    return document.getElementById("fides-modal-copy-link");
+  }
+
+  function sharePopoverEl() {
+    return document.getElementById("fides-modal-share-popover");
+  }
+
+  function isSharePopoverOpen() {
+    const popover = sharePopoverEl();
+    return !!(popover && !popover.hidden);
+  }
+
+  function onSharePopoverOutsideClick(event) {
+    const wrap = document.querySelector("#fides-modal-overlay .fides-modal-share");
+    if (wrap && wrap.contains(event.target)) return;
+    closeSharePopover();
+  }
+
+  function closeSharePopover() {
+    const popover = sharePopoverEl();
+    const button = shareButtonEl();
+    if (popover) popover.hidden = true;
+    if (button) button.setAttribute("aria-expanded", "false");
+    document.removeEventListener("mousedown", onSharePopoverOutsideClick, true);
+  }
+
+  function openSharePopover() {
+    const popover = sharePopoverEl();
+    const button = shareButtonEl();
+    if (!popover || !button) return;
+    popover.hidden = false;
+    button.setAttribute("aria-expanded", "true");
+    document.addEventListener("mousedown", onSharePopoverOutsideClick, true);
+  }
+
+  function toggleSharePopover() {
+    if (isSharePopoverOpen()) closeSharePopover();
+    else openSharePopover();
+  }
+
+  function useCaseShareSummary(item) {
+    const raw = String((item && item.summary) || "").replace(/\s+/g, " ").trim();
+    if (!raw) return "";
+    return raw.length > 180 ? raw.slice(0, 177) + "…" : raw;
+  }
+
+  function markCopyLinkSuccess() {
+    const label = document.querySelector("#fides-modal-share-copy [data-share-copy-label]");
+    if (label) label.textContent = "Link copied ✓";
+    setTimeout(() => {
+      if (label) label.textContent = "Copy link";
+      closeSharePopover();
+    }, 900);
+  }
+
+  async function nativeShareUseCase() {
+    if (!selectedUseCase || !selectedUseCase.id) return;
+    const url = useCaseCanonicalUrl(selectedUseCase.id);
+    const title = String(selectedUseCase.title || selectedUseCase.id || "FIDES use case");
+    const text = useCaseShareSummary(selectedUseCase) || title;
+    try {
+      await navigator.share({ title: title, text: text, url: url });
+      trackUseCaseShare(selectedUseCase.id, "native");
+    } catch (err) {
+      if (err && err.name === "AbortError") return;
+      openSharePopover();
+    }
+  }
+
+  function onShareButtonClick(event) {
+    event.stopPropagation();
+    if (!selectedUseCase || !selectedUseCase.id) return;
+    if (shouldUseNativeShare()) {
+      nativeShareUseCase();
+      return;
+    }
+    toggleSharePopover();
+  }
+
+  function shareUseCaseOnLinkedIn() {
+    if (!selectedUseCase || !selectedUseCase.id) return;
+    const href = useCaseLinkedInShareUrl(selectedUseCase.id);
+    if (!href) return;
+    trackUseCaseShare(selectedUseCase.id, "linkedin");
+    closeSharePopover();
+    window.open(href, "_blank", "noopener,noreferrer");
+  }
+
   function copyUseCaseLink() {
     if (!selectedUseCase || !selectedUseCase.id) return;
-    const text = useCaseModalDeepLink(selectedUseCase.id);
+    const text = useCaseCanonicalUrl(selectedUseCase.id);
     const catalogEl = root.querySelector(".fides-use-case-catalog");
     const theme = catalogEl ? catalogEl.getAttribute("data-theme") || "fides" : "fides";
+    const onSuccess = () => {
+      trackUseCaseShare(selectedUseCase.id, "copy_link");
+      if (isSharePopoverOpen()) markCopyLinkSuccess();
+      else showToast("Link copied to clipboard", "success", theme);
+    };
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(() => {
-        showToast("Link copied to clipboard", "success", theme);
-      }).catch(() => {
+      navigator.clipboard.writeText(text).then(onSuccess).catch(() => {
         showToast("Failed to copy link", "error", theme);
       });
       return;
@@ -624,7 +773,8 @@
     textarea.select();
     const success = document.execCommand("copy");
     textarea.remove();
-    showToast(success ? "Link copied to clipboard" : "Failed to copy link", success ? "success" : "error", theme);
+    if (success) onSuccess();
+    else showToast("Failed to copy link", "error", theme);
   }
 
   function formatDateLabel(value) {
@@ -1418,6 +1568,12 @@
     window.FidesCatalogUI.trackMatomoEvent("Use Case Catalog", "Modal Open", matomoSafePart(useCaseId));
   }
 
+  function trackUseCaseShare(useCaseId, method) {
+    if (!window.FidesCatalogUI || typeof window.FidesCatalogUI.trackMatomoEvent !== "function") return;
+    const name = [matomoSafePart(useCaseId), matomoSafePart(method)].join("|");
+    window.FidesCatalogUI.trackMatomoEvent("Use Case Catalog", "share_use_case", name);
+  }
+
   function trackUseCaseOrganisationClick(useCaseId, organisationId) {
     if (!window.FidesCatalogUI || typeof window.FidesCatalogUI.trackMatomoEvent !== "function") return;
     const name = [matomoSafePart(useCaseId), matomoSafePart(organisationId)].join("|");
@@ -1780,9 +1936,20 @@
             </div>
             <div class="fides-modal-header-actions">
               ${renderModalEditAction(item)}
-              <button type="button" class="fides-modal-copy-link" id="fides-modal-copy-link" aria-label="Copy link to this use case" title="Copy link to this use case">
-                ${icons.share}
-              </button>
+              <div class="fides-modal-share">
+                <button type="button" class="fides-modal-copy-link" id="fides-modal-copy-link" aria-label="Share this use case" title="Share this use case" aria-haspopup="menu" aria-expanded="false" aria-controls="fides-modal-share-popover">
+                  ${icons.share}
+                </button>
+                <div class="fides-modal-share-popover" id="fides-modal-share-popover" hidden role="menu" aria-label="Share this use case">
+                  <p class="fides-modal-share-popover-title">Share this use case</p>
+                  <button type="button" class="fides-modal-share-option" id="fides-modal-share-linkedin" role="menuitem">
+                    ${icons.linkedin} Share on LinkedIn
+                  </button>
+                  <button type="button" class="fides-modal-share-option" id="fides-modal-share-copy" role="menuitem">
+                    ${icons.link} <span data-share-copy-label>Copy link</span>
+                  </button>
+                </div>
+              </div>
               <button type="button" class="fides-modal-close" id="fides-modal-close" aria-label="Close modal">${icons.xLarge}</button>
             </div>
           </div>
@@ -1850,6 +2017,7 @@
   }
 
   function closeUseCaseModal() {
+    closeSharePopover();
     closeMediaLightbox();
     const existing = document.getElementById("fides-modal-overlay");
     if (existing) existing.remove();
@@ -1865,9 +2033,13 @@
   }
 
   function clearUseCaseDeepLink() {
-    const url = new URL(window.location.href);
-    url.searchParams.delete("usecase");
-    window.history.replaceState({}, "", url.toString());
+    if (listingUrlWhenOpened) {
+      window.history.replaceState({}, "", listingUrlWhenOpened);
+      listingUrlWhenOpened = "";
+      return;
+    }
+    const listing = LISTING_PATH || "/";
+    window.history.replaceState({}, "", listing);
   }
 
   function bindUseCaseModalEvents() {
@@ -1882,7 +2054,18 @@
 
     const copyLinkButton = document.getElementById("fides-modal-copy-link");
     if (copyLinkButton) {
-      copyLinkButton.addEventListener("click", (event) => {
+      copyLinkButton.addEventListener("click", onShareButtonClick);
+    }
+    const linkedInButton = document.getElementById("fides-modal-share-linkedin");
+    if (linkedInButton) {
+      linkedInButton.addEventListener("click", (event) => {
+        event.stopPropagation();
+        shareUseCaseOnLinkedIn();
+      });
+    }
+    const copyOption = document.getElementById("fides-modal-share-copy");
+    if (copyOption) {
+      copyOption.addEventListener("click", (event) => {
         event.stopPropagation();
         copyUseCaseLink();
       });
@@ -1947,6 +2130,13 @@
     if (event.key !== "Escape" || !document.getElementById("fides-modal-overlay")) return;
     // If the media lightbox is open, let it handle Escape (close lightbox only).
     if (document.getElementById("fides-media-lightbox")) return;
+    if (isSharePopoverOpen()) {
+      event.preventDefault();
+      closeSharePopover();
+      const button = shareButtonEl();
+      if (button) button.focus();
+      return;
+    }
     selectedUseCase = null;
     clearUseCaseDeepLink();
     closeUseCaseModal();
@@ -1955,9 +2145,12 @@
   function openUseCaseById(useCaseId) {
     selectedUseCase = currentItems.find((item) => item.id === useCaseId) || null;
     if (!selectedUseCase) return;
-    const url = new URL(window.location.href);
-    url.searchParams.set("usecase", useCaseId);
-    window.history.replaceState({}, "", url.toString());
+    if (!listingUrlWhenOpened && !isUseCaseSharePath()) {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("usecase");
+      listingUrlWhenOpened = url.pathname + url.search + url.hash;
+    }
+    window.history.replaceState({}, "", useCaseCanonicalUrl(useCaseId));
     openUseCaseModal();
   }
 
@@ -1984,7 +2177,7 @@
   }
 
   function openUseCaseFromQueryParam() {
-    const useCaseId = new URLSearchParams(window.location.search).get("usecase");
+    const useCaseId = useCaseIdFromLocation();
     if (!useCaseId) return;
     openUseCaseById(useCaseId);
   }

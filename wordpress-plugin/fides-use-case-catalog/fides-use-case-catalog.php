@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.20.28
+ * Version: 0.20.32
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,9 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.28');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.32');
+/** Bump this when share rewrite rules change so existing sites flush once. */
+define('FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION', '0.20.30');
 /** Admin list page size for Tools → Use Case Submissions. */
 define('FIDES_USE_CASE_CATALOG_ADMIN_PER_PAGE', 50);
 define('FIDES_USE_CASE_CATALOG_DEFAULT_UPDATE_FORM_PATH', '/use-cases/update/');
@@ -36,6 +38,10 @@ register_activation_hook(__FILE__, 'fides_use_case_catalog_activate');
 add_action('admin_init', 'fides_use_case_catalog_maybe_upgrade_schema');
 add_action('admin_init', 'fides_use_case_catalog_register_settings');
 add_action('init', 'fides_use_case_catalog_register_with_core', 5);
+add_action('init', 'fides_use_case_catalog_register_share_rewrites', 6);
+add_action('init', 'fides_use_case_catalog_maybe_flush_share_rewrites', 20);
+add_filter('query_vars', 'fides_use_case_catalog_share_query_vars');
+add_action('template_redirect', 'fides_use_case_catalog_redirect_query_share_urls', 1);
 add_action('admin_menu', 'fides_use_case_catalog_register_admin_page');
 add_action('admin_menu', 'fides_use_case_catalog_register_settings_page');
 add_action('admin_post_fides_use_case_set_status', 'fides_use_case_catalog_handle_status_action');
@@ -92,6 +98,13 @@ function fides_use_case_catalog_activate(): void {
 
     dbDelta($sql);
     update_option('fides_use_case_catalog_db_version', FIDES_USE_CASE_CATALOG_DB_VERSION);
+    fides_use_case_catalog_register_share_rewrites();
+    flush_rewrite_rules(false);
+    if (fides_use_case_catalog_listing_page_id() > 0) {
+        update_option('fides_use_case_catalog_share_rewrite', FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION);
+    } else {
+        delete_option('fides_use_case_catalog_share_rewrite');
+    }
 }
 
 function fides_use_case_catalog_maybe_upgrade_schema(): void {
@@ -191,12 +204,111 @@ function fides_use_case_catalog_register_with_core(): void {
             'description_field' => 'summary',
             'logo_field'        => 'imageUrl',
             'detail_param'      => 'usecase',
+            'pretty_path'       => fides_use_case_catalog_share_path(),
             'pages'             => array(
                 'main' => apply_filters('fides_use_case_catalog_path', '/ecosystem-explorer/use-cases/'),
             ),
             'jsonld_type'       => 'CreativeWork',
         )
     );
+}
+
+/**
+ * Query-less share/canonical path, e.g. /use-case/{id}/.
+ * LinkedIn ignores ?usecase= on the listing URL; a unique path is crawlable.
+ */
+function fides_use_case_catalog_share_path(): string {
+    return trailingslashit((string) apply_filters('fides_use_case_catalog_share_path', '/use-case/'));
+}
+
+function fides_use_case_catalog_listing_path(): string {
+    return trailingslashit((string) apply_filters('fides_use_case_catalog_path', '/ecosystem-explorer/use-cases/'));
+}
+
+/**
+ * @param array<int, string> $vars
+ * @return array<int, string>
+ */
+function fides_use_case_catalog_share_query_vars(array $vars): array {
+    $vars[] = 'usecase';
+    return $vars;
+}
+
+function fides_use_case_catalog_listing_page_id(): int {
+    $path = trim(fides_use_case_catalog_listing_path(), '/');
+    if ($path === '') {
+        return 0;
+    }
+    $page = get_page_by_path($path);
+    if ($page instanceof WP_Post) {
+        return (int) $page->ID;
+    }
+    $segments = explode('/', $path);
+    $leaf = end($segments);
+    if (is_string($leaf) && $leaf !== '') {
+        $page = get_page_by_path($leaf);
+        if ($page instanceof WP_Post) {
+            return (int) $page->ID;
+        }
+    }
+    return 0;
+}
+
+function fides_use_case_catalog_register_share_rewrites(): void {
+    $page_id = fides_use_case_catalog_listing_page_id();
+    if ($page_id < 1) {
+        return;
+    }
+    $share = trim(fides_use_case_catalog_share_path(), '/');
+    if ($share === '') {
+        return;
+    }
+    add_rewrite_rule(
+        '^' . preg_quote($share, '/') . '/([^/]+)/?$',
+        'index.php?page_id=' . $page_id . '&usecase=$matches[1]',
+        'top'
+    );
+}
+
+function fides_use_case_catalog_maybe_flush_share_rewrites(): void {
+    if (get_option('fides_use_case_catalog_share_rewrite') === FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION) {
+        return;
+    }
+    if (fides_use_case_catalog_listing_page_id() < 1) {
+        return;
+    }
+    fides_use_case_catalog_register_share_rewrites();
+    flush_rewrite_rules(false);
+    update_option('fides_use_case_catalog_share_rewrite', FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION);
+}
+
+/**
+ * LinkedIn ignores ?usecase= on the listing page. Send those URLs to the unique path.
+ */
+function fides_use_case_catalog_redirect_query_share_urls(): void {
+    if (is_admin() || wp_doing_ajax() || (function_exists('wp_is_json_request') && wp_is_json_request())) {
+        return;
+    }
+    if (isset($_SERVER['REQUEST_METHOD']) && strtoupper((string) $_SERVER['REQUEST_METHOD']) !== 'GET') {
+        return;
+    }
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+    if (empty($_GET['usecase'])) {
+        return;
+    }
+    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+    $id = sanitize_text_field(wp_unslash((string) $_GET['usecase']));
+    if ($id === '' || strpos($id, '/') !== false) {
+        return;
+    }
+    $request_uri = isset($_SERVER['REQUEST_URI']) ? wp_unslash((string) $_SERVER['REQUEST_URI']) : '';
+    $path = wp_parse_url($request_uri, PHP_URL_PATH);
+    $share = fides_use_case_catalog_share_path();
+    if (is_string($path) && str_starts_with(trailingslashit($path), $share)) {
+        return;
+    }
+    wp_safe_redirect(home_url($share . rawurlencode($id) . '/'), 301);
+    exit;
 }
 
 /**
@@ -2116,6 +2228,8 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             'themeDiscovery' => Fides_Use_Case_Discovery_Shortcode::theme_config(),
             'askFidesAvailable' => $ask_fides_available,
             'askFidesPlaceholder' => __('Ask anything about use cases…', 'fides-use-case-catalog'),
+            'sharePath' => fides_use_case_catalog_share_path(),
+            'listingPath' => fides_use_case_catalog_listing_path(),
         ),
         fides_use_case_catalog_catalog_urls()
     );

@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.28
+Stable tag: 0.20.32
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,18 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.32 =
+* Compress the branded Open Graph fallback (JPEG ~59 KB instead of a 645 KB PNG).
+
+= 0.20.31 =
+* Share cards use the use-case image when present (branded OG image is the fallback). Requires fides-community-tools-tiles ≥ 1.13.6 so LinkedIn oEmbed also returns the item title instead of “Use Cases”.
+
+= 0.20.30 =
+* Share and SEO URLs are now `/use-case/{id}/` (unique path, no `?usecase=`). LinkedIn crawlers were ignoring the query string and showing the listing title “Use Cases”. Old `?usecase=` links still open the modal. Requires fides-community-tools-tiles ≥ 1.13.5. Flush permalinks once after update.
+
+= 0.20.29 =
+* Activate the use-case modal share button: LinkedIn + Copy link popover on desktop, native share on mobile, canonical `?usecase=` URLs, Matomo `share_use_case`, and a branded Open Graph fallback image.
 
 = 0.20.28 =
 * Sync shared catalog UI: use-case cards in catalog modals.

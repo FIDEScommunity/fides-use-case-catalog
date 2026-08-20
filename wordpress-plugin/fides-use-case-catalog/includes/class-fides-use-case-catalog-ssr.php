@@ -56,6 +56,7 @@ if (! class_exists('Fides_Use_Case_Catalog_SSR')) {
                 if (self::$instance === null) {
                     self::$instance = new self();
                     self::$instance->bootstrap_renderer();
+                    self::$instance->bootstrap_share_metadata();
                 }
             }
 
@@ -81,6 +82,144 @@ if (! class_exists('Fides_Use_Case_Catalog_SSR')) {
                 if (function_exists('fides_use_case_catalog_register_with_core')) {
                     fides_use_case_catalog_register_with_core();
                 }
+            }
+
+            /**
+             * Phase-1 share metadata: item title + item image (branded card
+             * only when the use case has no imageUrl).
+             */
+            private function bootstrap_share_metadata(): void {
+                add_filter('fides_catalog_seo_logo_for', array($this, 'filter_seo_share_image'), 20, 3);
+                add_filter('wpseo_opengraph_image', array($this, 'filter_yoast_share_image'), 100);
+                add_filter('wpseo_twitter_image', array($this, 'filter_yoast_share_image'), 100);
+                add_filter('wpseo_opengraph_title', array($this, 'filter_yoast_share_title'), 100);
+                add_filter('wpseo_twitter_title', array($this, 'filter_yoast_share_title'), 100);
+                add_filter('wpseo_twitter_card_type', array($this, 'filter_yoast_twitter_card'), 100);
+                add_filter('wpseo_frontend_presenter_classes', array($this, 'filter_yoast_presenter_classes'), 99);
+                add_filter('wpseo_frontend_presenters', array($this, 'filter_yoast_presenters'), 99);
+                add_action('wp_head', array($this, 'render_share_image_fallbacks'), 100);
+            }
+
+            public static function og_image_url(): string {
+                return FIDES_USE_CASE_CATALOG_URL . 'assets/og-use-case.jpg';
+            }
+
+            /**
+             * @param mixed                $logo
+             * @param string               $type
+             * @param array<string, mixed> $item
+             * @return mixed
+             */
+            public function filter_seo_share_image($logo, $type, $item) {
+                if ($type !== self::TYPE) {
+                    return $logo;
+                }
+                if (is_string($logo) && trim($logo) !== '') {
+                    return $logo;
+                }
+                unset($item);
+                return self::og_image_url();
+            }
+
+            public function filter_yoast_share_image($image) {
+                $item = $this->current_share_item();
+                if (! $item) {
+                    return $image;
+                }
+                $url = isset($item['imageUrl']) ? trim((string) $item['imageUrl']) : '';
+                return $url !== '' ? $url : self::og_image_url();
+            }
+
+            public function filter_yoast_share_title($title) {
+                $item = $this->current_share_item();
+                if (! $item) {
+                    return $title;
+                }
+                $name = isset($item['title']) ? trim(wp_strip_all_tags((string) $item['title'])) : '';
+                return $name !== '' ? $name : $title;
+            }
+
+            public function filter_yoast_twitter_card($type) {
+                return $this->current_share_item() ? 'summary_large_image' : $type;
+            }
+
+            /**
+             * Drop Yoast image-dimension tags; they still describe the listing
+             * featured image after we swap og:image.
+             *
+             * @param array<int, string> $classes
+             * @return array<int, string>
+             */
+            public function filter_yoast_presenter_classes($classes) {
+                if (! $this->current_share_item() || ! is_array($classes)) {
+                    return $classes;
+                }
+                return array_values(
+                    array_filter(
+                        $classes,
+                        static function ($class) {
+                            return is_string($class) && strpos($class, 'Image_Dimensions') === false;
+                        }
+                    )
+                );
+            }
+
+            /**
+             * @param array<int, object|string> $presenters
+             * @return array<int, object|string>
+             */
+            public function filter_yoast_presenters($presenters) {
+                if (! $this->current_share_item() || ! is_array($presenters)) {
+                    return $presenters;
+                }
+                return array_values(
+                    array_filter(
+                        $presenters,
+                        static function ($presenter) {
+                            $class = is_object($presenter) ? get_class($presenter) : (string) $presenter;
+                            return strpos($class, 'Image_Dimensions') === false;
+                        }
+                    )
+                );
+            }
+
+            /**
+             * LinkedIn uses og:image:width/height when present. Only emit these
+             * for the branded fallback card (1200×627).
+             */
+            public function render_share_image_fallbacks(): void {
+                $item = $this->current_share_item();
+                if (! $item) {
+                    return;
+                }
+                $url = isset($item['imageUrl']) ? trim((string) $item['imageUrl']) : '';
+                if ($url !== '') {
+                    return;
+                }
+                echo '<meta property="og:image:width" content="1200" />' . "\n";
+                echo '<meta property="og:image:height" content="627" />' . "\n";
+            }
+
+            /**
+             * @return array<string, mixed>|null
+             */
+            private function current_share_item() {
+                if (! function_exists('fides_catalog_ssr_enabled') || ! fides_catalog_ssr_enabled()) {
+                    return null;
+                }
+                if (! class_exists('Fides_Catalog_Registry') || ! class_exists('Fides_Catalog_Source')) {
+                    return null;
+                }
+                $detected = Fides_Catalog_Registry::detect_current_detail_request();
+                if (! is_array($detected) || ($detected['type'] ?? '') !== self::TYPE) {
+                    return null;
+                }
+                $source = Fides_Catalog_Source::for(self::TYPE);
+                if (! $source) {
+                    return null;
+                }
+                $item = $source->find_by_id((string) $detected['item_id']);
+                return is_array($item) ? $item : null;
             }
 
             /* --------------------------------------------------------------
@@ -261,9 +400,7 @@ if (! class_exists('Fides_Use_Case_Catalog_SSR')) {
                 }
 
                 $image = isset($item['imageUrl']) ? trim((string) $item['imageUrl']) : '';
-                if ($image !== '') {
-                    $jsonld['image'] = $image;
-                }
+                $jsonld['image'] = $image !== '' ? $image : self::og_image_url();
 
                 $org = isset($item['organizationName']) ? trim((string) $item['organizationName']) : '';
                 if ($org !== '') {
