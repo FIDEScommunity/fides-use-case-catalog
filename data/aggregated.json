@@ -1,10 +1,67 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T19:18:12.491Z",
+  "lastUpdated": "2026-08-20T19:19:16.598Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 89,
+  "count": 90,
   "useCases": [
+    {
+      "id": "californias-new-card-design-using-verifiable-credential-barcode-iD9PVq",
+      "sector": "public_sector",
+      "title": "California’s New Card Design using Verifiable Credential Barcode",
+      "summary": "The California Department of Motor Vehicles (DMV) issues driver’s licenses and identification (DL/ID) cards to more than 34 million residents. In fall of 2025, the DMV introduced a redesigned card featuring a major security advancement. It incorporates a digitally signed W3C Verifiable Credential barcode printed on the back. This cryptographically protected barcode allows organizations to verify authenticity by using a simple scan and standard interoperable tools.  \nThis modernization strengthens fraud prevention and speeds up identity checks. It also improves reliability and expands equitable access by offering secure, privacy preserving, standards-based verification for all residents. The verifiable credential on the card can be revoked any time to manage cancellation, suspensions and fraud.  Verification tools are simple for any organization to use, ensuring trusted identity validation is available across the state.\nSo far, more than 8.4 million people have already received the improved card. With DL cards renewing every five years and ID cards every six years, nearly all 34-million cardholders are expected to benefit from the enhanced feature by 2031.",
+      "organizationName": "California Department of Motor Vehicles (CA DMV)",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T20:18:56+01:00",
+      "publishedAt": "2026-08-20T20:18:56+01:00",
+      "tags": [
+        "identity",
+        "fraud prevention",
+        "equity"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:ca-dmv",
+            "labelRaw": "California Department of Motor Vehicles (CA DMV)",
+            "url": "https://www.dmv.ca.gov/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/VC-Cover.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/VC-Cover.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/IfV2htzIm2U",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/IfV2htzIm2U",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://verify-credentials.dmv.ca.gov/",
+      "userJourney": "When a resident applies for or renews a DL/ID card, the DMV securely generates a digital signature over the identity data encoded in the W3C Verifiable Credential Barcode on the back side.  This signed barcode is printed directly onto the physical card. \nDuring verification, a relying party scans the barcode using a compatible verifier tool, which checks the digital signature to confirm that the credential was issued by the California DMV and the encoded data matches exactly what the DMV signed, ensuring it has not been altered. The validation happens in real time and in a privacy preserving manner. \nTo make verification easy, the DMV provides a web-based verifier as well as opensource tooling that organizations can adopt or integrate directly into their systems.  \nBecause the signed barcode uses open, interoperable standards, organizations capable of consuming Verifiable Credentials can authenticate the card without contacting the DMV. This process delivers fast, secure, and tamper evident validation of the physical credential using digital technology, improving trust and efficiency across diverse identity verification scenarios.",
+      "country": "US"
+    },
     {
       "id": "digitally-empowered-with-californias-instant-identity-card-iic-mbxRho",
       "sector": "public_sector",
