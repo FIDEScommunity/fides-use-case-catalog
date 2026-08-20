@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T04:25:52.888Z",
+  "lastUpdated": "2026-08-20T05:00:25.652Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 73,
   "useCases": [
@@ -13,8 +13,8 @@
       "organizationName": "K4-Security",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-20T05:25:37+01:00",
-      "publishedAt": "2026-08-20T05:25:37+01:00",
+      "updatedAt": "2026-08-20T06:00:02+01:00",
+      "publishedAt": "2026-08-20T06:00:02+01:00",
       "tags": [
         "Digital Identity",
         "Payment"
@@ -128,9 +128,9 @@
         "payments"
       ],
       "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Fides-ENG.png"
+        "https://fides.community/app/uploads/2026/08/unified-wallet-thumbnail-en.png"
       ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Fides-ENG.png",
+      "imageUrl": "https://fides.community/app/uploads/2026/08/unified-wallet-thumbnail-en.png",
       "videos": [
         {
           "url": "https://vimeo.com/1212264565?share=copy&fl=sv&fe=ci",
