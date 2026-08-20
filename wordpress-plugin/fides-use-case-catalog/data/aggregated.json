@@ -1,10 +1,97 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T17:41:24.331Z",
+  "lastUpdated": "2026-08-20T19:18:12.491Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 88,
+  "count": 89,
   "useCases": [
+    {
+      "id": "digitally-empowered-with-californias-instant-identity-card-iic-mbxRho",
+      "sector": "public_sector",
+      "title": "Digitally Empowered with California’s Instant Identity Card (IIC)",
+      "summary": "The California Department of Motor Vehicles’ (DMV) Instant Identity Card (IIC) is a fast, verifiable identity (ID) issued to residents who urgently need proof of identity. It helps people who don’t have their physical driver’s license (DL) or ID card, or lack a mobile device.\nIntroduced by the DMV in March 2025, IIC provides a cryptographically signed, scannable paper verifiable credential that contains the resident’s photograph, demographic information, and a QR code linking to a verification service. Over 3.6 million IICs have been issued in this combined paper and digital format.\nIIC addresses critical gaps faced by unhoused Californians, disaster survivors, and residents affected by emergencies, who frequently lose documents needed to access essential services. IIC lets DMV teams working at disaster recovery centers or outreach events for the unhoused issue immediate proof of identity onsite, reducing service access time from weeks to moments. \nIIC also supports corrections related reentry programs. Inmates waiting for physical ID cards can be issued an IIC to ensure they leave facilities with valid identity documentation, improving access to services and reducing recidivism.",
+      "organizationName": "California Department of Motor Vehicles (CA DMV)",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T20:17:53+01:00",
+      "publishedAt": "2026-08-20T20:17:53+01:00",
+      "tags": [
+        "identity",
+        "transaction",
+        "privacy",
+        "equity",
+        "public service"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:ca-dmv",
+            "labelRaw": "California Department of Motor Vehicles (CA DMV)",
+            "url": "https://www.dmv.ca.gov/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Los Angeles Homeless Services Authority",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "City of San Francisco",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "California Office of Emergency Services",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Catholic Charities of California",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/IIC-Cover.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/IIC-Cover.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/IfV2htzIm2U",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/IfV2htzIm2U",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://verify-credentials.dmv.ca.gov/",
+      "userJourney": "The IIC includes a photograph, limited demographic details, and a QR code that contains a digitally signed photo and data, enabling quick in-person identity verification. It is available to California residents who already have a DL/ID on DMV record and need immediate proof of identity to access aid or services.\nHolders can present their IIC to any entity that has a mobile/electronic device with a camera, such as a smart phone or tablet. The verifying party can access the DMV verifying website on their mobile/electronic device, or by scanning the QR code printed on the IIC. \nVerification uses NIST IAL3 equivalent identity flows due to superior form of identity protected with verifiable credential architecture enabled by cryptography and revocation lists, which reduces fraud during disaster situations and ensures only eligible individuals receive aid. Social service providers, housing authorities, and the Social Security Administration have aligned their workflows to accept IIC to significantly accelerate completion of housing and benefits applications, cutting processing times from several weeks to a day or two for unhoused residents.",
+      "country": "US"
+    },
     {
       "id": "the-california-department-of-motor-vehicles-dmv-wallet-supporting-diverse-credentials-and-protocols-SnOkLv",
       "sector": "digital",
