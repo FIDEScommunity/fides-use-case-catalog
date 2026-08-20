@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T20:52:34.832Z",
+  "lastUpdated": "2026-08-20T20:53:47.764Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 94,
   "useCases": [
@@ -765,7 +765,7 @@
       "organizationName": "California Department of Motor Vehicles (CA DMV)",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T20:17:53+01:00",
+      "updatedAt": "2026-08-20T21:53:29+01:00",
       "publishedAt": "2026-08-20T20:17:53+01:00",
       "tags": [
         "identity",
@@ -788,31 +788,31 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:lahsa",
             "labelRaw": "Los Angeles Homeless Services Authority",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:city-of-san-francisco",
             "labelRaw": "City of San Francisco",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:cal-oes",
             "labelRaw": "California Office of Emergency Services",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:catholic-charities-california",
             "labelRaw": "Catholic Charities of California",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
