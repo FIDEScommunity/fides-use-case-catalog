@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T17:40:15+00:00",
+    "generatedAt": "2026-08-20T17:41:07+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -2607,6 +2607,116 @@
                     },
                     "moreInfoUrl": "https://digitalfutures.cccco.edu/new-tools-to-strengthen-student-account-security/",
                     "userJourney": "When a college bound student signs into, or creates their OpenCCC account, which is the first step in applying to a California Community College, they are prompted to verify their identity.  DMV mobile wallet is highlighted as the preferred option for anyone with a CA driver's license or ID card, and access to a smartphone.  New mDL users will download the app, scan their ID and do a selfie match.  mDL holders will only need to scan the QR code and accept the prompt to share information with the CCCs. Their OpenCCC account is then marked as verified, and they are prompted to continue with their application as a verified student. Colleges receiving the verified applications can then skip labor intensive local verification processes, and fastrack the student to enrollment/ financial aid.  OpenCCC users who lose access to their accounts can recover them using a similar mDL workflow: 1- scan the QR code, 2- accept data sharing, 3- confirm account details for a matched account, 4- gain access and reset their password.  5- use their verified account to submit a college admission application",
+                    "country": "US"
+                }
+            ]
+        },
+        {
+            "orgSlug": "california-department-of-motor-vehicles-ca-dmv",
+            "orgId": "org:ca-dmv",
+            "orgName": "California Department of Motor Vehicles (CA DMV)",
+            "useCases": [
+                {
+                    "id": "the-california-department-of-motor-vehicles-dmv-wallet-supporting-diverse-credentials-and-protocols-SnOkLv",
+                    "sector": "digital",
+                    "title": "The California Department of Motor Vehicles (DMV) Wallet: Supporting Diverse Credentials and Protocols",
+                    "summary": "The DMV Wallet, launched in 2023, is a secure user controlled digital tool designed to hold a wide range of documents issued by the DMV and other entities, such as driver’s licenses, vehicle titles, and Disabled Person Parking Placards (DPPPs) in verifiable digital form. By replacing paper and plastic documents with cryptographically signed credentials, the Wallet addresses inefficiencies in issuing and replacing physical records, which have been slow, vulnerable to theft, and susceptible to fraudulent duplication. These challenges are especially burdensome for unhoused Californians and disaster survivors, who often lose vital documents and need immediate proof of identity. The Wallet provides a stable home for these credentials.  \nBy supporting both W3C Verifiable Credentials and ISO mobile driver’s licenses (mDL), the Wallet ensures interoperability and long-term sustainability across digital credential ecosystems. \nPublic reception has been extremely positive. The Wallet maintains an outstanding 4.8/5 star rating across more than 100,000 independent reviews, reflecting widespread trust, convenience, and satisfaction as the DMV continues expanding modern, secure digital services.",
+                    "organizationName": "California Department of Motor Vehicles (CA DMV)",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-20T18:41:07+01:00",
+                    "publishedAt": "2026-08-20T18:41:07+01:00",
+                    "tags": [
+                        "identity",
+                        "transaction",
+                        "privacy"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:ca-dmv",
+                                "labelRaw": "California Department of Motor Vehicles (CA DMV)",
+                                "url": "https://www.dmv.ca.gov/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "TruAge",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Hundreds of businesses which verify credentials from the wallet",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "proximity",
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc",
+                        "vcdm_1_1"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "ISO 18013-5",
+                        "ISO 18013-7",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "themes": [
+                        "person_identity"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/mDL-Cover.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/mDL-Cover.png",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=PefdT7_InKg&t",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://youtu.be/q6V6o1mW8Ps",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://youtu.be/DV-MSwF1d3k",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://youtu.be/WlMvpbOdw14?si=xlROx4OO00kLIGt5",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://youtu.be/GVWKot1SeK4?si=jaszxO04bT7SofLJ",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://youtu.be/IfV2htzIm2U",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=PefdT7_InKg&t",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.dmv.ca.gov/portal/california-mdl/",
+                    "userJourney": "A user begins by downloading the DMV Wallet and requesting a mobile Driver’s License (mDL) from the DMV, which verifies the identity using their physical driver’s license and, when done remotely, a liveness check. The individual can then use the Wallet’s add-on feature to add a growing library of credentials, such as TruAge, vehicle registration, DPPP, and others. \n\nThe DMV Wallet has an embedded privacy preserving offline reader that allows entities to verify credentials without network access or tracking users, ensuring high trust interactions for both individuals and service providers. Security is further strengthened through face matching validation, ensuring only authorized individuals can access or present their digital credentials. \n\nWhen customers call DMV support lines from a number associated with their DMV Wallet, relevant DPPP information automatically appears on the representative’s screen, reducing call times and improving service accuracy. The digital DPPP enables individuals who forget their physical placards to use their phones to validate parking eligibility, which makes it easier to locate, reserve, and access disabled parking spaces at participating locations.",
                     "country": "US"
                 }
             ]
