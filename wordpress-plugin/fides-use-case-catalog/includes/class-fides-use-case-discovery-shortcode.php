@@ -115,12 +115,76 @@ final class Fides_Use_Case_Discovery_Shortcode {
     }
 
     /**
+     * Display label for an involved-organization link (catalog or free text).
+     *
+     * @param array<string, mixed> $link
+     */
+    private static function organization_link_label(array $link): string {
+        if (! empty($link['labelRaw'])) {
+            return trim((string) $link['labelRaw']);
+        }
+        if (! empty($link['label'])) {
+            return trim((string) $link['label']);
+        }
+        if (! empty($link['refId'])) {
+            return trim((string) $link['refId']);
+        }
+        return '';
+    }
+
+    /**
+     * Unique involved organisations across published use cases.
+     * Catalog-linked rows dedupe on refId; free-text names (no refId) count too
+     * and merge with a catalog row that uses the same label.
+     *
+     * @param array<int, array<string, mixed>> $items
+     */
+    private static function unique_involved_organizations(array $items): int {
+        $by_ref          = array();
+        $catalog_labels  = array();
+        $free_text_labels = array();
+
+        foreach ($items as $item) {
+            if (! is_array($item)) {
+                continue;
+            }
+            $links = (isset($item['links']) && is_array($item['links'])) ? $item['links'] : array();
+            $rows  = (isset($links['organizations']) && is_array($links['organizations'])) ? $links['organizations'] : array();
+            foreach ($rows as $row) {
+                if (! is_array($row)) {
+                    continue;
+                }
+                $ref_id = strtolower(trim((string) ($row['refId'] ?? '')));
+                $label  = strtolower(self::organization_link_label($row));
+                if ($ref_id !== '') {
+                    $by_ref[ $ref_id ] = true;
+                    if ($label !== '') {
+                        $catalog_labels[ $label ] = true;
+                    }
+                    continue;
+                }
+                if ($label !== '') {
+                    $free_text_labels[ $label ] = true;
+                }
+            }
+        }
+
+        $extra = 0;
+        foreach ($free_text_labels as $label => $_seen) {
+            if (! isset($catalog_labels[ $label ])) {
+                $extra++;
+            }
+        }
+
+        return count($by_ref) + $extra;
+    }
+
+    /**
      * @param array<int, array<string, mixed>> $items
      * @return array{total: int, countries: int, organizations: int, production: int}
      */
     private static function metrics(array $items): array {
         $countries = array();
-        $organizations = array();
         $production = 0;
 
         foreach ($items as $item) {
@@ -131,10 +195,6 @@ final class Fides_Use_Case_Discovery_Shortcode {
             if ($country !== '') {
                 $countries[ $country ] = true;
             }
-            $organization = trim((string) ($item['organizationName'] ?? ''));
-            if ($organization !== '') {
-                $organizations[ strtolower($organization) ] = true;
-            }
             if (strtolower(trim((string) ($item['productionDeployment'] ?? ''))) === 'yes') {
                 $production++;
             }
@@ -143,7 +203,7 @@ final class Fides_Use_Case_Discovery_Shortcode {
         return array(
             'total'         => count($items),
             'countries'     => count($countries),
-            'organizations' => count($organizations),
+            'organizations' => self::unique_involved_organizations($items),
             'production'    => $production,
         );
     }
