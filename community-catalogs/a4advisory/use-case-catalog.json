@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:a4advisory",
+  "orgId": "org:aamva",
   "orgName": "A4Advisory",
   "useCases": [
     {
@@ -12,7 +12,7 @@
       "organizationName": "A4Advisory",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T15:18:15+01:00",
+      "updatedAt": "2026-08-20T21:58:20+01:00",
       "publishedAt": "2026-08-20T15:18:15+01:00",
       "tags": [
         "mDL",
@@ -243,38 +243,38 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:aamva",
             "labelRaw": "AAMVA",
             "url": "https://www.aamva.org/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:austroads",
             "labelRaw": "Austroads",
             "url": "https://austroads.gov.au/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:ereg",
             "labelRaw": "EReg",
             "url": "https://www.ereg-association.eu/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:rdw",
             "labelRaw": "RDW",
             "url": "https://www.rdw.nl/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:a4-advisory",
             "labelRaw": "A4Advisory",
             "url": "https://www.a4advisory.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
@@ -285,26 +285,26 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:task-force-7",
             "labelRaw": "Task Force 7",
             "url": "https://www.taskforce7.net/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:valid8",
             "labelRaw": "Valid8",
             "url": "https://valid8advisory.com/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
         "rps": [
           {
-            "refId": null,
+            "refId": "org:tsa",
             "labelRaw": "TSA",
             "url": "https://www.tsa.gov/",
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
