@@ -1,0 +1,66 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:france",
+  "orgName": "Agence Nationale des Titres Sécurisés",
+  "useCases": [
+    {
+      "id": "aptitude-verifier-for-dtc-vc-in-photoid-format-supporting-various-experimentations-for-digital-border-crossing-F8H7cE",
+      "sector": "mobility",
+      "title": "Aptitude verifier for DTC-VC in PhotoID format - Supporting various experimentations for digital border crossing",
+      "summary": "Within the European APTITUDE Large Scale Pilot, a dedicated verifier for border crossing demonstrates how a government-backed digital service can collect and verify a Digital Travel Credential - Virtual Component. The credential is derived from any passport and securely stored within a digital identity wallet (i.e. France Identité), its format is based ISO/IEC standard and can be shared for verification in proximity at border crossing.\nMultiple experimentations are and will be taking place over the next few months within APTITUDE consortium across the globe to support and enhance border crossings: Marseille Provence Airport, Coquelles Eurotunnel, Roissy Charles de Gaulle, Spain, Frankfurt, Helsinki, London, Hong-Kong.\nThe verifier serves travelers, border authorities, government agencies but also airports and airlines by enabling trusted, privacy-preserving identity verification using selective disclosure when needed. Through interoperability testing and real-world airport experiments, the solution demonstrates seamless credential exchange across multiple passport' nationalities, issuers, and verifiers from different countries.",
+      "organizationName": "Agence Nationale des Titres Sécurisés",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-20T16:37:17+01:00",
+      "publishedAt": "2026-08-20T16:37:17+01:00",
+      "tags": [
+        "EUDI Wallet ; ARF ; Border crossing ; DTC-VC ; seamless travel"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:france",
+            "labelRaw": "French Government",
+            "url": "https://france-identite.gouv.fr/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:agence-nationale-des-titres-securises",
+            "labelRaw": "Agence Nationale des Titres Sécurisés",
+            "url": "https://ants.gouv.fr/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "proximity"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "moreInfoUrl": "https://aptitude.digital-identity-wallet.eu/wallet-use/digital-travel-credentials/",
+      "userJourney": "AHEAD OF BORDER CONTROL – USER – 2 min\n\n1 - The tester installs on his wallet a dedicated version of France Identité (or any compatible wallet with 18013-5 capabilities)\n2 - Using his passport, the tester presents the inside of the physical document for collecting chip access key using Optical Character Recognition\n3 - The digital identity wallet may now perform contactless reading of the passport chip through NFC\n4 - The collected data (mainly Data Group 1 and Data Group 2) are converted into mDOC format (PhotoID) and signed by a legitimate authority (i.e. France Titres)\n5 - The wallet home page is now showing a new credential (Digital Travel Document – Virtual Component) with a related engagement QR code\n\nAT BORDER CONTROL – USER & BORDER AUTHORITIES – 10 sec\n\n1 - Border police is equipped with a dedicated computer to access the DTC-VC verification service and a connected QR code reader\n2 - The traveler is asked to present is engagement QR code to the QR code reader\n3 - After Bluetooth connection is established, the traveler shares his consent within the wallet\n4 - The border police receives the Digital Travel Credential – Virtual Component derived from the traveler’s passport",
+      "country": "FR"
+    }
+  ]
+}
