@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T15:37:17+00:00",
+    "generatedAt": "2026-08-20T15:53:00+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -7611,6 +7611,116 @@
             "orgId": "org:ooru",
             "orgName": "Ooru",
             "useCases": [
+                {
+                    "id": "iiit-bangalore-digital-academic-credential-issuance-and-verification-rm2bTO",
+                    "sector": "education",
+                    "title": "IIIT-Bangalore Digital Academic Credential Issuance and Verification",
+                    "summary": "A degree is only as useful as the world's ability to trust it. For a graduate, proving one has long meant waiting while an employer or verification agency writes to the university and staff check the paperwork by hand, a slow step that can hold up a job.\nIIIT-Bangalore now issues degree certificates and transcripts as verifiable credentials through CredIssuer (by Ooru), organised by batch and programme across online and offline cohorts. Background verification (BGV) agencies confirm them through a custom verification portal built by CredIssuer. If a credential carries a QR code, the check completes automatically once the fee is paid. If it does not, the system runs an OCR match against IIIT-B's verifiable records, and an IIIT-B reviewer manually approves or rejects it with a recorded comment. Automation carries the routine cases; a person handles the rest.\nThe system is live in production. Issuance began in 2025 and verification in 2026, with 10,485 credentials issued and 197 verifications to date. IIIT-B is issuer and verifier; BGV agencies are the relying parties. No personal wallet is active yet, though CredIssuer's architecture supports one.",
+                    "organizationName": "Ooru",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-20T16:53:00+01:00",
+                    "publishedAt": "2026-08-20T16:53:00+01:00",
+                    "tags": [
+                        "education",
+                        "verifiable academic credentials",
+                        "verification",
+                        "trust"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "IIIT-Bangalore",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Degree Certificates",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Academic Transcripts",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:ooru",
+                                "labelRaw": "Ooru",
+                                "url": "https://ooru.io/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "CredIssuer",
+                                "url": "https://credissuer.com/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "IIIT-Bangalore",
+                                "url": "https://www.iiitb.ac.in/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "BGV Agencies",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "other"
+                    ],
+                    "presentationProtocols": [],
+                    "interopProfiles": [],
+                    "themes": [
+                        "person_identity",
+                        "education"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/IIIT-B-.jpg"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/IIIT-B-.jpg",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/mIc7aFoVdVI",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/mIc7aFoVdVI",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://ooru.io/case-studies/iiit-bangalore",
+                    "userJourney": "1. IIIT-Bangalore issues degree certificates and transcripts as verifiable credentials through CredIssuer, organised by batch and programme.\n2. A BGV agency needing to confirm a candidate's credentials logs into the custom verification portal built by CredIssuer.\n3. The agency submits the candidate's credentials, with or without an embedded QR code (legacy credentials), and pays the verification fee.\n4. If a QR code is present, verification completes automatically once payment is made.\n5. If no QR code is present, the system runs an OCR match to find the corresponding verifiable credentials, and the IIIT-B team manually reviews and approves or rejects the request, with a mandatory comment.\n6. The BGV agency receives the verified result, completing the hiring-related check.",
+                    "country": "IN"
+                },
                 {
                     "id": "verifiable-work-completion-credentials-for-migrant-construction-workers-Nn1eez",
                     "sector": "construction",
