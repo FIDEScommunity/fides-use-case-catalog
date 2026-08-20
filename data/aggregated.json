@@ -1,10 +1,915 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T05:00:25.652Z",
+  "lastUpdated": "2026-08-20T12:19:32.806Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 73,
+  "count": 80,
   "useCases": [
+    {
+      "id": "digitising-police-clearance-certificates-with-dgrn-sao-tome-principe-pGvduS",
+      "sector": "public_sector",
+      "title": "Digitising Police Clearance Certificates with DGRN, São Tomé & Príncipe",
+      "summary": "A Police Clearance Certificate is something a citizen of São Tomé & Príncipe cannot do without. It is asked for at almost every threshold that matters: a job, a university place, a visa, a scholarship, studying or working abroad. It is still collected in person, on paper, at a DGRN counter. The hard part was never obtaining it. It was proving it was genuine, since anyone receiving it had to take it on trust.\nDGRN, set out to close that gap. The certificate is still issued at the counter, but it is now issued as a verifiable credential with a QR code, so anyone who receives it can confirm it is genuine in seconds, anywhere in the world. \nDGRN issues and stands behind each certificate, checking the applicant against the joint government criminal record database first. CredIssuer, Ooru's credentials ecosystem, turns a cleared record into a tamper-evident verifiable certificate. Verifica (https://verifica.gov.st/), Ooru's public verification portal for the country, is where universities, employers, and government bodies confirm it is real. This flow is live today. The next phase adds a citizen-facing portal and wallet, and lets DGRN design and deploy these credential forms itself.",
+      "organizationName": "Ooru",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T13:19:19+01:00",
+      "publishedAt": "2026-08-20T13:19:19+01:00",
+      "tags": [
+        "government",
+        "police clearance certificate",
+        "public sector",
+        "criminal record verification",
+        "digital governance",
+        "authentication"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "DGRN",
+            "url": "https://dgrn.gov.st/sobre.php",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Police Clearance Certificate",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:ooru",
+            "labelRaw": "Ooru",
+            "url": "https://ooru.io/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "DGRN",
+            "url": "https://dgrn.gov.st/sobre.php",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "CredIssuer",
+            "url": "https://credissuer.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Universities, employers, government bodies",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/STP-PCC.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/STP-PCC.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/PSn7MeMXGXc",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/PSn7MeMXGXc",
+        "provider": "youtube"
+      },
+      "userJourney": "1: A citizen applies for a Police Clearance Certificate at DGRN and states the reason for the request, such as employment, a visa, or education. That reason is recorded directly in the certificate.\n2: DGRN checks the applicant against the joint government criminal record database.\n3: Where the record is clear, DGRN calls CredIssuer to generate the certificate as a verifiable credential with an embedded QR code.\n4: The certificate is issued to the citizen on the spot, with no change to the existing application process. This part of the flow is live today.\n5: The citizen presents the certificate to whoever requires it: a university, an employer, or a government body, at home or abroad.\n6: The relying party confirms it is genuine through the Verifica portal (https://verifica.gov.st/), by scanning the QR code, uploading the document, or looking up the credential ID.",
+      "country": "ST"
+    },
+    {
+      "id": "age-verification-by-snapkyc-wt2dij",
+      "sector": "digital",
+      "title": "Age Verification by SnapKYC",
+      "summary": "SnapKYC is a consent-based verification orchestrator that lets a relying party confirm a user meets an eligibility requirement, such as an age threshold, without storing or exposing personal data.\nIt holds no credentials of its own. Built on open identity standards, it requests an eligibility claim from an existing trusted source. Today that source is Aadhaar, via the Aadhaar app and DigiLocker, and the same approach lets other issuers or wallets be added without changing the relying party's integration.\nWhen content is tagged age-restricted, the viewer is asked to verify their age. With their consent, SnapKYC sends an age-eligibility request to Aadhaar and receives only a yes or no. No age, date of birth, or identity attribute reaches the platform, and SnapKYC retains nothing. Age thresholds are configurable by jurisdiction, so one flow covers different regional age-of-majority rules.\nShown here through a media interface built to demonstrate the flow, not a live integration. Key players: UIDAI as issuer, the Aadhaar app as credential wallet, and SnapKYC as the verification layer any platform could adopt as a relying party. It is currently a working prototype.",
+      "organizationName": "SnapKYC",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-20T13:15:40+01:00",
+      "publishedAt": "2026-08-20T13:15:40+01:00",
+      "tags": [
+        "age verification",
+        "privacy",
+        "digital identity",
+        "selective disclosure",
+        "Aadhaar",
+        "social media"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "aadhaar",
+            "labelRaw": "Aadhaar",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "UIDAI",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "SnapKYC",
+            "url": "https://snapkyc.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Content Platforms",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot_2026-08-20_at_3.22.36_PM_optimized_1000.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot_2026-08-20_at_3.22.36_PM_optimized_1000.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/IMaz9Vpe-0A?si=S0xW7cCRWfQbRaq1",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/IMaz9Vpe-0A?si=S0xW7cCRWfQbRaq1",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://snapkyc.com/",
+      "userJourney": "1: Access Age-Restricted Content: A user attempts to access content designated as age-restricted on a social media platform.\n2: Age Verification Prompt: Before proceeding, the user is prompted to verify their age. On a web browser, this can be initiated by scanning a QR code; within a mobile app, the user can initiate the credential-sharing flow directly.\n3: Privacy-Preserving Age Check: SnapKYC requests an age-eligibility claim from the user’s Aadhaar-linked wallet in real time. The eligibility check is based on the applicable age threshold for the user’s jurisdiction—for example, 16+ or 18+.\n4: Minimal Data Disclosure: The verification returns only a Yes/No eligibility response. SnapKYC does not share the user’s date of birth, name, Aadhaar number, or other identity information with the social media platform.\n5: Seamless Continuation: If the user meets the required age threshold, they are returned to the exact content they were attempting to access.\n6: Access Restricted: If the user does not meet the required threshold, they are informed that the content is unavailable based on the applicable age requirement and are redirected to the platform’s home screen.",
+      "country": "IN"
+    },
+    {
+      "id": "passwordless-and-verifiable-workforce-identity-securing-ukraines-data-integrity-5ArNZP",
+      "sector": "public_sector",
+      "title": "Passwordless and Verifiable Workforce Identity: Securing Ukraine’s Data Integrity",
+      "summary": "This pilot closes a gap in Ukraine's public-sector security: verifying external contractors before granting digital access. \n\nThe State Agency for Infrastructure Restoration and Development of Ukraine already uses Hideez Development's FIDO2 passwordless authentication for internal staff, but its distributed contractors, maintaining regional surveillance and other infrastructure systems sit outside the internal domain. Creating full domain accounts or issuing passwords for them would be inefficient and risky, with no way to confirm affiliation at access time.\n\nThe project's goal is to add a verifiable credential layer from Turing Space (Netherlands) ahead of login, ties contractor authorisation to real-time organisational status via OpenID for Verifiable Credentials, and enables automatic revocation without manual admin work. Hideez calls the Turing Space Verifier API to enforce this check.\n\nThe pilot aligns with Ukrainian trust-service law, EU NIS2 Article 21, the Dutch Cyberbeveiligingswet, and eIDAS2, producing a validated, reusable model for contractor access applicable to other Ukrainian agencies and Dutch/EU organisations facing similar supply-chain risks.",
+      "organizationName": "Turing Space Inc.",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T13:14:47+01:00",
+      "publishedAt": "2026-08-20T13:14:47+01:00",
+      "tags": [
+        "Digital Identity",
+        "IAM",
+        "Personnel Mobility",
+        "Public Sector",
+        "Critical Infrastructure Security",
+        "Passwordless Authentication",
+        "FIDO2"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "paradym-wallet",
+            "labelRaw": "Paradym Wallet",
+            "url": "https://paradym.id",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:turing-space",
+            "labelRaw": "Turing Space Inc.",
+            "url": "https://turingcerts.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Hideez Development LLC",
+            "url": "https://hideez.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/cover.png",
+        "https://fides.community/app/uploads/2026/08/1.1.png",
+        "https://fides.community/app/uploads/2026/08/1.2.png",
+        "https://fides.community/app/uploads/2026/08/1.3.png",
+        "https://fides.community/app/uploads/2026/08/1.4.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/cover.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/UdBgdDh-H-o",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/UdBgdDh-H-o",
+        "provider": "youtube"
+      },
+      "userJourney": "Access to a protected Agency web service requires two independent conditions met in sequence. First, the contractor's verifiable credential: a cryptographically signed document proving current affiliation with a trusted contractor organization is checked via Turing Space and must be valid, unexpired, and unrevoked at access time. Only after this credential-based verification succeeds can the user proceed to Hideez's passwordless authentication layer. Access is granted only when both conditions are satisfied; an invalid, expired, or revoked credential blocks access.\n\nWorkflow: \n(1) IT admin issues a VC for the user via the Hideez Workforce ID portal; \n(2) user receives a confirmation email and adds the VC to the Paradym Wallet app by scanning the email's QR code; \n(3) user registers a passwordless authentication method (Hideez mobile app, platform Passkey, or external FIDO2 key) in Hideez IdP, linked to the VC; \n(4) a new user account is automatically created in on-premises Active Directory; \n(5) user signs in passwordlessly to SSO-configured web services via Hideez IdP; \n(6) if the VC is expired or revoked by IT admin, the user's access to web services is blocked.",
+      "country": "UA"
+    },
+    {
+      "id": "reusable-kyb-due-digital-due-diligence-for-financial-transactions-E06Xyi",
+      "sector": "finance",
+      "title": "Hypersign KYB — Instant Business Verification & UBO Due Diligence",
+      "summary": "BoostN is a sports fintech specializing in fundraising for the Bavarian Ice Hockey League, giving sponsors a simple way to manage their tax submissions. \n\nHypermine & BoostN demonstrate a practical, privacy-preserving approach to reusable KYB verification. While basic business wallets only establish company identity, robust Know Your Business (KYB) demands multi-layered due diligence — UBO (Ultimate Beneficial Owner) verification, representative-level business KYC, PEP and sanctions screening, and full lifecycle tracking. \n\nVerification & Issuance : A sponsor company and its representative complete full KYC/KYB via Hypermine. On approval, Hypermine issues a non-qualified W3C Verifiable Credential directly to the sponsor's Company Vault. \n\nIndependent Relying-Party Validation : BoostN, as the relying party, requests onboarding evidence. The sponsor presents the credential, letting BoostN independently verify cryptographic integrity, issuer trust, freshness, credential revocation status, and policy rules — before granting access. \n\nImpact : Eliminates repetitive onboarding and document sharing, preserving enterprise control, relying-party sovereignty, and verifiable auditability.",
+      "organizationName": "Hypermine",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T10:52:24+01:00",
+      "publishedAt": "2026-08-20T10:52:24+01:00",
+      "tags": [
+        "Finance",
+        "Fundraising",
+        "Sponsorships"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:hypermine",
+            "labelRaw": "Hypermine",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:boostn",
+            "labelRaw": "BoostN GMBH",
+            "url": "https://boostn.team/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/flow.png",
+        "https://fides.community/app/uploads/2026/08/Fides1.png",
+        "https://fides.community/app/uploads/2026/08/Fides2.png",
+        "https://fides.community/app/uploads/2026/08/Fides3.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/flow.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/1hs8SGwUbOM",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/1hs8SGwUbOM",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://hypersign.id/",
+      "userJourney": "KYB Verification & Reusable Credential Flow\n\n01 — Opportunity & Request: Sponsor A selects an opportunity on BoostN, triggering company KYB and representative KYC verifications.\n\n02 — Due Diligence: The representative submits company, UBO, and identity data via Hypermine, which executes ownership analysis, sanctions/PEP screening, and risk-based onboarding checks against verification policies.\n\n03 — Credential Issuance: Upon approval, Hypermine issues a reusable W3C Verifiable Credential (KYB Credential) to Sponsor A’s Company Vault, embedding identifiers, performed checks, policy details, validity periods, and revocation mechanisms.\n\n04 — Consent & Presentation: BoostN issues a purpose-bound data request. Sponsor A reviews and explicitly authorizes credential presentation directly from its vault via built-in consent management.\n\n05 — Verification & Decision: BoostN cryptographically validates Hypermine’s signature, integrity, policy compliance, freshness, and revocation status before finalizing the onboarding decision.\n\n06 — Reusability: Sponsor A retains the reusable KYB credential in its vault for instant reuse across other relying parties — no repeat due diligence.",
+      "country": "DE"
+    },
+    {
+      "id": "company-compass-L9THKy",
+      "sector": "digital",
+      "title": "Company Compass",
+      "summary": "Company Compass guides the user through all the steps necessary to create a private limited company (besloten vennootschap, BV). \nFor many entrepreneurs, setting up a legal entity is a complex and time-consuming process due to the involvement of various bodies, such as the notary, the Chamber of Commerce, the tax authorities, banks and wallet providers. Due to the various routes, the fragmentation of systems and the lack of overview, business owners often lose track of things, make mistakes or experience unnecessary delays. \n\nThe Company Compass process guidance application can solve this problem by acting as a central guide that provides step-by-step guidance, validates data, automatically synchronises with various parties and thus minimises errors. This leads to greater efficiency, shorter lead times and a smooth start to the business.\n\nThe process guidance application was created within Company Passport, a public-private collaboration of KNB, KVK, Belastingdienst, NVB and Betaalvereniging Nederland. The application exists as a functional demo.",
+      "organizationName": "ECP",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-20T09:08:01+01:00",
+      "publishedAt": "2026-08-20T09:08:01+01:00",
+      "tags": [
+        "business",
+        "public-private",
+        "wallet"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:knb",
+            "labelRaw": "Koninklijke Notariële Beroepsorganisatie (KNB)",
+            "url": "https://www.knb.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:kvk",
+            "labelRaw": "Kamer van Koophandel",
+            "url": "https://www.kvk.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bd",
+            "labelRaw": "Belastingdienst",
+            "url": "https://www.belastingdienst.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:nvb",
+            "labelRaw": "Nederlandse Vereniging van Banken",
+            "url": "https://www.nvb.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:betaalvereniging-nederland",
+            "labelRaw": "Betaalvereniging Nederland",
+            "url": "https://www.betaalvereniging.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ABN AMRO",
+            "url": "https://www.abnamro.nl/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ECP",
+            "url": "https://ecp.nl/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/CP-logo-16-9.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/CP-logo-16-9.png",
+      "moreInfoUrl": "https://sandboxfe.companypassport.com/",
+      "userJourney": "To establish a business in his/her name, the user needs a personal wallet in which his/het verified identity is recorded. The wallet is then linked to Company Compass. This ensures a safe and efficient way to identify the user when retrieving business data. The app then guides the user through all steps necessary to create a private limited company (BV). The application never stores data; the required data is always retrieved from the users digital wallet(s).",
+      "country": "NL"
+    },
+    {
+      "id": "instant-paperless-rural-credit-using-verifiable-credentials-xUny3z",
+      "sector": "agriculture",
+      "title": "Instant, Paperless Rural Credit Using Verifiable Credentials",
+      "summary": "Rural credit in Brazil traditionally requires farmers to gather paper land and environmental documents for manual bank review, causing delays and limiting access, especially for smallholders. This use case digitizes that process: Banco do Brasil, the MIR App (a farmer wallet), and Brazil's MGI Verifiable Credentials DPI platform let farmers turn CAR, CAF, and CCIR registry documents into tamper-proof digital credentials. Farmers authenticate via Gov.BR SSO, request credentials in the MIR App, and share them with the bank under their own consent. This piloted successfully in Rio Grande do Sul, where farmer Adriele Ines Brandt completed Brazil's first real rural credit transaction using verifiable credentials, financing farm equipment through the Pronaf program. MGI operates the platform; Banco do Brasil is the relying institution; EMATER/RS supports rural extension; farmers are the credential holders. The MIR App wallet gives farmers on-demand, self-controlled access to their land records. Verifiable credentials replace paperwork with cryptographically signed, instantly checkable proof, cutting travel, delay, and fraud risk while expanding credit access for young and women farmers.",
+      "organizationName": "inji.io",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-20T08:11:44+01:00",
+      "publishedAt": "2026-08-20T08:11:44+01:00",
+      "tags": [
+        "verifiable credentials",
+        "DPI",
+        "rural credit",
+        "agribusiness",
+        "Banco do Brasil",
+        "Inji Certify",
+        "Inji Verify",
+        "land registry",
+        "ICP-BR",
+        "financial inclusion",
+        "Brazil"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "inji-wallet",
+            "labelRaw": "Inji Wallet",
+            "url": "https://www.mosip.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": "issuer:mosip:insurance:test",
+            "labelRaw": "Inji Certify - Insurance Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "inji.io",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Management and Innovation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Banco do Brasil (BB)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Cadastro Ambiental Rural (CAR)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Gov.Br",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Centre for Open Societal System",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Centre for Digital Public Infrastructure",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "inji-web-verifier",
+            "labelRaw": "Inji Web Verifier",
+            "url": "https://injiverify.collab.mosip.net/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black-1.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black-1.jpg",
+      "videos": [
+        {
+          "url": "https://youtu.be/C5Xk940BQVo?si=Qq8ao79SQY9KBRwQ",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/C5Xk940BQVo?si=Qq8ao79SQY9KBRwQ",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.gov.br/gestao/pt-br/assuntos/meu-imovel-rural",
+      "userJourney": "1. The farmer logs into the MIR App using Gov.BR Single Sign-On (SSO) for authentication.\n2. The farmer requests a document (e.g., CAR, CAF, or CCIR) through the MIR App; the embedded Inji Mobile SDK sends the request to Inji Certify.\n3. Inji Certify retrieves the underlying document data from the relevant registries via a Data Exchange Layer, then generates and digitally signs the credential using ICP-BR-compliant PKI and the issuing authority's private keys.\n4. The signed Verifiable Credential (in JSON-LD, with an accompanying PDF where applicable) is returned to the MIR App and stored securely in the farmer's Wallet, under the farmer's own control.\n5. Separately, the farmer applies for a rural credit loan with Banco do Brasil via mobile or web client; BB requests the farmer's VCs from the MGI VCs DPI Verify backend, which returns an authorization link.\n6. BB sends the authorization link to the MIR App via a Firebase push notification; the farmer is prompted for consent before any credential is shared.\n7. Upon consent, the Wallet shares the VC as a JSON-LD Verifiable Presentation (for cryptographic proof) and a PDF (for BB's existing workflow).\n8. Verification is done by BB",
+      "country": "BR"
+    },
+    {
+      "id": "instant-digital-verification-of-education-credentials-using-verifytt-2qkCDD",
+      "sector": "education",
+      "title": "Instant Digital Verification of Education Credentials using VerifyTT",
+      "summary": "VerifyTT is Trinidad and Tobago's national platform for issuing, holding, and verifying digital credentials, starting with academic certificates and extending to legal and official documents. It solves the problem of paper credentials being fragile, slow to trust, and hard to verify, since confirming authenticity often means contacting the issuer. This costs graduates time, leaves employers uncertain, and burdens institutions with repeat verification requests. VerifyTT creates value for all: holders get a record safe from loss, fire, or flood; employers get instant \"Blue Tick\" verification; issuers spend less time on manual work. Institutions act as issuers, digitally signing credentials at source. Citizens are holders, claiming credentials via email and controlling who sees them. Employers act as verifiers, checking authenticity in seconds. The digital wallet lets holders securely store and selectively share credentials from their phone, shifting control to the individual. Verifiable credentials, cryptographically signed by the issuer, make instant trust possible: a QR scan checks a tamper-proof signature, not a document's look, enabling verification without contacting the issuer.",
+      "organizationName": "Inji",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T08:10:18+01:00",
+      "publishedAt": "2026-08-20T08:10:18+01:00",
+      "tags": [
+        "digital public infrastructure",
+        "DPI",
+        "verifiable credentials",
+        "Inji",
+        "W3C VC",
+        "national trust rail",
+        "education credentials",
+        "cryptographic verification",
+        "Trinidad and Tobago"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "inji-wallet",
+            "labelRaw": "Inji Wallet",
+            "url": "https://www.mosip.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": "issuer:mosip:insurance:test",
+            "labelRaw": "Inji Certify - Insurance Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Academic degrees, diplomas, and transcripts (education credentials)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "iGovTT (National Information and Communication Technology Company Limited) implementing agency",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "iGovTT",
+            "url": "https://igovtt.tt/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Inji",
+            "url": "http://inji.io",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Public Administration and Artificial Intelligence (MPAAI) strategic oversight",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "CDPI",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Deloitte",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:ooru",
+            "labelRaw": "Ooru",
+            "url": "https://ooru.io/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "inji-web-verifier",
+            "labelRaw": "Inji Web Verifier",
+            "url": "https://injiverify.collab.mosip.net/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_1_1"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "education"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black.jpg",
+      "videos": [
+        {
+          "url": "https://youtu.be/QiyfHuwZ4zU?si=baHHanp0meSAt1OY",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/QiyfHuwZ4zU?si=baHHanp0meSAt1OY",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://verifytt.gov.tt/publication/verifytt-embedding-trust,%20https://verifytt.gov.tt/issuers%20,%20https://verify.verifytt.gov.tt/%20,%20https://verifytt.gov.tt/graduation",
+      "userJourney": "1. A credential issuer (e.g., a tertiary institution) generates a cryptographically signed credential using its controlled signing key via the Issuance Module (Inji Certify).\n2. The credential holder (student/graduate) receives the credential into a digital wallet or secure repository under their own control (Credential Store / Web Locker).\n3. When the holder needs to prove a qualification (e.g., to an employer), they present the credential from their wallet to the relying party.\n4. The verifier (employer, regulator, or other institution) uses the Verification Module to independently check the credential's cryptographic integrity, issuer authenticity, and revocation status against the Issuer Registry / Key Management service.\n5. Verification returns a real-time, machine-verifiable result without any need to contact the issuing institution directly, replacing manual document review and confirmation calls.\n6. The same modular components (Issuance, Wallet, Verification, Issuer Registry) can be reused for new sectors by defining new credential schemas, without re-engineering the underlying trust architecture.",
+      "country": "TT"
+    },
+    {
+      "id": "business-wallet-based-kyb-financial-onboarding-Rzqouv",
+      "sector": "finance",
+      "title": "Business Wallet-Based KYB & Financial Onboarding",
+      "summary": "A company representative opens a business bank account in an EU member state where the company is not registered, using verified credentials from an EU Business Wallet instead of uploaded documents. \n\nKYB today is manual, document-based and national: banks chase register extracts across jurisdictions, verify signing authority and ownership by hand, onboarding runs to days or weeks at high cost and drop-off, and forged documents remain a fraud vector. Here the founder presents a Legal Person Identification Data credential and a European Company Certificate, plus a PID or mandate proving authority to act. Issuers are national business registers and competent authorities such as PRH in Finland; the holder is the company through an authorised representative; the verifier is the bank or fintech; Hovi provides the issuance and verification layer; supervisors and EU trust lists anchor trust. \n\nThe wallet is the consent point, showing who is asking and for what, and releasing only approved attributes through selective disclosure. The result is same-day onboarding, register-sourced data, a stronger AML audit trail and one pattern that works across all 27 member states.",
+      "organizationName": "Hovi",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-20T08:08:57+01:00",
+      "publishedAt": "2026-08-20T08:08:57+01:00",
+      "tags": [
+        "EU Business Wallet",
+        "EUDI Wallet",
+        "eIDAS 2.0",
+        "KYB",
+        "KYC",
+        "AML",
+        "LPID",
+        "European Company Certificate",
+        "Verifiable Credentials",
+        "Digital Identity",
+        "Bank Account Opening",
+        "Cross-Border Onboarding",
+        "Financial Services",
+        "Fintech",
+        "OID4VP",
+        "SD-JWT VC",
+        "Selective Disclosure",
+        "Regtech",
+        "Trust Infrastructure",
+        "Onboarding Automation"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "hovi-wallet",
+            "labelRaw": "Hovi Wallet",
+            "url": "https://www.hovi.id/wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "hovi-business-wallet",
+            "labelRaw": "Hovi Business Wallet",
+            "url": "https://www.hovi.id",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Kyckr",
+            "url": "https://kyckr.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "NGI Bank",
+            "url": "https://ngi.hovi.app",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "VREX",
+            "url": "https://vrex.hovi.app",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:fides:lpid:sd-jwt-vc",
+            "labelRaw": "LPID Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:eucc:sd-jwt-vc",
+            "labelRaw": "EU Company Certificate",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Kyckr",
+            "url": "https://kyckr.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:hovi",
+            "labelRaw": "Hovi",
+            "url": "https://www.hovi.id/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "VREX",
+            "url": "https://vrex.hovi.app",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "NGI Bank",
+            "url": "https://ngi.hovi.app",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Thumbnail-2.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Thumbnail-2.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/BvuMDnDXKrw",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/BvuMDnDXKrw",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://businesswallet.hovi.app",
+      "userJourney": "1. The founder starts a business account application on the bank or fintech platform and selects \"verify with EU Business Wallet\" instead of uploading documents.\n\n2. The platform sends a presentation request through Hovi's verification layer, specifying the attributes required for KYB and AML.\n\n3. The request reaches the wallet. Delivery can be triggered in-session by QR or deep link, or out of band by email or SMS, and can be combined with national eID authentication such as FTN or BankID where required.\n\n4. The founder reviews the request in the wallet: who is asking, which attributes, for what purpose.\n\n5. On approval, the wallet presents the LPID and ECC credentials, plus the representative's PID or mandate, over OID4VP in SD-JWT VC or mdoc format with selective disclosure.\n\n6. The verification layer checks issuer signatures, credential validity and revocation status, and the issuer's presence on the EU trust list, then returns a structured, verified result to the platform.\n\n7. The platform completes KYB, screens the disclosed ownership data against AML requirements, and provisions the account. The verification result is retained as an audit record.",
+      "country": "FI"
+    },
     {
       "id": "samsung-sds-integrated-digital-wallet-b5dcHk",
       "sector": "finance",
@@ -315,80 +1220,6 @@
       "moreInfoUrl": "https://www.neoflow.energy",
       "userJourney": "Neoflow gives each company in a cross-border energy shipment an agent to create assertions about oil shipments as verifiable credentials. As a shipment moves from origin to a US destination, each party contributes the facts it is responsible for. Neoflow turns these into credentials and assembles one Digital Passport per shipment, which CBP and stakeholders can check instead of waiting on paper.\n\nCompanies are the data source, so they issue credentials for their part. Neoflow holds and presents them on their behalf, and CBP verifies them. Each credential is cryptographically signed, and parties see only what is relevant to their role.\n\n1. Onboarding: A company joins once and registers identifying details as reusable credentials.\n2. Before arrival: Parties contribute data; Neoflow assembles the Passport and presents it to CBP before crossing for early visibility.\n3. In-transit and delivery: As the shipment moves and changes hands, each party adds its part and Neoflow updates the Passport in real time.\n4. Entry and clearance: The customs broker files the entry and links it on Neoflow. With origin and movement already proven, clearance is faster and no separate USMCA proof is needed.",
       "country": "CA"
-    },
-    {
-      "id": "reusable-kyb-due-digital-due-diligence-for-financial-transactions-E06Xyi",
-      "sector": "finance",
-      "title": "Hypersign KYB — Instant Business Verification & UBO Due Diligence",
-      "summary": "Boostn is a Sports Fintech specialising in Funding-raising for The Bavaria Ice Hockey league, they provide their sponsors with a simple way to manage their tax submission. Hypermine and BoostN demonstrate a practical, privacy-preserving approach to reusable enhanced KYB:\n\nWhile business wallets establish basic company identity, robust Know Your Business (KYB) demands multi-layered due diligence—including UBO analysis, representative verification, PEP/sanctions screening, and lifecycle tracking.\n\nVerification & Issuance: A sponsor company and its representative complete full KYC/KYB via Hypermine. Upon approval, Hypermine issues a non-qualified W3C Verifiable Credential directly to the sponsor’s Company Vault.\n\nIndependent Relying-Party Validation: BoostN (as the relying party) requests onboarding evidence. The sponsor presents the credential, allowing BoostN to independently verify cryptographic integrity, issuer trust, freshness, revocation status, and policy rules before granting access.\n\nImpact: Eliminates repetitive onboarding and document sharing while maintaining strict enterprise control, relying-party sovereignty, and verifiable auditability. (Non-QTSP implementation.)",
-      "organizationName": "Hypermine",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-19T21:12:23+01:00",
-      "publishedAt": "2026-08-19T20:04:14+01:00",
-      "tags": [
-        "Finance",
-        "Fundraising",
-        "Sponsorships"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": "org:hypermine",
-            "labelRaw": "Hypermine",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:boostn",
-            "labelRaw": "BoostN GMBH",
-            "url": "https://boostn.team/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [],
-      "vcFormats": [
-        "vcdm_1_1",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity",
-        "organizational_identity",
-        "compliance_reporting"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/flow.png",
-        "https://fides.community/app/uploads/2026/08/Fides1.png",
-        "https://fides.community/app/uploads/2026/08/Fides2.png",
-        "https://fides.community/app/uploads/2026/08/Fides3.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/flow.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/1hs8SGwUbOM",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/1hs8SGwUbOM",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://hypersign.id/",
-      "userJourney": "1. Opportunity & Request: Sponsor A selects a sponsorship opportunity on BoostN, triggering a requirement for company KYB and representative KYC.\n\n2. Due Diligence: The representative submits company, UBO, and identity data via Hypermine. Hypermine conducts ownership analysis, sanctions/PEP screening, and risk checks against its verification policy.\n\n3. Credential Issuance: Upon approval, Hypermine issues a reusable W3C KYB Credential to Sponsor A’s Company Vault containing company identifiers, checks performed, policy version, validity period, and status mechanisms.\n\n4. Consent & Presentation: BoostN sends a purpose-bound request for onboarding evidence. Sponsor A reviews the request and authorizes presentation from its Company Vault.\n\n5. Verification & Decision: BoostN validates Hypermine’s signature, cryptographic integrity, policy adherence, freshness, and revocation status before making the onboarding decision.\n\n6. Reusability: Sponsor A retains the credential in its vault for instant reuse across other relying parties.",
-      "country": "DE"
     },
     {
       "id": "flow-a-seamless-digital-journey-for-bereaved-people-jxUG78",
