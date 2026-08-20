@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T20:56:02+00:00",
+    "generatedAt": "2026-08-20T20:56:38+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -8261,7 +8261,7 @@
                     "organizationName": "Ooru",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-20T16:53:00+01:00",
+                    "updatedAt": "2026-08-20T21:56:38+01:00",
                     "publishedAt": "2026-08-20T16:53:00+01:00",
                     "tags": [
                         "education",
@@ -8306,17 +8306,17 @@
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:credissuer",
                                 "labelRaw": "CredIssuer",
                                 "url": "https://credissuer.com/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:iiit-bangalore",
                                 "labelRaw": "IIIT-Bangalore",
                                 "url": "https://www.iiitb.ac.in/",
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
