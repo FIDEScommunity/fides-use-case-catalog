@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T20:53:56+00:00",
+    "generatedAt": "2026-08-20T20:54:38+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -2867,7 +2867,7 @@
         },
         {
             "orgSlug": "california-dmv",
-            "orgId": "org:california-dmv",
+            "orgId": "org:ca-dmv",
             "orgName": "California DMV",
             "useCases": [
                 {
@@ -2878,7 +2878,7 @@
                     "organizationName": "California DMV",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-20T18:40:15+01:00",
+                    "updatedAt": "2026-08-20T21:54:38+01:00",
                     "publishedAt": "2026-08-20T18:40:15+01:00",
                     "tags": [
                         "identity",
@@ -2892,24 +2892,24 @@
                         "credentials": [],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:ca-dmv",
                                 "labelRaw": "California DMV",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:ccc-tech-center",
                                 "labelRaw": "CA Community Colleges",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:california-emsa",
                                 "labelRaw": "California Emergency Medical Services Authority",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
