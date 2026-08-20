@@ -1,0 +1,97 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:turing-space",
+  "orgName": "Turing Space Inc.",
+  "useCases": [
+    {
+      "id": "passwordless-and-verifiable-workforce-identity-securing-ukraines-data-integrity-5ArNZP",
+      "sector": "public_sector",
+      "title": "Passwordless and Verifiable Workforce Identity: Securing Ukraine’s Data Integrity",
+      "summary": "This pilot closes a gap in Ukraine's public-sector security: verifying external contractors before granting digital access. \n\nThe State Agency for Infrastructure Restoration and Development of Ukraine already uses Hideez Development's FIDO2 passwordless authentication for internal staff, but its distributed contractors, maintaining regional surveillance and other infrastructure systems sit outside the internal domain. Creating full domain accounts or issuing passwords for them would be inefficient and risky, with no way to confirm affiliation at access time.\n\nThe project's goal is to add a verifiable credential layer from Turing Space (Netherlands) ahead of login, ties contractor authorisation to real-time organisational status via OpenID for Verifiable Credentials, and enables automatic revocation without manual admin work. Hideez calls the Turing Space Verifier API to enforce this check.\n\nThe pilot aligns with Ukrainian trust-service law, EU NIS2 Article 21, the Dutch Cyberbeveiligingswet, and eIDAS2, producing a validated, reusable model for contractor access applicable to other Ukrainian agencies and Dutch/EU organisations facing similar supply-chain risks.",
+      "organizationName": "Turing Space Inc.",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T13:14:47+01:00",
+      "publishedAt": "2026-08-20T13:14:47+01:00",
+      "tags": [
+        "Digital Identity",
+        "IAM",
+        "Personnel Mobility",
+        "Public Sector",
+        "Critical Infrastructure Security",
+        "Passwordless Authentication",
+        "FIDO2"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "paradym-wallet",
+            "labelRaw": "Paradym Wallet",
+            "url": "https://paradym.id",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:turing-space",
+            "labelRaw": "Turing Space Inc.",
+            "url": "https://turingcerts.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Hideez Development LLC",
+            "url": "https://hideez.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/cover.png",
+        "https://fides.community/app/uploads/2026/08/1.1.png",
+        "https://fides.community/app/uploads/2026/08/1.2.png",
+        "https://fides.community/app/uploads/2026/08/1.3.png",
+        "https://fides.community/app/uploads/2026/08/1.4.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/cover.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/UdBgdDh-H-o",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/UdBgdDh-H-o",
+        "provider": "youtube"
+      },
+      "userJourney": "Access to a protected Agency web service requires two independent conditions met in sequence. First, the contractor's verifiable credential: a cryptographically signed document proving current affiliation with a trusted contractor organization is checked via Turing Space and must be valid, unexpired, and unrevoked at access time. Only after this credential-based verification succeeds can the user proceed to Hideez's passwordless authentication layer. Access is granted only when both conditions are satisfied; an invalid, expired, or revoked credential blocks access.\n\nWorkflow: \n(1) IT admin issues a VC for the user via the Hideez Workforce ID portal; \n(2) user receives a confirmation email and adds the VC to the Paradym Wallet app by scanning the email's QR code; \n(3) user registers a passwordless authentication method (Hideez mobile app, platform Passkey, or external FIDO2 key) in Hideez IdP, linked to the VC; \n(4) a new user account is automatically created in on-premises Active Directory; \n(5) user signs in passwordlessly to SSO-configured web services via Hideez IdP; \n(6) if the VC is expired or revoked by IT admin, the user's access to web services is blocked.",
+      "country": "UA"
+    }
+  ]
+}
