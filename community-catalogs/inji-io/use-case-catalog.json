@@ -12,7 +12,7 @@
       "organizationName": "inji.io",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-20T08:11:44+01:00",
+      "updatedAt": "2026-08-20T22:03:48+01:00",
       "publishedAt": "2026-08-20T08:11:44+01:00",
       "tags": [
         "verifiable credentials",
@@ -64,7 +64,7 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:banco-do-brasil",
             "labelRaw": "Banco do Brasil (BB)",
             "url": null,
             "source": "manual",
