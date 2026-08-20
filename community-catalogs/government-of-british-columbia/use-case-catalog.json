@@ -12,7 +12,7 @@
       "organizationName": "Government of British Columbia",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T21:20:36+01:00",
+      "updatedAt": "2026-08-20T21:51:11+01:00",
       "publishedAt": "2026-08-20T21:20:36+01:00",
       "tags": [
         "Mines Digital Trust",
@@ -112,45 +112,45 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:quartech",
             "labelRaw": "Quartech Systems Ltd.",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:pyx-global",
             "labelRaw": "Pyx Global",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:northernblock",
             "labelRaw": "Northern Block",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:mining-association-of-canada",
             "labelRaw": "Mining Association of Canada",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:copper-mark",
             "labelRaw": "The Copper Mark",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:hudbay-minerals",
             "labelRaw": "Hudbay Minerals",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           }
         ],
