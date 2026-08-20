@@ -12,8 +12,8 @@
       "organizationName": "Government of British Columbia",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T20:54:57+01:00",
-      "publishedAt": "2026-08-20T20:54:57+01:00",
+      "updatedAt": "2026-08-20T21:20:36+01:00",
+      "publishedAt": "2026-08-20T21:20:36+01:00",
       "tags": [
         "Mines Digital Trust",
         "critical minerals",
@@ -154,7 +154,15 @@
             "walletType": null
           }
         ],
-        "rps": []
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Critical Raw Material reference-implementation demonstration",
+            "url": "https://www.bcmine.pyx.io/verify?q=%7B%22payload%22%3A%7B%22uri%22%3A%22https%3A%2F%2Fvcs.bcmine.pyx.io%3A443%2Fapi%2F1.0.0%2Fverifiable-credentials%2F2bbde522-beff-4bcf-b13d-27cda51f3f1f.json%22%2C%22hash%22%3A%22e8ac23471e432350bdaf824aed47bf8c0c372e01d1be798c0b9eebe90e5925ea%22%7D%7D",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
       },
       "interactionModes": [
         "remote"
