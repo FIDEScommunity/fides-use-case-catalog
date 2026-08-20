@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T12:15:40+00:00",
+    "generatedAt": "2026-08-20T12:19:19+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -7157,6 +7157,116 @@
                     "moreInfoUrl": "https://shop.playground.neovo.ch/products/silent-tide",
                     "userJourney": "1) The customer adds an age-restricted product to their basket in the web shop.\r\n2) Before checkout, the shop (relying party) requests proof that the customer is over the required age.\r\n3) The wallet presents only an over-18 attribute over OpenID4VP — no date of birth, no full identity.\r\n4) The shop verifies the proof and unlocks the purchase.\r\n5) The customer completes checkout without uploading ID documents or sharing unnecessary personal data.",
                     "country": "CH"
+                }
+            ]
+        },
+        {
+            "orgSlug": "ooru",
+            "orgId": "org:ooru",
+            "orgName": "Ooru",
+            "useCases": [
+                {
+                    "id": "digitising-police-clearance-certificates-with-dgrn-sao-tome-principe-pGvduS",
+                    "sector": "public_sector",
+                    "title": "Digitising Police Clearance Certificates with DGRN, São Tomé & Príncipe",
+                    "summary": "A Police Clearance Certificate is something a citizen of São Tomé & Príncipe cannot do without. It is asked for at almost every threshold that matters: a job, a university place, a visa, a scholarship, studying or working abroad. It is still collected in person, on paper, at a DGRN counter. The hard part was never obtaining it. It was proving it was genuine, since anyone receiving it had to take it on trust.\nDGRN, set out to close that gap. The certificate is still issued at the counter, but it is now issued as a verifiable credential with a QR code, so anyone who receives it can confirm it is genuine in seconds, anywhere in the world. \nDGRN issues and stands behind each certificate, checking the applicant against the joint government criminal record database first. CredIssuer, Ooru's credentials ecosystem, turns a cleared record into a tamper-evident verifiable certificate. Verifica (https://verifica.gov.st/), Ooru's public verification portal for the country, is where universities, employers, and government bodies confirm it is real. This flow is live today. The next phase adds a citizen-facing portal and wallet, and lets DGRN design and deploy these credential forms itself.",
+                    "organizationName": "Ooru",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-20T13:19:19+01:00",
+                    "publishedAt": "2026-08-20T13:19:19+01:00",
+                    "tags": [
+                        "government",
+                        "police clearance certificate",
+                        "public sector",
+                        "criminal record verification",
+                        "digital governance",
+                        "authentication"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "DGRN",
+                                "url": "https://dgrn.gov.st/sobre.php",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Police Clearance Certificate",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:ooru",
+                                "labelRaw": "Ooru",
+                                "url": "https://ooru.io/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "DGRN",
+                                "url": "https://dgrn.gov.st/sobre.php",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "CredIssuer",
+                                "url": "https://credissuer.com/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Universities, employers, government bodies",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "other"
+                    ],
+                    "presentationProtocols": [],
+                    "interopProfiles": [],
+                    "themes": [
+                        "person_identity"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/STP-PCC.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/STP-PCC.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/PSn7MeMXGXc",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/PSn7MeMXGXc",
+                        "provider": "youtube"
+                    },
+                    "userJourney": "1: A citizen applies for a Police Clearance Certificate at DGRN and states the reason for the request, such as employment, a visa, or education. That reason is recorded directly in the certificate.\n2: DGRN checks the applicant against the joint government criminal record database.\n3: Where the record is clear, DGRN calls CredIssuer to generate the certificate as a verifiable credential with an embedded QR code.\n4: The certificate is issued to the citizen on the spot, with no change to the existing application process. This part of the flow is live today.\n5: The citizen presents the certificate to whoever requires it: a university, an employer, or a government body, at home or abroad.\n6: The relying party confirms it is genuine through the Verifica portal (https://verifica.gov.st/), by scanning the QR code, uploading the document, or looking up the credential ID.",
+                    "country": "ST"
                 }
             ]
         },
