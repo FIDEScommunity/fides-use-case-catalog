@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T19:18:56+00:00",
+    "generatedAt": "2026-08-20T19:34:46+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -9976,6 +9976,111 @@
                     "moreInfoUrl": "https://github.com/transpareo/transpareo-time-machine",
                     "userJourney": "1. A maker (manufacturer or importer) creates a product passport in Transpareo and publishes it. Transpareo seals that version as a verifiable credential: a W3C Data Integrity proof over Ed25519, signed with a key bound to the maker's own domain via a did:web identifier. A GS1 Digital Link QR code on the product points to the passport.\r\n\r\n2. A shopper scans the QR code with their phone. Nothing is installed, no wallet, no account: the link opens our open-source viewer, the Transpareo Time Machine, in the browser.\r\n\r\n3. The viewer fetches the passport and its proof, resolves the maker's public key from the did:web identifier, and verifies the signature client-side, offline, against that key. A pass means the record is authentic and unaltered, and the shopper can verify every earlier version too.\r\n\r\n4. A repairer or recycler later scans the same code to read repair and material data, and verifies it the same way.\r\n\r\n5. A market-surveillance authority verifies the same passport independently through a dedicated Authority API, which logs an audit entry on every access. Each party checks from its own side, trusting the maths rather than the maker or Transpareo.",
                     "country": "CH"
+                }
+            ]
+        },
+        {
+            "orgSlug": "trustlayer-foundation",
+            "orgId": "org:trustlayer-foundation",
+            "orgName": "Trustlayer Foundation",
+            "useCases": [
+                {
+                    "id": "aria-the-trust-handshake-that-lets-any-organisation-verify-an-ai-agent-at-its-door-ja4Hfl",
+                    "sector": "digital",
+                    "title": "ARIA: the trust handshake that lets any organisation verify an AI agent at its door",
+                    "summary": "AI agents already buy, negotiate and file on behalf of organisations — and they cross the boundary of the company that built them. At the receiving end, almost nothing answers three questions in the moment an agent knocks: who is this, which legal entity is accountable for it, and is it still permitted to act?\n\nARIA answers with a trust handshake. The agent declares its credential and its intent. The receiver evaluates both against a policy it published itself, in its own DNS, then admits or refuses with a defined response code — an auditable decision, never a silent drop. Verification runs locally at the receiver.\n\nThe credential is an AID: a W3C Verifiable Credential naming the agent and the party accountable for it, signed with a post-quantum composite suite (ML-DSA-65 + Ed25519, both must verify). Revocation reaches verifiers in about sixty seconds via an append-only ledger.\n\nThe standard is stewarded by a nonprofit, not a company. Spec CC-BY-4.0, code Apache 2.0, base level free permanently. Live since April 2026: 15 active AIDs across 5 organisations, published at api.aria.bar/v1/stats. Early numbers — infrastructure described at the moment before adoption, not after it.",
+                    "organizationName": "Trustlayer Foundation",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-20T20:34:46+01:00",
+                    "publishedAt": "2026-08-20T20:34:46+01:00",
+                    "tags": [
+                        "agent identity",
+                        "AI agents",
+                        "organisational identity",
+                        "verifiable credentials",
+                        "decentralized identifiers",
+                        "post-quantum cryptography",
+                        "DNS",
+                        "revocation",
+                        "accountability",
+                        "open standard",
+                        "nonprofit governance",
+                        "agentic commerce"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "ARIA Registry",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "AID — Agent Identity Document",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Trustlayer Foundation",
+                                "url": "http://www.trustlayer.foundation",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Tuno Labs",
+                                "url": "http://www.tuno.bar",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "https://www.aria.bar/spec",
+                                "url": "http://www.aria.bar/spec",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [],
+                    "interopProfiles": [],
+                    "themes": [
+                        "agentic_ai"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/image-2-2.png",
+                        "https://fides.community/app/uploads/2026/08/image-4.png",
+                        "https://fides.community/app/uploads/2026/08/image-1-1.png",
+                        "https://fides.community/app/uploads/2026/08/image-2-3.png",
+                        "https://fides.community/app/uploads/2026/08/image-3-1.png",
+                        "https://fides.community/app/uploads/2026/08/image-4-1.png",
+                        "https://fides.community/app/uploads/2026/08/image-5-1.png",
+                        "https://fides.community/app/uploads/2026/08/image-6-1.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/image-2-2.png",
+                    "moreInfoUrl": "https://aria.bar/spec",
+                    "userJourney": "1. An operator registers its agent with the ARIA Registry and names its Principal — the legal entity accountable for what that agent does.\n\n2. The registry issues an AID: a W3C Verifiable Credential naming the agent, its Principal and its trust level, signed with a post-quantum composite suite. It is held by the operator's systems — the holder here is a machine, not a person.\n\n3. The receiving organisation publishes its own ARIA Agent Trust Policy as a DNS TXT record on its domain: the minimum trust level it accepts, and its enforcement mode — monitor, warn or strict.\n\n4. The agent arrives and DECLARES its credential and its intent.\n\n5. The receiver EVALUATES both against the policy it published itself, verifying the signatures locally with the open-source verifier.\n\n6. The receiver ADMITS or refuses, returning a defined response code — so a refusal is auditable and machine-readable, never a silent drop.\n\n7. If the credential is later suspended or revoked, the event is written to an append-only ledger and reaches verifiers in about sixty seconds. The same agent knocking again is refused, at every door, without anyone being notified by hand.",
+                    "country": "MX"
                 }
             ]
         },
