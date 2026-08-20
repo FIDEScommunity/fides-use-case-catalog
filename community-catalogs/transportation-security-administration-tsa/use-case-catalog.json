@@ -1,0 +1,186 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:transportation-security-administration-tsa",
+  "orgName": "Transportation Security Administration (TSA)",
+  "useCases": [
+    {
+      "id": "secure-domestic-travel-tsa-mobile-drivers-license-at-airport-checkpoints-IyxXZl",
+      "sector": "mobility",
+      "title": "USA Secure Domestic Travel: TSA Mobile Driver's License at Airport Checkpoints",
+      "summary": "TSA enables domestic travelers to present a mobile driver's license (mDL) instead of a physical ID for identity verification at airport security checkpoints. Travelers get a contactless experience that shares only 6 data fields; TSA gets stronger assurance that the document is real and faster processing; issuing states lay the groundwork for a broader Digital ID ecosystem.\n\nThe use case is live. In May 2026, mDLs were presented at 271 airports, with 45,800 transactions that month. Monthly volume grew from 22,000 in March 2025 to 46,000 in May 2026. Twenty-one states and territories issue accepted credentials, presented through 13 wallet applications: Apple Wallet, Google Wallet, Samsung Wallet, and 10 state-issued apps. Each app has passed DHS/TSA requirements so the Digital ID retains REAL ID standards.\n\nState DMVs issue the mDL, wallets store and present it, the traveler consents, and TSA verifies the credential with TSA-approved readers. Identity-check time has fallen from about 20 seconds for physical ID to 6.83 seconds. The implementation uses ISO 18013-5/7, selective disclosure, cryptographic protection against tampering, and publicly posted TSA Privacy Risk Assessments.",
+      "organizationName": "Transportation Security Administration (TSA)",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T20:49:44+01:00",
+      "publishedAt": "2026-08-20T20:49:44+01:00",
+      "tags": [
+        "mDL",
+        "TSA",
+        "airport security",
+        "REAL ID",
+        "ISO 18013-5",
+        "Digital ID",
+        "Touchless ID"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "apple-wallet",
+            "labelRaw": "Apple Wallet",
+            "url": "https://www.apple.com/wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": "https://wallet.google.com/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "samsung-wallet",
+            "labelRaw": "Samsung Wallet",
+            "url": "https://www.samsung.com/us/apps/samsung-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Alaska Mobile ID",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Arkansas Mobile ID",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "California DMV Wallet App",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "Iowa Mobile ID",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "KY Mobile ID",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "LA Wallet",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "NY MiD",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "GET Mobile App (Utah)",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "VA MiD",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          },
+          {
+            "refId": null,
+            "labelRaw": "WV MiD",
+            "url": null,
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "State DMV",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Transportation Security Administration (TSA)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:dhs",
+            "labelRaw": "U.S. Department of Homeland Security",
+            "url": "https://www.dhs.gov/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Transportation Security Administration (TSA)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "ISO 18013-7"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "userJourney": "A participating state DMV or motor vehicle agency issues an mDL that stays in the same trust chain as the physical driver's license and can carry a REAL ID indicator. The credential is provisioned into a supported wallet: Apple Wallet, Google Wallet, Samsung Wallet, or a state-issued app such as Alaska Mobile ID, California DMV Wallet, LA Wallet, NY MiD, or VA MiD.\n\nAt a TSA checkpoint, the traveler presents the mDL from their smartphone instead of a physical license. TSA, as relying party, requests only the identity attributes needed for passenger screening and receives traveler consent before any data is shared. A TSA-approved reader authenticates the credential electronically. TSA Officers use the verified identity for screening, while automated authentication and biometric matching reduce manual visual inspection.\n\nThis proximity, contactless flow is in operation at 271 airports. Verification time is 6.83 seconds versus about 20 seconds for physical ID. The same standards-based mDL can later extend to other scenarios such as age verification and government services.",
+      "country": "US"
+    }
+  ]
+}
