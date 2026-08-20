@@ -156,7 +156,7 @@
       "organizationName": "California Department of Motor Vehicles (CA DMV)",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T18:41:07+01:00",
+      "updatedAt": "2026-08-20T21:53:56+01:00",
       "publishedAt": "2026-08-20T18:41:07+01:00",
       "tags": [
         "identity",
@@ -177,10 +177,10 @@
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:truage",
             "labelRaw": "TruAge",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
