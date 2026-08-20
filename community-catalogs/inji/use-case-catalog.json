@@ -1,0 +1,154 @@
+{
+  "$schema": "https://fides.community/schemas/use-case-catalog/v1",
+  "source": "wordpress",
+  "orgId": "org:inji",
+  "orgName": "Inji",
+  "useCases": [
+    {
+      "id": "instant-digital-verification-of-education-credentials-using-verifytt-2qkCDD",
+      "sector": "education",
+      "title": "Instant Digital Verification of Education Credentials using VerifyTT",
+      "summary": "VerifyTT is Trinidad and Tobago's national platform for issuing, holding, and verifying digital credentials, starting with academic certificates and extending to legal and official documents. It solves the problem of paper credentials being fragile, slow to trust, and hard to verify, since confirming authenticity often means contacting the issuer. This costs graduates time, leaves employers uncertain, and burdens institutions with repeat verification requests. VerifyTT creates value for all: holders get a record safe from loss, fire, or flood; employers get instant \"Blue Tick\" verification; issuers spend less time on manual work. Institutions act as issuers, digitally signing credentials at source. Citizens are holders, claiming credentials via email and controlling who sees them. Employers act as verifiers, checking authenticity in seconds. The digital wallet lets holders securely store and selectively share credentials from their phone, shifting control to the individual. Verifiable credentials, cryptographically signed by the issuer, make instant trust possible: a QR scan checks a tamper-proof signature, not a document's look, enabling verification without contacting the issuer.",
+      "organizationName": "Inji",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T08:10:18+01:00",
+      "publishedAt": "2026-08-20T08:10:18+01:00",
+      "tags": [
+        "digital public infrastructure",
+        "DPI",
+        "verifiable credentials",
+        "Inji",
+        "W3C VC",
+        "national trust rail",
+        "education credentials",
+        "cryptographic verification",
+        "Trinidad and Tobago"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "inji-wallet",
+            "labelRaw": "Inji Wallet",
+            "url": "https://www.mosip.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": "issuer:mosip:insurance:test",
+            "labelRaw": "Inji Certify - Insurance Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Academic degrees, diplomas, and transcripts (education credentials)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "iGovTT (National Information and Communication Technology Company Limited) implementing agency",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "iGovTT",
+            "url": "https://igovtt.tt/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Inji",
+            "url": "http://inji.io",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Public Administration and Artificial Intelligence (MPAAI) strategic oversight",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "CDPI",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Deloitte",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:ooru",
+            "labelRaw": "Ooru",
+            "url": "https://ooru.io/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "inji-web-verifier",
+            "labelRaw": "Inji Web Verifier",
+            "url": "https://injiverify.collab.mosip.net/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_1_1"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "education"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black.jpg",
+      "videos": [
+        {
+          "url": "https://youtu.be/QiyfHuwZ4zU?si=baHHanp0meSAt1OY",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/QiyfHuwZ4zU?si=baHHanp0meSAt1OY",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://verifytt.gov.tt/publication/verifytt-embedding-trust,%20https://verifytt.gov.tt/issuers%20,%20https://verify.verifytt.gov.tt/%20,%20https://verifytt.gov.tt/graduation",
+      "userJourney": "1. A credential issuer (e.g., a tertiary institution) generates a cryptographically signed credential using its controlled signing key via the Issuance Module (Inji Certify).\n2. The credential holder (student/graduate) receives the credential into a digital wallet or secure repository under their own control (Credential Store / Web Locker).\n3. When the holder needs to prove a qualification (e.g., to an employer), they present the credential from their wallet to the relying party.\n4. The verifier (employer, regulator, or other institution) uses the Verification Module to independently check the credential's cryptographic integrity, issuer authenticity, and revocation status against the Issuer Registry / Key Management service.\n5. Verification returns a real-time, machine-verifiable result without any need to contact the issuing institution directly, replacing manual document review and confirmation calls.\n6. The same modular components (Issuance, Wallet, Verification, Issuer Registry) can be reused for new sectors by defining new credential schemas, without re-engineering the underlying trust architecture.",
+      "country": "TT"
+    }
+  ]
+}
