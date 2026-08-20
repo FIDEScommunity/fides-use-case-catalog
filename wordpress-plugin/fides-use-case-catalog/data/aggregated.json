@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-20T20:54:19.656Z",
+  "lastUpdated": "2026-08-20T20:54:58.225Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 94,
   "useCases": [
@@ -955,7 +955,7 @@
       "organizationName": "California DMV",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T18:40:15+01:00",
+      "updatedAt": "2026-08-20T21:54:38+01:00",
       "publishedAt": "2026-08-20T18:40:15+01:00",
       "tags": [
         "identity",
@@ -969,24 +969,24 @@
         "credentials": [],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:ca-dmv",
             "labelRaw": "California DMV",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:ccc-tech-center",
             "labelRaw": "CA Community Colleges",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
+            "refId": "org:california-emsa",
             "labelRaw": "California Emergency Medical Services Authority",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
