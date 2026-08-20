@@ -10,10 +10,10 @@
       "title": "Trusted eReceipts for B2B Payments: issuing verifiable receipts to a European Business Wallet after EUDI-based SCA",
       "summary": "This use case demonstrates how a merchant can issue a verifiable eReceipt after a payment flow involving Strong Customer Authentication and deliver it to a European Business Wallet used by an SME buyer organisation. The scenario connects the EUDI Wallet, payment evidence, merchant-issued receipt data and organisational reuse of the receipt in downstream business processes.\n\nThe Bygg AB Business Wallet and the WE BUILD corporate shop for PA4 (without Tax Portal) are live and ready to test. Both run on the iGrant.io Organisation Wallet Suite. You need the iGrant.io EUDI Wallet app on your phone.\n\nPortals\n\n- Piggy Bank: https://piggybank-demo.igrant.io/\n- Bygg AB Business Wallet: https://byggab-businesswallet.igrant.io.\n- WE BUILD corporate shop: https://webuildshop-corporate-demo.igrant.io.\nBefore you start, issue yourself a Person Identification Data (PID) credential into your EUDI Wallet: https://igrant.io/demo/pid.html\n\nThe EBWOID and VAT-ID sit in the Bygg AB business wallet already, so business registration needs nothing extra from you.",
       "organizationName": "WE BUILD Consortium",
-      "productionDeployment": "yes",
+      "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-20T21:12:37+01:00",
-      "publishedAt": "2026-08-20T21:12:37+01:00",
+      "updatedAt": "2026-08-20T21:51:41+01:00",
+      "publishedAt": "2026-08-20T21:51:41+01:00",
       "tags": [
         "EUDI Wallet",
         "Business Wallet",

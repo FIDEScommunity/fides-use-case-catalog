@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:transportation-security-administration-tsa",
+  "orgId": "org:tsa",
   "orgName": "Transportation Security Administration (TSA)",
   "useCases": [
     {
@@ -12,7 +12,7 @@
       "organizationName": "Transportation Security Administration (TSA)",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T20:59:44+01:00",
+      "updatedAt": "2026-08-20T21:51:36+01:00",
       "publishedAt": "2026-08-20T20:49:44+01:00",
       "tags": [
         "mDL",
@@ -138,10 +138,10 @@
         ],
         "organizations": [
           {
-            "refId": null,
+            "refId": "org:tsa",
             "labelRaw": "Transportation Security Administration (TSA)",
             "url": null,
-            "source": "manual",
+            "source": "catalog",
             "walletType": null
           },
           {
