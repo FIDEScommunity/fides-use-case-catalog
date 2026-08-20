@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T20:51:11+00:00",
+    "generatedAt": "2026-08-20T20:51:36+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -10186,7 +10186,7 @@
         },
         {
             "orgSlug": "transportation-security-administration-tsa",
-            "orgId": "org:transportation-security-administration-tsa",
+            "orgId": "org:tsa",
             "orgName": "Transportation Security Administration (TSA)",
             "useCases": [
                 {
@@ -10197,7 +10197,7 @@
                     "organizationName": "Transportation Security Administration (TSA)",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-20T20:59:44+01:00",
+                    "updatedAt": "2026-08-20T21:51:36+01:00",
                     "publishedAt": "2026-08-20T20:49:44+01:00",
                     "tags": [
                         "mDL",
@@ -10323,10 +10323,10 @@
                         ],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:tsa",
                                 "labelRaw": "Transportation Security Administration (TSA)",
                                 "url": null,
-                                "source": "manual",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
