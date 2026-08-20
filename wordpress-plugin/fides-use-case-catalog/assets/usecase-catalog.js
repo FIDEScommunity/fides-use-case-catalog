@@ -20,6 +20,18 @@
     if (code) map[code] = bundle;
     return map;
   }, {});
+  function resolveThemeFilterCode(code) {
+    const requested = String(code || "");
+    if (!requested) return "";
+    if (Object.prototype.hasOwnProperty.call(THEME_BUNDLES_BY_CODE, requested)) {
+      return requested;
+    }
+    const bundle = THEME_BUNDLES.find((item) => {
+      const themeCodes = item && Array.isArray(item.themeCodes) ? item.themeCodes : [];
+      return themeCodes.indexOf(requested) !== -1;
+    });
+    return bundle && bundle.code ? String(bundle.code) : requested;
+  }
   const SECTOR_LABELS = taxonomy.sectors || {};
   const INTERACTION_MODE_LABELS = taxonomy.interactionModes || {};
   const VC_FORMAT_LABELS = taxonomy.vcFormats || {};
@@ -128,9 +140,7 @@
     columns: normalizeColumns(root.dataset.columns || config.columns)
   };
   const requestedThemeCode = new URLSearchParams(window.location.search).get("theme") || "";
-  let activeThemeCode = Object.prototype.hasOwnProperty.call(THEME_BUNDLES_BY_CODE, requestedThemeCode)
-    ? requestedThemeCode
-    : "";
+  let activeThemeCode = resolveThemeFilterCode(requestedThemeCode);
   const LIST_BREAKPOINT = 1024;
   let viewMode = localStorage.getItem("fides-use-case-view") || "grid";
   let mobileFiltersController = null;
@@ -2270,9 +2280,7 @@
   }
 
   function setThemeFilter(themeCode) {
-    activeThemeCode = Object.prototype.hasOwnProperty.call(THEME_BUNDLES_BY_CODE, themeCode)
-      ? themeCode
-      : "";
+    activeThemeCode = resolveThemeFilterCode(themeCode);
     const url = new URL(window.location.href);
     if (activeThemeCode) {
       url.searchParams.set("theme", activeThemeCode);
@@ -2288,9 +2296,10 @@
 
   function itemMatchesTheme(item, themeCode) {
     if (!themeCode) return true;
+    const itemThemes = itemThemeCodes(item);
+    if (itemThemes.indexOf(themeCode) !== -1) return true;
     const bundle = THEME_BUNDLES_BY_CODE[themeCode];
     const themeCodes = bundle && Array.isArray(bundle.themeCodes) ? bundle.themeCodes : [];
-    const itemThemes = itemThemeCodes(item);
     return themeCodes.some((code) => itemThemes.includes(code));
   }
 

@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.27
+Stable tag: 0.20.28
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,10 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.28 =
+* Sync shared catalog UI: use-case cards in catalog modals.
+* Accept canonical taxonomy `theme=` query values (e.g. `payments`) from Ecosystem Explorer tiles and map them onto the matching discovery bundle.
 
 = 0.20.27 =
 * Count the Involved organisations KPI from unique `links.organizations`
