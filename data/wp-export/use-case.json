@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-21T13:50:01+00:00",
+    "generatedAt": "2026-08-21T15:33:34+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5840,8 +5840,8 @@
                     "organizationName": "Hypermine",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-21T14:48:43+01:00",
-                    "publishedAt": "2026-08-21T14:48:43+01:00",
+                    "updatedAt": "2026-08-21T16:33:34+01:00",
+                    "publishedAt": "2026-08-21T16:33:34+01:00",
                     "tags": [
                         "Finance",
                         "Fundraising",
