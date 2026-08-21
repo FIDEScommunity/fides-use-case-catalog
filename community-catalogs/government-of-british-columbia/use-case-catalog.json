@@ -12,7 +12,7 @@
       "organizationName": "Government of British Columbia",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-21T05:23:55+01:00",
+      "updatedAt": "2026-08-21T05:47:40+01:00",
       "publishedAt": "2026-08-21T05:23:55+01:00",
       "tags": [
         "Mines Digital Trust",
@@ -36,10 +36,10 @@
             "walletType": "organizational"
           },
           {
-            "refId": null,
+            "refId": "orgbook",
             "labelRaw": "Orgbook BC",
             "url": "https://orgbook.gov.bc.ca/search",
-            "source": "manual",
+            "source": "catalog",
             "walletType": "organizational"
           }
         ],
