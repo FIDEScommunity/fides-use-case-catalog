@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-21T13:48:43+00:00",
+    "generatedAt": "2026-08-21T13:50:01+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -9653,6 +9653,108 @@
                     "moreInfoUrl": "https://snapkyc.com/",
                     "userJourney": "1: Access Age-Restricted Content: A user attempts to access content designated as age-restricted on a social media platform.\n2: Age Verification Prompt: Before proceeding, the user is prompted to verify their age. On a web browser, this can be initiated by scanning a QR code; within a mobile app, the user can initiate the credential-sharing flow directly.\n3: Privacy-Preserving Age Check: SnapKYC requests an age-eligibility claim from the user’s Aadhaar-linked wallet in real time. The eligibility check is based on the applicable age threshold for the user’s jurisdiction—for example, 16+ or 18+.\n4: Minimal Data Disclosure: The verification returns only a Yes/No eligibility response. SnapKYC does not share the user’s date of birth, name, Aadhaar number, or other identity information with the social media platform.\n5: Seamless Continuation: If the user meets the required age threshold, they are returned to the exact content they were attempting to access.\n6: Access Restricted: If the user does not meet the required threshold, they are informed that the content is unavailable based on the applicable age requirement and are redirected to the platform’s home screen.",
                     "country": "IN"
+                }
+            ]
+        },
+        {
+            "orgSlug": "solidus-network",
+            "orgId": "org:solidus-network",
+            "orgName": "Solidus Network",
+            "useCases": [
+                {
+                    "id": "reusable-kyc-on-open-standards-verify-once-present-anywhere-re-collect-nothing-JBaAQX",
+                    "sector": "digital",
+                    "title": "Reusable KYC on open standards: verify once, present anywhere, re-collect nothing",
+                    "summary": "A person completes identity verification once, receives a verifiable credential they hold themselves, and presents it to any number of independent verifiers without re-submitting documents. Each verifier learns only the attributes it actually needs.\n\nSolidus Network implements this on multi-stakeholder open standards rather than a proprietary format: W3C Verifiable Credentials 2.0, SD-JWT VC with holder key binding, OpenID4VCI for issuance, OpenID4VP with Presentation Exchange for presentation, BBS+ for selective disclosure, StatusList for revocation, and DIDComm v2 routing through a full mediator. The did:solidus method is registered in the W3C DID Method Registry, which is a registry listing rather than a W3C standard or endorsement.\n\nThe implementation is open source and published on npm under @solidus-network, so a credential issued here is readable by any conformant wallet or verifier, and the tooling is reusable by anyone building the same thing rather than rebuilding it.\n\nIt runs today on a public testnet. The wallet is in beta. There is no production deployment and no external security audit.",
+                    "organizationName": "Solidus Network",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-21T14:50:01+01:00",
+                    "publishedAt": "2026-08-21T14:50:01+01:00",
+                    "tags": [
+                        "reusable KYC",
+                        "verifiable credentials",
+                        "selective disclosure",
+                        "SD-JWT VC",
+                        "OpenID4VC",
+                        "BBS+",
+                        "did:solidus",
+                        "open source",
+                        "testnet"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Solidus Wallet",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Solidus Verify",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "KYC Verified",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "KYCVerifiedBBS",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:solidus-network",
+                                "labelRaw": "Solidus Network",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "proximity",
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "DIDComm v2",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "themes": [
+                        "person_identity"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-21-at-12.02.59.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-21-at-12.02.59.png",
+                    "moreInfoUrl": "https://docs.solidus.network",
+                    "userJourney": "1. Issue. The holder verifies their identity at verify.solidus.network, which reads a passport or national ID document (ICAO 9303 MRZ and NFC chip). On success the issuer mints a KYCVerified credential over OpenID4VCI, in W3C VC 2.0 and SD-JWT VC formats, cryptographically bound to the holder's key.\n\n2. Hold. The credential is delivered to the holder's wallet at wallet.solidus.network, in beta on testnet. The holder's identity keys are did:solidus DIDs. Revocation status is published as a StatusList.\n\n3. Present. A second relying party requests a presentation over OpenID4VP, stating its requirements as a Presentation Exchange presentation_definition. The wallet answers with a BBS+ selective-disclosure proof that reveals only the requested attributes, withholds the rest of the credential, and proves holder binding.\n\n4. Result. The second party is satisfied without collecting the document and without contacting the first. No second copy of the passport is created.\n\nThe issuer metadata is public at verify.solidus.network/.well-known/openid-credential-issuer.",
+                    "country": "TR"
                 }
             ]
         },
