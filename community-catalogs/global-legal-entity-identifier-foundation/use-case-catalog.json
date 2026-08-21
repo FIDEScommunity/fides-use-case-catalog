@@ -7,13 +7,13 @@
     {
       "id": "factoring-business-for-used-car-and-used-parts-export-transactionspoc-N88dqD",
       "sector": "trade",
-      "title": "Factoring Business for Used Car and Used Parts Export Transactions(POC)",
-      "summary": "TOPPAN and SBI are planning an factoring business for the overseas export of used cars and used parts.\nThis initiative aims to digitize procedures and enhance the screening process process during credit screening.\nThis will serve as a specific business use case in the trade and financial sectors\nSome Japanese exporters are exporting second hand Japanese cars to overseas countries.\nUsually the exporters are SME, but it takes time for them to receive the payment\nbecause of the time required to transport a car by ship.\nThis concept involves an SBI affiliate—acting as an intermediary—facilitating access to funds by providing on-chain financing via blockchain technology during import-export processes, utilizing a stable coin known as XDC.\nTOPPAN, a Japanese leading printing company, issued vLEI to handle end-user authentication and to take on part of the KYB/KYC process during credit screening.\nSince these transactions frequently occur between SMEs across national borders,\nit is necessary to verify the creditworthiness of the counterparty.\nthis is where the system leverages the benefit of GLEIF,\nwhich enables corporate verification based on internationally standardized procedures.",
+      "title": "Enabling Digital Trust for Cross-Border Factoring of Used Cars and Auto Parts",
+      "summary": "TOPPAN and SBI XDC Network APAC are collaborating on a factoring solution for cross-border export transactions, verifiable corporate identity with blockchain-based financing. TOPPAN is Japan’s first qualified vLEI issuer. The vLEI is a digital credential based on the Legal Entity Identifier (LEI) system and enables trusted digital verification of a legal entity and its authorized representatives. The Global Legal Entity Identifier Foundation (GLEIF), a not-for-profit organization that oversees the global LEI system, provides the framework for standardized legal-entity identification and verification. SBI XDC Network APAC, a joint venture between SBI Holdings and TradeFinex Tech, supports the growth of the XDC Network ecosystem across the Asia-Pacific region.\nThe initiative addresses a fundamental challenge in cross-border trade: how to establish trust in counterparties and transaction data while providing SMEs with faster access to working capital. By digitizing corporate verification, KYB/KYC, receivables verification, and financing processes, the solution demonstrates how digital trust infrastructure can reduce friction in international trade and financial transactions.",
       "organizationName": "Global Legal Entity Identifier Foundation",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-19T21:16:03+01:00",
-      "publishedAt": "2026-08-19T06:43:51+01:00",
+      "updatedAt": "2026-08-21T05:23:30+01:00",
+      "publishedAt": "2026-08-21T05:23:30+01:00",
       "tags": [
         "identity",
         "payment",
@@ -60,8 +60,12 @@
         "organizational_identity",
         "payments"
       ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Enabling-Digital-Trust-for-Cross-Border-Factoring-of-Used-Cars-and-Auto-Parts-PoC-1.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Enabling-Digital-Trust-for-Cross-Border-Factoring-of-Used-Cars-and-Auto-Parts-PoC-1.jpg",
       "moreInfoUrl": "https://www.holdings.toppan.com/en/news/2026/07/newsrelease260710_1.html",
-      "userJourney": "In this POC, they connected TOPPAN's corporate digital certificate vLEI, a verifiable credential solution offered by GLEIF,  with SBI XDC’s Trade Platform. Through this integration, they verified the automation of corporate identity confirmation and the authenticity of receivables information, targeting past transaction data from SS Trading Co., Ltd. (Head Office: Minato-ku, Tokyo; Representative Director: Takumi Shoda; hereinafter \"SS Trading\"), a company within the SBI Group that operates a used automobile and used auto parts export business. As a result, they confirmed that leveraging vLEI enables the entire factoring transaction process to be conducted online.",
+      "userJourney": "In this PoC, TOPPAN’s corporate digital certificate, the vLEI, was integrated with a digital trade application developed by SBI XDC Network APAC. Using historical transaction data from SS Trading Co., Ltd., an SBI Group company engaged in used automobile and auto parts exports, the PoC demonstrated vLEI-based corporate identity verification and the recording and verification of receivables information through the digital trade application.\nThe PoC confirmed that vLEI can automate online corporate identity verification for counterparties such as overseas buyers, including verification of the legal entity and its authorized representatives. It also confirmed that the authenticity and integrity of recorded receivables information can be verified through cryptographic validation of the associated vLEI.\nThe initiative is ongoing, with the aim of extending these capabilities to credit screening and financing and ultimately enabling the entire factoring process—from corporate identity and receivables verification through credit screening and financing—to be conducted digitally and online.",
       "country": "JP"
     }
   ]
