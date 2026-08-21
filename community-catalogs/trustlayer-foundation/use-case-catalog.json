@@ -10,10 +10,10 @@
       "title": "ARIA: the trust handshake that lets any organisation verify an AI agent at its door",
       "summary": "AI agents already buy, negotiate and file on behalf of organisations — and they cross the boundary of the company that built them. At the receiving end, almost nothing answers three questions in the moment an agent knocks: who is this, which legal entity is accountable for it, and is it still permitted to act?\n\nARIA answers with a trust handshake. The agent declares its credential and its intent. The receiver evaluates both against a policy it published itself, in its own DNS, then admits or refuses with a defined response code — an auditable decision, never a silent drop. Verification runs locally at the receiver.\n\nThe credential is an AID: a W3C Verifiable Credential naming the agent and the party accountable for it, signed with a post-quantum composite suite (ML-DSA-65 + Ed25519, both must verify). Revocation reaches verifiers in about sixty seconds via an append-only ledger.\n\nThe standard is stewarded by a nonprofit, not a company. Spec CC-BY-4.0, code Apache 2.0, base level free permanently. Live since April 2026: 15 active AIDs across 5 organisations, published at api.aria.bar/v1/stats. Early numbers — infrastructure described at the moment before adoption, not after it.",
       "organizationName": "Trustlayer Foundation",
-      "productionDeployment": "no",
+      "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T21:52:18+01:00",
-      "publishedAt": "2026-08-20T20:34:46+01:00",
+      "updatedAt": "2026-08-21T05:24:21+01:00",
+      "publishedAt": "2026-08-21T05:24:21+01:00",
       "tags": [
         "agent identity",
         "AI agents",
