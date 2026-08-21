@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-20T21:07:12+00:00",
+    "generatedAt": "2026-08-21T04:22:58+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -10186,12 +10186,12 @@
                     "id": "secure-domestic-travel-tsa-mobile-drivers-license-at-airport-checkpoints-IyxXZl",
                     "sector": "mobility",
                     "title": "USA Secure Domestic Travel: TSA Mobile Driver's License at Airport Checkpoints",
-                    "summary": "TSA enables domestic travelers to present a mobile driver's license (mDL) instead of a physical ID for identity verification at airport security checkpoints. Travelers get a contactless experience that shares only 6 data fields; TSA gets stronger assurance that the document is real and faster processing; issuing states lay the groundwork for a broader Digital ID ecosystem.\n\nThe use case is live. In May 2026, mDLs were presented at 271 airports, with 45,800 transactions that month. Monthly volume grew from 22,000 in March 2025 to 46,000 in May 2026. Twenty-one states and territories issue accepted credentials, presented through 13 wallet applications: Apple Wallet, Google Wallet, Samsung Wallet, and 10 state-issued apps. Each app has passed DHS/TSA requirements so the Digital ID retains REAL ID standards.\n\nState DMVs issue the mDL, wallets store and present it, the traveler consents, and TSA verifies the credential with TSA-approved readers. Identity-check time has fallen from about 20 seconds for physical ID to 6.83 seconds. The implementation uses ISO 18013-5/7, selective disclosure, cryptographic protection against tampering, and publicly posted TSA Privacy Risk Assessments.",
+                    "summary": "TSA enables domestic travelers to present a mobile driver's license (mDL) instead of a physical ID for identity verification at airport security checkpoints. Travelers get a contactless experience that shares only 6 data fields; TSA gets stronger assurance that the document is real and faster processing; issuing states lay the groundwork for a broader Digital ID ecosystem.\n\nThe use case is live. In May 2026, mDLs were presented at 271 airports, with 45,800 transactions that month. Monthly volume grew from 22,000 in March 2025 to 46,000 in May 2026. Twenty-one states and territories issue accepted credentials, presented through 13 wallet applications: Apple Wallet, Google Wallet, Samsung Wallet, and 10 state-issued apps. Each app has passed DHS/TSA requirements so the Digital ID retains REAL ID standards.\n\nHaving a lead, example Use Case for mDL acceptance has been essential to the adoption of Mobile Driver’s License in the United States.  TSA has set the example for participation by Relying Parties that accept mDL and created a level of momentum of the ecosystem that has been difficult to obtain with solely commercial Relying Parties.  Acceptance at TSA has become core requirements",
                     "organizationName": "Transportation Security Administration (TSA)",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-20T21:51:36+01:00",
-                    "publishedAt": "2026-08-20T20:49:44+01:00",
+                    "updatedAt": "2026-08-21T05:22:58+01:00",
+                    "publishedAt": "2026-08-21T05:22:58+01:00",
                     "tags": [
                         "mDL",
                         "TSA",
@@ -10303,12 +10303,159 @@
                                 "url": null,
                                 "source": "manual",
                                 "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Alaska",
+                                "url": "https://www.tsa.gov/digital-id/participating-states",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Arizona",
+                                "url": "https://www.tsa.gov/digital-id/participating-states",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Arkansas",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "California",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Colorado",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Georgia",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Hawaii",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Illinois",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Iowa",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Louisiana",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Kentucky",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Maryland",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Montana",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "New Mexico",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "New York",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "North Dakota",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Ohio",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Puerto Rico",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Virginia",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "West Virginia",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
                             }
                         ],
                         "credentials": [
                             {
                                 "refId": "cred:iso:mdl-mdoc:mdoc",
                                 "labelRaw": "mDL (MSO Mdoc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:iso:photoid-mdoc:mdoc",
+                                "labelRaw": "Photo ID (MSO Mdoc)",
                                 "url": null,
                                 "source": "catalog",
                                 "walletType": null
@@ -10337,6 +10484,13 @@
                                 "url": null,
                                 "source": "manual",
                                 "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "271 US Airports",
+                                "url": "https://www.tsa.gov/digital-id/participating-states",
+                                "source": "manual",
+                                "walletType": null
                             }
                         ]
                     },
@@ -10350,10 +10504,12 @@
                         "other"
                     ],
                     "presentationProtocols": [
-                        "ISO 18013-5",
-                        "ISO 18013-7"
+                        "ISO 18013-5"
                     ],
-                    "interopProfiles": [],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF",
+                        "HAIP v1"
+                    ],
                     "themes": [
                         "person_identity"
                     ],
@@ -10362,6 +10518,21 @@
                         "https://fides.community/app/uploads/2026/08/tsa2.png"
                     ],
                     "imageUrl": "https://fides.community/app/uploads/2026/08/tsa1.png",
+                    "videos": [
+                        {
+                            "url": "https://www.youtube.com/watch?v=pMO90x-8eko",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://www.youtube.com/watch?v=jLcEzTu429E",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://www.youtube.com/watch?v=pMO90x-8eko",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.tsa.gov/videos/tsa-digital-id-here",
                     "userJourney": "A participating state DMV or motor vehicle agency issues an mDL that stays in the same trust chain as the physical driver's license and can carry a REAL ID indicator. The credential is provisioned into a supported wallet: Apple Wallet, Google Wallet, Samsung Wallet, or a state-issued app such as Alaska Mobile ID, California DMV Wallet, LA Wallet, NY MiD, or VA MiD.\n\nAt a TSA checkpoint, the traveler presents the mDL from their smartphone instead of a physical license. TSA, as relying party, requests only the identity attributes needed for passenger screening and receives traveler consent before any data is shared. A TSA-approved reader authenticates the credential electronically. TSA Officers use the verified identity for screening, while automated authentication and biometric matching reduce manual visual inspection.\n\nThis proximity, contactless flow is in operation at 271 airports. Verification time is 6.83 seconds versus about 20 seconds for physical ID. The same standards-based mDL can later extend to other scenarios such as age verification and government services.",
                     "country": "US"
                 }
