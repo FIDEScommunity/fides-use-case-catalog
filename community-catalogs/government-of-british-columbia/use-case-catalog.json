@@ -12,8 +12,8 @@
       "organizationName": "Government of British Columbia",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-21T05:47:40+01:00",
-      "publishedAt": "2026-08-21T05:23:55+01:00",
+      "updatedAt": "2026-08-21T16:58:22+01:00",
+      "publishedAt": "2026-08-21T16:58:22+01:00",
       "tags": [
         "Mines Digital Trust",
         "critical minerals",
@@ -46,41 +46,27 @@
         "issuers": [
           {
             "refId": null,
-            "labelRaw": "Government of British Columbia",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Ministry of Mining and Critical Minerals",
-            "url": null,
+            "labelRaw": "BC Ministry of Mines and Critical Minerals",
+            "url": "https://www2.gov.bc.ca/gov/content/governments/organizational-structure/ministries-organizations/ministries/mining",
             "source": "manual",
             "walletType": null
           },
           {
             "refId": null,
             "labelRaw": "Mining Association of Canada",
-            "url": null,
+            "url": "https://mining.ca/",
             "source": "manual",
             "walletType": null
           },
           {
             "refId": null,
             "labelRaw": "The Copper Mark",
-            "url": null,
+            "url": "https://coppermark.org/",
             "source": "manual",
             "walletType": null
           }
         ],
         "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Mines Act Permit",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
           {
             "refId": null,
             "labelRaw": "Digital Product Passport",
@@ -92,6 +78,20 @@
             "refId": null,
             "labelRaw": "Conformity Credential",
             "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Mines Act Permit",
+            "url": "https://orgbook.gov.bc.ca/entity/BC1519310/type/registration.registries.ca",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Towards Sustainable Mining",
+            "url": "https://mining.ca/towards-sustainable-mining/tsm-progress-report/tsm-digital-credential-registry/",
             "source": "manual",
             "walletType": null
           }
