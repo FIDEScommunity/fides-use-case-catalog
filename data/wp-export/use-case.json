@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-21T07:06:49+00:00",
+    "generatedAt": "2026-08-21T10:13:59+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -599,8 +599,8 @@
                     "organizationName": "Agence Nationale des Titres Sécurisés",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-20T16:37:17+01:00",
-                    "publishedAt": "2026-08-20T16:37:17+01:00",
+                    "updatedAt": "2026-08-21T11:13:59+01:00",
+                    "publishedAt": "2026-08-21T11:13:59+01:00",
                     "tags": [
                         "EUDI Wallet ; ARF ; Border crossing ; DTC-VC ; seamless travel"
                     ],
@@ -645,6 +645,21 @@
                     "themes": [
                         "person_identity"
                     ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/DTC-VC-cover-1.png",
+                        "https://fides.community/app/uploads/2026/08/DTC-VC-cover-2.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/DTC-VC-cover-1.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/ISDn6LgDi9M",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/ISDn6LgDi9M",
+                        "provider": "youtube"
+                    },
                     "moreInfoUrl": "https://aptitude.digital-identity-wallet.eu/wallet-use/digital-travel-credentials/",
                     "userJourney": "AHEAD OF BORDER CONTROL – USER – 2 min\n\n1 - The tester installs on his wallet a dedicated version of France Identité (or any compatible wallet with 18013-5 capabilities)\n2 - Using his passport, the tester presents the inside of the physical document for collecting chip access key using Optical Character Recognition\n3 - The digital identity wallet may now perform contactless reading of the passport chip through NFC\n4 - The collected data (mainly Data Group 1 and Data Group 2) are converted into mDOC format (PhotoID) and signed by a legitimate authority (i.e. France Titres)\n5 - The wallet home page is now showing a new credential (Digital Travel Document – Virtual Component) with a related engagement QR code\n\nAT BORDER CONTROL – USER & BORDER AUTHORITIES – 10 sec\n\n1 - Border police is equipped with a dedicated computer to access the DTC-VC verification service and a connected QR code reader\n2 - The traveler is asked to present is engagement QR code to the QR code reader\n3 - After Bluetooth connection is established, the traveler shares his consent within the wallet\n4 - The border police receives the Digital Travel Credential – Virtual Component derived from the traveler’s passport",
                     "country": "FR"
