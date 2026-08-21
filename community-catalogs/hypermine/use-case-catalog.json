@@ -12,8 +12,8 @@
       "organizationName": "Hypermine",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-21T13:45:23+01:00",
-      "publishedAt": "2026-08-21T13:45:23+01:00",
+      "updatedAt": "2026-08-21T14:48:43+01:00",
+      "publishedAt": "2026-08-21T14:48:43+01:00",
       "tags": [
         "Finance",
         "Fundraising",
@@ -58,11 +58,11 @@
         "compliance_reporting"
       ],
       "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/BoostNFlow.png",
-        "https://fides.community/app/uploads/2026/08/How-it-works-reduce-pii-v2.png",
-        "https://fides.community/app/uploads/2026/08/finalCover.png"
+        "https://fides.community/app/uploads/2026/08/finalCover.png",
+        "https://fides.community/app/uploads/2026/08/BoostNFlow-1.png",
+        "https://fides.community/app/uploads/2026/08/How-it-works-reduce-pii-v2-1.png"
       ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/BoostNFlow.png",
+      "imageUrl": "https://fides.community/app/uploads/2026/08/finalCover.png",
       "videos": [
         {
           "url": "https://youtu.be/1hs8SGwUbOM",
