@@ -1,10 +1,150 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-22T04:12:11.605Z",
+  "lastUpdated": "2026-08-22T08:06:26.326Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 95,
+  "count": 96,
   "useCases": [
+    {
+      "id": "hims-espa-electronic-sale-and-purchase-agreement-using-digital-signature-5i9H0J",
+      "sector": "public_sector",
+      "title": "HIMS eSPA - Electronic Sale and Purchase Agreement using Digital Signature",
+      "summary": "Business challenge:Malaysia’s regulated property Sale & Purchase Agreement process traditionally requires physical identity checks, appointments and paper-based signing. This creates delays, inconvenience & fraud risks, especially for Malaysian and foreign buyers completing transactions from different locations.\nImplemented solution:KPKT’s eSPA digitises the process through HIMS and iDsaya mobile application. Users receive an invitation to complete eKYC using a MyKad or passport. iDsaya validates identity document, performs facial matching and liveness detection. Once verified, the user activates a digital certificate issued by a licensed Certification Authority & sets a PIN. When the agreement is ready, the user reviews it in HIMS and authorises the remote signature using iDsaya,PIN and TOTP.\nAchieved outcomes:eSPA enables secure remote identity verification and signing, shortens processing time, reduces paperwork and physical visits, and protects document integrity. It supports buyers,developers,representatives,landowners,witnesses,lawyers, KPKT/JPN,HIMS and the CA. No digital wallet or verifiable credentials are currently used; iDsaya provides the eKYC & remote signing function.",
+      "organizationName": "Pos Digicert Sdn Bhd",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-22T09:06:11+01:00",
+      "publishedAt": "2026-08-22T09:06:11+01:00",
+      "tags": [
+        "DigitalSignature",
+        "PKI",
+        "DigitalCertificate",
+        "RemoteSigning",
+        "ElectronicAgreement",
+        "eSPA",
+        "eKYC",
+        "IdentityVerification",
+        "BiometricVerification",
+        "FacialRecognition",
+        "LivenessDetection",
+        "MultiPartySigning",
+        "DocumentIntegrity",
+        "NonRepudiation",
+        "AuditTrail",
+        "eStamping",
+        "Housing",
+        "Property",
+        "RealEstate",
+        "PropertyTransaction",
+        "GovernmentServices",
+        "PublicSector",
+        "GovTech",
+        "DigitalGovernment",
+        "RegulatedTransactions",
+        "Malaysia",
+        "DigitalTransformation",
+        "PaperlessProcess",
+        "ProcessEfficiency",
+        "RemoteAccess",
+        "FraudPrevention",
+        "RegulatoryCompliance",
+        "TrustServices",
+        "SecureTransactions",
+        "UserConvenience",
+        "OperationalEfficiency",
+        "Transparency",
+        "Traceability",
+        "KPKT",
+        "JPN",
+        "HIMS",
+        "PosDigicert",
+        "iDsaya",
+        "CertificationAuthority",
+        "TOTP",
+        "MyKad",
+        "PassportVerification"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Pos Digicert CA",
+            "url": "https://www.posdigicert.com.my/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Housing and Local Government",
+            "url": "https://www.kpkt.gov.my",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "National Housing Department",
+            "url": "https://ehome.kpkt.gov.my/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Pos Digicert Sdn Bhd",
+            "url": "https://www.posdigicert.com.my",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Housing Integrated Management System (HIMS)",
+            "url": "https://hims.kpkt.gov.my/pemaju/login",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-18-at-22.27.29-1.jpeg",
+        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-18.21.15.jpg",
+        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-20.48.15.jpg",
+        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-21.27.18.jpeg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-18-at-22.27.29-1.jpeg",
+      "videos": [
+        {
+          "url": "https://youtu.be/UrDYsVQ9zAw",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/UrDYsVQ9zAw",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.posdigicert.com.my/espa/",
+      "userJourney": "1.The housing developer registers the project and relevant parties in KPKT’s HIMS, including buyers, landowners, witnesses and authorised representatives.\n2.HIMS sends each party an invitation to complete remote identity verification via the iDsaya mobile application.\n3.Malaysians submit their MyKad, while non-Malaysians submit a passport. iDsaya performs document verification, facial matching and liveness detection to confirm the applicant’s identity.\n4.Upon successful eKYC, a licensed Certification Authority (CA) issues and activates the user’s digital certificate. The user then creates PIN for signing authentication.\n5.Developer prepares the prescribed eSPA in HIMS, and all required parties are notified when it is ready.\n6.Each party reviews and authorises signing remotely using iDsaya, the certificate PIN and TOTP. The digital signature binds the verified signer to the document and enables detection of subsequent changes.\n7.HIMS validates signatures, certificate status and completion by all required parties before recording the executed eSPA.\n8.KPKT/JPN oversees the process, while relevant parties perform their respective roles. iDsaya provides eKYC and remote-signing functions",
+      "country": "MY"
+    },
     {
       "id": "samsung-sds-integrated-digital-wallet-b5dcHk",
       "sector": "finance",
