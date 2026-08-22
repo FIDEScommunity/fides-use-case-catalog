@@ -1,72 +1,67 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:ooru",
+  "orgId": "org:uidai",
   "orgName": "Ooru",
   "useCases": [
     {
-      "id": "iiit-bangalore-digital-academic-credential-issuance-and-verification-rm2bTO",
-      "sector": "education",
-      "title": "IIIT-Bangalore Digital Academic Credential Issuance and Verification",
-      "summary": "A degree is only as useful as the world's ability to trust it. For a graduate, proving one has long meant waiting while an employer or verification agency writes to the university and staff check the paperwork by hand, a slow step that can hold up a job.\nIIIT-Bangalore now issues degree certificates and transcripts as verifiable credentials through CredIssuer (by Ooru), organised by batch and programme across online and offline cohorts. Background verification (BGV) agencies confirm them through a custom verification portal built by CredIssuer. If a credential carries a QR code, the check completes automatically once the fee is paid. If it does not, the system runs an OCR match against IIIT-B's verifiable records, and an IIIT-B reviewer manually approves or rejects it with a recorded comment. Automation carries the routine cases; a person handles the rest.\nThe system is live in production. Issuance began in 2025 and verification in 2026, with 10,485 credentials issued and 197 verifications to date. IIIT-B is issuer and verifier; BGV agencies are the relying parties. No personal wallet is active yet, though CredIssuer's architecture supports one.",
+      "id": "age-verification-by-snapkyc-wt2dij",
+      "sector": "digital",
+      "title": "Age Verification by SnapKYC",
+      "summary": "SnapKYC is a consent-based verification orchestrator that lets a relying party confirm a user meets an eligibility requirement, such as an age threshold, without storing or exposing personal data.\nIt holds no credentials of its own. Built on open identity standards, it requests an eligibility claim from an existing trusted source. Today that source is Aadhaar, via the Aadhaar app and DigiLocker, and the same approach lets other issuers or wallets be added without changing the relying party's integration.\nWhen content is tagged age-restricted, the viewer is asked to verify their age. With their consent, SnapKYC sends an age-eligibility request to Aadhaar and receives only a yes or no. No age, date of birth, or identity attribute reaches the platform, and SnapKYC retains nothing. Age thresholds are configurable by jurisdiction, so one flow covers different regional age-of-majority rules.\nShown here through a media interface built to demonstrate the flow, not a live integration. Key players: UIDAI as issuer, the Aadhaar app as credential wallet, and SnapKYC as the verification layer any platform could adopt as a relying party. It is currently a working prototype.",
       "organizationName": "Ooru",
-      "productionDeployment": "yes",
+      "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-20T21:56:38+01:00",
-      "publishedAt": "2026-08-20T16:53:00+01:00",
+      "updatedAt": "2026-08-22T19:57:38+01:00",
+      "publishedAt": "2026-08-22T19:57:38+01:00",
       "tags": [
-        "education",
-        "verifiable academic credentials",
-        "verification",
-        "trust"
+        "age verification",
+        "privacy",
+        "digital identity",
+        "selective disclosure",
+        "Aadhaar",
+        "social media"
       ],
       "links": {
-        "personalWallets": [],
+        "personalWallets": [
+          {
+            "refId": "aadhaar",
+            "labelRaw": "Aadhaar",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
         "businessWallets": [],
         "issuers": [
           {
             "refId": null,
-            "labelRaw": "IIIT-Bangalore",
+            "labelRaw": "UIDAI",
             "url": null,
             "source": "manual",
             "walletType": null
           }
         ],
-        "credentials": [
+        "credentials": [],
+        "organizations": [
           {
-            "refId": null,
-            "labelRaw": "Degree Certificates",
-            "url": null,
-            "source": "manual",
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "Academic Transcripts",
-            "url": null,
-            "source": "manual",
+            "refId": "org:snapkyc",
+            "labelRaw": "SnapKYC",
+            "url": "https://snapkyc.com/",
+            "source": "catalog",
             "walletType": null
-          }
-        ],
-        "organizations": [
+          },
           {
             "refId": "org:ooru",
             "labelRaw": "Ooru",
             "url": "https://ooru.io/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:credissuer",
-            "labelRaw": "CredIssuer",
-            "url": "https://credissuer.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:iiit-bangalore",
-            "labelRaw": "IIIT-Bangalore",
-            "url": "https://www.iiitb.ac.in/",
             "source": "catalog",
             "walletType": null
           }
@@ -74,7 +69,7 @@
         "rps": [
           {
             "refId": null,
-            "labelRaw": "BGV Agencies",
+            "labelRaw": "Content Platforms",
             "url": null,
             "source": "manual",
             "walletType": null
@@ -82,36 +77,38 @@
         ]
       },
       "interactionModes": [
+        "proximity",
         "remote"
       ],
       "vcFormats": [
-        "jwt_vc"
+        "sd_jwt_vc"
       ],
       "issuanceProtocols": [
-        "other"
+        "oid4vci"
       ],
-      "presentationProtocols": [],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
       "interopProfiles": [],
       "themes": [
-        "person_identity",
-        "education"
+        "person_identity"
       ],
       "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/IIIT-B-.jpg"
+        "https://fides.community/app/uploads/2026/08/Screenshot_2026-08-20_at_3.22.36_PM_optimized_1000.png"
       ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/IIIT-B-.jpg",
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot_2026-08-20_at_3.22.36_PM_optimized_1000.png",
       "videos": [
         {
-          "url": "https://youtu.be/mIc7aFoVdVI",
+          "url": "https://youtu.be/IMaz9Vpe-0A?si=S0xW7cCRWfQbRaq1",
           "provider": "youtube"
         }
       ],
       "video": {
-        "url": "https://youtu.be/mIc7aFoVdVI",
+        "url": "https://youtu.be/IMaz9Vpe-0A?si=S0xW7cCRWfQbRaq1",
         "provider": "youtube"
       },
-      "moreInfoUrl": "https://ooru.io/case-studies/iiit-bangalore",
-      "userJourney": "1. IIIT-Bangalore issues degree certificates and transcripts as verifiable credentials through CredIssuer, organised by batch and programme.\n2. A BGV agency needing to confirm a candidate's credentials logs into the custom verification portal built by CredIssuer.\n3. The agency submits the candidate's credentials, with or without an embedded QR code (legacy credentials), and pays the verification fee.\n4. If a QR code is present, verification completes automatically once payment is made.\n5. If no QR code is present, the system runs an OCR match to find the corresponding verifiable credentials, and the IIIT-B team manually reviews and approves or rejects the request, with a mandatory comment.\n6. The BGV agency receives the verified result, completing the hiring-related check.",
+      "moreInfoUrl": "https://snapkyc.com/",
+      "userJourney": "1: Access Age-Restricted Content: A user attempts to access content designated as age-restricted on a social media platform.\n2: Age Verification Prompt: Before proceeding, the user is prompted to verify their age. On a web browser, this can be initiated by scanning a QR code; within a mobile app, the user can initiate the credential-sharing flow directly.\n3: Privacy-Preserving Age Check: SnapKYC requests an age-eligibility claim from the user’s Aadhaar-linked wallet in real time. The eligibility check is based on the applicable age threshold for the user’s jurisdiction—for example, 16+ or 18+.\n4: Minimal Data Disclosure: The verification returns only a Yes/No eligibility response. SnapKYC does not share the user’s date of birth, name, Aadhaar number, or other identity information with the social media platform.\n5: Seamless Continuation: If the user meets the required age threshold, they are returned to the exact content they were attempting to access.\n6: Access Restricted: If the user does not meet the required threshold, they are informed that the content is unavailable based on the applicable age requirement and are redirected to the platform’s home screen.",
       "country": "IN"
     },
     {
@@ -122,8 +119,8 @@
       "organizationName": "Ooru",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-20T21:59:15+01:00",
-      "publishedAt": "2026-08-20T14:39:33+01:00",
+      "updatedAt": "2026-08-22T19:57:26+01:00",
+      "publishedAt": "2026-08-22T19:57:26+01:00",
       "tags": [
         "migrant workers",
         "BOCW",
@@ -235,16 +232,126 @@
       "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-20-at-4.59.54-PM.png",
       "videos": [
         {
-          "url": "https://youtu.be/bMseaG7BKWg",
+          "url": "https://vimeo.com/1220442705?share=copy&fl=sv&fe=ci",
+          "provider": "vimeo"
+        }
+      ],
+      "video": {
+        "url": "https://vimeo.com/1220442705?share=copy&fl=sv&fe=ci",
+        "provider": "vimeo"
+      },
+      "moreInfoUrl": "https://ooru.io/case-studies/jan-sahas",
+      "userJourney": "1: A site administrator logs each worker's work history into the Worker Registry.\n2: The registered contractor of the site the worker worked on reviews and approves each entry in real time.\n3: Once a worker reaches 90 approved days, CredIssuer issues a verified certificate with an embedded QR code.\n4: The worker adds it to their BOCW application, and a labour official verifies it by scanning the QR code through CredIssuer's portal.",
+      "country": "IN"
+    },
+    {
+      "id": "iiit-bangalore-digital-academic-credential-issuance-and-verification-rm2bTO",
+      "sector": "education",
+      "title": "IIIT-Bangalore Digital Academic Credential Issuance and Verification",
+      "summary": "A degree is only as useful as the world's ability to trust it. For a graduate, proving one has long meant waiting while an employer or verification agency writes to the university and staff check the paperwork by hand, a slow step that can hold up a job.\nIIIT-Bangalore now issues degree certificates and transcripts as verifiable credentials through CredIssuer (by Ooru), organised by batch and programme across online and offline cohorts. Background verification (BGV) agencies confirm them through a custom verification portal built by CredIssuer. If a credential carries a QR code, the check completes automatically once the fee is paid. If it does not, the system runs an OCR match against IIIT-B's verifiable records, and an IIIT-B reviewer manually approves or rejects it with a recorded comment. Automation carries the routine cases; a person handles the rest.\nThe system is live in production. Issuance began in 2025 and verification in 2026, with 10,485 credentials issued and 197 verifications to date. IIIT-B is issuer and verifier; BGV agencies are the relying parties. No personal wallet is active yet, though CredIssuer's architecture supports one.",
+      "organizationName": "Ooru",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-20T21:56:38+01:00",
+      "publishedAt": "2026-08-20T16:53:00+01:00",
+      "tags": [
+        "education",
+        "verifiable academic credentials",
+        "verification",
+        "trust"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "IIIT-Bangalore",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Degree Certificates",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Academic Transcripts",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:ooru",
+            "labelRaw": "Ooru",
+            "url": "https://ooru.io/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:credissuer",
+            "labelRaw": "CredIssuer",
+            "url": "https://credissuer.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:iiit-bangalore",
+            "labelRaw": "IIIT-Bangalore",
+            "url": "https://www.iiitb.ac.in/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "BGV Agencies",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "education"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/IIIT-B-.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/IIIT-B-.jpg",
+      "videos": [
+        {
+          "url": "https://youtu.be/mIc7aFoVdVI",
           "provider": "youtube"
         }
       ],
       "video": {
-        "url": "https://youtu.be/bMseaG7BKWg",
+        "url": "https://youtu.be/mIc7aFoVdVI",
         "provider": "youtube"
       },
-      "moreInfoUrl": "https://ooru.io/case-studies/jan-sahas",
-      "userJourney": "1: A site administrator logs each worker's work history into the Worker Registry.\n2: The registered contractor of the site the worker worked on reviews and approves each entry in real time.\n3: Once a worker reaches 90 approved days, CredIssuer issues a verified certificate with an embedded QR code.\n4: The worker adds it to their BOCW application, and a labour official verifies it by scanning the QR code through CredIssuer's portal.",
+      "moreInfoUrl": "https://ooru.io/case-studies/iiit-bangalore",
+      "userJourney": "1. IIIT-Bangalore issues degree certificates and transcripts as verifiable credentials through CredIssuer, organised by batch and programme.\n2. A BGV agency needing to confirm a candidate's credentials logs into the custom verification portal built by CredIssuer.\n3. The agency submits the candidate's credentials, with or without an embedded QR code (legacy credentials), and pays the verification fee.\n4. If a QR code is present, verification completes automatically once payment is made.\n5. If no QR code is present, the system runs an OCR match to find the corresponding verifiable credentials, and the IIIT-B team manually reviews and approves or rejects the request, with a mandatory comment.\n6. The BGV agency receives the verified result, completing the hiring-related check.",
       "country": "IN"
     },
     {
