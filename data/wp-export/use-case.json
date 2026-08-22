@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-22T08:06:11+00:00",
+    "generatedAt": "2026-08-22T18:56:41+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -8749,12 +8749,12 @@
                     "id": "hims-espa-electronic-sale-and-purchase-agreement-using-digital-signature-5i9H0J",
                     "sector": "public_sector",
                     "title": "HIMS eSPA - Electronic Sale and Purchase Agreement using Digital Signature",
-                    "summary": "Business challenge:Malaysia’s regulated property Sale & Purchase Agreement process traditionally requires physical identity checks, appointments and paper-based signing. This creates delays, inconvenience & fraud risks, especially for Malaysian and foreign buyers completing transactions from different locations.\nImplemented solution:KPKT’s eSPA digitises the process through HIMS and iDsaya mobile application. Users receive an invitation to complete eKYC using a MyKad or passport. iDsaya validates identity document, performs facial matching and liveness detection. Once verified, the user activates a digital certificate issued by a licensed Certification Authority & sets a PIN. When the agreement is ready, the user reviews it in HIMS and authorises the remote signature using iDsaya,PIN and TOTP.\nAchieved outcomes:eSPA enables secure remote identity verification and signing, shortens processing time, reduces paperwork and physical visits, and protects document integrity. It supports buyers,developers,representatives,landowners,witnesses,lawyers, KPKT/JPN,HIMS and the CA. No digital wallet or verifiable credentials are currently used; iDsaya provides the eKYC & remote signing function.",
+                    "summary": "Business challenge: Malaysia’s property Sale and Purchase Agreement process traditionally requires physical identity checks, appointments and paper signing. This causes delays, inconvenience and fraud risks for remote buyers.\nImplemented solution: KPKT’s eSPA digitises the process through HIMS and iDsaya. Users complete MyKad or passport eKYC using document validation, facial matching and liveness detection. After verification, they activate a digital certificate issued by a licensed Certification Authority, review the agreement in HIMS and authorise remote signing through iDsaya using a PIN and TOTP. JWT VC remains in pilot. Building on experience from a similar project, we plan to use it for credential verification during authentication. Pos Digicert is the issuer, iDsaya the holder and HIMS the verifier. The credential contains a pseudonymous ID, role, transaction reference, issuance and expiry dates.\nAchieved outcomes: eSPA enables secure remote verification and legally recognised signing, reducing processing time, paperwork and physical visits while protecting document integrity. JWT VC strengthens participant and role verification without replacing PKI-based signing.",
                     "organizationName": "Pos Digicert Sdn Bhd",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-22T09:06:11+01:00",
-                    "publishedAt": "2026-08-22T09:06:11+01:00",
+                    "updatedAt": "2026-08-22T19:56:41+01:00",
+                    "publishedAt": "2026-08-22T19:56:41+01:00",
                     "tags": [
                         "DigitalSignature",
                         "PKI",
