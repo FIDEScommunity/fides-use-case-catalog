@@ -12,8 +12,8 @@
       "organizationName": "K4-Security",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-20T06:00:02+01:00",
-      "publishedAt": "2026-08-20T06:00:02+01:00",
+      "updatedAt": "2026-08-22T05:11:56+01:00",
+      "publishedAt": "2026-08-22T05:11:56+01:00",
       "tags": [
         "Digital Identity",
         "Payment"
@@ -87,13 +87,6 @@
           {
             "refId": null,
             "labelRaw": "Banks",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Securities Firms (Samsung securities)",
             "url": null,
             "source": "manual",
             "walletType": null
