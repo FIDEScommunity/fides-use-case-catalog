@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-23T14:58:29+00:00",
+    "generatedAt": "2026-08-23T15:00:06+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -7977,6 +7977,145 @@
                     },
                     "userJourney": "•\t1. The mine’s operator signs in; a non-extractable key is generated in the browser; its public half is published in a did:web on the mine’s domain (append-only).\n•\t2. The mine self-issues the origin credential (SD-JWT VC) for a bar, from the bar’s own screen.\n•\t3. The mine requests the carbon certificate; Natixar’s signing service issues the CarbonIntensityCredential (SD-JWT VC), bound to the origin credential [re-computing from a signed extraction, if the matrix is built].\n•\t4. The credential is held in the OpenWallet-based business wallet.\n•\t5. The holder presents via QR, disclosing selected fields only (SD-JWT selective disclosure).\n•\t6. The verifier checks on a public page — DID resolution, signature, disclosed-data integrity, revocation status — no account, no call to Natixar. Tampered / revoked / replayed presentations are rejected.",
                     "country": "FR"
+                }
+            ]
+        },
+        {
+            "orgSlug": "nedmod",
+            "orgId": "org:nedmod",
+            "orgName": "Nedmod",
+            "useCases": [
+                {
+                    "id": "credenid-fast-kyb-and-corporate-onboarding-with-a-business-wallet-PF1P0m",
+                    "sector": "finance",
+                    "title": "Credenid - Fast KYB and corporate onboarding with a business wallet",
+                    "summary": "This use case demonstrates reusable, wallet-based KYB for corporate account opening. Companies and their representatives currently submit registry records, LEI information and mandate documents repeatedly, while financial institutions must verify both the company and the representative’s authority. In the demo, a company representative presents two verifiable credentials in one consent-driven interaction: a Legal Entity Credential containing company identity and LEI data, and a Power of Representation credential proving authority to act for the company. Credenid cryptographically verifies the credentials, holder binding, validity, status and the link between the representative and the company. XYZ Bank Business receives only the requested information and verification result. This reduces repeated document collection, improves traceability and accelerates onboarding. \n\nLEI, sanctions, jurisdiction and UBO checks are simulated in the demo, production deployments can connect to live registries and compliance providers.",
+                    "organizationName": "Nedmod",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-23T16:00:06+01:00",
+                    "publishedAt": "2026-08-23T16:00:06+01:00",
+                    "tags": [
+                        "kyb",
+                        "sd-jwt vc",
+                        "oid4vci",
+                        "oid4vp"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Credenid Wallet",
+                                "url": "https://credenid.com",
+                                "source": "manual",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Credenid Wallet",
+                                "url": "https://credenid.com",
+                                "source": "manual",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Demo Trade Registry",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Demo Notary",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:gleif:legal-entity-vlei:acdc",
+                                "labelRaw": "vLEI - Legal Entity",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:eu:por-sd-jwt-vc:sd-jwt-vc",
+                                "labelRaw": "Power Of Representation (SD-JWT VC)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Legal Entity Credential (SD-JWT VC)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Credenid",
+                                "url": "https://credenid.com",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Nedmod",
+                                "url": "https://nedmod.com",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "XYZ Bank Business (Demo)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc",
+                        "sd_jwt_vc",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "ISO 18013-5",
+                        "OpenID4VP",
+                        "SIOPv2"
+                    ],
+                    "interopProfiles": [
+                        "EUDI Wallet ARF",
+                        "HAIP v1"
+                    ],
+                    "themes": [
+                        "person_identity",
+                        "organizational_identity"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/08/credenid-kyb-demo.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/08/credenid-kyb-demo.png",
+                    "moreInfoUrl": "https://demo.credenid.com/kyb",
+                    "userJourney": "1. The representative obtains a Legal Entity Credential from the demo trade registry and a Power of Representation credential from the demo notary, and stores both in Credenid Wallet.\n2. The representative starts corporate account opening at XYZ Bank Business and chooses wallet-based verification.\n3. The bank starts an OID4VP session through Credenid Verification Service and displays a QR code or deeplink.\n4. The representative scans the QR code. The wallet shows the requested company and authority information and asks for consent.\n5. The wallet presents both SD-JWT credentials together with a KB-JWT proving holder binding.\n6. Credenid verifies credential signatures, disclosed-field integrity, validity/status and that the mandate links the representative to the same legal entity.\n7. The verified claims are returned to the demo bank, which performs simulated LEI, sanctions, jurisdiction, representation and UBO checks.\n8. The bank displays the KYB decision and technical verification details, and the corporate onboarding can continue.",
+                    "country": "TR"
                 }
             ]
         },
