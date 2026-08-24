@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-24T15:24:19+00:00",
+    "generatedAt": "2026-08-24T15:25:37+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -5407,6 +5407,111 @@
                     "moreInfoUrl": "https://www.rbtp.pyx.io/interactive-vc-map",
                     "userJourney": "The Government of British Columbia issues a digital Mines Act Permit credential with authoritative permit data and publishes it through OrgBook BC, so it can be independently verified while remaining under government authority.\n\nA mining company then creates a United Nations Transparency Protocol (UNTP) raw-material digital product passport. The passport does not copy the underlying records; it links to trusted credentials from the organizations that own them. Sustainability bodies such as Towards Sustainable Mining and The Copper Mark can add verifiable conformity credentials, forming one connected evidence chain. Each party keeps control of its own data.\n\nDigital wallets issue, publish, exchange, discover and manage these credentials across platforms, including OrgBook BC and enterprise wallets such as Northern Block Orbit.\n\nWhen a buyer, regulator, investor or supply-chain partner reviews the passport, a verifier application follows the links, confirms the issuer, checks the digital signature and integrity, and validates credential status. Government speaks for permits, mining companies for provenance, and assurance bodies for sustainability claims.",
                     "country": "CA"
+                }
+            ]
+        },
+        {
+            "orgSlug": "hopae",
+            "orgId": "org:hopae",
+            "orgName": "Hopae",
+            "useCases": [
+                {
+                    "id": "autofill-customer-id-on-trip-com-with-google-wallet-rJkmvE",
+                    "sector": "mobility",
+                    "title": "Autofill Customer ID on Trip.com with Google Wallet",
+                    "summary": "Travellers can securely share authorised identity information from an ID Pass in Google Wallet to automatically populate the passenger details required when booking a flight on Trip.com. This removes the need to enter personal and travel document information manually, making the booking process faster and more convenient. It also reduces typing errors and discrepancies between the booking and the traveller's identity document, which can otherwise cause issues during check-in or boarding. The result is a smoother booking experience, more accurate passenger data and greater user control over what information is shared. This mobility use case is submitted by Hopae and involves Trip.com as the relying party.",
+                    "organizationName": "Hopae",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-24T16:25:37+01:00",
+                    "publishedAt": "2026-08-24T16:25:37+01:00",
+                    "tags": [
+                        "Travel",
+                        "Flight Booking",
+                        "Passenger Details",
+                        "Digital Identity",
+                        "Google Wallet",
+                        "ID Pass",
+                        "Identity Data Sharing",
+                        "Data Autofill",
+                        "User Consent",
+                        "Verified Credentials",
+                        "Mobility",
+                        "Seamless Travel"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "google-wallet",
+                                "labelRaw": "Google Wallet",
+                                "url": "https://wallet.google.com/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [
+                            {
+                                "refId": null,
+                                "labelRaw": "ID Pass",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Trip.com",
+                                "url": "http://trip.com",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Hopae",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:google",
+                                "labelRaw": "Google",
+                                "url": "https://www.google.com",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Trip.com",
+                                "url": "http://trip.com",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "mdoc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "themes": [
+                        "person_identity"
+                    ],
+                    "moreInfoUrl": "https://www.phocuswire.com/news/technology/trip-com-digital-id-google-apple-wallets",
+                    "userJourney": "1. On Trip.com, the user selects their preferred flight and proceeds to the booking page.\n2. On the Passenger Details page, the user selects Share from Wallet.\n3. Android displays the digital credential selector, showing the identity credentials that can be used with Trip.com.\n4. The user selects their ID Pass from Google Wallet.\n5. The user reviews the information requested by Trip.com, selects Share, and authenticates using their device.\n6. Google Wallet securely shares the requested information with Trip.com, and the relevant passenger details are automatically populated.\n7. The user reviews the populated details and continues with the booking.",
+                    "country": "KR"
                 }
             ]
         },
