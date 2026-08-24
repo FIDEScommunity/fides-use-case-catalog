@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-24T15:23:05+00:00",
+    "generatedAt": "2026-08-24T15:24:19+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6369,6 +6369,128 @@
                     "moreInfoUrl": "https://www.igrant.io/demo/open-bank-account.html",
                     "userJourney": "1. Share PID (Person Identification Data) for KYC identity verification\n2. Review terms and conditions\n3. Sign terms and conditions with QESAC (Qualified Electronic Signature Access Credential)\n4. Receive Bank Authenticator\n5. Log in to the bank portal by sharing the Bank Authenticator credentials \n\nOnce logged in, the individual can enable SCA for payments via existing payment rails (via Visa, Worldline, etc)",
                     "country": "SE"
+                }
+            ]
+        },
+        {
+            "orgSlug": "ilabs",
+            "orgId": "org:fides",
+            "orgName": "iLabs",
+            "useCases": [
+                {
+                    "id": "digital-twin-based-verifiable-credentials-for-local-impact-proven-on-the-open-interop-testbed-QLj1dx",
+                    "sector": "public_sector",
+                    "title": "Digital Twin based Verifiable Credentials for local impact, proven on the Open Interop Testbed",
+                    "summary": "itb.ilabs.ai is in production: a GITB test bed operated by iLabs, with external accounts, listed on fides.community as the Open Interop Testbed. It is where LDT4SSC/EUTwinLink wallets, issuers and verifiers prove they interoperate.\n\nWhat runs on it matters locally. Local impact is rewarded on trust, or not at all: carbon methodologies are built around reduction, avoidance or removal of greenhouse gases, so they exclude coral restoration, beach cleaning, water conservation, and the resilience work that counts most in a small island economy, such as making the homes of elderly residents safer, warmer and cheaper to run.\n\nLDT4SSC makes that impact spendable where it is earned, over three layers. The Local Digital Twin holds the ground truth: place, time, sensor, audit trail. The data space (iSHARE) moves it between city, project owner and retailer under agreed rules. The verifiable credential makes anyone believe it.\n\nThe testbed holds the three together. Every party runs the DIIP v5 suite and receives a signed report with a resolvable link; issuing that report as a Conformance Test Report credential is next in development. Interoperability here is a suite that can be watched fail.",
+                    "organizationName": "iLabs",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-24T16:24:19+01:00",
+                    "publishedAt": "2026-08-24T16:24:19+01:00",
+                    "tags": [
+                        "open interop testbed",
+                        "GITB",
+                        "ITB+",
+                        "Ayra",
+                        "TRQP",
+                        "trust registry",
+                        "conformance",
+                        "interoperability",
+                        "digital twin",
+                        "local digital twin",
+                        "data space",
+                        "iSHARE",
+                        "CO2",
+                        "environmental credits",
+                        "tokenisation",
+                        "sustainability",
+                        "smart city",
+                        "public sector",
+                        "DIIP v5",
+                        "EUTwinLink",
+                        "LDT4SSC",
+                        "Aruba",
+                        "Cartagena"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "co2-token-issuer.ldt4ssc.tech",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:fides",
+                                "labelRaw": "FIDES Labs",
+                                "url": "https://fides.community",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:uaegean",
+                                "labelRaw": "University of the Aegean",
+                                "url": "https://www.aegean.gr",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:ilabs",
+                                "labelRaw": "iLabs",
+                                "url": "https://www.ilabs.ai/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "EUTwinLink",
+                                "url": "https://knowledgehub.ldt4ssc.eu/journey/pilots/round1/eu-twinlink/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "EUTwinLink",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "EUTwinLink consortium",
+                                "url": "https://knowledgehub.ldt4ssc.eu/journey/pilots/round1/eu-twinlink/",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [
+                        "DIIP v5"
+                    ],
+                    "themes": [
+                        "dataspaces"
+                    ],
+                    "userJourney": "1. A wallet, issuer or verifier joining the ecosystem opens an account on itb.ilabs.ai and runs the DIIP v5 suite against its endpoints.\n\n2. The test bed runs the suite and produces a signed GITB test report with link: session id, suite version, date, verdict per test case.\n\n3. Next in development: issuing that report as a Conformance Test Report credential over OpenID4VCI, carrying the PASS verdict, suite version, session id and a resolvable link to the signed report, so anyone can open the evidence in one click.\n\n4. A resident or project owner completes a verified local action: a CO2 reduction, a coral restoration, a household energy improvement.\n\n5. The Local Digital Twin records it against a place, time and sensor, with the evidence and audit trail.\n\n6. The LDT4SSC issuer (co2-token-issuer.ldt4ssc.tech) issues a CO2 measurement token over OpenID4VCI, per DIIP v5, to the holder's wallet.\n\n7. The holder presents it over OpenID4VP to the EU LDT Marketplace, a municipal scheme or a retailer, which checks signature, status and validity before recognising it, and may require the counterparty's Test Report credential first.",
+                    "country": "NL"
                 }
             ]
         },
