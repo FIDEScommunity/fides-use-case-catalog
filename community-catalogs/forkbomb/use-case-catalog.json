@@ -7,26 +7,28 @@
     {
       "id": "credimi-collaborative-automation-for-eudi-interoperability-and-conformance-pYLePZ",
       "sector": "public_sector",
-      "title": "Credimi: Collaborative Automation for EUDI Interoperability and Conformance",
-      "summary": "Credimi is a shared automation and evidence platform for EUDI Wallet interoperability and conformance testing. It lets real wallets, issuers and verifiers from different countries and ecosystems be exercised in repeatable combinations, replacing bilateral demonstrations and manual testing with reusable workflows.\n\nThe platform automates both API interactions and end-user wallet journeys across physical or virtual devices. It captures structured results, protocol metadata, screenshots, video and device logs, then maps that evidence to a maintained source of truth covering EUDI ARF, OpenID, ETSI and regulatory requirements.\n\nCredimi also translates Functional Conformance Assessment Framework (FCAF) test specifications into repeatable automated test journeys and reviewable evidence. Our implementation of the FCAF tests, will be presented at GDC 2026 on Day 2 at 14:00 in Room F.\n\nThe collaboration value is cumulative: each implementation added to the environment creates new interoperability combinations for the wider community. Developers, pilots, Member States and assessors can reproduce failures, compare behaviour, share findings and rerun the same tests after fixes.",
+      "title": "One EUDI Wallet Release Across OpenID Foundation, WE BUILD and FCAF",
+      "summary": "Before releasing a new EUDI Wallet build, a wallet development team must show that the same app can receive and present credentials correctly across independent test ecosystems. Today this often requires separate manual sessions, provider-specific scripts and test code added to the application.\n\nIn the implemented Credimi workflow, a release candidate running on a real Android device is tested against OpenID Foundation and WE BUILD services. The wallet receives a test credential through OpenID4VCI and presents a PID-format SD-JWT VC through OpenID4VP. Credimi automates the wallet actions and API interactions, captures structured results, screenshots, video and device logs, and extracts the applicable FCAF test results from that evidence.\n\nThe developer can identify the failed requirement, fix the wallet and rerun exactly the same journey. Keeping the test logic outside the application substantially reduces implementation effort. The automation pipelines, adapters and evidence definitions can be reused across wallet releases and implementations, turning separate ecosystem tests into a shared and repeatable release-validation process.",
       "organizationName": "Forkbomb",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-17T20:18:24+01:00",
-      "publishedAt": "2026-08-17T20:18:24+01:00",
+      "updatedAt": "2026-08-24T13:54:53+01:00",
+      "publishedAt": "2026-08-24T13:54:53+01:00",
       "tags": [
         "EUDI Wallet",
+        "wallet development",
+        "release validation",
         "automation",
         "interoperability testing",
         "conformance testing",
         "FCAF",
-        "digital identity",
-        "verifiable credentials",
+        "OpenID Foundation",
+        "WE BUILD",
         "OpenID4VCI",
         "OpenID4VP",
         "SD-JWT VC",
-        "open standards",
-        "cross-border collaboration"
+        "reusable test evidence",
+        "cross-ecosystem collaboration"
       ],
       "links": {
         "personalWallets": [
@@ -502,7 +504,7 @@
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/08/credimi-home-1.png",
       "moreInfoUrl": "https://credimi.io/",
-      "userJourney": "Credimi integrates third-party interoperability and conformance services without making wallet developers rebuild automation for every provider. OpenID Foundation and WE BUILD test suites share one execution and evidence pipeline, while new services can be added through lightweight adapters.\n\n1. A developer connects a device running the wallet, selects a test suite and chooses an issuance or presentation flow. No test-specific code needs to be added to the wallet application.\n2. Credimi coordinates the external service, APIs and wallet actions. It drives QR-code or deep-link interactions across one or more devices and captures responses, metadata, screenshots, video, device logs and structured results. FCAF test results are extracted from these pipelines rather than produced by application-embedded test code.\n3. The developer reviews the evidence, fixes the wallet and reruns the same journey. Results can be compared across releases and test suites.\n\nKeeping the test logic in reusable automation pipelines cuts test implementation costs to a fraction of application-specific approaches and makes the automated tests reusable across wallets and assessment contexts.",
+      "userJourney": "Credimi makes external interoperability and conformance services easy to integrate into the same wallet-testing workflow, including OpenID Foundation and WE BUILD tests.\n\n1. The developer configures their Wallet component in credimi.io.\n2. They adapt Credimi’s published Maestro mobile-automation scripts to their wallet. Typically, 80–90% of each script can be reused, so the tests remain outside the wallet application rather than requiring test-specific code in it.\n3. The developer launches a pipeline on a Credimi Runner. The runner executes the automation on a physical device, emulator or simulator and extracts the applicable FCAF test results from the pipeline evidence.\n4. After execution, Credimi presents a detailed report showing every FCAF test performed, its result and the supporting execution evidence. The developer can inspect failures, adapt the wallet or script, and rerun the same pipeline.\n5. Pipelines can also run automatically on a schedule or through CI integration, allowing the same reusable tests to validate subsequent wallet releases.",
       "country": "NL"
     }
   ]
