@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-24T15:22:44+00:00",
+    "generatedAt": "2026-08-24T15:22:55+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -11966,6 +11966,261 @@
             "orgName": "Verana",
             "useCases": [
                 {
+                    "id": "cexa-reusable-kyc-for-exchanges-and-banks-with-the-original-issuer-paid-on-every-reuse-cmd42L",
+                    "sector": "finance",
+                    "title": "CEXA: reusable KYC for exchanges and banks, with the original issuer paid on every reuse",
+                    "summary": "Exchanges and banks run the same identity checks on the same customers, pay an IDV provider each time, and lose over half their sign-ups at the KYC wall. The Travel Rule adds a second redundancy: institutions must identify the counterparty behind every transfer, so each joins several directories and resubmits the same license.\n\nThe Crypto Exchange Association (demo) is a runnable answer built on Verana: a trust ecosystem founded by exchanges, open to the banks that serve them. It governs one reusable credential, CEXA-Kyc, on both sides: only accredited members may issue it, and only accredited members may ask a wallet for it. Asking for KYC data is a privileged, paid act. When a member accepts another member's credential, the protocol routes the reuse fee to the institution that paid for the original check: the KYC file becomes an asset, and the customer opens an account in about a minute. A second credential, CEXA-VerifiedCounterparty, published on each member's DID and free to verify, replaces N Travel Rule directory subscriptions with one membership.\n\nThe institutions are fictional. The infrastructure is not: run the full loop today with ten integrated open-source wallets.",
+                    "organizationName": "Verana",
+                    "productionDeployment": "no",
+                    "status": "published",
+                    "updatedAt": "2026-08-24T16:22:55+01:00",
+                    "publishedAt": "2026-08-24T16:22:55+01:00",
+                    "tags": [
+                        "Finance",
+                        "Crypto",
+                        "CEX",
+                        "FIDES Supporter",
+                        "Trust Networks",
+                        "Ecosystem Governance",
+                        "Verifiable Trust"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "inji-wallet",
+                                "labelRaw": "Inji Wallet",
+                                "url": "https://www.mosip.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "eudi-reference-personal-wallet",
+                                "labelRaw": "EUDI Wallet Reference Implementation",
+                                "url": "https://github.com/eu-digital-identity-wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "authbound-wallet",
+                                "labelRaw": "Authbound Wallet",
+                                "url": "https://authbound.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "paradym-wallet",
+                                "labelRaw": "Paradym Wallet",
+                                "url": "https://paradym.id",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "bc-wallet",
+                                "labelRaw": "BC Wallet",
+                                "url": "https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "wwwallet",
+                                "labelRaw": "wwWallet",
+                                "url": "https://wwwallet.org",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "hologram-messaging",
+                                "labelRaw": "Hologram Messaging",
+                                "url": "https://2060.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "sphereon-wallet",
+                                "labelRaw": "Sphereon Edge Wallet",
+                                "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "altme-wallet",
+                                "labelRaw": "Altme",
+                                "url": "https://altme.io",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "national-eudi-wallet-netherlands",
+                                "labelRaw": "NL Wallet (Netherlands)",
+                                "url": "https://www.nldigitalgovernment.nl/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "swiyu-wallet",
+                                "labelRaw": "SWIYU Wallet",
+                                "url": "https://www.swiyu.admin.ch/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [
+                            {
+                                "refId": "vs-agent-verana-business-wallet",
+                                "labelRaw": "VS Agent - Verana Business Wallet",
+                                "url": "https://playground.testnet.verana.network/business-wallets",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            }
+                        ],
+                        "issuers": [
+                            {
+                                "refId": "issuer:verana:verana-playground-issuer-aurum:test",
+                                "labelRaw": "Aurum Exchange (demo) — cexa-kyc (CEXA-Kyc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:verana:verana-playground-cexa-association:test",
+                                "labelRaw": "Crypto Exchange Association (demo) — cexa-verified-counterparty (CEXA-VerifiedCounterparty)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:verana:verana-playground-issuer-novara:test",
+                                "labelRaw": "Novara Bank (demo) — cexa-kyc (CEXA-Kyc)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "issuer:verana:verana-playground-helvetia-trust:test",
+                                "labelRaw": "Helvetia Trust (demo) — ecs-organization (ECS Organization Credential)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [
+                            {
+                                "refId": "cred:verana:ecs-organization:vcdm-2-0",
+                                "labelRaw": "ECS Organization Credential",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:verana:ecs-service:vcdm-2-0",
+                                "labelRaw": "ECS Service Credential",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:verana:cexa-kyc:sd-jwt-vc",
+                                "labelRaw": "CEXA-Kyc",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:verana:cexa-verified-counterparty:vcdm-2-0",
+                                "labelRaw": "CEXA-VerifiedCounterparty",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "organizations": [
+                            {
+                                "refId": "org:verana",
+                                "labelRaw": "Verana",
+                                "url": "https://verana.io",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:2060",
+                                "labelRaw": "2060.io",
+                                "url": "https://2060.io",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": "cexa-aurum",
+                                "labelRaw": "Aurum Exchange (demo)",
+                                "url": "https://aurum.cexa.playground.testnet.verana.network",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cexa-borealis",
+                                "labelRaw": "Borealis Markets (demo)",
+                                "url": "https://borealis.cexa.playground.testnet.verana.network",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cexa-darkpool",
+                                "labelRaw": "DarkPool Exchange (demo)",
+                                "url": "https://darkpool.cexa.playground.testnet.verana.network",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cexa-novara",
+                                "labelRaw": "Novara Bank (demo)",
+                                "url": "https://novara.cexa.playground.testnet.verana.network",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "anoncreds",
+                        "sd_jwt_vc",
+                        "vcdm_1_1",
+                        "vcdm_2_0"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci",
+                        "other"
+                    ],
+                    "presentationProtocols": [
+                        "DIDComm v2",
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "themes": [
+                        "person_identity",
+                        "compliance_reporting"
+                    ],
+                    "imageUrls": [
+                        "https://playground.testnet.verana.network/images/cexa/hero-branded.webp"
+                    ],
+                    "imageUrl": "https://playground.testnet.verana.network/images/cexa/hero-branded.webp",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/qymbOJ753aw",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/qymbOJ753aw",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://playground.testnet.verana.network/usecases/cexa",
+                    "userJourney": "1. The Association anchors its trust registry on Verana's Verifiable Public Registry: two schemas, a digest-anchored governance framework, and its fee schedule (fees are example values).\n\n2. Members join through vetted, paid, renewable on-chain onboarding. Validated members receive their CEXA-VerifiedCounterparty credential. Members must already be Verifiable Services: the Association issues memberships, not identity.\n\n3. The customer's first exchange runs one full IDV check, seals the evidence bundle into their wallet, digest-bound, and issues CEXA-Kyc for free.\n\n4. On reuse, the wallet trust-resolves the requester and checks its VERIFIER accreditation before presenting. The verifier re-binds the person (passport NFC plus face match), receives the sealed evidence as its own CDD file, and pays the protocol-split fee: 0.90 to the original issuer, 0.10 to the Association. No phone home: the issuer never learns where the customer went\n\n5. Travel Rule desks read the counterparty credential from the member's DID, free\n\n6. Failures fail closed: a verifiable exchange outside the Association resolves TRUSTED and is still refused; a revoked credential dies at every member at the next check",
+                    "country": "EE"
+                },
+                {
                     "id": "republic-of-verandia-citizen-ids-business-ids-and-legal-representation-on-one-open-trust-registry-WhRQPe",
                     "sector": "public_sector",
                     "title": "Republic of Verandia: citizen IDs, business IDs and legal representation on one open trust registry",
@@ -12463,261 +12718,6 @@
                     },
                     "moreInfoUrl": "https://playground.testnet.verana.network/usecases/vesta",
                     "userJourney": "Organization journey (Marc, CTO of Vesta): Marc deploys Vesta's Business Wallet (VS Agent) and anchors the company DID on the Verana Network. He completes KYB with an accredited issuer to obtain the ECS-Organization credential, then self-issues Service credentials so every Vesta service presents its identity as Linked VPs in its DID Document. He makes Vesta an ECS-Badge issuer for its ~200 employees and accredits a login service to verify those badges. Vesta's ISO 9001 certification becomes a verifiable credential, no re-certifying. Finally Marc builds the Vesta Repair Network, Vesta's own ecosystem with its own governance, issuing Authorized Repairer credentials that work at portal login and at the customer's front door.\n\nUser journey (runnable demos): choose a personal wallet, obtain an ECS-Badge from the demo issuer, log in to the staff portal as a repair employee with that badge instead of a password, then search the public directory of Authorized Repairers and check any repairer's Proof-of-Trust before opening the door.",
-                    "country": "EE"
-                },
-                {
-                    "id": "cexa-reusable-kyc-for-exchanges-and-banks-with-the-original-issuer-paid-on-every-reuse-cmd42L",
-                    "sector": "finance",
-                    "title": "CEXA: reusable KYC for exchanges and banks, with the original issuer paid on every reuse",
-                    "summary": "Exchanges and banks run the same identity checks on the same customers, pay an IDV provider each time, and lose over half their sign-ups at the KYC wall. The Travel Rule adds a second redundancy: institutions must identify the counterparty behind every transfer, so each joins several directories and resubmits the same license.\n\nThe Crypto Exchange Association (demo) is a runnable answer built on Verana: a trust ecosystem founded by exchanges, open to the banks that serve them. It governs one reusable credential, CEXA-Kyc, on both sides: only accredited members may issue it, and only accredited members may ask a wallet for it. Asking for KYC data is a privileged, paid act. When a member accepts another member's credential, the protocol routes the reuse fee to the institution that paid for the original check: the KYC file becomes an asset, and the customer opens an account in about a minute. A second credential, CEXA-VerifiedCounterparty, published on each member's DID and free to verify, replaces N Travel Rule directory subscriptions with one membership.\n\nThe institutions are fictional. The infrastructure is not: run the full loop today with ten integrated open-source wallets.",
-                    "organizationName": "Verana",
-                    "productionDeployment": "no",
-                    "status": "published",
-                    "updatedAt": "2026-08-24T09:00:47+01:00",
-                    "publishedAt": "2026-08-24T09:00:47+01:00",
-                    "tags": [
-                        "Finance",
-                        "Crypto",
-                        "CEX",
-                        "FIDES Supporter",
-                        "Trust Networks",
-                        "Ecosystem Governance",
-                        "Verifiable Trust"
-                    ],
-                    "links": {
-                        "personalWallets": [
-                            {
-                                "refId": "inji-wallet",
-                                "labelRaw": "Inji Wallet",
-                                "url": "https://www.mosip.io",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "eudi-reference-personal-wallet",
-                                "labelRaw": "EUDI Wallet Reference Implementation",
-                                "url": "https://github.com/eu-digital-identity-wallet/",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "authbound-wallet",
-                                "labelRaw": "Authbound Wallet",
-                                "url": "https://authbound.io",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "paradym-wallet",
-                                "labelRaw": "Paradym Wallet",
-                                "url": "https://paradym.id",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "bc-wallet",
-                                "labelRaw": "BC Wallet",
-                                "url": "https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "wwwallet",
-                                "labelRaw": "wwWallet",
-                                "url": "https://wwwallet.org",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "hologram-messaging",
-                                "labelRaw": "Hologram Messaging",
-                                "url": "https://2060.io",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "sphereon-wallet",
-                                "labelRaw": "Sphereon Edge Wallet",
-                                "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "altme-wallet",
-                                "labelRaw": "Altme",
-                                "url": "https://altme.io",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "national-eudi-wallet-netherlands",
-                                "labelRaw": "NL Wallet (Netherlands)",
-                                "url": "https://www.nldigitalgovernment.nl/",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            },
-                            {
-                                "refId": "swiyu-wallet",
-                                "labelRaw": "SWIYU Wallet",
-                                "url": "https://www.swiyu.admin.ch/",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            }
-                        ],
-                        "businessWallets": [
-                            {
-                                "refId": "vs-agent-verana-business-wallet",
-                                "labelRaw": "VS Agent - Verana Business Wallet",
-                                "url": "https://playground.testnet.verana.network/business-wallets",
-                                "source": "catalog",
-                                "walletType": "organizational"
-                            }
-                        ],
-                        "issuers": [
-                            {
-                                "refId": "issuer:verana:verana-playground-issuer-aurum:test",
-                                "labelRaw": "Aurum Exchange (demo) — cexa-kyc (CEXA-Kyc)",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "issuer:verana:verana-playground-cexa-association:test",
-                                "labelRaw": "Crypto Exchange Association (demo) — cexa-verified-counterparty (CEXA-VerifiedCounterparty)",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "issuer:verana:verana-playground-issuer-novara:test",
-                                "labelRaw": "Novara Bank (demo) — cexa-kyc (CEXA-Kyc)",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "issuer:verana:verana-playground-helvetia-trust:test",
-                                "labelRaw": "Helvetia Trust (demo) — ecs-organization (ECS Organization Credential)",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            }
-                        ],
-                        "credentials": [
-                            {
-                                "refId": "cred:verana:ecs-organization:vcdm-2-0",
-                                "labelRaw": "ECS Organization Credential",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "cred:verana:ecs-service:vcdm-2-0",
-                                "labelRaw": "ECS Service Credential",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "cred:verana:cexa-kyc:sd-jwt-vc",
-                                "labelRaw": "CEXA-Kyc",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "cred:verana:cexa-verified-counterparty:vcdm-2-0",
-                                "labelRaw": "CEXA-VerifiedCounterparty",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            }
-                        ],
-                        "organizations": [
-                            {
-                                "refId": "org:verana",
-                                "labelRaw": "Verana",
-                                "url": "https://verana.io",
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "org:2060",
-                                "labelRaw": "2060.io",
-                                "url": "https://2060.io",
-                                "source": "catalog",
-                                "walletType": null
-                            }
-                        ],
-                        "rps": [
-                            {
-                                "refId": "cexa-aurum",
-                                "labelRaw": "Aurum Exchange (demo)",
-                                "url": "https://aurum.cexa.playground.testnet.verana.network",
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "cexa-borealis",
-                                "labelRaw": "Borealis Markets (demo)",
-                                "url": "https://borealis.cexa.playground.testnet.verana.network",
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "cexa-darkpool",
-                                "labelRaw": "DarkPool Exchange (demo)",
-                                "url": "https://darkpool.cexa.playground.testnet.verana.network",
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "cexa-novara",
-                                "labelRaw": "Novara Bank (demo)",
-                                "url": "https://novara.cexa.playground.testnet.verana.network",
-                                "source": "catalog",
-                                "walletType": null
-                            }
-                        ]
-                    },
-                    "interactionModes": [
-                        "remote"
-                    ],
-                    "vcFormats": [
-                        "anoncreds",
-                        "sd_jwt_vc",
-                        "vcdm_1_1",
-                        "vcdm_2_0"
-                    ],
-                    "issuanceProtocols": [
-                        "oid4vci",
-                        "other"
-                    ],
-                    "presentationProtocols": [
-                        "DIDComm v2",
-                        "OpenID4VP"
-                    ],
-                    "interopProfiles": [],
-                    "themes": [
-                        "person_identity",
-                        "compliance_reporting"
-                    ],
-                    "imageUrls": [
-                        "https://playground.testnet.verana.network/images/cexa/hero-branded.webp"
-                    ],
-                    "imageUrl": "https://playground.testnet.verana.network/images/cexa/hero-branded.webp",
-                    "videos": [
-                        {
-                            "url": "https://youtu.be/qrgFV0Hv5OA",
-                            "provider": "youtube"
-                        }
-                    ],
-                    "video": {
-                        "url": "https://youtu.be/qrgFV0Hv5OA",
-                        "provider": "youtube"
-                    },
-                    "moreInfoUrl": "https://playground.testnet.verana.network/usecases/cexa",
-                    "userJourney": "1. The Association anchors its trust registry on Verana's Verifiable Public Registry: two schemas, a digest-anchored governance framework, and its fee schedule (fees are example values).\n\n2. Members join through vetted, paid, renewable on-chain onboarding. Validated members receive their CEXA-VerifiedCounterparty credential. Members must already be Verifiable Services: the Association issues memberships, not identity.\n\n3. The customer's first exchange runs one full IDV check, seals the evidence bundle into their wallet, digest-bound, and issues CEXA-Kyc for free.\n\n4. On reuse, the wallet trust-resolves the requester and checks its VERIFIER accreditation before presenting. The verifier re-binds the person (passport NFC plus face match), receives the sealed evidence as its own CDD file, and pays the protocol-split fee: 0.90 to the original issuer, 0.10 to the Association. No phone home: the issuer never learns where the customer went\n\n5. Travel Rule desks read the counterparty credential from the member's DID, free\n\n6. Failures fail closed: a verifiable exchange outside the Association resolves TRUSTED and is still refused; a revoked credential dies at every member at the next check",
                     "country": "EE"
                 }
             ]
