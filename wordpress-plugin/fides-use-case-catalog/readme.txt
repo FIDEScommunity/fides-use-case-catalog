@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.34
+Stable tag: 0.20.36
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,12 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.36 =
+* Sync shared modal UI library (tiles ≥ 1.13.15): Use cases accordion two-column layout on narrow screens.
+
+= 0.20.35 =
+* Complete VideoObject JSON-LD (thumbnailUrl, description, uploadDate, embedUrl) so Google Search Console no longer flags missing video fields. Omit the node when a thumbnail cannot be derived.
 
 = 0.20.34 =
 * Keep modal media at a compact 240 px height and show complete use-case images without cropping.
