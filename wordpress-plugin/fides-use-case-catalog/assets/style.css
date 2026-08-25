@@ -1964,8 +1964,10 @@
 }
 
 .fides-modal-overlay .fides-modal {
+  box-sizing: border-box;
   max-width: 900px;
   width: 95%;
+  min-width: 0;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
@@ -2021,6 +2023,8 @@
   margin: 0 0 0.25rem;
   color: var(--fides-text-primary);
   line-height: 1.2;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .fides-modal-overlay .fides-modal-provider {
@@ -2080,6 +2084,7 @@
   padding: 1.25rem 1.5rem 1.5rem;
   overflow-y: auto;
   flex: 1;
+  min-width: 0;
 }
 
 .fides-modal-last-updated {
@@ -3444,7 +3449,7 @@
 
 .fides-use-case-modal-hero {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.25rem;
   margin-bottom: 1.5rem;
 }
@@ -3459,6 +3464,8 @@
   font-size: 0.9375rem;
   line-height: 1.65;
   color: var(--fides-text-secondary);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .fides-media-rows {
@@ -3474,6 +3481,9 @@
 /* Compact media viewer + thumbnail strip */
 .fides-use-case-modal-media-wrap {
   --fides-media-height: 240px;
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
 }
 
 .fides-use-case-modal-carousel {
@@ -3481,6 +3491,8 @@
   border-radius: 12px;
   background: #0f172a;
   overflow: hidden;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .fides-use-case-modal-carousel:focus,
@@ -3492,6 +3504,7 @@
 .fides-use-case-modal-carousel-viewport {
   position: relative;
   overflow: hidden;
+  min-width: 0;
 }
 
 .fides-use-case-modal-carousel-track {
@@ -3562,6 +3575,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  max-width: 100%;
   border: 0;
 }
 
@@ -3573,6 +3587,7 @@
   display: block;
   width: 100%;
   height: 100%;
+  max-width: 100%;
   object-fit: cover;
 }
 
@@ -3637,6 +3652,8 @@
   background: #f8fafc;
   border-top: 1px solid var(--fides-border);
   overflow-x: auto;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .fides-media-thumb {
@@ -3706,6 +3723,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
+  max-width: 100%;
   border: 0;
 }
 
@@ -4502,7 +4520,7 @@
   }
 
   .fides-use-case-modal-hero.has-media {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .fides-modal-overlay .fides-details-kv {
@@ -4611,6 +4629,7 @@
   .fides-modal-overlay .fides-modal {
     width: 100% !important;
     max-width: 100% !important;
+    min-width: 0 !important;
     max-height: min(88dvh, calc(100dvh - 120px)) !important;
     border-radius: 12px !important;
     display: flex !important;
@@ -4639,6 +4658,7 @@
   .fides-modal-overlay .fides-modal-body {
     flex: 1 1 auto;
     min-height: 0;
+    min-width: 0;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
@@ -4647,7 +4667,7 @@
   /* Meta row (sector · country) spans full width under action buttons */
   .fides-modal-overlay--usecase .fides-modal-header {
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-areas:
       "logo title actions"
       "logo meta  meta";
