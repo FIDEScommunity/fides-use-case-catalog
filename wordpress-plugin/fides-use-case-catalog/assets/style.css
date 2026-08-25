@@ -2328,12 +2328,17 @@
   border-radius: 12px;
   border: 1px solid rgba(10, 110, 243, 0.18);
   background: linear-gradient(180deg, rgba(10, 110, 243, 0.07) 0%, rgba(10, 110, 243, 0.03) 100%);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .fides-modal-overlay .fides-modal-orgs-header {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
+  min-width: 0;
 }
 
 .fides-modal-overlay .fides-modal-orgs-label {
@@ -2365,12 +2370,17 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.55rem;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .fides-modal-overlay .fides-modal-org-chip {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   padding: 0.35rem 0.75rem 0.35rem 0.35rem;
   border-radius: 9999px;
   border: 1px solid var(--fides-border);
@@ -2448,6 +2458,9 @@
 }
 
 .fides-modal-overlay .fides-modal-org-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
