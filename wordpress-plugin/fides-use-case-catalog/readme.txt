@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.37
+Stable tag: 0.20.38
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,9 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.38 =
+* Sync shared modal UI library (tiles ≥ 1.13.17): Use cases accordion scrolls when more than two cases are linked.
 
 = 0.20.37 =
 * Keep the detail modal within the viewport when a use case has many videos or a YouTube embed (Honduras-style media carousel).
