@@ -27,6 +27,7 @@ import type {
   WordPressExport,
   AggregatedUseCaseData,
 } from '../types/use-case.js';
+import { listingOrgId } from './orgBucket.js';
 
 const ROOT = process.cwd();
 
@@ -163,7 +164,7 @@ async function applyExportToCommunityFiles(data: WordPressExport): Promise<void>
       // when their org drops out of the export. Community-authored files (added
       // via pull request, marked "community") are protected from pruning.
       source: 'wordpress',
-      orgId: org.orgId,
+      orgId: listingOrgId(org),
       orgName: org.orgName,
       useCases: Array.isArray(org.useCases) ? org.useCases : [],
     };

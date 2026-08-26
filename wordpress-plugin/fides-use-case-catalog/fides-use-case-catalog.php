@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.20.39
+ * Version: 0.20.40
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.39');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.40');
 /** Bump this when share rewrite rules change so existing sites flush once. */
 define('FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION', '0.20.30');
 /** Admin list page size for Tools → Use Case Submissions. */
@@ -25,6 +25,7 @@ define('FIDES_USE_CASE_CATALOG_DB_VERSION', '1.8.0');
 define('FIDES_USE_CASE_LOOKUP_LIMIT', 8);
 
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-id.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-org-bucket.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-share-url.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-video.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-taxonomy.php';
@@ -1027,14 +1028,6 @@ function fides_use_case_catalog_map_lookup_items(array $items, string $query, st
     );
 }
 
-function fides_use_case_catalog_slugify(string $text): string {
-    $slug = sanitize_title($text);
-    if ($slug === '') {
-        $slug = 'use-case';
-    }
-    return $slug;
-}
-
 function fides_use_case_catalog_detect_video_provider(string $url): string {
     $host = wp_parse_url($url, PHP_URL_HOST);
     if (! is_string($host)) {
@@ -1931,40 +1924,6 @@ function fides_use_case_catalog_github_sync_admin_notice(): void {
         '<div class="notice notice-error is-dismissible"><p><strong>%s</strong> %s</p></div>',
         esc_html__('FIDES Use Case Catalog — GitHub sync failed:', 'fides-use-case-catalog'),
         esc_html($message)
-    );
-}
-
-/**
- * Resolve the organization bucket (folder slug + id + display name) for an item.
- *
- * Prefers a linked organization reference (refId from the organization catalog)
- * and otherwise derives a stable slug from the free-text organizationName.
- *
- * @param array<string, mixed> $item
- * @return array{orgSlug:string, orgId:string, orgName:string}
- */
-function fides_use_case_catalog_org_bucket(array $item): array {
-    $org_name = isset($item['organizationName']) ? trim((string) $item['organizationName']) : '';
-
-    $linked_ref = '';
-    if (isset($item['links']['organizations'][0]) && is_array($item['links']['organizations'][0])) {
-        $linked_ref = isset($item['links']['organizations'][0]['refId'])
-            ? trim((string) $item['links']['organizations'][0]['refId'])
-            : '';
-    }
-
-    $slug_basis = $org_name !== '' ? $org_name : $linked_ref;
-    $slug = $slug_basis !== ''
-        ? fides_use_case_catalog_slugify($slug_basis)
-        : 'unknown-organization';
-
-    // A linked refId is already an org:… style identifier from the org catalog.
-    $org_id = $linked_ref !== '' ? $linked_ref : ('org:' . $slug);
-
-    return array(
-        'orgSlug' => $slug,
-        'orgId'   => $org_id,
-        'orgName' => $org_name !== '' ? $org_name : ($linked_ref !== '' ? $linked_ref : 'Unknown organization'),
     );
 }
 

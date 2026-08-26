@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:credenid",
+  "orgId": "org:nedmod",
   "orgName": "Nedmod",
   "useCases": [
     {

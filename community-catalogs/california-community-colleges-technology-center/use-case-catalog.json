@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:ca-dmv",
+  "orgId": "org:ccc-tech-center",
   "orgName": "California Community Colleges Technology Center",
   "useCases": [
     {

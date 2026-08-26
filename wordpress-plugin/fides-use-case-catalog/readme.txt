@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.39
+Stable tag: 0.20.40
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,9 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.40 =
+* Keep the listing organisation as orgId. Linked partners in Organisations involved must not replace the submitter (Hopae was exported as org:google).
 
 = 0.20.39 =
 * Truncate long organisation names in the modal “Organisations involved” chips so they stay inside the viewport.

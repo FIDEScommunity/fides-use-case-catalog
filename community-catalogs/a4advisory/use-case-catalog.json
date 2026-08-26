@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:aamva",
+  "orgId": "org:a4-advisory",
   "orgName": "A4Advisory",
   "useCases": [
     {
