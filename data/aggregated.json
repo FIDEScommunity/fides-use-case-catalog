@@ -1,10 +1,147 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-26T19:50:52.641Z",
+  "lastUpdated": "2026-08-26T19:57:14.427Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 99,
   "useCases": [
+    {
+      "id": "cross-border-micro-credentials-the-eu-ace-chain-eu-ch-MUUYsm",
+      "sector": "education",
+      "title": "Cross-Border Micro-Credentials: The EU.ACE Chain (EU - CH)",
+      "summary": "A student completes a university programme and receives a digital credential in their wallet. Instead of a PDF that another institution or employer has to check manually, the credential can be presented and verified directly.\n\nIn the EU.ACE pilot, participating universities used SAPIO to issue learning achievements as structured, verifiable credentials. The university remains the issuer, the learner keeps the credential in their own wallet, and another organisation can verify it without contacting SAPIO or the university.\n\nThe goal is simple: make academic achievements easier to carry, share and trust across institutions and countries.",
+      "organizationName": "SAPIO GMBH",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-26T20:56:58+01:00",
+      "publishedAt": "2026-08-26T20:56:58+01:00",
+      "tags": [
+        "education",
+        "micro-credentials",
+        "higher education",
+        "continuing education",
+        "cross-border recognition",
+        "lifelong learning",
+        "ECTS",
+        "academic credentials",
+        "university alliance",
+        "SD-JWT VC",
+        "OpenID4VP",
+        "Switzerland",
+        "Romania",
+        "Netherlands"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "paradym-wallet",
+            "labelRaw": "Paradym Wallet",
+            "url": "https://paradym.id",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Universitatea „1 Decembrie 1918” din Alba Iulia",
+            "url": "http://uab.ro",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:diploma-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "Diploma (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "EDC",
+            "url": "https://code.europa.eu/qualifications-courses-and-credentials/ELM-support/-/wikis/home",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "EU.ACE",
+            "url": "https://euace.eu/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:sapio-gmbh",
+            "labelRaw": "SAPIO GMBH",
+            "url": "http://www.sapio.id",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:hslu",
+            "labelRaw": "Lucerne University of Applied Sciences and Arts (HSLU)",
+            "url": "https://www.hslu.ch/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:alba-iulia-university",
+            "labelRaw": "Universitatea „1 Decembrie 1918” din Alba Iulia",
+            "url": "https://uab.ro",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:university-krems",
+            "labelRaw": "University for Continuing Education Krems",
+            "url": "https://www.donau-uni.ac.at/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4"
+      ],
+      "themes": [
+        "education"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/SAPIO_EUACE_cover_v2_1920x1080.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/SAPIO_EUACE_cover_v2_1920x1080.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=KkvYmnryrTA",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=KkvYmnryrTA",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.sapio.id/use-cases/",
+      "userJourney": "1. Programme delivery. Participants complete \"Education for All — Empowering Higher Education through Quality Micro-Credentials\" (16-27 March 2026, English, 1 ECTS, EQF 6-7). Academic requirements: 60% pass grade, 80% attendance.\n\n2. Credential modelling. SAPIO models the programme in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes under Knowledge, Skills and Competences. The template is programme-agnostic and reusable across the alliance without redesign.\n\n3. Issuer identity. The awarding institution is established as an institutional DID with an X.509 certificate, registered as a trusted entity. From here the university, not the platform, is the cryptographic root of trust.\n\n4. Issuance. The academic coordinator supplies the list of participants who met the criteria. SAPIO generates OID4VCI credential offers. Participation is voluntary and opt-in; declining has no effect on academic standing.\n\n5. Wallet retrieval. The learner accepts the offer in a standards-compliant wallet of their choice. No proprietary holder app, no account with SAPIO. From this point the credential lives in the learner's wallet and SAPIO retains no pe",
+      "country": "CH"
+    },
     {
       "id": "trusted-ereceipts-for-b2b-payments-issuing-verifiable-receipts-to-a-european-business-wallet-after-eudi-based-sca-yB3QzY",
       "sector": "finance",
@@ -10620,144 +10757,6 @@
       "imageUrl": "https://fides.community/app/uploads/2026/08/proovy_DIF.png",
       "userJourney": "1. Activity record. A volunteer takes part in an activity (community service, environmental work, disaster preparedness, education, etc.); the host organization submits the participation record to JAVO.\n2. Independent review. JAVO, as a neutral third party, reviews and approves the content of the certificate — establishing trust beyond any single organization.\n3. Issuance. JAVO issues a verifiable volunteer certificate to the volunteer through the proovy platform (OpenID4VCI).\n4. Hold in the wallet. The volunteer stores the credential in the proovy wallet on their smartphone and owns it permanently, independent of any single organization's records.\n5. Present with selective disclosure. When applying to a university, a job, or another program, the volunteer presents the credential (OpenID4VP), sharing only the attributes needed.\n6. Instant verification. The relying party cryptographically verifies the credential and confirms JAVO's third-party endorsement — no phone calls, no paper, no doubt about authenticity.",
       "country": "JP"
-    },
-    {
-      "id": "cross-border-micro-credentials-the-eu-ace-chain-eu-ch-MUUYsm",
-      "sector": "education",
-      "title": "Cross-Border Micro-Credentials: The EU.ACE Chain (EU - CH)",
-      "summary": "A student completes a university programme and receives a digital credential in their wallet. Instead of a PDF that another institution or employer has to check manually, the credential can be presented and verified directly.\r\n\r\nIn the EU.ACE pilot, participating universities used SAPIO to issue learning achievements as structured, verifiable credentials. The university remains the issuer, the learner keeps the credential in their own wallet, and another organisation can verify it without contacting SAPIO or the university.\r\n\r\nThe goal is simple: make academic achievements easier to carry, share and trust across institutions and countries.",
-      "organizationName": "SAPIO GMBH",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-15T17:07:47+01:00",
-      "publishedAt": "2026-08-13T10:53:12+01:00",
-      "tags": [
-        "education",
-        "micro-credentials",
-        "higher education",
-        "continuing education",
-        "cross-border recognition",
-        "lifelong learning",
-        "ECTS",
-        "academic credentials",
-        "university alliance",
-        "SD-JWT VC",
-        "OpenID4VP",
-        "Switzerland",
-        "Romania",
-        "Netherlands"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "paradym-wallet",
-            "labelRaw": "Paradym Wallet",
-            "url": "https://paradym.id",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Universitatea „1 Decembrie 1918” din Alba Iulia",
-            "url": "http://uab.ro",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:eu:diploma-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "Diploma (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "EDC",
-            "url": "https://code.europa.eu/qualifications-courses-and-credentials/ELM-support/-/wikis/home",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "EU.ACE",
-            "url": "https://euace.eu/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:sapio-gmbh",
-            "labelRaw": "SAPIO GMBH",
-            "url": "http://www.sapio.id",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:hslu",
-            "labelRaw": "Lucerne University of Applied Sciences and Arts (HSLU)",
-            "url": "https://www.hslu.ch/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:alba-iulia-university",
-            "labelRaw": "Universitatea „1 Decembrie 1918” din Alba Iulia",
-            "url": "https://uab.ro",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:university-krems",
-            "labelRaw": "University for Continuing Education Krems",
-            "url": "https://www.donau-uni.ac.at/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "DIIP v4",
-        "DIIP v5"
-      ],
-      "themes": [
-        "education"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/SAPIO_EUACE_cover_v2_1920x1080.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/SAPIO_EUACE_cover_v2_1920x1080.png",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=KkvYmnryrTA",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=KkvYmnryrTA",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.sapio.id/use-cases/",
-      "userJourney": "1. Programme delivery. Participants complete \"Education for All — Empowering Higher Education through Quality Micro-Credentials\" (16-27 March 2026, English, 1 ECTS, EQF 6-7). Academic requirements: 60% pass grade, 80% attendance.\r\n\r\n2. Credential modelling. SAPIO models the programme in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes under Knowledge, Skills and Competences. The template is programme-agnostic and reusable across the alliance without redesign.\r\n\r\n3. Issuer identity. The awarding institution is established as an institutional DID with an X.509 certificate, registered as a trusted entity. From here the university, not the platform, is the cryptographic root of trust.\r\n\r\n4. Issuance. The academic coordinator supplies the list of participants who met the criteria. SAPIO generates OID4VCI credential offers. Participation is voluntary and opt-in; declining has no effect on academic standing.\r\n\r\n5. Wallet retrieval. The learner accepts the offer in a standards-compliant wallet of their choice. No proprietary holder app, no account with SAPIO. From this point the credential lives in the learner's wallet and SAPIO retains no pe",
-      "country": "CH"
     },
     {
       "id": "dppskop-trusted-digital-product-passports-for-global-manufacturing-and-european-regulatory-compliance-KIIXN0",
