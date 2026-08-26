@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-26T19:23:13+00:00",
+    "generatedAt": "2026-08-26T19:57:51+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -107,7 +107,7 @@
         },
         {
             "orgSlug": "a4advisory",
-            "orgId": "org:aamva",
+            "orgId": "org:a4-advisory",
             "orgName": "A4Advisory",
             "useCases": [
                 {
@@ -588,7 +588,7 @@
         },
         {
             "orgSlug": "agence-nationale-des-titres-securises",
-            "orgId": "org:france",
+            "orgId": "org:agence-nationale-des-titres-securises",
             "orgName": "Agence Nationale des Titres Sécurisés",
             "useCases": [
                 {
@@ -2179,7 +2179,7 @@
         },
         {
             "orgSlug": "ayanworks-technology-solutions-pvt-ltd",
-            "orgId": "org:buthan",
+            "orgId": "org:ayanworks",
             "orgName": "AyanWorks Technology Solutions Pvt. Ltd.",
             "useCases": [
                 {
@@ -2499,7 +2499,7 @@
         },
         {
             "orgSlug": "california-community-colleges-technology-center",
-            "orgId": "org:ca-dmv",
+            "orgId": "org:ccc-tech-center",
             "orgName": "California Community Colleges Technology Center",
             "useCases": [
                 {
@@ -3488,7 +3488,7 @@
         },
         {
             "orgSlug": "credivera",
-            "orgId": "org:trumerit",
+            "orgId": "org:credivera",
             "orgName": "Credivera",
             "useCases": [
                 {
@@ -3992,7 +3992,7 @@
         },
         {
             "orgSlug": "ecp",
-            "orgId": "org:knb",
+            "orgId": "org:ecp",
             "orgName": "ECP",
             "useCases": [
                 {
@@ -4347,7 +4347,7 @@
         },
         {
             "orgSlug": "finspot",
-            "orgId": "org:ifc",
+            "orgId": "org:finspot",
             "orgName": "Finspot",
             "useCases": [
                 {
@@ -4533,7 +4533,7 @@
         },
         {
             "orgSlug": "forkbomb",
-            "orgId": "org:igrant",
+            "orgId": "org:forkbomb",
             "orgName": "Forkbomb",
             "useCases": [
                 {
@@ -5412,7 +5412,7 @@
         },
         {
             "orgSlug": "hopae",
-            "orgId": "org:google",
+            "orgId": "org:hopae",
             "orgName": "Hopae",
             "useCases": [
                 {
@@ -5517,7 +5517,7 @@
         },
         {
             "orgSlug": "hovi",
-            "orgId": "org:kyckr",
+            "orgId": "org:hovi",
             "orgName": "Hovi",
             "useCases": [
                 {
@@ -6479,7 +6479,7 @@
         },
         {
             "orgSlug": "ilabs",
-            "orgId": "org:fides",
+            "orgId": "org:ilabs",
             "orgName": "iLabs",
             "useCases": [
                 {
@@ -6594,7 +6594,7 @@
         },
         {
             "orgSlug": "inji",
-            "orgId": "org:igovtt",
+            "orgId": "org:inji",
             "orgName": "Inji",
             "useCases": [
                 {
@@ -8012,7 +8012,7 @@
         },
         {
             "orgSlug": "national-id-program",
-            "orgId": "org:national-id-program",
+            "orgId": "org:ethiopia",
             "orgName": "National ID Program",
             "useCases": [
                 {
@@ -8196,7 +8196,7 @@
         },
         {
             "orgSlug": "nedmod",
-            "orgId": "org:credenid",
+            "orgId": "org:nedmod",
             "orgName": "Nedmod",
             "useCases": [
                 {
@@ -8607,7 +8607,7 @@
         },
         {
             "orgSlug": "ooru",
-            "orgId": "org:uidai",
+            "orgId": "org:ooru",
             "orgName": "Ooru",
             "useCases": [
                 {
@@ -9353,7 +9353,7 @@
         },
         {
             "orgSlug": "recept",
-            "orgId": "org:javo",
+            "orgId": "org:recept",
             "orgName": "Recept",
             "useCases": [
                 {
@@ -9551,7 +9551,7 @@
         },
         {
             "orgSlug": "robert-bosch-gmbh",
-            "orgId": "org:bundesanzeiger-verlag",
+            "orgId": "org:bosch",
             "orgName": "Robert Bosch GmbH",
             "useCases": [
                 {
@@ -10017,12 +10017,12 @@
                     "id": "cross-border-micro-credentials-the-eu-ace-chain-eu-ch-MUUYsm",
                     "sector": "education",
                     "title": "Cross-Border Micro-Credentials: The EU.ACE Chain (EU - CH)",
-                    "summary": "A student completes a university programme and receives a digital credential in their wallet. Instead of a PDF that another institution or employer has to check manually, the credential can be presented and verified directly.\r\n\r\nIn the EU.ACE pilot, participating universities used SAPIO to issue learning achievements as structured, verifiable credentials. The university remains the issuer, the learner keeps the credential in their own wallet, and another organisation can verify it without contacting SAPIO or the university.\r\n\r\nThe goal is simple: make academic achievements easier to carry, share and trust across institutions and countries.",
+                    "summary": "A student completes a university programme and receives a digital credential in their wallet. Instead of a PDF that another institution or employer has to check manually, the credential can be presented and verified directly.\n\nIn the EU.ACE pilot, participating universities used SAPIO to issue learning achievements as structured, verifiable credentials. The university remains the issuer, the learner keeps the credential in their own wallet, and another organisation can verify it without contacting SAPIO or the university.\n\nThe goal is simple: make academic achievements easier to carry, share and trust across institutions and countries.",
                     "organizationName": "SAPIO GMBH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-15T17:07:47+01:00",
-                    "publishedAt": "2026-08-13T10:53:12+01:00",
+                    "updatedAt": "2026-08-26T20:56:58+01:00",
+                    "publishedAt": "2026-08-26T20:56:58+01:00",
                     "tags": [
                         "education",
                         "micro-credentials",
@@ -10127,8 +10127,7 @@
                         "OpenID4VP"
                     ],
                     "interopProfiles": [
-                        "DIIP v4",
-                        "DIIP v5"
+                        "DIIP v4"
                     ],
                     "themes": [
                         "education"
@@ -10148,7 +10147,7 @@
                         "provider": "youtube"
                     },
                     "moreInfoUrl": "https://www.sapio.id/use-cases/",
-                    "userJourney": "1. Programme delivery. Participants complete \"Education for All — Empowering Higher Education through Quality Micro-Credentials\" (16-27 March 2026, English, 1 ECTS, EQF 6-7). Academic requirements: 60% pass grade, 80% attendance.\r\n\r\n2. Credential modelling. SAPIO models the programme in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes under Knowledge, Skills and Competences. The template is programme-agnostic and reusable across the alliance without redesign.\r\n\r\n3. Issuer identity. The awarding institution is established as an institutional DID with an X.509 certificate, registered as a trusted entity. From here the university, not the platform, is the cryptographic root of trust.\r\n\r\n4. Issuance. The academic coordinator supplies the list of participants who met the criteria. SAPIO generates OID4VCI credential offers. Participation is voluntary and opt-in; declining has no effect on academic standing.\r\n\r\n5. Wallet retrieval. The learner accepts the offer in a standards-compliant wallet of their choice. No proprietary holder app, no account with SAPIO. From this point the credential lives in the learner's wallet and SAPIO retains no pe",
+                    "userJourney": "1. Programme delivery. Participants complete \"Education for All — Empowering Higher Education through Quality Micro-Credentials\" (16-27 March 2026, English, 1 ECTS, EQF 6-7). Academic requirements: 60% pass grade, 80% attendance.\n\n2. Credential modelling. SAPIO models the programme in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes under Knowledge, Skills and Competences. The template is programme-agnostic and reusable across the alliance without redesign.\n\n3. Issuer identity. The awarding institution is established as an institutional DID with an X.509 certificate, registered as a trusted entity. From here the university, not the platform, is the cryptographic root of trust.\n\n4. Issuance. The academic coordinator supplies the list of participants who met the criteria. SAPIO generates OID4VCI credential offers. Participation is voluntary and opt-in; declining has no effect on academic standing.\n\n5. Wallet retrieval. The learner accepts the offer in a standards-compliant wallet of their choice. No proprietary holder app, no account with SAPIO. From this point the credential lives in the learner's wallet and SAPIO retains no pe",
                     "country": "CH"
                 }
             ]
@@ -10257,7 +10256,7 @@
         },
         {
             "orgSlug": "sphereon",
-            "orgId": "org:kw1c",
+            "orgId": "org:sphereon",
             "orgName": "Sphereon",
             "useCases": [
                 {
@@ -10414,7 +10413,7 @@
         },
         {
             "orgSlug": "spherity",
-            "orgId": "org:catena-x",
+            "orgId": "org:spherity",
             "orgName": "Spherity",
             "useCases": [
                 {
@@ -13033,13 +13032,13 @@
                 {
                     "id": "trusted-ereceipts-for-b2b-payments-issuing-verifiable-receipts-to-a-european-business-wallet-after-eudi-based-sca-yB3QzY",
                     "sector": "finance",
-                    "title": "Trusted eReceipts for B2B Payments: issuing verifiable receipts to a European Business Wallet after EUDI-based SCA",
-                    "summary": "This use case demonstrates how a merchant can issue a verifiable eReceipt after a payment flow involving Strong Customer Authentication and deliver it to a European Business Wallet used by an SME buyer organisation. The scenario connects the EUDI Wallet, payment evidence, merchant-issued receipt data and organisational reuse of the receipt in downstream business processes.\n\nThe Bygg AB Business Wallet and the WE BUILD corporate shop for PA4 (without Tax Portal) are live and ready to test. Both run on the iGrant.io Organisation Wallet Suite. You need the iGrant.io EUDI Wallet app on your phone.\n\nPortals\n\n- Piggy Bank: https://piggybank-demo.igrant.io/\n- Bygg AB Business Wallet: https://byggab-businesswallet.igrant.io.\n- WE BUILD corporate shop: https://webuildshop-corporate-demo.igrant.io.\nBefore you start, issue yourself a Person Identification Data (PID) credential into your EUDI Wallet: https://igrant.io/demo/pid.html\n\nThe EBWOID and VAT-ID sit in the Bygg AB business wallet already, so business registration needs nothing extra from you.",
+                    "title": "Trusted eReceipts for B2B Payments: Issuing verifiable receipts to a European Business Wallet after EUDI-based SCA",
+                    "summary": "Verifiable eReceipts for SME business purchases: An SME buys online. An authorised employee approves the payment with Strong Customer Authentication from their personal EUDI Wallet, and the signed receipt lands in the company's European Business Wallet, ready to post against input VAT.\n\nThat split is the hard part. Payment rails authenticate people; tax and audit are about organisations. Here the payer is a natural person, while the receipt is bound to the company's wallet key.\n\nFor SMEs, this replaces the paper slip that gets rekeyed, lost, or written off along with the VAT it could have evidenced. The eReceipt carries itemised lines, per-rate VAT and settlement evidence, so input VAT reconciles automatically once the buyer shares receipts with the Member State tax service. ViDA does this for invoices; nothing does it for receipts, where most SME spending happens.\n\nLive on the iGrant.io Organisation Wallet Suite and requires any EUDI Wallet app like Data Wallet.\n\nPiggy Bank (Buyer Bank): piggybank-demo.igrant.io\nSeller /Merchant: webuildshop-corporate-demo.igrant.io\nSME Business Wallet: byggab-businesswallet.igrant.io\nTax portal (demo): taxservice-demo.igrant.io",
                     "organizationName": "WE BUILD Consortium",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-26T20:23:13+01:00",
-                    "publishedAt": "2026-08-26T20:23:13+01:00",
+                    "updatedAt": "2026-08-26T20:57:51+01:00",
+                    "publishedAt": "2026-08-26T20:57:51+01:00",
                     "tags": [
                         "EUDI Wallet",
                         "Business Wallet",
@@ -13080,6 +13079,20 @@
                                 "url": null,
                                 "source": "catalog",
                                 "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Buyer Bank",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Seller Bank",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
                             }
                         ],
                         "credentials": [
@@ -13114,6 +13127,20 @@
                             {
                                 "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
                                 "labelRaw": "PID (SD-JWT VC)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:vat-id:sd-jwt-vc",
+                                "labelRaw": "EUDI VAT ID",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
+                                "labelRaw": "EBW Owner Identification Data (EBW-OID)",
                                 "url": null,
                                 "source": "catalog",
                                 "walletType": null
@@ -13198,6 +13225,20 @@
                                 "url": "https://getreceipthero.com/",
                                 "source": "manual",
                                 "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Buyer Bank",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Member State Tax Authority",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
                             }
                         ]
                     },
@@ -13215,6 +13256,7 @@
                     ],
                     "interopProfiles": [
                         "EUDI Wallet ARF",
+                        "EWC v3",
                         "HAIP v1"
                     ],
                     "themes": [
@@ -13227,16 +13269,16 @@
                     "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png",
                     "videos": [
                         {
-                            "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
+                            "url": "https://www.youtube.com/watch?v=uYhA1WUhfTw",
                             "provider": "youtube"
                         }
                     ],
                     "video": {
-                        "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
+                        "url": "https://www.youtube.com/watch?v=uYhA1WUhfTw",
                         "provider": "youtube"
                     },
                     "moreInfoUrl": "https://webuildshop-corporate-demo.igrant.io/",
-                    "userJourney": "Journey 1\n1. Onboarding: Open https://byggab-businesswallet.igrant.io > \"Register as the business owner\". Scan QR with EUDI Wallet, present PID, accept Bygg AB Business Wallet Authenticator.\n2. Login: Press \"Sign in with your EUDI Wallet\", present Authenticator.\n3. Add People: Go to People, add user, choose payment attestation (Account/Card with Mastercard or Visa). User opens email, scans QR (or presses button), enters 4-digit code, accepts in wallet. Refresh to show Accepted/Linked.\n\nJourney 2\n1. Onboarding: Open https://webuildshop-corporate-demo.igrant.io/register > Business. Search European Digital Directory (\"bygg\", VAT, EBWOID) > Connect. Sign into Bygg portal, review claims and Trusted Service Provider details, share. Scan QR with EUDI Wallet (present PID) to get WE BUILD Shop Corporate Authenticator.\n2. Login: Sign in at shop with EUDI Wallet (business mode), present Corporate Authenticator.\n3. Payment: Add items to cart > Checkout. Press \"Pay with EUDI Wallet\", select credential (Journey 1 or https://piggybank-demo.igrant.io), approve TS12 payment.\n4. eReceipt: Open https://byggab-businesswallet.igrant.io, click notification bell, accept eReceipt. View under Receipts.",
+                    "userJourney": "Onboarding:\n1. Buyer admin registers Bygg AB at the shop. The Business Wallet presents the company's legal identity (EBWOID) and VAT-ID; the shop stores where receipts go.\n2. Buyer admin adds authorised employees, each holding a payment attestation from their bank, Piggy Bank.\n\nPurchase:\n3. Employee Johan signs in to the shop in Business mode. The shop rechecks the company identity and his payment attestation.\n4. He checks out and approves the payment in his own personal EUDI Wallet with Strong Customer Authentication, linked to that transaction. Settlement is SEPA Instant.\n5. On settlement, the shop builds the eReceipt and issues it as a signed credential straight to the Bygg AB Business Wallet. No QR code, no app switching.\n6. The wallet verifies signature, issuer trust, integrity rules and revocation on arrival. Johan authenticated as a person; the receipt belongs to the company.\n\nReuse and Tax Reconciliation:\n7. The expense service books it as an expense (ReceiptHero, mocked here).\n8. Buyer admin shares the period's receipts with the Member State tax service.\n9. The tax portal verifies each receipt and reconciles input VAT per rate, with no rekeying on either side.",
                     "country": "SE"
                 }
             ]
