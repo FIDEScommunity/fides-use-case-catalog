@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-26T15:18:05+00:00",
+    "generatedAt": "2026-08-26T17:47:08+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6601,7 +6601,7 @@
         },
         {
             "orgSlug": "inji",
-            "orgId": "org:inji",
+            "orgId": "org:igovtt",
             "orgName": "Inji",
             "useCases": [
                 {
@@ -6612,8 +6612,8 @@
                     "organizationName": "Inji",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-20T22:04:53+01:00",
-                    "publishedAt": "2026-08-20T08:10:18+01:00",
+                    "updatedAt": "2026-08-26T18:47:08+01:00",
+                    "publishedAt": "2026-08-26T18:47:08+01:00",
                     "tags": [
                         "digital public infrastructure",
                         "DPI",
@@ -6655,13 +6655,6 @@
                             }
                         ],
                         "organizations": [
-                            {
-                                "refId": null,
-                                "labelRaw": "iGovTT (National Information and Communication Technology Company Limited) implementing agency",
-                                "url": null,
-                                "source": "manual",
-                                "walletType": null
-                            },
                             {
                                 "refId": "org:igovtt",
                                 "labelRaw": "iGovTT",
