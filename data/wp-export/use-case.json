@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-26T19:23:13+00:00",
+    "generatedAt": "2026-08-26T19:56:58+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -107,7 +107,7 @@
         },
         {
             "orgSlug": "a4advisory",
-            "orgId": "org:aamva",
+            "orgId": "org:a4-advisory",
             "orgName": "A4Advisory",
             "useCases": [
                 {
@@ -588,7 +588,7 @@
         },
         {
             "orgSlug": "agence-nationale-des-titres-securises",
-            "orgId": "org:france",
+            "orgId": "org:agence-nationale-des-titres-securises",
             "orgName": "Agence Nationale des Titres Sécurisés",
             "useCases": [
                 {
@@ -2179,7 +2179,7 @@
         },
         {
             "orgSlug": "ayanworks-technology-solutions-pvt-ltd",
-            "orgId": "org:buthan",
+            "orgId": "org:ayanworks",
             "orgName": "AyanWorks Technology Solutions Pvt. Ltd.",
             "useCases": [
                 {
@@ -2499,7 +2499,7 @@
         },
         {
             "orgSlug": "california-community-colleges-technology-center",
-            "orgId": "org:ca-dmv",
+            "orgId": "org:ccc-tech-center",
             "orgName": "California Community Colleges Technology Center",
             "useCases": [
                 {
@@ -3488,7 +3488,7 @@
         },
         {
             "orgSlug": "credivera",
-            "orgId": "org:trumerit",
+            "orgId": "org:credivera",
             "orgName": "Credivera",
             "useCases": [
                 {
@@ -3992,7 +3992,7 @@
         },
         {
             "orgSlug": "ecp",
-            "orgId": "org:knb",
+            "orgId": "org:ecp",
             "orgName": "ECP",
             "useCases": [
                 {
@@ -4347,7 +4347,7 @@
         },
         {
             "orgSlug": "finspot",
-            "orgId": "org:ifc",
+            "orgId": "org:finspot",
             "orgName": "Finspot",
             "useCases": [
                 {
@@ -4533,7 +4533,7 @@
         },
         {
             "orgSlug": "forkbomb",
-            "orgId": "org:igrant",
+            "orgId": "org:forkbomb",
             "orgName": "Forkbomb",
             "useCases": [
                 {
@@ -5412,7 +5412,7 @@
         },
         {
             "orgSlug": "hopae",
-            "orgId": "org:google",
+            "orgId": "org:hopae",
             "orgName": "Hopae",
             "useCases": [
                 {
@@ -5517,7 +5517,7 @@
         },
         {
             "orgSlug": "hovi",
-            "orgId": "org:kyckr",
+            "orgId": "org:hovi",
             "orgName": "Hovi",
             "useCases": [
                 {
@@ -6479,7 +6479,7 @@
         },
         {
             "orgSlug": "ilabs",
-            "orgId": "org:fides",
+            "orgId": "org:ilabs",
             "orgName": "iLabs",
             "useCases": [
                 {
@@ -6594,7 +6594,7 @@
         },
         {
             "orgSlug": "inji",
-            "orgId": "org:igovtt",
+            "orgId": "org:inji",
             "orgName": "Inji",
             "useCases": [
                 {
@@ -8012,7 +8012,7 @@
         },
         {
             "orgSlug": "national-id-program",
-            "orgId": "org:national-id-program",
+            "orgId": "org:ethiopia",
             "orgName": "National ID Program",
             "useCases": [
                 {
@@ -8196,7 +8196,7 @@
         },
         {
             "orgSlug": "nedmod",
-            "orgId": "org:credenid",
+            "orgId": "org:nedmod",
             "orgName": "Nedmod",
             "useCases": [
                 {
@@ -8607,7 +8607,7 @@
         },
         {
             "orgSlug": "ooru",
-            "orgId": "org:uidai",
+            "orgId": "org:ooru",
             "orgName": "Ooru",
             "useCases": [
                 {
@@ -9353,7 +9353,7 @@
         },
         {
             "orgSlug": "recept",
-            "orgId": "org:javo",
+            "orgId": "org:recept",
             "orgName": "Recept",
             "useCases": [
                 {
@@ -9551,7 +9551,7 @@
         },
         {
             "orgSlug": "robert-bosch-gmbh",
-            "orgId": "org:bundesanzeiger-verlag",
+            "orgId": "org:bosch",
             "orgName": "Robert Bosch GmbH",
             "useCases": [
                 {
@@ -10017,12 +10017,12 @@
                     "id": "cross-border-micro-credentials-the-eu-ace-chain-eu-ch-MUUYsm",
                     "sector": "education",
                     "title": "Cross-Border Micro-Credentials: The EU.ACE Chain (EU - CH)",
-                    "summary": "A student completes a university programme and receives a digital credential in their wallet. Instead of a PDF that another institution or employer has to check manually, the credential can be presented and verified directly.\r\n\r\nIn the EU.ACE pilot, participating universities used SAPIO to issue learning achievements as structured, verifiable credentials. The university remains the issuer, the learner keeps the credential in their own wallet, and another organisation can verify it without contacting SAPIO or the university.\r\n\r\nThe goal is simple: make academic achievements easier to carry, share and trust across institutions and countries.",
+                    "summary": "A student completes a university programme and receives a digital credential in their wallet. Instead of a PDF that another institution or employer has to check manually, the credential can be presented and verified directly.\n\nIn the EU.ACE pilot, participating universities used SAPIO to issue learning achievements as structured, verifiable credentials. The university remains the issuer, the learner keeps the credential in their own wallet, and another organisation can verify it without contacting SAPIO or the university.\n\nThe goal is simple: make academic achievements easier to carry, share and trust across institutions and countries.",
                     "organizationName": "SAPIO GMBH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-15T17:07:47+01:00",
-                    "publishedAt": "2026-08-13T10:53:12+01:00",
+                    "updatedAt": "2026-08-26T20:56:58+01:00",
+                    "publishedAt": "2026-08-26T20:56:58+01:00",
                     "tags": [
                         "education",
                         "micro-credentials",
@@ -10127,8 +10127,7 @@
                         "OpenID4VP"
                     ],
                     "interopProfiles": [
-                        "DIIP v4",
-                        "DIIP v5"
+                        "DIIP v4"
                     ],
                     "themes": [
                         "education"
@@ -10148,7 +10147,7 @@
                         "provider": "youtube"
                     },
                     "moreInfoUrl": "https://www.sapio.id/use-cases/",
-                    "userJourney": "1. Programme delivery. Participants complete \"Education for All — Empowering Higher Education through Quality Micro-Credentials\" (16-27 March 2026, English, 1 ECTS, EQF 6-7). Academic requirements: 60% pass grade, 80% attendance.\r\n\r\n2. Credential modelling. SAPIO models the programme in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes under Knowledge, Skills and Competences. The template is programme-agnostic and reusable across the alliance without redesign.\r\n\r\n3. Issuer identity. The awarding institution is established as an institutional DID with an X.509 certificate, registered as a trusted entity. From here the university, not the platform, is the cryptographic root of trust.\r\n\r\n4. Issuance. The academic coordinator supplies the list of participants who met the criteria. SAPIO generates OID4VCI credential offers. Participation is voluntary and opt-in; declining has no effect on academic standing.\r\n\r\n5. Wallet retrieval. The learner accepts the offer in a standards-compliant wallet of their choice. No proprietary holder app, no account with SAPIO. From this point the credential lives in the learner's wallet and SAPIO retains no pe",
+                    "userJourney": "1. Programme delivery. Participants complete \"Education for All — Empowering Higher Education through Quality Micro-Credentials\" (16-27 March 2026, English, 1 ECTS, EQF 6-7). Academic requirements: 60% pass grade, 80% attendance.\n\n2. Credential modelling. SAPIO models the programme in an EDC/ELM-aligned structure — holder, activity, assessment, achievement — with nested learning outcomes under Knowledge, Skills and Competences. The template is programme-agnostic and reusable across the alliance without redesign.\n\n3. Issuer identity. The awarding institution is established as an institutional DID with an X.509 certificate, registered as a trusted entity. From here the university, not the platform, is the cryptographic root of trust.\n\n4. Issuance. The academic coordinator supplies the list of participants who met the criteria. SAPIO generates OID4VCI credential offers. Participation is voluntary and opt-in; declining has no effect on academic standing.\n\n5. Wallet retrieval. The learner accepts the offer in a standards-compliant wallet of their choice. No proprietary holder app, no account with SAPIO. From this point the credential lives in the learner's wallet and SAPIO retains no pe",
                     "country": "CH"
                 }
             ]
@@ -10257,7 +10256,7 @@
         },
         {
             "orgSlug": "sphereon",
-            "orgId": "org:kw1c",
+            "orgId": "org:sphereon",
             "orgName": "Sphereon",
             "useCases": [
                 {
@@ -10414,7 +10413,7 @@
         },
         {
             "orgSlug": "spherity",
-            "orgId": "org:catena-x",
+            "orgId": "org:spherity",
             "orgName": "Spherity",
             "useCases": [
                 {
