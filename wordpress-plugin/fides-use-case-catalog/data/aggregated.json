@@ -1,10 +1,1138 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-26T08:52:26.311Z",
+  "lastUpdated": "2026-08-26T17:48:17.854Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 99,
   "useCases": [
+    {
+      "id": "autofill-customer-id-on-trip-com-with-google-wallet-rJkmvE",
+      "sector": "mobility",
+      "title": "Autofill Customer ID on Trip.com with Google Wallet",
+      "summary": "Travellers can securely share authorised identity information from an ID Pass in Google Wallet to automatically populate the passenger details required when booking a flight on Trip.com. This removes the need to enter personal and travel document information manually, making the booking process faster and more convenient. It also reduces typing errors and discrepancies between the booking and the traveller's identity document, which can otherwise cause issues during check-in or boarding. The result is a smoother booking experience, more accurate passenger data and greater user control over what information is shared. This mobility use case is submitted by Hopae and involves Trip.com as the relying party.",
+      "organizationName": "Hopae",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-26T18:48:00+01:00",
+      "publishedAt": "2026-08-26T18:48:00+01:00",
+      "tags": [
+        "Travel",
+        "Flight Booking",
+        "Passenger Details",
+        "Digital Identity",
+        "Google Wallet",
+        "ID Pass",
+        "Identity Data Sharing",
+        "Data Autofill",
+        "User Consent",
+        "Verified Credentials",
+        "Mobility",
+        "Seamless Travel"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": "https://wallet.google.com/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "ID Pass",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:google",
+            "labelRaw": "Google",
+            "url": "https://www.google.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:trip-com",
+            "labelRaw": "Trip.com",
+            "url": "https://www.trip.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:hopae",
+            "labelRaw": "Hopae",
+            "url": "https://www.hopae.com/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Trip.com",
+            "url": "http://trip.com",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "moreInfoUrl": "https://www.phocuswire.com/news/technology/trip-com-digital-id-google-apple-wallets",
+      "userJourney": "1. On Trip.com, the user selects their preferred flight and proceeds to the booking page.\n2. On the Passenger Details page, the user selects Share from Wallet.\n3. Android displays the digital credential selector, showing the identity credentials that can be used with Trip.com.\n4. The user selects their ID Pass from Google Wallet.\n5. The user reviews the information requested by Trip.com, selects Share, and authenticates using their device.\n6. Google Wallet securely shares the requested information with Trip.com, and the relevant passenger details are automatically populated.\n7. The user reviews the populated details and continues with the booking.",
+      "country": "KR"
+    },
+    {
+      "id": "digital-twin-based-verifiable-credentials-for-local-impact-proven-on-the-open-interop-testbed-QLj1dx",
+      "sector": "public_sector",
+      "title": "Digital Twin based Verifiable Credentials for local impact, proven on the Open Interop Testbed",
+      "summary": "itb.ilabs.ai is in production: a GITB test bed operated by iLabs, with external accounts, listed on fides.community as the Open Interop Testbed. It is where LDT4SSC/EUTwinLink wallets, issuers and verifiers prove they interoperate.\n\nWhat runs on it matters locally. Local impact is rewarded on trust, or not at all: carbon methodologies are built around reduction, avoidance or removal of greenhouse gases, so they exclude coral restoration, beach cleaning, water conservation, and the resilience work that counts most in a small island economy, such as making the homes of elderly residents safer, warmer and cheaper to run.\n\nLDT4SSC makes that impact spendable where it is earned, over three layers. The Local Digital Twin holds the ground truth: place, time, sensor, audit trail. The data space (iSHARE) moves it between city, project owner and retailer under agreed rules. The verifiable credential makes anyone believe it.\n\nThe testbed holds the three together. Every party runs the DIIP v5 suite and receives a signed report with a resolvable link; issuing that report as a Conformance Test Report credential is next in development. Interoperability here is a suite that can be watched fail.",
+      "organizationName": "iLabs",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-26T18:47:52+01:00",
+      "publishedAt": "2026-08-26T18:47:52+01:00",
+      "tags": [
+        "open interop testbed",
+        "GITB",
+        "ITB+",
+        "Ayra",
+        "TRQP",
+        "trust registry",
+        "conformance",
+        "interoperability",
+        "digital twin",
+        "local digital twin",
+        "data space",
+        "iSHARE",
+        "CO2",
+        "environmental credits",
+        "tokenisation",
+        "sustainability",
+        "smart city",
+        "public sector",
+        "DIIP v5",
+        "EUTwinLink",
+        "LDT4SSC",
+        "Aruba",
+        "Cartagena"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "co2-token-issuer.ldt4ssc.tech",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:fides",
+            "labelRaw": "FIDES Labs",
+            "url": "https://fides.community",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:uaegean",
+            "labelRaw": "University of the Aegean",
+            "url": "https://www.aegean.gr",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:ilabs",
+            "labelRaw": "iLabs",
+            "url": "https://www.ilabs.ai/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "EUTwinLink consortium",
+            "url": "https://knowledgehub.ldt4ssc.eu/journey/pilots/round1/eu-twinlink/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:eutwinlink",
+            "labelRaw": "EUTwinLink",
+            "url": "https://knowledgehub.ldt4ssc.eu/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v5"
+      ],
+      "themes": [
+        "dataspaces"
+      ],
+      "userJourney": "1. A wallet, issuer or verifier joining the ecosystem opens an account on itb.ilabs.ai and runs the DIIP v5 suite against its endpoints.\n\n2. The test bed runs the suite and produces a signed GITB test report with link: session id, suite version, date, verdict per test case.\n\n3. Next in development: issuing that report as a Conformance Test Report credential over OpenID4VCI, carrying the PASS verdict, suite version, session id and a resolvable link to the signed report, so anyone can open the evidence in one click.\n\n4. A resident or project owner completes a verified local action: a CO2 reduction, a coral restoration, a household energy improvement.\n\n5. The Local Digital Twin records it against a place, time and sensor, with the evidence and audit trail.\n\n6. The LDT4SSC issuer (co2-token-issuer.ldt4ssc.tech) issues a CO2 measurement token over OpenID4VCI, per DIIP v5, to the holder's wallet.\n\n7. The holder presents it over OpenID4VP to the EU LDT Marketplace, a municipal scheme or a retailer, which checks signature, status and validity before recognising it, and may require the counterparty's Test Report credential first.",
+      "country": "NL"
+    },
+    {
+      "id": "credenid-fast-kyb-and-corporate-onboarding-with-a-business-wallet-PF1P0m",
+      "sector": "finance",
+      "title": "Credenid - Fast KYB and corporate onboarding with a business wallet",
+      "summary": "This use case demonstrates reusable, wallet-based KYB for corporate account opening. Companies and their representatives currently submit registry records, LEI information and mandate documents repeatedly, while financial institutions must verify both the company and the representative’s authority. In the demo, a company representative presents two verifiable credentials in one consent-driven interaction: a Legal Entity Credential containing company identity and LEI data, and a Power of Representation credential proving authority to act for the company. Credenid cryptographically verifies the credentials, holder binding, validity, status and the link between the representative and the company. XYZ Bank Business receives only the requested information and verification result. This reduces repeated document collection, improves traceability and accelerates onboarding. \n\nLEI, sanctions, jurisdiction and UBO checks are simulated in the demo, production deployments can connect to live registries and compliance providers.",
+      "organizationName": "Nedmod",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-26T18:47:46+01:00",
+      "publishedAt": "2026-08-26T18:47:46+01:00",
+      "tags": [
+        "kyb",
+        "sd-jwt vc",
+        "oid4vci",
+        "oid4vp"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": null,
+            "labelRaw": "Credenid Wallet",
+            "url": "https://credenid.com",
+            "source": "manual",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": null,
+            "labelRaw": "Credenid Wallet",
+            "url": "https://credenid.com",
+            "source": "manual",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Demo Trade Registry",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Demo Notary",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:gleif:legal-entity-vlei:acdc",
+            "labelRaw": "vLEI - Legal Entity",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:por-sd-jwt-vc:sd-jwt-vc",
+            "labelRaw": "Power Of Representation (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Legal Entity Credential (SD-JWT VC)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:credenid",
+            "labelRaw": "Credenid",
+            "url": "https://credenid.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:nedmod",
+            "labelRaw": "Nedmod",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "XYZ Bank Business (Demo)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "OpenID4VP",
+        "SIOPv2"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/credenid-kyb-demo.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/credenid-kyb-demo.png",
+      "moreInfoUrl": "https://demo.credenid.com/kyb",
+      "userJourney": "1. The representative obtains a Legal Entity Credential from the demo trade registry and a Power of Representation credential from the demo notary, and stores both in Credenid Wallet.\n2. The representative starts corporate account opening at XYZ Bank Business and chooses wallet-based verification.\n3. The bank starts an OID4VP session through Credenid Verification Service and displays a QR code or deeplink.\n4. The representative scans the QR code. The wallet shows the requested company and authority information and asks for consent.\n5. The wallet presents both SD-JWT credentials together with a KB-JWT proving holder binding.\n6. Credenid verifies credential signatures, disclosed-field integrity, validity/status and that the mandate links the representative to the same legal entity.\n7. The verified claims are returned to the demo bank, which performs simulated LEI, sanctions, jurisdiction, representation and UBO checks.\n8. The bank displays the KYB decision and technical verification details, and the corporate onboarding can continue.",
+      "country": "TR"
+    },
+    {
+      "id": "hims-espa-electronic-sale-and-purchase-agreement-using-digital-signature-5i9H0J",
+      "sector": "public_sector",
+      "title": "HIMS eSPA - Electronic Sale and Purchase Agreement using Digital Signature",
+      "summary": "Business challenge: Malaysia’s property Sale and Purchase Agreement process traditionally requires physical identity checks, appointments and paper signing. This causes delays, inconvenience and fraud risks for remote buyers.\nImplemented solution: KPKT’s eSPA digitises the process through HIMS and iDsaya. Users complete MyKad or passport eKYC using document validation, facial matching and liveness detection. After verification, they activate a digital certificate issued by a licensed Certification Authority, review the agreement in HIMS and authorise remote signing through iDsaya using a PIN and TOTP. JWT VC remains in pilot. Building on experience from a similar project, we plan to use it for credential verification during authentication. Pos Digicert is the issuer, iDsaya the holder and HIMS the verifier. The credential contains a pseudonymous ID, role, transaction reference, issuance and expiry dates.\nAchieved outcomes: eSPA enables secure remote verification and legally recognised signing, reducing processing time, paperwork and physical visits while protecting document integrity. JWT VC strengthens participant and role verification without replacing PKI-based signing.",
+      "organizationName": "Pos Digicert",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-26T18:47:40+01:00",
+      "publishedAt": "2026-08-26T18:47:40+01:00",
+      "tags": [
+        "DigitalSignature",
+        "PKI",
+        "DigitalCertificate",
+        "RemoteSigning",
+        "ElectronicAgreement",
+        "eSPA",
+        "eKYC",
+        "IdentityVerification",
+        "BiometricVerification",
+        "FacialRecognition",
+        "LivenessDetection",
+        "MultiPartySigning",
+        "DocumentIntegrity",
+        "NonRepudiation",
+        "AuditTrail",
+        "eStamping",
+        "Housing",
+        "Property",
+        "RealEstate",
+        "PropertyTransaction",
+        "GovernmentServices",
+        "PublicSector",
+        "GovTech",
+        "DigitalGovernment",
+        "RegulatedTransactions",
+        "Malaysia",
+        "DigitalTransformation",
+        "PaperlessProcess",
+        "ProcessEfficiency",
+        "RemoteAccess",
+        "FraudPrevention",
+        "RegulatoryCompliance",
+        "TrustServices",
+        "SecureTransactions",
+        "UserConvenience",
+        "OperationalEfficiency",
+        "Transparency",
+        "Traceability",
+        "KPKT",
+        "JPN",
+        "HIMS",
+        "PosDigicert",
+        "iDsaya",
+        "CertificationAuthority",
+        "TOTP",
+        "MyKad",
+        "PassportVerification"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Pos Digicert CA",
+            "url": "https://www.posdigicert.com.my/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Housing and Local Government",
+            "url": "https://www.kpkt.gov.my",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:pos-digicert",
+            "labelRaw": "Pos Digicert",
+            "url": "https://www.posdigicert.com.my/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:jabatan-perumahan-negara",
+            "labelRaw": "National Housing Department",
+            "url": "https://ehome.kpkt.gov.my/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Housing Integrated Management System (HIMS)",
+            "url": "https://hims.kpkt.gov.my/pemaju/login",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-18-at-22.27.29-1.jpeg",
+        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-18.21.15.jpg",
+        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-20.48.15.jpg",
+        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-21.27.18.jpeg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-18-at-22.27.29-1.jpeg",
+      "videos": [
+        {
+          "url": "https://youtu.be/JmHxtVSz2W4",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://youtu.be/UrDYsVQ9zAw",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/JmHxtVSz2W4",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.posdigicert.com.my/espa/",
+      "userJourney": "1.Housing developer registers the project & relevant parties in KPKT’s HIMS, including buyers, landowners, witnesses & authorised representatives.\n2.HIMS sends each party an invitation to complete remote identity verification via the iDsaya mobile application.\n3.Malaysians submit their MyKad, while non-Malaysians submit a passport. iDsaya performs document verification, facial matching & liveness detection to confirm identity.\n4.Upon successful eKYC, a Verifiable Credential (VC) is established, followed by the issuance & activation of a digital certificate by a licensed CA. User creates a PIN for signing authentication.\n5.The developer prepares the prescribed eSPA in HIMS & notifies all required parties when it is ready.\n6.Each party reviews & authorises signing remotely using iDsaya, the certificate PIN & TOTP. Digital signature binds the verified signer to the document & detects subsequent changes.\n7.HIMS validates the signatures, certificate status & completion by all required parties before recording the executed eSPA.\n8.KPKT/JPN oversees the process, while relevant parties perform their respective roles. iDsaya provides eKYC, identity credentials & remote signing capabilities.",
+      "country": "MY"
+    },
+    {
+      "id": "trusted-ereceipts-for-b2b-payments-issuing-verifiable-receipts-to-a-european-business-wallet-after-eudi-based-sca-yB3QzY",
+      "sector": "finance",
+      "title": "Trusted eReceipts for B2B Payments: issuing verifiable receipts to a European Business Wallet after EUDI-based SCA",
+      "summary": "This use case demonstrates how a merchant can issue a verifiable eReceipt after a payment flow involving Strong Customer Authentication and deliver it to a European Business Wallet used by an SME buyer organisation. The scenario connects the EUDI Wallet, payment evidence, merchant-issued receipt data and organisational reuse of the receipt in downstream business processes.\n\nThe Bygg AB Business Wallet and the WE BUILD corporate shop for PA4 (without Tax Portal) are live and ready to test. Both run on the iGrant.io Organisation Wallet Suite. You need the iGrant.io EUDI Wallet app on your phone.\n\nPortals\n\n- Piggy Bank: https://piggybank-demo.igrant.io/\n- Bygg AB Business Wallet: https://byggab-businesswallet.igrant.io.\n- WE BUILD corporate shop: https://webuildshop-corporate-demo.igrant.io.\nBefore you start, issue yourself a Person Identification Data (PID) credential into your EUDI Wallet: https://igrant.io/demo/pid.html\n\nThe EBWOID and VAT-ID sit in the Bygg AB business wallet already, so business registration needs nothing extra from you.",
+      "organizationName": "WE BUILD Consortium",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-26T18:47:31+01:00",
+      "publishedAt": "2026-08-26T18:47:31+01:00",
+      "tags": [
+        "EUDI Wallet",
+        "Business Wallet",
+        "eReceipt",
+        "B2B Payments",
+        "Strong Customer Authentication",
+        "Verifiable Credentials",
+        "OpenID4VCI",
+        "OpenID4VP",
+        "Interoperability",
+        "Expense Management",
+        "Tax / Compliance",
+        "SME"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "igrant-data-wallet",
+            "labelRaw": "Data Wallet by iGrant.io",
+            "url": "https://igrant.io/datawallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "igrant-organization-wallet",
+            "labelRaw": "Organisation Wallet Suite by iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:igrant:webuildcorporateshop:production",
+            "labelRaw": "WE BUILD Corporate Shop",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:igrantio:payment-account:sd-jwt-vc",
+            "labelRaw": "Payment Account",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:igrantio:payment-card:sd-jwt-vc",
+            "labelRaw": "Payment Card",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "eReceipt",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Authenticator",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:webuild",
+            "labelRaw": "WE BUILD Consortium",
+            "url": "https://www.webuildconsortium.eu/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bosch",
+            "labelRaw": "Robert Bosch GmbH",
+            "url": "https://www.bosch.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:uaegean",
+            "labelRaw": "University of the Aegean",
+            "url": "https://www.aegean.gr",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:procivis",
+            "labelRaw": "Procivis",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:igrant",
+            "labelRaw": "iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:onepoint",
+            "labelRaw": "Onepoint",
+            "url": "https://www.groupeonepoint.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:valtiokonttori",
+            "labelRaw": "Valtiokonttori",
+            "url": "https://www.valtiokonttori.fi/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:op-bank",
+            "labelRaw": "OP Bank",
+            "url": "https://www.op.fi/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:receipthero",
+            "labelRaw": "ReceiptHero",
+            "url": "https://getreceipthero.com/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "WE BUILD Corporate Shop",
+            "url": "https://webuildshop-corporate-demo.igrant.io/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bygg AB Business Wallet",
+            "url": "https://byggab-businesswallet.igrant.io/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ReceiptHero",
+            "url": "https://getreceipthero.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://webuildshop-corporate-demo.igrant.io/",
+      "userJourney": "Journey 1\n1. Onboarding: Open https://byggab-businesswallet.igrant.io > \"Register as the business owner\". Scan QR with EUDI Wallet, present PID, accept Bygg AB Business Wallet Authenticator.\n2. Login: Press \"Sign in with your EUDI Wallet\", present Authenticator.\n3. Add People: Go to People, add user, choose payment attestation (Account/Card with Mastercard or Visa). User opens email, scans QR (or presses button), enters 4-digit code, accepts in wallet. Refresh to show Accepted/Linked.\n\nJourney 2\n1. Onboarding: Open https://webuildshop-corporate-demo.igrant.io/register > Business. Search European Digital Directory (\"bygg\", VAT, EBWOID) > Connect. Sign into Bygg portal, review claims and Trusted Service Provider details, share. Scan QR with EUDI Wallet (present PID) to get WE BUILD Shop Corporate Authenticator.\n2. Login: Sign in at shop with EUDI Wallet (business mode), present Corporate Authenticator.\n3. Payment: Add items to cart > Checkout. Press \"Pay with EUDI Wallet\", select credential (Journey 1 or https://piggybank-demo.igrant.io), approve TS12 payment.\n4. eReceipt: Open https://byggab-businesswallet.igrant.io, click notification bell, accept eReceipt. View under Receipts.",
+      "country": "SE"
+    },
+    {
+      "id": "instant-paperless-rural-credit-using-verifiable-credentials-xUny3z",
+      "sector": "agriculture",
+      "title": "Instant, Paperless Rural Credit Using Verifiable Credentials",
+      "summary": "Rural credit in Brazil traditionally requires farmers to gather paper land and environmental documents for manual bank review, causing delays and limiting access, especially for smallholders. This use case digitizes that process: Banco do Brasil, the MIR App (a farmer wallet), and Brazil's MGI Verifiable Credentials DPI platform let farmers turn CAR, CAF, and CCIR registry documents into tamper-proof digital credentials. Farmers authenticate via Gov.BR SSO, request credentials in the MIR App, and share them with the bank under their own consent. This piloted successfully in Rio Grande do Sul, where farmer Adriele Ines Brandt completed Brazil's first real rural credit transaction using verifiable credentials, financing farm equipment through the Pronaf program. MGI operates the platform; Banco do Brasil is the relying institution; EMATER/RS supports rural extension; farmers are the credential holders. The MIR App wallet gives farmers on-demand, self-controlled access to their land records. Verifiable credentials replace paperwork with cryptographically signed, instantly checkable proof, cutting travel, delay, and fraud risk while expanding credit access for young and women farmers.",
+      "organizationName": "inji.io",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-26T18:47:16+01:00",
+      "publishedAt": "2026-08-26T18:47:16+01:00",
+      "tags": [
+        "verifiable credentials",
+        "DPI",
+        "rural credit",
+        "agribusiness",
+        "Banco do Brasil",
+        "Inji Certify",
+        "Inji Verify",
+        "land registry",
+        "ICP-BR",
+        "financial inclusion",
+        "Brazil"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "inji-wallet",
+            "labelRaw": "Inji Wallet",
+            "url": "https://www.mosip.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": "issuer:mosip:insurance:test",
+            "labelRaw": "Inji Certify - Insurance Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "inji.io",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Management and Innovation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:banco-do-brasil",
+            "labelRaw": "Banco do Brasil (BB)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Cadastro Ambiental Rural (CAR)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Gov.Br",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:coss",
+            "labelRaw": "Centre for Open Societal Systems",
+            "url": "https://coss.org.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:cdpi",
+            "labelRaw": "CDPI",
+            "url": "https://cdpi.dev/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "inji-web-verifier",
+            "labelRaw": "Inji Web Verifier",
+            "url": "https://injiverify.collab.mosip.net/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_1_1",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black-1.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black-1.jpg",
+      "videos": [
+        {
+          "url": "https://youtu.be/C5Xk940BQVo?si=Qq8ao79SQY9KBRwQ",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/C5Xk940BQVo?si=Qq8ao79SQY9KBRwQ",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://www.gov.br/gestao/pt-br/assuntos/meu-imovel-rural",
+      "userJourney": "1. The farmer logs into the MIR App using Gov.BR Single Sign-On (SSO) for authentication.\n2. The farmer requests a document (e.g., CAR, CAF, or CCIR) through the MIR App; the embedded Inji Mobile SDK sends the request to Inji Certify.\n3. Inji Certify retrieves the underlying document data from the relevant registries via a Data Exchange Layer, then generates and digitally signs the credential using ICP-BR-compliant PKI and the issuing authority's private keys.\n4. The signed Verifiable Credential (in JSON-LD, with an accompanying PDF where applicable) is returned to the MIR App and stored securely in the farmer's Wallet, under the farmer's own control.\n5. Separately, the farmer applies for a rural credit loan with Banco do Brasil via mobile or web client; BB requests the farmer's VCs from the MGI VCs DPI Verify backend, which returns an authorization link.\n6. BB sends the authorization link to the MIR App via a Firebase push notification; the farmer is prompted for consent before any credential is shared.\n7. Upon consent, the Wallet shares the VC as a JSON-LD Verifiable Presentation (for cryptographic proof) and a PDF (for BB's existing workflow).\n8. Verification is done by BB",
+      "country": "BR"
+    },
+    {
+      "id": "instant-digital-verification-of-education-credentials-using-verifytt-2qkCDD",
+      "sector": "education",
+      "title": "Instant Digital Verification of Education Credentials using VerifyTT",
+      "summary": "VerifyTT is Trinidad and Tobago's national platform for issuing, holding, and verifying digital credentials, starting with academic certificates and extending to legal and official documents. It solves the problem of paper credentials being fragile, slow to trust, and hard to verify, since confirming authenticity often means contacting the issuer. This costs graduates time, leaves employers uncertain, and burdens institutions with repeat verification requests. VerifyTT creates value for all: holders get a record safe from loss, fire, or flood; employers get instant \"Blue Tick\" verification; issuers spend less time on manual work. Institutions act as issuers, digitally signing credentials at source. Citizens are holders, claiming credentials via email and controlling who sees them. Employers act as verifiers, checking authenticity in seconds. The digital wallet lets holders securely store and selectively share credentials from their phone, shifting control to the individual. Verifiable credentials, cryptographically signed by the issuer, make instant trust possible: a QR scan checks a tamper-proof signature, not a document's look, enabling verification without contacting the issuer.",
+      "organizationName": "Inji",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-26T18:47:08+01:00",
+      "publishedAt": "2026-08-26T18:47:08+01:00",
+      "tags": [
+        "digital public infrastructure",
+        "DPI",
+        "verifiable credentials",
+        "Inji",
+        "W3C VC",
+        "national trust rail",
+        "education credentials",
+        "cryptographic verification",
+        "Trinidad and Tobago"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "inji-wallet",
+            "labelRaw": "Inji Wallet",
+            "url": "https://www.mosip.io",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": "issuer:mosip:insurance:test",
+            "labelRaw": "Inji Certify - Insurance Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Academic degrees, diplomas, and transcripts (education credentials)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:igovtt",
+            "labelRaw": "iGovTT",
+            "url": "https://igovtt.tt/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Inji",
+            "url": "http://inji.io",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ministry of Public Administration and Artificial Intelligence (MPAAI) strategic oversight",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "CDPI",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:deloitte",
+            "labelRaw": "Deloitte",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:ooru",
+            "labelRaw": "Ooru",
+            "url": "https://ooru.io/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "inji-web-verifier",
+            "labelRaw": "Inji Web Verifier",
+            "url": "https://injiverify.collab.mosip.net/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "vcdm_1_1"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "education"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black.jpg"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black.jpg",
+      "videos": [
+        {
+          "url": "https://youtu.be/QiyfHuwZ4zU?si=baHHanp0meSAt1OY",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/QiyfHuwZ4zU?si=baHHanp0meSAt1OY",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://verifytt.gov.tt/publication/verifytt-embedding-trust,%20https://verifytt.gov.tt/issuers%20,%20https://verify.verifytt.gov.tt/%20,%20https://verifytt.gov.tt/graduation",
+      "userJourney": "1. A credential issuer (e.g., a tertiary institution) generates a cryptographically signed credential using its controlled signing key via the Issuance Module (Inji Certify).\n2. The credential holder (student/graduate) receives the credential into a digital wallet or secure repository under their own control (Credential Store / Web Locker).\n3. When the holder needs to prove a qualification (e.g., to an employer), they present the credential from their wallet to the relying party.\n4. The verifier (employer, regulator, or other institution) uses the Verification Module to independently check the credential's cryptographic integrity, issuer authenticity, and revocation status against the Issuer Registry / Key Management service.\n5. Verification returns a real-time, machine-verifiable result without any need to contact the issuing institution directly, replacing manual document review and confirmation calls.\n6. The same modular components (Issuance, Wallet, Verification, Issuer Registry) can be reused for new sectors by defining new credential schemas, without re-engineering the underlying trust architecture.",
+      "country": "TT"
+    },
+    {
+      "id": "verified-machine-safety-access-at-koning-willem-i-college-kw1c-6fShwI",
+      "sector": "manufacturing",
+      "title": "Verified machine safety access at Koning Willem I College (KW1C)",
+      "summary": "A student is trained on a high-risk workshop machine and receives a digital machine safety certificate. That same digital certificate lets the student book the machine online. Later, at the machine itself, the student holds their credential against the machine's reader. The same certificate is checked again, and only then does the physical lock release.\n\nMost digital identity projects stay online: a credential is shown, a screen confirms it, done. This case bridges the online world and the physical world with the same credential and the same EUDI and ISO standards. Only the physical check of the certificate at the machine decides whether it runs at all. The machine either starts, or it stays locked.",
+      "organizationName": "Sphereon",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-26T16:18:05+01:00",
+      "publishedAt": "2026-08-26T16:18:05+01:00",
+      "tags": [
+        "machine safety",
+        "physical access control",
+        "proximity unlock",
+        "digital-to-physical",
+        "mdoc",
+        "industry",
+        "education"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Edge Wallet",
+            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "sphereon-business-wallet",
+            "labelRaw": "Sphereon Business Wallet",
+            "url": "https://sphereon.com/solutions/sphereon-business-wallet/",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "sphereon-vdx-platform",
+            "labelRaw": "Sphereon VDX platform",
+            "url": "https://sphereon.com/sphereon-vdx-verifiable-data-exchange/",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Koning Willem I College (KW1C)",
+            "url": "https://www.kw1c.nl/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:eduwallet:epi:test",
+            "labelRaw": "eduID Proeftuin Issuer (Eduwallet proeftuin)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Machine Safety Certificate",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eduwallet:academic-base:sd-jwt-vc",
+            "labelRaw": "Academic Base Credential (ABC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:upper-secondary-education:sd-jwt-vc",
+            "labelRaw": "Upper Secondary Education Certificate",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:kw1c",
+            "labelRaw": "Koning Willem I College (KW1C)",
+            "url": "https://www.kw1c.nl/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:surf",
+            "labelRaw": "SURF",
+            "url": "https://www.surf.nl/en",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:sphereon",
+            "labelRaw": "Sphereon",
+            "url": "https://sphereon.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:simac-access-solutions",
+            "labelRaw": "Simac Access Solutions",
+            "url": "https://www.simac.com/nl/access-solutions/oplossingen",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci",
+        "other"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v5",
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "education",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg"
+      ],
+      "imageUrl": "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg",
+      "moreInfoUrl": "https://sphereon.com/content/uploads/PDF/FIDES_Innovation_Award.pdf",
+      "userJourney": "A student completes safety training for a high-risk machine. KW1C, using its Sphereon VDX business wallet, issues a machine safety certificate as an ISO 18013-5 mdoc to the student's personal wallet.\n\nTo reserve a machine, the student logs in with their SURF eduID, which confirms they are enrolled at KW1C, and presents the safety certificate online. VDX verifies it, and only a valid certificate allows the student to make a reservation via the business wallet.\n\nAt the reserved time, the student stands at the machine and holds the same credential against the reader. VDX verifies it again, now in person over NFC/BLE. No person checks it; the machine does. \nOn a successful check the existing Simac Pronto controller releases the physical lock. An unsuccessful check leaves the machine locked.\n\nThe innovation is the combination of digital and physical in one credential. The same certificate, issued once, is verified both ways: online when booking, and in person at the machine. Most digital identity stops at the screen. Here the digital reaches into the physical: it unlocks a real machine, or keeps it locked.",
+      "country": "NL"
+    },
     {
       "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
       "sector": "digital",
@@ -474,219 +1602,6 @@
       "moreInfoUrl": "https://www.neoflow.energy",
       "userJourney": "Neoflow gives each company in a cross-border energy shipment an agent to create assertions about oil shipments as verifiable credentials. As a shipment moves from origin to a US destination, each party contributes the facts it is responsible for. Neoflow turns these into credentials and assembles one Digital Passport per shipment, which CBP and stakeholders can check instead of waiting on paper.\n\nCompanies are the data source, so they issue credentials for their part. Neoflow holds and presents them on their behalf, and CBP verifies them. Each credential is cryptographically signed, and parties see only what is relevant to their role.\n\n1. Onboarding: A company joins once and registers identifying details as reusable credentials.\n2. Before arrival: Parties contribute data; Neoflow assembles the Passport and presents it to CBP before crossing for early visibility.\n3. In-transit and delivery: As the shipment moves and changes hands, each party adds its part and Neoflow updates the Passport in real time.\n4. Entry and clearance: The customs broker files the entry and links it on Neoflow. With origin and movement already proven, clearance is faster and no separate USMCA proof is needed.",
       "country": "CA"
-    },
-    {
-      "id": "autofill-customer-id-on-trip-com-with-google-wallet-rJkmvE",
-      "sector": "mobility",
-      "title": "Autofill Customer ID on Trip.com with Google Wallet",
-      "summary": "Travellers can securely share authorised identity information from an ID Pass in Google Wallet to automatically populate the passenger details required when booking a flight on Trip.com. This removes the need to enter personal and travel document information manually, making the booking process faster and more convenient. It also reduces typing errors and discrepancies between the booking and the traveller's identity document, which can otherwise cause issues during check-in or boarding. The result is a smoother booking experience, more accurate passenger data and greater user control over what information is shared. This mobility use case is submitted by Hopae and involves Trip.com as the relying party.",
-      "organizationName": "Hopae",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-24T16:25:37+01:00",
-      "publishedAt": "2026-08-24T16:25:37+01:00",
-      "tags": [
-        "Travel",
-        "Flight Booking",
-        "Passenger Details",
-        "Digital Identity",
-        "Google Wallet",
-        "ID Pass",
-        "Identity Data Sharing",
-        "Data Autofill",
-        "User Consent",
-        "Verified Credentials",
-        "Mobility",
-        "Seamless Travel"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "google-wallet",
-            "labelRaw": "Google Wallet",
-            "url": "https://wallet.google.com/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "ID Pass",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "Trip.com",
-            "url": "http://trip.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Hopae",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:google",
-            "labelRaw": "Google",
-            "url": "https://www.google.com",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Trip.com",
-            "url": "http://trip.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "mdoc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity"
-      ],
-      "moreInfoUrl": "https://www.phocuswire.com/news/technology/trip-com-digital-id-google-apple-wallets",
-      "userJourney": "1. On Trip.com, the user selects their preferred flight and proceeds to the booking page.\n2. On the Passenger Details page, the user selects Share from Wallet.\n3. Android displays the digital credential selector, showing the identity credentials that can be used with Trip.com.\n4. The user selects their ID Pass from Google Wallet.\n5. The user reviews the information requested by Trip.com, selects Share, and authenticates using their device.\n6. Google Wallet securely shares the requested information with Trip.com, and the relevant passenger details are automatically populated.\n7. The user reviews the populated details and continues with the booking.",
-      "country": "KR"
-    },
-    {
-      "id": "digital-twin-based-verifiable-credentials-for-local-impact-proven-on-the-open-interop-testbed-QLj1dx",
-      "sector": "public_sector",
-      "title": "Digital Twin based Verifiable Credentials for local impact, proven on the Open Interop Testbed",
-      "summary": "itb.ilabs.ai is in production: a GITB test bed operated by iLabs, with external accounts, listed on fides.community as the Open Interop Testbed. It is where LDT4SSC/EUTwinLink wallets, issuers and verifiers prove they interoperate.\n\nWhat runs on it matters locally. Local impact is rewarded on trust, or not at all: carbon methodologies are built around reduction, avoidance or removal of greenhouse gases, so they exclude coral restoration, beach cleaning, water conservation, and the resilience work that counts most in a small island economy, such as making the homes of elderly residents safer, warmer and cheaper to run.\n\nLDT4SSC makes that impact spendable where it is earned, over three layers. The Local Digital Twin holds the ground truth: place, time, sensor, audit trail. The data space (iSHARE) moves it between city, project owner and retailer under agreed rules. The verifiable credential makes anyone believe it.\n\nThe testbed holds the three together. Every party runs the DIIP v5 suite and receives a signed report with a resolvable link; issuing that report as a Conformance Test Report credential is next in development. Interoperability here is a suite that can be watched fail.",
-      "organizationName": "iLabs",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-24T16:24:19+01:00",
-      "publishedAt": "2026-08-24T16:24:19+01:00",
-      "tags": [
-        "open interop testbed",
-        "GITB",
-        "ITB+",
-        "Ayra",
-        "TRQP",
-        "trust registry",
-        "conformance",
-        "interoperability",
-        "digital twin",
-        "local digital twin",
-        "data space",
-        "iSHARE",
-        "CO2",
-        "environmental credits",
-        "tokenisation",
-        "sustainability",
-        "smart city",
-        "public sector",
-        "DIIP v5",
-        "EUTwinLink",
-        "LDT4SSC",
-        "Aruba",
-        "Cartagena"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "co2-token-issuer.ldt4ssc.tech",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": "org:fides",
-            "labelRaw": "FIDES Labs",
-            "url": "https://fides.community",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:uaegean",
-            "labelRaw": "University of the Aegean",
-            "url": "https://www.aegean.gr",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:ilabs",
-            "labelRaw": "iLabs",
-            "url": "https://www.ilabs.ai/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "EUTwinLink",
-            "url": "https://knowledgehub.ldt4ssc.eu/journey/pilots/round1/eu-twinlink/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "EUTwinLink",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "EUTwinLink consortium",
-            "url": "https://knowledgehub.ldt4ssc.eu/journey/pilots/round1/eu-twinlink/",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "DIIP v5"
-      ],
-      "themes": [
-        "dataspaces"
-      ],
-      "userJourney": "1. A wallet, issuer or verifier joining the ecosystem opens an account on itb.ilabs.ai and runs the DIIP v5 suite against its endpoints.\n\n2. The test bed runs the suite and produces a signed GITB test report with link: session id, suite version, date, verdict per test case.\n\n3. Next in development: issuing that report as a Conformance Test Report credential over OpenID4VCI, carrying the PASS verdict, suite version, session id and a resolvable link to the signed report, so anyone can open the evidence in one click.\n\n4. A resident or project owner completes a verified local action: a CO2 reduction, a coral restoration, a household energy improvement.\n\n5. The Local Digital Twin records it against a place, time and sensor, with the evidence and audit trail.\n\n6. The LDT4SSC issuer (co2-token-issuer.ldt4ssc.tech) issues a CO2 measurement token over OpenID4VCI, per DIIP v5, to the holder's wallet.\n\n7. The holder presents it over OpenID4VP to the EU LDT Marketplace, a municipal scheme or a retailer, which checks signature, status and validity before recognising it, and may require the counterparty's Test Report credential first.",
-      "country": "NL"
     },
     {
       "id": "vesta-appliances-from-impostors-to-proof-of-trust-ATYNCN",
@@ -2019,282 +2934,6 @@
       "country": "DE"
     },
     {
-      "id": "credenid-fast-kyb-and-corporate-onboarding-with-a-business-wallet-PF1P0m",
-      "sector": "finance",
-      "title": "Credenid - Fast KYB and corporate onboarding with a business wallet",
-      "summary": "This use case demonstrates reusable, wallet-based KYB for corporate account opening. Companies and their representatives currently submit registry records, LEI information and mandate documents repeatedly, while financial institutions must verify both the company and the representative’s authority. In the demo, a company representative presents two verifiable credentials in one consent-driven interaction: a Legal Entity Credential containing company identity and LEI data, and a Power of Representation credential proving authority to act for the company. Credenid cryptographically verifies the credentials, holder binding, validity, status and the link between the representative and the company. XYZ Bank Business receives only the requested information and verification result. This reduces repeated document collection, improves traceability and accelerates onboarding. \n\nLEI, sanctions, jurisdiction and UBO checks are simulated in the demo, production deployments can connect to live registries and compliance providers.",
-      "organizationName": "Nedmod",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-23T16:00:06+01:00",
-      "publishedAt": "2026-08-23T16:00:06+01:00",
-      "tags": [
-        "kyb",
-        "sd-jwt vc",
-        "oid4vci",
-        "oid4vp"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": null,
-            "labelRaw": "Credenid Wallet",
-            "url": "https://credenid.com",
-            "source": "manual",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": null,
-            "labelRaw": "Credenid Wallet",
-            "url": "https://credenid.com",
-            "source": "manual",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Demo Trade Registry",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Demo Notary",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:gleif:legal-entity-vlei:acdc",
-            "labelRaw": "vLEI - Legal Entity",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:eu:por-sd-jwt-vc:sd-jwt-vc",
-            "labelRaw": "Power Of Representation (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Legal Entity Credential (SD-JWT VC)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "Credenid",
-            "url": "https://credenid.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Nedmod",
-            "url": "https://nedmod.com",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "XYZ Bank Business (Demo)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "mdoc",
-        "sd_jwt_vc",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-5",
-        "OpenID4VP",
-        "SIOPv2"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "person_identity",
-        "organizational_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/credenid-kyb-demo.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/credenid-kyb-demo.png",
-      "moreInfoUrl": "https://demo.credenid.com/kyb",
-      "userJourney": "1. The representative obtains a Legal Entity Credential from the demo trade registry and a Power of Representation credential from the demo notary, and stores both in Credenid Wallet.\n2. The representative starts corporate account opening at XYZ Bank Business and chooses wallet-based verification.\n3. The bank starts an OID4VP session through Credenid Verification Service and displays a QR code or deeplink.\n4. The representative scans the QR code. The wallet shows the requested company and authority information and asks for consent.\n5. The wallet presents both SD-JWT credentials together with a KB-JWT proving holder binding.\n6. Credenid verifies credential signatures, disclosed-field integrity, validity/status and that the mandate links the representative to the same legal entity.\n7. The verified claims are returned to the demo bank, which performs simulated LEI, sanctions, jurisdiction, representation and UBO checks.\n8. The bank displays the KYB decision and technical verification details, and the corporate onboarding can continue.",
-      "country": "TR"
-    },
-    {
-      "id": "hims-espa-electronic-sale-and-purchase-agreement-using-digital-signature-5i9H0J",
-      "sector": "public_sector",
-      "title": "HIMS eSPA - Electronic Sale and Purchase Agreement using Digital Signature",
-      "summary": "Business challenge: Malaysia’s property Sale and Purchase Agreement process traditionally requires physical identity checks, appointments and paper signing. This causes delays, inconvenience and fraud risks for remote buyers.\nImplemented solution: KPKT’s eSPA digitises the process through HIMS and iDsaya. Users complete MyKad or passport eKYC using document validation, facial matching and liveness detection. After verification, they activate a digital certificate issued by a licensed Certification Authority, review the agreement in HIMS and authorise remote signing through iDsaya using a PIN and TOTP. JWT VC remains in pilot. Building on experience from a similar project, we plan to use it for credential verification during authentication. Pos Digicert is the issuer, iDsaya the holder and HIMS the verifier. The credential contains a pseudonymous ID, role, transaction reference, issuance and expiry dates.\nAchieved outcomes: eSPA enables secure remote verification and legally recognised signing, reducing processing time, paperwork and physical visits while protecting document integrity. JWT VC strengthens participant and role verification without replacing PKI-based signing.",
-      "organizationName": "Pos Digicert Sdn Bhd",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-23T15:58:29+01:00",
-      "publishedAt": "2026-08-23T15:58:29+01:00",
-      "tags": [
-        "DigitalSignature",
-        "PKI",
-        "DigitalCertificate",
-        "RemoteSigning",
-        "ElectronicAgreement",
-        "eSPA",
-        "eKYC",
-        "IdentityVerification",
-        "BiometricVerification",
-        "FacialRecognition",
-        "LivenessDetection",
-        "MultiPartySigning",
-        "DocumentIntegrity",
-        "NonRepudiation",
-        "AuditTrail",
-        "eStamping",
-        "Housing",
-        "Property",
-        "RealEstate",
-        "PropertyTransaction",
-        "GovernmentServices",
-        "PublicSector",
-        "GovTech",
-        "DigitalGovernment",
-        "RegulatedTransactions",
-        "Malaysia",
-        "DigitalTransformation",
-        "PaperlessProcess",
-        "ProcessEfficiency",
-        "RemoteAccess",
-        "FraudPrevention",
-        "RegulatoryCompliance",
-        "TrustServices",
-        "SecureTransactions",
-        "UserConvenience",
-        "OperationalEfficiency",
-        "Transparency",
-        "Traceability",
-        "KPKT",
-        "JPN",
-        "HIMS",
-        "PosDigicert",
-        "iDsaya",
-        "CertificationAuthority",
-        "TOTP",
-        "MyKad",
-        "PassportVerification"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Pos Digicert CA",
-            "url": "https://www.posdigicert.com.my/",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "Ministry of Housing and Local Government",
-            "url": "https://www.kpkt.gov.my",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "National Housing Department",
-            "url": "https://ehome.kpkt.gov.my/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Pos Digicert Sdn Bhd",
-            "url": "https://www.posdigicert.com.my",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Housing Integrated Management System (HIMS)",
-            "url": "https://hims.kpkt.gov.my/pemaju/login",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-18-at-22.27.29-1.jpeg",
-        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-18.21.15.jpg",
-        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-20.48.15.jpg",
-        "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-20-at-21.27.18.jpeg"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/WhatsApp-Image-2026-08-18-at-22.27.29-1.jpeg",
-      "videos": [
-        {
-          "url": "https://youtu.be/JmHxtVSz2W4",
-          "provider": "youtube"
-        },
-        {
-          "url": "https://youtu.be/UrDYsVQ9zAw",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/JmHxtVSz2W4",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.posdigicert.com.my/espa/",
-      "userJourney": "1.Housing developer registers the project & relevant parties in KPKT’s HIMS, including buyers, landowners, witnesses & authorised representatives.\n2.HIMS sends each party an invitation to complete remote identity verification via the iDsaya mobile application.\n3.Malaysians submit their MyKad, while non-Malaysians submit a passport. iDsaya performs document verification, facial matching & liveness detection to confirm identity.\n4.Upon successful eKYC, a Verifiable Credential (VC) is established, followed by the issuance & activation of a digital certificate by a licensed CA. User creates a PIN for signing authentication.\n5.The developer prepares the prescribed eSPA in HIMS & notifies all required parties when it is ready.\n6.Each party reviews & authorises signing remotely using iDsaya, the certificate PIN & TOTP. Digital signature binds the verified signer to the document & detects subsequent changes.\n7.HIMS validates the signatures, certificate status & completion by all required parties before recording the executed eSPA.\n8.KPKT/JPN oversees the process, while relevant parties perform their respective roles. iDsaya provides eKYC, identity credentials & remote signing capabilities.",
-      "country": "MY"
-    },
-    {
       "id": "age-verification-by-snapkyc-wt2dij",
       "sector": "digital",
       "title": "Age Verification by SnapKYC",
@@ -3543,222 +4182,6 @@
       "country": "US"
     },
     {
-      "id": "trusted-ereceipts-for-b2b-payments-issuing-verifiable-receipts-to-a-european-business-wallet-after-eudi-based-sca-yB3QzY",
-      "sector": "finance",
-      "title": "Trusted eReceipts for B2B Payments: issuing verifiable receipts to a European Business Wallet after EUDI-based SCA",
-      "summary": "This use case demonstrates how a merchant can issue a verifiable eReceipt after a payment flow involving Strong Customer Authentication and deliver it to a European Business Wallet used by an SME buyer organisation. The scenario connects the EUDI Wallet, payment evidence, merchant-issued receipt data and organisational reuse of the receipt in downstream business processes.\n\nThe Bygg AB Business Wallet and the WE BUILD corporate shop for PA4 (without Tax Portal) are live and ready to test. Both run on the iGrant.io Organisation Wallet Suite. You need the iGrant.io EUDI Wallet app on your phone.\n\nPortals\n\n- Piggy Bank: https://piggybank-demo.igrant.io/\n- Bygg AB Business Wallet: https://byggab-businesswallet.igrant.io.\n- WE BUILD corporate shop: https://webuildshop-corporate-demo.igrant.io.\nBefore you start, issue yourself a Person Identification Data (PID) credential into your EUDI Wallet: https://igrant.io/demo/pid.html\n\nThe EBWOID and VAT-ID sit in the Bygg AB business wallet already, so business registration needs nothing extra from you.",
-      "organizationName": "WE BUILD Consortium",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-20T21:51:41+01:00",
-      "publishedAt": "2026-08-20T21:51:41+01:00",
-      "tags": [
-        "EUDI Wallet",
-        "Business Wallet",
-        "eReceipt",
-        "B2B Payments",
-        "Strong Customer Authentication",
-        "Verifiable Credentials",
-        "OpenID4VCI",
-        "OpenID4VP",
-        "Interoperability",
-        "Expense Management",
-        "Tax / Compliance",
-        "SME"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "igrant-data-wallet",
-            "labelRaw": "Data Wallet by iGrant.io",
-            "url": "https://igrant.io/datawallet",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "igrant-organization-wallet",
-            "labelRaw": "Organisation Wallet Suite by iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": "issuer:igrant:webuildcorporateshop:production",
-            "labelRaw": "WE BUILD Corporate Shop",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:igrantio:payment-account:sd-jwt-vc",
-            "labelRaw": "Payment Account",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:igrantio:payment-card:sd-jwt-vc",
-            "labelRaw": "Payment Card",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "eReceipt",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Authenticator",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:webuild",
-            "labelRaw": "WE BUILD Consortium",
-            "url": "https://www.webuildconsortium.eu/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Onepoint",
-            "url": "https://www.groupeonepoint.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Valtiokonttori",
-            "url": "https://www.valtiokonttori.fi/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:bosch",
-            "labelRaw": "Robert Bosch GmbH",
-            "url": "https://www.bosch.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "OP Bank",
-            "url": "https://www.op.fi/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:uaegean",
-            "labelRaw": "University of the Aegean",
-            "url": "https://www.aegean.gr",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:procivis",
-            "labelRaw": "Procivis",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "ReceiptHero",
-            "url": "https://getreceipthero.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:igrant",
-            "labelRaw": "iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "WE BUILD Corporate Shop",
-            "url": "https://webuildshop-corporate-demo.igrant.io/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bygg AB Business Wallet",
-            "url": "https://byggab-businesswallet.igrant.io/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "ReceiptHero",
-            "url": "https://getreceipthero.com/",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "person_identity",
-        "organizational_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://webuildshop-corporate-demo.igrant.io/",
-      "userJourney": "Journey 1\n1. Onboarding: Open https://byggab-businesswallet.igrant.io > \"Register as the business owner\". Scan QR with EUDI Wallet, present PID, accept Bygg AB Business Wallet Authenticator.\n2. Login: Press \"Sign in with your EUDI Wallet\", present Authenticator.\n3. Add People: Go to People, add user, choose payment attestation (Account/Card with Mastercard or Visa). User opens email, scans QR (or presses button), enters 4-digit code, accepts in wallet. Refresh to show Accepted/Linked.\n\nJourney 2\n1. Onboarding: Open https://webuildshop-corporate-demo.igrant.io/register > Business. Search European Digital Directory (\"bygg\", VAT, EBWOID) > Connect. Sign into Bygg portal, review claims and Trusted Service Provider details, share. Scan QR with EUDI Wallet (present PID) to get WE BUILD Shop Corporate Authenticator.\n2. Login: Sign in at shop with EUDI Wallet (business mode), present Corporate Authenticator.\n3. Payment: Add items to cart > Checkout. Press \"Pay with EUDI Wallet\", select credential (Journey 1 or https://piggybank-demo.igrant.io), approve TS12 payment.\n4. eReceipt: Open https://byggab-businesswallet.igrant.io, click notification bell, accept eReceipt. View under Receipts.",
-      "country": "SE"
-    },
-    {
       "id": "californias-new-card-design-using-verifiable-credential-barcode-iD9PVq",
       "sector": "public_sector",
       "title": "California’s New Card Design using Verifiable Credential Barcode",
@@ -5000,293 +5423,6 @@
       "moreInfoUrl": "https://sandboxfe.companypassport.com/",
       "userJourney": "To establish a business in his/her name, the user needs a personal wallet in which his/het verified identity is recorded. The wallet is then linked to Company Compass. This ensures a safe and efficient way to identify the user when retrieving business data. The app then guides the user through all steps necessary to create a private limited company (BV). The application never stores data; the required data is always retrieved from the users digital wallet(s).",
       "country": "NL"
-    },
-    {
-      "id": "instant-paperless-rural-credit-using-verifiable-credentials-xUny3z",
-      "sector": "agriculture",
-      "title": "Instant, Paperless Rural Credit Using Verifiable Credentials",
-      "summary": "Rural credit in Brazil traditionally requires farmers to gather paper land and environmental documents for manual bank review, causing delays and limiting access, especially for smallholders. This use case digitizes that process: Banco do Brasil, the MIR App (a farmer wallet), and Brazil's MGI Verifiable Credentials DPI platform let farmers turn CAR, CAF, and CCIR registry documents into tamper-proof digital credentials. Farmers authenticate via Gov.BR SSO, request credentials in the MIR App, and share them with the bank under their own consent. This piloted successfully in Rio Grande do Sul, where farmer Adriele Ines Brandt completed Brazil's first real rural credit transaction using verifiable credentials, financing farm equipment through the Pronaf program. MGI operates the platform; Banco do Brasil is the relying institution; EMATER/RS supports rural extension; farmers are the credential holders. The MIR App wallet gives farmers on-demand, self-controlled access to their land records. Verifiable credentials replace paperwork with cryptographically signed, instantly checkable proof, cutting travel, delay, and fraud risk while expanding credit access for young and women farmers.",
-      "organizationName": "inji.io",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-20T22:03:48+01:00",
-      "publishedAt": "2026-08-20T08:11:44+01:00",
-      "tags": [
-        "verifiable credentials",
-        "DPI",
-        "rural credit",
-        "agribusiness",
-        "Banco do Brasil",
-        "Inji Certify",
-        "Inji Verify",
-        "land registry",
-        "ICP-BR",
-        "financial inclusion",
-        "Brazil"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "inji-wallet",
-            "labelRaw": "Inji Wallet",
-            "url": "https://www.mosip.io",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": "issuer:mosip:insurance:test",
-            "labelRaw": "Inji Certify - Insurance Sandbox Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "inji.io",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Ministry of Management and Innovation",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:banco-do-brasil",
-            "labelRaw": "Banco do Brasil (BB)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Cadastro Ambiental Rural (CAR)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Gov.Br",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Centre for Open Societal System",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Centre for Digital Public Infrastructure",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": "inji-web-verifier",
-            "labelRaw": "Inji Web Verifier",
-            "url": "https://injiverify.collab.mosip.net/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "vcdm_1_1",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity",
-        "organizational_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black-1.jpg"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black-1.jpg",
-      "videos": [
-        {
-          "url": "https://youtu.be/C5Xk940BQVo?si=Qq8ao79SQY9KBRwQ",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/C5Xk940BQVo?si=Qq8ao79SQY9KBRwQ",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://www.gov.br/gestao/pt-br/assuntos/meu-imovel-rural",
-      "userJourney": "1. The farmer logs into the MIR App using Gov.BR Single Sign-On (SSO) for authentication.\n2. The farmer requests a document (e.g., CAR, CAF, or CCIR) through the MIR App; the embedded Inji Mobile SDK sends the request to Inji Certify.\n3. Inji Certify retrieves the underlying document data from the relevant registries via a Data Exchange Layer, then generates and digitally signs the credential using ICP-BR-compliant PKI and the issuing authority's private keys.\n4. The signed Verifiable Credential (in JSON-LD, with an accompanying PDF where applicable) is returned to the MIR App and stored securely in the farmer's Wallet, under the farmer's own control.\n5. Separately, the farmer applies for a rural credit loan with Banco do Brasil via mobile or web client; BB requests the farmer's VCs from the MGI VCs DPI Verify backend, which returns an authorization link.\n6. BB sends the authorization link to the MIR App via a Firebase push notification; the farmer is prompted for consent before any credential is shared.\n7. Upon consent, the Wallet shares the VC as a JSON-LD Verifiable Presentation (for cryptographic proof) and a PDF (for BB's existing workflow).\n8. Verification is done by BB",
-      "country": "BR"
-    },
-    {
-      "id": "instant-digital-verification-of-education-credentials-using-verifytt-2qkCDD",
-      "sector": "education",
-      "title": "Instant Digital Verification of Education Credentials using VerifyTT",
-      "summary": "VerifyTT is Trinidad and Tobago's national platform for issuing, holding, and verifying digital credentials, starting with academic certificates and extending to legal and official documents. It solves the problem of paper credentials being fragile, slow to trust, and hard to verify, since confirming authenticity often means contacting the issuer. This costs graduates time, leaves employers uncertain, and burdens institutions with repeat verification requests. VerifyTT creates value for all: holders get a record safe from loss, fire, or flood; employers get instant \"Blue Tick\" verification; issuers spend less time on manual work. Institutions act as issuers, digitally signing credentials at source. Citizens are holders, claiming credentials via email and controlling who sees them. Employers act as verifiers, checking authenticity in seconds. The digital wallet lets holders securely store and selectively share credentials from their phone, shifting control to the individual. Verifiable credentials, cryptographically signed by the issuer, make instant trust possible: a QR scan checks a tamper-proof signature, not a document's look, enabling verification without contacting the issuer.",
-      "organizationName": "Inji",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-20T22:04:53+01:00",
-      "publishedAt": "2026-08-20T08:10:18+01:00",
-      "tags": [
-        "digital public infrastructure",
-        "DPI",
-        "verifiable credentials",
-        "Inji",
-        "W3C VC",
-        "national trust rail",
-        "education credentials",
-        "cryptographic verification",
-        "Trinidad and Tobago"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "inji-wallet",
-            "labelRaw": "Inji Wallet",
-            "url": "https://www.mosip.io",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": "issuer:mosip:insurance:test",
-            "labelRaw": "Inji Certify - Insurance Sandbox Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Academic degrees, diplomas, and transcripts (education credentials)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": null,
-            "labelRaw": "iGovTT (National Information and Communication Technology Company Limited) implementing agency",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:igovtt",
-            "labelRaw": "iGovTT",
-            "url": "https://igovtt.tt/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Inji",
-            "url": "http://inji.io",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Ministry of Public Administration and Artificial Intelligence (MPAAI) strategic oversight",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "CDPI",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:deloitte",
-            "labelRaw": "Deloitte",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:ooru",
-            "labelRaw": "Ooru",
-            "url": "https://ooru.io/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": "inji-web-verifier",
-            "labelRaw": "Inji Web Verifier",
-            "url": "https://injiverify.collab.mosip.net/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "vcdm_1_1"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity",
-        "education"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black.jpg"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Inji-Logo-Horizontal-Black.jpg",
-      "videos": [
-        {
-          "url": "https://youtu.be/QiyfHuwZ4zU?si=baHHanp0meSAt1OY",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/QiyfHuwZ4zU?si=baHHanp0meSAt1OY",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://verifytt.gov.tt/publication/verifytt-embedding-trust,%20https://verifytt.gov.tt/issuers%20,%20https://verify.verifytt.gov.tt/%20,%20https://verifytt.gov.tt/graduation",
-      "userJourney": "1. A credential issuer (e.g., a tertiary institution) generates a cryptographically signed credential using its controlled signing key via the Issuance Module (Inji Certify).\n2. The credential holder (student/graduate) receives the credential into a digital wallet or secure repository under their own control (Credential Store / Web Locker).\n3. When the holder needs to prove a qualification (e.g., to an employer), they present the credential from their wallet to the relying party.\n4. The verifier (employer, regulator, or other institution) uses the Verification Module to independently check the credential's cryptographic integrity, issuer authenticity, and revocation status against the Issuer Registry / Key Management service.\n5. Verification returns a real-time, machine-verifiable result without any need to contact the issuing institution directly, replacing manual document review and confirmation calls.\n6. The same modular components (Issuance, Wallet, Verification, Issuer Registry) can be reused for new sectors by defining new credential schemas, without re-engineering the underlying trust architecture.",
-      "country": "TT"
     },
     {
       "id": "business-wallet-based-kyb-financial-onboarding-Rzqouv",
@@ -11523,135 +11659,6 @@
       "moreInfoUrl": "https://valko.hovi.app/",
       "userJourney": "1. Marie shops online. She adds gin and vodka, both age-restricted products, to her cart on an online store.\n\n2. Checkout triggers age verification. At checkout, the store requests proof that Marie is over 18 before the order can proceed.\n\n3. Marie scans a QR code. The store displays a QR code linked to the verification request.\n\n4. Marie completes the check in her wallet app. She scans the code with her France Identité EUDI Wallet, reviews the request, and approves sharing only her age attribute.\n\n5. Verification completes instantly. The wallet returns a verifiable proof of age to the retailer in real time.\n\n6. Order is confirmed. With age confirmed, the order goes through immediately, no forms, no document upload, no manual review wait.",
       "country": "FI"
-    },
-    {
-      "id": "verified-machine-safety-access-at-koning-willem-i-college-kw1c-6fShwI",
-      "sector": "manufacturing",
-      "title": "Verified machine safety access at Koning Willem I College (KW1C)",
-      "summary": "A student is trained on a high-risk workshop machine and receives a digital machine safety certificate. That same digital certificate lets the student book the machine online. Later, at the machine itself, the student holds their credential against the machine's reader. The same certificate is checked again, and only then does the physical lock release.\r\n\r\nMost digital identity projects stay online: a credential is shown, a screen confirms it, done. This case bridges the online world and the physical world with the same credential and the same EUDI and ISO standards. Only the physical check of the certificate at the machine decides whether it runs at all. The machine either starts, or it stays locked.",
-      "organizationName": "Sphereon",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-03T15:26:30+01:00",
-      "publishedAt": "2026-07-20T19:46:18+01:00",
-      "tags": [
-        "machine safety",
-        "physical access control",
-        "proximity unlock",
-        "digital-to-physical",
-        "mdoc",
-        "industry",
-        "education"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "sphereon-wallet",
-            "labelRaw": "Sphereon Edge Wallet",
-            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "sphereon-business-wallet",
-            "labelRaw": "Sphereon Business Wallet",
-            "url": "https://sphereon.com/solutions/sphereon-business-wallet/",
-            "source": "catalog",
-            "walletType": "organizational"
-          },
-          {
-            "refId": "sphereon-vdx-platform",
-            "labelRaw": "Sphereon VDX platform",
-            "url": "https://sphereon.com/sphereon-vdx-verifiable-data-exchange/",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Koning Willem I College (KW1C)",
-            "url": "https://www.kw1c.nl/",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Machine Safety Certificate",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:kw1c",
-            "labelRaw": "Koning Willem I College (KW1C)",
-            "url": "https://www.kw1c.nl/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:surf",
-            "labelRaw": "SURF",
-            "url": "https://www.surf.nl/en",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:sphereon",
-            "labelRaw": "Sphereon",
-            "url": "https://sphereon.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:simac-access-solutions",
-            "labelRaw": "Simac Access Solutions",
-            "url": "https://www.simac.com/nl/access-solutions/oplossingen",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "proximity",
-        "remote"
-      ],
-      "vcFormats": [
-        "mdoc",
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci",
-        "other"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-5",
-        "ISO 18013-7",
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "DIIP v5",
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "education",
-        "compliance_reporting"
-      ],
-      "imageUrls": [
-        "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg"
-      ],
-      "imageUrl": "https://sphereon.com/content/uploads/2026/07/Machine-Safety-Image-50-scaled.jpg",
-      "moreInfoUrl": "https://sphereon.com/content/uploads/PDF/FIDES_Innovation_Award.pdf",
-      "userJourney": "A student completes safety training for a high-risk machine. KW1C, using its Sphereon VDX business wallet, issues a machine safety certificate as an ISO 18013-5 mdoc to the student's personal wallet.\r\n\r\nTo reserve a machine, the student logs in with their SURF eduID, which confirms they are enrolled at KW1C, and presents the safety certificate online. VDX verifies it, and only a valid certificate allows the student to make a reservation via the business wallet.\r\n\r\nAt the reserved time, the student stands at the machine and holds the same credential against the reader. VDX verifies it again, now in person over NFC/BLE. No person checks it; the machine does. \r\nOn a successful check the existing Simac Pronto controller releases the physical lock. An unsuccessful check leaves the machine locked.\r\n\r\nThe innovation is the combination of digital and physical in one credential. The same certificate, issued once, is verified both ways: online when booking, and in person at the machine. Most digital identity stops at the screen. Here the digital reaches into the physical: it unlocks a real machine, or keeps it locked.",
-      "country": "NL"
     },
     {
       "id": "pass2rent-from-proof-of-age-to-open-door-car-rental-on-eudi-wallets-xMkRtD",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:hopae",
+  "orgId": "org:google",
   "orgName": "Hopae",
   "useCases": [
     {
@@ -12,8 +12,8 @@
       "organizationName": "Hopae",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-24T16:25:37+01:00",
-      "publishedAt": "2026-08-24T16:25:37+01:00",
+      "updatedAt": "2026-08-26T18:48:00+01:00",
+      "publishedAt": "2026-08-26T18:48:00+01:00",
       "tags": [
         "Travel",
         "Flight Booking",
@@ -51,23 +51,23 @@
         ],
         "organizations": [
           {
-            "refId": null,
-            "labelRaw": "Trip.com",
-            "url": "http://trip.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Hopae",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
             "refId": "org:google",
             "labelRaw": "Google",
             "url": "https://www.google.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:trip-com",
+            "labelRaw": "Trip.com",
+            "url": "https://www.trip.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:hopae",
+            "labelRaw": "Hopae",
+            "url": "https://www.hopae.com/",
             "source": "catalog",
             "walletType": null
           }

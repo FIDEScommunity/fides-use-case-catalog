@@ -12,8 +12,8 @@
       "organizationName": "WE BUILD Consortium",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-20T21:51:41+01:00",
-      "publishedAt": "2026-08-20T21:51:41+01:00",
+      "updatedAt": "2026-08-26T18:47:31+01:00",
+      "publishedAt": "2026-08-26T18:47:31+01:00",
       "tags": [
         "EUDI Wallet",
         "Business Wallet",
@@ -102,31 +102,10 @@
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "Onepoint",
-            "url": "https://www.groupeonepoint.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Valtiokonttori",
-            "url": "https://www.valtiokonttori.fi/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
             "refId": "org:bosch",
             "labelRaw": "Robert Bosch GmbH",
             "url": "https://www.bosch.com/",
             "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "OP Bank",
-            "url": "https://www.op.fi/",
-            "source": "manual",
             "walletType": null
           },
           {
@@ -144,16 +123,37 @@
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "ReceiptHero",
-            "url": "https://getreceipthero.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
             "refId": "org:igrant",
             "labelRaw": "iGrant.io",
             "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:onepoint",
+            "labelRaw": "Onepoint",
+            "url": "https://www.groupeonepoint.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:valtiokonttori",
+            "labelRaw": "Valtiokonttori",
+            "url": "https://www.valtiokonttori.fi/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:op-bank",
+            "labelRaw": "OP Bank",
+            "url": "https://www.op.fi/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:receipthero",
+            "labelRaw": "ReceiptHero",
+            "url": "https://getreceipthero.com/",
             "source": "catalog",
             "walletType": null
           }

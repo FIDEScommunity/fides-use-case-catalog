@@ -1,19 +1,19 @@
 {
   "$schema": "https://fides.community/schemas/use-case-catalog/v1",
   "source": "wordpress",
-  "orgId": "org:pos-digicert-sdn-bhd",
-  "orgName": "Pos Digicert Sdn Bhd",
+  "orgId": "org:pos-digicert",
+  "orgName": "Pos Digicert",
   "useCases": [
     {
       "id": "hims-espa-electronic-sale-and-purchase-agreement-using-digital-signature-5i9H0J",
       "sector": "public_sector",
       "title": "HIMS eSPA - Electronic Sale and Purchase Agreement using Digital Signature",
       "summary": "Business challenge: Malaysia’s property Sale and Purchase Agreement process traditionally requires physical identity checks, appointments and paper signing. This causes delays, inconvenience and fraud risks for remote buyers.\nImplemented solution: KPKT’s eSPA digitises the process through HIMS and iDsaya. Users complete MyKad or passport eKYC using document validation, facial matching and liveness detection. After verification, they activate a digital certificate issued by a licensed Certification Authority, review the agreement in HIMS and authorise remote signing through iDsaya using a PIN and TOTP. JWT VC remains in pilot. Building on experience from a similar project, we plan to use it for credential verification during authentication. Pos Digicert is the issuer, iDsaya the holder and HIMS the verifier. The credential contains a pseudonymous ID, role, transaction reference, issuance and expiry dates.\nAchieved outcomes: eSPA enables secure remote verification and legally recognised signing, reducing processing time, paperwork and physical visits while protecting document integrity. JWT VC strengthens participant and role verification without replacing PKI-based signing.",
-      "organizationName": "Pos Digicert Sdn Bhd",
+      "organizationName": "Pos Digicert",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-23T15:58:29+01:00",
-      "publishedAt": "2026-08-23T15:58:29+01:00",
+      "updatedAt": "2026-08-26T18:47:40+01:00",
+      "publishedAt": "2026-08-26T18:47:40+01:00",
       "tags": [
         "DigitalSignature",
         "PKI",
@@ -85,17 +85,17 @@
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "National Housing Department",
-            "url": "https://ehome.kpkt.gov.my/",
-            "source": "manual",
+            "refId": "org:pos-digicert",
+            "labelRaw": "Pos Digicert",
+            "url": "https://www.posdigicert.com.my/",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "Pos Digicert Sdn Bhd",
-            "url": "https://www.posdigicert.com.my",
-            "source": "manual",
+            "refId": "org:jabatan-perumahan-negara",
+            "labelRaw": "National Housing Department",
+            "url": "https://ehome.kpkt.gov.my/",
+            "source": "catalog",
             "walletType": null
           }
         ],

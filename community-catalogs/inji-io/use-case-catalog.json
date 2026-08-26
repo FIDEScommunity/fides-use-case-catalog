@@ -12,8 +12,8 @@
       "organizationName": "inji.io",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-20T22:03:48+01:00",
-      "publishedAt": "2026-08-20T08:11:44+01:00",
+      "updatedAt": "2026-08-26T18:47:16+01:00",
+      "publishedAt": "2026-08-26T18:47:16+01:00",
       "tags": [
         "verifiable credentials",
         "DPI",
@@ -85,17 +85,17 @@
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "Centre for Open Societal System",
-            "url": null,
-            "source": "manual",
+            "refId": "org:coss",
+            "labelRaw": "Centre for Open Societal Systems",
+            "url": "https://coss.org.in/",
+            "source": "catalog",
             "walletType": null
           },
           {
-            "refId": null,
-            "labelRaw": "Centre for Digital Public Infrastructure",
-            "url": null,
-            "source": "manual",
+            "refId": "org:cdpi",
+            "labelRaw": "CDPI",
+            "url": "https://cdpi.dev/",
+            "source": "catalog",
             "walletType": null
           }
         ],
