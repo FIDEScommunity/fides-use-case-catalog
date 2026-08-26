@@ -10,7 +10,7 @@
  *     info, last updated) and the "how it works" / taxonomy / linked-item
  *     sections for the SSR detail block.
  *   - Enrich the CreativeWork JSON-LD with use-case-specific properties
- *     (about, keywords, image, author organisation, dates, video).
+ *     (about, keywords, image, author organisation, dates, complete VideoObject).
  *
  * Everything stays gated on fides_catalog_ssr_enabled(); flipping the master
  * switch off in /wp-admin/options-general.php?page=fides-catalog-seo instantly
@@ -429,16 +429,11 @@ if (! class_exists('Fides_Use_Case_Catalog_SSR')) {
                     }
                 }
 
-                $video = (isset($item['video']) && is_array($item['video'])) ? $item['video'] : array();
-                if (! empty($video['url']) && is_string($video['url'])) {
-                    $video_object = array(
-                        '@type' => 'VideoObject',
-                        'name'  => isset($item['title']) ? (string) $item['title'] : '',
-                        'contentUrl' => (string) $video['url'],
-                    );
-                    if (! empty($video_object['name'])) {
-                        $jsonld['video'] = $video_object;
-                    }
+                $video_object = function_exists('fides_use_case_catalog_video_object_for_jsonld')
+                    ? fides_use_case_catalog_video_object_for_jsonld($item)
+                    : null;
+                if (is_array($video_object)) {
+                    $jsonld['video'] = $video_object;
                 }
 
                 $more_info = isset($item['moreInfoUrl']) ? trim((string) $item['moreInfoUrl']) : '';

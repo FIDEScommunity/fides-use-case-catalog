@@ -56,3 +56,9 @@ test("PHP share redirect only matches exact listing paths", () => {
     assert.fail(result.stdout + result.stderr);
   }
 });
+
+test("SSR VideoObject uses the shared helper instead of a partial object", () => {
+  const ssr = readFileSync(join(plugin, "includes/class-fides-use-case-catalog-ssr.php"), "utf8");
+  assert.match(ssr, /fides_use_case_catalog_video_object_for_jsonld/);
+  assert.doesNotMatch(ssr, /'contentUrl'\s*=>\s*\(string\)\s*\$video\['url'\]/);
+});

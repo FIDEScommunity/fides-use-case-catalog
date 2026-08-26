@@ -15,6 +15,7 @@ if (! defined('ABSPATH')) {
 $plugin = dirname(__DIR__, 2) . '/wordpress-plugin/fides-use-case-catalog';
 require $plugin . '/includes/use-case-id.php';
 require $plugin . '/includes/use-case-share-url.php';
+require $plugin . '/includes/use-case-video.php';
 
 $failures = 0;
 $passes = 0;
@@ -120,6 +121,87 @@ expect_same(
     false,
     'legacy lowercase-only regex still rejects mixed case (documents the bug)'
 );
+
+expect_same(
+    fides_use_case_catalog_youtube_video_id('https://youtu.be/wKQxV9O-k64?si=XYW3QStIIVqQ5FmJ'),
+    'wKQxV9O-k64',
+    'youtu.be id ignores share query'
+);
+expect_same(
+    fides_use_case_catalog_youtube_video_id('https://www.youtube.com/watch?v=aCgyC9P3T0Q&t=7s'),
+    'aCgyC9P3T0Q',
+    'watch?v= id ignores timestamp'
+);
+expect_same(
+    fides_use_case_catalog_youtube_video_id('https://youtube.com/shorts/j5EiM5PI3lA?si=INwcf5mSZn_F9W9f'),
+    'j5EiM5PI3lA',
+    'youtube shorts id'
+);
+expect_same(
+    fides_use_case_catalog_youtube_video_id('https://www.youtube.com/embed/QiyfHuwZ4zU'),
+    'QiyfHuwZ4zU',
+    'youtube embed id'
+);
+expect_same(
+    fides_use_case_catalog_youtube_video_id('https://vimeo.com/123456'),
+    '',
+    'vimeo url has no youtube id'
+);
+
+$honduras = array(
+    'title' => 'Honduras: Billetera Electronica Nacional (BIEN)',
+    'summary' => 'Honduras launched BIEN, a self-sovereign digital identity wallet.',
+    'publishedAt' => '2026-08-18T17:17:36+01:00',
+    'video' => array(
+        'url' => 'https://youtu.be/wKQxV9O-k64?si=XYW3QStIIVqQ5FmJ',
+        'provider' => 'youtube',
+    ),
+);
+$video_ld = fides_use_case_catalog_video_object_for_jsonld($honduras);
+expect_same(is_array($video_ld), true, 'complete youtube item emits VideoObject');
+expect_same($video_ld['@type'] ?? '', 'VideoObject', 'VideoObject @type');
+expect_same($video_ld['thumbnailUrl'] ?? '', 'https://i.ytimg.com/vi/wKQxV9O-k64/hqdefault.jpg', 'youtube thumbnailUrl');
+expect_same($video_ld['embedUrl'] ?? '', 'https://www.youtube-nocookie.com/embed/wKQxV9O-k64', 'youtube embedUrl');
+expect_same($video_ld['description'] ?? '', $honduras['summary'], 'VideoObject description from summary');
+expect_same(isset($video_ld['uploadDate']) && $video_ld['uploadDate'] !== '', true, 'VideoObject uploadDate is set');
+
+$no_thumb = array(
+    'title' => 'No thumbnail host',
+    'summary' => 'A hosted mp4 without a poster.',
+    'publishedAt' => '2026-08-18T17:17:36+01:00',
+    'video' => array('url' => 'https://example.com/demo.mp4'),
+);
+expect_same(
+    fides_use_case_catalog_video_object_for_jsonld($no_thumb),
+    null,
+    'non-youtube without imageUrl omits VideoObject'
+);
+
+$fallback_image = $no_thumb;
+$fallback_image['imageUrl'] = 'https://example.com/poster.jpg';
+$fallback_ld = fides_use_case_catalog_video_object_for_jsonld($fallback_image);
+expect_same(is_array($fallback_ld), true, 'non-youtube with imageUrl emits VideoObject');
+expect_same($fallback_ld['thumbnailUrl'] ?? '', 'https://example.com/poster.jpg', 'imageUrl used as thumbnailUrl');
+expect_same(isset($fallback_ld['embedUrl']), false, 'non-youtube has no embedUrl');
+
+$no_date = $honduras;
+unset($no_date['publishedAt']);
+expect_same(
+    fides_use_case_catalog_video_object_for_jsonld($no_date),
+    null,
+    'missing upload date omits VideoObject'
+);
+
+$from_videos = array(
+    'title' => 'Videos array only',
+    'summary' => 'Uses videos[0].',
+    'updatedAt' => '2026-08-18T17:17:36+01:00',
+    'videos' => array(
+        array('url' => 'https://www.youtube.com/watch?v=6GwCxyofSVE', 'provider' => 'youtube'),
+    ),
+);
+$videos_ld = fides_use_case_catalog_video_object_for_jsonld($from_videos);
+expect_same($videos_ld['contentUrl'] ?? '', 'https://www.youtube.com/watch?v=6GwCxyofSVE', 'falls back to videos[0]');
 
 echo "\n{$passes} passed, {$failures} failed\n";
 exit($failures > 0 ? 1 : 0);
