@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-26T08:51:59+00:00",
+    "generatedAt": "2026-08-26T08:52:09+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -11542,6 +11542,110 @@
             "orgName": "Unique Identification Authority of India",
             "useCases": [
                 {
+                    "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
+                    "sector": "digital",
+                    "title": "Arattai: Verified Social Media Profiles",
+                    "summary": "Arattai is an Indian instant messaging and social networking platform (Like WhatsApp and Signal) with 8 million users that enables users to connect, communicate, and build trusted online communities. By integrating with the Aadhaar App, Arattai can offer users the option to verify their identity and receive a Verified Profile badge.\n\nUsers can securely share a digitally signed verifiable credential from the Aadhaar App with their explicit consent, allowing Arattai to confirm that the profile belongs to a real individual without storing or exposing unnecessary personal information. This helps reduce fake accounts, impersonation, bots, and identity fraud while enabling users to build credibility and trust on the platform. The verification is privacy-preserving, paperless, and based on cryptographically verifiable digital credentials, giving users greater control over their identity while fostering a safer and more authentic social media experience. Arattai does 10,000 -15, 000 presentation based verification per month for their social media profiles.",
+                    "organizationName": "Unique Identification Authority of India",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-08-26T09:52:09+01:00",
+                    "publishedAt": "2026-08-26T09:52:09+01:00",
+                    "tags": [
+                        "social media",
+                        "profile verification",
+                        "digital identity",
+                        "verifiable credentials",
+                        "digital wallet",
+                        "Aadhaar",
+                        "Aadhaar App",
+                        "optional verification",
+                        "trusted profiles",
+                        "identity assurance",
+                        "privacy preserving verification"
+                    ],
+                    "links": {
+                        "personalWallets": [
+                            {
+                                "refId": "aadhaar",
+                                "labelRaw": "Aadhaar",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
+                        "businessWallets": [],
+                        "issuers": [
+                            {
+                                "refId": null,
+                                "labelRaw": "UIDAI",
+                                "url": "http://uidai.gov.in",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:uidai",
+                                "labelRaw": "Unique Identification Authority of India",
+                                "url": "https://uidai.gov.in/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:arattai",
+                                "labelRaw": "Arattai",
+                                "url": "http://Arattai.in",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": [
+                            {
+                                "refId": null,
+                                "labelRaw": "Arattai",
+                                "url": "http://arattai.in",
+                                "source": "manual",
+                                "walletType": null
+                            }
+                        ]
+                    },
+                    "interactionModes": [
+                        "remote"
+                    ],
+                    "vcFormats": [
+                        "sd_jwt_vc"
+                    ],
+                    "issuanceProtocols": [
+                        "oid4vci"
+                    ],
+                    "presentationProtocols": [
+                        "OpenID4VP"
+                    ],
+                    "interopProfiles": [],
+                    "themes": [
+                        "person_identity"
+                    ],
+                    "imageUrls": [
+                        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png"
+                    ],
+                    "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png",
+                    "videos": [
+                        {
+                            "url": "https://youtu.be/mzxH9MwmcKQ",
+                            "provider": "youtube"
+                        }
+                    ],
+                    "video": {
+                        "url": "https://youtu.be/mzxH9MwmcKQ",
+                        "provider": "youtube"
+                    },
+                    "moreInfoUrl": "https://www.arattai.in/",
+                    "userJourney": "A user downloads Arattai, creates a profile, and can immediately access the platform's messaging and social features without completing identity verification.\n\nIf the user chooses to verify their profile, Arattai initiates an app-to-app verification request to the Aadhaar App or another compatible digital identity wallet, such as Google Wallet. The user reviews the identity request and provides consent to share the required credential.\n\nThe wallet presents a verifiable identity credential to Arattai. Arattai cryptographically verifies the credential and, once verification is successful, updates the user's profile to display a verified status.\n\nOther users can then see that the profile has been verified using a trusted digital identity credential. The verification provides an additional layer of assurance without requiring Arattai to collect or store copies of the user's identity document.",
+                    "country": "IN"
+                },
+                {
                     "id": "urban-company-service-professional-and-customer-identity-verification-0DW84B",
                     "sector": "digital",
                     "title": "Urban Company: Service Professional and Customer Identity Verification",
@@ -11845,110 +11949,6 @@
                         "provider": "youtube"
                     },
                     "userJourney": "An MBBS graduate applies for practitioner registration with the Tamil Nadu Medical Council. As part of the registration process, the applicant is asked to verify their identity using the Aadhaar App. The applicant presents their Aadhaar identity information and completes proof of presence through face verification. The Council verifies the presented identity and uses the verified information as part of its broader checks on the applicant's academic and professional credentials. Once the required checks are completed, the Council proceeds with the practitioner registration process.",
-                    "country": "IN"
-                },
-                {
-                    "id": "delivery-agent-and-customer-identity-verification-using-the-aadhaar-app-NPL99P",
-                    "sector": "digital",
-                    "title": "Arattai: Verified Social Media Profiles",
-                    "summary": "Arattai is an Indian instant messaging and social networking platform (Like WhatsApp and Signal) with 8 million users that enables users to connect, communicate, and build trusted online communities. By integrating with the Aadhaar App, Arattai can offer users the option to verify their identity and receive a Verified Profile badge.\r\n\r\nUsers can securely share a digitally signed verifiable credential from the Aadhaar App with their explicit consent, allowing Arattai to confirm that the profile belongs to a real individual without storing or exposing unnecessary personal information. This helps reduce fake accounts, impersonation, bots, and identity fraud while enabling users to build credibility and trust on the platform. The verification is privacy-preserving, paperless, and based on cryptographically verifiable digital credentials, giving users greater control over their identity while fostering a safer and more authentic social media experience.",
-                    "organizationName": "Unique Identification Authority of India",
-                    "productionDeployment": "yes",
-                    "status": "published",
-                    "updatedAt": "2026-08-03T15:28:51+01:00",
-                    "publishedAt": "2026-07-16T14:51:06+01:00",
-                    "tags": [
-                        "social media",
-                        "profile verification",
-                        "digital identity",
-                        "verifiable credentials",
-                        "digital wallet",
-                        "Aadhaar",
-                        "Aadhaar App",
-                        "optional verification",
-                        "trusted profiles",
-                        "identity assurance",
-                        "privacy preserving verification"
-                    ],
-                    "links": {
-                        "personalWallets": [
-                            {
-                                "refId": "aadhaar",
-                                "labelRaw": "Aadhaar",
-                                "url": "https://uidai.gov.in/",
-                                "source": "catalog",
-                                "walletType": "personal"
-                            }
-                        ],
-                        "businessWallets": [],
-                        "issuers": [
-                            {
-                                "refId": null,
-                                "labelRaw": "UIDAI",
-                                "url": "http://uidai.gov.in",
-                                "source": "manual",
-                                "walletType": null
-                            }
-                        ],
-                        "credentials": [],
-                        "organizations": [
-                            {
-                                "refId": "org:uidai",
-                                "labelRaw": "Unique Identification Authority of India",
-                                "url": "https://uidai.gov.in/",
-                                "source": "catalog",
-                                "walletType": null
-                            },
-                            {
-                                "refId": "org:arattai",
-                                "labelRaw": "Arattai",
-                                "url": "http://Arattai.in",
-                                "source": "catalog",
-                                "walletType": null
-                            }
-                        ],
-                        "rps": [
-                            {
-                                "refId": null,
-                                "labelRaw": "Arattai",
-                                "url": "http://arattai.in",
-                                "source": "manual",
-                                "walletType": null
-                            }
-                        ]
-                    },
-                    "interactionModes": [
-                        "remote"
-                    ],
-                    "vcFormats": [
-                        "sd_jwt_vc"
-                    ],
-                    "issuanceProtocols": [
-                        "oid4vci"
-                    ],
-                    "presentationProtocols": [
-                        "OpenID4VP"
-                    ],
-                    "interopProfiles": [],
-                    "themes": [
-                        "person_identity"
-                    ],
-                    "imageUrls": [
-                        "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png"
-                    ],
-                    "imageUrl": "https://fides.community/app/uploads/2026/07/ChatGPT-Image-Jul-14-2026-06_53_20-PM.png",
-                    "videos": [
-                        {
-                            "url": "https://youtu.be/mzxH9MwmcKQ",
-                            "provider": "youtube"
-                        }
-                    ],
-                    "video": {
-                        "url": "https://youtu.be/mzxH9MwmcKQ",
-                        "provider": "youtube"
-                    },
-                    "moreInfoUrl": "https://www.arattai.in/",
-                    "userJourney": "A user downloads Arattai, creates a profile, and can immediately access the platform's messaging and social features without completing identity verification.\r\n\r\nIf the user chooses to verify their profile, Arattai initiates an app-to-app verification request to the Aadhaar App or another compatible digital identity wallet, such as Google Wallet. The user reviews the identity request and provides consent to share the required credential.\r\n\r\nThe wallet presents a verifiable identity credential to Arattai. Arattai cryptographically verifies the credential and, once verification is successful, updates the user's profile to display a verified status.\r\n\r\nOther users can then see that the profile has been verified using a trusted digital identity credential. The verification provides an additional layer of assurance without requiring Arattai to collect or store copies of the user's identity document.",
                     "country": "IN"
                 },
                 {
