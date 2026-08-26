@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-26T17:47:40+00:00",
+    "generatedAt": "2026-08-26T17:47:46+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -8203,7 +8203,7 @@
         },
         {
             "orgSlug": "nedmod",
-            "orgId": "org:nedmod",
+            "orgId": "org:credenid",
             "orgName": "Nedmod",
             "useCases": [
                 {
@@ -8214,8 +8214,8 @@
                     "organizationName": "Nedmod",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-23T16:00:06+01:00",
-                    "publishedAt": "2026-08-23T16:00:06+01:00",
+                    "updatedAt": "2026-08-26T18:47:46+01:00",
+                    "publishedAt": "2026-08-26T18:47:46+01:00",
                     "tags": [
                         "kyb",
                         "sd-jwt vc",
@@ -8282,17 +8282,17 @@
                         ],
                         "organizations": [
                             {
-                                "refId": null,
+                                "refId": "org:credenid",
                                 "labelRaw": "Credenid",
-                                "url": "https://credenid.com",
-                                "source": "manual",
+                                "url": "https://credenid.com/",
+                                "source": "catalog",
                                 "walletType": null
                             },
                             {
-                                "refId": null,
+                                "refId": "org:nedmod",
                                 "labelRaw": "Nedmod",
-                                "url": "https://nedmod.com",
-                                "source": "manual",
+                                "url": null,
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
