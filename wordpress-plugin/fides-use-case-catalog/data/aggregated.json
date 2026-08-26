@@ -1,10 +1,219 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-26T17:48:17.854Z",
+  "lastUpdated": "2026-08-26T19:23:35.210Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 99,
   "useCases": [
+    {
+      "id": "trusted-ereceipts-for-b2b-payments-issuing-verifiable-receipts-to-a-european-business-wallet-after-eudi-based-sca-yB3QzY",
+      "sector": "finance",
+      "title": "Trusted eReceipts for B2B Payments: issuing verifiable receipts to a European Business Wallet after EUDI-based SCA",
+      "summary": "This use case demonstrates how a merchant can issue a verifiable eReceipt after a payment flow involving Strong Customer Authentication and deliver it to a European Business Wallet used by an SME buyer organisation. The scenario connects the EUDI Wallet, payment evidence, merchant-issued receipt data and organisational reuse of the receipt in downstream business processes.\n\nThe Bygg AB Business Wallet and the WE BUILD corporate shop for PA4 (without Tax Portal) are live and ready to test. Both run on the iGrant.io Organisation Wallet Suite. You need the iGrant.io EUDI Wallet app on your phone.\n\nPortals\n\n- Piggy Bank: https://piggybank-demo.igrant.io/\n- Bygg AB Business Wallet: https://byggab-businesswallet.igrant.io.\n- WE BUILD corporate shop: https://webuildshop-corporate-demo.igrant.io.\nBefore you start, issue yourself a Person Identification Data (PID) credential into your EUDI Wallet: https://igrant.io/demo/pid.html\n\nThe EBWOID and VAT-ID sit in the Bygg AB business wallet already, so business registration needs nothing extra from you.",
+      "organizationName": "WE BUILD Consortium",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-26T20:23:13+01:00",
+      "publishedAt": "2026-08-26T20:23:13+01:00",
+      "tags": [
+        "EUDI Wallet",
+        "Business Wallet",
+        "eReceipt",
+        "B2B Payments",
+        "Strong Customer Authentication",
+        "Verifiable Credentials",
+        "OpenID4VCI",
+        "OpenID4VP",
+        "Interoperability",
+        "Expense Management",
+        "Tax / Compliance",
+        "SME"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "igrant-data-wallet",
+            "labelRaw": "Data Wallet by iGrant.io",
+            "url": "https://igrant.io/datawallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "igrant-organization-wallet",
+            "labelRaw": "Organisation Wallet Suite by iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:igrant:webuildcorporateshop:production",
+            "labelRaw": "WE BUILD Corporate Shop",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:igrantio:payment-account:sd-jwt-vc",
+            "labelRaw": "Payment Account",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:igrantio:payment-card:sd-jwt-vc",
+            "labelRaw": "Payment Card",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "eReceipt",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Authenticator",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:webuild",
+            "labelRaw": "WE BUILD Consortium",
+            "url": "https://www.webuildconsortium.eu/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:bosch",
+            "labelRaw": "Robert Bosch GmbH",
+            "url": "https://www.bosch.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:uaegean",
+            "labelRaw": "University of the Aegean",
+            "url": "https://www.aegean.gr",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:igrant",
+            "labelRaw": "iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:onepoint",
+            "labelRaw": "Onepoint",
+            "url": "https://www.groupeonepoint.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:valtiokonttori",
+            "labelRaw": "Valtiokonttori",
+            "url": "https://www.valtiokonttori.fi/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:op-bank",
+            "labelRaw": "OP Bank",
+            "url": "https://www.op.fi/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:receipthero",
+            "labelRaw": "ReceiptHero",
+            "url": "https://getreceipthero.com/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "WE BUILD Corporate Shop",
+            "url": "https://webuildshop-corporate-demo.igrant.io/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bygg AB Business Wallet",
+            "url": "https://byggab-businesswallet.igrant.io/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "ReceiptHero",
+            "url": "https://getreceipthero.com/",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://webuildshop-corporate-demo.igrant.io/",
+      "userJourney": "Journey 1\n1. Onboarding: Open https://byggab-businesswallet.igrant.io > \"Register as the business owner\". Scan QR with EUDI Wallet, present PID, accept Bygg AB Business Wallet Authenticator.\n2. Login: Press \"Sign in with your EUDI Wallet\", present Authenticator.\n3. Add People: Go to People, add user, choose payment attestation (Account/Card with Mastercard or Visa). User opens email, scans QR (or presses button), enters 4-digit code, accepts in wallet. Refresh to show Accepted/Linked.\n\nJourney 2\n1. Onboarding: Open https://webuildshop-corporate-demo.igrant.io/register > Business. Search European Digital Directory (\"bygg\", VAT, EBWOID) > Connect. Sign into Bygg portal, review claims and Trusted Service Provider details, share. Scan QR with EUDI Wallet (present PID) to get WE BUILD Shop Corporate Authenticator.\n2. Login: Sign in at shop with EUDI Wallet (business mode), present Corporate Authenticator.\n3. Payment: Add items to cart > Checkout. Press \"Pay with EUDI Wallet\", select credential (Journey 1 or https://piggybank-demo.igrant.io), approve TS12 payment.\n4. eReceipt: Open https://byggab-businesswallet.igrant.io, click notification bell, accept eReceipt. View under Receipts.",
+      "country": "SE"
+    },
     {
       "id": "autofill-customer-id-on-trip-com-with-google-wallet-rJkmvE",
       "sector": "mobility",
@@ -486,222 +695,6 @@
       "moreInfoUrl": "https://www.posdigicert.com.my/espa/",
       "userJourney": "1.Housing developer registers the project & relevant parties in KPKT’s HIMS, including buyers, landowners, witnesses & authorised representatives.\n2.HIMS sends each party an invitation to complete remote identity verification via the iDsaya mobile application.\n3.Malaysians submit their MyKad, while non-Malaysians submit a passport. iDsaya performs document verification, facial matching & liveness detection to confirm identity.\n4.Upon successful eKYC, a Verifiable Credential (VC) is established, followed by the issuance & activation of a digital certificate by a licensed CA. User creates a PIN for signing authentication.\n5.The developer prepares the prescribed eSPA in HIMS & notifies all required parties when it is ready.\n6.Each party reviews & authorises signing remotely using iDsaya, the certificate PIN & TOTP. Digital signature binds the verified signer to the document & detects subsequent changes.\n7.HIMS validates the signatures, certificate status & completion by all required parties before recording the executed eSPA.\n8.KPKT/JPN oversees the process, while relevant parties perform their respective roles. iDsaya provides eKYC, identity credentials & remote signing capabilities.",
       "country": "MY"
-    },
-    {
-      "id": "trusted-ereceipts-for-b2b-payments-issuing-verifiable-receipts-to-a-european-business-wallet-after-eudi-based-sca-yB3QzY",
-      "sector": "finance",
-      "title": "Trusted eReceipts for B2B Payments: issuing verifiable receipts to a European Business Wallet after EUDI-based SCA",
-      "summary": "This use case demonstrates how a merchant can issue a verifiable eReceipt after a payment flow involving Strong Customer Authentication and deliver it to a European Business Wallet used by an SME buyer organisation. The scenario connects the EUDI Wallet, payment evidence, merchant-issued receipt data and organisational reuse of the receipt in downstream business processes.\n\nThe Bygg AB Business Wallet and the WE BUILD corporate shop for PA4 (without Tax Portal) are live and ready to test. Both run on the iGrant.io Organisation Wallet Suite. You need the iGrant.io EUDI Wallet app on your phone.\n\nPortals\n\n- Piggy Bank: https://piggybank-demo.igrant.io/\n- Bygg AB Business Wallet: https://byggab-businesswallet.igrant.io.\n- WE BUILD corporate shop: https://webuildshop-corporate-demo.igrant.io.\nBefore you start, issue yourself a Person Identification Data (PID) credential into your EUDI Wallet: https://igrant.io/demo/pid.html\n\nThe EBWOID and VAT-ID sit in the Bygg AB business wallet already, so business registration needs nothing extra from you.",
-      "organizationName": "WE BUILD Consortium",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-26T18:47:31+01:00",
-      "publishedAt": "2026-08-26T18:47:31+01:00",
-      "tags": [
-        "EUDI Wallet",
-        "Business Wallet",
-        "eReceipt",
-        "B2B Payments",
-        "Strong Customer Authentication",
-        "Verifiable Credentials",
-        "OpenID4VCI",
-        "OpenID4VP",
-        "Interoperability",
-        "Expense Management",
-        "Tax / Compliance",
-        "SME"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "igrant-data-wallet",
-            "labelRaw": "Data Wallet by iGrant.io",
-            "url": "https://igrant.io/datawallet",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "igrant-organization-wallet",
-            "labelRaw": "Organisation Wallet Suite by iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": "issuer:igrant:webuildcorporateshop:production",
-            "labelRaw": "WE BUILD Corporate Shop",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:igrantio:payment-account:sd-jwt-vc",
-            "labelRaw": "Payment Account",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:igrantio:payment-card:sd-jwt-vc",
-            "labelRaw": "Payment Card",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "eReceipt",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Authenticator",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:webuild",
-            "labelRaw": "WE BUILD Consortium",
-            "url": "https://www.webuildconsortium.eu/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:bosch",
-            "labelRaw": "Robert Bosch GmbH",
-            "url": "https://www.bosch.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:uaegean",
-            "labelRaw": "University of the Aegean",
-            "url": "https://www.aegean.gr",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:procivis",
-            "labelRaw": "Procivis",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:igrant",
-            "labelRaw": "iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:onepoint",
-            "labelRaw": "Onepoint",
-            "url": "https://www.groupeonepoint.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:valtiokonttori",
-            "labelRaw": "Valtiokonttori",
-            "url": "https://www.valtiokonttori.fi/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:op-bank",
-            "labelRaw": "OP Bank",
-            "url": "https://www.op.fi/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:receipthero",
-            "labelRaw": "ReceiptHero",
-            "url": "https://getreceipthero.com/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "WE BUILD Corporate Shop",
-            "url": "https://webuildshop-corporate-demo.igrant.io/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bygg AB Business Wallet",
-            "url": "https://byggab-businesswallet.igrant.io/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "ReceiptHero",
-            "url": "https://getreceipthero.com/",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "person_identity",
-        "organizational_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=ZG2-2EaCzfw&feature=youtu.be",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://webuildshop-corporate-demo.igrant.io/",
-      "userJourney": "Journey 1\n1. Onboarding: Open https://byggab-businesswallet.igrant.io > \"Register as the business owner\". Scan QR with EUDI Wallet, present PID, accept Bygg AB Business Wallet Authenticator.\n2. Login: Press \"Sign in with your EUDI Wallet\", present Authenticator.\n3. Add People: Go to People, add user, choose payment attestation (Account/Card with Mastercard or Visa). User opens email, scans QR (or presses button), enters 4-digit code, accepts in wallet. Refresh to show Accepted/Linked.\n\nJourney 2\n1. Onboarding: Open https://webuildshop-corporate-demo.igrant.io/register > Business. Search European Digital Directory (\"bygg\", VAT, EBWOID) > Connect. Sign into Bygg portal, review claims and Trusted Service Provider details, share. Scan QR with EUDI Wallet (present PID) to get WE BUILD Shop Corporate Authenticator.\n2. Login: Sign in at shop with EUDI Wallet (business mode), present Corporate Authenticator.\n3. Payment: Add items to cart > Checkout. Press \"Pay with EUDI Wallet\", select credential (Journey 1 or https://piggybank-demo.igrant.io), approve TS12 payment.\n4. eReceipt: Open https://byggab-businesswallet.igrant.io, click notification bell, accept eReceipt. View under Receipts.",
-      "country": "SE"
     },
     {
       "id": "instant-paperless-rural-credit-using-verifiable-credentials-xUny3z",

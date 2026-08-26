@@ -12,8 +12,8 @@
       "organizationName": "WE BUILD Consortium",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-26T18:47:31+01:00",
-      "publishedAt": "2026-08-26T18:47:31+01:00",
+      "updatedAt": "2026-08-26T20:23:13+01:00",
+      "publishedAt": "2026-08-26T20:23:13+01:00",
       "tags": [
         "EUDI Wallet",
         "Business Wallet",
@@ -112,13 +112,6 @@
             "refId": "org:uaegean",
             "labelRaw": "University of the Aegean",
             "url": "https://www.aegean.gr",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:procivis",
-            "labelRaw": "Procivis",
-            "url": "https://www.procivis.ch",
             "source": "catalog",
             "walletType": null
           },
