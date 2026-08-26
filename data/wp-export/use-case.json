@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-26T17:47:46+00:00",
+    "generatedAt": "2026-08-26T17:47:52+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -6490,8 +6490,8 @@
                     "organizationName": "iLabs",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-24T16:24:19+01:00",
-                    "publishedAt": "2026-08-24T16:24:19+01:00",
+                    "updatedAt": "2026-08-26T18:47:52+01:00",
+                    "publishedAt": "2026-08-26T18:47:52+01:00",
                     "tags": [
                         "open interop testbed",
                         "GITB",
@@ -6554,23 +6554,16 @@
                             },
                             {
                                 "refId": null,
-                                "labelRaw": "EUTwinLink",
-                                "url": "https://knowledgehub.ldt4ssc.eu/journey/pilots/round1/eu-twinlink/",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "EUTwinLink",
-                                "url": null,
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
                                 "labelRaw": "EUTwinLink consortium",
                                 "url": "https://knowledgehub.ldt4ssc.eu/journey/pilots/round1/eu-twinlink/",
                                 "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:eutwinlink",
+                                "labelRaw": "EUTwinLink",
+                                "url": "https://knowledgehub.ldt4ssc.eu/",
+                                "source": "catalog",
                                 "walletType": null
                             }
                         ],
