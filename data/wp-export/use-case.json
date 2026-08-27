@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-27T08:26:28+00:00",
+    "generatedAt": "2026-08-27T17:20:11+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -9562,8 +9562,8 @@
                     "organizationName": "Robert Bosch GmbH",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-19T21:05:38+01:00",
-                    "publishedAt": "2026-08-18T19:18:33+01:00",
+                    "updatedAt": "2026-08-27T18:20:11+01:00",
+                    "publishedAt": "2026-08-27T18:20:11+01:00",
                     "tags": [
                         "#EBWOID",
                         "#EUCC",
@@ -9594,6 +9594,34 @@
                                 "url": "https://github.com/eu-digital-identity-wallet/",
                                 "source": "catalog",
                                 "walletType": "personal"
+                            },
+                            {
+                                "refId": "digidentity-wallet",
+                                "labelRaw": "Digidentity Wallet",
+                                "url": "https://www.digidentity.com",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "credenco-wallet",
+                                "labelRaw": "Credenco Wallet",
+                                "url": "https://www.credenco.com",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "eudi-reference-personal-wallet",
+                                "labelRaw": "EUDI Wallet Reference Implementation",
+                                "url": "https://github.com/eu-digital-identity-wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            },
+                            {
+                                "refId": "national-eudi-wallet-germany",
+                                "labelRaw": "National EUDI Wallet (Germany)",
+                                "url": "https://www.sprind.org/eudi-wallet",
+                                "source": "catalog",
+                                "walletType": "personal"
                             }
                         ],
                         "businessWallets": [
@@ -9608,6 +9636,13 @@
                                 "refId": "spherity-business-wallet",
                                 "labelRaw": "Spherity's European Business Wallet",
                                 "url": "https://www.spherity.com/eida",
+                                "source": "catalog",
+                                "walletType": "organizational"
+                            },
+                            {
+                                "refId": "igrant-organization-wallet",
+                                "labelRaw": "Organisation Wallet Suite by iGrant.io",
+                                "url": "https://igrant.io",
                                 "source": "catalog",
                                 "walletType": "organizational"
                             }
@@ -9665,6 +9700,41 @@
                             {
                                 "refId": null,
                                 "labelRaw": "Robert Bosch GmbH",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Info Camere (IT)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "KVK (NL)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "ABN AMRO Bank(NL)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Raiffeisen Bank International (AT)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Doxalia (FR)",
                                 "url": null,
                                 "source": "manual",
                                 "walletType": null
@@ -9884,6 +9954,69 @@
                                 "url": "https://www.bosch.nl/",
                                 "source": "manual",
                                 "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Freelancers (Germany - over Datev)",
+                                "url": "https://apps.datev.de/ano/de/",
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Voestalpine (AT)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Siemens (DE)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "SBB Cargo (CH)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Orange (FR)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Oslo Commune (NO)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "ABN AMRO Bank (NL)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Raiffeisen Bank International (AT)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
+                            },
+                            {
+                                "refId": null,
+                                "labelRaw": "Doxalia (FR)",
+                                "url": null,
+                                "source": "manual",
+                                "walletType": null
                             }
                         ]
                     },
@@ -9907,7 +10040,8 @@
                         "organizational_identity"
                     ],
                     "imageUrls": [
-                        "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png"
+                        "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
+                        "https://fides.community/app/uploads/2026/08/Pilot_Overview.png"
                     ],
                     "imageUrl": "https://fides.community/app/uploads/2026/08/GDC_End2End_Digital-Business-Workflows_1.0.png",
                     "videos": [
