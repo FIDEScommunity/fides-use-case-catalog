@@ -1,10 +1,143 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-26T19:58:09.407Z",
+  "lastUpdated": "2026-08-27T04:26:26.848Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 99,
   "useCases": [
+    {
+      "id": "verifiable-work-completion-credentials-for-migrant-construction-workers-Nn1eez",
+      "sector": "construction",
+      "title": "CredIssuer by Ooru - Verifiable Work-Completion Credentials for Migrant Construction Workers",
+      "summary": "India's Building and Other Construction Workers (BOCW) scheme entitles a migrant construction worker to welfare benefits once they complete 90 days of work in a year. The hard part was proving it. Eligibility rested on paper: forms, signatures, and manual checks that were slow for workers and hard for officials to verify. Paper is also easy to forge, and fabricated work histories are a known weak point in welfare disbursal, so those who genuinely qualify are often the hardest to believe.\nJan Sahas set out to close that gap. With construction firms Ashiana Housing and Total Environment, it piloted a verifiable alternative built on CredIssuer, Ooru's verifiable credentials ecosystem. Site administrators log each worker's history into a Worker Registry; entries are approved in real time, and once a worker has enough approved days, a tamper-resistant digital certificate with a QR code is issued. The worker attaches it to their BOCW application, and a labour official confirms it in seconds through CredIssuer's portal instead of checking paperwork by hand.\nThe flow is live. In the pilot, 194 certificates were issued and verified, enabling workers to gain faster access to their benefits.",
+      "organizationName": "Ooru",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-08-27T05:26:11+01:00",
+      "publishedAt": "2026-08-27T05:26:11+01:00",
+      "tags": [
+        "migrant workers",
+        "BOCW",
+        "verifiable credentials",
+        "welfare benefits",
+        "government verification",
+        "CredIssuer"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Total Environment",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Ashiana Housing Ltd.",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "Work-Completion Certificate",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:ooru",
+            "labelRaw": "Ooru",
+            "url": "https://ooru.io/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:credissuer",
+            "labelRaw": "CredIssuer",
+            "url": "https://credissuer.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:jan-sahas",
+            "labelRaw": "Jan Sahas",
+            "url": "https://jansahas.org/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:total-environment",
+            "labelRaw": "Total Environment",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:ashiana-housing",
+            "labelRaw": "Ashiana Housing Ltd.",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "BOCW",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Labour Officials",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-20-at-4.59.54-PM.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-20-at-4.59.54-PM.png",
+      "videos": [
+        {
+          "url": "https://vimeo.com/1220442705?share=copy&fl=sv&fe=ci",
+          "provider": "vimeo"
+        }
+      ],
+      "video": {
+        "url": "https://vimeo.com/1220442705?share=copy&fl=sv&fe=ci",
+        "provider": "vimeo"
+      },
+      "moreInfoUrl": "https://ooru.io/case-studies/jan-sahas",
+      "userJourney": "1: A site administrator logs each worker's work history into the Worker Registry.\n2: The registered contractor of the site the worker worked on reviews and approves each entry in real time.\n3: Once a worker reaches 90 approved days, CredIssuer issues a verified certificate with an embedded QR code.\n4: The worker adds it to their BOCW application, and a labour official verifies it by scanning the QR code through CredIssuer's portal.",
+      "country": "IN"
+    },
     {
       "id": "trusted-ereceipts-for-b2b-payments-issuing-verifiable-receipts-to-a-european-business-wallet-after-eudi-based-sca-yB3QzY",
       "sector": "finance",
@@ -3211,139 +3344,6 @@
       },
       "moreInfoUrl": "https://snapkyc.com/",
       "userJourney": "1: Access Age-Restricted Content: A user attempts to access content designated as age-restricted on a social media platform.\n2: Age Verification Prompt: Before proceeding, the user is prompted to verify their age. On a web browser, this can be initiated by scanning a QR code; within a mobile app, the user can initiate the credential-sharing flow directly.\n3: Privacy-Preserving Age Check: SnapKYC requests an age-eligibility claim from the user’s Aadhaar-linked wallet in real time. The eligibility check is based on the applicable age threshold for the user’s jurisdiction—for example, 16+ or 18+.\n4: Minimal Data Disclosure: The verification returns only a Yes/No eligibility response. SnapKYC does not share the user’s date of birth, name, Aadhaar number, or other identity information with the social media platform.\n5: Seamless Continuation: If the user meets the required age threshold, they are returned to the exact content they were attempting to access.\n6: Access Restricted: If the user does not meet the required threshold, they are informed that the content is unavailable based on the applicable age requirement and are redirected to the platform’s home screen.",
-      "country": "IN"
-    },
-    {
-      "id": "verifiable-work-completion-credentials-for-migrant-construction-workers-Nn1eez",
-      "sector": "construction",
-      "title": "Verifiable Work-Completion Credentials for Migrant Construction Workers",
-      "summary": "India's Building and Other Construction Workers (BOCW) scheme entitles a migrant construction worker to welfare benefits once they complete 90 days of work in a year. The hard part was proving it. Eligibility rested on paper: forms, signatures, and manual checks that were slow for workers and hard for officials to verify. Paper is also easy to forge, and fabricated work histories are a known weak point in welfare disbursal, so those who genuinely qualify are often the hardest to believe.\nJan Sahas set out to close that gap. With construction firms Ashiana Housing and Total Environment, it piloted a verifiable alternative built on CredIssuer, Ooru's verifiable credentials ecosystem. Site administrators log each worker's history into a Worker Registry; entries are approved in real time, and once a worker has enough approved days, a tamper-resistant digital certificate with a QR code is issued. The worker attaches it to their BOCW application, and a labour official confirms it in seconds through CredIssuer's portal instead of checking paperwork by hand.\nThe flow is live. In the pilot, 194 certificates were issued and verified, enabling workers to gain faster access to their benefits.",
-      "organizationName": "Ooru",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-22T19:57:26+01:00",
-      "publishedAt": "2026-08-22T19:57:26+01:00",
-      "tags": [
-        "migrant workers",
-        "BOCW",
-        "verifiable credentials",
-        "welfare benefits",
-        "government verification",
-        "CredIssuer"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Total Environment",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Ashiana Housing Ltd.",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "Work-Completion Certificate",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:ooru",
-            "labelRaw": "Ooru",
-            "url": "https://ooru.io/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:credissuer",
-            "labelRaw": "CredIssuer",
-            "url": "https://credissuer.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:jan-sahas",
-            "labelRaw": "Jan Sahas",
-            "url": "https://jansahas.org/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:total-environment",
-            "labelRaw": "Total Environment",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:ashiana-housing",
-            "labelRaw": "Ashiana Housing Ltd.",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "BOCW",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Labour Officials",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity",
-        "compliance_reporting"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-20-at-4.59.54-PM.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-20-at-4.59.54-PM.png",
-      "videos": [
-        {
-          "url": "https://vimeo.com/1220442705?share=copy&fl=sv&fe=ci",
-          "provider": "vimeo"
-        }
-      ],
-      "video": {
-        "url": "https://vimeo.com/1220442705?share=copy&fl=sv&fe=ci",
-        "provider": "vimeo"
-      },
-      "moreInfoUrl": "https://ooru.io/case-studies/jan-sahas",
-      "userJourney": "1: A site administrator logs each worker's work history into the Worker Registry.\n2: The registered contractor of the site the worker worked on reviews and approves each entry in real time.\n3: Once a worker reaches 90 approved days, CredIssuer issues a verified certificate with an embedded QR code.\n4: The worker adds it to their BOCW application, and a labour official verifies it by scanning the QR code through CredIssuer's portal.",
       "country": "IN"
     },
     {

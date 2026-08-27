@@ -5,122 +5,15 @@
   "orgName": "Ooru",
   "useCases": [
     {
-      "id": "age-verification-by-snapkyc-wt2dij",
-      "sector": "digital",
-      "title": "Age Verification by SnapKYC",
-      "summary": "SnapKYC is a consent-based verification orchestrator that lets a relying party confirm a user meets an eligibility requirement, such as an age threshold, without storing or exposing personal data.\nIt holds no credentials of its own. Built on open identity standards, it requests an eligibility claim from an existing trusted source. Today that source is Aadhaar, via the Aadhaar app and DigiLocker, and the same approach lets other issuers or wallets be added without changing the relying party's integration.\nWhen content is tagged age-restricted, the viewer is asked to verify their age. With their consent, SnapKYC sends an age-eligibility request to Aadhaar and receives only a yes or no. No age, date of birth, or identity attribute reaches the platform, and SnapKYC retains nothing. Age thresholds are configurable by jurisdiction, so one flow covers different regional age-of-majority rules.\nShown here through a media interface built to demonstrate the flow, not a live integration. Key players: UIDAI as issuer, the Aadhaar app as credential wallet, and SnapKYC as the verification layer any platform could adopt as a relying party. It is currently a working prototype.",
-      "organizationName": "Ooru",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-22T19:57:38+01:00",
-      "publishedAt": "2026-08-22T19:57:38+01:00",
-      "tags": [
-        "age verification",
-        "privacy",
-        "digital identity",
-        "selective disclosure",
-        "Aadhaar",
-        "social media"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "aadhaar",
-            "labelRaw": "Aadhaar",
-            "url": "https://uidai.gov.in/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "UIDAI",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [],
-        "organizations": [
-          {
-            "refId": "org:uidai",
-            "labelRaw": "Unique Identification Authority of India",
-            "url": "https://uidai.gov.in/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:snapkyc",
-            "labelRaw": "SnapKYC",
-            "url": "https://snapkyc.com/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:ooru",
-            "labelRaw": "Ooru",
-            "url": "https://ooru.io/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "Content Platforms",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "proximity",
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [],
-      "themes": [
-        "person_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Screenshot_2026-08-20_at_3.22.36_PM_optimized_1000.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot_2026-08-20_at_3.22.36_PM_optimized_1000.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/IMaz9Vpe-0A?si=S0xW7cCRWfQbRaq1",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/IMaz9Vpe-0A?si=S0xW7cCRWfQbRaq1",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://snapkyc.com/",
-      "userJourney": "1: Access Age-Restricted Content: A user attempts to access content designated as age-restricted on a social media platform.\n2: Age Verification Prompt: Before proceeding, the user is prompted to verify their age. On a web browser, this can be initiated by scanning a QR code; within a mobile app, the user can initiate the credential-sharing flow directly.\n3: Privacy-Preserving Age Check: SnapKYC requests an age-eligibility claim from the user’s Aadhaar-linked wallet in real time. The eligibility check is based on the applicable age threshold for the user’s jurisdiction—for example, 16+ or 18+.\n4: Minimal Data Disclosure: The verification returns only a Yes/No eligibility response. SnapKYC does not share the user’s date of birth, name, Aadhaar number, or other identity information with the social media platform.\n5: Seamless Continuation: If the user meets the required age threshold, they are returned to the exact content they were attempting to access.\n6: Access Restricted: If the user does not meet the required threshold, they are informed that the content is unavailable based on the applicable age requirement and are redirected to the platform’s home screen.",
-      "country": "IN"
-    },
-    {
       "id": "verifiable-work-completion-credentials-for-migrant-construction-workers-Nn1eez",
       "sector": "construction",
-      "title": "Verifiable Work-Completion Credentials for Migrant Construction Workers",
+      "title": "CredIssuer by Ooru - Verifiable Work-Completion Credentials for Migrant Construction Workers",
       "summary": "India's Building and Other Construction Workers (BOCW) scheme entitles a migrant construction worker to welfare benefits once they complete 90 days of work in a year. The hard part was proving it. Eligibility rested on paper: forms, signatures, and manual checks that were slow for workers and hard for officials to verify. Paper is also easy to forge, and fabricated work histories are a known weak point in welfare disbursal, so those who genuinely qualify are often the hardest to believe.\nJan Sahas set out to close that gap. With construction firms Ashiana Housing and Total Environment, it piloted a verifiable alternative built on CredIssuer, Ooru's verifiable credentials ecosystem. Site administrators log each worker's history into a Worker Registry; entries are approved in real time, and once a worker has enough approved days, a tamper-resistant digital certificate with a QR code is issued. The worker attaches it to their BOCW application, and a labour official confirms it in seconds through CredIssuer's portal instead of checking paperwork by hand.\nThe flow is live. In the pilot, 194 certificates were issued and verified, enabling workers to gain faster access to their benefits.",
       "organizationName": "Ooru",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-22T19:57:26+01:00",
-      "publishedAt": "2026-08-22T19:57:26+01:00",
+      "updatedAt": "2026-08-27T05:26:11+01:00",
+      "publishedAt": "2026-08-27T05:26:11+01:00",
       "tags": [
         "migrant workers",
         "BOCW",
@@ -242,6 +135,113 @@
       },
       "moreInfoUrl": "https://ooru.io/case-studies/jan-sahas",
       "userJourney": "1: A site administrator logs each worker's work history into the Worker Registry.\n2: The registered contractor of the site the worker worked on reviews and approves each entry in real time.\n3: Once a worker reaches 90 approved days, CredIssuer issues a verified certificate with an embedded QR code.\n4: The worker adds it to their BOCW application, and a labour official verifies it by scanning the QR code through CredIssuer's portal.",
+      "country": "IN"
+    },
+    {
+      "id": "age-verification-by-snapkyc-wt2dij",
+      "sector": "digital",
+      "title": "Age Verification by SnapKYC",
+      "summary": "SnapKYC is a consent-based verification orchestrator that lets a relying party confirm a user meets an eligibility requirement, such as an age threshold, without storing or exposing personal data.\nIt holds no credentials of its own. Built on open identity standards, it requests an eligibility claim from an existing trusted source. Today that source is Aadhaar, via the Aadhaar app and DigiLocker, and the same approach lets other issuers or wallets be added without changing the relying party's integration.\nWhen content is tagged age-restricted, the viewer is asked to verify their age. With their consent, SnapKYC sends an age-eligibility request to Aadhaar and receives only a yes or no. No age, date of birth, or identity attribute reaches the platform, and SnapKYC retains nothing. Age thresholds are configurable by jurisdiction, so one flow covers different regional age-of-majority rules.\nShown here through a media interface built to demonstrate the flow, not a live integration. Key players: UIDAI as issuer, the Aadhaar app as credential wallet, and SnapKYC as the verification layer any platform could adopt as a relying party. It is currently a working prototype.",
+      "organizationName": "Ooru",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-08-22T19:57:38+01:00",
+      "publishedAt": "2026-08-22T19:57:38+01:00",
+      "tags": [
+        "age verification",
+        "privacy",
+        "digital identity",
+        "selective disclosure",
+        "Aadhaar",
+        "social media"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "aadhaar",
+            "labelRaw": "Aadhaar",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "UIDAI",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": "org:uidai",
+            "labelRaw": "Unique Identification Authority of India",
+            "url": "https://uidai.gov.in/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:snapkyc",
+            "labelRaw": "SnapKYC",
+            "url": "https://snapkyc.com/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:ooru",
+            "labelRaw": "Ooru",
+            "url": "https://ooru.io/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "Content Platforms",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [],
+      "themes": [
+        "person_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Screenshot_2026-08-20_at_3.22.36_PM_optimized_1000.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot_2026-08-20_at_3.22.36_PM_optimized_1000.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/IMaz9Vpe-0A?si=S0xW7cCRWfQbRaq1",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/IMaz9Vpe-0A?si=S0xW7cCRWfQbRaq1",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://snapkyc.com/",
+      "userJourney": "1: Access Age-Restricted Content: A user attempts to access content designated as age-restricted on a social media platform.\n2: Age Verification Prompt: Before proceeding, the user is prompted to verify their age. On a web browser, this can be initiated by scanning a QR code; within a mobile app, the user can initiate the credential-sharing flow directly.\n3: Privacy-Preserving Age Check: SnapKYC requests an age-eligibility claim from the user’s Aadhaar-linked wallet in real time. The eligibility check is based on the applicable age threshold for the user’s jurisdiction—for example, 16+ or 18+.\n4: Minimal Data Disclosure: The verification returns only a Yes/No eligibility response. SnapKYC does not share the user’s date of birth, name, Aadhaar number, or other identity information with the social media platform.\n5: Seamless Continuation: If the user meets the required age threshold, they are returned to the exact content they were attempting to access.\n6: Access Restricted: If the user does not meet the required threshold, they are informed that the content is unavailable based on the applicable age requirement and are redirected to the platform’s home screen.",
       "country": "IN"
     },
     {
