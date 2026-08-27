@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-27T04:26:11+00:00",
+    "generatedAt": "2026-08-27T08:26:28+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -13037,8 +13037,8 @@
                     "organizationName": "WE BUILD Consortium",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-26T20:57:51+01:00",
-                    "publishedAt": "2026-08-26T20:57:51+01:00",
+                    "updatedAt": "2026-08-27T09:26:28+01:00",
+                    "publishedAt": "2026-08-27T09:26:28+01:00",
                     "tags": [
                         "EUDI Wallet",
                         "Business Wallet",
@@ -13112,13 +13112,6 @@
                             },
                             {
                                 "refId": null,
-                                "labelRaw": "eReceipt",
-                                "url": null,
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
                                 "labelRaw": "Authenticator",
                                 "url": null,
                                 "source": "manual",
@@ -13141,6 +13134,13 @@
                             {
                                 "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
                                 "labelRaw": "EBW Owner Identification Data (EBW-OID)",
+                                "url": null,
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "cred:webuild:ereceipt:sd-jwt-vc",
+                                "labelRaw": "eReceipt",
                                 "url": null,
                                 "source": "catalog",
                                 "walletType": null
@@ -13236,7 +13236,7 @@
                             {
                                 "refId": null,
                                 "labelRaw": "Member State Tax Authority",
-                                "url": null,
+                                "url": "https://taxservice-demo.igrant.io/",
                                 "source": "manual",
                                 "walletType": null
                             }
