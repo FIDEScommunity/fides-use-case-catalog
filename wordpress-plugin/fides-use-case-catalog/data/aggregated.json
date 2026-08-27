@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-08-27T17:20:31.083Z",
+  "lastUpdated": "2026-08-27T19:25:50.558Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 99,
   "useCases": [
@@ -13,8 +13,8 @@
       "organizationName": "Robert Bosch GmbH",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-27T18:20:11+01:00",
-      "publishedAt": "2026-08-27T18:20:11+01:00",
+      "updatedAt": "2026-08-27T20:25:33+01:00",
+      "publishedAt": "2026-08-27T20:25:33+01:00",
       "tags": [
         "#EBWOID",
         "#EUCC",
@@ -94,6 +94,13 @@
             "refId": "igrant-organization-wallet",
             "labelRaw": "Organisation Wallet Suite by iGrant.io",
             "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
             "source": "catalog",
             "walletType": "organizational"
           }
@@ -498,6 +505,18 @@
       "videos": [
         {
           "url": "https://vimeo.com/1218464760?share=copy&fl=sv&fe=ci",
+          "provider": "vimeo"
+        },
+        {
+          "url": "https://vimeo.com/1221406095?fl=tl&fe=ec",
+          "provider": "vimeo"
+        },
+        {
+          "url": "https://vimeo.com/1221404973?fl=tl&fe=ec",
+          "provider": "vimeo"
+        },
+        {
+          "url": "https://vimeo.com/1221881555?fl=tl&fe=ec",
           "provider": "vimeo"
         }
       ],
