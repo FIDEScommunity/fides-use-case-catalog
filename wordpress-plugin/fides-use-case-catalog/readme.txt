@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.40
+Stable tag: 0.20.41
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,9 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.20.41 =
+* Sync shared catalog analytics for uniform wallet and organization detail/outbound events with Matomo outlink deduplication (tiles ≥ 1.13.21).
 
 = 0.20.40 =
 * Keep the listing organisation as orgId. Linked partners in Organisations involved must not replace the submitter (Hopae was exported as org:google).
