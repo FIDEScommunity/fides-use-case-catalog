@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-08-31T07:07:36+00:00",
+    "generatedAt": "2026-08-31T21:06:45+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -13194,8 +13194,8 @@
                     "organizationName": "WE BUILD Consortium",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-27T09:26:28+01:00",
-                    "publishedAt": "2026-08-27T09:26:28+01:00",
+                    "updatedAt": "2026-08-31T22:06:44+01:00",
+                    "publishedAt": "2026-08-31T22:06:44+01:00",
                     "tags": [
                         "EUDI Wallet",
                         "Business Wallet",
@@ -13421,12 +13421,17 @@
                         "organizational_identity"
                     ],
                     "imageUrls": [
-                        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png"
+                        "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png",
+                        "https://fides.community/app/uploads/2026/08/maxresdefault.jpg"
                     ],
                     "imageUrl": "https://fides.community/app/uploads/2026/08/Screenshot-2026-08-19-at-23.08.21-3.png",
                     "videos": [
                         {
                             "url": "https://www.youtube.com/watch?v=uYhA1WUhfTw",
+                            "provider": "youtube"
+                        },
+                        {
+                            "url": "https://www.youtube.com/watch?v=m6opYC-0U7c",
                             "provider": "youtube"
                         }
                     ],
