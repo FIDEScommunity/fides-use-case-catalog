@@ -8,12 +8,12 @@
       "id": "from-mine-permit-to-digital-product-passport-building-an-open-digital-trust-ecosystem-for-responsible-critical-minerals-c31nxy",
       "sector": "supply_chain",
       "title": "From Mine Permit to Digital Product Passport: Building an Open Digital Trust Ecosystem for Responsible Critical Minerals",
-      "summary": "Energy & Mines Digital Trust began with a use case, as shown in the video, in which production-issued digital credentials are held in a mining company's digital wallet and verified by the Mining Association of Canada. Building on this foundation, the initiative now connects regulatory, sustainability, and supply chain evidence into a network of verifiable, linked data using digital credentials, registries, passports and wallets. Today, critical mineral evidence is spread across government, mining companies, assurance programs, and technology providers, making it difficult for buyers, regulators and downstream manufacturers to verify that claims are authentic, current, and linked to the material. The solution combines a BC Mines Act Permit credential, sustainability credentials such as Towards Sustainable Mining and The Copper Mark, a UNTP Digital Product Passport. Digital wallets and registries enables businesses to maintain control of sensitive provenance and sustainability data when sharing it with suppliers. The result is lower verification costs, improved market access, and enhanced privacy that enable a standards-based market for responsible minerals, a G7 priority.",
+      "summary": "Energy & Mines Digital Trust began with a use case, as shown in the video, in which production-issued digital credentials are held in a mining company's digital wallet and verified by the Mining Association of Canada. Building on this foundation, the initiative now connects regulatory, sustainability, and supply chain evidence into a network of verifiable, linked data using digital credentials, registries, passports and wallets. Today, critical mineral evidence is spread across government, mining companies, assurance programs, and technology providers, making it difficult for buyers, regulators and downstream manufacturers to verify that claims are authentic, current, and linked to the material. The solution combines a BC Mines Act Permit credential, sustainability credentials such as Towards Sustainable Mining, Responsible Mining Initiative, The Copper Mark & UNTP Digital Product Passport. Digital wallets and registries enables businesses to securely share provenance and sustainability data with suppliers. The result is lower verification costs, improved market access and enhanced privacy, which enables standards-based market for responsible minerals, a G7 priority.",
       "organizationName": "Government of British Columbia",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-08-28T05:25:03+01:00",
-      "publishedAt": "2026-08-28T05:25:03+01:00",
+      "updatedAt": "2026-09-02T17:17:50+01:00",
+      "publishedAt": "2026-09-02T17:17:50+01:00",
       "tags": [
         "Mines Digital Trust",
         "critical minerals",
@@ -64,6 +64,13 @@
             "url": "https://coppermark.org/",
             "source": "manual",
             "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Responsible Mining Initiative",
+            "url": "https://www.responsiblebusiness.org/",
+            "source": "manual",
+            "walletType": null
           }
         ],
         "credentials": [
@@ -93,6 +100,27 @@
             "labelRaw": "Towards Sustainable Mining",
             "url": "https://mining.ca/towards-sustainable-mining/tsm-progress-report/tsm-digital-credential-registry/",
             "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Responsible Mining Initative",
+            "url": "https://www.responsiblebusiness.org/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "The Copper Mark",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "cred:uncefact:dia:vcdm-2-0",
+            "labelRaw": "Digital Identity Anchor",
+            "url": null,
+            "source": "catalog",
             "walletType": null
           }
         ],
@@ -145,6 +173,13 @@
             "url": null,
             "source": "catalog",
             "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Responsible Business Alliance",
+            "url": "https://www.responsiblebusiness.org/",
+            "source": "manual",
+            "walletType": null
           }
         ],
         "rps": [
@@ -192,7 +227,7 @@
         "provider": "youtube"
       },
       "moreInfoUrl": "https://www.rbtp.pyx.io/interactive-vc-map",
-      "userJourney": "In addition to the use case show in the demo video, click on issuers, wallets, credentials and more info below to see the interactive supply chain VC map, in which the Government of BC issues a digital Mines Act Permit credential with authoritative permit data and publishes it through OrgBook BC, so it can be independently verified while remaining under government authority. \n\nA mining company then creates a UNTP raw-material digital product passport. The passport does not copy the underlying records; it links to trusted credentials from the organizations that own them. Standards bodies such as Towards Sustainable Mining and The Copper Mark can add verifiable conformity credentials, forming one connected evidence chain. Each party keeps control of its own data.\n\nDigital wallets, such as Orgbook BC and Northern Block Orbit publish, discover and manage these credentials.\n\nWhen a buyer or regulator reviews the passport, a verifier application follows the links, confirms the issuer, checks the digital signature and integrity, and validates credential status. Government speaks for permits, mining companies for provenance, and assurance bodies for sustainability claims.",
+      "userJourney": "In addition to the use case show in the demo video, click on issuers, wallets, credentials and more info below to see the interactive supply chain VC map, in which the Government of BC issues a digital Mines Act Permit credential with authoritative permit data and publishes it through OrgBook BC, so it can be independently verified while remaining under government authority. A mining company then creates a UNTP raw-material digital product passport. The passport does not copy the underlying records; it links to trusted credentials from the organizations that own them. Standards bodies such as Towards Sustainable Mining, Responsible Mining Initiative and The Copper Mark can add conformity credentials, forming one connected evidence chain. Each party keeps control of its own data. Digital wallets, such as Orgbook BC and Northern Block Orbit publish, discover and manage these credentials. When a buyer or regulator reviews the passport, a verifier application follows the links, confirms the issuer, checks the digital signature and integrity, and validates credential status. Government speaks for permits, mining companies for provenance, and assurance bodies for sustainability claims.",
       "country": "CA"
     }
   ]
