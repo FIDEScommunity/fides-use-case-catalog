@@ -1,10 +1,49 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-09-02T16:18:09.264Z",
+  "lastUpdated": "2026-09-09T17:31:42.918Z",
   "generator": "fides-use-case-catalog crawler",
-  "count": 99,
+  "count": 100,
   "useCases": [
+    {
+      "id": "portable-pentest-compliance-and-privacy-credentials-for-supply-chain-trust-YdIhWh",
+      "sector": "supply_chain",
+      "title": "Portable pentest, compliance and privacy credentials for supply-chain trust",
+      "summary": "Problem\nEvery business now has to prove its security and privacy posture to customers, regulators and partners. That proof travels as PDF pentest reports, ISO and SOC 2 certificates, and GDPR statements, backed by endless vendor questionnaires. These are slow to check, trivial to forge, and out of date the moment a certificate is revoked, a retest fails, or a scope changes. A buyer screening fifty suppliers has no quick way to confirm that any single report is genuine, current, and tied to the scope it claims.\n\nSolution\nWe turn security and privacy attestations into W3C Verifiable Credentials that an organization holds in a wallet aligned with the EU Digital Identity Wallet and EBSI. The design follows our find it, prove it, fix it loop: a penetration test finds the weaknesses, a compliance and privacy assessment proves the posture, and the credential makes that proof portable and cryptographically checkable.",
+      "organizationName": "Cybessure (Earendel Global UG)",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-09-09T18:31:25+01:00",
+      "publishedAt": "2026-09-09T18:31:25+01:00",
+      "tags": [],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [],
+        "credentials": [],
+        "organizations": [
+          {
+            "refId": null,
+            "labelRaw": "Cybessure (Earendel Global UG)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [],
+      "vcFormats": [],
+      "issuanceProtocols": [],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "organizational_identity",
+        "compliance_reporting"
+      ],
+      "userJourney": "Standards and protocols\nW3C Verifiable Credentials, OpenID for Verifiable Credential Issuance and Presentation (OpenID4VCI and OpenID4VP), EBSI trust registries, and EUDI Wallet alignment. Selective disclosure lets a holder present \"no criticals open\" without revealing the finding detail.\n\nWhat makes it work\nIt runs as one feedback loop from testing through compliance rather than four disconnected paper trails, and it covers ISO 27001, NIS2, SOC 2, GDPR, CRA and BSI+ in a single credential model instead of a separate silo per framework. The credential set is scalable across a large supplier base and tailored to each customer's scope, and it sits on our security tools stack and partner ecosystem so issuance and verification fit existing assessor workflows. It is built on research-based, state-of-the-art cybersecurity, with the whole thing designed around how procurement and audit teams actually work.",
+      "country": "DE"
+    },
     {
       "id": "from-mine-permit-to-digital-product-passport-building-an-open-digital-trust-ecosystem-for-responsible-critical-minerals-c31nxy",
       "sector": "supply_chain",
