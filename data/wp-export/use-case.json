@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-09-09T17:31:25+00:00",
+    "generatedAt": "2026-09-14T11:53:05+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -9531,8 +9531,8 @@
                     "organizationName": "Reeco",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-16T14:05:50+01:00",
-                    "publishedAt": "2026-08-16T14:05:50+01:00",
+                    "updatedAt": "2026-09-14T12:53:05+01:00",
+                    "publishedAt": "2026-09-14T12:53:05+01:00",
                     "tags": [
                         "Digital Product Passport",
                         "DPP",
@@ -9550,25 +9550,26 @@
                         "Data Interoperability"
                     ],
                     "links": {
-                        "personalWallets": [],
+                        "personalWallets": [
+                            {
+                                "refId": "sphereon-wallet",
+                                "labelRaw": "Sphereon Edge Wallet",
+                                "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+                                "source": "catalog",
+                                "walletType": "personal"
+                            }
+                        ],
                         "businessWallets": [],
                         "issuers": [
                             {
-                                "refId": "issuer:thales:unfold:test",
-                                "labelRaw": "Thales Unfold OID4VCI Issuer",
-                                "url": null,
-                                "source": "catalog",
+                                "refId": null,
+                                "labelRaw": "Reeco DPP Issuer",
+                                "url": "https://ia.reeco.eco",
+                                "source": "manual",
                                 "walletType": null
                             }
                         ],
                         "credentials": [
-                            {
-                                "refId": "cred:ewc:epassport-sd-jwt:sd-jwt-vc",
-                                "labelRaw": "ePassport (SD-JWT VC)",
-                                "url": null,
-                                "source": "catalog",
-                                "walletType": null
-                            },
                             {
                                 "refId": "cred:uncefact:dpp:vcdm-2-0",
                                 "labelRaw": "Digital Product Passport",
