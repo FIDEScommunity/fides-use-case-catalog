@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-09-14T11:53:05+00:00",
+    "generatedAt": "2026-09-17T17:14:41+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -4033,6 +4033,66 @@
                     "moreInfoUrl": "https://dppskop.com",
                     "userJourney": "1. A manufacturer creates a new product in DPPskop and defines its core product information, sustainability attributes and compliance requirements.\n\n2. Suppliers securely provide material, component and sustainability data through structured collaboration workflows, ensuring that trusted information is collected directly from the source.\n\n3. DPPskop validates, structures and enriches the collected information using AI-assisted data processing while keeping all compliance decisions under human control.\n\n4. The completed Digital Product Passport is reviewed through DPPskop's Interoperability Lab to assess data quality, interoperability and readiness for the evolving European Digital Product Passport ecosystem.\n\n5. The Digital Product Passport is published using GS1 Digital Link, enabling manufacturers, supply chain partners, customers and future regulatory authorities to access trusted product information throughout the product lifecycle.",
                     "country": "TR"
+                }
+            ]
+        },
+        {
+            "orgSlug": "echt",
+            "orgId": "org:echt",
+            "orgName": "ECHT",
+            "useCases": [
+                {
+                    "id": "sneller-instromen-dossier-direct-op-orde-6JCjSV",
+                    "sector": "education",
+                    "title": "Sneller instromen, dossier direct op orde!",
+                    "summary": "Van intake, skillspaspoort en skillsanalyse tot mbo-certificaten in haar eigen wallet. De werkgever ziet bij sollicitatie in seconden wat aantoonbaar op orde is.",
+                    "organizationName": "ECHT",
+                    "productionDeployment": "yes",
+                    "status": "published",
+                    "updatedAt": "2026-09-17T18:14:41+01:00",
+                    "publishedAt": "2026-09-17T18:14:41+01:00",
+                    "tags": [
+                        "diploma's",
+                        "skills-based instroom"
+                    ],
+                    "links": {
+                        "personalWallets": [],
+                        "businessWallets": [],
+                        "issuers": [],
+                        "credentials": [],
+                        "organizations": [
+                            {
+                                "refId": "org:echt",
+                                "labelRaw": "ECHT",
+                                "url": "https://echtonderwijs.nl/",
+                                "source": "catalog",
+                                "walletType": null
+                            },
+                            {
+                                "refId": "org:sphereon",
+                                "labelRaw": "Sphereon",
+                                "url": "https://sphereon.com",
+                                "source": "catalog",
+                                "walletType": null
+                            }
+                        ],
+                        "rps": []
+                    },
+                    "interactionModes": [],
+                    "vcFormats": [],
+                    "issuanceProtocols": [],
+                    "presentationProtocols": [],
+                    "interopProfiles": [],
+                    "themes": [
+                        "education"
+                    ],
+                    "imageUrls": [
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuyIN2Uy_mATg7iRYSPYqnu1pNVw6dJukUbjM9SCkyvQ&s=10"
+                    ],
+                    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuyIN2Uy_mATg7iRYSPYqnu1pNVw6dJukUbjM9SCkyvQ&s=10",
+                    "moreInfoUrl": "http://www.echt.works",
+                    "userJourney": "Samira wil werken in de kinderopvang, maar komt uit een andere sector. Zij meldt zich aan bij ECHT. In de intake brengen we haar skills, drijfveren en ervaring in kaart en bouwen we haar skillspaspoort op. Diploma's, certificaten en eerdere scholing koppelen we eraan. Samira beheert dat paspoort zelf en houdt er toegang toe. Daarna volgt het skillsassessment. We leggen de uitkomst naast wat de functie vraagt. Zo wordt zichtbaar wat er nog ontbreekt. Die gap is geen afwijzing, maar de ontwikkelroute. De opleider verzorgt de aanvullende scholing en geeft het behaalde mbo-certificaat uit als verifieerbare referentie, rechtstreeks naar Samira's wallet. Bij haar sollicitatie deelt Samira zelf toegang. De werkgever ziet in seconden welke diploma's, certificaten, scholing en gevalideerde skills aantoonbaar op orde zijn. Geen losse pdf's, geen mailwisseling, geen dubbele controle. De controle verschuift van verzamelen naar kijken. Komt de GGD langs, dan is het dossier vooraf compleet. Wat ontbrak is gerepareerd voordat Samira op de groep stond. Rollen: ECHT werft, beoordeelt en begeleidt. De opleider geeft uit. De werkgever verifieert. Samira bepaalt wat zij deelt en met wie.",
+                    "country": "NL"
                 }
             ]
         },
