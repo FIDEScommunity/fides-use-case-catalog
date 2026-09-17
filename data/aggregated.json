@@ -1,23 +1,23 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-09-17T17:15:07.411Z",
+  "lastUpdated": "2026-09-17T17:19:47.730Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 101,
   "useCases": [
     {
       "id": "sneller-instromen-dossier-direct-op-orde-6JCjSV",
       "sector": "education",
-      "title": "Sneller instromen, dossier direct op orde!",
-      "summary": "Van intake, skillspaspoort en skillsanalyse tot mbo-certificaten in haar eigen wallet. De werkgever ziet bij sollicitatie in seconden wat aantoonbaar op orde is.",
+      "title": "Faster onboarding, a complete employee record from day one!",
+      "summary": "From intake, skills passport and skills assessment to vocational education certificates in her own wallet. When she applies for a job, the employer can see within seconds which requirements have been demonstrably met.",
       "organizationName": "ECHT",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-09-17T18:14:41+01:00",
-      "publishedAt": "2026-09-17T18:14:41+01:00",
+      "updatedAt": "2026-09-17T18:19:32+01:00",
+      "publishedAt": "2026-09-17T18:19:32+01:00",
       "tags": [
-        "diploma's",
-        "skills-based instroom"
+        "diplomas",
+        "skills-based recruitment"
       ],
       "links": {
         "personalWallets": [],
@@ -55,7 +55,7 @@
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTuyIN2Uy_mATg7iRYSPYqnu1pNVw6dJukUbjM9SCkyvQ&s=10",
       "moreInfoUrl": "http://www.echt.works",
-      "userJourney": "Samira wil werken in de kinderopvang, maar komt uit een andere sector. Zij meldt zich aan bij ECHT. In de intake brengen we haar skills, drijfveren en ervaring in kaart en bouwen we haar skillspaspoort op. Diploma's, certificaten en eerdere scholing koppelen we eraan. Samira beheert dat paspoort zelf en houdt er toegang toe. Daarna volgt het skillsassessment. We leggen de uitkomst naast wat de functie vraagt. Zo wordt zichtbaar wat er nog ontbreekt. Die gap is geen afwijzing, maar de ontwikkelroute. De opleider verzorgt de aanvullende scholing en geeft het behaalde mbo-certificaat uit als verifieerbare referentie, rechtstreeks naar Samira's wallet. Bij haar sollicitatie deelt Samira zelf toegang. De werkgever ziet in seconden welke diploma's, certificaten, scholing en gevalideerde skills aantoonbaar op orde zijn. Geen losse pdf's, geen mailwisseling, geen dubbele controle. De controle verschuift van verzamelen naar kijken. Komt de GGD langs, dan is het dossier vooraf compleet. Wat ontbrak is gerepareerd voordat Samira op de groep stond. Rollen: ECHT werft, beoordeelt en begeleidt. De opleider geeft uit. De werkgever verifieert. Samira bepaalt wat zij deelt en met wie.",
+      "userJourney": "Samira wants to work in childcare but is moving from another sector. She signs up with ECHT, where her skills, motivations and experience are mapped and used to build her skills passport. Diplomas, certificates and previous training are linked to it, while Samira remains in control.\n\nA skills assessment then compares her profile with the requirements of the role. Any gaps become her development pathway rather than a reason for rejection. The education provider delivers the additional training and issues the resulting vocational education certificate as a verifiable credential directly to Samira’s wallet.\n\nWhen applying for a job, Samira decides what to share. The employer can instantly verify her diplomas, certificates, training and validated skills. No separate PDFs, email exchanges or duplicate checks. ECHT recruits, assesses and supports; the education provider issues; the employer verifies; and Samira controls what she shares and with whom.",
       "country": "NL"
     },
     {
