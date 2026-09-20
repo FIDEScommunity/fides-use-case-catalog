@@ -74,6 +74,11 @@
   let listingUrlWhenOpened = "";
   const RATINGS_BATCH_LIMIT = 100;
   const RATINGS_TYPE = "usecase";
+  const AWARDS_API_BASE = String(config.awardsApiBase || config.ratingsApiBase || "").trim().replace(/\/$/, "");
+  const AWARD_PROGRAM_KEYS = Array.isArray(config.awardProgramKeys) && config.awardProgramKeys.length
+    ? config.awardProgramKeys.map(String)
+    : ["gdt-2026", "fides-community-2026"];
+  const awardRecognitionsByUseCaseId = Object.create(null);
   const root = document.getElementById("fides-use-case-catalog-root");
   if (!root) return;
   let catalogLoadMeta = { showStaleNotice: false, remoteFailed: false, snapshotDate: "" };
@@ -145,7 +150,18 @@
   const requestedThemeCode = new URLSearchParams(window.location.search).get("theme") || "";
   let activeThemeCode = resolveThemeFilterCode(requestedThemeCode);
   const LIST_BREAKPOINT = 1024;
+  const LISTING_PAGE_SIZE = 24;
+  const LISTING_PAGE_PARAM = "catalog_page";
+  const RECOMMENDED_PAGE_QUOTAS = Object.freeze({
+    winners: 2,
+    finalists: 4,
+    production: 12,
+    other: 6
+  });
+  const SORT_STORAGE_KEY = "fides-use-case-sort-v2";
+  const SORT_OPTIONS = ["recommended", "updated_desc", "likes_desc", "title_asc"];
   let viewMode = localStorage.getItem("fides-use-case-view") || "grid";
+  let listingPage = listingPageFromLocation();
   let mobileFiltersController = null;
   function getMobileFilters() {
     if (mobileFiltersController) return mobileFiltersController;
@@ -188,6 +204,8 @@
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="20" x="4" y="2" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01"/><path d="M16 6h.01"/><path d="M12 6h.01"/><path d="M12 10h.01"/><path d="M12 14h.01"/><path d="M16 10h.01"/><path d="M16 14h.01"/><path d="M8 10h.01"/><path d="M8 14h.01"/></svg>',
     tag:
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>',
+    award:
+      '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>',
     calendar:
       '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>',
     link:
@@ -310,6 +328,65 @@
   function getUseCaseLikeCount(item) {
     const summary = item && item.id ? ratingSummariesByUseCaseId[item.id] : null;
     return summary ? Number(summary.count) || 0 : 0;
+  }
+
+  function awardRecognitions(item) {
+    const id = item && item.id ? String(item.id) : "";
+    return id && Array.isArray(awardRecognitionsByUseCaseId[id])
+      ? awardRecognitionsByUseCaseId[id]
+      : [];
+  }
+
+  function isAwardWinner(item) {
+    return awardRecognitions(item).some((recognition) => recognition.place === 1);
+  }
+
+  function strongestAwardRecognition(item) {
+    const recognitions = awardRecognitions(item);
+    return recognitions.find((recognition) => recognition.place === 1) || recognitions[0] || null;
+  }
+
+  async function loadAwardRecognitions() {
+    if (!AWARDS_API_BASE || AWARD_PROGRAM_KEYS.length === 0) return;
+    const payloads = await Promise.all(
+      AWARD_PROGRAM_KEYS.map(async (programKey) => {
+        const endpoint = buildRatingsEndpoint(AWARDS_API_BASE, `awards/${encodeURIComponent(programKey)}`);
+        if (!endpoint) return null;
+        try {
+          const response = await fetch(endpoint, { credentials: "same-origin" });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          return await response.json();
+        } catch (error) {
+          console.warn(`Award program ${programKey} could not be loaded:`, error.message);
+          return null;
+        }
+      })
+    );
+
+    payloads.filter((payload) => payload && payload.ok).forEach((payload) => {
+      const programKey = String(payload.program || "");
+      const programLabel = String(payload.label || programKey);
+      const programUrl = String(payload.url || "");
+      const year = Number(payload.year) || null;
+      (Array.isArray(payload.categories) ? payload.categories : []).forEach((category) => {
+        const categoryKey = String(category.key || "");
+        const categoryLabel = String(category.label || categoryKey);
+        (Array.isArray(category.finalists) ? category.finalists : []).forEach((finalist) => {
+          if (String(finalist.type || "") !== RATINGS_TYPE || !finalist.id) return;
+          const id = String(finalist.id);
+          if (!awardRecognitionsByUseCaseId[id]) awardRecognitionsByUseCaseId[id] = [];
+          awardRecognitionsByUseCaseId[id].push({
+            programKey,
+            programLabel,
+            programUrl,
+            year,
+            categoryKey,
+            categoryLabel,
+            place: Number(finalist.place) || null
+          });
+        });
+      });
+    });
   }
 
   function ratingMapForLinkedType(type) {
@@ -1510,6 +1587,35 @@
     return codes.filter((code) => Object.prototype.hasOwnProperty.call(SECTOR_LABELS, code));
   }
 
+  function awardBadgeLabel(recognition) {
+    if (!recognition) return "";
+    const result = recognition.place === 1 ? "Winner" : "Finalist";
+    return recognition.year ? `${result} ${recognition.year}` : result;
+  }
+
+  function renderAwardRecognitionLinks(item) {
+    const recognitions = awardRecognitions(item);
+    if (!recognitions.length) return "";
+    return recognitions.map((recognition) => {
+      const result = recognition.place === 1 ? "Winner" : "Finalist";
+      const label = `${result} · ${recognition.categoryLabel}`;
+      const content = `${icons.award}<span>${escapeHtml(label)}</span>`;
+      return recognition.programUrl
+        ? `<a class="fides-award-recognition" href="${escapeHtml(recognition.programUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">${content}${icons.externalLinkSmall}</a>`
+        : `<span class="fides-award-recognition">${content}</span>`;
+    }).join("");
+  }
+
+  function renderModalAwardInlineBadge(item) {
+    const recognition = strongestAwardRecognition(item);
+    if (!recognition) return "";
+    const type = recognition.place === 1 ? "winner" : "finalist";
+    const content = `${icons.award}<span>${escapeHtml(awardBadgeLabel(recognition))}</span>`;
+    return recognition.programUrl
+      ? `<a class="fides-modal-award-inline award-${type}" href="${escapeHtml(recognition.programUrl)}" target="_blank" rel="noopener noreferrer" title="${escapeHtml(recognition.categoryLabel)}" onclick="event.stopPropagation();">${content}</a>`
+      : `<span class="fides-modal-award-inline award-${type}" title="${escapeHtml(recognition.categoryLabel)}">${content}</span>`;
+  }
+
   function renderUseCaseModalBadges(item) {
     const stage = normalizeProductionDeployment(item.productionDeployment);
     const readinessBadge = stage
@@ -1520,10 +1626,15 @@
       .sort((a, b) => SECTOR_LABELS[a].localeCompare(SECTOR_LABELS[b], "en", { sensitivity: "base" }))
       .map((code) => `<span class="fides-modal-badge sector">${escapeHtml(SECTOR_LABELS[code])}</span>`)
       .join("");
-    if (!readinessBadge && !sectorBadges) return "";
+    const recognition = strongestAwardRecognition(item);
+    const awardBadge = recognition
+      ? `<span class="fides-modal-badge award-${recognition.place === 1 ? "winner" : "finalist"}">${icons.award}${escapeHtml(awardBadgeLabel(recognition))}</span>`
+      : "";
+    if (!readinessBadge && !sectorBadges && !awardBadge) return "";
     return `
       <div class="fides-modal-badges">
         <div class="fides-modal-badges-left">
+          ${awardBadge}
           ${readinessBadge}
           ${sectorBadges}
         </div>
@@ -1765,6 +1876,11 @@
                 : ""
             }
             ${
+              awardRecognitions(item).length
+                ? `<div class="fides-kv-row fides-kv-row-wide"><span class="fides-kv-key">FIDES awards</span><span class="fides-kv-val fides-award-recognitions">${renderAwardRecognitionLinks(item)}</span></div>`
+                : ""
+            }
+            ${
               moreInfoUrl
                 ? `<div class="fides-kv-row fides-kv-row-wide"><span class="fides-kv-key">More info</span><span class="fides-kv-val"><a href="${escapeHtml(moreInfoUrl)}" target="_blank" rel="noopener noreferrer" class="fides-modal-link-inline" onclick="event.stopPropagation();">${icons.externalLinkSmall} Open page</a></span></div>`
                 : ""
@@ -1926,6 +2042,10 @@
     }
     if (countryText) {
       subtitleParts.push(`<span class="fides-modal-subtitle-item fides-modal-subtitle-item--country">${icons.globe} ${escapeHtml(countryText)}</span>`);
+    }
+    const awardBadge = renderModalAwardInlineBadge(item);
+    if (awardBadge) {
+      subtitleParts.push(awardBadge);
     }
     const subtitleHtml = subtitleParts.join('<span class="fides-modal-subtitle-sep" aria-hidden="true">·</span>');
 
@@ -2209,6 +2329,7 @@
   let filterFacets = null;
   const filterGroupState = {
     theme: activeThemeCode !== "",
+    awardRecognition: false,
     sector: activeThemeCode === "",
     country: false,
     productionDeployment: false,
@@ -2228,7 +2349,10 @@
     presentationProtocols: [],
     interopProfiles: [],
     productionDeployment: [],
-    sortBy: "likes_desc"
+    awardRecognition: [],
+    sortBy: SORT_OPTIONS.includes(localStorage.getItem(SORT_STORAGE_KEY))
+      ? localStorage.getItem(SORT_STORAGE_KEY)
+      : "recommended"
   };
 
   function effectiveView() {
@@ -2269,6 +2393,12 @@
       }
     }, 150)
   );
+  window.addEventListener("popstate", () => {
+    const nextPage = listingPageFromLocation();
+    if (nextPage === listingPage) return;
+    listingPage = nextPage;
+    if (root.querySelector(".fides-results")) renderResultsOnly();
+  });
 
   function uniqueSorted(items, keyFn) {
     return [...new Set(items.map(keyFn).flat().filter(Boolean))].sort((a, b) =>
@@ -2286,7 +2416,8 @@
       filters.issuanceProtocols.length +
       filters.presentationProtocols.length +
       filters.interopProfiles.length +
-      filters.productionDeployment.length
+      filters.productionDeployment.length +
+      filters.awardRecognition.length
     );
   }
 
@@ -2306,7 +2437,11 @@
       issuanceProtocols: {},
       presentationProtocols: {},
       interopProfiles: {},
-      productionDeployment: {}
+      productionDeployment: {},
+      awardRecognition: {
+        winner: 0,
+        finalist: 0
+      }
     };
     items.forEach((item) => {
       const sectorValue = itemSector(item);
@@ -2321,6 +2456,11 @@
       if (item.productionDeployment) {
         const stage = normalizeProductionDeployment(item.productionDeployment);
         if (stage) facets.productionDeployment[stage] = (facets.productionDeployment[stage] || 0) + 1;
+      }
+      const recognitions = awardRecognitions(item);
+      if (recognitions.length) facets.awardRecognition.finalist += 1;
+      if (recognitions.some((recognition) => recognition.place === 1)) {
+        facets.awardRecognition.winner += 1;
       }
     });
     return facets;
@@ -2429,6 +2569,13 @@
           </div>
         </div>
         <div class="fides-sidebar-content">
+          ${
+            (filterFacets?.awardRecognition?.finalist || 0) > 0
+              ? renderCheckboxGroup("Awards", "awardRecognition", ["winner", "finalist"], (value) =>
+                  value === "winner" ? "Award winners" : "All finalists"
+                )
+              : ""
+          }
           ${renderThemeFilterGroup()}
           ${
             sectorOptions.length
@@ -2556,6 +2703,15 @@
     return `<span class="fides-view-details">${label}</span>`;
   }
 
+  function renderListingAwardBadge(item, compact) {
+    const recognition = strongestAwardRecognition(item);
+    if (!recognition) return "";
+    const winner = recognition.place === 1;
+    const label = awardBadgeLabel(recognition);
+    const title = `${label} · ${recognition.categoryLabel} · ${recognition.programLabel}`;
+    return `<span class="fides-use-case-award-badge ${winner ? "is-winner" : "is-finalist"}${compact ? " is-compact" : ""}" title="${escapeHtml(title)}">${icons.award}<span>${escapeHtml(label)}</span></span>`;
+  }
+
   function renderUseCaseCard(item) {
     const imageUrl = deriveCardImage(item);
     const readinessLabel = productionDeploymentLabel(item.productionDeployment);
@@ -2575,6 +2731,7 @@
             </div>
             <div class="fides-use-case-hero-text">
               <h3 class="fides-use-case-hero-title">${escapeHtml(item.title || item.id)}</h3>
+              ${strongestAwardRecognition(item) ? `<div class="fides-use-case-award-placement">${renderListingAwardBadge(item, false)}</div>` : ""}
               ${summary ? `<p class="fides-use-case-hero-summary">${escapeHtml(summary)}</p>` : ""}
             </div>
           </div>
@@ -2629,6 +2786,7 @@
       <article class="fides-use-case-row-item" data-use-case-id="${escapeHtml(useCaseId)}" role="button" tabindex="0" aria-label="${escapeHtml(item.title || item.id)}">
         <div class="fides-row-name">
           <span class="fides-row-name-text" title="${escapeHtml(item.title || item.id)}">${escapeHtml(item.title || item.id)}</span>
+          ${renderListingAwardBadge(item, true)}
         </div>
         <div class="fides-row-likes">${renderUseCaseListLike(useCaseId)}</div>
         <div class="fides-row-country">
@@ -2640,6 +2798,206 @@
         <div class="fides-row-updated">${escapeHtml(formatDateLabel(item.updatedAt))}</div>
       </article>
     `;
+  }
+
+  function listingPageFromLocation() {
+    try {
+      const raw = new URLSearchParams(window.location.search).get(LISTING_PAGE_PARAM);
+      const page = parseInt(raw || "1", 10);
+      return Number.isFinite(page) && page > 0 ? page : 1;
+    } catch (_error) {
+      return 1;
+    }
+  }
+
+  function listingHrefForPage(page) {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete("usecase");
+      if (page <= 1) url.searchParams.delete(LISTING_PAGE_PARAM);
+      else url.searchParams.set(LISTING_PAGE_PARAM, String(page));
+      return url.pathname + url.search + url.hash;
+    } catch (_error) {
+      return LISTING_PATH || "/";
+    }
+  }
+
+  function setListingPage(page, push) {
+    listingPage = Math.max(1, Number(page) || 1);
+    try {
+      const href = listingHrefForPage(listingPage);
+      if (push) history.pushState({ fidesCatalogPage: listingPage }, "", href);
+      else history.replaceState({ fidesCatalogPage: listingPage }, "", href);
+    } catch (_error) {
+      /* History is optional; pagination still works in-memory. */
+    }
+  }
+
+  function resetListingPage() {
+    if (listingPage !== 1 || listingPageFromLocation() !== 1) setListingPage(1, false);
+    else listingPage = 1;
+  }
+
+  function visibleSlice(items) {
+    const list = Array.isArray(items) ? items : [];
+    let bounds = paginationBounds(list, listingPage);
+    const totalPages = bounds.totalPages;
+    if (listingPage > totalPages) {
+      listingPage = totalPages;
+      setListingPage(listingPage, false);
+      bounds = paginationBounds(list, listingPage);
+    }
+    return list.slice(bounds.startIndex, bounds.endIndex);
+  }
+
+  function paginationBounds(items, page) {
+    const list = Array.isArray(items) ? items : [];
+    const total = list.length;
+    const storedFirstPageSize = Number(list.recommendedFirstPageSize);
+    const firstPageSize = Number.isInteger(storedFirstPageSize)
+      ? Math.max(0, Math.min(LISTING_PAGE_SIZE, storedFirstPageSize))
+      : Math.min(LISTING_PAGE_SIZE, total);
+    const totalPages = Math.max(1, 1 + Math.ceil(Math.max(0, total - firstPageSize) / LISTING_PAGE_SIZE));
+    const safePage = Math.max(1, Math.min(Number(page) || 1, totalPages));
+    const startIndex = safePage === 1
+      ? 0
+      : firstPageSize + (safePage - 2) * LISTING_PAGE_SIZE;
+    const pageSize = safePage === 1 ? firstPageSize : LISTING_PAGE_SIZE;
+    return {
+      totalPages,
+      startIndex,
+      endIndex: Math.min(startIndex + pageSize, total)
+    };
+  }
+
+  function paginationPageNumbers(page, totalPages) {
+    if (totalPages <= 9) return Array.from({ length: totalPages }, (_value, index) => index + 1);
+    const pages = [1];
+    for (let number = Math.max(2, page - 2); number <= Math.min(totalPages - 1, page + 2); number += 1) {
+      pages.push(number);
+    }
+    pages.push(totalPages);
+    return pages.filter((number, index, list) => list.indexOf(number) === index);
+  }
+
+  function renderPaginationBar(items) {
+    const total = Array.isArray(items) ? items.length : 0;
+    if (total === 0) return "";
+    const bounds = paginationBounds(items, listingPage);
+    const totalPages = bounds.totalPages;
+    const page = Math.min(listingPage, totalPages);
+    const start = bounds.startIndex + 1;
+    const end = bounds.endIndex;
+    let previousPage = 0;
+    const pageLinks = paginationPageNumbers(page, totalPages).map((number) => {
+      const ellipsis = previousPage > 0 && number > previousPage + 1
+        ? '<li class="fides-catalog-pagination__ellipsis" aria-hidden="true">…</li>'
+        : "";
+      previousPage = number;
+      const current = number === page ? ' aria-current="page"' : "";
+      return `${ellipsis}<li><a href="${escapeHtml(listingHrefForPage(number))}" data-catalog-page="${number}"${current}>${number}</a></li>`;
+    }).join("");
+    const previous = page > 1
+      ? `<a class="fides-catalog-pagination__prev" href="${escapeHtml(listingHrefForPage(page - 1))}" data-catalog-page="${page - 1}" rel="prev">Previous</a>`
+      : "";
+    const next = page < totalPages
+      ? `<a class="fides-catalog-pagination__next" href="${escapeHtml(listingHrefForPage(page + 1))}" data-catalog-page="${page + 1}" rel="next">Next</a>`
+      : "";
+    return `<nav class="fides-catalog-pagination" data-fides-use-case-pagination aria-label="Catalog pages">
+      <p class="fides-catalog-pagination__meta">Showing ${start}–${end} of ${total}</p>
+      ${totalPages > 1 ? `<div class="fides-catalog-pagination__nav">${previous}<ol class="fides-catalog-pagination__pages">${pageLinks}</ol>${next}</div>` : ""}
+    </nav>`;
+  }
+
+  function bindPaginationLinks() {
+    root.querySelectorAll("[data-catalog-page]").forEach((link) => {
+      link.addEventListener("click", (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        event.preventDefault();
+        setListingPage(parseInt(link.getAttribute("data-catalog-page") || "1", 10), true);
+        renderResultsOnly();
+        root.querySelector(".fides-results-bar")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  }
+
+  function dailyRecommendationScore(item) {
+    const seed = `${new Date().toISOString().slice(0, 10)}|${String(item.id || item.title || "")}`;
+    let hash = 2166136261;
+    for (let index = 0; index < seed.length; index += 1) {
+      hash ^= seed.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    return hash >>> 0;
+  }
+
+  function recommendationBand(item) {
+    if (isAwardWinner(item)) return 0;
+    if (awardRecognitions(item).length) return 1;
+    if (normalizeProductionDeployment(item.productionDeployment) === "yes") return 2;
+    return 3;
+  }
+
+  function compareDailyRecommendation(a, b) {
+    const scoreDiff = dailyRecommendationScore(a) - dailyRecommendationScore(b);
+    if (scoreDiff !== 0) return scoreDiff;
+    return String(a.title || "").localeCompare(String(b.title || ""), undefined, { sensitivity: "base" });
+  }
+
+  function recommendationBuckets(items) {
+    return [
+      items.filter((item) => recommendationBand(item) === 0).sort(compareDailyRecommendation),
+      items.filter((item) => recommendationBand(item) === 1).sort(compareDailyRecommendation),
+      items.filter((item) => recommendationBand(item) === 2).sort(compareDailyRecommendation),
+      items.filter((item) => recommendationBand(item) === 3).sort(compareDailyRecommendation)
+    ];
+  }
+
+  function takeRecommendedPage(buckets) {
+    const slotPattern = [
+      2, 0, 2, 3,
+      2, 1, 2, 3,
+      2, 1, 2, 3,
+      2, 0, 2, 3,
+      2, 1, 2, 3,
+      2, 1, 2, 3
+    ];
+    const page = [];
+    slotPattern.forEach((bucketIndex) => {
+      const item = buckets[bucketIndex].shift();
+      if (item) page.push(item);
+    });
+
+    while (page.length < LISTING_PAGE_SIZE) {
+      const fallbackBucket = buckets
+        .filter((bucket) => bucket.length > 0)
+        .sort((a, b) => b.length - a.length)[0];
+      if (!fallbackBucket) break;
+      page.push(fallbackBucket.shift());
+    }
+    return page;
+  }
+
+  function buildRecommendedOrder(items, deferWithoutVisual) {
+    const withVisual = deferWithoutVisual
+      ? items.filter((item) => Boolean(deriveCardImage(item)))
+      : items.slice();
+    const withoutVisual = deferWithoutVisual
+      ? items.filter((item) => !deriveCardImage(item))
+      : [];
+    const visualBuckets = recommendationBuckets(withVisual);
+    const firstPage = takeRecommendedPage(visualBuckets);
+    const deferredBuckets = recommendationBuckets(withoutVisual);
+    const remainingBuckets = visualBuckets.map((bucket, index) =>
+      bucket.concat(deferredBuckets[index]).sort(compareDailyRecommendation)
+    );
+    const ordered = firstPage.slice();
+
+    while (remainingBuckets.some((bucket) => bucket.length > 0)) {
+      ordered.push(...takeRecommendedPage(remainingBuckets));
+    }
+    ordered.recommendedFirstPageSize = firstPage.length;
+    return ordered;
   }
 
   function renderCards(items) {
@@ -2662,6 +3020,7 @@
   function render() {
     const wasOpen = getMobileFilters()?.captureOpenState() ?? false;
     const filtered = getFilteredUseCases();
+    const visible = visibleSlice(filtered);
     const metrics = computeMetrics(filtered);
     root.innerHTML = `
       <section class="fides-use-case-catalog fides-credential-catalog" data-theme="fides">
@@ -2704,8 +3063,9 @@
                 <label class="fides-sort-label" for="fides-sort-select">
                   <span class="fides-sort-text">Sort by:</span>
                   <select id="fides-sort-select" class="fides-sort-select">
-                    <option value="likes_desc" ${filters.sortBy === "likes_desc" ? "selected" : ""}>Most liked</option>
+                    <option value="recommended" ${filters.sortBy === "recommended" ? "selected" : ""}>Explore</option>
                     <option value="updated_desc" ${filters.sortBy === "updated_desc" ? "selected" : ""}>Most recent</option>
+                    <option value="likes_desc" ${filters.sortBy === "likes_desc" ? "selected" : ""}>Most liked</option>
                     <option value="title_asc" ${filters.sortBy === "title_asc" ? "selected" : ""}>A–Z</option>
                   </select>
                 </label>
@@ -2714,8 +3074,9 @@
             </div>
             ${renderKpiCards(metrics)}
             <div class="fides-results">
-              ${renderCards(filtered)}
+              ${renderCards(visible)}
             </div>
+            ${renderPaginationBar(filtered)}
             <p id="fides-catalog-message" class="fides-form-message" aria-live="polite"></p>
           </section>
         </div>
@@ -2723,6 +3084,7 @@
     `;
 
     bindEvents();
+    bindPaginationLinks();
     getMobileFilters()?.applyAfterRender(wasOpen);
     applyStaleCatalogNotice();
   }
@@ -2765,6 +3127,11 @@
         if (!itemMatchesArrayFilter(item, "presentationProtocols", "presentationProtocols")) return false;
         if (!itemMatchesArrayFilter(item, "interopProfiles", "interopProfiles")) return false;
         if (filters.productionDeployment.length > 0 && !filters.productionDeployment.includes(normalizeProductionDeployment(item.productionDeployment || ""))) return false;
+        if (filters.awardRecognition.length > 0) {
+          const matchesWinner = filters.awardRecognition.includes("winner") && isAwardWinner(item);
+          const matchesFinalist = filters.awardRecognition.includes("finalist") && awardRecognitions(item).length > 0;
+          if (!matchesWinner && !matchesFinalist) return false;
+        }
         return true;
       })
       .slice();
@@ -2773,25 +3140,32 @@
       list.sort((a, b) => String(a.title || "").localeCompare(String(b.title || ""), undefined, { sensitivity: "base" }));
     } else if (filters.sortBy === "updated_desc") {
       list.sort((a, b) => Date.parse(b.updatedAt || "") - Date.parse(a.updatedAt || ""));
-    } else {
-      // likes_desc (default): most liked first, most recent as tie-breaker
+    } else if (filters.sortBy === "likes_desc") {
       list.sort((a, b) => {
         const diff = getUseCaseLikeCount(b) - getUseCaseLikeCount(a);
         if (diff !== 0) return diff;
         return Date.parse(b.updatedAt || "") - Date.parse(a.updatedAt || "");
       });
+    } else {
+      const deferWithoutVisual = getActiveFilterCount() === 0 && !filters.search;
+      return buildRecommendedOrder(list, deferWithoutVisual);
     }
     return list;
   }
 
   function renderResultsOnly() {
     const filtered = getFilteredUseCases();
+    const visible = visibleSlice(filtered);
     const metrics = computeMetrics(filtered);
 
     const resultsEl = root.querySelector(".fides-results");
     if (resultsEl) {
-      resultsEl.innerHTML = renderCards(filtered);
+      resultsEl.innerHTML = renderCards(visible);
     }
+    const paginationHtml = renderPaginationBar(filtered);
+    const paginationEl = root.querySelector("[data-fides-use-case-pagination]");
+    if (paginationEl) paginationEl.outerHTML = paginationHtml;
+    else if (paginationHtml && resultsEl) resultsEl.insertAdjacentHTML("afterend", paginationHtml);
 
     const kpiValues = root.querySelectorAll(".fides-kpi-card .fides-kpi-value");
     if (kpiValues.length >= 4) {
@@ -2804,6 +3178,7 @@
     const searchClear = root.querySelector("#fides-search-clear");
     if (searchClear) searchClear.classList.toggle("hidden", !filters.search);
     bindUseCaseCardEvents();
+    bindPaginationLinks();
   }
 
   function bindEvents() {
@@ -2816,6 +3191,7 @@
     if (searchInput) {
       const handleSearch = debounce((e) => {
         filters.search = String(e.target.value || "").trim().toLowerCase();
+        resetListingPage();
         renderResultsOnly();
       }, 250);
       searchInput.addEventListener("input", handleSearch);
@@ -2825,6 +3201,7 @@
         filters.search = "";
         if (searchInput) searchInput.value = "";
         searchClear.classList.add("hidden");
+        resetListingPage();
         renderResultsOnly();
       });
     }
@@ -2839,7 +3216,10 @@
     }
     if (sortSelect) {
       sortSelect.addEventListener("change", (e) => {
-        filters.sortBy = String(e.target.value || "likes_desc");
+        const nextSort = String(e.target.value || "recommended");
+        filters.sortBy = SORT_OPTIONS.includes(nextSort) ? nextSort : "recommended";
+        localStorage.setItem(SORT_STORAGE_KEY, filters.sortBy);
+        resetListingPage();
         renderResultsOnly();
       });
     }
@@ -2855,7 +3235,8 @@
         filters.presentationProtocols = [];
         filters.interopProfiles = [];
         filters.productionDeployment = [];
-        filters.sortBy = "likes_desc";
+        filters.awardRecognition = [];
+        resetListingPage();
         render();
       });
     }
@@ -2863,6 +3244,7 @@
       input.addEventListener("change", (e) => {
         if (!e.target.checked) return;
         setThemeFilter(String(e.target.dataset.themeCode || ""));
+        resetListingPage();
         render();
       });
     });
@@ -2879,6 +3261,7 @@
           filters[group] = filters[group].filter((v) => v !== value);
         }
         updateFilterChrome();
+        resetListingPage();
         renderResultsOnly();
       });
     });
@@ -3136,8 +3519,11 @@
     try {
       const rawItems = await loadUseCases();
       currentItems = rawItems.map((item) => Object.assign({}, item, { productionDeployment: normalizeProductionDeployment(item.productionDeployment) }));
+      await Promise.all([
+        loadAwardRecognitions(),
+        loadUseCaseRatingSummaries(currentItems)
+      ]);
       filterFacets = computeFacets(currentItems);
-      await loadUseCaseRatingSummaries(currentItems);
       render();
       openUseCaseFromQueryParam();
       if (VOCABULARY_URL || VOCABULARY_FALLBACK_URL) {

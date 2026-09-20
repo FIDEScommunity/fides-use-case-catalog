@@ -43,7 +43,7 @@ if (! class_exists('Fides_Use_Case_Catalog_SSR')) {
         class Fides_Use_Case_Catalog_SSR extends Fides_Catalog_SSR_Renderer {
 
             const TYPE = 'usecase';
-            const MAX_LISTING_ITEMS = 30;
+            const MAX_LISTING_ITEMS = 24;
 
             /** @var self|null */
             private static $instance = null;

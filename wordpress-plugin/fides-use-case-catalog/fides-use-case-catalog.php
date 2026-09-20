@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.20.42
+ * Version: 0.21.4
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.20.42');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.21.4');
 /** Bump this when share rewrite rules change so existing sites flush once. */
 define('FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION', '0.20.30');
 /** Admin list page size for Tools → Use Case Submissions. */
@@ -2178,6 +2178,8 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             'vocabularyUrl' => 'https://raw.githubusercontent.com/FIDEScommunity/fides-interop-profiles/main/data/vocabulary.json',
             'vocabularyFallbackUrl' => FIDES_USE_CASE_CATALOG_URL . 'assets/vocabulary.json',
             'ratingsApiBase' => rest_url('fides-catalog/v1'),
+            'awardsApiBase' => rest_url('fides-catalog/v1'),
+            'awardProgramKeys' => array('gdt-2026', 'fides-community-2026'),
             'ratingsNonce' => wp_create_nonce('wp_rest'),
             'ratingsIsLoggedIn' => is_user_logged_in(),
             'ratingsLoginUrl' => $ratings_login_url,

@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.20.42
+Stable tag: 0.21.4
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,23 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.21.4 =
+* Rename the user-facing Recommended sort option to Explore to avoid implying a FIDES endorsement.
+
+= 0.21.3 =
+* Keep filtered Explore results together on one page when they fit, including entries without visual media.
+
+= 0.21.2 =
+* Keep the Awards filter group collapsed by default.
+
+= 0.21.1 =
+* Mix winners, finalists, production cases and other entries throughout Explore pages.
+* Keep placeholder cards off the first Explore page and improve responsive award badge placement.
+
+= 0.21.0 =
+* Show centrally managed FIDES award winner/finalist badges, filters and modal details.
+* Add crawlable 24-item listing pagination and make Explore the daily rotating default sort while retaining recent, liked and A–Z options.
 
 = 0.20.42 =
 * Sync shared modal UI: icon-only Official/Community listing badge on mobile; more reliable modal close after several opens (tiles ≥ 1.13.22).
