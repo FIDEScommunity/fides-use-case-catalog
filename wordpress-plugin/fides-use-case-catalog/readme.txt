@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.21.4
+Stable tag: 0.21.7
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,15 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.21.7 =
+* Shorten award detail badges on mobile to Winner/Finalist plus year while retaining the full award name for accessibility and desktop.
+
+= 0.21.6 =
+* Restore side-by-side key/value rows in the mobile use-case details, including rows with award badges.
+
+= 0.21.5 =
+* Use an icon-only award badge in list view so long use-case titles retain more space.
 
 = 0.21.4 =
 * Rename the user-facing Recommended sort option to Explore to avoid implying a FIDES endorsement.

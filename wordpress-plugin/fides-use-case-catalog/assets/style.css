@@ -2415,6 +2415,21 @@
   flex: 0 0 auto;
 }
 
+.fides-award-recognition-label--mobile {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .fides-award-recognition-label--full {
+    display: none;
+  }
+
+  .fides-award-recognition-label--mobile {
+    display: inline;
+    white-space: nowrap;
+  }
+}
+
 .fides-modal-overlay .fides-modal-orgs {
   display: flex;
   flex-direction: column;
@@ -2829,12 +2844,15 @@
 
 .fides-use-case-award-badge.is-compact {
   min-height: 0;
-  margin-top: 0.3rem;
-  padding: 0.25rem 0.45rem;
+  padding: 0.25rem;
   background: #e0f2fe;
   color: #0369a1;
   border-color: #7dd3fc;
   backdrop-filter: none;
+}
+
+.fides-use-case-award-badge.is-compact > span {
+  display: none;
 }
 
 .fides-use-case-award-badge.is-compact.is-winner {

@@ -9,6 +9,7 @@ const repo = dirname(testsDir);
 const plugin = join(repo, "wordpress-plugin/fides-use-case-catalog");
 const js = readFileSync(join(plugin, "assets/usecase-catalog.js"), "utf8");
 const css = readFileSync(join(plugin, "assets/style.css"), "utf8");
+const sharedCss = readFileSync(join(plugin, "assets/lib/fides-catalog-ui.css"), "utf8");
 const php = readFileSync(join(plugin, "fides-use-case-catalog.php"), "utf8");
 const ssr = readFileSync(join(plugin, "includes/class-fides-use-case-catalog-ssr.php"), "utf8");
 
@@ -59,7 +60,30 @@ test("mobile award badge follows the card title without compressing it", () => {
   assert.match(css, /\.fides-use-case-hero-badges--like-only\s*\{[\s\S]*position: absolute/);
 });
 
+test("list view uses an accessible icon-only award badge", () => {
+  assert.match(js, /compact \? ` role="img" aria-label="/);
+  assert.match(css, /\.fides-use-case-award-badge\.is-compact > span\s*\{\s*display: none;/);
+});
+
 test("narrow mobile modal gives the title a full-width row above award metadata", () => {
   assert.match(css, /@media \(max-width: 480px\)[\s\S]*grid-template-areas:\s*"logo actions"\s*"title title"\s*"meta meta"/);
   assert.match(js, /fides-modal-title[\s\S]*fides-modal-provider--usecase/);
+});
+
+test("mobile use-case details keep keys and values in one row", () => {
+  assert.match(
+    sharedCss,
+    /@media \(max-width: 640px\)[\s\S]*\.fides-modal-overlay\.fides-modal-overlay--usecase \.fides-kv-row\s*\{\s*grid-template-columns: minmax\(7rem, max-content\) minmax\(0, 1fr\);/
+  );
+  assert.match(
+    sharedCss,
+    /\.fides-modal-overlay\.fides-modal-overlay--usecase \.fides-kv-key\s*\{\s*white-space: nowrap;/
+  );
+});
+
+test("mobile use-case award details use a compact accessible label", () => {
+  assert.match(js, /const compactLabel = recognition\.year \? `\$\{result\} \$\{recognition\.year\}` : result;/);
+  assert.match(js, /aria-label="\$\{escapeHtml\(accessibleLabel\)\}"/);
+  assert.match(css, /@media \(max-width: 640px\)[\s\S]*\.fides-award-recognition-label--full\s*\{\s*display: none;/);
+  assert.match(css, /\.fides-award-recognition-label--mobile\s*\{[\s\S]*display: inline;[\s\S]*white-space: nowrap;/);
 });

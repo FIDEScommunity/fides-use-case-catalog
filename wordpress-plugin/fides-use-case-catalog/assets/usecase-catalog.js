@@ -1599,10 +1599,12 @@
     return recognitions.map((recognition) => {
       const result = recognition.place === 1 ? "Winner" : "Finalist";
       const label = `${result} · ${recognition.categoryLabel}`;
-      const content = `${icons.award}<span>${escapeHtml(label)}</span>`;
+      const compactLabel = recognition.year ? `${result} ${recognition.year}` : result;
+      const accessibleLabel = [label, recognition.programLabel].filter(Boolean).join(" · ");
+      const content = `${icons.award}<span class="fides-award-recognition-label fides-award-recognition-label--full">${escapeHtml(label)}</span><span class="fides-award-recognition-label fides-award-recognition-label--mobile">${escapeHtml(compactLabel)}</span>`;
       return recognition.programUrl
-        ? `<a class="fides-award-recognition" href="${escapeHtml(recognition.programUrl)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();">${content}${icons.externalLinkSmall}</a>`
-        : `<span class="fides-award-recognition">${content}</span>`;
+        ? `<a class="fides-award-recognition" href="${escapeHtml(recognition.programUrl)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(accessibleLabel)}" title="${escapeHtml(accessibleLabel)}" onclick="event.stopPropagation();">${content}${icons.externalLinkSmall}</a>`
+        : `<span class="fides-award-recognition" aria-label="${escapeHtml(accessibleLabel)}" title="${escapeHtml(accessibleLabel)}">${content}</span>`;
     }).join("");
   }
 
@@ -2709,7 +2711,8 @@
     const winner = recognition.place === 1;
     const label = awardBadgeLabel(recognition);
     const title = `${label} · ${recognition.categoryLabel} · ${recognition.programLabel}`;
-    return `<span class="fides-use-case-award-badge ${winner ? "is-winner" : "is-finalist"}${compact ? " is-compact" : ""}" title="${escapeHtml(title)}">${icons.award}<span>${escapeHtml(label)}</span></span>`;
+    const compactAccessibility = compact ? ` role="img" aria-label="${escapeHtml(title)}"` : "";
+    return `<span class="fides-use-case-award-badge ${winner ? "is-winner" : "is-finalist"}${compact ? " is-compact" : ""}" title="${escapeHtml(title)}"${compactAccessibility}>${icons.award}<span>${escapeHtml(label)}</span></span>`;
   }
 
   function renderUseCaseCard(item) {
