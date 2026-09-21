@@ -12,8 +12,8 @@
       "organizationName": "AAS-Studio",
       "productionDeployment": "no",
       "status": "published",
-      "updatedAt": "2026-08-19T20:38:48+01:00",
-      "publishedAt": "2026-08-17T20:11:53+01:00",
+      "updatedAt": "2026-09-21T18:11:35+01:00",
+      "publishedAt": "2026-09-21T18:11:35+01:00",
       "tags": [
         "digital-product-passport",
         "verifiable-credentials",
@@ -29,7 +29,7 @@
           {
             "refId": null,
             "labelRaw": "AAS-Studio",
-            "url": "http://aas-studio-eu",
+            "url": "https://aas-studio.eu/",
             "source": "manual",
             "walletType": null
           }

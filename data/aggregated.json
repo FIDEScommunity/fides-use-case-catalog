@@ -1,10 +1,103 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-09-21T17:02:11.887Z",
+  "lastUpdated": "2026-09-21T17:11:53.155Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 101,
   "useCases": [
+    {
+      "id": "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-t2LpAh",
+      "sector": "manufacturing",
+      "title": "Cryptographically Verifiable Digital Product Passports for EU Battery Regulation Compliance",
+      "summary": "European manufacturers must issue Digital Product Passports (EU Battery Regulation\n2023/1542, from 18 February 2027, with the ESPR extending this to further\ncategories). Today the data those passports need lives in unstructured PDF\ndatasheets, and manufacturers have no way to prove a downstream party has not\naltered the file after publication.\n\nAAS Studio turns a datasheet into a conformant Asset Administration Shell (IDTA,\nIEC 63278-1:2023), then issues a W3C Verifiable Credential (VCDM 2.0, JWT-VC, and\nan SD-JWT-VC variant with selective disclosure) committing to a canonical hash of\nthe passport content. The manufacturer is the issuer, signing with a tenant-scoped\nES256 key. Any verifier — regulator, recycler, supply-chain partner — checks the\ncredential against a public JWKS with no account and no call back to AAS Studio:\nverification is fully offline. Revocation is enforced via a Bitstring/Token Status\nList.",
+      "organizationName": "AAS-Studio",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-09-21T18:11:35+01:00",
+      "publishedAt": "2026-09-21T18:11:35+01:00",
+      "tags": [
+        "digital-product-passport",
+        "verifiable-credentials",
+        "battery-regulation",
+        "manufacturing",
+        "supply-chain",
+        "sustainability"
+      ],
+      "links": {
+        "personalWallets": [],
+        "businessWallets": [],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "AAS-Studio",
+            "url": "https://aas-studio.eu/",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": null,
+            "labelRaw": "DigitalProductPassportCredential",
+            "url": "http://aas-studio.eu",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:aas-studio",
+            "labelRaw": "AAS-Studio",
+            "url": "http://aas-studio.eu",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": []
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "jwt_vc",
+        "sd_jwt_vc",
+        "vcdm_2_0"
+      ],
+      "issuanceProtocols": [
+        "other"
+      ],
+      "presentationProtocols": [],
+      "interopProfiles": [],
+      "themes": [
+        "compliance_reporting",
+        "digital_product_passports"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/homepage.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/homepage.png",
+      "videos": [
+        {
+          "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=ATS0oWPEf_g",
+          "provider": "youtube"
+        },
+        {
+          "url": "https://www.youtube.com/playlist?list=PLalPBeAf1XCg",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://aas-studio.eu/verify",
+      "userJourney": "1. Manufacturer uploads a PDF datasheet; AAS Studio extracts the regulatory fields\n   with an LLM ensemble and maps them onto a conformant Asset Administration Shell,\n   validated against the official IDTA test engine.\n2. AAS Studio computes a canonical hash of the passport content and issues a W3C\n   Verifiable Credential signed with the manufacturer's own ES256 key, optionally\n   as an SD-JWT-VC for selective disclosure.\n3. If issued as revocable, a Bitstring/Token Status List slot is allocated; the\n   manufacturer can revoke it later, effective immediately for any verifier.\n4. The holder presents the credential's JWT to a relying party by any channel.\n5. The relying party verifies it fully offline: it fetches the public JWKS and\n   re-derives the proof itself, including the status-list check, so the verdict\n   never depends on trusting AAS Studio's server.",
+      "country": "PT"
+    },
     {
       "id": "verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J",
       "sector": "digital",
@@ -8155,99 +8248,6 @@
       "moreInfoUrl": "https://www.izertis.com/en/w/news/ssitizens-the-technology-that-makes-social-assistance-available-to-everyone",
       "userJourney": "1. Municipality issues the credential. The City Council, as trusted issuer, signs a verifiable credential attesting the citizen's eligibility and delivers it to the citizen's mobile wallet via OID4VCI.\n\n2. Merchants join with a business identity. Each shop is accredited through its own business wallet and receives an organizational credential proving it is a valid party in the programme.\n\n3. Aid is minted as tokenized funds. The administration issues programmable tokens backed one-to-one by the budget. Smart contracts govern roles, scope, expiration and redemption.\n\n4. Citizen pays with a QR. At the point of sale, the citizen scans the merchant's QR. The wallet presents the credential (OID4VP) and the smart contract transfers tokens to the merchant. No card, no password.\n\n5. AI validates the purchase. The merchant uploads the receipt; an LLM-based module checks that items fall within eligible categories, with no manual review.\n\n6. Automatic reimbursement. The smart contract triggers reimbursement to the merchant's bank account in euros. The full trail is recorded on-chain for real-time auditing.",
       "country": "ES"
-    },
-    {
-      "id": "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-t2LpAh",
-      "sector": "manufacturing",
-      "title": "Cryptographically Verifiable Digital Product Passports for EU Battery Regulation Compliance",
-      "summary": "European manufacturers must issue Digital Product Passports (EU Battery Regulation\n2023/1542, from 18 February 2027, with the ESPR extending this to further\ncategories). Today the data those passports need lives in unstructured PDF\ndatasheets, and manufacturers have no way to prove a downstream party has not\naltered the file after publication.\n\nAAS Studio turns a datasheet into a conformant Asset Administration Shell (IDTA,\nIEC 63278-1:2023), then issues a W3C Verifiable Credential (VCDM 2.0, JWT-VC, and\nan SD-JWT-VC variant with selective disclosure) committing to a canonical hash of\nthe passport content. The manufacturer is the issuer, signing with a tenant-scoped\nES256 key. Any verifier — regulator, recycler, supply-chain partner — checks the\ncredential against a public JWKS with no account and no call back to AAS Studio:\nverification is fully offline. Revocation is enforced via a Bitstring/Token Status\nList.",
-      "organizationName": "AAS-Studio",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-19T20:38:48+01:00",
-      "publishedAt": "2026-08-17T20:11:53+01:00",
-      "tags": [
-        "digital-product-passport",
-        "verifiable-credentials",
-        "battery-regulation",
-        "manufacturing",
-        "supply-chain",
-        "sustainability"
-      ],
-      "links": {
-        "personalWallets": [],
-        "businessWallets": [],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "AAS-Studio",
-            "url": "http://aas-studio-eu",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": null,
-            "labelRaw": "DigitalProductPassportCredential",
-            "url": "http://aas-studio.eu",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:aas-studio",
-            "labelRaw": "AAS-Studio",
-            "url": "http://aas-studio.eu",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": []
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "jwt_vc",
-        "sd_jwt_vc",
-        "vcdm_2_0"
-      ],
-      "issuanceProtocols": [
-        "other"
-      ],
-      "presentationProtocols": [],
-      "interopProfiles": [],
-      "themes": [
-        "compliance_reporting",
-        "digital_product_passports"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/homepage.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/homepage.png",
-      "videos": [
-        {
-          "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
-          "provider": "youtube"
-        },
-        {
-          "url": "https://www.youtube.com/watch?v=ATS0oWPEf_g",
-          "provider": "youtube"
-        },
-        {
-          "url": "https://www.youtube.com/playlist?list=PLalPBeAf1XCg",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://www.youtube.com/watch?v=6gEoSqndmqw",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://aas-studio.eu/verify",
-      "userJourney": "1. Manufacturer uploads a PDF datasheet; AAS Studio extracts the regulatory fields\n   with an LLM ensemble and maps them onto a conformant Asset Administration Shell,\n   validated against the official IDTA test engine.\n2. AAS Studio computes a canonical hash of the passport content and issues a W3C\n   Verifiable Credential signed with the manufacturer's own ES256 key, optionally\n   as an SD-JWT-VC for selective disclosure.\n3. If issued as revocable, a Bitstring/Token Status List slot is allocated; the\n   manufacturer can revoke it later, effective immediately for any verifier.\n4. The holder presents the credential's JWT to a relying party by any channel.\n5. The relying party verifies it fully offline: it fetches the public JWKS and\n   re-derives the proof itself, including the status-list check, so the verdict\n   never depends on trusting AAS Studio's server.",
-      "country": "PT"
     },
     {
       "id": "credebl-an-open-source-digital-trust-infrastructure-enabling-trusted-digital-ecosystems-AWG8qU",
