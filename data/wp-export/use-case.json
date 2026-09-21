@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-09-17T17:19:32+00:00",
+    "generatedAt": "2026-09-21T17:01:50+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -12365,8 +12365,8 @@
                     "organizationName": "validant.ai",
                     "productionDeployment": "no",
                     "status": "published",
-                    "updatedAt": "2026-08-19T14:52:12+01:00",
-                    "publishedAt": "2026-08-19T14:52:12+01:00",
+                    "updatedAt": "2026-09-21T18:01:50+01:00",
+                    "publishedAt": "2026-09-21T18:01:50+01:00",
                     "tags": [
                         "ai-fairness",
                         "ai-act",
@@ -12407,7 +12407,7 @@
                             {
                                 "refId": null,
                                 "labelRaw": "validant.ai AI Fairness Seal Issuer",
-                                "url": "https://issuer.validant.ai",
+                                "url": "https://validant.ai/trust-seal",
                                 "source": "manual",
                                 "walletType": null
                             }
@@ -12442,13 +12442,6 @@
                                 "refId": null,
                                 "labelRaw": "validant.ai public Trust Seal verifier",
                                 "url": "https://validant.ai/verify",
-                                "source": "manual",
-                                "walletType": null
-                            },
-                            {
-                                "refId": null,
-                                "labelRaw": "validant.ai Decision Receipt check",
-                                "url": "https://verifier.validant.ai",
                                 "source": "manual",
                                 "walletType": null
                             }
