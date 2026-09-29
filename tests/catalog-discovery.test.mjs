@@ -22,6 +22,20 @@ test("listing paginates 24 items and keeps the page in the URL", () => {
   assert.match(ssr, /const MAX_LISTING_ITEMS = 24;/);
 });
 
+test("catalog loading is measurable, bounded and retryable", () => {
+  assert.match(php, /id="fides-use-case-catalog-root"[^>]*aria-busy="true"/);
+  assert.match(js, /createCatalogLoadTracker/);
+  assert.match(js, /category: "Use Case Catalog"/);
+  assert.match(js, /catalogLoadTracker\.ready\(\)/);
+  assert.match(js, /catalogLoadTracker\.failed\(\)/);
+  assert.match(js, /currentItems\.length === 0/);
+  assert.match(js, /setTimeout\(\(\) => \{[\s\S]*mountLoadStatus\("slow"\);[\s\S]*\}, 8000\)/);
+  assert.match(js, /const generation = \+\+loadGeneration/);
+  assert.match(js, /generation !== loadGeneration/);
+  assert.match(js, /data-fides-catalog-retry/);
+  assert.match(css, /#fides-use-case-catalog-root\[aria-busy="true"\][\s\S]*min-height:/);
+});
+
 test("recommended is the default persisted sort and rotates daily", () => {
   assert.match(js, /const SORT_STORAGE_KEY = "fides-use-case-sort-v2";/);
   assert.match(js, /: "recommended"/);

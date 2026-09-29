@@ -1023,6 +1023,10 @@
   color: #0f172a;
 }
 
+#fides-use-case-catalog-root[aria-busy="true"] {
+  min-height: min(80vh, 900px);
+}
+
 /* Initial loading state (also server-rendered via SSR before the JS UI mounts).
    Scoped to the root so it works before the themed .fides-use-case-catalog
    wrapper — which holds the CSS variables — exists. Matches the other catalogs. */
@@ -1043,6 +1047,33 @@
   border-radius: 50%;
   animation: fides-spin 1s linear infinite;
   margin-bottom: 1rem;
+}
+
+#fides-use-case-catalog-root .fides-catalog-load-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem;
+  color: #374151;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+#fides-use-case-catalog-root .fides-catalog-load-status p {
+  margin: 0;
+}
+
+#fides-use-case-catalog-root .fides-catalog-load-status button {
+  padding: 0.5rem 0.875rem;
+  color: #ffffff;
+  background: #0a6ef3;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
 }
 
 @keyframes fides-spin {

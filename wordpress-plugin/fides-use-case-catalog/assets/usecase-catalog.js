@@ -81,6 +81,19 @@
   const awardRecognitionsByUseCaseId = Object.create(null);
   const root = document.getElementById("fides-use-case-catalog-root");
   if (!root) return;
+  const catalogLoadTracker =
+    window.FidesCatalogUI && typeof window.FidesCatalogUI.createCatalogLoadTracker === "function"
+      ? window.FidesCatalogUI.createCatalogLoadTracker({
+          root,
+          category: "Use Case Catalog",
+          breakpoint: 1024
+        })
+      : {
+          ready() { root.setAttribute("aria-busy", "false"); },
+          failed() { root.setAttribute("aria-busy", "false"); },
+          setBusy(busy) { root.setAttribute("aria-busy", busy ? "true" : "false"); },
+          isComplete() { return false; }
+        };
   let catalogLoadMeta = { showStaleNotice: false, remoteFailed: false, snapshotDate: "" };
 
   function applyStaleCatalogNotice() {
@@ -3472,46 +3485,87 @@
   async function loadUseCases() {
     const ui = window.FidesCatalogUI;
     const restUrl = apiBase ? `${apiBase}/catalog` : "";
+    const loadMeta = { showStaleNotice: false, remoteFailed: false, snapshotDate: "" };
     if (ui && typeof ui.loadCatalogAggregatedJson === "function" && (aggregatedUrl || restUrl)) {
       const loaded = await ui.loadCatalogAggregatedJson({
         remoteUrl: aggregatedUrl,
         cacheUrl: String(config.cacheDataUrl || "").trim(),
         localUrl: restUrl
       });
-      catalogLoadMeta.showStaleNotice = !!loaded.showStaleNotice;
-      catalogLoadMeta.remoteFailed = !!loaded.remoteFailed;
-      catalogLoadMeta.snapshotDate = loaded.snapshotDate || "";
+      loadMeta.showStaleNotice = !!loaded.showStaleNotice;
+      loadMeta.remoteFailed = !!loaded.remoteFailed;
+      loadMeta.snapshotDate = loaded.snapshotDate || "";
       if (loaded.ok && loaded.data) {
         if (Array.isArray(loaded.data.useCases) && loaded.data.useCases.length > 0) {
-          return loaded.data.useCases;
+          return { items: loaded.data.useCases, meta: loadMeta };
         }
         if (Array.isArray(loaded.data) && loaded.data.length > 0) {
-          return loaded.data;
+          return { items: loaded.data, meta: loadMeta };
         }
       }
       if (aggregatedUrl && restUrl && loaded.source === "github") {
-        return fetchUseCases(restUrl);
+        return { items: await fetchUseCases(restUrl), meta: loadMeta };
       }
-      return [];
+      return { items: [], meta: loadMeta };
     }
     if (aggregatedUrl) {
       try {
         const items = await fetchUseCases(aggregatedUrl, { cache: "no-cache" });
-        if (items.length > 0) return items;
+        if (items.length > 0) return { items, meta: loadMeta };
       } catch (githubError) {
         console.warn("Use case GitHub source unavailable, falling back to REST:", githubError.message);
-        catalogLoadMeta.showStaleNotice = true;
-        catalogLoadMeta.remoteFailed = true;
+        loadMeta.showStaleNotice = true;
+        loadMeta.remoteFailed = true;
       }
     }
     if (apiBase) {
-      return fetchUseCases(`${apiBase}/catalog`);
+      return { items: await fetchUseCases(`${apiBase}/catalog`), meta: loadMeta };
     }
-    return [];
+    return { items: [], meta: loadMeta };
+  }
+
+  let loadGeneration = 0;
+  let slowLoadTimer = null;
+
+  function mountLoadStatus(kind) {
+    let status = root.querySelector("[data-fides-catalog-load-status]");
+    if (!status) {
+      status = document.createElement("div");
+      status.className = "fides-catalog-load-status";
+      status.setAttribute("data-fides-catalog-load-status", "1");
+      status.setAttribute("role", kind === "error" ? "alert" : "status");
+      status.setAttribute("aria-live", "polite");
+      root.prepend(status);
+    }
+    status.setAttribute("role", kind === "error" ? "alert" : "status");
+    if (kind === "retrying") {
+      status.innerHTML = "<p>Retrying catalog data…</p>";
+      return;
+    }
+    const message = kind === "error"
+      ? "Could not load the latest catalog data."
+      : "Loading is taking longer than expected.";
+    status.innerHTML = `<p>${message}</p><button type="button" data-fides-catalog-retry>Try again</button>`;
+    status.querySelector("[data-fides-catalog-retry]")?.addEventListener("click", () => {
+      mountLoadStatus("retrying");
+      load();
+    });
   }
 
   async function load() {
-    if (!aggregatedUrl && !apiBase) return;
+    const generation = ++loadGeneration;
+    catalogLoadTracker.setBusy(true);
+    if (slowLoadTimer) clearTimeout(slowLoadTimer);
+    slowLoadTimer = setTimeout(() => {
+      if (generation === loadGeneration) mountLoadStatus("slow");
+    }, 8000);
+    if (!aggregatedUrl && !apiBase) {
+      catalogLoadTracker.failed();
+      mountLoadStatus("error");
+      clearTimeout(slowLoadTimer);
+      slowLoadTimer = null;
+      return;
+    }
     if (window.FidesCatalogUI && typeof window.FidesCatalogUI.initMatomoLinkTracking === "function") {
       window.FidesCatalogUI.initMatomoLinkTracking({
         category: "Use Case Catalog",
@@ -3520,14 +3574,21 @@
       });
     }
     try {
-      const rawItems = await loadUseCases();
-      currentItems = rawItems.map((item) => Object.assign({}, item, { productionDeployment: normalizeProductionDeployment(item.productionDeployment) }));
+      const loadedCatalog = await loadUseCases();
+      if (generation !== loadGeneration) return;
+      catalogLoadMeta = loadedCatalog.meta;
+      currentItems = loadedCatalog.items.map((item) => Object.assign({}, item, { productionDeployment: normalizeProductionDeployment(item.productionDeployment) }));
+      if (currentItems.length === 0) {
+        throw new Error("Catalog data contains no use cases.");
+      }
       await Promise.all([
         loadAwardRecognitions(),
         loadUseCaseRatingSummaries(currentItems)
       ]);
+      if (generation !== loadGeneration) return;
       filterFacets = computeFacets(currentItems);
       render();
+      catalogLoadTracker.ready();
       openUseCaseFromQueryParam();
       if (VOCABULARY_URL || VOCABULARY_FALLBACK_URL) {
         loadVocabulary(VOCABULARY_URL, VOCABULARY_FALLBACK_URL)
@@ -3540,6 +3601,8 @@
           });
       }
     } catch (_err) {
+      if (generation !== loadGeneration) return;
+      catalogLoadTracker.failed();
       // Reveal the server-rendered SSR fallback (if present) instead of
       // wiping the container with an error — keeps content for no-JS/crawlers
       // and for users when the upstream catalog feed is unreachable.
@@ -3551,9 +3614,16 @@
         if (spinner) spinner.remove();
         catalogLoadMeta.showStaleNotice = catalogLoadMeta.remoteFailed;
         applyStaleCatalogNotice();
+        mountLoadStatus("error");
         return;
       }
-      root.innerHTML = '<p class="fides-form-message is-error">Could not load catalog data.</p>';
+      root.innerHTML = "";
+      mountLoadStatus("error");
+    } finally {
+      if (generation === loadGeneration && slowLoadTimer) {
+        clearTimeout(slowLoadTimer);
+        slowLoadTimer = null;
+      }
     }
   }
 

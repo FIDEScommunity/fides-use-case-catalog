@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.21.7
+ * Version: 0.21.8
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.21.7');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.21.8');
 /** Bump this when share rewrite rules change so existing sites flush once. */
 define('FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION', '0.20.30');
 /** Admin list page size for Tools → Use Case Submissions. */
@@ -2207,7 +2207,7 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
     }
 
     return sprintf(
-        '<div id="fides-use-case-catalog-root" data-columns="%s">%s</div>',
+        '<div id="fides-use-case-catalog-root" data-columns="%s" aria-busy="true">%s</div>',
         esc_attr($columns),
         $ssr_html
     );
