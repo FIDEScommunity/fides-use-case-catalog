@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.21.8
+Stable tag: 0.21.9
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,9 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.21.9 =
+* Prevent horizontal scrolling in the mobile use-case modal by wrapping wide detail links, theme buttons and tags.
 
 = 0.21.8 =
 * Make the mobile filter drawer modal and keyboard-accessible through the shared catalog UI.

@@ -2113,6 +2113,7 @@
 
 .fides-modal-overlay .fides-modal-body {
   padding: 1.25rem 1.5rem 1.5rem;
+  overflow-x: hidden;
   overflow-y: auto;
   flex: 1;
   min-width: 0;
@@ -4406,19 +4407,25 @@
 .fides-modal-overlay .fides-tag-chip {
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
+  max-width: 100%;
+  min-width: 0;
   padding: 0.2rem 0.5rem;
   border-radius: 9999px;
   border: 1px solid var(--fides-border);
   background: #ffffff;
   font-size: 0.75rem;
   margin: 0 0.25rem 0.25rem 0;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .fides-modal-overlay .fides-use-case-theme-button {
   display: inline-flex;
   align-items: center;
+  box-sizing: border-box;
   gap: 0.3rem;
+  max-width: 100%;
+  min-width: 0;
   padding: 0.35rem 0.65rem;
   border: 1px solid color-mix(in srgb, var(--fides-accent) 45%, transparent);
   border-radius: 0.5rem;
@@ -4428,7 +4435,7 @@
   font-weight: 600;
   line-height: 1.2;
   text-decoration: none;
-  white-space: nowrap;
+  white-space: normal;
   transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
@@ -4461,6 +4468,15 @@
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 0.2em;
+}
+
+/* Shared catalog UI forces nowrap on kv links. On a phone that, plus nowrap
+   theme buttons and tags, makes the open details block wider than the sheet
+   and the body (overflow-y: auto) starts scrolling sideways. */
+.fides-modal-overlay.fides-modal-overlay--usecase .fides-kv-val .fides-modal-link-inline {
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
 }
 
 .fides-modal-overlay .fides-modal-link-inline:hover {
@@ -4935,6 +4951,7 @@
     flex: 1 1 auto;
     min-height: 0;
     min-width: 0;
+    overflow-x: hidden;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
