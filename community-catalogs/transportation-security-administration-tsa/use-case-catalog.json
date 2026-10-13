@@ -269,15 +269,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iso:mdl-mdoc:mdoc",
-            "labelRaw": "mDL (MSO Mdoc)",
+            "refId": "cred:iso:mdl",
+            "labelRaw": "mDL",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:photoid-mdoc:mdoc",
-            "labelRaw": "Photo ID (MSO Mdoc)",
+            "refId": "cred:iso:photoid",
+            "labelRaw": "Photo ID",
             "url": null,
             "source": "catalog",
             "walletType": null

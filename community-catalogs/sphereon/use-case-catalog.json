@@ -74,14 +74,14 @@
             "walletType": null
           },
           {
-            "refId": "cred:eduwallet:academic-base:sd-jwt-vc",
+            "refId": "cred:eduwallet:academic-base",
             "labelRaw": "Academic Base Credential (ABC)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:upper-secondary-education:sd-jwt-vc",
+            "refId": "cred:fides:upper-secondary-education",
             "labelRaw": "Upper Secondary Education Certificate",
             "url": null,
             "source": "catalog",

@@ -191,35 +191,35 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dpp:vcdm-2-0",
+            "refId": "cred:uncefact:dpp",
             "labelRaw": "Digital Product Passport",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dfr:vcdm-2-0",
+            "refId": "cred:uncefact:dfr",
             "labelRaw": "Digital Facility Record",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dte:vcdm-2-0",
+            "refId": "cred:uncefact:dte",
             "labelRaw": "Digital Traceability Event",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dia:vcdm-2-0",
+            "refId": "cred:uncefact:dia",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dcc:vcdm-2-0",
+            "refId": "cred:uncefact:dcc",
             "labelRaw": "Conformity Credential",
             "url": null,
             "source": "catalog",

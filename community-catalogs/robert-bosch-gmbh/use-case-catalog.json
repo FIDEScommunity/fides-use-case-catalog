@@ -199,8 +199,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -213,28 +213,28 @@
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
+            "refId": "cred:webuild:ebw-oid",
             "labelRaw": "EBW Owner Identification Data (EBW-OID)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:eucc:sd-jwt-vc",
+            "refId": "cred:webuild:eucc",
             "labelRaw": "EU Company Certificate",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:vat-id:sd-jwt-vc",
+            "refId": "cred:webuild:vat-id",
             "labelRaw": "EUDI VAT ID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:einvoice:sd-jwt-vc",
+            "refId": "cred:webuild:einvoice",
             "labelRaw": "eInvoice",
             "url": null,
             "source": "catalog",
@@ -255,49 +255,49 @@
             "walletType": null
           },
           {
-            "refId": "cred:webuild:company-info:sd-jwt-vc",
+            "refId": "cred:webuild:company-info",
             "labelRaw": "Company Info",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:contact-person:sd-jwt-vc",
+            "refId": "cred:webuild:contact-person",
             "labelRaw": "Contact Person",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:payment-terms:sd-jwt-vc",
+            "refId": "cred:webuild:payment-terms",
             "labelRaw": "Payment Terms",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ownership:sd-jwt-vc",
+            "refId": "cred:webuild:ownership",
             "labelRaw": "Ownership",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:authorised-signatories:sd-jwt-vc",
+            "refId": "cred:webuild:authorised-signatories",
             "labelRaw": "Authorised Signatories",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:iban-ov:sd-jwt-vc",
+            "refId": "cred:webuild:iban-ov",
             "labelRaw": "IBAN Ownership Verification",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ubo:sd-jwt-vc",
+            "refId": "cred:webuild:ubo",
             "labelRaw": "Ultimate Beneficial Owner",
             "url": null,
             "source": "catalog",

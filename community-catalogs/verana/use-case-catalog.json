@@ -175,28 +175,28 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-badge:vcdm-2-0",
+            "refId": "cred:verana:ecs-badge",
             "labelRaw": "ECS Badge Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "refId": "cred:verana:ecs-organization",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "refId": "cred:verana:ecs-service",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:authorized-repairer:vcdm-2-0",
+            "refId": "cred:verana:authorized-repairer",
             "labelRaw": "Authorized Repairer (Vesta)",
             "url": null,
             "source": "catalog",
@@ -412,28 +412,28 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "refId": "cred:verana:ecs-organization",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "refId": "cred:verana:ecs-service",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:cexa-kyc:sd-jwt-vc",
+            "refId": "cred:verana:cexa-kyc",
             "labelRaw": "CEXA-Kyc",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:cexa-verified-counterparty:vcdm-2-0",
+            "refId": "cred:verana:cexa-verified-counterparty",
             "labelRaw": "CEXA-VerifiedCounterparty",
             "url": null,
             "source": "catalog",
@@ -658,21 +658,21 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "refId": "cred:verana:ecs-organization",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "refId": "cred:verana:ecs-service",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:verandia-citizen-id:sd-jwt-vc",
+            "refId": "cred:verana:verandia-citizen-id",
             "labelRaw": "Verandia Citizen ID",
             "url": null,
             "source": "catalog",

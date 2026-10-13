@@ -116,8 +116,36 @@
     issuer: String(config.issuerCatalogUrl || "").replace(/\/$/, ""),
     credential: String(config.credentialCatalogUrl || "").replace(/\/$/, ""),
     rp: String(config.rpCatalogUrl || "").replace(/\/$/, ""),
-    organization: String(config.organizationCatalogUrl || "").replace(/\/$/, "")
+    organization: String(config.organizationCatalogUrl || "").replace(/\/$/, ""),
+    organizationDetail: String(config.organizationDetailUrl || "").replace(/\/$/, "")
   };
+  let credentialAliasIndex = { byId: Object.create(null), canonicalIdByRef: Object.create(null) };
+
+  function resolveCredentialRefId(credentialId) {
+    const ui = window.FidesCatalogUI;
+    if (ui && typeof ui.resolveCredentialCanonicalId === "function") {
+      return ui.resolveCredentialCanonicalId(credentialId, credentialAliasIndex);
+    }
+    return credentialId;
+  }
+
+  async function loadCredentialAliasIndex() {
+    credentialAliasIndex = { byId: Object.create(null), canonicalIdByRef: Object.create(null) };
+    const url = String(config.credentialAggregatedDataUrl || "").trim();
+    if (!url) return;
+    try {
+      const response = await fetch(url);
+      if (!response.ok) return;
+      const data = await response.json();
+      const creds = Array.isArray(data.credentials) ? data.credentials : [];
+      const ui = window.FidesCatalogUI;
+      if (ui && typeof ui.buildCredentialAliasIndex === "function") {
+        credentialAliasIndex = ui.buildCredentialAliasIndex(creds);
+      }
+    } catch (err) {
+      console.warn("Credential catalog alias index load failed:", err && err.message ? err.message : err);
+    }
+  }
   const LINK_ACCORDION_SECTIONS = [
     {
       key: "personal-wallets",
@@ -896,10 +924,21 @@
     return String(link.labelRaw || link.refId || link.url || "—").trim() || "—";
   }
 
+  function catalogLinkRefId(link, param) {
+    const refId = link && link.refId ? String(link.refId) : "";
+    if (!refId) return "";
+    if (param === "credential") {
+      return resolveCredentialRefId(refId) || refId;
+    }
+    return refId;
+  }
+
   function catalogExploreHref(catalogBase, param, pluralParam, links) {
     const base = String(catalogBase || "").replace(/\/$/, "");
     if (!base) return "";
-    const ids = (links || []).map((link) => link && link.refId).filter(Boolean);
+    const ids = Array.from(new Set(
+      (links || []).map((link) => catalogLinkRefId(link, param)).filter(Boolean)
+    ));
     if (ids.length === 0) return "";
     try {
       const url = new URL(base, window.location.origin);
@@ -919,7 +958,7 @@
     // so the entry opens in its own catalog modal — matching the other
     // catalogs. Only fall back to an external URL when no catalog deep link
     // can be built (no refId or no catalog base configured).
-    const refId = link && link.refId ? String(link.refId) : "";
+    const refId = catalogLinkRefId(link, param);
     const base = String(catalogBase || "").replace(/\/$/, "");
     if (refId && base) {
       try {
@@ -1675,10 +1714,13 @@
   function organizationCatalogHref(link, useCaseId) {
     const refId = link && link.refId ? String(link.refId).trim() : "";
     const orgBase = CATALOG_URLS.organization;
+    const orgDetailBase = CATALOG_URLS.organizationDetail;
     if (!refId || !orgBase) return "";
     const fromUseCase = String(useCaseId || "").trim();
     try {
-      const built = new URL(`${orgBase.replace(/\/$/, "")}/?org=${encodeURIComponent(refId)}`, window.location.origin);
+      const built = orgDetailBase
+        ? new URL(`${orgDetailBase}/${encodeURIComponent(refId)}/`, window.location.origin)
+        : new URL(`${orgBase}/?org=${encodeURIComponent(refId)}`, window.location.origin);
       if (fromUseCase) built.searchParams.set("from", `usecase:${fromUseCase}`);
       return built.pathname + built.search + built.hash;
     } catch (_err) {
@@ -3583,7 +3625,8 @@
       }
       await Promise.all([
         loadAwardRecognitions(),
-        loadUseCaseRatingSummaries(currentItems)
+        loadUseCaseRatingSummaries(currentItems),
+        loadCredentialAliasIndex()
       ]);
       if (generation !== loadGeneration) return;
       filterFacets = computeFacets(currentItems);

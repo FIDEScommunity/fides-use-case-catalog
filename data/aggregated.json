@@ -1,10 +1,499 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-09-21T17:11:53.155Z",
+  "lastUpdated": "2026-10-12T20:29:18.331Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 101,
   "useCases": [
+    {
+      "id": "credimi-collaborative-automation-for-eudi-interoperability-and-conformance-pYLePZ",
+      "sector": "public_sector",
+      "title": "One EUDI Wallet Release Across OpenID Foundation, WE BUILD and FCAF",
+      "summary": "Before releasing a new EUDI Wallet build, a wallet development team must show that the same app can receive and present credentials correctly across independent test ecosystems. Today this often requires separate manual sessions, provider-specific scripts and test code added to the application.\n\nIn the implemented Credimi workflow, a release candidate running on a real Android device is tested against OpenID Foundation and WE BUILD services. The wallet receives a test credential through OpenID4VCI and presents a PID-format SD-JWT VC through OpenID4VP. Credimi automates the wallet actions and API interactions, captures structured results, screenshots, video and device logs, and extracts the applicable FCAF test results from that evidence.\n\nThe developer can identify the failed requirement, fix the wallet and rerun exactly the same journey. Keeping the test logic outside the application substantially reduces implementation effort. The automation pipelines, adapters and evidence definitions can be reused across wallet releases and implementations, turning separate ecosystem tests into a shared and repeatable release-validation process.",
+      "organizationName": "Forkbomb",
+      "productionDeployment": "yes",
+      "status": "published",
+      "updatedAt": "2026-09-21T18:11:44+01:00",
+      "publishedAt": "2026-09-21T18:11:44+01:00",
+      "tags": [
+        "EUDI Wallet",
+        "wallet development",
+        "release validation",
+        "automation",
+        "interoperability testing",
+        "conformance testing",
+        "FCAF",
+        "OpenID Foundation",
+        "WE BUILD",
+        "OpenID4VCI",
+        "OpenID4VP",
+        "SD-JWT VC",
+        "reusable test evidence",
+        "cross-ecosystem collaboration"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "scytales-id-wallet",
+            "labelRaw": "Scytales ID Wallet",
+            "url": "https://scytales.com",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-reference-personal-wallet",
+            "labelRaw": "EUDI Wallet Reference Implementation",
+            "url": "https://github.com/eu-digital-identity-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "talao-wallet",
+            "labelRaw": "Talao Wallet",
+            "url": "https://talao.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "altme-wallet",
+            "labelRaw": "Altme",
+            "url": "https://altme.io",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Edge Wallet",
+            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "wwwallet",
+            "labelRaw": "wwWallet",
+            "url": "https://wwwallet.org",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "paradym-wallet",
+            "labelRaw": "Paradym Wallet",
+            "url": "https://paradym.id",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "procivis-one-wallet",
+            "labelRaw": "Procivis One Wallet",
+            "url": "https://www.procivis.ch",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "toppan-wallet",
+            "labelRaw": "TOPPAN Wallet",
+            "url": "https://www.toppan.com",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "hovi-wallet",
+            "labelRaw": "Hovi Wallet",
+            "url": "https://www.hovi.id/wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "national-eudi-wallet-greece",
+            "labelRaw": "National EUDI Wallet (Greece)",
+            "url": null,
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "igrant-data-wallet",
+            "labelRaw": "Data Wallet by iGrant.io",
+            "url": "https://igrant.io/datawallet",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "france-identite",
+            "labelRaw": "France Identité",
+            "url": "https://france-identite.gouv.fr/",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "gataca-wallet",
+            "labelRaw": "Gataca Wallet",
+            "url": "https://gataca.io/products/wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "eudi-age-verification-wallet",
+            "labelRaw": "EUDI Age Verification App (Reference)",
+            "url": "https://github.com/eu-digital-identity-wallet/av-app-ios-wallet-ui",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "google-wallet",
+            "labelRaw": "Google Wallet",
+            "url": "https://wallet.google.com/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:animo:bundesdruckerei:test",
+            "labelRaw": "Bundesdruckerei (Animo Playground)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:findynet:pension-demo-procivis:test",
+            "labelRaw": "Pension demo - Procivis issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:findynet:pension-demo-paradym:test",
+            "labelRaw": "Pension demo - Paradym issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:credenco:kvk:test",
+            "labelRaw": "KVK Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "wwWallet issuer",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:igrant:playground:test",
+            "labelRaw": "Issuer Playground by iGrant.io",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Sicpa",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Sicpa",
+            "url": "https://ewc.pre.vc-dts.sicpa.com/demo",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:talao:acnliwayop:test",
+            "labelRaw": "Talao Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:findynet:pension-demo-sphereon:test",
+            "labelRaw": "Pension demo - Sphereon issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "FortID",
+            "url": "https://fortid.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:findynet:pension-demo-waltid:test",
+            "labelRaw": "Pension demo - Walt.id issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:pid",
+            "labelRaw": "PID (WE BUILD SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:ewc:pid-eudi",
+            "labelRaw": "PID EUDI",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:iso:photoid",
+            "labelRaw": "Photo ID",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:ewc:photo-id",
+            "labelRaw": "Photo ID",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:igrant",
+            "labelRaw": "iGrant.io",
+            "url": "https://igrant.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:scytales",
+            "labelRaw": "Scytales",
+            "url": "https://scytales.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:wwwallet",
+            "labelRaw": "wwWallet.org",
+            "url": "https://wwwallet.org",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:webuild",
+            "labelRaw": "WE BUILD Consortium",
+            "url": "https://www.webuildconsortium.eu/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:gataca",
+            "labelRaw": "Gataca Labs",
+            "url": "https://gataca.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:hovi",
+            "labelRaw": "Hovi",
+            "url": "https://www.hovi.id/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:credenco",
+            "labelRaw": "Credenco",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:animo",
+            "labelRaw": "Animo Solutions",
+            "url": "https://animo.id",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:forkbomb",
+            "labelRaw": "Forkbomb",
+            "url": "https://forkbomb.solutions",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:toppan",
+            "labelRaw": "Toppan",
+            "url": "https://www.toppan.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:talao",
+            "labelRaw": "Talao",
+            "url": "https://talao.io",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:france",
+            "labelRaw": "French Government",
+            "url": "https://france-identite.gouv.fr/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "igrant-bank-login-demo",
+            "labelRaw": "Bank Account Login",
+            "url": "https://www.igrant.io/demo/log-into-bank-account.html",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "igrant-dcql-credential-query-demo",
+            "labelRaw": "DCQL Credential Query",
+            "url": "https://www.igrant.io/demo/openid4vp-dcql-03.html",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "igrant-dcql-trusted-authority-demo",
+            "labelRaw": "DCQL – Trusted Authority Verification",
+            "url": "https://www.igrant.io/demo/openid4vp-dcql-01.html",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "igrant-insurance-policy-demo",
+            "labelRaw": "Insurance Policy",
+            "url": "https://www.igrant.io/demo/insurance.html",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "igrant-issue-test-qesac",
+            "labelRaw": "Issue Test QESAC",
+            "url": "https://www.igrant.io/demo/qesac.html",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bundesdruckerei (Animo)",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Bundesdruckerei (Animo)",
+            "url": "https://funke.animo.id",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "EUDI Wallet (reference implementation)",
+            "url": "https://verifier-backend.eudiw.dev/swagger-ui",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "HOVI",
+            "url": "https://api.hovi.id/verification/send-proof-request",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "InGroupe PID mDoc (France Identitè)",
+            "url": "https://playground-ingroupe.utoconnect.com/",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Pardym verifier",
+            "url": "https://api.paradym.id/v1/projects/cmqexrelo000302s66x0k9r1j/openid4vc/verification/request",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "Sicpa Passport Verification",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "wwWallet",
+            "url": "https://demo-verifier.wwwallet.org/",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "proximity",
+        "remote"
+      ],
+      "vcFormats": [
+        "mdoc",
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-5",
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "DIIP v5",
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/credimi-home-1.png",
+        "https://fides.community/app/uploads/2026/08/OpenIDPipeline2-1.png",
+        "https://fides.community/app/uploads/2026/08/OpenIDPipeline1.png",
+        "https://fides.community/app/uploads/2026/08/ShotW2_1.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/credimi-home-1.png",
+      "moreInfoUrl": "https://credimi.io/",
+      "userJourney": "Credimi makes external interoperability and conformance services easy to integrate into the same wallet-testing workflow, including OpenID Foundation and WE BUILD tests.\n\n1. The developer configures their Wallet component in credimi.io.\n2. They adapt Credimi’s published Maestro mobile-automation scripts to their wallet. Typically, 80–90% of each script can be reused, so the tests remain outside the wallet application rather than requiring test-specific code in it.\n3. The developer launches a pipeline on a Credimi Runner. The runner executes the automation on a physical device, emulator or simulator and extracts the applicable FCAF test results from the pipeline evidence.\n4. After execution, Credimi presents a detailed report showing every FCAF test performed, its result and the supporting execution evidence. The developer can inspect failures, adapt the wallet or script, and rerun the same pipeline.\n5. Pipelines can also run automatically on a schedule or through CI integration, allowing the same reusable tests to validate subsequent wallet releases.",
+      "country": "NL"
+    },
     {
       "id": "cryptographically-verifiable-digital-product-passports-for-eu-battery-regulation-compliance-t2LpAh",
       "sector": "manufacturing",
@@ -326,7 +815,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dpp:vcdm-2-0",
+            "refId": "cred:uncefact:dpp",
             "labelRaw": "Digital Product Passport",
             "url": null,
             "source": "catalog",
@@ -540,7 +1029,7 @@
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dia:vcdm-2-0",
+            "refId": "cred:uncefact:dia",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",
@@ -848,8 +1337,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -862,28 +1351,28 @@
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
+            "refId": "cred:webuild:ebw-oid",
             "labelRaw": "EBW Owner Identification Data (EBW-OID)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:eucc:sd-jwt-vc",
+            "refId": "cred:webuild:eucc",
             "labelRaw": "EU Company Certificate",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:vat-id:sd-jwt-vc",
+            "refId": "cred:webuild:vat-id",
             "labelRaw": "EUDI VAT ID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:einvoice:sd-jwt-vc",
+            "refId": "cred:webuild:einvoice",
             "labelRaw": "eInvoice",
             "url": null,
             "source": "catalog",
@@ -904,49 +1393,49 @@
             "walletType": null
           },
           {
-            "refId": "cred:webuild:company-info:sd-jwt-vc",
+            "refId": "cred:webuild:company-info",
             "labelRaw": "Company Info",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:contact-person:sd-jwt-vc",
+            "refId": "cred:webuild:contact-person",
             "labelRaw": "Contact Person",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:payment-terms:sd-jwt-vc",
+            "refId": "cred:webuild:payment-terms",
             "labelRaw": "Payment Terms",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ownership:sd-jwt-vc",
+            "refId": "cred:webuild:ownership",
             "labelRaw": "Ownership",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:authorised-signatories:sd-jwt-vc",
+            "refId": "cred:webuild:authorised-signatories",
             "labelRaw": "Authorised Signatories",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:iban-ov:sd-jwt-vc",
+            "refId": "cred:webuild:iban-ov",
             "labelRaw": "IBAN Ownership Verification",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ubo:sd-jwt-vc",
+            "refId": "cred:webuild:ubo",
             "labelRaw": "Ultimate Beneficial Owner",
             "url": null,
             "source": "catalog",
@@ -1244,14 +1733,14 @@
         ],
         "credentials": [
           {
-            "refId": "cred:igrantio:payment-account:sd-jwt-vc",
+            "refId": "cred:igrantio:payment-account",
             "labelRaw": "Payment Account",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:igrantio:payment-card:sd-jwt-vc",
+            "refId": "cred:igrantio:payment-card",
             "labelRaw": "Payment Card",
             "url": null,
             "source": "catalog",
@@ -1265,28 +1754,28 @@
             "walletType": null
           },
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:vat-id:sd-jwt-vc",
+            "refId": "cred:webuild:vat-id",
             "labelRaw": "EUDI VAT ID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
+            "refId": "cred:webuild:ebw-oid",
             "labelRaw": "EBW Owner Identification Data (EBW-OID)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ereceipt:sd-jwt-vc",
+            "refId": "cred:webuild:ereceipt",
             "labelRaw": "eReceipt",
             "url": null,
             "source": "catalog",
@@ -1606,7 +2095,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:gleif:legal-entity-vlei:acdc",
+            "refId": "cred:gleif:legal-entity-vlei",
             "labelRaw": "vLEI - Legal Entity",
             "url": null,
             "source": "catalog",
@@ -1895,8 +2384,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:diploma-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "Diploma (SD-JWT VC)",
+            "refId": "cred:eu:diploma",
+            "labelRaw": "Diploma",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -2243,15 +2732,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:gleif:legal-entity-vlei:acdc",
+            "refId": "cred:gleif:legal-entity-vlei",
             "labelRaw": "vLEI - Legal Entity",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:por-sd-jwt-vc:sd-jwt-vc",
-            "labelRaw": "Power Of Representation (SD-JWT VC)",
+            "refId": "cred:eu:por",
+            "labelRaw": "Power Of Representation",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -2816,14 +3305,14 @@
             "walletType": null
           },
           {
-            "refId": "cred:eduwallet:academic-base:sd-jwt-vc",
+            "refId": "cred:eduwallet:academic-base",
             "labelRaw": "Academic Base Credential (ABC)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:upper-secondary-education:sd-jwt-vc",
+            "refId": "cred:fides:upper-secondary-education",
             "labelRaw": "Upper Secondary Education Certificate",
             "url": null,
             "source": "catalog",
@@ -3044,7 +3533,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dia:vcdm-2-0",
+            "refId": "cred:uncefact:dia",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",
@@ -3537,28 +4026,28 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-badge:vcdm-2-0",
+            "refId": "cred:verana:ecs-badge",
             "labelRaw": "ECS Badge Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "refId": "cred:verana:ecs-organization",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "refId": "cred:verana:ecs-service",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:authorized-repairer:vcdm-2-0",
+            "refId": "cred:verana:authorized-repairer",
             "labelRaw": "Authorized Repairer (Vesta)",
             "url": null,
             "source": "catalog",
@@ -3774,28 +4263,28 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "refId": "cred:verana:ecs-organization",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "refId": "cred:verana:ecs-service",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:cexa-kyc:sd-jwt-vc",
+            "refId": "cred:verana:cexa-kyc",
             "labelRaw": "CEXA-Kyc",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:cexa-verified-counterparty:vcdm-2-0",
+            "refId": "cred:verana:cexa-verified-counterparty",
             "labelRaw": "CEXA-VerifiedCounterparty",
             "url": null,
             "source": "catalog",
@@ -4020,21 +4509,21 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "refId": "cred:verana:ecs-organization",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "refId": "cred:verana:ecs-service",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:verandia-citizen-id:sd-jwt-vc",
+            "refId": "cred:verana:verandia-citizen-id",
             "labelRaw": "Verandia Citizen ID",
             "url": null,
             "source": "catalog",
@@ -4120,509 +4609,6 @@
       "moreInfoUrl": "https://playground.testnet.verana.network/usecases/verandia",
       "userJourney": "The Republic anchors everything on a Verifiable Public Registry: an open, neutral registry of ecosystems, schemas and permissions that a state can equally self-host. The National Business Registry becomes an accredited issuer of Organization credentials, so proving a company's identity is a lookup, not paperwork. The National Civil Registry runs its own open-source issuing service and creates the Citizen ID ecosystem: it defines the eIDAS-2-inspired schema and holds the ISSUER permission, while relying parties like the Tax Buro and Meridian Bank must obtain VERIFIER permissions before wallets will share anything, the registry analog of eIDAS 2 relying-party registration. Citizens scan a QR and receive the Citizen ID in any wallet from the open roster, over AnonCreds/DIDComm or OpenID4VCI (SD-JWT VC). Companies attach Business IDs to self-hosted business wallets and publish services; representatives add a Proof of Legal Representation. Before anything is shared, the wallet trust-resolves the counterparty against the registry and renders a Proof-of-Trust. An unauthorized lender that over-asks and a fake refund portal both fail resolution and are refused, with proof.",
       "country": "EE"
-    },
-    {
-      "id": "credimi-collaborative-automation-for-eudi-interoperability-and-conformance-pYLePZ",
-      "sector": "public_sector",
-      "title": "One EUDI Wallet Release Across OpenID Foundation, WE BUILD and FCAF",
-      "summary": "Before releasing a new EUDI Wallet build, a wallet development team must show that the same app can receive and present credentials correctly across independent test ecosystems. Today this often requires separate manual sessions, provider-specific scripts and test code added to the application.\n\nIn the implemented Credimi workflow, a release candidate running on a real Android device is tested against OpenID Foundation and WE BUILD services. The wallet receives a test credential through OpenID4VCI and presents a PID-format SD-JWT VC through OpenID4VP. Credimi automates the wallet actions and API interactions, captures structured results, screenshots, video and device logs, and extracts the applicable FCAF test results from that evidence.\n\nThe developer can identify the failed requirement, fix the wallet and rerun exactly the same journey. Keeping the test logic outside the application substantially reduces implementation effort. The automation pipelines, adapters and evidence definitions can be reused across wallet releases and implementations, turning separate ecosystem tests into a shared and repeatable release-validation process.",
-      "organizationName": "Forkbomb",
-      "productionDeployment": "yes",
-      "status": "published",
-      "updatedAt": "2026-08-24T13:54:53+01:00",
-      "publishedAt": "2026-08-24T13:54:53+01:00",
-      "tags": [
-        "EUDI Wallet",
-        "wallet development",
-        "release validation",
-        "automation",
-        "interoperability testing",
-        "conformance testing",
-        "FCAF",
-        "OpenID Foundation",
-        "WE BUILD",
-        "OpenID4VCI",
-        "OpenID4VP",
-        "SD-JWT VC",
-        "reusable test evidence",
-        "cross-ecosystem collaboration"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "scytales-id-wallet",
-            "labelRaw": "Scytales ID Wallet",
-            "url": "https://scytales.com",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "eudi-reference-personal-wallet",
-            "labelRaw": "EUDI Wallet Reference Implementation",
-            "url": "https://github.com/eu-digital-identity-wallet/",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "talao-wallet",
-            "labelRaw": "Talao Wallet",
-            "url": "https://talao.io",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "altme-wallet",
-            "labelRaw": "Altme",
-            "url": "https://altme.io",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "sphereon-wallet",
-            "labelRaw": "Sphereon Edge Wallet",
-            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "wwwallet",
-            "labelRaw": "wwWallet",
-            "url": "https://wwwallet.org",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "paradym-wallet",
-            "labelRaw": "Paradym Wallet",
-            "url": "https://paradym.id",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "procivis-one-wallet",
-            "labelRaw": "Procivis One Wallet",
-            "url": "https://www.procivis.ch",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "toppan-wallet",
-            "labelRaw": "TOPPAN Wallet",
-            "url": "https://www.toppan.com",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "hovi-wallet",
-            "labelRaw": "Hovi Wallet",
-            "url": "https://www.hovi.id/wallet",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "national-eudi-wallet-greece",
-            "labelRaw": "National EUDI Wallet (Greece)",
-            "url": null,
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "igrant-data-wallet",
-            "labelRaw": "Data Wallet by iGrant.io",
-            "url": "https://igrant.io/datawallet",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "france-identite",
-            "labelRaw": "France Identité",
-            "url": "https://france-identite.gouv.fr/",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "gataca-wallet",
-            "labelRaw": "Gataca Wallet",
-            "url": "https://gataca.io/products/wallet",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "eudi-age-verification-wallet",
-            "labelRaw": "EUDI Age Verification App (Reference)",
-            "url": "https://github.com/eu-digital-identity-wallet/av-app-ios-wallet-ui",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "google-wallet",
-            "labelRaw": "Google Wallet",
-            "url": "https://wallet.google.com/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "credenco-business-wallet",
-            "labelRaw": "Credenco Business Wallet",
-            "url": "https://www.credenco.com",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": "issuer:animo:bundesdruckerei:test",
-            "labelRaw": "Bundesdruckerei (Animo Playground)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:findynet:pension-demo-procivis:test",
-            "labelRaw": "Pension demo - Procivis issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:findynet:pension-demo-paradym:test",
-            "labelRaw": "Pension demo - Paradym issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:credenco:kvk:test",
-            "labelRaw": "KVK Sandbox Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "wwWallet issuer",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:igrant:playground:test",
-            "labelRaw": "Issuer Playground by iGrant.io",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Sicpa",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Sicpa",
-            "url": "https://ewc.pre.vc-dts.sicpa.com/demo",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:talao:acnliwayop:test",
-            "labelRaw": "Talao Sandbox Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:findynet:pension-demo-sphereon:test",
-            "labelRaw": "Pension demo - Sphereon issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "FortID",
-            "url": "https://fortid.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:findynet:pension-demo-waltid:test",
-            "labelRaw": "Pension demo - Walt.id issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:eu:pid-mdoc:mdoc",
-            "labelRaw": "PID (MSO Mdoc)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:pid:sd-jwt-vc",
-            "labelRaw": "PID (WE BUILD SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:ewc:pid-eudi-mdoc:mso-mdoc",
-            "labelRaw": "PID EUDI (MSO Mdoc)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:ewc:pid-eudi-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID EUDI (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:iso:photoid-mdoc:mdoc",
-            "labelRaw": "Photo ID (MSO Mdoc)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:ewc:photo-id-sd-jwt:sd-jwt-vc",
-            "labelRaw": "Photo ID (SD-JWT VC)",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:igrant",
-            "labelRaw": "iGrant.io",
-            "url": "https://igrant.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:scytales",
-            "labelRaw": "Scytales",
-            "url": "https://scytales.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:wwwallet",
-            "labelRaw": "wwWallet.org",
-            "url": "https://wwwallet.org",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:webuild",
-            "labelRaw": "WE BUILD Consortium",
-            "url": "https://www.webuildconsortium.eu/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:gataca",
-            "labelRaw": "Gataca Labs",
-            "url": "https://gataca.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:hovi",
-            "labelRaw": "Hovi",
-            "url": "https://www.hovi.id/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:credenco",
-            "labelRaw": "Credenco",
-            "url": "https://www.credenco.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:animo",
-            "labelRaw": "Animo Solutions",
-            "url": "https://animo.id",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:forkbomb",
-            "labelRaw": "Forkbomb",
-            "url": "https://forkbomb.solutions",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:toppan",
-            "labelRaw": "Toppan",
-            "url": "https://www.toppan.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:talao",
-            "labelRaw": "Talao",
-            "url": "https://talao.io",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:france",
-            "labelRaw": "French Government",
-            "url": "https://france-identite.gouv.fr/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": "igrant-bank-login-demo",
-            "labelRaw": "Bank Account Login",
-            "url": "https://www.igrant.io/demo/log-into-bank-account.html",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "igrant-dcql-credential-query-demo",
-            "labelRaw": "DCQL Credential Query",
-            "url": "https://www.igrant.io/demo/openid4vp-dcql-03.html",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "igrant-dcql-trusted-authority-demo",
-            "labelRaw": "DCQL – Trusted Authority Verification",
-            "url": "https://www.igrant.io/demo/openid4vp-dcql-01.html",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "igrant-insurance-policy-demo",
-            "labelRaw": "Insurance Policy",
-            "url": "https://www.igrant.io/demo/insurance.html",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "igrant-issue-test-qesac",
-            "labelRaw": "Issue Test QESAC",
-            "url": "https://www.igrant.io/demo/qesac.html",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "wwWallet",
-            "url": "https://funke-verifier.wwwallet.org/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bundesdruckerei (Animo)",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Bundesdruckerei (Animo)",
-            "url": "https://funke.animo.id",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "EUDI Wallet (reference implementation)",
-            "url": "https://verifier-backend.eudiw.dev/swagger-ui",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "HOVI",
-            "url": "https://api.hovi.id/verification/send-proof-request",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "InGroupe PID mDoc (France Identitè)",
-            "url": "https://playground-ingroupe.utoconnect.com/",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Pardym verifier",
-            "url": "https://api.paradym.id/v1/projects/cmqexrelo000302s66x0k9r1j/openid4vc/verification/request",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "Sicpa Passport Verification",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "proximity",
-        "remote"
-      ],
-      "vcFormats": [
-        "mdoc",
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-5",
-        "ISO 18013-7",
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "DIIP v4",
-        "DIIP v5",
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "compliance_reporting"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/credimi-home-1.png",
-        "https://fides.community/app/uploads/2026/08/OpenIDPipeline2-1.png",
-        "https://fides.community/app/uploads/2026/08/OpenIDPipeline1.png",
-        "https://fides.community/app/uploads/2026/08/ShotW2_1.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/credimi-home-1.png",
-      "moreInfoUrl": "https://credimi.io/",
-      "userJourney": "Credimi makes external interoperability and conformance services easy to integrate into the same wallet-testing workflow, including OpenID Foundation and WE BUILD tests.\n\n1. The developer configures their Wallet component in credimi.io.\n2. They adapt Credimi’s published Maestro mobile-automation scripts to their wallet. Typically, 80–90% of each script can be reused, so the tests remain outside the wallet application rather than requiring test-specific code in it.\n3. The developer launches a pipeline on a Credimi Runner. The runner executes the automation on a physical device, emulator or simulator and extracts the applicable FCAF test results from the pipeline evidence.\n4. After execution, Credimi presents a detailed report showing every FCAF test performed, its result and the supporting execution evidence. The developer can inspect failures, adapt the wallet or script, and rerun the same pipeline.\n5. Pipelines can also run automatically on a schedule or through CI integration, allowing the same reusable tests to validate subsequent wallet releases.",
-      "country": "NL"
     },
     {
       "id": "reusable-kyb-due-digital-due-diligence-for-financial-transactions-E06Xyi",
@@ -5531,15 +5517,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iso:mdl-mdoc:mdoc",
-            "labelRaw": "mDL (MSO Mdoc)",
+            "refId": "cred:iso:mdl",
+            "labelRaw": "mDL",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:photoid-mdoc:mdoc",
-            "labelRaw": "Photo ID (MSO Mdoc)",
+            "refId": "cred:iso:photoid",
+            "labelRaw": "Photo ID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -6410,29 +6396,29 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iso:mdl-mdoc:mdoc",
-            "labelRaw": "mDL (MSO Mdoc)",
+            "refId": "cred:iso:mdl",
+            "labelRaw": "mDL",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:age-verification-mdoc:mdoc",
-            "labelRaw": "Age Verification (MSO Mdoc)",
+            "refId": "cred:eu:age-verification",
+            "labelRaw": "Age Verification",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:photoid-mdoc:mdoc",
-            "labelRaw": "Photo ID (MSO Mdoc)",
+            "refId": "cred:iso:photoid",
+            "labelRaw": "Photo ID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:mvrc-mdoc:mdoc",
-            "labelRaw": "Vehicle Registration Certificate (MSO Mdoc)",
+            "refId": "cred:iso:mvrc",
+            "labelRaw": "Vehicle Registration Certificate",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -6939,14 +6925,14 @@
         ],
         "credentials": [
           {
-            "refId": "cred:fides:lpid:sd-jwt-vc",
+            "refId": "cred:fides:lpid",
             "labelRaw": "LPID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:eucc:sd-jwt-vc",
+            "refId": "cred:webuild:eucc",
             "labelRaw": "EU Company Certificate",
             "url": null,
             "source": "catalog",
@@ -7199,8 +7185,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:age-verification-mdoc:mdoc",
-            "labelRaw": "Age Verification (MSO Mdoc)",
+            "refId": "cred:eu:age-verification",
+            "labelRaw": "Age Verification",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -7607,35 +7593,35 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dpp:vcdm-2-0",
+            "refId": "cred:uncefact:dpp",
             "labelRaw": "Digital Product Passport",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dfr:vcdm-2-0",
+            "refId": "cred:uncefact:dfr",
             "labelRaw": "Digital Facility Record",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dte:vcdm-2-0",
+            "refId": "cred:uncefact:dte",
             "labelRaw": "Digital Traceability Event",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dia:vcdm-2-0",
+            "refId": "cred:uncefact:dia",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dcc:vcdm-2-0",
+            "refId": "cred:uncefact:dcc",
             "labelRaw": "Conformity Credential",
             "url": null,
             "source": "catalog",
@@ -8349,15 +8335,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "refId": "cred:uidai:aadhaar",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
-            "labelRaw": "Boarding Pass (MSO Mdoc)",
+            "refId": "cred:iata:boarding-pass",
+            "labelRaw": "Boarding Pass",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -8831,8 +8817,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:ehic-sd-jwt-vc:sd-jwt-vc",
-            "labelRaw": "EHIC (SD-JWT VC)",
+            "refId": "cred:eu:ehic",
+            "labelRaw": "EHIC",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -8952,8 +8938,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -9038,8 +9024,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -9124,8 +9110,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -10049,8 +10035,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -10131,14 +10117,14 @@
         "issuers": [],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "refId": "cred:verana:ecs-organization",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "refId": "cred:verana:ecs-service",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
@@ -10761,56 +10747,56 @@
         ],
         "credentials": [
           {
-            "refId": "cred:fides:bri:sd-jwt-vc",
+            "refId": "cred:fides:bri",
             "labelRaw": "BRI Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:brp:sd-jwt-vc",
+            "refId": "cred:fides:brp",
             "labelRaw": "BRP Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:pid:sd-jwt-vc",
+            "refId": "cred:fides:pid",
             "labelRaw": "PID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:green-lane:sd-jwt-vc",
+            "refId": "cred:fides:green-lane",
             "labelRaw": "Green Lane Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:company-roles:sd-jwt-vc",
+            "refId": "cred:fides:company-roles",
             "labelRaw": "Company Roles Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:iban:sd-jwt-vc",
+            "refId": "cred:fides:iban",
             "labelRaw": "IBAN Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:lpid:sd-jwt-vc",
+            "refId": "cred:fides:lpid",
             "labelRaw": "LPID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:contact-details:sd-jwt-vc",
+            "refId": "cred:fides:contact-details",
             "labelRaw": "Contact Details",
             "url": null,
             "source": "catalog",
@@ -11777,15 +11763,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-mdoc:mdoc",
-            "labelRaw": "PID (MSO Mdoc)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:loyalty-mdoc:mdoc",
-            "labelRaw": "Loyalty (MSO Mdoc)",
+            "refId": "cred:eu:loyalty",
+            "labelRaw": "Loyalty",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -11905,8 +11891,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-mdoc:mdoc",
-            "labelRaw": "PID (MSO Mdoc)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -12037,15 +12023,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-mdoc:mdoc",
-            "labelRaw": "PID (MSO Mdoc)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:mdl-mdoc:mdoc",
-            "labelRaw": "mDL (MSO Mdoc)",
+            "refId": "cred:iso:mdl",
+            "labelRaw": "mDL",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -12156,7 +12142,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "refId": "cred:uidai:aadhaar",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",
@@ -12255,7 +12241,7 @@
         "issuers": [],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "refId": "cred:uidai:aadhaar",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",
@@ -12629,8 +12615,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -12847,7 +12833,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:swiyu:betaid-sdjwt:sd-jwt-vc",
+            "refId": "cred:swiyu:betaid-sdjwt",
             "labelRaw": "Beta-ID",
             "url": null,
             "source": "catalog",
@@ -12969,14 +12955,14 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
+            "refId": "cred:iata:boarding-pass",
             "labelRaw": "Boarding Pass",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iata:booking-order-mdoc:mdoc",
+            "refId": "cred:iata:booking-order",
             "labelRaw": "Booking Order",
             "url": null,
             "source": "catalog",

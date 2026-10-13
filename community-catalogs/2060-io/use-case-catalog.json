@@ -42,14 +42,14 @@
         "issuers": [],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization:vcdm-2-0",
+            "refId": "cred:verana:ecs-organization",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service:vcdm-2-0",
+            "refId": "cred:verana:ecs-service",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",

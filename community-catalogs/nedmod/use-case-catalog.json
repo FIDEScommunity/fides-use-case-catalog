@@ -57,15 +57,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:gleif:legal-entity-vlei:acdc",
+            "refId": "cred:gleif:legal-entity-vlei",
             "labelRaw": "vLEI - Legal Entity",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:por-sd-jwt-vc:sd-jwt-vc",
-            "labelRaw": "Power Of Representation (SD-JWT VC)",
+            "refId": "cred:eu:por",
+            "labelRaw": "Power Of Representation",
             "url": null,
             "source": "catalog",
             "walletType": null

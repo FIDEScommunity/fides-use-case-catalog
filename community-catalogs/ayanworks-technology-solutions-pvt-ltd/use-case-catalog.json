@@ -104,15 +104,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
+            "refId": "cred:uidai:aadhaar",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
-            "labelRaw": "Boarding Pass (MSO Mdoc)",
+            "refId": "cred:iata:boarding-pass",
+            "labelRaw": "Boarding Pass",
             "url": null,
             "source": "catalog",
             "walletType": null
