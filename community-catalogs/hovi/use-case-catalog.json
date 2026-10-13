@@ -80,14 +80,14 @@
         ],
         "credentials": [
           {
-            "refId": "cred:fides:lpid:sd-jwt-vc",
+            "refId": "cred:fides:lpid",
             "labelRaw": "LPID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:eucc:sd-jwt-vc",
+            "refId": "cred:webuild:eucc",
             "labelRaw": "EU Company Certificate",
             "url": null,
             "source": "catalog",
@@ -214,15 +214,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-mdoc:mdoc",
-            "labelRaw": "PID (MSO Mdoc)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:loyalty-mdoc:mdoc",
-            "labelRaw": "Loyalty (MSO Mdoc)",
+            "refId": "cred:eu:loyalty",
+            "labelRaw": "Loyalty",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -342,8 +342,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-mdoc:mdoc",
-            "labelRaw": "PID (MSO Mdoc)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null

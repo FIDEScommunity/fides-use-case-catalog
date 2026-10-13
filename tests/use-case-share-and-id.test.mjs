@@ -57,6 +57,16 @@ test("PHP share redirect only matches exact listing paths", () => {
   }
 });
 
+test("organization links keep mixed-case use-case attribution on the canonical detail route", () => {
+  const catalog = readFileSync(join(plugin, "assets/usecase-catalog.js"), "utf8");
+  const php = readFileSync(join(plugin, "fides-use-case-catalog.php"), "utf8");
+  assert.match(php, /'organizationDetailUrl'\s*=>/);
+  assert.match(catalog, /organizationDetail:\s*String\(config\.organizationDetailUrl/);
+  assert.match(catalog, /new URL\(`\$\{orgDetailBase\}\/\$\{encodeURIComponent\(refId\)\}\/`/);
+  assert.match(catalog, /built\.searchParams\.set\("from", `usecase:\$\{fromUseCase\}`\)/);
+  assert.doesNotMatch(catalog, /fromUseCase\s*=\s*.+\.toLowerCase\(\)/);
+});
+
 test("SSR VideoObject uses the shared helper instead of a partial object", () => {
   const ssr = readFileSync(join(plugin, "includes/class-fides-use-case-catalog-ssr.php"), "utf8");
   assert.match(ssr, /fides_use_case_catalog_video_object_for_jsonld/);

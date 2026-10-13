@@ -45,8 +45,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -131,8 +131,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -217,8 +217,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -1142,8 +1142,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
-            "labelRaw": "PID (SD-JWT VC)",
+            "refId": "cred:eu:pid",
+            "labelRaw": "PID",
             "url": null,
             "source": "catalog",
             "walletType": null

@@ -79,7 +79,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:gleif:legal-entity-vlei:acdc",
+            "refId": "cred:gleif:legal-entity-vlei",
             "labelRaw": "vLEI - Legal Entity",
             "url": null,
             "source": "catalog",
