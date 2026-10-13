@@ -2,7 +2,7 @@
 Contributors: fideslabs
 Requires at least: 5.0
 Tested up to: 6.7
-Stable tag: 0.21.10
+Stable tag: 0.21.11
 License: Apache-2.0
 License URI: https://www.apache.org/licenses/LICENSE-2.0
 
@@ -17,6 +17,9 @@ theme links into the filtered Use Case Explorer; and a compact explanation of
 how use cases connect the other FIDES catalogs.
 
 == Changelog ==
+
+= 0.21.11 =
+* Support type-level credential links and alias resolution in the catalog UI and forms (TS11 / tiles ≥ 1.13.32).
 
 = 0.21.10 =
 * Preserve the original use-case ID when opening an organization detail, including across canonical detail routing for Matomo source attribution.
