@@ -1,10 +1,408 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-10-13T14:45:12.549Z",
+  "lastUpdated": "2026-10-13T14:45:52.023Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 101,
   "useCases": [
+    {
+      "id": "business-wallet-based-kyb-financial-onboarding-Rzqouv",
+      "sector": "finance",
+      "title": "Business Wallet-Based KYB & Financial Onboarding",
+      "summary": "A company representative opens a business bank account in an EU member state where the company is not registered, using verified credentials from an EU Business Wallet instead of uploaded documents. \n\nKYB today is manual, document-based and national: banks chase register extracts across jurisdictions, verify signing authority and ownership by hand, onboarding runs to days or weeks at high cost and drop-off, and forged documents remain a fraud vector. Here the founder presents a Legal Person Identification Data credential and a European Company Certificate, plus a PID or mandate proving authority to act. Issuers are national business registers and competent authorities such as PRH in Finland; the holder is the company through an authorised representative; the verifier is the bank or fintech; Hovi provides the issuance and verification layer; supervisors and EU trust lists anchor trust. \n\nThe wallet is the consent point, showing who is asking and for what, and releasing only approved attributes through selective disclosure. The result is same-day onboarding, register-sourced data, a stronger AML audit trail and one pattern that works across all 27 member states.",
+      "organizationName": "Hovi",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-10-13T15:45:15+01:00",
+      "publishedAt": "2026-10-13T15:45:15+01:00",
+      "tags": [
+        "EU Business Wallet",
+        "EUDI Wallet",
+        "eIDAS 2.0",
+        "KYB",
+        "KYC",
+        "AML",
+        "LPID",
+        "European Company Certificate",
+        "Verifiable Credentials",
+        "Digital Identity",
+        "Bank Account Opening",
+        "Cross-Border Onboarding",
+        "Financial Services",
+        "Fintech",
+        "OID4VP",
+        "SD-JWT VC",
+        "Selective Disclosure",
+        "Regtech",
+        "Trust Infrastructure",
+        "Onboarding Automation"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "hovi-wallet",
+            "labelRaw": "Hovi Wallet",
+            "url": "https://www.hovi.id/wallet",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "hovi-business-wallet",
+            "labelRaw": "Hovi Business Wallet",
+            "url": "https://www.hovi.id",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": null,
+            "labelRaw": "Kyckr",
+            "url": "https://kyckr.com",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "NGI Bank",
+            "url": "https://ngi.hovi.app",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "VREX",
+            "url": "https://vrex.hovi.app",
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:webuild:eucc:sd-jwt-vc",
+            "labelRaw": "EU Company Certificate",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:kyckr",
+            "labelRaw": "Kyckr",
+            "url": "https://kyckr.com",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:hovi",
+            "labelRaw": "Hovi",
+            "url": "https://www.hovi.id/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": null,
+            "labelRaw": "VREX",
+            "url": "https://vrex.hovi.app",
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "NGI Bank",
+            "url": "https://ngi.hovi.app",
+            "source": "manual",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "ISO 18013-7",
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "EUDI Wallet ARF",
+        "HAIP v1"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity",
+        "compliance_reporting"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/Thumbnail-2.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/Thumbnail-2.png",
+      "videos": [
+        {
+          "url": "https://youtu.be/BvuMDnDXKrw",
+          "provider": "youtube"
+        }
+      ],
+      "video": {
+        "url": "https://youtu.be/BvuMDnDXKrw",
+        "provider": "youtube"
+      },
+      "moreInfoUrl": "https://businesswallet.hovi.app",
+      "userJourney": "1. The founder starts a business account application on the bank or fintech platform and selects \"verify with EU Business Wallet\" instead of uploading documents.\n\n2. The platform sends a presentation request through Hovi's verification layer, specifying the attributes required for KYB and AML.\n\n3. The request reaches the wallet. Delivery can be triggered in-session by QR or deep link, or out of band by email or SMS, and can be combined with national eID authentication such as FTN or BankID where required.\n\n4. The founder reviews the request in the wallet: who is asking, which attributes, for what purpose.\n\n5. On approval, the wallet presents the LPID and ECC credentials, plus the representative's PID or mandate, over OID4VP in SD-JWT VC or mdoc format with selective disclosure.\n\n6. The verification layer checks issuer signatures, credential validity and revocation status, and the issuer's presence on the EU trust list, then returns a structured, verified result to the platform.\n\n7. The platform completes KYB, screens the disclosed ownership data against AML requirements, and provisions the account. The verification result is retained as an audit record.",
+      "country": "FI"
+    },
+    {
+      "id": "green-lane-verified-wallet-based-company-formation-and-registration-VUXbMJ",
+      "sector": "public_sector",
+      "title": "Green Lane Verified: Wallet-Based Company Formation and Registration",
+      "summary": "Green Lane is a voluntary digital route for registering a sole proprietorship with KVK or incorporating a legal entity, such as a BV, through a civil-law notary.\nEntrepreneurs retrieve verified identity and evidence data from authoritative sources into an eIDAS-compliant personal wallet and share only the data needed for a specific purpose. This reduces repeated document requests, manual checks and corrections, while giving entrepreneurs more control over their data.\nKVK and notaries remain responsible for all legal, professional and risk-based assessments and may request additional information. Green Lane does not guarantee approval, registration or trustworthiness. Its status only confirms that an agreed data set was verifiably supplied and met defined quality criteria. Verified business data may later be reused through a business wallet for KYC, onboarding and other business relationships.\n\nSubmitted on behalf of the Green Lane collaboration. Pre-pilot fase.",
+      "organizationName": "Kamer van Koophandel",
+      "productionDeployment": "no",
+      "status": "published",
+      "updatedAt": "2026-10-13T15:45:08+01:00",
+      "publishedAt": "2026-10-13T15:45:08+01:00",
+      "tags": [
+        "Trade",
+        "Public sector",
+        "Finance",
+        "Digital identity",
+        "KYC",
+        "KYB"
+      ],
+      "links": {
+        "personalWallets": [
+          {
+            "refId": "igrant-data-wallet",
+            "labelRaw": "Data Wallet by iGrant.io",
+            "url": "https://igrant.io/datawallet",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "heidi-wallet",
+            "labelRaw": "Heidi Wallet App",
+            "url": "https://ubique.ch",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "credenco-wallet",
+            "labelRaw": "Credenco Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "personal"
+          },
+          {
+            "refId": "sphereon-wallet",
+            "labelRaw": "Sphereon Edge Wallet",
+            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
+            "source": "catalog",
+            "walletType": "personal"
+          }
+        ],
+        "businessWallets": [
+          {
+            "refId": "credenco-business-wallet",
+            "labelRaw": "Credenco Business Wallet",
+            "url": "https://www.credenco.com",
+            "source": "catalog",
+            "walletType": "organizational"
+          },
+          {
+            "refId": "sphereon-business-wallet",
+            "labelRaw": "Sphereon Business Wallet",
+            "url": "https://sphereon.com/solutions/sphereon-business-wallet/",
+            "source": "catalog",
+            "walletType": "organizational"
+          }
+        ],
+        "issuers": [
+          {
+            "refId": "issuer:fides:mijnoverheid-issuer:test",
+            "labelRaw": "MijnOverheid issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:fides:credential-issuer:test",
+            "labelRaw": "FIDES Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:credenco:kvk:test",
+            "labelRaw": "KVK Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "issuer:credenco:belastingdienst:test",
+            "labelRaw": "Belastingdienst Sandbox Issuer",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "credentials": [
+          {
+            "refId": "cred:fides:bri:sd-jwt-vc",
+            "labelRaw": "BRI Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:brp:sd-jwt-vc",
+            "labelRaw": "BRP Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:green-lane:sd-jwt-vc",
+            "labelRaw": "Green Lane Credential",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:company-roles:sd-jwt-vc",
+            "labelRaw": "Company Roles Attestation",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:fides:contact-details:sd-jwt-vc",
+            "labelRaw": "Contact Details",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "PID Attestation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "IBAN Attestation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "LPID Attestation",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          }
+        ],
+        "organizations": [
+          {
+            "refId": "org:bd",
+            "labelRaw": "Belastingdienst",
+            "url": "https://www.belastingdienst.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": null,
+            "labelRaw": "RIEC Amsterdam-Amstelland",
+            "url": null,
+            "source": "manual",
+            "walletType": null
+          },
+          {
+            "refId": "org:fides",
+            "labelRaw": "FIDES Labs",
+            "url": "https://fides.community",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:kvk",
+            "labelRaw": "Kamer van Koophandel",
+            "url": "https://www.kvk.nl",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "org:nvb",
+            "labelRaw": "Nederlandse Vereniging van Banken",
+            "url": "https://www.nvb.nl/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ],
+        "rps": [
+          {
+            "refId": "kvk-frontoffice-sandbox",
+            "labelRaw": "Kamer van Koophandel Frontoffice",
+            "url": "https://kvk.fides.community/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "mijnoverheid-sandbox",
+            "labelRaw": "MijnOverheid",
+            "url": "https://mijnoverheid.fides.community/",
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "hak-rein-vos-notarissen-sandbox",
+            "labelRaw": "Hak & Rein Vos Notarissen",
+            "url": "https://hrv.fides.community/",
+            "source": "catalog",
+            "walletType": null
+          }
+        ]
+      },
+      "interactionModes": [
+        "remote"
+      ],
+      "vcFormats": [
+        "sd_jwt_vc"
+      ],
+      "issuanceProtocols": [
+        "oid4vci"
+      ],
+      "presentationProtocols": [
+        "OpenID4VP"
+      ],
+      "interopProfiles": [
+        "DIIP v4",
+        "DIIP v5"
+      ],
+      "themes": [
+        "person_identity",
+        "organizational_identity"
+      ],
+      "imageUrls": [
+        "https://fides.community/app/uploads/2026/08/20251208-Poortwachters-Eindpresentatie.png",
+        "https://fides.community/app/uploads/2025/12/mijnoverheid-scaled.png"
+      ],
+      "imageUrl": "https://fides.community/app/uploads/2026/08/20251208-Poortwachters-Eindpresentatie.png",
+      "userJourney": "The entrepreneur voluntarily chooses the Green Lane when registering a sole proprietorship with KVK or incorporating a legal entity through a civil-law notary.\nVerified personal data is retrieved into a digital wallet, while any missing business information is added by the entrepreneur. The wallet shows what data is requested, why it is needed, who receives it and whether it is verified or self-declared.\nAfter consent, KVK or the notary receives and validates the data, while remaining responsible for the legal and risk-based assessment. Missing or conflicting information may require additional review.\nOnce approved, the business is registered and a digital Green Lane statement may be issued. The data and status must be kept up to date.",
+      "country": "NL"
+    },
     {
       "id": "verified-machine-safety-access-at-koning-willem-i-college-kw1c-6fShwI",
       "sector": "manufacturing",
@@ -6843,169 +7241,6 @@
       "country": "NL"
     },
     {
-      "id": "business-wallet-based-kyb-financial-onboarding-Rzqouv",
-      "sector": "finance",
-      "title": "Business Wallet-Based KYB & Financial Onboarding",
-      "summary": "A company representative opens a business bank account in an EU member state where the company is not registered, using verified credentials from an EU Business Wallet instead of uploaded documents. \n\nKYB today is manual, document-based and national: banks chase register extracts across jurisdictions, verify signing authority and ownership by hand, onboarding runs to days or weeks at high cost and drop-off, and forged documents remain a fraud vector. Here the founder presents a Legal Person Identification Data credential and a European Company Certificate, plus a PID or mandate proving authority to act. Issuers are national business registers and competent authorities such as PRH in Finland; the holder is the company through an authorised representative; the verifier is the bank or fintech; Hovi provides the issuance and verification layer; supervisors and EU trust lists anchor trust. \n\nThe wallet is the consent point, showing who is asking and for what, and releasing only approved attributes through selective disclosure. The result is same-day onboarding, register-sourced data, a stronger AML audit trail and one pattern that works across all 27 member states.",
-      "organizationName": "Hovi",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-20T22:05:43+01:00",
-      "publishedAt": "2026-08-20T08:08:57+01:00",
-      "tags": [
-        "EU Business Wallet",
-        "EUDI Wallet",
-        "eIDAS 2.0",
-        "KYB",
-        "KYC",
-        "AML",
-        "LPID",
-        "European Company Certificate",
-        "Verifiable Credentials",
-        "Digital Identity",
-        "Bank Account Opening",
-        "Cross-Border Onboarding",
-        "Financial Services",
-        "Fintech",
-        "OID4VP",
-        "SD-JWT VC",
-        "Selective Disclosure",
-        "Regtech",
-        "Trust Infrastructure",
-        "Onboarding Automation"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "hovi-wallet",
-            "labelRaw": "Hovi Wallet",
-            "url": "https://www.hovi.id/wallet",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "hovi-business-wallet",
-            "labelRaw": "Hovi Business Wallet",
-            "url": "https://www.hovi.id",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": null,
-            "labelRaw": "Kyckr",
-            "url": "https://kyckr.com",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "NGI Bank",
-            "url": "https://ngi.hovi.app",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "VREX",
-            "url": "https://vrex.hovi.app",
-            "source": "manual",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:fides:lpid:sd-jwt-vc",
-            "labelRaw": "LPID Attestation",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:webuild:eucc:sd-jwt-vc",
-            "labelRaw": "EU Company Certificate",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:kyckr",
-            "labelRaw": "Kyckr",
-            "url": "https://kyckr.com",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:hovi",
-            "labelRaw": "Hovi",
-            "url": "https://www.hovi.id/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": null,
-            "labelRaw": "VREX",
-            "url": "https://vrex.hovi.app",
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "NGI Bank",
-            "url": "https://ngi.hovi.app",
-            "source": "manual",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "ISO 18013-7",
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "EUDI Wallet ARF",
-        "HAIP v1"
-      ],
-      "themes": [
-        "person_identity",
-        "organizational_identity",
-        "compliance_reporting"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/Thumbnail-2.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/Thumbnail-2.png",
-      "videos": [
-        {
-          "url": "https://youtu.be/BvuMDnDXKrw",
-          "provider": "youtube"
-        }
-      ],
-      "video": {
-        "url": "https://youtu.be/BvuMDnDXKrw",
-        "provider": "youtube"
-      },
-      "moreInfoUrl": "https://businesswallet.hovi.app",
-      "userJourney": "1. The founder starts a business account application on the bank or fintech platform and selects \"verify with EU Business Wallet\" instead of uploading documents.\n\n2. The platform sends a presentation request through Hovi's verification layer, specifying the attributes required for KYB and AML.\n\n3. The request reaches the wallet. Delivery can be triggered in-session by QR or deep link, or out of band by email or SMS, and can be combined with national eID authentication such as FTN or BankID where required.\n\n4. The founder reviews the request in the wallet: who is asking, which attributes, for what purpose.\n\n5. On approval, the wallet presents the LPID and ECC credentials, plus the representative's PID or mandate, over OID4VP in SD-JWT VC or mdoc format with selective disclosure.\n\n6. The verification layer checks issuer signatures, credential validity and revocation status, and the issuer's presence on the EU trust list, then returns a structured, verified result to the platform.\n\n7. The platform completes KYB, screens the disclosed ownership data against AML requirements, and provisions the account. The verification result is retained as an audit record.",
-      "country": "FI"
-    },
-    {
       "id": "flow-a-seamless-digital-journey-for-bereaved-people-jxUG78",
       "sector": "digital",
       "title": "Flow! - A seamless digital journey for bereaved people",
@@ -10641,248 +10876,6 @@
       ],
       "imageUrl": "https://fides.community/app/uploads/2026/08/Presentatie1-1.jpg",
       "userJourney": "An employee signs in to the organisation's business wallet with their personal EUDI wallet; organisational credentials belong to the company, the access pass to the person.\nThe organisation identifies itself with a qualified attestation (QEAA) aligned with LPID/EBWOID formats: one identity, reusable across every chain.\nA machine-readable mandate credential proves the person or system acts on behalf of the organisation; differentiated per process, instantly revocable, verified at the moment of the transaction.\nThe submission is sealed machine-to-machine with a qualified electronic seal (QSeal, JAdES-LTA, eIDAS art. 35) via a qualified trust service provider, then delivered to the receiving public body through QERDS (ETSI TS 119 522) with a qualified timestamp.\nQERDS logs evidence events for submission, acceptance and delivery in a searchable audit trail, and the receiver acknowledges receipt. Both parties hold non-repudiable proof: the sender can prove it delivered on time and unaltered, the receiver what it received, registered mail, machine-to-machine.",
-      "country": "NL"
-    },
-    {
-      "id": "green-lane-verified-wallet-based-company-formation-and-registration-VUXbMJ",
-      "sector": "public_sector",
-      "title": "Green Lane Verified: Wallet-Based Company Formation and Registration",
-      "summary": "Green Lane is a voluntary digital route for registering a sole proprietorship with KVK or incorporating a legal entity, such as a BV, through a civil-law notary.\nEntrepreneurs retrieve verified identity and evidence data from authoritative sources into an eIDAS-compliant personal wallet and share only the data needed for a specific purpose. This reduces repeated document requests, manual checks and corrections, while giving entrepreneurs more control over their data.\nKVK and notaries remain responsible for all legal, professional and risk-based assessments and may request additional information. Green Lane does not guarantee approval, registration or trustworthiness. Its status only confirms that an agreed data set was verifiably supplied and met defined quality criteria. Verified business data may later be reused through a business wallet for KYC, onboarding and other business relationships.\n\nSubmitted on behalf of the Green Lane collaboration. Pre-pilot fase.",
-      "organizationName": "Kamer van Koophandel",
-      "productionDeployment": "no",
-      "status": "published",
-      "updatedAt": "2026-08-13T10:58:41+01:00",
-      "publishedAt": "2026-08-13T10:58:41+01:00",
-      "tags": [
-        "Trade",
-        "Public sector",
-        "Finance",
-        "Digital identity",
-        "KYC",
-        "KYB"
-      ],
-      "links": {
-        "personalWallets": [
-          {
-            "refId": "igrant-data-wallet",
-            "labelRaw": "Data Wallet by iGrant.io",
-            "url": "https://igrant.io/datawallet",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "heidi-wallet",
-            "labelRaw": "Heidi Wallet App",
-            "url": "https://ubique.ch",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "credenco-wallet",
-            "labelRaw": "Credenco Wallet",
-            "url": "https://www.credenco.com",
-            "source": "catalog",
-            "walletType": "personal"
-          },
-          {
-            "refId": "sphereon-wallet",
-            "labelRaw": "Sphereon Edge Wallet",
-            "url": "https://sphereon.com/eidas-2/sphereon-wallet/",
-            "source": "catalog",
-            "walletType": "personal"
-          }
-        ],
-        "businessWallets": [
-          {
-            "refId": "credenco-business-wallet",
-            "labelRaw": "Credenco Business Wallet",
-            "url": "https://www.credenco.com",
-            "source": "catalog",
-            "walletType": "organizational"
-          },
-          {
-            "refId": "sphereon-business-wallet",
-            "labelRaw": "Sphereon Business Wallet",
-            "url": "https://sphereon.com/solutions/sphereon-business-wallet/",
-            "source": "catalog",
-            "walletType": "organizational"
-          }
-        ],
-        "issuers": [
-          {
-            "refId": "issuer:fides:mijnoverheid-issuer:test",
-            "labelRaw": "MijnOverheid issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:fides:credential-issuer:test",
-            "labelRaw": "FIDES Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:credenco:kvk:test",
-            "labelRaw": "KVK Sandbox Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "issuer:credenco:belastingdienst:test",
-            "labelRaw": "Belastingdienst Sandbox Issuer",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "credentials": [
-          {
-            "refId": "cred:fides:bri:sd-jwt-vc",
-            "labelRaw": "BRI Attestation",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:fides:brp:sd-jwt-vc",
-            "labelRaw": "BRP Attestation",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:fides:pid:sd-jwt-vc",
-            "labelRaw": "PID Attestation",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:fides:green-lane:sd-jwt-vc",
-            "labelRaw": "Green Lane Credential",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:fides:company-roles:sd-jwt-vc",
-            "labelRaw": "Company Roles Attestation",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:fides:iban:sd-jwt-vc",
-            "labelRaw": "IBAN Attestation",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:fides:lpid:sd-jwt-vc",
-            "labelRaw": "LPID Attestation",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:fides:contact-details:sd-jwt-vc",
-            "labelRaw": "Contact Details",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "organizations": [
-          {
-            "refId": "org:bd",
-            "labelRaw": "Belastingdienst",
-            "url": "https://www.belastingdienst.nl",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": null,
-            "labelRaw": "RIEC Amsterdam-Amstelland",
-            "url": null,
-            "source": "manual",
-            "walletType": null
-          },
-          {
-            "refId": "org:fides",
-            "labelRaw": "FIDES Labs",
-            "url": "https://fides.community",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:kvk",
-            "labelRaw": "Kamer van Koophandel",
-            "url": "https://www.kvk.nl",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "org:nvb",
-            "labelRaw": "Nederlandse Vereniging van Banken",
-            "url": "https://www.nvb.nl/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ],
-        "rps": [
-          {
-            "refId": "kvk-frontoffice-sandbox",
-            "labelRaw": "Kamer van Koophandel Frontoffice",
-            "url": "https://kvk.fides.community/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "mijnoverheid-sandbox",
-            "labelRaw": "MijnOverheid",
-            "url": "https://mijnoverheid.fides.community/",
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "hak-rein-vos-notarissen-sandbox",
-            "labelRaw": "Hak & Rein Vos Notarissen",
-            "url": "https://hrv.fides.community/",
-            "source": "catalog",
-            "walletType": null
-          }
-        ]
-      },
-      "interactionModes": [
-        "remote"
-      ],
-      "vcFormats": [
-        "sd_jwt_vc"
-      ],
-      "issuanceProtocols": [
-        "oid4vci"
-      ],
-      "presentationProtocols": [
-        "OpenID4VP"
-      ],
-      "interopProfiles": [
-        "DIIP v4",
-        "DIIP v5"
-      ],
-      "themes": [
-        "person_identity",
-        "organizational_identity"
-      ],
-      "imageUrls": [
-        "https://fides.community/app/uploads/2026/08/20251208-Poortwachters-Eindpresentatie.png",
-        "https://fides.community/app/uploads/2025/12/mijnoverheid-scaled.png"
-      ],
-      "imageUrl": "https://fides.community/app/uploads/2026/08/20251208-Poortwachters-Eindpresentatie.png",
-      "userJourney": "The entrepreneur voluntarily chooses the Green Lane when registering a sole proprietorship with KVK or incorporating a legal entity through a civil-law notary.\nVerified personal data is retrieved into a digital wallet, while any missing business information is added by the entrepreneur. The wallet shows what data is requested, why it is needed, who receives it and whether it is verified or self-declared.\nAfter consent, KVK or the notary receives and validates the data, while remaining responsible for the legal and risk-based assessment. Missing or conflicting information may require additional review.\nOnce approved, the business is registered and a digital Green Lane statement may be issued. The data and status must be kept up to date.",
       "country": "NL"
     },
     {
