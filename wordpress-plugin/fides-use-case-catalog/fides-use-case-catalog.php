@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FIDES Use Case Catalog
  * Description: Submission form and catalog renderer for the FIDES Use Case Catalog.
- * Version: 0.21.9
+ * Version: 0.21.10
  * Author: FIDES Labs BV
  * License: Apache-2.0
  */
@@ -11,7 +11,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define('FIDES_USE_CASE_CATALOG_VERSION', '0.21.9');
+define('FIDES_USE_CASE_CATALOG_VERSION', '0.21.10');
 /** Bump this when share rewrite rules change so existing sites flush once. */
 define('FIDES_USE_CASE_CATALOG_SHARE_REWRITE_VERSION', '0.20.30');
 /** Admin list page size for Tools → Use Case Submissions. */
@@ -538,6 +538,26 @@ function fides_use_case_catalog_is_local_site(): bool {
 }
 
 /**
+ * Credential catalog aggregated.json for alias resolution of credential links.
+ * On local sites prefer the sibling plugin so seed-merge aliases resolve before GitHub publish.
+ */
+function fides_use_case_catalog_resolve_credential_aggregated_url(): string {
+    $github = 'https://raw.githubusercontent.com/FIDEScommunity/fides-credential-catalog/main/data/aggregated.json';
+    $opt    = trim((string) get_option('fides_use_case_catalog_credential_aggregated_url', ''));
+    if ($opt !== '') {
+        return esc_url_raw($opt);
+    }
+    if (fides_use_case_catalog_is_local_site()) {
+        $cred_main = WP_PLUGIN_DIR . '/fides-credential-catalog/fides-credential-catalog.php';
+        $cred_json = WP_PLUGIN_DIR . '/fides-credential-catalog/data/aggregated.json';
+        if (file_exists($cred_json) && file_exists($cred_main)) {
+            return plugins_url('data/aggregated.json', $cred_main);
+        }
+    }
+    return $github;
+}
+
+/**
  * @return array<string, string>
  */
 function fides_use_case_catalog_catalog_urls(): array {
@@ -567,6 +587,9 @@ function fides_use_case_catalog_catalog_urls(): array {
         'organizationCatalogUrl' => $use_local
             ? $base . '/organizations/'
             : 'https://fides.community/organizations/',
+        'organizationDetailUrl' => $use_local
+            ? $base . '/organization/'
+            : 'https://fides.community/organization/',
         'ecosystemExplorerUrl' => get_option(
             'fides_use_case_catalog_ecosystem_explorer_url',
             'https://fides.community/topics/ecosystem-explorer/'
@@ -689,7 +712,8 @@ function fides_use_case_catalog_lookup_sources(): array {
             'personal-wallet' => $wallet_source,
             'business-wallet' => $wallet_source,
             'issuer' => 'https://raw.githubusercontent.com/FIDEScommunity/fides-issuer-catalog/main/data/aggregated.json',
-            'credential' => 'https://raw.githubusercontent.com/FIDEScommunity/fides-credential-catalog/main/data/aggregated.json',
+            // Prefer local sibling credential aggregated.json on *.local (seed-merge type ids).
+            'credential' => fides_use_case_catalog_resolve_credential_aggregated_url(),
             'organization' => 'https://raw.githubusercontent.com/FIDEScommunity/fides-organization-catalog/main/data/aggregated.json',
             'rp' => 'https://raw.githubusercontent.com/FIDEScommunity/fides-rp-catalog/main/data/aggregated.json',
         )
@@ -2171,6 +2195,7 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             // (org-editable via pull request). REST /catalog (apiBase) is the
             // same-origin fallback for local/empty/unreachable situations.
             'aggregatedUrl' => esc_url_raw(fides_use_case_catalog_aggregated_url()),
+            'credentialAggregatedDataUrl' => esc_url_raw(fides_use_case_catalog_resolve_credential_aggregated_url()),
             'cacheDataUrl' => rest_url('fides-catalog/v1/aggregated/usecase'),
             'taxonomy' => fides_use_case_catalog_taxonomy_options(),
             'columns' => $columns,
