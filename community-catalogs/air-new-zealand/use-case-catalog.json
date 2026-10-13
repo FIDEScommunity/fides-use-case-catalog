@@ -78,14 +78,14 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iata:boarding-pass",
+            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
             "labelRaw": "Boarding Pass",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iata:booking-order",
+            "refId": "cred:iata:booking-order-mdoc:mdoc",
             "labelRaw": "Booking Order",
             "url": null,
             "source": "catalog",

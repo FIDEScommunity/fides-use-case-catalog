@@ -246,8 +246,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null

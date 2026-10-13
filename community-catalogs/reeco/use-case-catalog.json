@@ -52,7 +52,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dpp",
+            "refId": "cred:uncefact:dpp:vcdm-2-0",
             "labelRaw": "Digital Product Passport",
             "url": null,
             "source": "catalog",

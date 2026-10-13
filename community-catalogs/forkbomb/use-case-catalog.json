@@ -12,7 +12,7 @@
       "organizationName": "Forkbomb",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-09-21T18:11:44+01:00",
+      "updatedAt": "2026-10-13T15:40:00+01:00",
       "publishedAt": "2026-09-21T18:11:44+01:00",
       "tags": [
         "EUDI Wallet",
@@ -242,36 +242,29 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:pid",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:pid:sd-jwt-vc",
             "labelRaw": "PID (WE BUILD SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:ewc:pid-eudi",
-            "labelRaw": "PID EUDI",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:iso:photoid",
-            "labelRaw": "Photo ID",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:ewc:photo-id",
-            "labelRaw": "Photo ID",
+            "refId": "cred:iso:photoid-mdoc:mdoc",
+            "labelRaw": "Photo ID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null

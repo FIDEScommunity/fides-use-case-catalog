@@ -52,8 +52,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:diploma",
-            "labelRaw": "Diploma",
+            "refId": "cred:eu:diploma-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "Diploma (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null

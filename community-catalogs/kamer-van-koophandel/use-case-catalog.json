@@ -56,8 +56,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:ehic",
-            "labelRaw": "EHIC",
+            "refId": "cred:eu:ehic-sd-jwt-vc:sd-jwt-vc",
+            "labelRaw": "EHIC (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -233,56 +233,56 @@
         ],
         "credentials": [
           {
-            "refId": "cred:fides:bri",
+            "refId": "cred:fides:bri:sd-jwt-vc",
             "labelRaw": "BRI Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:brp",
+            "refId": "cred:fides:brp:sd-jwt-vc",
             "labelRaw": "BRP Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:pid",
+            "refId": "cred:fides:pid:sd-jwt-vc",
             "labelRaw": "PID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:green-lane",
+            "refId": "cred:fides:green-lane:sd-jwt-vc",
             "labelRaw": "Green Lane Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:company-roles",
+            "refId": "cred:fides:company-roles:sd-jwt-vc",
             "labelRaw": "Company Roles Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:iban",
+            "refId": "cred:fides:iban:sd-jwt-vc",
             "labelRaw": "IBAN Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:lpid",
+            "refId": "cred:fides:lpid:sd-jwt-vc",
             "labelRaw": "LPID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:contact-details",
+            "refId": "cred:fides:contact-details:sd-jwt-vc",
             "labelRaw": "Contact Details",
             "url": null,
             "source": "catalog",

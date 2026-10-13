@@ -43,7 +43,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:swiyu:betaid-sdjwt",
+            "refId": "cred:swiyu:betaid-sdjwt:sd-jwt-vc",
             "labelRaw": "Beta-ID",
             "url": null,
             "source": "catalog",

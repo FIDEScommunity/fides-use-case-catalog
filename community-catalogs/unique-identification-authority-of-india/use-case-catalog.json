@@ -152,7 +152,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dia",
+            "refId": "cred:uncefact:dia:vcdm-2-0",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",
@@ -352,7 +352,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar",
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",
@@ -451,7 +451,7 @@
         "issuers": [],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar",
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",

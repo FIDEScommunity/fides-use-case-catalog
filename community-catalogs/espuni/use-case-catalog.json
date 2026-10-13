@@ -55,8 +55,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:age-verification",
-            "labelRaw": "Age Verification",
+            "refId": "cred:eu:age-verification-mdoc:mdoc",
+            "labelRaw": "Age Verification (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null

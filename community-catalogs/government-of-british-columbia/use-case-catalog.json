@@ -117,7 +117,7 @@
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dia",
+            "refId": "cred:uncefact:dia:vcdm-2-0",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",

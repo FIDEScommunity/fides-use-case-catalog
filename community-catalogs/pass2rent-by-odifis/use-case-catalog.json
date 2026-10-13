@@ -62,15 +62,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:mdl",
-            "labelRaw": "mDL",
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null

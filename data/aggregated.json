@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "catalogType": "use-case-catalog",
-  "lastUpdated": "2026-10-13T07:35:10.058Z",
+  "lastUpdated": "2026-10-13T14:40:19.404Z",
   "generator": "fides-use-case-catalog crawler",
   "count": 101,
   "useCases": [
@@ -13,7 +13,7 @@
       "organizationName": "Forkbomb",
       "productionDeployment": "yes",
       "status": "published",
-      "updatedAt": "2026-09-21T18:11:44+01:00",
+      "updatedAt": "2026-10-13T15:40:00+01:00",
       "publishedAt": "2026-09-21T18:11:44+01:00",
       "tags": [
         "EUDI Wallet",
@@ -243,36 +243,29 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:pid",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
+            "url": null,
+            "source": "catalog",
+            "walletType": null
+          },
+          {
+            "refId": "cred:webuild:pid:sd-jwt-vc",
             "labelRaw": "PID (WE BUILD SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:ewc:pid-eudi",
-            "labelRaw": "PID EUDI",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:iso:photoid",
-            "labelRaw": "Photo ID",
-            "url": null,
-            "source": "catalog",
-            "walletType": null
-          },
-          {
-            "refId": "cred:ewc:photo-id",
-            "labelRaw": "Photo ID",
+            "refId": "cred:iso:photoid-mdoc:mdoc",
+            "labelRaw": "Photo ID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -815,7 +808,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dpp",
+            "refId": "cred:uncefact:dpp:vcdm-2-0",
             "labelRaw": "Digital Product Passport",
             "url": null,
             "source": "catalog",
@@ -1029,7 +1022,7 @@
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dia",
+            "refId": "cred:uncefact:dia:vcdm-2-0",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",
@@ -1337,8 +1330,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -1351,28 +1344,28 @@
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ebw-oid",
+            "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
             "labelRaw": "EBW Owner Identification Data (EBW-OID)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:eucc",
+            "refId": "cred:webuild:eucc:sd-jwt-vc",
             "labelRaw": "EU Company Certificate",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:vat-id",
+            "refId": "cred:webuild:vat-id:sd-jwt-vc",
             "labelRaw": "EUDI VAT ID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:einvoice",
+            "refId": "cred:webuild:einvoice:sd-jwt-vc",
             "labelRaw": "eInvoice",
             "url": null,
             "source": "catalog",
@@ -1393,49 +1386,49 @@
             "walletType": null
           },
           {
-            "refId": "cred:webuild:company-info",
+            "refId": "cred:webuild:company-info:sd-jwt-vc",
             "labelRaw": "Company Info",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:contact-person",
+            "refId": "cred:webuild:contact-person:sd-jwt-vc",
             "labelRaw": "Contact Person",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:payment-terms",
+            "refId": "cred:webuild:payment-terms:sd-jwt-vc",
             "labelRaw": "Payment Terms",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ownership",
+            "refId": "cred:webuild:ownership:sd-jwt-vc",
             "labelRaw": "Ownership",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:authorised-signatories",
+            "refId": "cred:webuild:authorised-signatories:sd-jwt-vc",
             "labelRaw": "Authorised Signatories",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:iban-ov",
+            "refId": "cred:webuild:iban-ov:sd-jwt-vc",
             "labelRaw": "IBAN Ownership Verification",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ubo",
+            "refId": "cred:webuild:ubo:sd-jwt-vc",
             "labelRaw": "Ultimate Beneficial Owner",
             "url": null,
             "source": "catalog",
@@ -1733,14 +1726,14 @@
         ],
         "credentials": [
           {
-            "refId": "cred:igrantio:payment-account",
+            "refId": "cred:igrantio:payment-account:sd-jwt-vc",
             "labelRaw": "Payment Account",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:igrantio:payment-card",
+            "refId": "cred:igrantio:payment-card:sd-jwt-vc",
             "labelRaw": "Payment Card",
             "url": null,
             "source": "catalog",
@@ -1754,28 +1747,28 @@
             "walletType": null
           },
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:vat-id",
+            "refId": "cred:webuild:vat-id:sd-jwt-vc",
             "labelRaw": "EUDI VAT ID",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ebw-oid",
+            "refId": "cred:webuild:ebw-oid:sd-jwt-vc",
             "labelRaw": "EBW Owner Identification Data (EBW-OID)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:ereceipt",
+            "refId": "cred:webuild:ereceipt:sd-jwt-vc",
             "labelRaw": "eReceipt",
             "url": null,
             "source": "catalog",
@@ -2095,7 +2088,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:gleif:legal-entity-vlei",
+            "refId": "cred:gleif:legal-entity-vlei:acdc",
             "labelRaw": "vLEI - Legal Entity",
             "url": null,
             "source": "catalog",
@@ -2384,8 +2377,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:diploma",
-            "labelRaw": "Diploma",
+            "refId": "cred:eu:diploma-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "Diploma (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -2732,15 +2725,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:gleif:legal-entity-vlei",
+            "refId": "cred:gleif:legal-entity-vlei:acdc",
             "labelRaw": "vLEI - Legal Entity",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:por",
-            "labelRaw": "Power Of Representation",
+            "refId": "cred:eu:por-sd-jwt-vc:sd-jwt-vc",
+            "labelRaw": "Power Of Representation (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -3305,14 +3298,14 @@
             "walletType": null
           },
           {
-            "refId": "cred:eduwallet:academic-base",
+            "refId": "cred:eduwallet:academic-base:sd-jwt-vc",
             "labelRaw": "Academic Base Credential (ABC)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:upper-secondary-education",
+            "refId": "cred:fides:upper-secondary-education:sd-jwt-vc",
             "labelRaw": "Upper Secondary Education Certificate",
             "url": null,
             "source": "catalog",
@@ -3533,7 +3526,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dia",
+            "refId": "cred:uncefact:dia:vcdm-2-0",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",
@@ -4026,28 +4019,28 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-badge",
+            "refId": "cred:verana:ecs-badge:vcdm-2-0",
             "labelRaw": "ECS Badge Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-organization",
+            "refId": "cred:verana:ecs-organization:vcdm-2-0",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service",
+            "refId": "cred:verana:ecs-service:vcdm-2-0",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:authorized-repairer",
+            "refId": "cred:verana:authorized-repairer:vcdm-2-0",
             "labelRaw": "Authorized Repairer (Vesta)",
             "url": null,
             "source": "catalog",
@@ -4263,28 +4256,28 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization",
+            "refId": "cred:verana:ecs-organization:vcdm-2-0",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service",
+            "refId": "cred:verana:ecs-service:vcdm-2-0",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:cexa-kyc",
+            "refId": "cred:verana:cexa-kyc:sd-jwt-vc",
             "labelRaw": "CEXA-Kyc",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:cexa-verified-counterparty",
+            "refId": "cred:verana:cexa-verified-counterparty:vcdm-2-0",
             "labelRaw": "CEXA-VerifiedCounterparty",
             "url": null,
             "source": "catalog",
@@ -4509,21 +4502,21 @@
         ],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization",
+            "refId": "cred:verana:ecs-organization:vcdm-2-0",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service",
+            "refId": "cred:verana:ecs-service:vcdm-2-0",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:verandia-citizen-id",
+            "refId": "cred:verana:verandia-citizen-id:sd-jwt-vc",
             "labelRaw": "Verandia Citizen ID",
             "url": null,
             "source": "catalog",
@@ -5517,15 +5510,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iso:mdl",
-            "labelRaw": "mDL",
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:photoid",
-            "labelRaw": "Photo ID",
+            "refId": "cred:iso:photoid-mdoc:mdoc",
+            "labelRaw": "Photo ID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -6396,29 +6389,29 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iso:mdl",
-            "labelRaw": "mDL",
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:age-verification",
-            "labelRaw": "Age Verification",
+            "refId": "cred:eu:age-verification-mdoc:mdoc",
+            "labelRaw": "Age Verification (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:photoid",
-            "labelRaw": "Photo ID",
+            "refId": "cred:iso:photoid-mdoc:mdoc",
+            "labelRaw": "Photo ID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:mvrc",
-            "labelRaw": "Vehicle Registration Certificate",
+            "refId": "cred:iso:mvrc-mdoc:mdoc",
+            "labelRaw": "Vehicle Registration Certificate (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -6925,14 +6918,14 @@
         ],
         "credentials": [
           {
-            "refId": "cred:fides:lpid",
+            "refId": "cred:fides:lpid:sd-jwt-vc",
             "labelRaw": "LPID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:webuild:eucc",
+            "refId": "cred:webuild:eucc:sd-jwt-vc",
             "labelRaw": "EU Company Certificate",
             "url": null,
             "source": "catalog",
@@ -7185,8 +7178,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:age-verification",
-            "labelRaw": "Age Verification",
+            "refId": "cred:eu:age-verification-mdoc:mdoc",
+            "labelRaw": "Age Verification (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -7593,35 +7586,35 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uncefact:dpp",
+            "refId": "cred:uncefact:dpp:vcdm-2-0",
             "labelRaw": "Digital Product Passport",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dfr",
+            "refId": "cred:uncefact:dfr:vcdm-2-0",
             "labelRaw": "Digital Facility Record",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dte",
+            "refId": "cred:uncefact:dte:vcdm-2-0",
             "labelRaw": "Digital Traceability Event",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dia",
+            "refId": "cred:uncefact:dia:vcdm-2-0",
             "labelRaw": "Digital Identity Anchor",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:uncefact:dcc",
+            "refId": "cred:uncefact:dcc:vcdm-2-0",
             "labelRaw": "Conformity Credential",
             "url": null,
             "source": "catalog",
@@ -8335,15 +8328,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar",
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iata:boarding-pass",
-            "labelRaw": "Boarding Pass",
+            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
+            "labelRaw": "Boarding Pass (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -8817,8 +8810,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:ehic",
-            "labelRaw": "EHIC",
+            "refId": "cred:eu:ehic-sd-jwt-vc:sd-jwt-vc",
+            "labelRaw": "EHIC (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -8938,8 +8931,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -9024,8 +9017,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -9110,8 +9103,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -10035,8 +10028,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -10117,14 +10110,14 @@
         "issuers": [],
         "credentials": [
           {
-            "refId": "cred:verana:ecs-organization",
+            "refId": "cred:verana:ecs-organization:vcdm-2-0",
             "labelRaw": "ECS Organization Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:verana:ecs-service",
+            "refId": "cred:verana:ecs-service:vcdm-2-0",
             "labelRaw": "ECS Service Credential",
             "url": null,
             "source": "catalog",
@@ -10747,56 +10740,56 @@
         ],
         "credentials": [
           {
-            "refId": "cred:fides:bri",
+            "refId": "cred:fides:bri:sd-jwt-vc",
             "labelRaw": "BRI Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:brp",
+            "refId": "cred:fides:brp:sd-jwt-vc",
             "labelRaw": "BRP Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:pid",
+            "refId": "cred:fides:pid:sd-jwt-vc",
             "labelRaw": "PID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:green-lane",
+            "refId": "cred:fides:green-lane:sd-jwt-vc",
             "labelRaw": "Green Lane Credential",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:company-roles",
+            "refId": "cred:fides:company-roles:sd-jwt-vc",
             "labelRaw": "Company Roles Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:iban",
+            "refId": "cred:fides:iban:sd-jwt-vc",
             "labelRaw": "IBAN Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:lpid",
+            "refId": "cred:fides:lpid:sd-jwt-vc",
             "labelRaw": "LPID Attestation",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:fides:contact-details",
+            "refId": "cred:fides:contact-details:sd-jwt-vc",
             "labelRaw": "Contact Details",
             "url": null,
             "source": "catalog",
@@ -11763,15 +11756,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:loyalty",
-            "labelRaw": "Loyalty",
+            "refId": "cred:eu:loyalty-mdoc:mdoc",
+            "labelRaw": "Loyalty (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -11891,8 +11884,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -12023,15 +12016,15 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-mdoc:mdoc",
+            "labelRaw": "PID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:mdl",
-            "labelRaw": "mDL",
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -12142,7 +12135,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar",
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",
@@ -12241,7 +12234,7 @@
         "issuers": [],
         "credentials": [
           {
-            "refId": "cred:uidai:aadhaar",
+            "refId": "cred:uidai:aadhaar-mdoc:mdoc",
             "labelRaw": "Aadhaar Verifiable Credential",
             "url": null,
             "source": "catalog",
@@ -12615,8 +12608,8 @@
         ],
         "credentials": [
           {
-            "refId": "cred:eu:pid",
-            "labelRaw": "PID",
+            "refId": "cred:eu:pid-vc-sd-jwt:sd-jwt-vc",
+            "labelRaw": "PID (SD-JWT VC)",
             "url": null,
             "source": "catalog",
             "walletType": null
@@ -12833,7 +12826,7 @@
         ],
         "credentials": [
           {
-            "refId": "cred:swiyu:betaid-sdjwt",
+            "refId": "cred:swiyu:betaid-sdjwt:sd-jwt-vc",
             "labelRaw": "Beta-ID",
             "url": null,
             "source": "catalog",
@@ -12955,14 +12948,14 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iata:boarding-pass",
+            "refId": "cred:iata:boarding-pass-mdoc:mdoc",
             "labelRaw": "Boarding Pass",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iata:booking-order",
+            "refId": "cred:iata:booking-order-mdoc:mdoc",
             "labelRaw": "Booking Order",
             "url": null,
             "source": "catalog",

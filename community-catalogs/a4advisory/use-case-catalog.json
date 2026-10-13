@@ -206,29 +206,29 @@
         ],
         "credentials": [
           {
-            "refId": "cred:iso:mdl",
-            "labelRaw": "mDL",
+            "refId": "cred:iso:mdl-mdoc:mdoc",
+            "labelRaw": "mDL (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:eu:age-verification",
-            "labelRaw": "Age Verification",
+            "refId": "cred:eu:age-verification-mdoc:mdoc",
+            "labelRaw": "Age Verification (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:photoid",
-            "labelRaw": "Photo ID",
+            "refId": "cred:iso:photoid-mdoc:mdoc",
+            "labelRaw": "Photo ID (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
           },
           {
-            "refId": "cred:iso:mvrc",
-            "labelRaw": "Vehicle Registration Certificate",
+            "refId": "cred:iso:mvrc-mdoc:mdoc",
+            "labelRaw": "Vehicle Registration Certificate (MSO Mdoc)",
             "url": null,
             "source": "catalog",
             "walletType": null
