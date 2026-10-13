@@ -1,7 +1,7 @@
 {
     "schemaVersion": "1.0.0",
     "catalogType": "use-case-catalog",
-    "generatedAt": "2026-10-13T14:40:00+00:00",
+    "generatedAt": "2026-10-13T14:44:52+00:00",
     "organizations": [
         {
             "orgSlug": "2060-io",
@@ -10546,8 +10546,8 @@
                     "organizationName": "Sphereon",
                     "productionDeployment": "yes",
                     "status": "published",
-                    "updatedAt": "2026-08-26T16:18:05+01:00",
-                    "publishedAt": "2026-08-26T16:18:05+01:00",
+                    "updatedAt": "2026-10-13T15:44:52+01:00",
+                    "publishedAt": "2026-10-13T15:44:52+01:00",
                     "tags": [
                         "machine safety",
                         "physical access control",
@@ -10615,10 +10615,10 @@
                                 "walletType": null
                             },
                             {
-                                "refId": "cred:fides:upper-secondary-education:sd-jwt-vc",
+                                "refId": null,
                                 "labelRaw": "Upper Secondary Education Certificate",
                                 "url": null,
-                                "source": "catalog",
+                                "source": "manual",
                                 "walletType": null
                             }
                         ],
