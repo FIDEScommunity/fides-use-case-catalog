@@ -188,6 +188,9 @@
     showSearch: true,
     columns: normalizeColumns(root.dataset.columns || config.columns)
   };
+  // design="pilot": FIDES design-system overview (shared FidesDS.card rows).
+  const DESIGN_PILOT = root.dataset.design === "pilot" && !!(window.FidesDS && typeof window.FidesDS.card === "function");
+  const DETAIL_URL = String(root.dataset.detailUrl || "").trim();
   const requestedThemeCode = new URLSearchParams(window.location.search).get("theme") || "";
   let activeThemeCode = resolveThemeFilterCode(requestedThemeCode);
   const LIST_BREAKPOINT = 1024;
@@ -205,6 +208,7 @@
   let listingPage = listingPageFromLocation();
   let mobileFiltersController = null;
   function getMobileFilters() {
+    if (DESIGN_PILOT) return null;
     if (mobileFiltersController) return mobileFiltersController;
     if (!window.FidesCatalogUI || typeof window.FidesCatalogUI.createMobileFiltersController !== "function") {
       return null;
@@ -3059,6 +3063,7 @@
   }
 
   function renderCards(items) {
+    if (DESIGN_PILOT) return renderPilotResults(items);
     const mode = effectiveView();
     if (items.length === 0) {
       return `
@@ -3076,6 +3081,10 @@
   }
 
   function render() {
+    if (DESIGN_PILOT) {
+      renderPilot();
+      return;
+    }
     const wasOpen = getMobileFilters()?.captureOpenState() ?? false;
     const filtered = getFilteredUseCases();
     const visible = visibleSlice(filtered);
@@ -3235,8 +3244,401 @@
 
     const searchClear = root.querySelector("#fides-search-clear");
     if (searchClear) searchClear.classList.toggle("hidden", !filters.search);
+    if (DESIGN_PILOT) updatePilotChrome(filtered);
     bindUseCaseCardEvents();
     bindPaginationLinks();
+  }
+
+  /* ---------- Design pilot overview (FIDES design system) ---------- */
+
+  const PILOT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const PILOT_MORE_FILTER_KEYS = ["awardRecognition", ...TAXONOMY_FILTER_GROUPS.map((group) => group.key)];
+  const PILOT_COMPACT_BREAKPOINT = 600;
+  let pilotEventsBound = false;
+
+  function pilotStatusLabel(item) {
+    const value = normalizeProductionDeployment(item.productionDeployment || "");
+    if (value === "yes") return "In production";
+    if (value === "no") return "Not in production";
+    return "";
+  }
+
+  function pilotUpdatedDate(item) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(item.updatedAt || ""));
+    if (!match) return "";
+    const month = parseInt(match[2], 10);
+    if (month < 1 || month > 12) return "";
+    return `${parseInt(match[3], 10)} ${PILOT_MONTHS[month - 1]} ${match[1]}`;
+  }
+
+  function pilotExcerpt(text, max = 220) {
+    const trimmed = String(text || "").trim();
+    if (!trimmed) return "";
+    const first = trimmed.split(/\n\s*\n/)[0].replace(/\s+/g, " ").trim();
+    if (first.length <= max) return first;
+    let cut = first.slice(0, max);
+    const space = cut.lastIndexOf(" ");
+    if (space !== -1 && space > max * 0.6) cut = cut.slice(0, space);
+    return cut.replace(/[\s,;:.\-–—]+$/u, "") + "…";
+  }
+
+  function pilotDetailHref(id) {
+    if (DETAIL_URL) return `${DETAIL_URL}${DETAIL_URL.includes("?") ? "&" : "?"}usecase=${encodeURIComponent(id)}`;
+    return `${SHARE_PATH}${encodeURIComponent(id)}/`;
+  }
+
+  /** Mirrors Fides_Use_Case_Design::card_props() for the row variant. */
+  function useCaseCardProps(item) {
+    const id = String(item.id || "");
+    const title = String(item.title || id);
+    const owner = String(item.organizationName || "").trim();
+    const updated = pilotUpdatedDate(item);
+    const sector = sectorLabel(item);
+    const country = countryLabel(item);
+    return {
+      variant: "row",
+      href: pilotDetailHref(id),
+      title,
+      image_url: deriveCardImage(item),
+      image_alt: "",
+      fallback_label: owner || title,
+      cta_label: "Read use case →",
+      data: { "use-case-id": id },
+      kicker: [sector, country].filter((value) => value && value !== "—").join(" · "),
+      summary: pilotExcerpt(item.summary),
+      owner,
+      status: pilotStatusLabel(item),
+      meta: updated ? `Updated ${updated}` : ""
+    };
+  }
+
+  function renderPilotResults(items) {
+    if (!items.length) {
+      return `<div class="fides-uc-pilot__empty">
+        <p>No use cases in the current FIDES catalog for this selection.</p>
+        <button type="button" class="fides-ds-text-button" data-pilot-reset>Clear filters and search</button>
+      </div>`;
+    }
+    return `<ul class="fides-ds-cards fides-uc-pilot__list">${items
+      .map((item) => `<li>${window.FidesDS.card(useCaseCardProps(item))}</li>`)
+      .join("")}</ul>`;
+  }
+
+  function pilotFilterLabel(key, value) {
+    if (key === "sector") return SECTOR_LABELS[value] || prettifyKey(value);
+    if (key === "country") return countryLabel({ country: value });
+    if (key === "productionDeployment") return value === "yes" ? "In production" : value === "no" ? "Not in production" : value;
+    if (key === "awardRecognition") return value === "winner" ? "Award winners" : "All finalists";
+    const group = TAXONOMY_FILTER_GROUPS.find((entry) => entry.key === key);
+    return group ? group.labels[value] || prettifyKey(value) : value;
+  }
+
+  function pilotFilterOptions(key) {
+    if (key === "sector") {
+      return Object.keys(SECTOR_LABELS)
+        .filter((value) => (filterFacets?.sector?.[value] || 0) > 0)
+        .sort((a, b) => SECTOR_LABELS[a].localeCompare(SECTOR_LABELS[b], "en", { sensitivity: "base" }));
+    }
+    if (key === "country") {
+      return Object.keys(filterFacets?.country || {})
+        .filter((value) => (filterFacets?.country?.[value] || 0) > 0)
+        .sort((a, b) => countryLabel({ country: a }).localeCompare(countryLabel({ country: b }), "en", { sensitivity: "base" }));
+    }
+    if (key === "productionDeployment") return PRODUCTION_DEPLOYMENT_OPTIONS.slice().sort().reverse();
+    if (key === "awardRecognition") return (filterFacets?.awardRecognition?.finalist || 0) > 0 ? ["winner", "finalist"] : [];
+    const group = TAXONOMY_FILTER_GROUPS.find((entry) => entry.key === key);
+    return group ? Object.keys(group.labels).filter((value) => (filterFacets?.[key]?.[value] || 0) > 0) : [];
+  }
+
+  function renderPilotOptions(key) {
+    return pilotFilterOptions(key)
+      .map((value) => {
+        const checked = (filters[key] || []).includes(value) ? "checked" : "";
+        const count = filterFacets?.[key]?.[value] || 0;
+        return `<label class="fides-uc-pilot__option">
+          <input type="checkbox" data-filter-group="${escapeHtml(key)}" value="${escapeHtml(value)}" ${checked}>
+          <span class="fides-uc-pilot__option-label">${escapeHtml(pilotFilterLabel(key, value))}</span>
+          <span class="fides-uc-pilot__option-count">${count}</span>
+        </label>`;
+      })
+      .join("");
+  }
+
+  function pilotSummaryText(keys, allLabel) {
+    const selected = keys.flatMap((key) => (filters[key] || []).map((value) => pilotFilterLabel(key, value)));
+    if (selected.length === 0) return allLabel;
+    if (selected.length === 1) return selected[0];
+    return `${selected.length} selected`;
+  }
+
+  function renderPilotDropdown(id, label, allLabel, keys, bodyHtml) {
+    if (!bodyHtml.trim()) return "";
+    return `<details class="fides-uc-pilot__dropdown" data-pilot-dropdown="${escapeHtml(id)}" data-pilot-keys="${escapeHtml(keys.join(","))}">
+      <summary class="fides-uc-pilot__dropdown-summary">
+        <span class="fides-uc-pilot__dropdown-label">${escapeHtml(label)}</span>
+        <span class="fides-uc-pilot__dropdown-value" data-pilot-summary data-pilot-all="${escapeHtml(allLabel)}">${escapeHtml(pilotSummaryText(keys, allLabel))}</span>
+        <span class="fides-uc-pilot__dropdown-icon" aria-hidden="true">${icons.chevronDown}</span>
+      </summary>
+      <div class="fides-uc-pilot__dropdown-panel">
+        <fieldset><legend class="fides-ds-visually-hidden">${escapeHtml(label)}</legend>${bodyHtml}</fieldset>
+      </div>
+    </details>`;
+  }
+
+  function renderPilotMoreFilters() {
+    const groups = PILOT_MORE_FILTER_KEYS.map((key) => {
+      const options = renderPilotOptions(key);
+      if (!options) return "";
+      const title = key === "awardRecognition"
+        ? "Awards"
+        : (TAXONOMY_FILTER_GROUPS.find((group) => group.key === key) || {}).title || key;
+      return `<div class="fides-uc-pilot__option-group"><p class="fides-uc-pilot__option-group-title">${escapeHtml(title)}</p>${options}</div>`;
+    }).join("");
+    return renderPilotDropdown("more", "More filters", "None", PILOT_MORE_FILTER_KEYS, groups);
+  }
+
+  function renderPilotThemeChips() {
+    if (!THEME_BUNDLES.length) return "";
+    const chips = [{ code: "", title: "All themes" }, ...THEME_BUNDLES.map((bundle) => ({
+      code: String(bundle.code || ""),
+      title: String(bundle.title || bundle.code || "")
+    }))];
+    return `<div class="fides-uc-pilot__themes" role="group" aria-label="Theme">${chips
+      .map((chip) => `<button type="button" class="fides-ds-chip" data-pilot-theme="${escapeHtml(chip.code)}" aria-pressed="${activeThemeCode === chip.code ? "true" : "false"}">${escapeHtml(chip.title)}</button>`)
+      .join("")}</div>`;
+  }
+
+  function renderPilotActivePills() {
+    const pills = [];
+    if (activeThemeCode) {
+      const bundle = THEME_BUNDLES_BY_CODE[activeThemeCode];
+      pills.push({ group: "theme", value: activeThemeCode, label: bundle ? bundle.title : activeThemeCode });
+    }
+    ["sector", "country", "productionDeployment", ...PILOT_MORE_FILTER_KEYS].forEach((key) => {
+      (filters[key] || []).forEach((value) => pills.push({ group: key, value, label: pilotFilterLabel(key, value) }));
+    });
+    if (!pills.length) return "";
+    return `<p class="fides-ds-visually-hidden">Active filters</p><ul class="fides-uc-pilot__pills">${pills
+      .map((pill) => `<li><button type="button" class="fides-uc-pilot__pill" data-pilot-remove-group="${escapeHtml(pill.group)}" data-pilot-remove-value="${escapeHtml(pill.value)}">${escapeHtml(pill.label)}<span aria-hidden="true"> ×</span><span class="fides-ds-visually-hidden"> (remove filter)</span></button></li>`)
+      .join("")}</ul>`;
+  }
+
+  function pilotCountLabel(count) {
+    return `${count} use case${count === 1 ? "" : "s"}`;
+  }
+
+  function renderPilot() {
+    const filtered = getFilteredUseCases();
+    const visible = visibleSlice(filtered);
+    const title = String(root.dataset.title || "Use cases");
+    const addUrl = String(root.dataset.addUrl || "").trim();
+    root.innerHTML = `
+      <div class="fides-ds-page fides-uc-pilot__page">
+        <header class="fides-uc-pilot__intro">
+          <div class="fides-uc-pilot__intro-text">
+            <p class="fides-ds-kicker">Ecosystem Explorer</p>
+            <h1 class="fides-ds-heading-1">${escapeHtml(title)}</h1>
+          </div>
+          <div class="fides-uc-pilot__intro-aside">
+            <p class="fides-uc-pilot__total"><span class="fides-uc-pilot__total-value">${currentItems.length}</span> <span>use cases in the FIDES catalog</span></p>
+            ${addUrl ? `<a class="fides-ds-button" href="${escapeHtml(addUrl)}">Add a use case <span aria-hidden="true">→</span></a>` : ""}
+          </div>
+        </header>
+
+        <div class="fides-uc-pilot__controls">
+          <div class="fides-uc-pilot__search-row" role="search">
+            <div class="fides-uc-pilot__search">
+              <label class="fides-ds-visually-hidden" for="fides-search-input">Search use cases</label>
+              <span class="fides-uc-pilot__search-icon" aria-hidden="true">${icons.search}</span>
+              <input id="fides-search-input" class="fides-uc-pilot__search-input" type="search" placeholder="Search use cases, organizations or topics" value="${escapeHtml(filters.search)}" autocomplete="off">
+              <button class="fides-uc-pilot__search-clear ${filters.search ? "" : "hidden"}" id="fides-search-clear" type="button" aria-label="Clear search">${icons.xSmall}</button>
+            </div>
+            ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-button fides-ds-button--secondary fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button">Ask FIDES</button>' : ""}
+          </div>
+          ${renderPilotThemeChips()}
+          <div class="fides-uc-pilot__filters">
+            <button class="fides-ds-button fides-ds-button--secondary fides-uc-pilot__filters-toggle" type="button" aria-expanded="false" aria-controls="fides-uc-pilot-filter-panel" data-pilot-open>
+              Filters <span class="fides-filter-count ${getActiveFilterCount() > 0 ? "" : "hidden"}">${getActiveFilterCount() || 0}</span>
+            </button>
+            <div class="fides-uc-pilot__filter-panel" id="fides-uc-pilot-filter-panel" aria-labelledby="fides-uc-pilot-filter-title">
+              <div class="fides-uc-pilot__panel-head">
+                <h2 class="fides-uc-pilot__panel-title" id="fides-uc-pilot-filter-title">Filter use cases</h2>
+                <button type="button" class="fides-uc-pilot__panel-close" data-pilot-close>Close <span aria-hidden="true">×</span></button>
+              </div>
+              <div class="fides-uc-pilot__dropdowns">
+                ${renderPilotDropdown("sector", "Sector", "All sectors", ["sector"], renderPilotOptions("sector"))}
+                ${renderPilotDropdown("country", "Country", "All countries", ["country"], renderPilotOptions("country"))}
+                ${renderPilotDropdown("status", "Status", "All statuses", ["productionDeployment"], renderPilotOptions("productionDeployment"))}
+                ${renderPilotMoreFilters()}
+              </div>
+              <div class="fides-uc-pilot__panel-actions">
+                <button type="button" class="fides-ds-button fides-ds-button--block" data-pilot-close>Show <span data-pilot-count-inline>${filtered.length}</span>&nbsp;use cases</button>
+              </div>
+            </div>
+            <button id="fides-clear" class="fides-ds-text-button fides-uc-pilot__clear ${getActiveFilterCount() > 0 ? "" : "hidden"}" type="button">Clear filters</button>
+          </div>
+          <div class="fides-uc-pilot__active" data-pilot-active>${renderPilotActivePills()}</div>
+        </div>
+
+        <div class="fides-uc-pilot__results-bar fides-results-bar">
+          <h2 class="fides-uc-pilot__count" data-pilot-count tabindex="-1" aria-live="polite">${pilotCountLabel(filtered.length)}</h2>
+          <label class="fides-uc-pilot__sort" for="fides-sort-select">
+            <span>Sort by</span>
+            <select id="fides-sort-select" class="fides-uc-pilot__sort-select">
+              <option value="recommended" ${filters.sortBy === "recommended" ? "selected" : ""}>Explore</option>
+              <option value="updated_desc" ${filters.sortBy === "updated_desc" ? "selected" : ""}>Most recent</option>
+              <option value="likes_desc" ${filters.sortBy === "likes_desc" ? "selected" : ""}>Most liked</option>
+              <option value="title_asc" ${filters.sortBy === "title_asc" ? "selected" : ""}>A–Z</option>
+            </select>
+          </label>
+        </div>
+        <div class="fides-results">${renderPilotResults(visible)}</div>
+        ${renderPaginationBar(filtered)}
+        <p id="fides-catalog-message" class="fides-form-message" aria-live="polite"></p>
+      </div>
+    `;
+    bindEvents();
+    bindPaginationLinks();
+    bindPilotEvents();
+    applyStaleCatalogNotice();
+  }
+
+  function updatePilotChrome(filtered) {
+    const count = root.querySelector("[data-pilot-count]");
+    if (count) count.textContent = pilotCountLabel(filtered.length);
+    const inline = root.querySelector("[data-pilot-count-inline]");
+    if (inline) inline.textContent = String(filtered.length);
+    root.querySelectorAll("[data-pilot-dropdown]").forEach((dropdown) => {
+      const keys = String(dropdown.dataset.pilotKeys || "").split(",").filter(Boolean);
+      const summary = dropdown.querySelector("[data-pilot-summary]");
+      if (summary) summary.textContent = pilotSummaryText(keys, summary.dataset.pilotAll || "");
+      dropdown.classList.toggle("has-active", keys.some((key) => (filters[key] || []).length > 0));
+    });
+    root.querySelectorAll("[data-pilot-theme]").forEach((chip) => {
+      chip.setAttribute("aria-pressed", chip.dataset.pilotTheme === activeThemeCode ? "true" : "false");
+    });
+    const active = root.querySelector("[data-pilot-active]");
+    if (active) active.innerHTML = renderPilotActivePills();
+    updateFilterChrome();
+  }
+
+  function pilotIsCompact() {
+    return window.innerWidth < PILOT_COMPACT_BREAKPOINT;
+  }
+
+  function pilotPanel() {
+    return root.querySelector("#fides-uc-pilot-filter-panel");
+  }
+
+  function setPilotPanelOpen(open) {
+    const panel = pilotPanel();
+    const toggle = root.querySelector("[data-pilot-open]");
+    if (!panel || !toggle) return;
+    panel.classList.toggle("is-open", open);
+    toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    document.documentElement.classList.toggle("fides-uc-pilot-panel-open", open);
+    if (open) {
+      panel.setAttribute("role", "dialog");
+      panel.setAttribute("aria-modal", "true");
+      panel.querySelector("[data-pilot-close]")?.focus();
+    } else {
+      panel.removeAttribute("role");
+      panel.removeAttribute("aria-modal");
+      toggle.focus();
+    }
+  }
+
+  function closePilotDropdowns(except) {
+    root.querySelectorAll("details[data-pilot-dropdown][open]").forEach((dropdown) => {
+      if (dropdown !== except) dropdown.open = false;
+    });
+  }
+
+  function bindPilotEvents() {
+    if (pilotEventsBound) return;
+    pilotEventsBound = true;
+
+    root.addEventListener("click", (event) => {
+      const theme = event.target.closest("[data-pilot-theme]");
+      if (theme) {
+        setThemeFilter(String(theme.dataset.pilotTheme || ""));
+        resetListingPage();
+        renderResultsOnly();
+        return;
+      }
+      const remove = event.target.closest("[data-pilot-remove-group]");
+      if (remove) {
+        const group = remove.dataset.pilotRemoveGroup;
+        const value = remove.dataset.pilotRemoveValue;
+        if (group === "theme") {
+          clearThemeFilter();
+        } else if (Array.isArray(filters[group])) {
+          filters[group] = filters[group].filter((entry) => entry !== value);
+          root.querySelectorAll(`input[data-filter-group="${CSS.escape(group)}"]`).forEach((input) => {
+            if (input.value === value) input.checked = false;
+          });
+        }
+        resetListingPage();
+        renderResultsOnly();
+        root.querySelector("[data-pilot-count]")?.focus();
+        return;
+      }
+      if (event.target.closest("[data-pilot-reset]")) {
+        root.querySelector("#fides-clear")?.click();
+        root.querySelector("#fides-search-input")?.focus();
+        return;
+      }
+      if (event.target.closest("[data-pilot-open]")) {
+        setPilotPanelOpen(true);
+        return;
+      }
+      if (event.target.closest("[data-pilot-close]")) {
+        setPilotPanelOpen(false);
+      }
+    });
+
+    // Desktop and tablet: one dropdown open at a time.
+    root.addEventListener("toggle", (event) => {
+      const dropdown = event.target;
+      if (!(dropdown instanceof HTMLDetailsElement) || !dropdown.matches("[data-pilot-dropdown]")) return;
+      if (dropdown.open && !pilotIsCompact()) closePilotDropdowns(dropdown);
+    }, true);
+
+    document.addEventListener("click", (event) => {
+      if (pilotIsCompact()) return;
+      if (event.target.closest && event.target.closest("details[data-pilot-dropdown]")) return;
+      closePilotDropdowns(null);
+    });
+
+    root.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        const openDropdown = event.target.closest("details[data-pilot-dropdown][open]");
+        if (openDropdown && !pilotIsCompact()) {
+          openDropdown.open = false;
+          openDropdown.querySelector("summary")?.focus();
+          return;
+        }
+        if (pilotPanel()?.classList.contains("is-open")) setPilotPanelOpen(false);
+        return;
+      }
+      if (event.key === "Tab" && pilotPanel()?.classList.contains("is-open")) {
+        const focusable = [...pilotPanel().querySelectorAll("summary, button, input, select, a[href]")].filter((el) => el.offsetParent !== null);
+        if (!focusable.length) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    window.addEventListener("resize", debounce(() => {
+      if (!pilotIsCompact() && pilotPanel()?.classList.contains("is-open")) setPilotPanelOpen(false);
+    }, 150));
   }
 
   function bindEvents() {
