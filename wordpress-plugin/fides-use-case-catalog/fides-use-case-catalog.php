@@ -33,6 +33,12 @@ require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/use-case-notifications.php'
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-catalog-ssr.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-catalog-submission-diff.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-discovery-shortcode.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-design.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-detail-page.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-featured.php';
+Fides_Use_Case_Design::bootstrap();
+Fides_Use_Case_Detail_Page::bootstrap();
+Fides_Use_Case_Featured::bootstrap();
 
 // Boot the SSR/SEO renderer (no-op shim when the tiles base class is absent).
 Fides_Use_Case_Catalog_SSR::bootstrap();
@@ -681,6 +687,7 @@ function fides_use_case_catalog_render_settings_page(): void {
                     </td>
                 </tr>
             </table>
+            <?php do_action('fides_use_case_catalog_settings_sections'); ?>
             <?php submit_button(); ?>
         </form>
     </div>
@@ -2161,14 +2168,25 @@ add_shortcode('fides_use_case_update_form', 'fides_use_case_catalog_update_form_
 function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
     $atts = shortcode_atts(
         array(
-            'columns' => '3',
+            'columns'    => '3',
+            // design="pilot" renders the FIDES design-system overview; detail_url
+            // points result rows at a detail page instead of the modal share URL.
+            'design'     => '',
+            'detail_url' => '',
+            'title'      => 'Use cases',
+            'add_url'    => '',
         ),
         $atts,
         'fides_use_case_catalog'
     );
     $columns = in_array($atts['columns'], array('2', '3', '4'), true) ? $atts['columns'] : '3';
+    $design = ($atts['design'] === 'pilot' && Fides_Use_Case_Design::available()) ? 'pilot' : '';
+    $detail_url = $design === 'pilot' ? esc_url_raw(trim((string) $atts['detail_url'])) : '';
     $ask_fides_available = has_action('fides_assistant_enqueue_headless') !== false;
 
+    if ($design === 'pilot') {
+        Fides_Use_Case_Design::enqueue();
+    }
     wp_enqueue_style('fides-use-case-catalog-style');
     wp_enqueue_style('fides-use-case-catalog-ui-lib');
     if ($ask_fides_available) {
@@ -2229,6 +2247,17 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
     $ssr_html = '';
     if (class_exists('Fides_Use_Case_Catalog_SSR')) {
         $ssr_html = Fides_Use_Case_Catalog_SSR::build_initial_html($atts);
+    }
+
+    if ($design === 'pilot') {
+        return sprintf(
+            '<div id="fides-use-case-catalog-root" class="fides-ds fides-uc-pilot" data-columns="%s" data-design="pilot" data-detail-url="%s" data-title="%s" data-add-url="%s" aria-busy="true">%s</div>',
+            esc_attr($columns),
+            esc_attr($detail_url),
+            esc_attr(sanitize_text_field((string) $atts['title'])),
+            esc_attr(esc_url_raw(trim((string) $atts['add_url']))),
+            $ssr_html
+        );
     }
 
     return sprintf(
