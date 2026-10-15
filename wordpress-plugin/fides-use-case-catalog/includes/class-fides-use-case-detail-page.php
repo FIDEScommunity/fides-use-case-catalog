@@ -57,10 +57,7 @@ final class Fides_Use_Case_Detail_Page {
             $page_id     = fides_use_case_catalog_listing_page_id();
             $listing_url = $page_id > 0 ? (string) get_permalink($page_id) : home_url(fides_use_case_catalog_listing_path());
         }
-        $detail_base = trim((string) $atts['detail_url']);
-        if ($detail_base === '') {
-            $detail_base = (string) get_permalink();
-        }
+        $detail_base = Fides_Use_Case_Design::detail_base((string) $atts['detail_url']);
 
         $id   = Fides_Use_Case_Design::requested_id((string) $atts['id']);
         $item = Fides_Use_Case_Design::find($id);
@@ -94,7 +91,9 @@ final class Fides_Use_Case_Detail_Page {
         $status    = Fides_Use_Case_Design::status_label($item);
         $updated   = Fides_Use_Case_Design::updated_date($item, true);
         $updated_iso = preg_match('/^\d{4}-\d{2}-\d{2}/', (string) ($item['updatedAt'] ?? ''), $m) ? $m[0] : '';
-        $share_url = Fides_Use_Case_Design::share_url($id);
+        $page_url  = Fides_Use_Case_Design::detail_url($id, $detail_base);
+        $awards    = Fides_Use_Case_Design::award_recognitions($id);
+        $likes     = Fides_Use_Case_Design::like_count($id);
         $copy_status_id = 'fides-uc-copy-status';
 
         $sections = array();
@@ -135,6 +134,12 @@ final class Fides_Use_Case_Detail_Page {
         <?php if ($status !== '') : ?>
           <li><span class="fides-ds-status"><?php echo esc_html($status); ?></span></li>
         <?php endif; ?>
+        <?php if ($awards) : ?>
+          <li><span class="fides-ds-status fides-uc-detail__award"><?php echo esc_html(Fides_Use_Case_Design::award_label($awards[0])); ?></span></li>
+        <?php endif; ?>
+        <?php if ($likes > 0) : ?>
+          <li class="fides-ds-meta"><?php echo esc_html(Fides_Use_Case_Design::like_label($likes)); ?></li>
+        <?php endif; ?>
       </ul>
     </header>
 
@@ -154,6 +159,7 @@ final class Fides_Use_Case_Detail_Page {
           echo self::fact('Country', Fides_Use_Case_Design::country_label($item));
           echo self::fact('Production deployment', $status === 'In production' ? 'Yes' : ($status === 'Not in production' ? 'No' : ''));
           echo self::fact('Themes', implode(', ', self::theme_labels($item)));
+          echo self::awards_fact($awards); // phpcs:ignore WordPress.Security.EscapeOutput
           ?>
         </dl>
         <div class="fides-uc-detail__actions">
@@ -163,7 +169,7 @@ final class Fides_Use_Case_Detail_Page {
           <?php if ($videos) : ?>
             <a class="fides-ds-action-link" href="#video-and-links">Watch the video <span aria-hidden="true">↓</span></a>
           <?php endif; ?>
-          <button type="button" class="fides-ds-text-button" data-fides-ds-copy="<?php echo esc_attr($share_url); ?>" aria-describedby="<?php echo esc_attr($copy_status_id); ?>">Copy link</button>
+          <button type="button" class="fides-ds-text-button" data-fides-ds-copy="<?php echo esc_attr($page_url); ?>" aria-describedby="<?php echo esc_attr($copy_status_id); ?>">Copy link</button>
           <p class="fides-ds-meta fides-uc-detail__copy-status" id="<?php echo esc_attr($copy_status_id); ?>" role="status" aria-live="polite"></p>
         </div>
       </aside>
@@ -217,6 +223,9 @@ final class Fides_Use_Case_Detail_Page {
                       <a href="<?php echo esc_url($relation['href']); ?>"<?php echo $relation['external'] ? ' rel="noopener" target="_blank"' : ''; ?>><?php echo esc_html($relation['label']); ?><?php if ($relation['external']) : ?><span aria-hidden="true"> ↗</span><span class="fides-ds-visually-hidden"> (external site, opens in a new tab)</span><?php endif; ?></a>
                     <?php else : ?>
                       <span class="fides-uc-relations__label"><?php echo esc_html($relation['label']); ?></span>
+                    <?php endif; ?>
+                    <?php if ($relation['identifier'] !== '') : ?>
+                      <code class="fides-uc-relations__identifier"><?php echo esc_html($relation['identifier']); ?></code>
                     <?php endif; ?>
                     <span class="fides-uc-relations__source"><?php echo esc_html($relation['source']); ?></span>
                   </li>
@@ -318,6 +327,25 @@ final class Fides_Use_Case_Detail_Page {
             return '<a class="fides-ds-button" href="' . esc_url($url) . '">Suggest an update <span aria-hidden="true">→</span></a>';
         }
         return '<a class="fides-ds-button fides-ds-button--secondary" href="' . esc_url(fides_use_case_catalog_form_login_url()) . '">Sign in to suggest an update <span aria-hidden="true">→</span></a>';
+    }
+
+    /**
+     * @param list<array{program_label:string, program_url:string, year:int, category_label:string, place:int}> $awards
+     */
+    private static function awards_fact(array $awards): string {
+        if (! $awards) {
+            return '';
+        }
+        $lines = array();
+        foreach ($awards as $award) {
+            $text = Fides_Use_Case_Design::award_label($award) . ', ' . $award['program_label']
+                . ($award['category_label'] !== '' ? ' (' . $award['category_label'] . ')' : '');
+            $url = self::http_url($award['program_url']);
+            $lines[] = $url !== ''
+                ? '<a href="' . esc_url($url) . '" rel="noopener" target="_blank">' . esc_html($text) . '<span aria-hidden="true"> ↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>'
+                : esc_html($text);
+        }
+        return '<div class="fides-ds-facts__row"><dt>' . esc_html(count($awards) > 1 ? 'Awards' : 'Award') . '</dt><dd>' . implode('<br>', $lines) . '</dd></div>';
     }
 
     private static function fact(string $label, string $value): string {
@@ -458,7 +486,7 @@ final class Fides_Use_Case_Detail_Page {
 
     /**
      * @param array<string, mixed> $item
-     * @return list<array{label:string, items:list<array{label:string, href:string, external:bool, source:string}>}>
+     * @return list<array{label:string, items:list<array{label:string, href:string, external:bool, source:string, identifier:string}>}>
      */
     private static function relation_groups(array $item): array {
         $links  = isset($item['links']) && is_array($item['links']) ? $item['links'] : array();
@@ -484,16 +512,25 @@ final class Fides_Use_Case_Detail_Page {
 
     /**
      * Catalog deep link when the relation references a FIDES catalog record,
-     * the relation's own http(s) URL otherwise, or plain text.
+     * the relation's own http(s) URL otherwise, or plain text. A non-web
+     * identifier in the url field (e.g. a URN) is kept and shown as text.
      *
      * @param array<string, mixed> $link
-     * @return array{label:string, href:string, external:bool, source:string}
+     * @return array{label:string, href:string, external:bool, source:string, identifier:string}
      */
     private static function relation(array $link, string $key, string $use_case_id): array {
-        $ref   = trim((string) ($link['refId'] ?? ''));
-        $url   = self::http_url((string) ($link['url'] ?? ''));
+        $ref        = trim((string) ($link['refId'] ?? ''));
+        $raw_url    = trim((string) ($link['url'] ?? ''));
+        $url        = self::http_url($raw_url);
+        $identifier = $url === '' ? $raw_url : '';
+        if ($ref !== '' && $key === 'credentials') {
+            $ref = Fides_Use_Case_Design::credential_canonical_id($ref);
+        }
         $label = trim((string) ($link['labelRaw'] ?? ''));
-        $label = $label !== '' ? $label : ($ref !== '' ? $ref : $url);
+        $label = $label !== '' ? $label : ($ref !== '' ? $ref : ($url !== '' ? $url : $identifier));
+        if ($identifier === $label) {
+            $identifier = '';
+        }
         $urls  = fides_use_case_catalog_catalog_urls();
         $href  = '';
         if ($ref !== '' && isset(self::RELATION_GROUPS[$key])) {
@@ -512,10 +549,11 @@ final class Fides_Use_Case_Detail_Page {
         }
         $in_catalog = ($link['source'] ?? '') === 'catalog' && $ref !== '';
         return array(
-            'label'    => $label,
-            'href'     => $href,
-            'external' => $external,
-            'source'   => $in_catalog ? 'FIDES catalog record' : 'Listed by the submitter',
+            'label'      => $label,
+            'href'       => $href,
+            'external'   => $external,
+            'source'     => $in_catalog ? 'FIDES catalog record' : 'Listed by the submitter',
+            'identifier' => $identifier,
         );
     }
 

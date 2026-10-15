@@ -784,6 +784,18 @@ html.fides-uc-pilot-panel-open {
   font-weight: 400;
 }
 
+.fides-ds .fides-uc-relations__identifier {
+  justify-self: start;
+  max-width: 100%;
+  padding: 0 var(--fides-ds-space-1);
+  background: var(--fides-ds-soft);
+  color: var(--fides-ds-body);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
 .fides-ds .fides-uc-detail__band {
   display: grid;
   gap: var(--fides-ds-space-6);

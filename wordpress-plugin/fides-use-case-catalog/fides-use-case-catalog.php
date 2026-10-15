@@ -547,6 +547,15 @@ function fides_use_case_catalog_is_local_site(): bool {
  * Credential catalog aggregated.json for alias resolution of credential links.
  * On local sites prefer the sibling plugin so seed-merge aliases resolve before GitHub publish.
  */
+/**
+ * Award programs whose finalists are shown on use cases.
+ *
+ * @return list<string>
+ */
+function fides_use_case_catalog_award_program_keys(): array {
+    return array('gdt-2026', 'fides-community-2026');
+}
+
 function fides_use_case_catalog_resolve_credential_aggregated_url(): string {
     $github = 'https://raw.githubusercontent.com/FIDEScommunity/fides-credential-catalog/main/data/aggregated.json';
     $opt    = trim((string) get_option('fides_use_case_catalog_credential_aggregated_url', ''));
@@ -2222,7 +2231,7 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             'vocabularyFallbackUrl' => FIDES_USE_CASE_CATALOG_URL . 'assets/vocabulary.json',
             'ratingsApiBase' => rest_url('fides-catalog/v1'),
             'awardsApiBase' => rest_url('fides-catalog/v1'),
-            'awardProgramKeys' => array('gdt-2026', 'fides-community-2026'),
+            'awardProgramKeys' => fides_use_case_catalog_award_program_keys(),
             'ratingsNonce' => wp_create_nonce('wp_rest'),
             'ratingsIsLoggedIn' => is_user_logged_in(),
             'ratingsLoginUrl' => $ratings_login_url,

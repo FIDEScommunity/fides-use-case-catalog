@@ -3308,8 +3308,18 @@
       summary: pilotExcerpt(item.summary),
       owner,
       status: pilotStatusLabel(item),
-      meta: updated ? `Updated ${updated}` : ""
+      meta: pilotEngagementMeta(item, updated ? `Updated ${updated}` : "")
     };
+  }
+
+  /** Mirrors Fides_Use_Case_Design::engagement_meta(). */
+  function pilotEngagementMeta(item, prefix) {
+    const parts = [prefix];
+    const recognition = strongestAwardRecognition(item);
+    if (recognition) parts.push(awardBadgeLabel(recognition));
+    const likes = getUseCaseLikeCount(item);
+    if (likes > 0) parts.push(likes === 1 ? "1 like" : `${likes} likes`);
+    return parts.filter(Boolean).join(" · ");
   }
 
   function renderPilotResults(items) {

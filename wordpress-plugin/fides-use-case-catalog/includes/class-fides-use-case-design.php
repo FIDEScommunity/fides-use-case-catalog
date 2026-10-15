@@ -23,9 +23,70 @@ final class Fides_Use_Case_Design {
     /** @var array<int, array<string, mixed>>|null */
     private static ?array $items = null;
 
+    /** @var array<string, string>|null credential id or alias => canonical credential id */
+    private static ?array $credential_ids = null;
+
+    /** @var array<string, list<array<string, mixed>>>|null use-case id => award recognitions */
+    private static ?array $awards = null;
+
+    /** @var array<string, int> */
+    private static array $likes = array();
+
     public static function bootstrap(): void {
         add_action('wp_enqueue_scripts', array(__CLASS__, 'register_assets'), 20);
         add_action('wp_enqueue_scripts', array(__CLASS__, 'enqueue_for_current_post'), 21);
+        add_filter('get_canonical_url', array(__CLASS__, 'filter_canonical_url'), 10, 2);
+    }
+
+    /** Drop per-request caches (catalog items, credential aliases, awards, likes). */
+    public static function flush_cache(): void {
+        self::$items          = null;
+        self::$credential_ids = null;
+        self::$awards         = null;
+        self::$likes          = array();
+    }
+
+    /**
+     * Canonical for a page with [fides_use_case_detail]: the same URL that
+     * "Copy link" and related cards use for the record that is shown.
+     *
+     * @param string       $canonical_url
+     * @param WP_Post|null $post
+     * @return string
+     */
+    public static function filter_canonical_url($canonical_url, $post = null) {
+        if (! $post instanceof WP_Post || ! has_shortcode((string) $post->post_content, 'fides_use_case_detail')) {
+            return $canonical_url;
+        }
+        $atts = self::shortcode_attributes((string) $post->post_content, 'fides_use_case_detail');
+        $id   = self::requested_id((string) ($atts['id'] ?? ''));
+        if ($id === '' || self::find($id) === null) {
+            return $canonical_url;
+        }
+        return self::detail_url($id, self::detail_base((string) ($atts['detail_url'] ?? ''), $post));
+    }
+
+    /**
+     * Base URL for detail links rendered by [fides_use_case_detail]: the
+     * shortcode's detail_url, else the permalink of the page itself.
+     */
+    public static function detail_base(string $detail_url, $post = null): string {
+        $detail_url = trim($detail_url);
+        if ($detail_url !== '') {
+            return $detail_url;
+        }
+        return (string) get_permalink($post);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private static function shortcode_attributes(string $content, string $tag): array {
+        if (! preg_match_all('/' . get_shortcode_regex(array($tag)) . '/', $content, $matches, PREG_SET_ORDER)) {
+            return array();
+        }
+        $atts = shortcode_parse_atts($matches[0][3]);
+        return is_array($atts) ? array_map('strval', $atts) : array();
     }
 
     /** True when the shared design system from fides-community-tools-tiles is loaded. */
@@ -97,6 +158,8 @@ final class Fides_Use_Case_Design {
         if (empty($items) && function_exists('fides_use_case_catalog_github_items')) {
             $items = fides_use_case_catalog_github_items();
         }
+        /** Filters the published use cases used by the design views. */
+        $items       = apply_filters('fides_use_case_design_items', $items);
         self::$items = array_values(array_filter(is_array($items) ? $items : array(), static function ($item) {
             return is_array($item) && ! empty($item['id']) && ! empty($item['title']);
         }));
@@ -117,6 +180,122 @@ final class Fides_Use_Case_Design {
             }
         }
         return null;
+    }
+
+    /**
+     * Canonical credential-catalog id for a credential reference that may be
+     * an alias id or a per-format credentialId. Same rules as
+     * buildCredentialAliasIndex() in the shared fides-catalog-ui.js.
+     */
+    public static function credential_canonical_id(string $ref): string {
+        $ref = trim($ref);
+        if ($ref === '') {
+            return '';
+        }
+        if (self::$credential_ids === null) {
+            $credentials = array();
+            if (class_exists('Fides_Catalog_Source')) {
+                $source = Fides_Catalog_Source::for('credential');
+                if ($source) {
+                    $credentials = $source->all();
+                }
+            }
+            /** Filters the credential catalog rows used for alias resolution. */
+            $credentials = apply_filters('fides_use_case_design_credentials', $credentials);
+            $index       = array();
+            foreach (is_array($credentials) ? $credentials : array() as $credential) {
+                if (! is_array($credential) || ! isset($credential['id']) || ! is_string($credential['id']) || $credential['id'] === '') {
+                    continue;
+                }
+                $canonical  = $credential['id'];
+                $resolvable = array($canonical);
+                foreach ((array) ($credential['aliasIds'] ?? array()) as $alias) {
+                    $resolvable[] = (string) $alias;
+                }
+                foreach ((array) ($credential['formats'] ?? array()) as $format) {
+                    if (is_array($format) && ! empty($format['credentialId'])) {
+                        $resolvable[] = (string) $format['credentialId'];
+                    }
+                }
+                foreach ($resolvable as $resolvable_id) {
+                    if ($resolvable_id !== '') {
+                        $index[$resolvable_id] = $canonical;
+                    }
+                }
+            }
+            self::$credential_ids = $index;
+        }
+        return self::$credential_ids[$ref] ?? $ref;
+    }
+
+    /**
+     * Award recognitions for a use case from the shared awards REST route
+     * (the same data the listing loads in loadAwardRecognitions()).
+     *
+     * @return list<array{program_label:string, program_url:string, year:int, category_label:string, place:int}>
+     */
+    public static function award_recognitions(string $id): array {
+        if (self::$awards === null) {
+            self::$awards = array();
+            if (function_exists('rest_do_request')) {
+                foreach (fides_use_case_catalog_award_program_keys() as $program_key) {
+                    $response = rest_do_request(new WP_REST_Request('GET', '/fides-catalog/v1/awards/' . rawurlencode($program_key)));
+                    $payload  = $response instanceof WP_REST_Response && $response->get_status() === 200 ? $response->get_data() : null;
+                    if (! is_array($payload) || empty($payload['ok'])) {
+                        continue;
+                    }
+                    foreach ((array) ($payload['categories'] ?? array()) as $category) {
+                        foreach ((array) ($category['finalists'] ?? array()) as $finalist) {
+                            if (($finalist['type'] ?? '') !== 'usecase' || empty($finalist['id'])) {
+                                continue;
+                            }
+                            self::$awards[(string) $finalist['id']][] = array(
+                                'program_label'  => (string) ($payload['label'] ?? $program_key),
+                                'program_url'    => (string) ($payload['url'] ?? ''),
+                                'year'           => (int) ($payload['year'] ?? 0),
+                                'category_label' => (string) ($category['label'] ?? $category['key'] ?? ''),
+                                'place'          => (int) ($finalist['place'] ?? 0),
+                            );
+                        }
+                    }
+                }
+            }
+        }
+        $recognitions = self::$awards[$id] ?? array();
+        usort($recognitions, static function ($a, $b) {
+            return ($b['place'] === 1) <=> ($a['place'] === 1);
+        });
+        return $recognitions;
+    }
+
+    /**
+     * "Winner 2026" / "Finalist 2026", as awardBadgeLabel() in the listing.
+     *
+     * @param array{year:int, place:int} $recognition
+     */
+    public static function award_label(array $recognition): string {
+        $result = $recognition['place'] === 1 ? 'Winner' : 'Finalist';
+        return $recognition['year'] > 0 ? $result . ' ' . $recognition['year'] : $result;
+    }
+
+    /** Like count from the shared ratings REST route. */
+    public static function like_count(string $id): int {
+        if (! array_key_exists($id, self::$likes)) {
+            self::$likes[$id] = 0;
+            if (function_exists('rest_do_request')) {
+                $request = new WP_REST_Request('GET', '/fides-catalog/v1/ratings/batch');
+                $request->set_query_params(array('type' => 'usecase', 'ids' => $id));
+                $response = rest_do_request($request);
+                $data     = $response instanceof WP_REST_Response && $response->get_status() === 200 ? $response->get_data() : null;
+                $row      = is_array($data) && isset($data['results'][$id]) && is_array($data['results'][$id]) ? $data['results'][$id] : array();
+                self::$likes[$id] = max(0, (int) ($row['likes'] ?? $row['count'] ?? 0));
+            }
+        }
+        return self::$likes[$id];
+    }
+
+    public static function like_label(int $count): string {
+        return $count === 1 ? '1 like' : $count . ' likes';
     }
 
     /**
@@ -141,6 +320,9 @@ final class Fides_Use_Case_Design {
     public static function detail_url(string $id, string $detail_base = ''): string {
         $detail_base = trim($detail_base);
         if ($detail_base !== '') {
+            if ($detail_base[0] === '/' && strpos($detail_base, '//') !== 0) {
+                $detail_base = home_url($detail_base);
+            }
             return add_query_arg('usecase', rawurlencode($id), $detail_base);
         }
         return home_url(fides_use_case_catalog_share_path() . rawurlencode($id) . '/');
@@ -267,16 +449,35 @@ final class Fides_Use_Case_Design {
             $props['summary'] = self::excerpt((string) ($item['summary'] ?? ''));
             $props['owner']   = $owner;
             $props['status']  = self::status_label($item);
-            $props['meta']    = $updated !== '' ? 'Updated ' . $updated : '';
+            $props['meta']    = self::engagement_meta($id, $updated !== '' ? 'Updated ' . $updated : '');
         } elseif ($variant === 'feature') {
             $props['kicker']    = implode(' · ', array_filter(array('Featured use case', $owner)));
             $props['status']    = self::status_label($item);
+            $props['meta']      = self::engagement_meta($id, '');
             $props['media_fit'] = 'cover';
             $props['cta_label'] = 'Explore this use case →';
         } else {
             $props['kicker'] = implode(' · ', array_filter(array($owner, self::country_label($item))));
+            $props['meta']   = self::engagement_meta($id, '');
         }
         return $props;
+    }
+
+    /**
+     * Card meta line: optional prefix, strongest award, like count (when > 0).
+     * Mirrors pilotEngagementMeta() in assets/usecase-catalog.js.
+     */
+    public static function engagement_meta(string $id, string $prefix): string {
+        $parts        = array($prefix);
+        $recognitions = $id !== '' ? self::award_recognitions($id) : array();
+        if ($recognitions) {
+            $parts[] = self::award_label($recognitions[0]);
+        }
+        $likes = $id !== '' ? self::like_count($id) : 0;
+        if ($likes > 0) {
+            $parts[] = self::like_label($likes);
+        }
+        return implode(' · ', array_filter($parts, 'strlen'));
     }
 
     /**

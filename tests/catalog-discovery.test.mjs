@@ -59,7 +59,8 @@ test("recommended page one defers cards without visual media", () => {
 });
 
 test("awards are loaded from the central registry and exposed in listing UI", () => {
-  assert.match(php, /'awardProgramKeys' => array\('gdt-2026', 'fides-community-2026'\)/);
+  assert.match(php, /'awardProgramKeys' => fides_use_case_catalog_award_program_keys\(\)/);
+  assert.match(php, /function fides_use_case_catalog_award_program_keys\(\): array \{\s*return array\('gdt-2026', 'fides-community-2026'\);/);
   assert.match(js, /loadAwardRecognitions\(\)/);
   assert.match(js, /awardRecognitionsByUseCaseId/);
   assert.match(js, /renderListingAwardBadge/);
