@@ -14,6 +14,8 @@ if (! defined('ABSPATH') || ! defined('FIDES_DESIGN_PILOT')) {
 
 const PILOT_DETAIL_ID   = 'verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J';
 const PILOT_FEATURED_ID = 'digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC';
+/** Shared header/footer page template from fides-community-tools-tiles. */
+const PILOT_SHELL_TEMPLATE = 'fides-site-shell';
 
 $layout_meta = array(
     'has_hero_section'        => 'disabled',
@@ -26,7 +28,7 @@ $layout_meta = array(
     'disable_share_box'       => 'yes',
 );
 
-function pilot_upsert_page(string $path, string $title, string $content, int $parent, array $layout_meta): int {
+function pilot_upsert_page(string $path, string $title, string $content, int $parent, array $layout_meta, string $template = ''): int {
     $existing = get_page_by_path($path);
     $postarr  = array(
         'post_type'    => 'page',
@@ -48,6 +50,9 @@ function pilot_upsert_page(string $path, string $title, string $content, int $pa
     }
     update_post_meta($id, 'blocksy_post_meta_options', $layout_meta);
     update_post_meta($id, '_fides_design_pilot', '1');
+    if ($template !== '') {
+        update_post_meta($id, '_wp_page_template', $template);
+    }
     WP_CLI::log(sprintf('%-40s %s', $path, get_permalink($id)));
     return (int) $id;
 }
@@ -70,7 +75,8 @@ pilot_upsert_page(
     'Use cases (design pilot)',
     '<!-- wp:shortcode -->[fides_use_case_catalog design="pilot" title="Use cases" detail_url="/fides-design-pilot/use-case/" add_url="/use-case-form/"]<!-- /wp:shortcode -->',
     $parent,
-    $layout_meta
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
 );
 
 pilot_upsert_page(
@@ -78,10 +84,12 @@ pilot_upsert_page(
     'Use case detail (design pilot)',
     '<!-- wp:shortcode -->[fides_use_case_detail id="' . PILOT_DETAIL_ID . '" listing_url="/fides-design-pilot/overview/"]<!-- /wp:shortcode -->',
     $parent,
-    $layout_meta
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
 );
 
 // Hero text is the existing homepage hero (page 771); the card comes from the catalog.
+// "Explore use cases" is the secondary hero action from Paper 11.1, pointing at the pilot overview.
 pilot_upsert_page(
     'fides-design-pilot/homepage-fragment',
     'Homepage fragment (design pilot)',
@@ -91,6 +99,7 @@ pilot_upsert_page(
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"55%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:55%\">"
     . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-1\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-1\">Accelerating Digital Trust</h1>\n<!-- /wp:heading -->\n"
     . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">The new international movement dedicated to the continuous improvement of digital trust on the internet.</p>\n<!-- /wp:paragraph -->"
+    . "\n<!-- wp:paragraph {\"className\":\"fides-uc-fragment__action\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"32px\"}}}} -->\n<p class=\"fides-uc-fragment__action\" style=\"margin-top:32px\"><a class=\"fides-ds-action-link\" href=\"/fides-design-pilot/overview/\">Explore use cases <span aria-hidden=\"true\">→</span></a></p>\n<!-- /wp:paragraph -->"
     . "</div>\n<!-- /wp:column -->\n"
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"45%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:45%\">"
     . "<!-- wp:shortcode -->[fides_use_case_featured detail_url=\"/fides-design-pilot/use-case/\"]<!-- /wp:shortcode -->"
@@ -98,7 +107,8 @@ pilot_upsert_page(
     . "</div>\n<!-- /wp:columns -->"
     . "</div>\n<!-- /wp:group -->",
     $parent,
-    $layout_meta
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
 );
 
 if (! get_option(Fides_Use_Case_Featured::OPTION)) {

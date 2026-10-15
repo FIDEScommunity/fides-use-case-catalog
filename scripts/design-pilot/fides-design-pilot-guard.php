@@ -39,6 +39,44 @@ add_filter(
     }
 );
 
+/*
+ * Site shell navigation uses fides.community paths. On the pilot, point them
+ * at the existing local page for the same destination (use cases go to the
+ * pilot overview) and at the live page when the local copy has none.
+ */
+add_filter(
+    'fides_site_shell_url',
+    static function ($url, $path) {
+        if (preg_match('#^https?://#i', (string) $path)) {
+            return $url;
+        }
+        $local = array(
+            '/ecosystem-explorer/'                          => '/explorer/',
+            '/ecosystem-explorer/use-cases/'                => '/fides-design-pilot/overview/',
+            '/ecosystem-explorer/use-cases/submit-use-case/' => '/use-case-form/',
+            '/ecosystem-explorer/map/'                      => '/map/',
+            '/ecosystem-explorer/theme/'                    => '/theme/',
+            '/ecosystem-explorer/personal-wallets/'         => '/wallet-catalog/',
+            '/ecosystem-explorer/organizational-wallets/'   => '/business-wallets/',
+            '/ecosystem-explorer/credential-catalog/'       => '/credential-catalog/',
+            '/ecosystem-explorer/issuer-catalog/'           => '/issuer-catalog/',
+            '/ecosystem-explorer/relying-party-catalog/'    => '/relying-party-websites/',
+            '/community-tools/glossary/'                    => '/glossary/',
+            '/organizations/submit-organization/'           => '/organizations-submit/',
+            '/organizations/update-organization/'           => '/organizations-update/',
+        );
+        if (isset($local[$path])) {
+            return home_url($local[$path]);
+        }
+        if (get_page_by_path(trim((string) $path, '/')) instanceof WP_Post) {
+            return $url;
+        }
+        return 'https://fides.community' . $path;
+    },
+    10,
+    2
+);
+
 add_action(
     'wp_footer',
     static function () {

@@ -136,6 +136,9 @@ $check(strpos($html, 'href="' . esc_url($beta_url) . '"') !== false, 'related ca
 $check(strpos($html, 'fides-uc-detail__award">Finalist 2026<') !== false, 'award badge in header');
 $check(strpos($html, 'Finalist 2026, Test Awards 2026 (Impact)') !== false, 'award listed in At a glance');
 $check(strpos($html, '>3 likes<') !== false, 'like count in header');
+$check(preg_match('#<details class="fides-ds-section-nav[^"]*" data-fides-ds-section-nav>\s*<summary>On this page#', $html) === 1, 'section navigation is a collapsible "On this page" disclosure');
+$check(preg_match('#<nav aria-label="On this page">\s*<ul>\s*<li><a href="\#overview">Overview</a>#', $html) === 1, 'section navigation links to the page sections');
+$check(preg_match('#<details[^>]*\sopen#', $html) === 0, 'section navigation is collapsed until the script opens it on desktop');
 
 $missing = do_shortcode('[fides_use_case_detail id="' . UC_GONE . '"]');
 $check(strpos($missing, 'This use case is not in the current FIDES catalog.') !== false, 'missing record shows the not-in-catalog state');
