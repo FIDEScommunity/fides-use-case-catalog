@@ -497,6 +497,28 @@ final class Fides_Use_Case_Design {
      * @param array<string, mixed> $item
      * @return array<int, array<string, mixed>>
      */
+    /**
+     * Dark "Contribute" band closing the overview (Paper 02 Use cases). Rendered
+     * next to the JS root so the client-side overview never replaces it.
+     */
+    public static function contribute_band_html(string $add_url): string {
+        $button = $add_url !== ''
+            ? '<a class="fides-ds-button" href="' . esc_url($add_url) . '">Add a use case <span aria-hidden="true">→</span></a>'
+            : '';
+        return '<section class="fides-ds fides-ds-band--dark fides-uc-contribute" aria-labelledby="fides-uc-contribute-title">'
+            . '<div class="fides-ds-page fides-uc-contribute__inner">'
+            . '<div class="fides-uc-contribute__intro">'
+            . '<p class="fides-ds-kicker">Contribute</p>'
+            . '<h2 class="fides-uc-contribute__title" id="fides-uc-contribute-title">Add or update<br>a listing.</h2>'
+            . '<p>Help keep the ecosystem visible and useful.</p>'
+            . '</div>'
+            . '<div class="fides-uc-contribute__steps">'
+            . '<p>List your organization first, then submit a use case or suggest an update.</p>'
+            . '<p class="fides-uc-contribute__note">A FIDES Community account is required. Submissions are reviewed before publication.</p>'
+            . $button
+            . '</div></div></section>';
+    }
+
     public static function related(array $item, int $limit = 3): array {
         $id      = (string) ($item['id'] ?? '');
         $themes  = isset($item['themes']) && is_array($item['themes']) ? $item['themes'] : array();

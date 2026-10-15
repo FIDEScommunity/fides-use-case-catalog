@@ -2259,14 +2259,15 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
     }
 
     if ($design === 'pilot') {
+        $add_url = esc_url_raw(trim((string) $atts['add_url']));
         return sprintf(
             '<div id="fides-use-case-catalog-root" class="fides-ds fides-uc-pilot" data-columns="%s" data-design="pilot" data-detail-url="%s" data-title="%s" data-add-url="%s" aria-busy="true">%s</div>',
             esc_attr($columns),
             esc_attr($detail_url),
             esc_attr(sanitize_text_field((string) $atts['title'])),
-            esc_attr(esc_url_raw(trim((string) $atts['add_url']))),
+            esc_attr($add_url),
             $ssr_html
-        );
+        ) . Fides_Use_Case_Design::contribute_band_html($add_url);
     }
 
     return sprintf(

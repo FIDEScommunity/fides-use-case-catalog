@@ -677,42 +677,21 @@ html.fides-uc-pilot-panel-open {
   display: none;
 }
 
+/* Collapsed "On this page" below 1100px (Paper 15.5/15.6), full-bleed bar;
+   sticky tabs on wide screens. Link styling comes from .fides-ds-section-nav. */
 .fides-ds .fides-uc-detail__sections {
-  position: sticky;
-  top: var(--wp-admin--admin-bar--height, 0px);
-  z-index: 5;
-  margin-bottom: var(--fides-ds-space-7);
-  border-block: 1px solid var(--fides-ds-line);
-  background: var(--fides-ds-ground);
+  margin: 0 calc(-1 * var(--fides-ds-gutter)) var(--fides-ds-space-7);
+  padding-inline: var(--fides-ds-gutter);
 }
 
-.fides-ds .fides-uc-detail__sections ul {
-  display: flex;
-  gap: var(--fides-ds-space-6);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.fides-ds .fides-uc-detail__sections a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 56px;
-  border-bottom: 2px solid transparent;
-  color: var(--fides-ds-ink);
-  font-size: 14px;
-  line-height: 20px;
-  font-weight: 500;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.fides-ds .fides-uc-detail__sections a:hover {
-  border-bottom-color: var(--fides-ds-brand);
-  color: var(--fides-ds-ink);
-}
-
-.fides-ds .fides-uc-detail__sections a:focus-visible {
-  outline-offset: -3px;
+@media (min-width: 1100px) {
+  .fides-ds .fides-uc-detail__sections {
+    position: sticky;
+    top: var(--wp-admin--admin-bar--height, 0px);
+    z-index: 5;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
 }
 
 .fides-ds .fides-uc-detail__layout {
@@ -953,4 +932,63 @@ html.fides-uc-pilot-panel-open {
 
 .fides-ds.fides-uc-featured {
   background: transparent;
+}
+
+/* ---------- Overview contribute band ---------- */
+
+.fides-ds.fides-uc-contribute {
+  padding-block: var(--fides-ds-space-7);
+}
+
+.fides-ds .fides-uc-contribute__inner {
+  display: grid;
+  gap: 20px;
+}
+
+.fides-ds .fides-uc-contribute__intro,
+.fides-ds .fides-uc-contribute__steps {
+  display: grid;
+  gap: 20px;
+  align-content: start;
+  justify-items: start;
+}
+
+.fides-ds .fides-uc-contribute .fides-ds-kicker {
+  color: #ffffff;
+}
+
+.fides-ds .fides-uc-contribute__title {
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.04em;
+}
+
+.fides-ds .fides-uc-contribute p {
+  max-width: 500px;
+}
+
+.fides-ds .fides-uc-contribute .fides-uc-contribute__note {
+  color: #c8c8c8;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.fides-ds .fides-uc-contribute .fides-ds-button:focus-visible {
+  outline-color: #ffffff;
+}
+
+@media (min-width: 1100px) {
+  .fides-ds.fides-uc-contribute {
+    padding-block: var(--fides-ds-space-8);
+  }
+
+  .fides-ds .fides-uc-contribute__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 36px;
+  }
+
+  .fides-ds .fides-uc-contribute__title {
+    font-size: 48px;
+    line-height: 50px;
+  }
 }

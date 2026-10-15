@@ -176,13 +176,16 @@ final class Fides_Use_Case_Detail_Page {
     </div>
 
     <?php if (count($sections) > 1) : ?>
-      <nav class="fides-uc-detail__sections" aria-label="On this page">
-        <ul>
-          <?php foreach ($sections as $anchor => $label) : ?>
-            <li><a href="#<?php echo esc_attr($anchor); ?>"><?php echo esc_html($label); ?></a></li>
-          <?php endforeach; ?>
-        </ul>
-      </nav>
+      <details class="fides-ds-section-nav fides-uc-detail__sections" data-fides-ds-section-nav>
+        <summary>On this page <svg class="fides-ds-section-nav__chevron" aria-hidden="true" focusable="false" width="12" height="8" viewBox="0 0 12 8"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></summary>
+        <nav aria-label="On this page">
+          <ul>
+            <?php foreach ($sections as $anchor => $label) : ?>
+              <li><a href="#<?php echo esc_attr($anchor); ?>"><?php echo esc_html($label); ?></a></li>
+            <?php endforeach; ?>
+          </ul>
+        </nav>
+      </details>
     <?php endif; ?>
 
     <div class="fides-uc-detail__layout">
