@@ -22,6 +22,7 @@ utrecht-demo, so that site must be running in Local.
 | `start-server.sh` | Serve the pilot on `http://localhost:10088` (IPv4 and IPv6; port 10080 is blocked by Chrome) |
 | `create-pages.sh` | Create or update the pilot pages and the default homepage feature |
 | `teardown-site.sh` | Stop the server, drop the pilot database, delete the pilot files |
+| `run-tests.sh` | Run `tests/use-case-design-behaviour.php` in the pilot WordPress (fixture data, mocked REST, no database writes) |
 
 `fides-design-pilot-guard.php` (installed as mu-plugin) blocks outgoing mail
 and every outgoing HTTP request except GET/HEAD, so catalog data still loads
@@ -43,6 +44,31 @@ fallback use case by stable catalog id; the preview uses the same card as the
 page. An id that is no longer in the catalog is skipped (the fallback is used)
 and the settings page shows a warning. A single placement can override the
 setting with `[fides_use_case_featured id="<catalog-id>"]`.
+
+## Behaviour tests
+
+`scripts/design-pilot/run-tests.sh` exits non-zero on failure. It covers:
+featured selection, fallback and missing records (including the settings
+warning), non-HTTP identifiers kept as code, credential aliases linking to the
+canonical record, copy link / canonical / related cards using the same detail
+route, and award and like display. The regular `npm test` and the tiles
+`phpunit` and card parity tests still apply.
+
+## Not restored yet (no content parity claimed)
+
+- Liking: the pilot rows and detail page show like counts but have no like toggle.
+- Detail route: the pilot uses `/fides-design-pilot/use-case/?usecase=<id>`
+  for copy link and canonical. Production needs one decided detail route with
+  matching canonical, redirects from the old `?usecase=` modal links and metadata.
+- Site shell: the old Blocksy header, footer and blue outer margins remain; the
+  contribute band, the Siteopzet and the token files from Paper are missing;
+  the mobile section navigation scrolls horizontally instead of the collapsed
+  Paper variant. Paper plus the handbook are the reference for the final shell.
+- Cache busting: the design CSS/JS use `filemtime` versions, but
+  `usecase-catalog.js` still uses `FIDES_USE_CASE_CATALOG_VERSION` (0.21.11);
+  bump the plugin version before any staging build.
+- Environment: the pilot database runs on utrecht-demo's MySQL in Local;
+  simplify this before using the pilot as a daily dev environment.
 
 ## Rollback
 
