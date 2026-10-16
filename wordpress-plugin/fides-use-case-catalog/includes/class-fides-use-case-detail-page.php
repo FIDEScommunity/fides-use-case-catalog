@@ -30,6 +30,9 @@ final class Fides_Use_Case_Detail_Page {
         'organizations'   => array('Organizations', 'organizationDetailUrl', ''),
     );
 
+    /** Records shown per role before "Show all". */
+    private const RELATION_VISIBLE = 6;
+
     public static function bootstrap(): void {
         add_shortcode('fides_use_case_detail', array(__CLASS__, 'shortcode'));
     }
@@ -215,26 +218,18 @@ final class Fides_Use_Case_Detail_Page {
 
       <div class="fides-uc-detail__aside">
         <?php if ($relations) : ?>
-          <section class="fides-ds-panel fides-uc-detail__panel" id="ecosystem" aria-labelledby="ecosystem-title">
-            <h2 class="fides-ds-panel__title" id="ecosystem-title">Connected ecosystem</h2>
-            <?php foreach ($relations as $group) : ?>
-              <h3 class="fides-uc-detail__group-title"><?php echo esc_html($group['label']); ?></h3>
-              <ul class="fides-uc-relations">
-                <?php foreach ($group['items'] as $relation) : ?>
-                  <li class="fides-uc-relations__item">
-                    <?php if ($relation['href'] !== '') : ?>
-                      <a href="<?php echo esc_url($relation['href']); ?>"<?php echo $relation['external'] ? ' rel="noopener" target="_blank"' : ''; ?>><?php echo esc_html($relation['label']); ?><?php if ($relation['external']) : ?><span aria-hidden="true"> ↗</span><span class="fides-ds-visually-hidden"> (external site, opens in a new tab)</span><?php endif; ?></a>
-                    <?php else : ?>
-                      <span class="fides-uc-relations__label"><?php echo esc_html($relation['label']); ?></span>
-                    <?php endif; ?>
-                    <?php if ($relation['identifier'] !== '') : ?>
-                      <code class="fides-uc-relations__identifier"><?php echo esc_html($relation['identifier']); ?></code>
-                    <?php endif; ?>
-                    <span class="fides-uc-relations__source"><?php echo esc_html($relation['source']); ?></span>
-                  </li>
-                <?php endforeach; ?>
-              </ul>
-            <?php endforeach; ?>
+          <section class="fides-ds-panel fides-uc-detail__panel fides-uc-ecosystem-summary" aria-labelledby="ecosystem-summary-title">
+            <h2 class="fides-ds-panel__title" id="ecosystem-summary-title">Connected ecosystem</h2>
+            <p class="fides-uc-ecosystem-summary__intro">Entries per role. One party can appear in more than one role.</p>
+            <dl class="fides-uc-ecosystem-summary__roles">
+              <?php foreach ($relations as $group) : ?>
+                <div class="fides-uc-ecosystem-summary__role">
+                  <dt><?php echo esc_html($group['label']); ?></dt>
+                  <dd><?php echo esc_html((string) count($group['items'])); ?></dd>
+                </div>
+              <?php endforeach; ?>
+            </dl>
+            <a class="fides-ds-action-link fides-uc-ecosystem-summary__link" href="#ecosystem">View connected ecosystem <span aria-hidden="true">↓</span></a>
           </section>
         <?php endif; ?>
 
@@ -261,6 +256,20 @@ final class Fides_Use_Case_Detail_Page {
         <?php endif; ?>
       </div>
     </div>
+
+    <?php if ($relations) : ?>
+      <section class="fides-uc-ecosystem" id="ecosystem" aria-labelledby="ecosystem-title">
+        <div class="fides-uc-ecosystem__head">
+          <h2 class="fides-ds-heading-3" id="ecosystem-title">Connected ecosystem</h2>
+          <p class="fides-uc-ecosystem__intro">The wallets, credentials and participants listed for this use case, by role.</p>
+        </div>
+        <div class="fides-uc-ecosystem__groups">
+          <?php foreach ($relations as $index => $group) : ?>
+            <?php echo self::relation_group_html($group, 'ecosystem-group-' . $index); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+          <?php endforeach; ?>
+        </div>
+      </section>
+    <?php endif; ?>
 
     <?php if (isset($sections['video-and-links'])) : ?>
       <section class="fides-ds-band--dark fides-uc-detail__band" id="video-and-links" aria-labelledby="video-and-links-title">
@@ -497,12 +506,16 @@ final class Fides_Use_Case_Detail_Page {
         foreach (self::RELATION_GROUPS as $key => $config) {
             $list = isset($links[$key]) && is_array($links[$key]) ? $links[$key] : array();
             $rows = array();
+            $seen = array();
             foreach ($list as $link) {
                 if (! is_array($link)) {
                     continue;
                 }
                 $relation = self::relation($link, $key, (string) $item['id']);
-                if ($relation['label'] !== '') {
+                // Source data can list the same record twice in one role; count it once.
+                $dedupe = strtolower($relation['label'] . '|' . $relation['href'] . '|' . $relation['identifier']);
+                if ($relation['label'] !== '' && ! isset($seen[$dedupe])) {
+                    $seen[$dedupe] = true;
                     $rows[] = $relation;
                 }
             }
@@ -511,6 +524,56 @@ final class Fides_Use_Case_Detail_Page {
             }
         }
         return $groups;
+    }
+
+    /**
+     * One role group in the Connected ecosystem section. Groups longer than
+     * RELATION_VISIBLE keep the rest in a native disclosure, so every record
+     * stays reachable by keyboard and in the HTML.
+     *
+     * @param array{label:string, items:list<array{label:string, href:string, external:bool, source:string, identifier:string}>} $group
+     */
+    private static function relation_group_html(array $group, string $id): string {
+        $items   = $group['items'];
+        $visible = array_slice($items, 0, self::RELATION_VISIBLE);
+        $rest    = array_slice($items, self::RELATION_VISIBLE);
+        $list    = static function (array $rows): string {
+            return '<ul class="fides-uc-relations">' . implode('', array_map(array(__CLASS__, 'relation_item_html'), $rows)) . '</ul>';
+        };
+        $html = '<div class="fides-uc-ecosystem__group" role="group" aria-labelledby="' . esc_attr($id) . '">'
+            . '<h3 class="fides-uc-ecosystem__role" id="' . esc_attr($id) . '">' . esc_html($group['label'])
+            . ' <span class="fides-uc-ecosystem__count">' . esc_html((string) count($items)) . '</span></h3>'
+            . $list($visible);
+        if ($rest) {
+            $html .= '<details class="fides-uc-ecosystem__more"><summary>'
+                . '<span class="fides-uc-ecosystem__more-closed">Show all ' . esc_html((string) count($items)) . '</span>'
+                . '<span class="fides-uc-ecosystem__more-open">Show fewer</span>'
+                . '<span class="fides-ds-visually-hidden"> ' . esc_html($group['label']) . '</span></summary>'
+                . $list($rest) . '</details>';
+        }
+        return $html . '</div>';
+    }
+
+    /**
+     * Internal catalog link, external link (marked) or plain text when the
+     * record has no destination; URNs stay visible as code.
+     *
+     * @param array{label:string, href:string, external:bool, source:string, identifier:string} $relation
+     */
+    private static function relation_item_html(array $relation): string {
+        if ($relation['href'] !== '') {
+            $name = '<a class="fides-uc-relations__name" href="' . esc_url($relation['href']) . '"' . ($relation['external'] ? ' rel="noopener" target="_blank"' : '') . '>'
+                . esc_html($relation['label'])
+                . ($relation['external'] ? '<span aria-hidden="true"> ↗</span><span class="fides-ds-visually-hidden"> (external site, opens in a new tab)</span>' : '')
+                . '</a>';
+        } else {
+            $name = '<span class="fides-uc-relations__label">' . esc_html($relation['label']) . '</span>';
+        }
+        $identifier = $relation['identifier'] !== ''
+            ? '<code class="fides-uc-relations__identifier">' . esc_html($relation['identifier']) . '</code>'
+            : '';
+        return '<li class="fides-uc-relations__item">' . $name . $identifier
+            . '<span class="fides-uc-relations__source">' . esc_html($relation['source']) . '</span></li>';
     }
 
     /**

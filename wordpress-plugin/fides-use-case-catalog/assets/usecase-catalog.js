@@ -3231,7 +3231,9 @@
     }
     const paginationHtml = renderPaginationBar(filtered);
     const paginationEl = root.querySelector("[data-fides-use-case-pagination]");
+    const paginationSlot = root.querySelector("[data-pilot-pagination-slot]");
     if (paginationEl) paginationEl.outerHTML = paginationHtml;
+    else if (paginationHtml && paginationSlot) paginationSlot.insertAdjacentHTML("beforeend", paginationHtml);
     else if (paginationHtml && resultsEl) resultsEl.insertAdjacentHTML("afterend", paginationHtml);
 
     const kpiValues = root.querySelectorAll(".fides-kpi-card .fides-kpi-value");
@@ -3252,7 +3254,7 @@
   /* ---------- Design pilot overview (FIDES design system) ---------- */
 
   const PILOT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  const PILOT_MORE_FILTER_KEYS = ["awardRecognition", ...TAXONOMY_FILTER_GROUPS.map((group) => group.key)];
+  const PILOT_MORE_FILTER_KEYS = ["productionDeployment", "awardRecognition", ...TAXONOMY_FILTER_GROUPS.map((group) => group.key)];
   const PILOT_COMPACT_BREAKPOINT = 600;
   let pilotEventsBound = false;
 
@@ -3374,8 +3376,19 @@
       .join("");
   }
 
+  function pilotThemeTitle(code) {
+    const bundle = THEME_BUNDLES_BY_CODE[code];
+    return bundle ? String(bundle.title || code) : code;
+  }
+
+  /** Theme is single-select state (activeThemeCode), the other keys are filter arrays. */
+  function pilotSelectedLabels(key) {
+    if (key === "theme") return activeThemeCode ? [pilotThemeTitle(activeThemeCode)] : [];
+    return (filters[key] || []).map((value) => pilotFilterLabel(key, value));
+  }
+
   function pilotSummaryText(keys, allLabel) {
-    const selected = keys.flatMap((key) => (filters[key] || []).map((value) => pilotFilterLabel(key, value)));
+    const selected = keys.flatMap(pilotSelectedLabels);
     if (selected.length === 0) return allLabel;
     if (selected.length === 1) return selected[0];
     return `${selected.length} selected`;
@@ -3399,38 +3412,64 @@
     const groups = PILOT_MORE_FILTER_KEYS.map((key) => {
       const options = renderPilotOptions(key);
       if (!options) return "";
-      const title = key === "awardRecognition"
-        ? "Awards"
-        : (TAXONOMY_FILTER_GROUPS.find((group) => group.key === key) || {}).title || key;
+      const title = key === "productionDeployment"
+        ? "Status"
+        : key === "awardRecognition"
+          ? "Awards"
+          : (TAXONOMY_FILTER_GROUPS.find((group) => group.key === key) || {}).title || key;
       return `<div class="fides-uc-pilot__option-group"><p class="fides-uc-pilot__option-group-title">${escapeHtml(title)}</p>${options}</div>`;
     }).join("");
     return renderPilotDropdown("more", "More filters", "None", PILOT_MORE_FILTER_KEYS, groups);
   }
 
-  function renderPilotThemeChips() {
+  /** Same options and counts as the classic theme radio group (renderThemeFilterGroup). */
+  function renderPilotThemeDropdown() {
     if (!THEME_BUNDLES.length) return "";
-    const chips = [{ code: "", title: "All themes" }, ...THEME_BUNDLES.map((bundle) => ({
-      code: String(bundle.code || ""),
-      title: String(bundle.title || bundle.code || "")
-    }))];
-    return `<div class="fides-uc-pilot__themes" role="group" aria-label="Theme">${chips
-      .map((chip) => `<button type="button" class="fides-ds-chip" data-pilot-theme="${escapeHtml(chip.code)}" aria-pressed="${activeThemeCode === chip.code ? "true" : "false"}">${escapeHtml(chip.title)}</button>`)
-      .join("")}</div>`;
+    const options = [
+      { code: "", title: "All themes", count: currentItems.length },
+      ...THEME_BUNDLES.map((bundle) => ({
+        code: String(bundle.code || ""),
+        title: String(bundle.title || bundle.code || ""),
+        count: currentItems.filter((item) => itemMatchesTheme(item, String(bundle.code || ""))).length
+      }))
+    ];
+    const body = options.map((option) => `<label class="fides-uc-pilot__option">
+        <input type="radio" name="fides-uc-pilot-theme" data-pilot-theme="${escapeHtml(option.code)}" value="${escapeHtml(option.code)}" ${activeThemeCode === option.code ? "checked" : ""}>
+        <span class="fides-uc-pilot__option-label">${escapeHtml(option.title)}</span>
+        <span class="fides-uc-pilot__option-count">${option.count}</span>
+      </label>`).join("");
+    return renderPilotDropdown("theme", "Theme", "All themes", ["theme"], body);
   }
 
   function renderPilotActivePills() {
     const pills = [];
     if (activeThemeCode) {
-      const bundle = THEME_BUNDLES_BY_CODE[activeThemeCode];
-      pills.push({ group: "theme", value: activeThemeCode, label: bundle ? bundle.title : activeThemeCode });
+      pills.push({ group: "theme", value: activeThemeCode, label: pilotThemeTitle(activeThemeCode) });
     }
-    ["sector", "country", "productionDeployment", ...PILOT_MORE_FILTER_KEYS].forEach((key) => {
+    ["sector", "country", ...PILOT_MORE_FILTER_KEYS].forEach((key) => {
       (filters[key] || []).forEach((value) => pills.push({ group: key, value, label: pilotFilterLabel(key, value) }));
     });
     if (!pills.length) return "";
-    return `<p class="fides-ds-visually-hidden">Active filters</p><ul class="fides-uc-pilot__pills">${pills
+    return `<p class="fides-uc-pilot__active-label">Active filters</p><ul class="fides-uc-pilot__pills">${pills
       .map((pill) => `<li><button type="button" class="fides-uc-pilot__pill" data-pilot-remove-group="${escapeHtml(pill.group)}" data-pilot-remove-value="${escapeHtml(pill.value)}">${escapeHtml(pill.label)}<span aria-hidden="true"> ×</span><span class="fides-ds-visually-hidden"> (remove filter)</span></button></li>`)
       .join("")}</ul>`;
+  }
+
+  /**
+   * Page intro from the shortcode content (sanitized server-side): the first
+   * paragraph sits under the title, further paragraphs next to the pagination.
+   */
+  function pilotIntroParts() {
+    const html = String(root.dataset.intro || "").trim();
+    if (!html) return { lead: "", closing: "" };
+    const template = document.createElement("template");
+    template.innerHTML = html;
+    const paragraphs = [...template.content.children].filter((node) => node.tagName === "P");
+    if (!paragraphs.length) return { lead: `<p>${html}</p>`, closing: "" };
+    return {
+      lead: paragraphs[0].outerHTML,
+      closing: paragraphs.slice(1).map((node) => node.outerHTML).join("")
+    };
   }
 
   function pilotCountLabel(count) {
@@ -3442,17 +3481,16 @@
     const visible = visibleSlice(filtered);
     const title = String(root.dataset.title || "Use cases");
     const addUrl = String(root.dataset.addUrl || "").trim();
+    const intro = pilotIntroParts();
     root.innerHTML = `
       <div class="fides-ds-page fides-uc-pilot__page">
         <header class="fides-uc-pilot__intro">
-          <div class="fides-uc-pilot__intro-text">
-            <p class="fides-ds-kicker">Ecosystem Explorer</p>
-            <h1 class="fides-ds-heading-1">${escapeHtml(title)}</h1>
+          <p class="fides-ds-kicker">Ecosystem Explorer</p>
+          <div class="fides-uc-pilot__title-row">
+            <h1 class="fides-ds-heading-1 fides-ds-heading-1--catalog">${escapeHtml(title)}</h1>
+            ${addUrl ? `<a class="fides-ds-action-link fides-uc-pilot__add" href="${escapeHtml(addUrl)}">Add a use case <span aria-hidden="true">→</span></a>` : ""}
           </div>
-          <div class="fides-uc-pilot__intro-aside">
-            <p class="fides-uc-pilot__total"><span class="fides-uc-pilot__total-value">${currentItems.length}</span> <span>use cases in the FIDES catalog</span></p>
-            ${addUrl ? `<a class="fides-ds-button" href="${escapeHtml(addUrl)}">Add a use case <span aria-hidden="true">→</span></a>` : ""}
-          </div>
+          ${intro.lead ? `<div class="fides-uc-pilot__lead">${intro.lead}</div>` : ""}
         </header>
 
         <div class="fides-uc-pilot__controls">
@@ -3463,9 +3501,8 @@
               <input id="fides-search-input" class="fides-uc-pilot__search-input" type="search" placeholder="Search use cases, organizations or topics" value="${escapeHtml(filters.search)}" autocomplete="off">
               <button class="fides-uc-pilot__search-clear ${filters.search ? "" : "hidden"}" id="fides-search-clear" type="button" aria-label="Clear search">${icons.xSmall}</button>
             </div>
-            ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-button fides-ds-button--secondary fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button">Ask FIDES</button>' : ""}
+            ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-text-button fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button">Ask FIDES <span aria-hidden="true">→</span></button>' : ""}
           </div>
-          ${renderPilotThemeChips()}
           <div class="fides-uc-pilot__filters">
             <button class="fides-ds-button fides-ds-button--secondary fides-uc-pilot__filters-toggle" type="button" aria-expanded="false" aria-controls="fides-uc-pilot-filter-panel" data-pilot-open>
               Filters <span class="fides-filter-count ${getActiveFilterCount() > 0 ? "" : "hidden"}">${getActiveFilterCount() || 0}</span>
@@ -3476,9 +3513,9 @@
                 <button type="button" class="fides-uc-pilot__panel-close" data-pilot-close>Close <span aria-hidden="true">×</span></button>
               </div>
               <div class="fides-uc-pilot__dropdowns">
+                ${renderPilotThemeDropdown()}
                 ${renderPilotDropdown("sector", "Sector", "All sectors", ["sector"], renderPilotOptions("sector"))}
                 ${renderPilotDropdown("country", "Country", "All countries", ["country"], renderPilotOptions("country"))}
-                ${renderPilotDropdown("status", "Status", "All statuses", ["productionDeployment"], renderPilotOptions("productionDeployment"))}
                 ${renderPilotMoreFilters()}
               </div>
               <div class="fides-uc-pilot__panel-actions">
@@ -3503,7 +3540,10 @@
           </label>
         </div>
         <div class="fides-results">${renderPilotResults(visible)}</div>
-        ${renderPaginationBar(filtered)}
+        <div class="fides-uc-pilot__footer-row" data-pilot-pagination-slot>
+          ${intro.closing ? `<div class="fides-uc-pilot__closing">${intro.closing}</div>` : ""}
+          ${renderPaginationBar(filtered)}
+        </div>
         <p id="fides-catalog-message" class="fides-form-message" aria-live="polite"></p>
       </div>
     `;
@@ -3522,10 +3562,10 @@
       const keys = String(dropdown.dataset.pilotKeys || "").split(",").filter(Boolean);
       const summary = dropdown.querySelector("[data-pilot-summary]");
       if (summary) summary.textContent = pilotSummaryText(keys, summary.dataset.pilotAll || "");
-      dropdown.classList.toggle("has-active", keys.some((key) => (filters[key] || []).length > 0));
+      dropdown.classList.toggle("has-active", keys.some((key) => pilotSelectedLabels(key).length > 0));
     });
-    root.querySelectorAll("[data-pilot-theme]").forEach((chip) => {
-      chip.setAttribute("aria-pressed", chip.dataset.pilotTheme === activeThemeCode ? "true" : "false");
+    root.querySelectorAll("input[data-pilot-theme]").forEach((input) => {
+      input.checked = input.dataset.pilotTheme === activeThemeCode;
     });
     const active = root.querySelector("[data-pilot-active]");
     if (active) active.innerHTML = renderPilotActivePills();
@@ -3568,14 +3608,15 @@
     if (pilotEventsBound) return;
     pilotEventsBound = true;
 
+    root.addEventListener("change", (event) => {
+      const theme = event.target.closest && event.target.closest("input[data-pilot-theme]");
+      if (!theme || !theme.checked) return;
+      setThemeFilter(String(theme.dataset.pilotTheme || ""));
+      resetListingPage();
+      renderResultsOnly();
+    });
+
     root.addEventListener("click", (event) => {
-      const theme = event.target.closest("[data-pilot-theme]");
-      if (theme) {
-        setThemeFilter(String(theme.dataset.pilotTheme || ""));
-        resetListingPage();
-        renderResultsOnly();
-        return;
-      }
       const remove = event.target.closest("[data-pilot-remove-group]");
       if (remove) {
         const group = remove.dataset.pilotRemoveGroup;
@@ -3939,16 +3980,19 @@
   async function loadUseCases() {
     const ui = window.FidesCatalogUI;
     const restUrl = apiBase ? `${apiBase}/catalog` : "";
-    const loadMeta = { showStaleNotice: false, remoteFailed: false, snapshotDate: "" };
+    const loadMeta = { showStaleNotice: false, remoteFailed: false, snapshotDate: "", source: "" };
     if (ui && typeof ui.loadCatalogAggregatedJson === "function" && (aggregatedUrl || restUrl)) {
       const loaded = await ui.loadCatalogAggregatedJson({
         remoteUrl: aggregatedUrl,
         cacheUrl: String(config.cacheDataUrl || "").trim(),
-        localUrl: restUrl
+        localUrl: restUrl,
+        // null keeps the loader's host detection (*.local prefers local data).
+        preferLocal: typeof config.preferLocalSource === "boolean" ? config.preferLocalSource : null
       });
       loadMeta.showStaleNotice = !!loaded.showStaleNotice;
       loadMeta.remoteFailed = !!loaded.remoteFailed;
       loadMeta.snapshotDate = loaded.snapshotDate || "";
+      loadMeta.source = loaded.source || "";
       if (loaded.ok && loaded.data) {
         if (Array.isArray(loaded.data.useCases) && loaded.data.useCases.length > 0) {
           return { items: loaded.data.useCases, meta: loadMeta };
@@ -3958,6 +4002,7 @@
         }
       }
       if (aggregatedUrl && restUrl && loaded.source === "github") {
+        loadMeta.source = "local";
         return { items: await fetchUseCases(restUrl), meta: loadMeta };
       }
       return { items: [], meta: loadMeta };
@@ -4031,6 +4076,7 @@
       const loadedCatalog = await loadUseCases();
       if (generation !== loadGeneration) return;
       catalogLoadMeta = loadedCatalog.meta;
+      if (catalogLoadMeta.source) root.dataset.catalogSource = catalogLoadMeta.source;
       currentItems = loadedCatalog.items.map((item) => Object.assign({}, item, { productionDeployment: normalizeProductionDeployment(item.productionDeployment) }));
       if (currentItems.length === 0) {
         throw new Error("Catalog data contains no use cases.");

@@ -2073,7 +2073,7 @@ function fides_use_case_catalog_enqueue_assets(): void {
         'fides-use-case-catalog-list',
         FIDES_USE_CASE_CATALOG_URL . 'assets/usecase-catalog.js',
         array('fides-use-case-catalog-ui-lib'),
-        FIDES_USE_CASE_CATALOG_VERSION,
+        file_exists($plugin_dir . 'assets/usecase-catalog.js') ? filemtime($plugin_dir . 'assets/usecase-catalog.js') : FIDES_USE_CASE_CATALOG_VERSION,
         true
     );
     wp_register_script(
@@ -2174,7 +2174,8 @@ function fides_use_case_catalog_update_form_shortcode(array $atts = array()): st
 add_shortcode('fides_use_case_form', 'fides_use_case_catalog_form_shortcode');
 add_shortcode('fides_use_case_update_form', 'fides_use_case_catalog_update_form_shortcode');
 
-function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
+function fides_use_case_catalog_list_shortcode($atts = array(), $content = ''): string {
+    $atts = is_array($atts) ? $atts : array();
     $atts = shortcode_atts(
         array(
             'columns'    => '3',
@@ -2243,6 +2244,8 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
             'askFidesPlaceholder' => __('Ask anything about use cases…', 'fides-use-case-catalog'),
             'sharePath' => fides_use_case_catalog_share_path(),
             'listingPath' => fides_use_case_catalog_listing_path(),
+            // true: same-origin data first; false: GitHub first; null: detect *.local hosts.
+            'preferLocalSource' => apply_filters('fides_use_case_catalog_prefer_local_source', null),
         ),
         fides_use_case_catalog_catalog_urls()
     );
@@ -2260,12 +2263,15 @@ function fides_use_case_catalog_list_shortcode(array $atts = array()): string {
 
     if ($design === 'pilot') {
         $add_url = esc_url_raw(trim((string) $atts['add_url']));
+        // Enclosed shortcode content is the page intro: first paragraph under the title.
+        $intro = trim(wp_kses_post((string) $content));
         return sprintf(
-            '<div id="fides-use-case-catalog-root" class="fides-ds fides-uc-pilot" data-columns="%s" data-design="pilot" data-detail-url="%s" data-title="%s" data-add-url="%s" aria-busy="true">%s</div>',
+            '<div id="fides-use-case-catalog-root" class="fides-ds fides-uc-pilot" data-columns="%s" data-design="pilot" data-detail-url="%s" data-title="%s" data-add-url="%s" data-intro="%s" aria-busy="true">%s</div>',
             esc_attr($columns),
             esc_attr($detail_url),
             esc_attr(sanitize_text_field((string) $atts['title'])),
             esc_attr($add_url),
+            esc_attr($intro),
             $ssr_html
         ) . Fides_Use_Case_Design::contribute_band_html($add_url);
     }
