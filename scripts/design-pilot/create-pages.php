@@ -97,7 +97,7 @@ pilot_upsert_page(
     . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:48px;padding-bottom:96px\">"
     . "<!-- wp:columns {\"verticalAlignment\":\"center\",\"style\":{\"spacing\":{\"blockGap\":{\"left\":\"64px\"}}}} -->\n<div class=\"wp-block-columns are-vertically-aligned-center\">"
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"55%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:55%\">"
-    . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-1\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-1\">Accelerating Digital Trust</h1>\n<!-- /wp:heading -->\n"
+    . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-hero\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-hero\">Accelerating Digital Trust</h1>\n<!-- /wp:heading -->\n"
     . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">The new international movement dedicated to the continuous improvement of digital trust on the internet.</p>\n<!-- /wp:paragraph -->"
     . "\n<!-- wp:paragraph {\"className\":\"fides-uc-fragment__action\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"32px\"}}}} -->\n<p class=\"fides-uc-fragment__action\" style=\"margin-top:32px\"><a class=\"fides-ds-action-link\" href=\"/fides-design-pilot/overview/\">Explore use cases <span aria-hidden=\"true\">→</span></a></p>\n<!-- /wp:paragraph -->"
     . "</div>\n<!-- /wp:column -->\n"

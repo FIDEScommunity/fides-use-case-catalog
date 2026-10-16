@@ -123,7 +123,7 @@ final class Fides_Use_Case_Detail_Page {
       <?php if (Fides_Use_Case_Design::kicker($item) !== '') : ?>
         <p class="fides-ds-kicker"><?php echo esc_html(Fides_Use_Case_Design::kicker($item)); ?></p>
       <?php endif; ?>
-      <h1 class="fides-ds-heading-1 fides-uc-detail__title"><?php echo esc_html($title); ?></h1>
+      <h1 class="fides-ds-heading-1 fides-ds-heading-1--detail fides-uc-detail__title"><?php echo esc_html($title); ?></h1>
       <ul class="fides-uc-detail__meta">
         <?php if ($owner !== '') : ?>
           <li class="fides-uc-detail__owner"><?php echo self::owner_html($item, $owner); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>

@@ -11,20 +11,20 @@
 }
 
 .fides-ds .fides-uc-pilot__page {
-  padding-block: var(--fides-ds-space-7) var(--fides-ds-space-9);
+  padding-block: var(--fides-ds-catalog-intro-padding) var(--fides-ds-space-8);
 }
 
 .fides-ds .fides-uc-pilot__intro {
   display: grid;
-  gap: var(--fides-ds-space-6);
+  gap: var(--fides-ds-space-4) var(--fides-ds-space-5);
   align-items: end;
-  padding-bottom: var(--fides-ds-space-7);
+  padding-bottom: var(--fides-ds-catalog-intro-padding);
   border-bottom: 1px solid var(--fides-ds-line);
 }
 
 .fides-ds .fides-uc-pilot__intro-text {
   display: grid;
-  gap: var(--fides-ds-space-4);
+  gap: var(--fides-ds-space-3);
   min-width: 0;
 }
 
@@ -32,7 +32,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--fides-ds-space-4);
+  gap: var(--fides-ds-space-3);
 }
 
 .fides-ds .fides-uc-pilot__total {
@@ -46,10 +46,10 @@
 }
 
 .fides-ds .fides-uc-pilot__total-value {
-  font-size: clamp(40px, 1.5rem + 3vw, 72px);
-  line-height: 1;
+  font-size: var(--fides-ds-count-size);
+  line-height: var(--fides-ds-count-leading);
   font-weight: 700;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.04em;
   color: var(--fides-ds-ink);
   font-variant-numeric: tabular-nums;
 }
@@ -69,8 +69,8 @@
 
 .fides-ds .fides-uc-pilot__controls {
   display: grid;
-  gap: var(--fides-ds-space-5);
-  padding-block: var(--fides-ds-space-6);
+  gap: var(--fides-ds-catalog-group-gap);
+  padding-block: var(--fides-ds-space-4);
 }
 
 .fides-ds .fides-uc-pilot__search-row {
@@ -87,9 +87,9 @@
 
 .fides-ds .fides-uc-pilot__search-input {
   width: 100%;
-  min-height: 56px;
+  min-height: 48px;
   margin: 0;
-  padding: 14px 52px 14px 48px;
+  padding: 10px 52px 10px 48px;
   border: 1px solid var(--fides-ds-ink);
   border-radius: 0;
   background: var(--fides-ds-ground);
@@ -139,7 +139,7 @@
 }
 
 .fides-ds .fides-uc-pilot__ask {
-  min-height: 56px;
+  min-height: 48px;
 }
 
 .fides-ds .fides-uc-pilot__themes {
@@ -150,6 +150,12 @@
 
 .fides-ds .fides-uc-pilot__themes .fides-ds-chip {
   white-space: nowrap;
+}
+
+@media (min-width: 1100px) {
+  .fides-ds .fides-uc-pilot__themes .fides-ds-chip {
+    font-size: 13px;
+  }
 }
 
 .fides-ds .fides-uc-pilot__filters {
@@ -372,13 +378,13 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: var(--fides-ds-space-4);
-  padding-top: var(--fides-ds-space-4);
+  gap: var(--fides-ds-space-2) var(--fides-ds-space-4);
+  padding-top: var(--fides-ds-space-2);
   border-top: 2px solid var(--fides-ds-ink);
 }
 
 .fides-ds .fides-uc-pilot__count {
-  font-size: 20px;
+  font-size: 18px;
   line-height: 28px;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -608,8 +614,6 @@ html.fides-uc-pilot-panel-open {
 
 .fides-ds .fides-uc-detail__title {
   max-width: 1150px;
-  font-size: clamp(40px, 1.5rem + 3vw, 64px);
-  line-height: 1.04;
 }
 
 .fides-ds .fides-uc-detail__meta {
