@@ -133,6 +133,7 @@ $check(strpos($html, '?credential=cred%3Acanonical%3Aone') !== false, 'credentia
 $check(strpos($html, 'cred%3Aalias%3Aone') === false, 'alias id is not used in credential links');
 $check(strpos($html, 'data-fides-ds-copy="' . esc_attr($alpha_url) . '"') !== false, 'Copy link uses the detail route of the page');
 $check(strpos($html, 'href="' . esc_url($beta_url) . '"') !== false, 'related card uses the same detail route');
+$check(preg_match('#<h1 class="fides-ds-heading-1 fides-ds-heading-1--detail fides-uc-detail__title"#', $html) === 1, 'detail title uses the detail heading role');
 $check(strpos($html, 'fides-uc-detail__award">Finalist 2026<') !== false, 'award badge in header');
 $check(strpos($html, 'Finalist 2026, Test Awards 2026 (Impact)') !== false, 'award listed in At a glance');
 $check(strpos($html, '>3 likes<') !== false, 'like count in header');

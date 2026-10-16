@@ -23,14 +23,16 @@ utrecht-demo, so that site must be running in Local.
 | `create-pages.sh` | Create or update the pilot pages and the default homepage feature |
 | `teardown-site.sh` | Stop the server, drop the pilot database, delete the pilot files |
 | `run-tests.sh` | Run `tests/use-case-design-behaviour.php` and `tests/site-shell-behaviour.php` in the pilot WordPress (fixture data, mocked REST, no database writes) |
-| `tests/run-shell-route.sh` | Visitor route in headless Chrome at 1440/1024/768/390/320 px: homepage fragment → overview → detail → back, dropdowns, mobile menu, section navigation; screenshots in `../screens/shell/`. Uses an existing Playwright install (`PLAYWRIGHT_MODULE`) and the server from `start-server.sh` |
+| `tests/run-shell-route.sh` | Visitor route in headless Chrome at 1366×768 and 1440/1100/1024/768/390/320 px: homepage fragment → overview → detail → back, dropdowns, mobile menu, section navigation, filters with Escape/focus, pagination, long titles and the logo back to the homepage fragment; screenshots in `../screens/shell/`. Uses an existing Playwright install (`PLAYWRIGHT_MODULE`) and the server from `start-server.sh` |
+| `tests/run-measure-density.sh <label>` | Measure computed type sizes, Explore panel height, first result position, controls under 44 px and overflow at seven viewports; writes `measurements.json` and screenshots to `../screens/density-<label>/` |
 
 `fides-design-pilot-guard.php` (installed as mu-plugin) blocks outgoing mail
 and every outgoing HTTP request except GET/HEAD, so catalog data still loads
 but nothing is published or synced. It also adds `noindex`, shows a
 "Local design pilot" badge and maps the shell navigation to local pages
 (`fides_site_shell_url`; destinations without a local page link to
-fides.community). The mu-plugin is a copy: after editing it, copy it again to
+fides.community). The logo (`/`) maps to `/fides-design-pilot/homepage-fragment/`
+in the pilot only; the active homepage is not touched. The mu-plugin is a copy: after editing it, copy it again to
 `$PILOT_SITE/wp-content/mu-plugins/`.
 
 ## Site shell
@@ -47,7 +49,16 @@ the `fides_site_shell_url` filter; returning `''` leaves a link out, and a
 group or dropdown without links disappears. Destinations from the sitemap
 without an existing page are not in the navigation: Knowledge index,
 Intermediaries & connectors, Trust schemes, Get help choosing, Open Interop
-Testbed and Ask FIDES.
+Testbed and Ask FIDES. Glossary sits under Explore → Discover until
+Learn & connect has more existing destinations.
+
+Compactness (DS1.1): type roles and density come from tokens in
+`design-system.css` (`--fides-ds-hero-*`, `--fides-ds-h1-*`,
+`--fides-ds-detail-h1-*`, `--fides-ds-card-*`, `--fides-ds-count-*`,
+`--fides-ds-menu-*`, `--fides-ds-catalog-*`) with mobile values first and
+overrides at 600, 1100 and 1440 px. Headings use `fides-ds-heading-hero`,
+`fides-ds-heading-1` and `fides-ds-heading-1--detail`. Dropdown links have no
+descriptions; article text stays 18/29.
 
 ## Pilot pages
 

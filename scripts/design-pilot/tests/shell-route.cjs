@@ -11,7 +11,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 
 const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const OUT = process.env.SCREENS_DIR || path.join(process.cwd(), "screens");
-const WIDTHS = (process.env.WIDTHS || "1440,1024,768,390,320").split(",").map(Number);
+const WIDTHS = (process.env.WIDTHS || "1366,1440,1100,1024,768,390,320").split(",").map(Number);
 const WIDE = 1100;
 
 const results = [];
@@ -80,6 +80,60 @@ async function navigateToOverview(page, width) {
   check(`route @${width}: navigation reaches the pilot overview`, true);
 }
 
+const countText = (page) => page.locator(".fides-uc-pilot__count").first().textContent().then((t) => t.trim());
+
+async function filterChecks(page, width) {
+  await page.locator(".fides-ds-card--row").first().waitFor();
+  const total = await countText(page);
+  if (width >= 600) {
+    const dropdown = page.locator('details[data-pilot-dropdown="sector"]');
+    await dropdown.locator("summary").click();
+    await dropdown.locator(".fides-uc-pilot__option").first().click();
+    await page.waitForTimeout(200);
+    check(`filters @${width}: a sector option narrows the results`, (await countText(page)) !== total, `${total} -> ${await countText(page)}`);
+    await page.keyboard.press("Escape");
+    check(`filters @${width}: Escape closes the dropdown and returns focus`, !(await dropdown.evaluate((el) => el.open)) && (await dropdown.locator("summary").evaluate((el) => el === document.activeElement)));
+  } else {
+    const toggle = page.locator("[data-pilot-open]");
+    await toggle.click();
+    const panel = page.locator("#fides-uc-pilot-filter-panel");
+    check(`filters @${width}: Filters opens the panel as a dialog`, (await panel.getAttribute("role")) === "dialog");
+    await panel.locator('details[data-pilot-dropdown="sector"] summary').click();
+    await panel.locator('details[data-pilot-dropdown="sector"] .fides-uc-pilot__option').first().click();
+    await page.keyboard.press("Escape");
+    check(`filters @${width}: Escape closes the panel and returns focus`, (await panel.getAttribute("role")) === null && (await toggle.evaluate((el) => el === document.activeElement)));
+    check(`filters @${width}: a sector option narrows the results`, (await countText(page)) !== total, `${total} -> ${await countText(page)}`);
+  }
+  await page.locator("#fides-clear").click();
+  await page.waitForTimeout(200);
+  check(`filters @${width}: Clear filters restores all results`, (await countText(page)) === total, `${await countText(page)} vs ${total}`);
+
+  const next = page.locator('.fides-catalog-pagination a[data-catalog-page="2"]').first();
+  await next.click();
+  await page.waitForTimeout(300);
+  const meta = (await page.locator(".fides-catalog-pagination__meta").textContent()).trim();
+  check(`filters @${width}: pagination shows the second page`, /^Showing 25–/.test(meta), meta);
+  await page.locator('.fides-catalog-pagination a[data-catalog-page="1"]').first().click();
+  await page.waitForTimeout(300);
+}
+
+async function longTitleChecks(page, width) {
+  const links = page.locator(".fides-ds-card--row a.fides-ds-card__link");
+  const titles = await links.allTextContents();
+  const longest = titles.reduce((best, t, i) => (t.trim().length > titles[best].trim().length ? i : best), 0);
+  const rowFits = await page.evaluate(() => [...document.querySelectorAll(".fides-ds-card--row .fides-ds-card__title")].every((n) => n.scrollWidth <= n.clientWidth + 1));
+  check(`long titles @${width}: row titles wrap inside their column`, rowFits);
+  await links.nth(longest).click();
+  await page.waitForURL(/usecase=/);
+  const fit = await page.evaluate(() => {
+    const h1 = document.querySelector(".fides-uc-detail__title");
+    return { fits: h1.scrollWidth <= h1.clientWidth + 1, overflow: document.documentElement.scrollWidth > innerWidth + 1, length: h1.textContent.length };
+  });
+  check(`long titles @${width}: longest title on page 1 (${fit.length} chars) wraps without overflow`, fit.fits && !fit.overflow, JSON.stringify(fit));
+  await page.goBack();
+  await page.waitForURL(/\/fides-design-pilot\/overview\//);
+}
+
 async function run() {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch({
@@ -88,7 +142,7 @@ async function run() {
   });
   try {
     for (const width of WIDTHS) {
-      const context = await browser.newContext({ viewport: { width, height: 900 } });
+      const context = await browser.newContext({ viewport: { width, height: width === 1366 ? 768 : 900 } });
       // Locally Complianz writes its consent cookie on path ":10088/", so a choice never sticks; preset it.
       await context.addCookies(
         Object.entries({ "banner-status": "dismissed", policy_id: "35", functional: "allow", preferences: "deny", statistics: "deny", marketing: "deny" })
@@ -167,6 +221,13 @@ async function run() {
         await page.waitForTimeout(300);
       }
       check(`route @${width}: browser back from detail returns to the overview`, /\/fides-design-pilot\/overview\/?$/.test(page.url()), page.url());
+
+      await filterChecks(page, width);
+      await longTitleChecks(page, width);
+
+      await page.locator(".fides-ds-site-header__brand:visible").first().click();
+      await page.waitForURL(/\/fides-design-pilot\/homepage-fragment\/?$/);
+      check(`route @${width}: logo returns to the pilot homepage fragment`, true);
 
       check(`@${width}: no JavaScript page errors`, pageErrors.length === 0, pageErrors.join(" | "));
       await context.close();

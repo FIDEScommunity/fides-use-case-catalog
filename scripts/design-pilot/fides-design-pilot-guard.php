@@ -51,6 +51,7 @@ add_filter(
             return $url;
         }
         $local = array(
+            '/'                                             => '/fides-design-pilot/homepage-fragment/',
             '/ecosystem-explorer/'                          => '/explorer/',
             '/ecosystem-explorer/use-cases/'                => '/fides-design-pilot/overview/',
             '/ecosystem-explorer/use-cases/submit-use-case/' => '/use-case-form/',

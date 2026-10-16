@@ -71,17 +71,27 @@ $check(preg_match('#class="fides-ds-site-nav__panel"[^>]*hidden#', $header) === 
 $check(strpos($header, 'href="' . esc_url(home_url('/fides-design-pilot/overview/')) . '"') !== false, 'Use cases maps to the pilot overview');
 $check(strpos($header, 'href="https://fides.community/plans/"') !== false, 'destination without a local page links to fides.community');
 $check(strpos($header, 'placeholder="Search FIDES"') !== false && strpos($header, 'name="s"') !== false, 'search uses the WordPress search with a labelled field');
+$check(strpos($header, 'fides-ds-site-nav__panel-text') === false, 'panel links carry no descriptions');
+preg_match('#id="fides-ds-panel-explore".*?</div></div></div>#s', $header, $explore_panel);
+$explore_panel = $explore_panel[0] ?? '';
+preg_match_all('#fides-ds-site-nav__group-label"[^>]*>([^<]+)<#', $explore_panel, $explore_groups);
+$check($explore_groups[1] === array('Discover', 'Browse catalogs'), 'Explore has the groups Discover and Browse catalogs: ' . implode(', ', $explore_groups[1]));
+$check(preg_match('#>Discover</p>(?:(?!group-label).)*>Glossary\s*<#s', $explore_panel) === 1, 'Glossary is listed under Discover');
+$check(strpos($explore_panel, 'Learn &amp; connect') === false, 'Learn & connect is not shown yet');
+$brand_url = Fides_DS_Site_Shell::url('/');
+$check($brand_url !== '' && strpos($header, 'class="fides-ds-site-header__brand" href="' . esc_url($brand_url) . '"') !== false, 'logo links to the mapped homepage');
+$check(preg_match('#class="fides-ds-site-header__brand" href="[^"]*/fides-design-pilot/homepage-fragment/"#', $header) === 1, 'logo links to the pilot homepage fragment in the pilot');
 
 // Dropped destinations disappear, including emptied groups.
 $drop = static function ($url, $path) {
-    return in_array($path, array('/about-fides/news/', '/community-tools/glossary/'), true) ? '' : $url;
+    return in_array($path, array('/about-fides/news/', '/awards/global-digital-trust-awards/', '/awards/fides-community-awards/'), true) ? '' : $url;
 };
 add_filter('fides_site_shell_url', $drop, PHP_INT_MAX, 2);
 $header_dropped = Fides_DS_Site_Shell::render_header();
 $footer_dropped = Fides_DS_Site_Shell::render_footer();
 remove_filter('fides_site_shell_url', $drop, PHP_INT_MAX);
 $check(strpos($header_dropped, '>Updates<') === false, 'link with an empty URL is left out of the header');
-$check(strpos($header_dropped, 'Learn &amp; connect') === false, 'group without links is left out');
+$check(strpos($header, '>Awards</p>') !== false && strpos($header_dropped, '>Awards</p>') === false, 'group without links is left out');
 $check(strpos($footer_dropped, '>News<') === false, 'link with an empty URL is left out of the footer');
 $check(strpos($header_dropped, '>Plans<') !== false, 'other links stay when one is dropped');
 
