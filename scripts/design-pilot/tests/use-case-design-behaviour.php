@@ -46,6 +46,16 @@ $fixture_items = array(
                 array('refId' => null, 'labelRaw' => '', 'url' => 'urn:test:bare:2', 'source' => 'manual'),
                 array('refId' => null, 'labelRaw' => 'Web credential', 'url' => 'https://example.org/credential', 'source' => 'manual'),
             ),
+            // Issuer 2 is listed twice (as in some source data) and must count once.
+            'issuers'     => array_map(
+                static function (int $n): array {
+                    return array('refId' => null, 'labelRaw' => 'Issuer ' . $n, 'source' => 'manual');
+                },
+                array(1, 2, 2, 3, 4, 5, 6, 7, 8)
+            ),
+            'organizations' => array(
+                array('refId' => null, 'labelRaw' => 'Issuer 1', 'source' => 'manual'),
+            ),
         ),
     ),
     array(
@@ -134,6 +144,34 @@ $check(strpos($html, 'cred%3Aalias%3Aone') === false, 'alias id is not used in c
 $check(strpos($html, 'data-fides-ds-copy="' . esc_attr($alpha_url) . '"') !== false, 'Copy link uses the detail route of the page');
 $check(strpos($html, 'href="' . esc_url($beta_url) . '"') !== false, 'related card uses the same detail route');
 $check(preg_match('#<h1 class="fides-ds-heading-1 fides-ds-heading-1--detail fides-uc-detail__title"#', $html) === 1, 'detail title uses the detail heading role');
+
+// Connected ecosystem: role summary in the sidebar, full section before Video & links.
+preg_match_all('#<div class="fides-uc-ecosystem-summary__role">\s*<dt>([^<]+)</dt>\s*<dd>(\d+)</dd>#', $html, $roles, PREG_SET_ORDER);
+$summary = array();
+foreach ($roles as $role) {
+    $summary[$role[1]] = (int) $role[2];
+}
+$check($summary === array('Issuers' => 8, 'Credential types' => 4, 'Organizations' => 1), 'summary lists only roles with records, with their entry counts: ' . wp_json_encode($summary));
+$check(strpos($html, 'One party can appear in more than one role.') !== false, 'summary says counts are entries per role, not unique parties');
+$check(strpos($html, 'href="#ecosystem">View connected ecosystem') !== false, 'summary links to the full ecosystem section');
+$aside_pos     = strpos($html, 'fides-uc-detail__aside');
+$summary_pos   = strpos($html, 'fides-uc-ecosystem-summary');
+$technical_pos = strpos($html, 'id="technical-details"');
+$section_pos   = strpos($html, '<section class="fides-uc-ecosystem" id="ecosystem"');
+$check($aside_pos < $summary_pos && ($technical_pos === false || $summary_pos < $technical_pos), 'summary sits in the sidebar before the technical details');
+$check($section_pos !== false && $section_pos > strpos($html, 'id="overview"') && substr_count($html, 'id="ecosystem"') === 1, 'one full ecosystem section after the story');
+$check(strpos($html, '<li><a href="#ecosystem">Ecosystem</a></li>') !== false, 'page navigation points at the full ecosystem section');
+preg_match('#<section class="fides-uc-ecosystem".*?</section>#s', $html, $section);
+$section = $section[0] ?? '';
+$check(substr_count($section, 'class="fides-uc-relations__item"') === 13, 'full section lists every record (8 issuers, 4 credentials, 1 organization)');
+$check(substr_count($section, '<details class="fides-uc-ecosystem__more">') === 1 && strpos($section, 'Show all 8') !== false, 'a long role group gets a Show all disclosure with its count');
+$check(preg_match('#Show all 8.*?Issuer 7.*?Issuer 8#s', $section) === 1, 'records beyond the first six stay in the HTML inside the disclosure');
+$check(substr_count($section, '>Issuer 2<') === 1, 'an identical record listed twice in one role is shown and counted once');
+$check(preg_match('#<span class="fides-uc-relations__label">Issuer 1</span>#', $section) === 1 && substr_count($section, '>Issuer 1<') === 2, 'the same party can be listed under two roles');
+$check(strpos($section, 'rel="noopener" target="_blank">Web credential') !== false, 'external relation stays an external link');
+$check(strpos($section, '?credential=cred%3Acanonical%3Aone') !== false, 'catalog relation stays an internal catalog link');
+$beta_html = do_shortcode('[fides_use_case_detail id="' . UC_BETA . '" detail_url="' . DETAIL_BASE . '"]');
+$check(strpos($beta_html, 'fides-uc-ecosystem') === false && strpos($beta_html, 'href="#ecosystem"') === false, 'no ecosystem summary, section or navigation item without relations');
 $check(strpos($html, 'fides-uc-detail__award">Finalist 2026<') !== false, 'award badge in header');
 $check(strpos($html, 'Finalist 2026, Test Awards 2026 (Impact)') !== false, 'award listed in At a glance');
 $check(strpos($html, '>3 likes<') !== false, 'like count in header');

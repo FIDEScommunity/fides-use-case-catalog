@@ -78,6 +78,13 @@ add_filter(
     2
 );
 
+/*
+ * localhost is not a *.local host, so make the catalog source order explicit:
+ * GitHub first, as in production. A stale-data notice then means GitHub really
+ * failed; the same-origin cache and the plugin data are only fallbacks.
+ */
+add_filter('fides_use_case_catalog_prefer_local_source', '__return_false');
+
 add_action(
     'wp_footer',
     static function () {

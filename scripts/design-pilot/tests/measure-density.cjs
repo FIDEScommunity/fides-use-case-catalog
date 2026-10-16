@@ -41,6 +41,11 @@ async function run() {
       );
       const page = await context.newPage();
       const m = (report[key] = {});
+      const githubStarts = new Map();
+      m.githubRequests = [];
+      page.on("request", (r) => { if (r.url().includes("raw.githubusercontent.com")) githubStarts.set(r, Date.now()); });
+      page.on("requestfinished", (r) => { if (githubStarts.has(r)) m.githubRequests.push({ ms: Date.now() - githubStarts.get(r), ok: true }); });
+      page.on("requestfailed", (r) => { if (githubStarts.has(r)) m.githubRequests.push({ ms: Date.now() - githubStarts.get(r), failure: r.failure() && r.failure().errorText }); });
 
       await page.goto(`${BASE}/fides-design-pilot/homepage-fragment/`);
       await page.evaluate(() => document.fonts.ready);
@@ -85,14 +90,22 @@ async function run() {
       await page.waitForLoadState("networkidle").catch(() => {});
       await page.evaluate(() => document.fonts.ready);
       m.catalogH1 = await page.evaluate(textStyle(".fides-ds-shell__main h1"));
-      m.count = await page.evaluate(textStyle(".fides-uc-pilot__total-value"));
+      m.count = await page.evaluate(textStyle("[data-pilot-count]"));
+      m.staleNotice = (await page.locator("[data-fides-stale-catalog-notice]").count()) > 0;
+      m.catalogSource = await page.evaluate(() => document.getElementById("fides-use-case-catalog-root").dataset.catalogSource || "");
       m.firstRow = await page.evaluate(() => {
         const row = document.querySelector(".fides-ds-card--row");
         const r = row.getBoundingClientRect();
         const ts = getComputedStyle(row.querySelector(".fides-ds-card__title"));
         const summary = row.querySelector(".fides-ds-card__summary");
         const ss = summary && getComputedStyle(summary);
-        return { top: Math.round(r.top + scrollY), title: `${ts.fontSize}/${ts.lineHeight}`, summary: ss && `${ss.fontSize}/${ss.lineHeight}` };
+        const media = row.querySelector(".fides-ds-card__media, img");
+        return {
+          top: Math.round(r.top + scrollY),
+          imageTop: media ? Math.round(media.getBoundingClientRect().top + scrollY) : null,
+          title: `${ts.fontSize}/${ts.lineHeight}`,
+          summary: ss && `${ss.fontSize}/${ss.lineHeight}`,
+        };
       });
       m.smallControls = await page.evaluate(() =>
         [...document.querySelectorAll(".fides-ds-shell__main :is(input:not([type=checkbox]):not([type=radio]), select, button, summary)")]
@@ -116,6 +129,9 @@ async function run() {
   }
   fs.writeFileSync(path.join(OUT, "measurements.json"), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report));
+  const failures = Object.entries(report).filter(([, m]) => m && typeof m === "object" && ((m.smallControls || []).length || m.overflow));
+  for (const [key, m] of failures) console.error(`not ok - ${key}: ${m.overflow ? "horizontal overflow " : ""}${JSON.stringify(m.smallControls || [])}`);
+  if (failures.length) process.exitCode = 1;
 }
 
 run().catch((err) => {

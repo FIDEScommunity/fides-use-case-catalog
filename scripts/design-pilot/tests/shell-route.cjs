@@ -13,6 +13,8 @@ const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const OUT = process.env.SCREENS_DIR || path.join(process.cwd(), "screens");
 const WIDTHS = (process.env.WIDTHS || "1366,1440,1100,1024,768,390,320").split(",").map(Number);
 const WIDE = 1100;
+// Third-party embeds can keep the load event pending; the pilot UI only needs the DOM.
+const DOM_READY = { waitUntil: "domcontentloaded" };
 
 const results = [];
 function check(name, ok, detail) {
@@ -76,11 +78,19 @@ async function navigateToOverview(page, width) {
     check(`menu @${width}: Community group expands`, await dialog.getByRole("link", { name: "Community Awards" }).isVisible());
     await dialog.getByRole("link", { name: "Use cases", exact: true }).click();
   }
-  await page.waitForURL(/\/fides-design-pilot\/overview\/?$/);
+  await page.waitForURL(/\/fides-design-pilot\/overview\/?$/, DOM_READY);
   check(`route @${width}: navigation reaches the pilot overview`, true);
 }
 
 const countText = (page) => page.locator(".fides-uc-pilot__count").first().textContent().then((t) => t.trim());
+
+/** Open a filter dropdown; below 600 px the dropdowns live in the Filters dialog. */
+async function pilotDropdown(page, width, id) {
+  if (width < 600) await page.locator("[data-pilot-open]").click();
+  const dropdown = page.locator(`details[data-pilot-dropdown="${id}"]`);
+  if (!(await dropdown.evaluate((el) => el.open))) await dropdown.locator("summary").click();
+  return dropdown;
+}
 
 async function filterChecks(page, width) {
   await page.locator(".fides-ds-card--row").first().waitFor();
@@ -108,6 +118,45 @@ async function filterChecks(page, width) {
   await page.waitForTimeout(200);
   check(`filters @${width}: Clear filters restores all results`, (await countText(page)) === total, `${await countText(page)} vs ${total}`);
 
+  // Theme dropdown replaces the theme chips; a theme becomes a removable active filter.
+  const theme = await pilotDropdown(page, width, "theme");
+  const themeOptions = theme.locator(".fides-uc-pilot__option");
+  const themeCount = await themeOptions.count();
+  check(`filters @${width}: Theme lists All themes plus every theme with a count`, themeCount > 2 && (await theme.locator(".fides-uc-pilot__option-count").count()) === themeCount, String(themeCount));
+  const themeName = (await themeOptions.nth(1).locator(".fides-uc-pilot__option-label").textContent()).trim();
+  await themeOptions.nth(1).click();
+  await page.waitForTimeout(200);
+  await page.keyboard.press("Escape");
+  const themed = await countText(page);
+  check(`filters @${width}: a theme narrows the results`, themed !== total, `${total} -> ${themed}`);
+  const themePill = page.locator(`.fides-uc-pilot__pill[data-pilot-remove-group="theme"]`);
+  check(`filters @${width}: the chosen theme shows as an active filter`, (await themePill.count()) === 1 && (await themePill.textContent()).includes(themeName));
+  await themePill.click();
+  await page.waitForTimeout(200);
+  check(`filters @${width}: removing the theme filter restores all results`, (await countText(page)) === total && (await themePill.count()) === 0);
+
+  // Status lives under More filters.
+  const more = await pilotDropdown(page, width, "more");
+  const statusGroup = more.locator(".fides-uc-pilot__option-group", { has: page.locator(".fides-uc-pilot__option-group-title", { hasText: "Status" }) });
+  check(`filters @${width}: More filters contains Status`, (await statusGroup.locator('input[data-filter-group="productionDeployment"]').count()) >= 1);
+  check(`filters @${width}: no separate Status dropdown`, (await page.locator('details[data-pilot-dropdown="status"]').count()) === 0);
+  await statusGroup.locator(".fides-uc-pilot__option").first().click();
+  await page.waitForTimeout(200);
+  await page.keyboard.press("Escape");
+  check(`filters @${width}: a status narrows the results`, (await countText(page)) !== total);
+  check(`filters @${width}: the status shows as an active filter`, (await page.locator('.fides-uc-pilot__pill[data-pilot-remove-group="productionDeployment"]').count()) === 1);
+  await page.locator("#fides-clear").click();
+  await page.waitForTimeout(200);
+  check(`filters @${width}: Clear filters resets status too`, (await countText(page)) === total);
+
+  await page.locator("#fides-search-input").fill("wallet");
+  await page.waitForTimeout(500);
+  const searched = await countText(page);
+  check(`filters @${width}: search narrows the results`, searched !== total && searched !== "0 use cases", searched);
+  await page.locator("#fides-search-clear").click();
+  await page.waitForTimeout(300);
+  check(`filters @${width}: clearing search restores all results`, (await countText(page)) === total);
+
   const next = page.locator('.fides-catalog-pagination a[data-catalog-page="2"]').first();
   await next.click();
   await page.waitForTimeout(300);
@@ -124,14 +173,14 @@ async function longTitleChecks(page, width) {
   const rowFits = await page.evaluate(() => [...document.querySelectorAll(".fides-ds-card--row .fides-ds-card__title")].every((n) => n.scrollWidth <= n.clientWidth + 1));
   check(`long titles @${width}: row titles wrap inside their column`, rowFits);
   await links.nth(longest).click();
-  await page.waitForURL(/usecase=/);
+  await page.waitForURL(/usecase=/, DOM_READY);
   const fit = await page.evaluate(() => {
     const h1 = document.querySelector(".fides-uc-detail__title");
     return { fits: h1.scrollWidth <= h1.clientWidth + 1, overflow: document.documentElement.scrollWidth > innerWidth + 1, length: h1.textContent.length };
   });
   check(`long titles @${width}: longest title on page 1 (${fit.length} chars) wraps without overflow`, fit.fits && !fit.overflow, JSON.stringify(fit));
-  await page.goBack();
-  await page.waitForURL(/\/fides-design-pilot\/overview\//);
+  await page.goBack(DOM_READY);
+  await page.waitForURL(/\/fides-design-pilot\/overview\//, DOM_READY);
 }
 
 async function run() {
@@ -152,7 +201,7 @@ async function run() {
       const pageErrors = [];
       page.on("pageerror", (err) => pageErrors.push(err.message));
 
-      await page.goto(`${BASE}/fides-design-pilot/homepage-fragment/`);
+      await page.goto(`${BASE}/fides-design-pilot/homepage-fragment/`, DOM_READY);
       // The existing consent banner overlays every page; answer it first, as a visitor would.
       const deny = page.locator(".cmplz-btn.cmplz-deny:visible").first();
       if (await deny.waitFor({ state: "visible", timeout: 4000 }).then(() => true, () => false)) await deny.click();
@@ -183,9 +232,25 @@ async function run() {
       const first = page.locator(".fides-ds-card--row a.fides-ds-card__link").first();
       const title = (await first.textContent()).trim();
       await first.click();
-      await page.waitForURL(/\/fides-design-pilot\/use-case\/\?usecase=/);
+      await page.waitForURL(/\/fides-design-pilot\/use-case\/\?usecase=/, DOM_READY);
       check(`route @${width}: overview row opens the pilot detail`, (await page.locator("h1").first().textContent()).trim() === title, title);
       await shellChecks(page, "detail", width);
+
+      const ecosystemLink = page.locator(".fides-uc-ecosystem-summary__link");
+      if (await ecosystemLink.count()) {
+        await ecosystemLink.click();
+        await page.waitForTimeout(400);
+        const anchor = await page.evaluate(() => {
+          const section = document.getElementById("ecosystem");
+          const r = section.getBoundingClientRect();
+          return { hash: location.hash, top: Math.round(r.top), visible: r.top >= 0 && r.top < innerHeight, summaryCounts: [...document.querySelectorAll(".fides-uc-ecosystem-summary__role dd")].map((n) => Number(n.textContent)), groupCounts: [...document.querySelectorAll(".fides-uc-ecosystem__group")].map((g) => g.querySelectorAll(".fides-uc-relations__item").length) };
+        });
+        check(`detail @${width}: View connected ecosystem jumps to the full section`, anchor.hash === "#ecosystem" && anchor.visible, JSON.stringify(anchor));
+        check(`detail @${width}: summary counts match the records per role`, JSON.stringify(anchor.summaryCounts) === JSON.stringify(anchor.groupCounts), JSON.stringify(anchor));
+        // Undo the #ecosystem history entry so the later back-navigation check still leaves the detail page.
+        await page.goBack(DOM_READY);
+        await page.evaluate(() => window.scrollTo(0, 0));
+      }
 
       const nav = page.locator("details.fides-uc-detail__sections");
       const summary = nav.locator("summary");
@@ -212,7 +277,7 @@ async function run() {
       await page.screenshot({ path: path.join(OUT, `detail-top-${width}.png`) });
 
       await page.getByRole("link", { name: "← All use cases" }).click();
-      await page.waitForURL(/\/fides-design-pilot\/overview\/?$/);
+      await page.waitForURL(/\/fides-design-pilot\/overview\/?$/, DOM_READY);
       check(`route @${width}: back link returns to the overview`, true);
       // History is overview -> detail (-> #section) -> overview; step back past the detail entries.
       await page.goBack({ waitUntil: "commit" });
@@ -226,7 +291,7 @@ async function run() {
       await longTitleChecks(page, width);
 
       await page.locator(".fides-ds-site-header__brand:visible").first().click();
-      await page.waitForURL(/\/fides-design-pilot\/homepage-fragment\/?$/);
+      await page.waitForURL(/\/fides-design-pilot\/homepage-fragment\/?$/, DOM_READY);
       check(`route @${width}: logo returns to the pilot homepage fragment`, true);
 
       check(`@${width}: no JavaScript page errors`, pageErrors.length === 0, pageErrors.join(" | "));

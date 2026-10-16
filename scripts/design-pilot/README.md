@@ -85,8 +85,51 @@ canonical record, copy link / canonical / related cards using the same detail
 route, award and like display, the collapsible section navigation, the shell
 template applying only to the pilot pages, remapped and dropped navigation
 links, header/footer markup (unique ids, toggle targets, hidden dialog,
-account link) and the contribute band. The regular `npm test` and the tiles
+account link), the contribute band and the detail ecosystem (summary counts,
+one full section, Show all disclosure, duplicate records counted once,
+internal / external / unlinked records). The regular `npm test` and the tiles
 `phpunit` and card parity tests still apply.
+
+Browser checks (system Chrome plus an existing Playwright install, all exit
+non-zero on failure):
+
+- `tests/run-shell-route.sh`: homepage fragment → overview → detail → back at
+  1366, 1440, 1100, 1024, 768, 390 and 320 px, including Theme, Status under
+  More filters, active filter removal, Clear filters, search, pagination, long
+  titles and the Ecosystem anchor.
+- `tests/run-ux16-checks.sh`: blocks GitHub for one browser context to force
+  the catalog fallback, then checks the stale-data notice, a 44×44 dismiss
+  button and no functional target under 44 px (with a self-test that a 20 px
+  button is caught); plus the detail ecosystem on a record with many and one
+  with few relations (`DETAIL_SLUGS` overrides them).
+- `tests/run-measure-density.sh <label>`: first row and image positions,
+  text sizes, the catalog source per viewport and GitHub request timings;
+  fails on small controls or horizontal overflow.
+- `tests/probe-catalog-source.cjs` (`RUNS=5`): which catalog source each cold
+  load used and how long each request took.
+
+## Catalog data source
+
+The overview loads `aggregated.json` from GitHub raw first, then the
+same-origin last-known-good cache (`/wp-json/fides-catalog/v1/aggregated/usecase`),
+then the plugin copy, with a 4 s timeout per source. The source used is on the
+root as `data-catalog-source`. `localhost` is not a `*.local` host, so the
+pilot guard sets `fides_use_case_catalog_prefer_local_source` to `false`
+(GitHub first, as in production). Without the filter (`null`) the shared
+loader keeps its host detection. A stale-data notice therefore means GitHub
+did not answer in time; the cache is only as fresh as its last successful
+refresh.
+
+## UX round 16 (Paper 16.1 / 16.2)
+
+- Overview: catalog title role `fides-ds-heading-1--catalog` (38/44 from
+  1100 px, not a global H1 change), Add a use case link, intro from the
+  enclosed shortcode content, one search row with Ask FIDES, Theme / Sector /
+  Country / More filters (Status inside More filters), removable active
+  filters, one results counter next to Sort.
+- Detail: the sidebar shows a per-role summary before the technical details;
+  the full Connected ecosystem section (`#ecosystem`) follows the story and
+  user journey, before Video & links.
 
 ## Not restored yet (no content parity claimed)
 
@@ -102,9 +145,11 @@ account link) and the contribute band. The regular `npm test` and the tiles
   the other catalogs are not on it yet.
 - Consent: locally Complianz writes its cookie on path `:10088/`, so a choice
   does not persist across pages; the route test presets the cookie.
-- Cache busting: the design CSS/JS use `filemtime` versions, but
-  `usecase-catalog.js` still uses `FIDES_USE_CASE_CATALOG_VERSION` (0.21.11);
-  bump the plugin version before any staging build.
+- Cache busting: the design CSS/JS and `usecase-catalog.js` use `filemtime`
+  versions; bump the plugin version before any staging build anyway.
+- Shared notice CSS: only the use-case copy of `fides-catalog-ui.css` is
+  synced with the tiles source; the other catalog repos are not in the pilot
+  and keep the old dismiss button (about 20 px) until they are synced.
 - Environment: the pilot database runs on utrecht-demo's MySQL in Local;
   simplify this before using the pilot as a daily dev environment.
 

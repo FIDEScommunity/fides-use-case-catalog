@@ -70,10 +70,15 @@ $parent = pilot_upsert_page(
     array('has_hero_section' => 'enabled')
 );
 
+// Intro text is the existing paragraph on fides.community/ecosystem-explorer/use-cases/
+// (not in the local copy); split in two sentences as in Paper 16.1.
 pilot_upsert_page(
     'fides-design-pilot/overview',
     'Use cases (design pilot)',
-    '<!-- wp:shortcode -->[fides_use_case_catalog design="pilot" title="Use cases" detail_url="/fides-design-pilot/use-case/" add_url="/use-case-form/"]<!-- /wp:shortcode -->',
+    '<!-- wp:shortcode -->[fides_use_case_catalog design="pilot" title="Use cases" detail_url="/fides-design-pilot/use-case/" add_url="/use-case-form/"]'
+    . '<p>Discover real-world examples of <a href="https://fides.community/topics/personal-wallets/">digital wallets</a> and <a href="https://fides.community/topics/credentials/">verifiable credentials</a> in action — passwordless login, age verification, digital travel, cross-border and public services, and more.</p>'
+    . '<p>Learn from proven patterns, compare approaches, and reuse what works instead of starting from scratch.</p>'
+    . '[/fides_use_case_catalog]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
