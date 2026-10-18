@@ -789,6 +789,7 @@
   }
   .fides-ds .fides-uc-pilot__filter-panel .fides-ds-popover__panel {
     position: static;
+    width: auto;
     min-width: 0;
     max-width: none;
     margin-top: var(--fides-ds-space-1);

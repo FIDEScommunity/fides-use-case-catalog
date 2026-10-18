@@ -213,6 +213,8 @@ async function overviewMobile(browser, width) {
   const before = page.url();
   const country = page.locator('[data-fides-ds-popover][data-pilot-keys="country"]');
   await country.locator(".fides-ds-popover__toggle").click();
+  const widths = await country.evaluate((n) => [n.querySelector(".fides-ds-popover__toggle"), n.querySelector(".fides-ds-popover__panel")].map((el) => Math.round(el.getBoundingClientRect().width)));
+  check(`${tag}: option list in the dialog is as wide as its toggle`, widths[0] === widths[1], JSON.stringify(widths));
   await country.locator('input[type="checkbox"]').first().check();
   await page.locator(".fides-uc-pilot__panel-actions [data-pilot-cancel]").click();
   await page.waitForTimeout(200);
