@@ -1401,3 +1401,150 @@ html.fides-uc-pilot-panel-open {
     --fides-ds-catalog-title-leading: 38px;
   }
 }
+
+/* ---------- Compact desktop (UX review 2026-10-18) ----------
+   Reading text keeps its size; controls, headings and spacing get tighter.
+   Mouse/trackpad desktops get 40 px controls; touch keeps 44 px. */
+
+.fides-ds a.fides-uc-detail__media--video {
+  position: relative;
+  display: block;
+  color: inherit;
+}
+
+.fides-ds a.fides-uc-detail__media--video .fides-ds-card__img {
+  object-fit: cover;
+}
+
+.fides-ds a.fides-uc-detail__media--video:hover .fides-ds-gallery__play {
+  background: var(--fides-ds-link);
+}
+
+/* Section headings stay clearly below the page title. */
+.fides-ds.fides-uc-detail .fides-uc-detail__section .fides-ds-heading-2 {
+  font-size: 24px;
+  line-height: 30px;
+}
+
+/* About 70 characters per line for running text. */
+.fides-ds.fides-uc-detail .fides-uc-detail__main .fides-ds-prose,
+.fides-ds.fides-uc-detail .fides-uc-detail__main .fides-ds-steps {
+  max-width: 720px;
+}
+
+/* Page screenshots carry little information at thumbnail size on phones. */
+@container fides-ds-cards (max-width: 599px) {
+  .fides-ds.fides-uc-pilot .fides-ds-card--row .fides-ds-card__media {
+    display: none;
+  }
+}
+
+@media (min-width: 600px) {
+  .fides-ds.fides-uc-pilot {
+    --fides-ds-catalog-title-size: 30px;
+    --fides-ds-catalog-title-leading: 36px;
+  }
+}
+
+@container fides-ds-cards (min-width: 600px) {
+  .fides-ds.fides-uc-pilot .fides-ds-card--row {
+    grid-template-columns: 120px minmax(0, 1fr);
+  }
+  .fides-ds.fides-uc-pilot .fides-ds-card--row.fides-ds-card--no-media {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fides-ds.fides-uc-pilot .fides-ds-card--row .fides-ds-card__media {
+    width: 120px;
+    height: 75px;
+  }
+  .fides-ds.fides-uc-pilot .fides-ds-card--row .fides-ds-card__body {
+    gap: 6px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__intro {
+    padding-bottom: var(--fides-ds-space-4);
+  }
+  .fides-ds.fides-uc-detail .fides-uc-detail__hero {
+    padding-bottom: var(--fides-ds-space-5);
+  }
+  .fides-ds.fides-uc-detail .fides-uc-detail__sections {
+    margin-bottom: var(--fides-ds-space-6);
+  }
+  .fides-ds.fides-uc-detail .fides-uc-detail__main,
+  .fides-ds.fides-uc-detail .fides-uc-detail__aside {
+    gap: var(--fides-ds-space-7);
+  }
+  .fides-ds.fides-uc-detail .fides-uc-detail__section .fides-ds-heading-2 {
+    font-size: 26px;
+    line-height: 32px;
+  }
+}
+
+@media (min-width: 1100px) and (pointer: fine) {
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__search-input {
+    height: 40px;
+    min-height: 40px;
+    padding-block: 7px;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__search-clear {
+    width: 40px;
+    height: 40px;
+  }
+  .fides-ds.fides-uc-pilot .fides-ds-button,
+  .fides-ds.fides-uc-detail .fides-ds-button {
+    min-height: 40px;
+    padding-block: 8px;
+  }
+  .fides-ds.fides-uc-pilot .fides-ds-popover__toggle,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__more-toggle,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__select {
+    min-height: 40px;
+    padding-block: 8px;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__more-close {
+    width: 40px;
+    height: 40px;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__technical-toggle,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__pill {
+    min-height: 40px;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__pill {
+    padding-block: 6px;
+  }
+}
+
+/* Wide screens: search and the four filter lists share one row. */
+@media (min-width: 1200px) {
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__controls {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--fides-ds-space-3);
+    align-items: end;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__search-row {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__search-head {
+    justify-content: flex-start;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filters,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel {
+    display: contents;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-row {
+    grid-column: 2;
+    grid-row: 1;
+    grid-template-columns: repeat(4, max-content);
+    gap: var(--fides-ds-space-2);
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-row > * {
+    max-width: 220px;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__more,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__active {
+    grid-column: 1 / -1;
+  }
+}
