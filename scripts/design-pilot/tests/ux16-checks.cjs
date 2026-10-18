@@ -24,18 +24,19 @@ function check(name, ok, detail) {
   console.log(`${ok ? "ok" : "not ok"} - ${name}${detail && !ok ? ` (${detail})` : ""}`);
 }
 
-/** Visible functional controls under 44 px; inline text links in prose are exempt. */
+/** Visible functional controls under 44 px (40 px with a mouse from 1100 px); inline text links in prose are exempt. */
 function smallTargets(page) {
-  return page.evaluate(() =>
-    [...document.querySelectorAll(".fides-ds-shell__main :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]), select, button, summary, [role=button], a.fides-ds-action-link, a.fides-ds-button)")]
+  return page.evaluate(() => {
+    const min = innerWidth >= 1100 && matchMedia("(pointer: fine)").matches ? 40 : 44;
+    return [...document.querySelectorAll(".fides-ds-shell__main :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]), select, button, summary, [role=button], a.fides-ds-action-link, a.fides-ds-button)")]
       .filter((n) => n.getClientRects().length && getComputedStyle(n).visibility !== "hidden")
       .map((n) => {
         const r = n.getBoundingClientRect();
         const square = n.matches(".fides-stale-catalog-notice-dismiss");
         return { el: (n.getAttribute("aria-label") || n.textContent || n.placeholder || n.tagName).trim().replace(/\s+/g, " ").slice(0, 40), w: Math.round(r.width), h: Math.round(r.height), square };
       })
-      .filter((c) => c.h < 44 || (c.square && c.w < 44))
-  );
+      .filter((c) => c.h < min || (c.square && c.w < 44));
+  });
 }
 
 /** The PHP built-in server occasionally stalls on one worker; retry a navigation once. */

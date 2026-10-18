@@ -107,12 +107,13 @@ async function run() {
           summary: ss && `${ss.fontSize}/${ss.lineHeight}`,
         };
       });
-      m.smallControls = await page.evaluate(() =>
-        [...document.querySelectorAll(".fides-ds-shell__main :is(input:not([type=checkbox]):not([type=radio]), select, button, summary)")]
+      m.smallControls = await page.evaluate(() => {
+        const min = innerWidth >= 1100 && matchMedia("(pointer: fine)").matches ? 40 : 44;
+        return [...document.querySelectorAll(".fides-ds-shell__main :is(input:not([type=checkbox]):not([type=radio]), select, button, summary)")]
           .filter((n) => n.getClientRects().length && n.getBoundingClientRect().width > 0)
           .map((n) => ({ el: (n.getAttribute("aria-label") || n.textContent || n.placeholder || n.tagName).trim().replace(/\s+/g, " ").slice(0, 30), h: Math.round(n.getBoundingClientRect().height) }))
-          .filter((c) => c.h < 44)
-      );
+          .filter((c) => c.h < min);
+      });
       m.overflow = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
       await page.screenshot({ path: path.join(OUT, `overview-${key}.png`) });
 

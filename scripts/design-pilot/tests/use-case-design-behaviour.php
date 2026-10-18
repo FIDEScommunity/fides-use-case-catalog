@@ -18,6 +18,7 @@ const UC_BETA  = 'pilot-test-beta-BBBBBB';
 const UC_GONE  = 'pilot-test-gone-ZZZZZZ';
 const UC_SOLO  = 'pilot-test-solo-CCCCCC';
 const UC_DUO   = 'pilot-test-duo-DDDDDD';
+const UC_VIDEO = 'pilot-test-video-EEEEEE';
 const DETAIL_BASE = 'http://localhost/pilot/detail/';
 
 $results = array('pass' => 0, 'fail' => array());
@@ -86,6 +87,13 @@ $fixture_items = array(
         'summary'              => 'Duo summary.',
         'imageUrl'             => 'https://example.org/media/duo-1.png',
         'imageUrls'            => array('https://example.org/media/duo-2.png'),
+    ),
+    array(
+        'id'                   => UC_VIDEO,
+        'title'                => 'Video only use case',
+        'productionDeployment' => 'no',
+        'summary'              => 'Video summary.',
+        'video'                => array('url' => 'https://youtu.be/abcdefghijk', 'provider' => 'youtube'),
     ),
 );
 
@@ -212,6 +220,11 @@ $check(preg_match('#<a class="fides-ds-action-link fides-uc-detail__original" hr
 $check(strpos($beta_html, 'fides-uc-detail__original') === false, 'no original-image link without an image');
 $duo_html = do_shortcode('[fides_use_case_detail id="' . UC_DUO . '" detail_url="' . DETAIL_BASE . '"]');
 $check(strpos($duo_html, 'id="media"') !== false && strpos($duo_html, 'fides-uc-detail__original') === false, 'two images use the media section instead of the hero link');
+
+// A video still in the hero is a play link to the media section, not a dead image.
+$video_html = do_shortcode('[fides_use_case_detail id="' . UC_VIDEO . '" detail_url="' . DETAIL_BASE . '"]');
+$check(preg_match('#<a class="fides-uc-detail__media fides-uc-detail__media--video" href="\#media" data-fides-ds-play>#', $video_html) === 1 && strpos($video_html, 'Play video: Video only use case') !== false && strpos($video_html, 'id="media"') !== false, 'a video poster in the hero links to and plays the media section');
+$check(strpos($solo_html, 'data-fides-ds-play') === false && strpos($duo_html, 'data-fides-ds-play') === false, 'image heroes are not play links');
 
 $missing = do_shortcode('[fides_use_case_detail id="' . UC_GONE . '"]');
 $check(strpos($missing, 'This use case is not in the current FIDES catalog.') !== false, 'missing record shows the not-in-catalog state');

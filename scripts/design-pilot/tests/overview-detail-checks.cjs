@@ -53,16 +53,18 @@ async function newContext(browser, width, height) {
   return context;
 }
 
+/* 44 px, or 40 px with a mouse from 1100 px (compact desktop). */
 function smallTargets(page) {
-  return page.evaluate(() =>
-    [...document.querySelectorAll(".fides-ds-shell__main :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]), select, button, summary, [role=button], a.fides-ds-action-link, a.fides-ds-button)")]
+  return page.evaluate(() => {
+    const min = innerWidth >= 1100 && matchMedia("(pointer: fine)").matches ? 40 : 44;
+    return [...document.querySelectorAll(".fides-ds-shell__main :is(input:not([type=checkbox]):not([type=radio]):not([type=hidden]), select, button, summary, [role=button], a.fides-ds-action-link, a.fides-ds-button)")]
       .filter((n) => n.getClientRects().length && getComputedStyle(n).visibility !== "hidden")
       .map((n) => {
         const r = n.getBoundingClientRect();
         return { el: (n.getAttribute("aria-label") || n.textContent || n.tagName).trim().replace(/\s+/g, " ").slice(0, 40), h: Math.round(r.height) };
       })
-      .filter((c) => c.h < 44)
-  );
+      .filter((c) => c.h < min);
+  });
 }
 
 const count = (page) => page.locator("[data-pilot-count]").first().textContent().then((t) => Number((t.match(/\d+/) || [NaN])[0]));
@@ -90,7 +92,7 @@ async function overviewDesktop(browser) {
     };
   });
   check("overview: title and arrow are one link", card.links === 1 && card.arrowInLink, JSON.stringify(card));
-  check("overview: media box is 180x112", !card.media || (card.media[0] === 180 && card.media[1] === 112), JSON.stringify(card.media));
+  check("overview: compact media box is 120x75", !card.media || (card.media[0] === 120 && card.media[1] === 75), JSON.stringify(card.media));
   check("overview: summary clamps to 2 lines; compact title 20/26 bold", card.clamp === "2" && card.title && card.title[0] === "20px" && card.title[1] === "26px" && Number(card.title[2]) >= 700, JSON.stringify(card));
 
   await page.fill("#fides-search-input", "wallet");
@@ -325,6 +327,11 @@ async function detailChecks(browser, width, slug) {
   }
 
   const thumbs = page.locator(".fides-ds-gallery__thumb");
+  const lonePlay = page.locator("#media button[data-fides-ds-gallery-play][data-embed]");
+  if ((await thumbs.count()) === 0 && (await lonePlay.count())) {
+    await lonePlay.click();
+    check(`${tag}: a single video plays in place`, (await page.locator("#media .fides-ds-gallery__frame iframe").count()) === 1);
+  }
   if ((await thumbs.count()) > 1) {
     await thumbs.nth(1).click();
     const current = await thumbs.nth(1).getAttribute("aria-current");
@@ -470,7 +477,7 @@ async function readmoreChecks(browser) {
   await noJs.close();
 }
 
-/* Hero at 1440 (Paper): title 42/48, text column 792 and image column 520. */
+/* Hero at 1440: compact title 36/42, text column 792 and image column 520. */
 async function heroChecks(browser) {
   const context = await newContext(browser, 1440, 900);
   const page = await context.newPage();
@@ -483,8 +490,15 @@ async function heroChecks(browser) {
       const title = getComputedStyle(document.querySelector(".fides-uc-detail__title"));
       return { cols, size: title.fontSize, leading: title.lineHeight, media: hero.classList.contains("fides-uc-detail__hero--no-media") ? null : true };
     });
-    check(`hero @1440 ${slug.slice(0, 20)}: title 42/48`, h.size === "42px" && h.leading === "48px", JSON.stringify(h));
+    check(`hero @1440 ${slug.slice(0, 20)}: title 36/42`, h.size === "36px" && h.leading === "42px", JSON.stringify(h));
     check(`hero @1440 ${slug.slice(0, 20)}: columns 792 / 520`, h.media === null || (h.cols[0] === 792 && h.cols[1] === 520), JSON.stringify(h.cols));
+    const poster = page.locator("a.fides-uc-detail__media--video[data-fides-ds-play]");
+    if (await poster.count()) {
+      const name = (await poster.textContent()).trim();
+      await poster.click();
+      await page.waitForTimeout(400);
+      check(`hero @1440 ${slug.slice(0, 20)}: a video poster in the hero plays the video in the media section`, /^Play video:/.test(name) && (await page.locator("#media .fides-ds-gallery__frame iframe").count()) === 1, name);
+    }
   }
   await context.close();
 }
