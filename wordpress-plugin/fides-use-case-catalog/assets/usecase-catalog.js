@@ -2454,7 +2454,11 @@
       }
     }, 150)
   );
-  window.addEventListener("popstate", () => {
+  window.addEventListener("popstate", (event) => {
+    if (DESIGN_PILOT) {
+      pilotHandlePopstate(event);
+      return;
+    }
     const nextPage = listingPageFromLocation();
     if (nextPage === listingPage) return;
     listingPage = nextPage;
@@ -2972,6 +2976,7 @@
   }
 
   function bindPaginationLinks() {
+    if (DESIGN_PILOT) return;
     root.querySelectorAll("[data-catalog-page]").forEach((link) => {
       link.addEventListener("click", (event) => {
         if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
@@ -3273,20 +3278,21 @@
     return `${parseInt(match[3], 10)} ${PILOT_MONTHS[month - 1]} ${match[1]}`;
   }
 
-  function pilotExcerpt(text, max = 220) {
-    const trimmed = String(text || "").trim();
-    if (!trimmed) return "";
-    const first = trimmed.split(/\n\s*\n/)[0].replace(/\s+/g, " ").trim();
-    if (first.length <= max) return first;
-    let cut = first.slice(0, max);
-    const space = cut.lastIndexOf(" ");
-    if (space !== -1 && space > max * 0.6) cut = cut.slice(0, space);
-    return cut.replace(/[\s,;:.\-–—]+$/u, "") + "…";
-  }
-
   function pilotDetailHref(id) {
     if (DETAIL_URL) return `${DETAIL_URL}${DETAIL_URL.includes("?") ? "&" : "?"}usecase=${encodeURIComponent(id)}`;
     return `${SHARE_PATH}${encodeURIComponent(id)}/`;
+  }
+
+  function pilotOwnerHref(item, owner) {
+    if (!owner || !CATALOG_URLS.organizationDetail) return "";
+    const match = getLinkItems(item, "organizations").find((link) =>
+      link && typeof link === "object" &&
+      String(link.labelRaw || "").trim().toLowerCase() === owner.toLowerCase() &&
+      String(link.refId || "").trim() !== ""
+    );
+    if (!match) return "";
+    const ref = String(match.refId).trim();
+    return `${CATALOG_URLS.organizationDetail}/${encodeURIComponent(ref)}/?from=${encodeURIComponent(`usecase:${String(item.id || "")}`)}`;
   }
 
   /** Mirrors Fides_Use_Case_Design::card_props() for the row variant. */
@@ -3303,12 +3309,11 @@
       title,
       image_url: deriveCardImage(item),
       image_alt: "",
-      fallback_label: owner || title,
-      cta_label: "Read use case →",
       data: { "use-case-id": id },
       kicker: [sector, country].filter((value) => value && value !== "—").join(" · "),
-      summary: pilotExcerpt(item.summary),
+      summary: String(item.summary || "").replace(/\s+/g, " ").trim(),
       owner,
+      owner_href: pilotOwnerHref(item, owner),
       status: pilotStatusLabel(item),
       meta: pilotEngagementMeta(item, updated ? `Updated ${updated}` : "")
     };
@@ -3324,16 +3329,166 @@
     return parts.filter(Boolean).join(" · ");
   }
 
-  function renderPilotResults(items) {
-    if (!items.length) {
-      return `<div class="fides-uc-pilot__empty">
-        <p>No use cases in the current FIDES catalog for this selection.</p>
-        <button type="button" class="fides-ds-text-button" data-pilot-reset>Clear filters and search</button>
-      </div>`;
+  /* ---------- Pilot state: shareable URL, Back/Forward ---------- */
+
+  const PILOT_URL_PARAMS = {
+    sector: "sector",
+    country: "country",
+    productionDeployment: "status",
+    awardRecognition: "award",
+    interactionModes: "mode",
+    vcFormats: "format",
+    issuanceProtocols: "issuance",
+    presentationProtocols: "presentation",
+    interopProfiles: "profile"
+  };
+  const PILOT_FILTER_KEYS = Object.keys(PILOT_URL_PARAMS);
+  const PILOT_TECH_KEYS = TAXONOMY_FILTER_GROUPS.map((group) => group.key);
+  const PILOT_RETURN_KEY = "usecase";
+  let pilotSearchText = "";
+  let pilotSnapshot = null;
+  let pilotMoreOpen = false;
+  let pilotTechOpen = false;
+
+  function pilotReadUrl(initial) {
+    const params = new URLSearchParams(window.location.search);
+    pilotSearchText = String(params.get("q") || "").trim();
+    filters.search = pilotSearchText.toLowerCase();
+    PILOT_FILTER_KEYS.forEach((key) => {
+      const raw = String(params.get(PILOT_URL_PARAMS[key]) || "");
+      const values = raw.split(",").map((value) => value.trim()).filter(Boolean);
+      filters[key] = [...new Set(key === "country" ? values.map((value) => value.toUpperCase()) : values)];
+    });
+    activeThemeCode = resolveThemeFilterCode(params.get("theme") || "");
+    const sort = String(params.get("sort") || "");
+    if (SORT_OPTIONS.includes(sort)) filters.sortBy = sort;
+    else if (!initial) filters.sortBy = "recommended";
+    listingPage = listingPageFromLocation();
+  }
+
+  function pilotUrl() {
+    const url = new URL(window.location.href);
+    ["q", "theme", "sort", LISTING_PAGE_PARAM, ...Object.values(PILOT_URL_PARAMS)].forEach((param) => url.searchParams.delete(param));
+    if (pilotSearchText) url.searchParams.set("q", pilotSearchText);
+    if (activeThemeCode) url.searchParams.set("theme", activeThemeCode);
+    PILOT_FILTER_KEYS.forEach((key) => {
+      if (filters[key].length) url.searchParams.set(PILOT_URL_PARAMS[key], filters[key].join(","));
+    });
+    if (filters.sortBy !== "recommended") url.searchParams.set("sort", filters.sortBy);
+    if (listingPage > 1) url.searchParams.set(LISTING_PAGE_PARAM, String(listingPage));
+    return url.pathname + url.search + url.hash;
+  }
+
+  function pilotWriteUrl(push) {
+    const href = pilotUrl();
+    const current = window.location.pathname + window.location.search + window.location.hash;
+    try {
+      if (push && href !== current) {
+        history.replaceState(Object.assign({}, history.state, { fidesPilot: true, scrollY: Math.round(window.scrollY) }), "");
+        history.pushState({ fidesPilot: true }, "", href);
+      } else {
+        history.replaceState(Object.assign({}, history.state, { fidesPilot: true }), "", href);
+      }
+    } catch (_error) {
+      /* History is optional; the overview still works in-memory. */
     }
+  }
+
+  function pilotAnnounce() {
+    const live = root.querySelector("[data-pilot-live]");
+    if (!live) return;
+    const message = pilotCountLabel(getFilteredUseCases().length);
+    live.textContent = "";
+    window.setTimeout(() => { live.textContent = message; }, 60);
+  }
+
+  /** Apply a state change: page 1 unless kept, URL entry, results, announcement. */
+  function pilotCommit(options = {}) {
+    if (!options.keepPage) listingPage = 1;
+    pilotWriteUrl(options.push !== false);
+    renderResultsOnly();
+    if (options.announce !== false) pilotAnnounce();
+  }
+
+  /** Filter choices inside the compact dialog stay temporary until "Apply filters". */
+  function pilotFiltersChanged() {
+    if (pilotSnapshot) {
+      updatePilotChrome(getFilteredUseCases());
+      return;
+    }
+    pilotCommit();
+  }
+
+  function pilotPrefersReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
+  /** Back from a detail page: restore scroll and focus on the link that was used. */
+  function pilotRestoreReturn() {
+    const stored = window.FidesDS && typeof window.FidesDS.readReturn === "function" ? window.FidesDS.readReturn(PILOT_RETURN_KEY) : null;
+    if (!stored || stored.url !== window.location.href) return;
+    const navigation = performance && performance.getEntriesByType ? performance.getEntriesByType("navigation")[0] : null;
+    const fromDetail = String(document.referrer || "").includes(`usecase=${encodeURIComponent(stored.id)}`);
+    if (!fromDetail && !(navigation && navigation.type === "back_forward")) return;
+    window.scrollTo(0, Number(stored.scrollY) || 0);
+    const link = root.querySelector(`[data-use-case-id="${CSS.escape(stored.id)}"] .fides-ds-card__link`);
+    if (link) link.focus({ preventScroll: true });
+  }
+
+  /* ---------- Pilot rendering ---------- */
+
+  function renderPilotEmpty() {
+    const hasSearch = pilotSearchText !== "";
+    const active = pilotActiveFilters();
+    const quoted = `“${pilotSearchText}”`;
+    const message = hasSearch && active.length
+      ? `No use cases match ${quoted} with the selected filters.`
+      : hasSearch
+        ? `No use cases match ${quoted}.`
+        : "No use cases match the selected filters.";
+    const actions = [];
+    active.slice(-3).forEach((filter) => {
+      actions.push(`<button type="button" class="fides-ds-button fides-ds-button--secondary" data-pilot-remove-group="${escapeHtml(filter.group)}" data-pilot-remove-value="${escapeHtml(filter.value)}">Remove ${escapeHtml(filter.label)}</button>`);
+    });
+    if (hasSearch) actions.push('<button type="button" class="fides-ds-button fides-ds-button--secondary" data-pilot-clear-search>Clear search</button>');
+    if (active.length > 1) actions.push('<button type="button" class="fides-ds-text-button" data-pilot-clear-filters>Clear all filters</button>');
+    return `<div class="fides-uc-pilot__empty">
+      <h3 class="fides-uc-pilot__state-title">No matching use cases</h3>
+      <p>${escapeHtml(message)}</p>
+      ${actions.length ? `<div class="fides-uc-pilot__state-actions">${actions.join("")}</div>` : ""}
+    </div>`;
+  }
+
+  function renderPilotResults(items) {
+    if (!items.length) return renderPilotEmpty();
     return `<ul class="fides-ds-cards fides-uc-pilot__list">${items
       .map((item) => `<li>${window.FidesDS.card(useCaseCardProps(item))}</li>`)
       .join("")}</ul>`;
+  }
+
+  function pilotSkeletonHtml() {
+    const row = '<div class="fides-uc-pilot__skeleton-row"><span class="fides-uc-pilot__skeleton-media"></span><span class="fides-uc-pilot__skeleton-lines"><span></span><span></span><span></span></span></div>';
+    return `<div class="fides-uc-pilot__loading" data-pilot-loading>
+      <p class="fides-ds-visually-hidden" role="status">Loading use cases…</p>
+      <div aria-hidden="true">${row.repeat(4)}</div>
+    </div>`;
+  }
+
+  /** Shown while the catalog loads: decorative skeleton rows, no count yet. */
+  function showPilotLoading() {
+    root.setAttribute("aria-busy", "true");
+    root.querySelector('[data-fides-ssr-spinner="1"]')?.remove();
+    root.querySelector("[data-pilot-loading]")?.remove();
+    root.insertAdjacentHTML("beforeend", pilotSkeletonHtml());
+  }
+
+  function pilotFilterTitle(key) {
+    if (key === "theme") return "Theme";
+    if (key === "sector") return "Sector";
+    if (key === "country") return "Country";
+    if (key === "productionDeployment") return "Production deployment";
+    if (key === "awardRecognition") return "Awards";
+    return (TAXONOMY_FILTER_GROUPS.find((group) => group.key === key) || {}).title || key;
   }
 
   function pilotFilterLabel(key, value) {
@@ -3367,10 +3522,10 @@
       .map((value) => {
         const checked = (filters[key] || []).includes(value) ? "checked" : "";
         const count = filterFacets?.[key]?.[value] || 0;
-        return `<label class="fides-uc-pilot__option">
+        return `<label class="fides-ds-option">
           <input type="checkbox" data-filter-group="${escapeHtml(key)}" value="${escapeHtml(value)}" ${checked}>
-          <span class="fides-uc-pilot__option-label">${escapeHtml(pilotFilterLabel(key, value))}</span>
-          <span class="fides-uc-pilot__option-count">${count}</span>
+          <span class="fides-ds-option__label">${escapeHtml(pilotFilterLabel(key, value))}</span>
+          <span class="fides-ds-option__count">${count}</span>
         </label>`;
       })
       .join("");
@@ -3394,36 +3549,37 @@
     return `${selected.length} selected`;
   }
 
-  function renderPilotDropdown(id, label, allLabel, keys, bodyHtml) {
-    if (!bodyHtml.trim()) return "";
-    return `<details class="fides-uc-pilot__dropdown" data-pilot-dropdown="${escapeHtml(id)}" data-pilot-keys="${escapeHtml(keys.join(","))}">
-      <summary class="fides-uc-pilot__dropdown-summary">
-        <span class="fides-uc-pilot__dropdown-label">${escapeHtml(label)}</span>
-        <span class="fides-uc-pilot__dropdown-value" data-pilot-summary data-pilot-all="${escapeHtml(allLabel)}">${escapeHtml(pilotSummaryText(keys, allLabel))}</span>
-        <span class="fides-uc-pilot__dropdown-icon" aria-hidden="true">${icons.chevronDown}</span>
-      </summary>
-      <div class="fides-uc-pilot__dropdown-panel">
-        <fieldset><legend class="fides-ds-visually-hidden">${escapeHtml(label)}</legend>${bodyHtml}</fieldset>
-      </div>
-    </details>`;
+  function pilotActiveFilters() {
+    const active = [];
+    if (activeThemeCode) active.push({ group: "theme", value: activeThemeCode, label: pilotThemeTitle(activeThemeCode) });
+    PILOT_FILTER_KEYS.forEach((key) => {
+      (filters[key] || []).forEach((value) => active.push({ group: key, value, label: pilotFilterLabel(key, value) }));
+    });
+    return active;
   }
 
-  function renderPilotMoreFilters() {
-    const groups = PILOT_MORE_FILTER_KEYS.map((key) => {
-      const options = renderPilotOptions(key);
-      if (!options) return "";
-      const title = key === "productionDeployment"
-        ? "Status"
-        : key === "awardRecognition"
-          ? "Awards"
-          : (TAXONOMY_FILTER_GROUPS.find((group) => group.key === key) || {}).title || key;
-      return `<div class="fides-uc-pilot__option-group"><p class="fides-uc-pilot__option-group-title">${escapeHtml(title)}</p>${options}</div>`;
-    }).join("");
-    return renderPilotDropdown("more", "More filters", "None", PILOT_MORE_FILTER_KEYS, groups);
+  function pilotPanelSelectionCount() {
+    return PILOT_MORE_FILTER_KEYS.reduce((total, key) => total + (filters[key] || []).length, 0);
+  }
+
+  function renderPilotPopover(id, label, allLabel, keys, bodyHtml) {
+    if (!bodyHtml.trim()) return "";
+    const panelId = `fides-uc-pilot-options-${id}`;
+    const active = keys.some((key) => pilotSelectedLabels(key).length > 0);
+    return `<div class="fides-ds-popover fides-uc-pilot__popover${active ? " has-active" : ""}" data-fides-ds-popover data-pilot-keys="${escapeHtml(keys.join(","))}">
+      <button type="button" class="fides-ds-popover__toggle" aria-expanded="false" aria-controls="${panelId}">
+        <span class="fides-ds-popover__label">${escapeHtml(label)}</span>
+        <span class="fides-ds-popover__value" data-pilot-summary data-pilot-all="${escapeHtml(allLabel)}">${escapeHtml(pilotSummaryText(keys, allLabel))}</span>
+        <span class="fides-ds-popover__chevron" aria-hidden="true">${icons.chevronDown}</span>
+      </button>
+      <div class="fides-ds-popover__panel" id="${panelId}" hidden>
+        <fieldset><legend class="fides-ds-visually-hidden">${escapeHtml(label)}</legend>${bodyHtml}</fieldset>
+      </div>
+    </div>`;
   }
 
   /** Same options and counts as the classic theme radio group (renderThemeFilterGroup). */
-  function renderPilotThemeDropdown() {
+  function renderPilotThemePopover() {
     if (!THEME_BUNDLES.length) return "";
     const options = [
       { code: "", title: "All themes", count: currentItems.length },
@@ -3433,26 +3589,73 @@
         count: currentItems.filter((item) => itemMatchesTheme(item, String(bundle.code || ""))).length
       }))
     ];
-    const body = options.map((option) => `<label class="fides-uc-pilot__option">
+    const body = options.map((option) => `<label class="fides-ds-option">
         <input type="radio" name="fides-uc-pilot-theme" data-pilot-theme="${escapeHtml(option.code)}" value="${escapeHtml(option.code)}" ${activeThemeCode === option.code ? "checked" : ""}>
-        <span class="fides-uc-pilot__option-label">${escapeHtml(option.title)}</span>
-        <span class="fides-uc-pilot__option-count">${option.count}</span>
+        <span class="fides-ds-option__label">${escapeHtml(option.title)}</span>
+        <span class="fides-ds-option__count">${option.count}</span>
       </label>`).join("");
-    return renderPilotDropdown("theme", "Theme", "All themes", ["theme"], body);
+    return renderPilotPopover("theme", "Theme", "All themes", ["theme"], body);
+  }
+
+  function renderPilotStatusSelect() {
+    const options = pilotFilterOptions("productionDeployment");
+    if (!options.length) return "";
+    const selected = filters.productionDeployment.length === 1 ? filters.productionDeployment[0] : "";
+    return `<div class="fides-uc-pilot__more-field">
+      <label class="fides-uc-pilot__more-label" for="fides-uc-pilot-status">Production deployment</label>
+      <select id="fides-uc-pilot-status" class="fides-uc-pilot__select" data-pilot-status>
+        <option value="">All statuses</option>
+        ${options.map((value) => `<option value="${escapeHtml(value)}" ${selected === value ? "selected" : ""}>${escapeHtml(pilotFilterLabel("productionDeployment", value))} (${filterFacets?.productionDeployment?.[value] || 0})</option>`).join("")}
+      </select>
+    </div>`;
+  }
+
+  function renderPilotAwards() {
+    const options = renderPilotOptions("awardRecognition");
+    if (!options) return "";
+    return `<fieldset class="fides-uc-pilot__more-field fides-uc-pilot__awards">
+      <legend class="fides-uc-pilot__more-label">Awards</legend>
+      <div class="fides-uc-pilot__inline-options">${options}</div>
+    </fieldset>`;
+  }
+
+  function renderPilotTechnical() {
+    const popovers = TAXONOMY_FILTER_GROUPS
+      .map((group) => renderPilotPopover(group.key, group.title, "Any", [group.key], renderPilotOptions(group.key)))
+      .join("");
+    if (!popovers) return "";
+    const names = TAXONOMY_FILTER_GROUPS.map((group) => group.title).join(" · ");
+    return `<div class="fides-uc-pilot__technical">
+      <button type="button" class="fides-uc-pilot__technical-toggle" aria-expanded="${pilotTechOpen ? "true" : "false"}" aria-controls="fides-uc-pilot-technical" data-pilot-tech-toggle>
+        <span class="fides-uc-pilot__technical-title">Technical filters <span class="fides-uc-pilot__badge" data-pilot-tech-count hidden></span></span>
+        <span class="fides-uc-pilot__technical-names">${escapeHtml(names)}</span>
+        <span class="fides-uc-pilot__technical-icon" aria-hidden="true">${icons.chevronDown}</span>
+      </button>
+      <div class="fides-uc-pilot__technical-grid" id="fides-uc-pilot-technical" ${pilotTechOpen ? "" : "hidden"}>${popovers}</div>
+    </div>`;
+  }
+
+  function renderPilotMore(count) {
+    return `<section class="fides-uc-pilot__more" id="fides-uc-pilot-more" aria-labelledby="fides-uc-pilot-more-title" ${pilotMoreOpen ? "" : "hidden"}>
+      <div class="fides-uc-pilot__more-head">
+        <h3 class="fides-uc-pilot__more-title" id="fides-uc-pilot-more-title">More filters</h3>
+        <p class="fides-uc-pilot__more-result" data-pilot-more-count>${pilotCountLabel(count)}</p>
+        <button type="button" class="fides-uc-pilot__more-close" data-pilot-more-close aria-label="Close more filters">${icons.x}</button>
+      </div>
+      <div class="fides-uc-pilot__more-grid">
+        ${renderPilotStatusSelect()}
+        ${renderPilotAwards()}
+      </div>
+      ${renderPilotTechnical()}
+    </section>`;
   }
 
   function renderPilotActivePills() {
-    const pills = [];
-    if (activeThemeCode) {
-      pills.push({ group: "theme", value: activeThemeCode, label: pilotThemeTitle(activeThemeCode) });
-    }
-    ["sector", "country", ...PILOT_MORE_FILTER_KEYS].forEach((key) => {
-      (filters[key] || []).forEach((value) => pills.push({ group: key, value, label: pilotFilterLabel(key, value) }));
-    });
-    if (!pills.length) return "";
-    return `<p class="fides-uc-pilot__active-label">Active filters</p><ul class="fides-uc-pilot__pills">${pills
-      .map((pill) => `<li><button type="button" class="fides-uc-pilot__pill" data-pilot-remove-group="${escapeHtml(pill.group)}" data-pilot-remove-value="${escapeHtml(pill.value)}">${escapeHtml(pill.label)}<span aria-hidden="true"> ×</span><span class="fides-ds-visually-hidden"> (remove filter)</span></button></li>`)
-      .join("")}</ul>`;
+    const active = pilotActiveFilters();
+    if (!active.length) return "";
+    return `<ul class="fides-uc-pilot__pills" aria-label="Active filters">${active
+      .map((pill) => `<li><button type="button" class="fides-uc-pilot__pill" data-pilot-remove-group="${escapeHtml(pill.group)}" data-pilot-remove-value="${escapeHtml(pill.value)}">${escapeHtml(pilotFilterTitle(pill.group))}: ${escapeHtml(pill.label)}<span aria-hidden="true"> ×</span><span class="fides-ds-visually-hidden"> (remove filter)</span></button></li>`)
+      .join("")}</ul><button id="fides-clear" class="fides-ds-text-button fides-uc-pilot__clear" type="button" data-pilot-clear-filters>Clear filters</button>`;
   }
 
   /**
@@ -3482,6 +3685,8 @@
     const title = String(root.dataset.title || "Use cases");
     const addUrl = String(root.dataset.addUrl || "").trim();
     const intro = pilotIntroParts();
+    const activeCount = getActiveFilterCount();
+    const panelCount = pilotPanelSelectionCount();
     root.innerHTML = `
       <div class="fides-ds-page fides-uc-pilot__page">
         <header class="fides-uc-pilot__intro">
@@ -3494,44 +3699,52 @@
         </header>
 
         <div class="fides-uc-pilot__controls">
-          <div class="fides-uc-pilot__search-row" role="search">
-            <div class="fides-uc-pilot__search">
-              <label class="fides-ds-visually-hidden" for="fides-search-input">Search use cases</label>
-              <span class="fides-uc-pilot__search-icon" aria-hidden="true">${icons.search}</span>
-              <input id="fides-search-input" class="fides-uc-pilot__search-input" type="search" placeholder="Search use cases, organizations or topics" value="${escapeHtml(filters.search)}" autocomplete="off">
-              <button class="fides-uc-pilot__search-clear ${filters.search ? "" : "hidden"}" id="fides-search-clear" type="button" aria-label="Clear search">${icons.xSmall}</button>
+          <form class="fides-uc-pilot__search-row" role="search" data-pilot-search-form>
+            <label class="fides-uc-pilot__search-label" for="fides-search-input">Search use cases</label>
+            <div class="fides-uc-pilot__search-line">
+              <div class="fides-uc-pilot__search">
+                <span class="fides-uc-pilot__search-icon" aria-hidden="true">${icons.search}</span>
+                <input id="fides-search-input" class="fides-uc-pilot__search-input" type="search" name="q" placeholder="Use case, organization or topic" value="${escapeHtml(pilotSearchText)}" autocomplete="off">
+                <button class="fides-uc-pilot__search-clear ${pilotSearchText ? "" : "hidden"}" id="fides-search-clear" type="button" aria-label="Clear search">${icons.xSmall}</button>
+              </div>
+              <button type="submit" class="fides-ds-button fides-uc-pilot__search-submit">Search</button>
+              ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-text-button fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button">Ask FIDES <span aria-hidden="true">→</span></button>' : ""}
             </div>
-            ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-text-button fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button">Ask FIDES <span aria-hidden="true">→</span></button>' : ""}
-          </div>
+          </form>
           <div class="fides-uc-pilot__filters">
             <button class="fides-ds-button fides-ds-button--secondary fides-uc-pilot__filters-toggle" type="button" aria-expanded="false" aria-controls="fides-uc-pilot-filter-panel" data-pilot-open>
-              Filters <span class="fides-filter-count ${getActiveFilterCount() > 0 ? "" : "hidden"}">${getActiveFilterCount() || 0}</span>
+              Filters <span class="fides-filter-count ${activeCount > 0 ? "" : "hidden"}">${activeCount || 0}</span><span class="fides-ds-visually-hidden"> active</span>
             </button>
             <div class="fides-uc-pilot__filter-panel" id="fides-uc-pilot-filter-panel" aria-labelledby="fides-uc-pilot-filter-title">
               <div class="fides-uc-pilot__panel-head">
-                <h2 class="fides-uc-pilot__panel-title" id="fides-uc-pilot-filter-title">Filter use cases</h2>
-                <button type="button" class="fides-uc-pilot__panel-close" data-pilot-close>Close <span aria-hidden="true">×</span></button>
+                <h2 class="fides-uc-pilot__panel-title" id="fides-uc-pilot-filter-title">Filters</h2>
+                <button type="button" class="fides-uc-pilot__panel-close" data-pilot-cancel aria-label="Close filters">${icons.x}</button>
               </div>
-              <div class="fides-uc-pilot__dropdowns">
-                ${renderPilotThemeDropdown()}
-                ${renderPilotDropdown("sector", "Sector", "All sectors", ["sector"], renderPilotOptions("sector"))}
-                ${renderPilotDropdown("country", "Country", "All countries", ["country"], renderPilotOptions("country"))}
-                ${renderPilotMoreFilters()}
+              <div class="fides-uc-pilot__filter-row">
+                ${renderPilotThemePopover()}
+                ${renderPilotPopover("sector", "Sector", "All sectors", ["sector"], renderPilotOptions("sector"))}
+                ${renderPilotPopover("country", "Country", "All countries", ["country"], renderPilotOptions("country"))}
+                <button type="button" class="fides-uc-pilot__more-toggle${panelCount ? " has-active" : ""}" aria-expanded="${pilotMoreOpen ? "true" : "false"}" aria-controls="fides-uc-pilot-more" data-pilot-more-toggle>
+                  <span>More filters</span>
+                  <span class="fides-uc-pilot__badge" data-pilot-more-badge ${panelCount ? "" : "hidden"}>${panelCount}</span><span class="fides-ds-visually-hidden" data-pilot-more-badge-text>${panelCount ? ` (${panelCount} selected)` : ""}</span>
+                  <span class="fides-uc-pilot__more-icon" aria-hidden="true">${icons.chevronDown}</span>
+                </button>
               </div>
+              ${renderPilotMore(filtered.length)}
               <div class="fides-uc-pilot__panel-actions">
-                <button type="button" class="fides-ds-button fides-ds-button--block" data-pilot-close>Show <span data-pilot-count-inline>${filtered.length}</span>&nbsp;use cases</button>
+                <button type="button" class="fides-ds-button fides-ds-button--secondary" data-pilot-cancel>Cancel</button>
+                <button type="button" class="fides-ds-button" data-pilot-apply>Apply filters <span class="fides-uc-pilot__apply-count">(<span data-pilot-count-inline>${filtered.length}</span>)</span></button>
               </div>
             </div>
-            <button id="fides-clear" class="fides-ds-text-button fides-uc-pilot__clear ${getActiveFilterCount() > 0 ? "" : "hidden"}" type="button">Clear filters</button>
           </div>
           <div class="fides-uc-pilot__active" data-pilot-active>${renderPilotActivePills()}</div>
         </div>
 
         <div class="fides-uc-pilot__results-bar fides-results-bar">
-          <h2 class="fides-uc-pilot__count" data-pilot-count tabindex="-1" aria-live="polite">${pilotCountLabel(filtered.length)}</h2>
+          <h2 class="fides-uc-pilot__count${pilotMoreOpen ? " is-repeated" : ""}" data-pilot-count tabindex="-1">${pilotCountLabel(filtered.length)}</h2>
           <label class="fides-uc-pilot__sort" for="fides-sort-select">
             <span>Sort by</span>
-            <select id="fides-sort-select" class="fides-uc-pilot__sort-select">
+            <select id="fides-sort-select" class="fides-uc-pilot__select fides-uc-pilot__sort-select">
               <option value="recommended" ${filters.sortBy === "recommended" ? "selected" : ""}>Explore</option>
               <option value="updated_desc" ${filters.sortBy === "updated_desc" ? "selected" : ""}>Most recent</option>
               <option value="likes_desc" ${filters.sortBy === "likes_desc" ? "selected" : ""}>Most liked</option>
@@ -3539,6 +3752,7 @@
             </select>
           </label>
         </div>
+        <p class="fides-ds-visually-hidden" role="status" aria-live="polite" data-pilot-live></p>
         <div class="fides-results">${renderPilotResults(visible)}</div>
         <div class="fides-uc-pilot__footer-row" data-pilot-pagination-slot>
           ${intro.closing ? `<div class="fides-uc-pilot__closing">${intro.closing}</div>` : ""}
@@ -3547,26 +3761,61 @@
         <p id="fides-catalog-message" class="fides-form-message" aria-live="polite"></p>
       </div>
     `;
-    bindEvents();
-    bindPaginationLinks();
     bindPilotEvents();
     applyStaleCatalogNotice();
   }
 
-  function updatePilotChrome(filtered) {
-    const count = root.querySelector("[data-pilot-count]");
-    if (count) count.textContent = pilotCountLabel(filtered.length);
-    const inline = root.querySelector("[data-pilot-count-inline]");
-    if (inline) inline.textContent = String(filtered.length);
-    root.querySelectorAll("[data-pilot-dropdown]").forEach((dropdown) => {
-      const keys = String(dropdown.dataset.pilotKeys || "").split(",").filter(Boolean);
-      const summary = dropdown.querySelector("[data-pilot-summary]");
-      if (summary) summary.textContent = pilotSummaryText(keys, summary.dataset.pilotAll || "");
-      dropdown.classList.toggle("has-active", keys.some((key) => pilotSelectedLabels(key).length > 0));
-    });
+  /** Bring every control in line with the current state (after Back/Forward or Cancel). */
+  function pilotSyncInputs() {
+    const search = root.querySelector("#fides-search-input");
+    if (search && document.activeElement !== search) search.value = pilotSearchText;
+    root.querySelector("#fides-search-clear")?.classList.toggle("hidden", !(search && search.value));
     root.querySelectorAll("input[data-pilot-theme]").forEach((input) => {
       input.checked = input.dataset.pilotTheme === activeThemeCode;
     });
+    root.querySelectorAll("input[data-filter-group]").forEach((input) => {
+      input.checked = (filters[input.dataset.filterGroup] || []).includes(input.value);
+    });
+    const status = root.querySelector("[data-pilot-status]");
+    if (status) status.value = filters.productionDeployment.length === 1 ? filters.productionDeployment[0] : "";
+    const sort = root.querySelector("#fides-sort-select");
+    if (sort) sort.value = filters.sortBy;
+  }
+
+  function updatePilotChrome(filtered) {
+    const label = pilotCountLabel(filtered.length);
+    const count = root.querySelector("[data-pilot-count]");
+    if (count) {
+      count.textContent = label;
+      count.classList.toggle("is-repeated", pilotMoreOpen && !pilotSnapshot);
+    }
+    const moreCount = root.querySelector("[data-pilot-more-count]");
+    if (moreCount) moreCount.textContent = label;
+    const inline = root.querySelector("[data-pilot-count-inline]");
+    if (inline) inline.textContent = String(filtered.length);
+    root.querySelectorAll("[data-fides-ds-popover][data-pilot-keys]").forEach((popover) => {
+      const keys = String(popover.dataset.pilotKeys || "").split(",").filter(Boolean);
+      const summary = popover.querySelector("[data-pilot-summary]");
+      if (summary) summary.textContent = pilotSummaryText(keys, summary.dataset.pilotAll || "");
+      popover.classList.toggle("has-active", keys.some((key) => pilotSelectedLabels(key).length > 0));
+    });
+    const panelCount = pilotPanelSelectionCount();
+    const moreToggle = root.querySelector("[data-pilot-more-toggle]");
+    if (moreToggle) moreToggle.classList.toggle("has-active", panelCount > 0);
+    const badge = root.querySelector("[data-pilot-more-badge]");
+    if (badge) {
+      badge.textContent = String(panelCount);
+      badge.hidden = panelCount === 0;
+    }
+    const badgeText = root.querySelector("[data-pilot-more-badge-text]");
+    if (badgeText) badgeText.textContent = panelCount ? ` (${panelCount} selected)` : "";
+    const techCount = PILOT_TECH_KEYS.reduce((total, key) => total + (filters[key] || []).length, 0);
+    const techBadge = root.querySelector("[data-pilot-tech-count]");
+    if (techBadge) {
+      techBadge.textContent = techCount ? `${techCount} selected` : "";
+      techBadge.hidden = techCount === 0;
+    }
+    pilotSyncInputs();
     const active = root.querySelector("[data-pilot-active]");
     if (active) active.innerHTML = renderPilotActivePills();
     updateFilterChrome();
@@ -3580,100 +3829,229 @@
     return root.querySelector("#fides-uc-pilot-filter-panel");
   }
 
-  function setPilotPanelOpen(open) {
-    const panel = pilotPanel();
-    const toggle = root.querySelector("[data-pilot-open]");
-    if (!panel || !toggle) return;
-    panel.classList.toggle("is-open", open);
-    toggle.setAttribute("aria-expanded", open ? "true" : "false");
-    document.documentElement.classList.toggle("fides-uc-pilot-panel-open", open);
-    if (open) {
-      panel.setAttribute("role", "dialog");
-      panel.setAttribute("aria-modal", "true");
-      panel.querySelector("[data-pilot-close]")?.focus();
-    } else {
-      panel.removeAttribute("role");
-      panel.removeAttribute("aria-modal");
-      toggle.focus();
-    }
+  function pilotTakeSnapshot() {
+    const snapshot = { theme: activeThemeCode, filters: {} };
+    PILOT_FILTER_KEYS.forEach((key) => { snapshot.filters[key] = filters[key].slice(); });
+    return snapshot;
   }
 
-  function closePilotDropdowns(except) {
-    root.querySelectorAll("details[data-pilot-dropdown][open]").forEach((dropdown) => {
-      if (dropdown !== except) dropdown.open = false;
-    });
+  function pilotRestoreSnapshot(snapshot) {
+    activeThemeCode = snapshot.theme;
+    PILOT_FILTER_KEYS.forEach((key) => { filters[key] = snapshot.filters[key].slice(); });
+  }
+
+  /** Compact screens: one Filters dialog; choices are temporary until applied. */
+  function openPilotDialog() {
+    const panel = pilotPanel();
+    const toggle = root.querySelector("[data-pilot-open]");
+    if (!panel || !toggle || pilotSnapshot) return;
+    pilotSnapshot = pilotTakeSnapshot();
+    panel.classList.add("is-open");
+    panel.setAttribute("role", "dialog");
+    panel.setAttribute("aria-modal", "true");
+    toggle.setAttribute("aria-expanded", "true");
+    document.documentElement.classList.add("fides-uc-pilot-panel-open");
+    updatePilotChrome(getFilteredUseCases());
+    panel.querySelector(".fides-uc-pilot__panel-close")?.focus();
+  }
+
+  function closePilotDialog(apply) {
+    const panel = pilotPanel();
+    const toggle = root.querySelector("[data-pilot-open]");
+    if (!panel || !pilotSnapshot) return;
+    const snapshot = pilotSnapshot;
+    pilotSnapshot = null;
+    if (window.FidesDS && window.FidesDS.closePopovers) window.FidesDS.closePopovers();
+    panel.classList.remove("is-open");
+    panel.removeAttribute("role");
+    panel.removeAttribute("aria-modal");
+    document.documentElement.classList.remove("fides-uc-pilot-panel-open");
+    if (toggle) toggle.setAttribute("aria-expanded", "false");
+    if (apply) {
+      pilotCommit();
+    } else {
+      pilotRestoreSnapshot(snapshot);
+      updatePilotChrome(getFilteredUseCases());
+    }
+    toggle?.focus();
+  }
+
+  function setPilotMoreOpen(open, focusTarget) {
+    pilotMoreOpen = open;
+    const section = root.querySelector("#fides-uc-pilot-more");
+    const toggle = root.querySelector("[data-pilot-more-toggle]");
+    if (section) section.hidden = !open;
+    if (toggle) toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    root.querySelector("[data-pilot-count]")?.classList.toggle("is-repeated", open && !pilotSnapshot);
+    if (!open && focusTarget) toggle?.focus();
+  }
+
+  function setPilotTechnicalOpen(open) {
+    pilotTechOpen = open;
+    const grid = root.querySelector("#fides-uc-pilot-technical");
+    const toggle = root.querySelector("[data-pilot-tech-toggle]");
+    if (grid) grid.hidden = !open;
+    if (toggle) toggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
+  function pilotClearFilters() {
+    activeThemeCode = "";
+    PILOT_FILTER_KEYS.forEach((key) => { filters[key] = []; });
+  }
+
+  function pilotFocusCount() {
+    root.querySelector("[data-pilot-count]")?.focus({ preventScroll: true });
   }
 
   function bindPilotEvents() {
     if (pilotEventsBound) return;
     pilotEventsBound = true;
 
+    root.addEventListener("submit", (event) => {
+      if (!event.target.matches("[data-pilot-search-form]")) return;
+      event.preventDefault();
+      const input = root.querySelector("#fides-search-input");
+      pilotSearchText = String(input ? input.value : "").trim();
+      filters.search = pilotSearchText.toLowerCase();
+      pilotCommit();
+    });
+
+    root.addEventListener("input", (event) => {
+      if (event.target.id !== "fides-search-input") return;
+      root.querySelector("#fides-search-clear")?.classList.toggle("hidden", !event.target.value);
+    });
+
     root.addEventListener("change", (event) => {
-      const theme = event.target.closest && event.target.closest("input[data-pilot-theme]");
-      if (!theme || !theme.checked) return;
-      setThemeFilter(String(theme.dataset.pilotTheme || ""));
-      resetListingPage();
-      renderResultsOnly();
+      const target = event.target;
+      if (target.matches("input[data-pilot-theme]")) {
+        if (!target.checked) return;
+        activeThemeCode = resolveThemeFilterCode(String(target.dataset.pilotTheme || ""));
+        pilotFiltersChanged();
+        return;
+      }
+      if (target.matches("input[data-filter-group]")) {
+        const group = target.dataset.filterGroup;
+        if (!Array.isArray(filters[group])) return;
+        filters[group] = target.checked
+          ? [...new Set([...filters[group], target.value])]
+          : filters[group].filter((value) => value !== target.value);
+        pilotFiltersChanged();
+        return;
+      }
+      if (target.matches("[data-pilot-status]")) {
+        filters.productionDeployment = target.value ? [target.value] : [];
+        pilotFiltersChanged();
+        return;
+      }
+      if (target.id === "fides-sort-select") {
+        const nextSort = String(target.value || "recommended");
+        filters.sortBy = SORT_OPTIONS.includes(nextSort) ? nextSort : "recommended";
+        localStorage.setItem(SORT_STORAGE_KEY, filters.sortBy);
+        pilotCommit();
+      }
     });
 
     root.addEventListener("click", (event) => {
-      const remove = event.target.closest("[data-pilot-remove-group]");
+      const target = event.target;
+      const cardLink = target.closest(".fides-ds-card__link");
+      if (cardLink) {
+        const card = cardLink.closest("[data-use-case-id]");
+        if (card && window.FidesDS && window.FidesDS.rememberReturn) {
+          window.FidesDS.rememberReturn(PILOT_RETURN_KEY, card.getAttribute("data-use-case-id"), window.location.href);
+        }
+        try {
+          history.replaceState(Object.assign({}, history.state, { fidesPilot: true, scrollY: Math.round(window.scrollY) }), "");
+        } catch (_error) {
+          /* History is optional. */
+        }
+        return;
+      }
+      const pageLink = target.closest("[data-catalog-page]");
+      if (pageLink) {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+        event.preventDefault();
+        listingPage = Math.max(1, parseInt(pageLink.getAttribute("data-catalog-page") || "1", 10) || 1);
+        pilotCommit({ keepPage: true, announce: false });
+        root.querySelector(".fides-uc-pilot__results-bar")?.scrollIntoView({ behavior: pilotPrefersReducedMotion() ? "auto" : "smooth", block: "start" });
+        pilotFocusCount();
+        return;
+      }
+      const remove = target.closest("[data-pilot-remove-group]");
       if (remove) {
         const group = remove.dataset.pilotRemoveGroup;
         const value = remove.dataset.pilotRemoveValue;
-        if (group === "theme") {
-          clearThemeFilter();
-        } else if (Array.isArray(filters[group])) {
-          filters[group] = filters[group].filter((entry) => entry !== value);
-          root.querySelectorAll(`input[data-filter-group="${CSS.escape(group)}"]`).forEach((input) => {
-            if (input.value === value) input.checked = false;
-          });
-        }
-        resetListingPage();
-        renderResultsOnly();
-        root.querySelector("[data-pilot-count]")?.focus();
+        if (group === "theme") activeThemeCode = "";
+        else if (Array.isArray(filters[group])) filters[group] = filters[group].filter((entry) => entry !== value);
+        pilotFiltersChanged();
+        pilotFocusCount();
         return;
       }
-      if (event.target.closest("[data-pilot-reset]")) {
-        root.querySelector("#fides-clear")?.click();
-        root.querySelector("#fides-search-input")?.focus();
+      if (target.closest("[data-pilot-clear-filters]")) {
+        pilotClearFilters();
+        pilotFiltersChanged();
+        pilotFocusCount();
         return;
       }
-      if (event.target.closest("[data-pilot-open]")) {
-        setPilotPanelOpen(true);
+      if (target.closest("[data-pilot-clear-search]") || target.closest("#fides-search-clear")) {
+        const input = root.querySelector("#fides-search-input");
+        if (input) input.value = "";
+        pilotSearchText = "";
+        filters.search = "";
+        pilotCommit();
+        input?.focus();
         return;
       }
-      if (event.target.closest("[data-pilot-close]")) {
-        setPilotPanelOpen(false);
+      if (target.closest("#fides-ask-fides-trigger")) {
+        if (!window.FidesAssistant || typeof window.FidesAssistant.open !== "function") return;
+        const input = root.querySelector("#fides-search-input");
+        window.FidesAssistant.open({
+          prefill: input ? String(input.value || "").trim() : pilotSearchText,
+          placeholder: ASK_FIDES_PLACEHOLDER
+        });
+        return;
+      }
+      if (target.closest("[data-pilot-more-toggle]")) {
+        setPilotMoreOpen(!pilotMoreOpen, false);
+        return;
+      }
+      if (target.closest("[data-pilot-more-close]")) {
+        setPilotMoreOpen(false, true);
+        return;
+      }
+      if (target.closest("[data-pilot-tech-toggle]")) {
+        setPilotTechnicalOpen(!pilotTechOpen);
+        return;
+      }
+      if (target.closest("[data-pilot-open]")) {
+        openPilotDialog();
+        return;
+      }
+      if (target.closest("[data-pilot-apply]")) {
+        closePilotDialog(true);
+        return;
+      }
+      if (target.closest("[data-pilot-cancel]")) {
+        closePilotDialog(false);
       }
     });
 
-    // Desktop and tablet: one dropdown open at a time.
-    root.addEventListener("toggle", (event) => {
-      const dropdown = event.target;
-      if (!(dropdown instanceof HTMLDetailsElement) || !dropdown.matches("[data-pilot-dropdown]")) return;
-      if (dropdown.open && !pilotIsCompact()) closePilotDropdowns(dropdown);
-    }, true);
-
-    document.addEventListener("click", (event) => {
-      if (pilotIsCompact()) return;
-      if (event.target.closest && event.target.closest("details[data-pilot-dropdown]")) return;
-      closePilotDropdowns(null);
-    });
-
+    // Option lists close first (shared FidesDS popover, capture phase); then the dialog or More filters.
     root.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
-        const openDropdown = event.target.closest("details[data-pilot-dropdown][open]");
-        if (openDropdown && !pilotIsCompact()) {
-          openDropdown.open = false;
-          openDropdown.querySelector("summary")?.focus();
+        if (pilotSnapshot) {
+          event.preventDefault();
+          closePilotDialog(false);
           return;
         }
-        if (pilotPanel()?.classList.contains("is-open")) setPilotPanelOpen(false);
+        const more = root.querySelector("#fides-uc-pilot-more");
+        if (pilotMoreOpen && more && (more.contains(event.target) || event.target.closest("[data-pilot-more-toggle]"))) {
+          event.preventDefault();
+          setPilotMoreOpen(false, true);
+        }
         return;
       }
-      if (event.key === "Tab" && pilotPanel()?.classList.contains("is-open")) {
-        const focusable = [...pilotPanel().querySelectorAll("summary, button, input, select, a[href]")].filter((el) => el.offsetParent !== null);
+      if (event.key === "Tab" && pilotSnapshot) {
+        const focusable = [...pilotPanel().querySelectorAll("button, input, select, a[href]")].filter((el) => el.offsetParent !== null && !el.disabled);
         if (!focusable.length) return;
         const first = focusable[0];
         const last = focusable[focusable.length - 1];
@@ -3688,8 +4066,27 @@
     });
 
     window.addEventListener("resize", debounce(() => {
-      if (!pilotIsCompact() && pilotPanel()?.classList.contains("is-open")) setPilotPanelOpen(false);
+      if (!pilotIsCompact() && pilotSnapshot) closePilotDialog(false);
     }, 150));
+  }
+
+  /** Back/Forward between overview states: restore state, controls and scroll. */
+  function pilotHandlePopstate(event) {
+    if (!currentItems.length) return;
+    if (pilotSnapshot) {
+      pilotSnapshot = null;
+      const panel = pilotPanel();
+      panel?.classList.remove("is-open");
+      panel?.removeAttribute("role");
+      panel?.removeAttribute("aria-modal");
+      document.documentElement.classList.remove("fides-uc-pilot-panel-open");
+    }
+    pilotReadUrl(false);
+    const search = root.querySelector("#fides-search-input");
+    if (search) search.value = pilotSearchText;
+    renderResultsOnly();
+    const y = event && event.state ? event.state.scrollY : null;
+    if (typeof y === "number") window.scrollTo(0, y);
   }
 
   function bindEvents() {
@@ -4041,10 +4438,18 @@
       status.innerHTML = "<p>Retrying catalog data…</p>";
       return;
     }
-    const message = kind === "error"
-      ? "Could not load the latest catalog data."
-      : "Loading is taking longer than expected.";
-    status.innerHTML = `<p>${message}</p><button type="button" data-fides-catalog-retry>Try again</button>`;
+    if (DESIGN_PILOT) {
+      status.classList.add("fides-uc-pilot__load-status", "fides-ds-page");
+      status.classList.toggle("is-error", kind === "error");
+      status.innerHTML = kind === "error"
+        ? '<h2 class="fides-uc-pilot__state-title">Use cases could not be loaded</h2><p>The catalog data could not be retrieved, so no results can be shown. Check your connection and try again.</p><button type="button" class="fides-ds-button" data-fides-catalog-retry>Try again</button>'
+        : '<p>Loading is taking longer than expected.</p><button type="button" class="fides-ds-text-button" data-fides-catalog-retry>Try again</button>';
+    } else {
+      const message = kind === "error"
+        ? "Could not load the latest catalog data."
+        : "Loading is taking longer than expected.";
+      status.innerHTML = `<p>${message}</p><button type="button" data-fides-catalog-retry>Try again</button>`;
+    }
     status.querySelector("[data-fides-catalog-retry]")?.addEventListener("click", () => {
       mountLoadStatus("retrying");
       load();
@@ -4054,6 +4459,7 @@
   async function load() {
     const generation = ++loadGeneration;
     catalogLoadTracker.setBusy(true);
+    if (DESIGN_PILOT && !currentItems.length) showPilotLoading();
     if (slowLoadTimer) clearTimeout(slowLoadTimer);
     slowLoadTimer = setTimeout(() => {
       if (generation === loadGeneration) mountLoadStatus("slow");
@@ -4088,7 +4494,15 @@
       ]);
       if (generation !== loadGeneration) return;
       filterFacets = computeFacets(currentItems);
+      if (DESIGN_PILOT) {
+        if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+        pilotReadUrl(true);
+      }
       render();
+      if (DESIGN_PILOT) {
+        pilotWriteUrl(false);
+        pilotRestoreReturn();
+      }
       catalogLoadTracker.ready();
       openUseCaseFromQueryParam();
       if (VOCABULARY_URL || VOCABULARY_FALLBACK_URL) {
@@ -4104,6 +4518,7 @@
     } catch (_err) {
       if (generation !== loadGeneration) return;
       catalogLoadTracker.failed();
+      root.querySelector("[data-pilot-loading]")?.remove();
       // Reveal the server-rendered SSR fallback (if present) instead of
       // wiping the container with an error — keeps content for no-JS/crawlers
       // and for users when the upstream catalog feed is unreachable.

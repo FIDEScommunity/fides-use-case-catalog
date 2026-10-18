@@ -403,27 +403,6 @@ final class Fides_Use_Case_Design {
     }
 
     /**
-     * First paragraph of the summary, cut at a word boundary.
-     */
-    public static function excerpt(string $text, int $max = 220): string {
-        $text = trim($text);
-        if ($text === '') {
-            return '';
-        }
-        $parts = preg_split('/\n\s*\n/', $text);
-        $first = trim(preg_replace('/\s+/u', ' ', (string) ($parts[0] ?? '')));
-        if (mb_strlen($first) <= $max) {
-            return $first;
-        }
-        $cut = mb_substr($first, 0, $max);
-        $space = mb_strrpos($cut, ' ');
-        if ($space !== false && $space > $max * 0.6) {
-            $cut = mb_substr($cut, 0, $space);
-        }
-        return preg_replace('/[\s,;:.\-–—]+$/u', '', $cut) . '…';
-    }
-
-    /**
      * Shared card props for a use case.
      *
      * @param array<string, mixed> $item
@@ -445,9 +424,11 @@ final class Fides_Use_Case_Design {
             'data'           => array('use-case-id' => $id),
         );
         if ($variant === 'row') {
-            $props['kicker']  = self::kicker($item);
-            $props['summary'] = self::excerpt((string) ($item['summary'] ?? ''));
-            $props['owner']   = $owner;
+            unset($props['fallback_label'], $props['cta_label']);
+            $props['kicker']     = self::kicker($item);
+            $props['summary']    = trim((string) preg_replace('/\s+/u', ' ', (string) ($item['summary'] ?? '')));
+            $props['owner']      = $owner;
+            $props['owner_href'] = self::owner_href($item, $owner);
             $props['status']  = self::status_label($item);
             $props['meta']    = self::engagement_meta($id, $updated !== '' ? 'Updated ' . $updated : '');
         } elseif ($variant === 'feature') {
@@ -461,6 +442,31 @@ final class Fides_Use_Case_Design {
             $props['meta']   = self::engagement_meta($id, '');
         }
         return $props;
+    }
+
+    /**
+     * FIDES organization page for the owner when the item links an
+     * organization record with the same name; mirrors pilotOwnerHref().
+     *
+     * @param array<string, mixed> $item
+     */
+    public static function owner_href(array $item, string $owner): string {
+        $urls = function_exists('fides_use_case_catalog_catalog_urls') ? fides_use_case_catalog_catalog_urls() : array();
+        $base = isset($urls['organizationDetailUrl']) ? rtrim((string) $urls['organizationDetailUrl'], '/') : '';
+        if ($owner === '' || $base === '') {
+            return '';
+        }
+        $orgs = isset($item['links']['organizations']) && is_array($item['links']['organizations']) ? $item['links']['organizations'] : array();
+        foreach ($orgs as $org) {
+            if (! is_array($org) || strcasecmp(trim((string) ($org['labelRaw'] ?? '')), $owner) !== 0) {
+                continue;
+            }
+            $ref = trim((string) ($org['refId'] ?? ''));
+            if ($ref !== '') {
+                return $base . '/' . rawurlencode($ref) . '/?from=' . rawurlencode('usecase:' . (string) ($item['id'] ?? ''));
+            }
+        }
+        return '';
     }
 
     /**
