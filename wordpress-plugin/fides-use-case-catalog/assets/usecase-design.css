@@ -924,6 +924,22 @@ html.fides-uc-pilot-panel-open {
   background: var(--fides-ds-ground);
 }
 
+.fides-ds .fides-uc-detail__visual {
+  display: grid;
+  gap: var(--fides-ds-space-2);
+  align-content: start;
+  justify-items: start;
+  min-width: 0;
+}
+
+.fides-ds .fides-uc-detail__visual .fides-uc-detail__media {
+  width: 100%;
+}
+
+.fides-ds .fides-uc-detail__original {
+  min-height: 44px;
+}
+
 .fides-ds .fides-uc-detail__media .fides-ds-card__img {
   display: block;
   width: 100%;
@@ -1240,10 +1256,10 @@ html.fides-uc-pilot-panel-open {
 }
 
 @media (min-width: 1100px) {
+  /* Hero (Paper 1440): text 792 and image 520 with a 32 gap; the body keeps 800 / 64 / 480. */
   .fides-ds .fides-uc-detail__hero {
-    grid-template-columns: minmax(0, 800px) minmax(0, 480px);
-    justify-content: space-between;
-    column-gap: 64px;
+    grid-template-columns: minmax(0, 792fr) minmax(0, 520fr);
+    column-gap: 32px;
   }
   .fides-ds .fides-uc-detail__hero--no-media {
     grid-template-columns: minmax(0, 800px);

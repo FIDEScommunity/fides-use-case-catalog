@@ -106,6 +106,8 @@ final class Fides_Use_Case_Detail_Page {
             $hero_image = $videos[0]['poster'];
         }
         $has_media   = $videos || count($images) > 1;
+        // Without a media section, a single image is only reachable through this link.
+        $original    = ! $has_media && count($images) === 1 ? $images[0] : '';
         $media_title = $images && $videos ? 'Images & video' : ($videos ? (count($videos) > 1 ? 'Videos' : 'Video') : 'Images');
 
         $sections = array();
@@ -163,7 +165,14 @@ final class Fides_Use_Case_Detail_Page {
           <a class="fides-ds-action-link" href="<?php echo esc_url('https://www.linkedin.com/sharing/share-offsite/?url=' . rawurlencode($page_url)); ?>" rel="noopener" target="_blank">Share on LinkedIn<span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
         </div>
       </div>
-      <?php if ($hero_image !== '') : ?>
+      <?php if ($hero_image !== '' && $original !== '') : ?>
+        <div class="fides-uc-detail__visual">
+          <figure class="fides-uc-detail__media">
+            <img class="fides-ds-card__img" src="<?php echo esc_url($hero_image); ?>" alt="" decoding="async" fetchpriority="high">
+          </figure>
+          <a class="fides-ds-action-link fides-uc-detail__original" href="<?php echo esc_url($original); ?>" rel="noopener" target="_blank">Open original image <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
+        </div>
+      <?php elseif ($hero_image !== '') : ?>
         <figure class="fides-uc-detail__media">
           <img class="fides-ds-card__img" src="<?php echo esc_url($hero_image); ?>" alt="" decoding="async" fetchpriority="high">
         </figure>
