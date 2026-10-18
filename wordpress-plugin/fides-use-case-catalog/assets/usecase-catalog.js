@@ -3597,45 +3597,38 @@
     return renderPilotPopover("theme", "Theme", "All themes", ["theme"], body);
   }
 
-  function renderPilotStatusSelect() {
-    const options = pilotFilterOptions("productionDeployment");
-    if (!options.length) return "";
-    const selected = filters.productionDeployment.length === 1 ? filters.productionDeployment[0] : "";
-    return `<div class="fides-uc-pilot__more-field">
-      <label class="fides-uc-pilot__more-label" for="fides-uc-pilot-status">Production deployment</label>
-      <select id="fides-uc-pilot-status" class="fides-uc-pilot__select" data-pilot-status>
-        <option value="">All statuses</option>
-        ${options.map((value) => `<option value="${escapeHtml(value)}" ${selected === value ? "selected" : ""}>${escapeHtml(pilotFilterLabel("productionDeployment", value))} (${filterFacets?.productionDeployment?.[value] || 0})</option>`).join("")}
-      </select>
-    </div>`;
+  /** Production deployment keeps multiple selection (OR within the group), like the other lists. */
+  function renderPilotStatus() {
+    return renderPilotPopover("productionDeployment", "Production deployment", "All statuses", ["productionDeployment"], renderPilotOptions("productionDeployment"));
   }
 
   function renderPilotAwards() {
     const options = renderPilotOptions("awardRecognition");
     if (!options) return "";
-    return `<fieldset class="fides-uc-pilot__more-field fides-uc-pilot__awards">
-      <legend class="fides-uc-pilot__more-label">Awards</legend>
+    return `<div class="fides-uc-pilot__more-field fides-uc-pilot__awards" role="group" aria-labelledby="fides-uc-pilot-awards-label">
+      <span class="fides-uc-pilot__more-label" id="fides-uc-pilot-awards-label">Awards</span>
       <div class="fides-uc-pilot__inline-options">${options}</div>
-    </fieldset>`;
-  }
-
-  function renderPilotTechnical() {
-    const popovers = TAXONOMY_FILTER_GROUPS
-      .map((group) => renderPilotPopover(group.key, group.title, "Any", [group.key], renderPilotOptions(group.key)))
-      .join("");
-    if (!popovers) return "";
-    const names = TAXONOMY_FILTER_GROUPS.map((group) => group.title).join(" · ");
-    return `<div class="fides-uc-pilot__technical">
-      <button type="button" class="fides-uc-pilot__technical-toggle" aria-expanded="${pilotTechOpen ? "true" : "false"}" aria-controls="fides-uc-pilot-technical" data-pilot-tech-toggle>
-        <span class="fides-uc-pilot__technical-title">Technical filters <span class="fides-uc-pilot__badge" data-pilot-tech-count hidden></span></span>
-        <span class="fides-uc-pilot__technical-names">${escapeHtml(names)}</span>
-        <span class="fides-uc-pilot__technical-icon" aria-hidden="true">${icons.chevronDown}</span>
-      </button>
-      <div class="fides-uc-pilot__technical-grid" id="fides-uc-pilot-technical" ${pilotTechOpen ? "" : "hidden"}>${popovers}</div>
     </div>`;
   }
 
+  function renderPilotTechnicalPopovers() {
+    return TAXONOMY_FILTER_GROUPS
+      .map((group) => renderPilotPopover(group.key, group.title, "Any", [group.key], renderPilotOptions(group.key)))
+      .join("");
+  }
+
+  /** Group names are only listed while the group is closed; open, the field labels show them. */
+  function renderPilotTechnicalToggle() {
+    const names = TAXONOMY_FILTER_GROUPS.map((group) => group.title).join(" · ");
+    return `<button type="button" class="fides-uc-pilot__technical-toggle" aria-expanded="${pilotTechOpen ? "true" : "false"}" aria-controls="fides-uc-pilot-technical" data-pilot-tech-toggle>
+        <span class="fides-uc-pilot__technical-title">Technical filters <span class="fides-uc-pilot__badge" data-pilot-tech-count hidden></span></span>
+        <span class="fides-uc-pilot__technical-names">${escapeHtml(names)}</span>
+        <span class="fides-uc-pilot__technical-icon" aria-hidden="true">${icons.chevronDown}</span>
+      </button>`;
+  }
+
   function renderPilotMore(count) {
+    const technical = renderPilotTechnicalPopovers();
     return `<section class="fides-uc-pilot__more" id="fides-uc-pilot-more" aria-labelledby="fides-uc-pilot-more-title" ${pilotMoreOpen ? "" : "hidden"}>
       <div class="fides-uc-pilot__more-head">
         <h3 class="fides-uc-pilot__more-title" id="fides-uc-pilot-more-title">More filters</h3>
@@ -3643,10 +3636,11 @@
         <button type="button" class="fides-uc-pilot__more-close" data-pilot-more-close aria-label="Close more filters">${icons.x}</button>
       </div>
       <div class="fides-uc-pilot__more-grid">
-        ${renderPilotStatusSelect()}
+        ${renderPilotStatus()}
         ${renderPilotAwards()}
+        ${technical ? renderPilotTechnicalToggle() : ""}
       </div>
-      ${renderPilotTechnical()}
+      ${technical ? `<div class="fides-uc-pilot__technical-grid" id="fides-uc-pilot-technical" ${pilotTechOpen ? "" : "hidden"}>${technical}</div>` : ""}
     </section>`;
   }
 
@@ -3700,7 +3694,10 @@
 
         <div class="fides-uc-pilot__controls">
           <form class="fides-uc-pilot__search-row" role="search" data-pilot-search-form>
-            <label class="fides-uc-pilot__search-label" for="fides-search-input">Search use cases</label>
+            <div class="fides-uc-pilot__search-head">
+              <label class="fides-uc-pilot__search-label" for="fides-search-input">Search use cases</label>
+              ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-text-button fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button">Ask FIDES <span aria-hidden="true">→</span></button>' : ""}
+            </div>
             <div class="fides-uc-pilot__search-line">
               <div class="fides-uc-pilot__search">
                 <span class="fides-uc-pilot__search-icon" aria-hidden="true">${icons.search}</span>
@@ -3708,13 +3705,9 @@
                 <button class="fides-uc-pilot__search-clear ${pilotSearchText ? "" : "hidden"}" id="fides-search-clear" type="button" aria-label="Clear search">${icons.xSmall}</button>
               </div>
               <button type="submit" class="fides-ds-button fides-uc-pilot__search-submit">Search</button>
-              ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-text-button fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button">Ask FIDES <span aria-hidden="true">→</span></button>' : ""}
             </div>
           </form>
           <div class="fides-uc-pilot__filters">
-            <button class="fides-ds-button fides-ds-button--secondary fides-uc-pilot__filters-toggle" type="button" aria-expanded="false" aria-controls="fides-uc-pilot-filter-panel" data-pilot-open>
-              Filters <span class="fides-filter-count ${activeCount > 0 ? "" : "hidden"}">${activeCount || 0}</span><span class="fides-ds-visually-hidden"> active</span>
-            </button>
             <div class="fides-uc-pilot__filter-panel" id="fides-uc-pilot-filter-panel" aria-labelledby="fides-uc-pilot-filter-title">
               <div class="fides-uc-pilot__panel-head">
                 <h2 class="fides-uc-pilot__panel-title" id="fides-uc-pilot-filter-title">Filters</h2>
@@ -3741,6 +3734,9 @@
         </div>
 
         <div class="fides-uc-pilot__results-bar fides-results-bar">
+          <button class="fides-ds-button fides-ds-button--secondary fides-uc-pilot__filters-toggle" type="button" aria-expanded="false" aria-controls="fides-uc-pilot-filter-panel" data-pilot-open>
+            Filters <span class="fides-filter-count ${activeCount > 0 ? "" : "hidden"}">${activeCount || 0}</span><span class="fides-ds-visually-hidden"> active</span>
+          </button>
           <h2 class="fides-uc-pilot__count${pilotMoreOpen ? " is-repeated" : ""}" data-pilot-count tabindex="-1">${pilotCountLabel(filtered.length)}</h2>
           <label class="fides-uc-pilot__sort" for="fides-sort-select">
             <span>Sort by</span>
@@ -3776,8 +3772,6 @@
     root.querySelectorAll("input[data-filter-group]").forEach((input) => {
       input.checked = (filters[input.dataset.filterGroup] || []).includes(input.value);
     });
-    const status = root.querySelector("[data-pilot-status]");
-    if (status) status.value = filters.productionDeployment.length === 1 ? filters.productionDeployment[0] : "";
     const sort = root.querySelector("#fides-sort-select");
     if (sort) sort.value = filters.sortBy;
   }
@@ -3935,11 +3929,6 @@
         filters[group] = target.checked
           ? [...new Set([...filters[group], target.value])]
           : filters[group].filter((value) => value !== target.value);
-        pilotFiltersChanged();
-        return;
-      }
-      if (target.matches("[data-pilot-status]")) {
-        filters.productionDeployment = target.value ? [target.value] : [];
         pilotFiltersChanged();
         return;
       }

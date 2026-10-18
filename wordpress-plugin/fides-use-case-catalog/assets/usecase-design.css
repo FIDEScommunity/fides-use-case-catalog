@@ -57,6 +57,14 @@
   margin: 0;
 }
 
+.fides-ds .fides-uc-pilot__search-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 var(--fides-ds-space-4);
+}
+
 .fides-ds .fides-uc-pilot__search-label {
   color: var(--fides-ds-ink);
   font-size: 14px;
@@ -139,8 +147,11 @@
   justify-content: center;
 }
 
+/* 44px target that overlaps the label row instead of growing it. */
 .fides-ds .fides-uc-pilot__ask {
   gap: var(--fides-ds-space-1);
+  min-height: 44px;
+  margin-block: -11px;
   font-size: 14px;
   line-height: 22px;
   text-decoration: none;
@@ -206,8 +217,7 @@
   box-shadow: inset 0 0 0 1px var(--fides-ds-link);
 }
 
-.fides-ds .fides-uc-pilot__more-icon,
-.fides-ds .fides-uc-pilot__technical-icon {
+.fides-ds .fides-uc-pilot__more-icon {
   display: inline-flex;
   margin-left: auto;
 }
@@ -236,12 +246,13 @@
   display: none;
 }
 
-/* More filters: in-flow panel under the filter row, not a dialog. */
+/* More filters (compact 19.8): in-flow panel, one short head and one row
+   with status, awards and the technical toggle; technical lists below. */
 .fides-ds .fides-uc-pilot__more {
   display: grid;
-  gap: var(--fides-ds-space-4);
+  gap: var(--fides-ds-space-2);
   margin-top: var(--fides-ds-space-3);
-  padding: var(--fides-ds-space-4) var(--fides-ds-space-4) var(--fides-ds-space-5);
+  padding: var(--fides-ds-space-1) var(--fides-ds-space-4) var(--fides-ds-space-3);
   border-top: 2px solid var(--fides-ds-link);
   background: var(--fides-ds-ground);
   box-shadow: inset 0 -1px 0 var(--fides-ds-line);
@@ -255,7 +266,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--fides-ds-space-2) var(--fides-ds-space-4);
+  gap: 0 var(--fides-ds-space-4);
 }
 
 .fides-ds .fides-uc-pilot__more-title {
@@ -278,6 +289,7 @@
   width: 44px;
   height: 44px;
   margin-left: auto;
+  margin-right: calc(-1 * var(--fides-ds-space-3));
   padding: 0;
   border: 0;
   background: none;
@@ -287,15 +299,22 @@
 }
 
 .fides-ds .fides-uc-pilot__more-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 320px));
-  gap: var(--fides-ds-space-4) var(--fides-ds-space-6);
-  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fides-ds-space-2) var(--fides-ds-space-6);
+}
+
+.fides-ds .fides-uc-pilot__more-grid > .fides-uc-pilot__popover {
+  flex: 0 1 300px;
+  min-width: min(100%, 260px);
 }
 
 .fides-ds .fides-uc-pilot__more-field {
-  display: grid;
-  gap: var(--fides-ds-space-1);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--fides-ds-space-4);
   min-width: 0;
   margin: 0;
   padding: 0;
@@ -325,18 +344,14 @@
   background: none;
 }
 
-.fides-ds .fides-uc-pilot__technical {
-  border-top: 1px solid var(--fides-ds-line);
-}
-
 .fides-ds .fides-uc-pilot__technical-toggle {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  display: flex;
   align-items: center;
-  gap: 2px var(--fides-ds-space-3);
-  width: 100%;
+  gap: var(--fides-ds-space-2) var(--fides-ds-space-3);
+  min-width: 0;
   min-height: 44px;
-  padding: var(--fides-ds-space-3) 0;
+  margin-left: auto;
+  padding: 0;
   border: 0;
   background: none;
   color: var(--fides-ds-ink);
@@ -358,25 +373,34 @@
   font-size: 14px;
   line-height: 22px;
   font-weight: 700;
+  white-space: nowrap;
 }
 
 .fides-ds .fides-uc-pilot__technical-names {
-  grid-column: 1;
+  min-width: 0;
+  overflow: hidden;
   color: var(--fides-ds-muted);
   font-size: 13px;
   line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fides-ds .fides-uc-pilot__technical-toggle[aria-expanded="true"] .fides-uc-pilot__technical-names {
+  display: none;
 }
 
 .fides-ds .fides-uc-pilot__technical-icon {
-  grid-column: 2;
-  grid-row: 1 / span 2;
+  display: inline-flex;
+  flex: 0 0 auto;
 }
 
 .fides-ds .fides-uc-pilot__technical-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
   gap: var(--fides-ds-space-3);
-  padding-bottom: var(--fides-ds-space-2);
+  padding-top: var(--fides-ds-space-2);
+  border-top: 1px solid var(--fides-ds-line);
 }
 
 .fides-ds .fides-uc-pilot__technical-grid[hidden] {
@@ -674,13 +698,32 @@
 
 /* Compact (Paper 19.4 M): one Filters dialog with temporary choices. */
 @media (max-width: 599px) {
+  .fides-ds .fides-uc-pilot__search-line {
+    flex-wrap: nowrap;
+    gap: var(--fides-ds-space-2);
+  }
+  .fides-ds .fides-uc-pilot__search {
+    flex: 1 1 auto;
+  }
+  .fides-ds .fides-uc-pilot__search-input {
+    padding-left: 40px;
+  }
+  .fides-ds .fides-uc-pilot__search-icon {
+    left: 12px;
+  }
   .fides-ds .fides-uc-pilot__search-submit {
-    flex: 1 1 100%;
+    padding-inline: var(--fides-ds-space-4);
+  }
+  .fides-ds .fides-uc-pilot__controls {
+    gap: var(--fides-ds-space-2);
+    padding-bottom: var(--fides-ds-space-3);
   }
   .fides-ds .fides-uc-pilot__filters-toggle {
     display: inline-flex;
     justify-content: center;
     gap: var(--fides-ds-space-2);
+    min-height: 44px;
+    padding: 8px var(--fides-ds-space-4);
   }
   .fides-ds .fides-uc-pilot__filter-panel {
     display: none;
@@ -768,11 +811,42 @@
     justify-content: center;
   }
   .fides-ds .fides-uc-pilot__results-bar {
-    align-items: flex-start;
-    flex-direction: column;
+    gap: var(--fides-ds-space-2) var(--fides-ds-space-3);
+    padding-block: var(--fides-ds-space-2);
+  }
+  /* Filters and Sort share one row; the count (not focusable) sits under them, above the results. */
+  .fides-ds .fides-uc-pilot__count {
+    order: 3;
+    flex: 1 0 100%;
   }
   .fides-ds .fides-uc-pilot__sort {
+    gap: var(--fides-ds-space-2);
+  }
+  .fides-ds .fides-uc-pilot__sort-select {
+    min-width: 0;
+    padding-right: 32px;
+    background-position: right 10px center;
+  }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__more-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__more-grid > .fides-uc-pilot__popover {
+    flex-basis: auto;
+  }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__technical-toggle {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 2px var(--fides-ds-space-3);
     margin-left: 0;
+  }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__technical-names {
+    grid-column: 1;
+    white-space: normal;
+  }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__technical-icon {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
   .fides-ds .fides-uc-pilot__skeleton-row {
     grid-template-columns: minmax(0, 1fr);
