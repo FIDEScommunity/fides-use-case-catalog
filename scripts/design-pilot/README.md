@@ -24,6 +24,7 @@ utrecht-demo, so that site must be running in Local.
 | `teardown-site.sh` | Stop the server, drop the pilot database, delete the pilot files |
 | `run-tests.sh` | Run `tests/use-case-design-behaviour.php` and `tests/site-shell-behaviour.php` in the pilot WordPress (fixture data, mocked REST, no database writes) |
 | `tests/run-shell-route.sh` | Visitor route in headless Chrome at 1366×768 and 1440/1100/1024/768/390/320 px: homepage fragment → overview → detail → back, dropdowns, mobile menu, section navigation, filters with Escape/focus, pagination, long titles and the logo back to the homepage fragment; screenshots in `../screens/shell/`. Uses an existing Playwright install (`PLAYWRIGHT_MODULE`) and the server from `start-server.sh` |
+| `tests/run-overview-detail-checks.sh` | Overview and detail behaviour (brief 2026-10-18) in headless Chrome; screenshots in `../screens/overview-detail/` |
 | `tests/run-measure-density.sh <label>` | Measure computed type sizes, Explore panel height, first result position, controls under 44 px and overflow at seven viewports; writes `measurements.json` and screenshots to `../screens/density-<label>/` |
 
 `fides-design-pilot-guard.php` (installed as mu-plugin) blocks outgoing mail
@@ -81,13 +82,16 @@ setting with `[fides_use_case_featured id="<catalog-id>"]`.
 `scripts/design-pilot/run-tests.sh` exits non-zero on failure. It covers:
 featured selection, fallback and missing records (including the settings
 warning), non-HTTP identifiers kept as code, credential aliases linking to the
-canonical record, copy link / canonical / related cards using the same detail
-route, award and like display, the collapsible section navigation, the shell
-template applying only to the pilot pages, remapped and dropped navigation
-links, header/footer markup (unique ids, toggle targets, hidden dialog,
-account link), the contribute band and the detail ecosystem (summary counts,
-one full section, Show all disclosure, duplicate records counted once,
-internal / external / unlinked records). The regular `npm test` and the tiles
+canonical record, share link / canonical using the same detail route, award
+and like display, the collapsible section navigation, the shell template
+applying only to the pilot pages, remapped and dropped navigation links,
+header/footer markup (unique ids, toggle targets, hidden dialog, account
+link), the contribute band, and the detail page: organisations in their own
+block, invalid source URLs without destination, ecosystem summary without
+organisations, wide/compact variant, groups over three records closed on
+narrow screens, exact duplicates counted once, internal / external /
+unlinked records, Themes/Tags, update bar at the bottom, no related cards
+or promo. The regular `npm test` and the tiles
 `phpunit` and card parity tests still apply.
 
 Browser checks (system Chrome plus an existing Playwright install, all exit
@@ -100,8 +104,17 @@ non-zero on failure):
 - `tests/run-ux16-checks.sh`: blocks GitHub for one browser context to force
   the catalog fallback, then checks the stale-data notice, a 44×44 dismiss
   button and no functional target under 44 px (with a self-test that a 20 px
-  button is caught); plus the detail ecosystem on a record with many and one
-  with few relations (`DETAIL_SLUGS` overrides them).
+  button is caught).
+- `tests/run-overview-detail-checks.sh`: overview row card (one link,
+  180×112 media, 2-line summary), search on Enter, lists that stay open on a
+  choice, Escape order (list, then More filters), OR within / AND between
+  technical groups, Clear filters keeping the search, Back restoring URL
+  state and focus, Back to results; mobile Filters dialog (focus, Cancel,
+  Escape, Apply). Detail at 1440/768/390/320 for the three example records
+  (`DETAIL_SLUGS`): 800/64/480 columns, mobile order, accordions, technical
+  details closed, Show all organisations, Read full / Show less position,
+  anchors opening hidden content, gallery selection and in-place play,
+  invalid links, 44 px targets and overflow.
 - `tests/run-measure-density.sh <label>`: first row and image positions,
   text sizes, the catalog source per viewport and GitHub request timings;
   fails on small controls or horizontal overflow.
@@ -131,11 +144,25 @@ refresh.
   the full Connected ecosystem section (`#ecosystem`) follows the story and
   user journey, before Video & links.
 
+## Overview and detail (brief 2026-10-18, Paper 17.1 B, 18.x, 19.7)
+
+- Overview: row card 17.1 B from the shared `Fides_DS_Card` / `FidesDS.card`
+  row variant (title and arrow one link, linked organisation, facts line).
+  Filter lists use the shared `[data-fides-ds-popover]` behaviour; More
+  filters is an in-flow panel; below 600 px all filters sit in one Filters
+  dialog with temporary choices. Search, filters, sort and page are in the
+  URL; `FidesDS.rememberReturn()` feeds the detail page's Back to results.
+- Detail: one template for every record; blocks render only for present
+  fields. Shared narrow-screen behaviours in `design-system.js`:
+  `[data-fides-ds-collapsible]`, `[data-fides-ds-readmore]`,
+  `[data-fides-ds-show-all]`, `[data-fides-ds-gallery]` and anchors that open
+  hidden content. Without JavaScript all content stays visible.
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.
 - Detail route: the pilot uses `/fides-design-pilot/use-case/?usecase=<id>`
-  for copy link and canonical. Production needs one decided detail route with
+  for the share link and canonical. Production needs one decided detail route with
   matching canonical, redirects from the old `?usecase=` modal links and metadata.
 - Site shell: dropdowns, the mobile menu and the desktop section tabs need
   JavaScript (without it the links in the panels are not reachable). Search

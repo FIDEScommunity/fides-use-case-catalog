@@ -84,49 +84,57 @@ async function navigateToOverview(page, width) {
 
 const countText = (page) => page.locator(".fides-uc-pilot__count").first().textContent().then((t) => t.trim());
 
-/** Open a filter dropdown; below 600 px the dropdowns live in the Filters dialog. */
-async function pilotDropdown(page, width, id) {
-  if (width < 600) await page.locator("[data-pilot-open]").click();
-  const dropdown = page.locator(`details[data-pilot-dropdown="${id}"]`);
-  if (!(await dropdown.evaluate((el) => el.open))) await dropdown.locator("summary").click();
-  return dropdown;
+/** Open a filter list; below 600 px the lists live in the Filters dialog. */
+async function pilotPopover(page, width, keys) {
+  if (width < 600 && (await page.locator("#fides-uc-pilot-filter-panel[role=dialog]").count()) === 0) await page.locator("[data-pilot-open]").click();
+  const popover = page.locator(`[data-fides-ds-popover][data-pilot-keys="${keys}"]`);
+  const toggle = popover.locator(".fides-ds-popover__toggle");
+  if ((await toggle.getAttribute("aria-expanded")) !== "true") await toggle.click();
+  return popover;
+}
+
+/** Desktop applies choices directly (Escape closes the list); the mobile dialog needs Apply filters. */
+async function commitFilters(page, width) {
+  if (width < 600) await page.locator("[data-pilot-apply]").click();
+  else await page.keyboard.press("Escape");
+  await page.waitForTimeout(200);
 }
 
 async function filterChecks(page, width) {
   await page.locator(".fides-ds-card--row").first().waitFor();
   const total = await countText(page);
   if (width >= 600) {
-    const dropdown = page.locator('details[data-pilot-dropdown="sector"]');
-    await dropdown.locator("summary").click();
-    await dropdown.locator(".fides-uc-pilot__option").first().click();
+    const popover = await pilotPopover(page, width, "sector");
+    await popover.locator('input[type="checkbox"]').first().check();
     await page.waitForTimeout(200);
     check(`filters @${width}: a sector option narrows the results`, (await countText(page)) !== total, `${total} -> ${await countText(page)}`);
     await page.keyboard.press("Escape");
-    check(`filters @${width}: Escape closes the dropdown and returns focus`, !(await dropdown.evaluate((el) => el.open)) && (await dropdown.locator("summary").evaluate((el) => el === document.activeElement)));
+    const toggle = popover.locator(".fides-ds-popover__toggle");
+    check(`filters @${width}: Escape closes the list and returns focus`, (await toggle.getAttribute("aria-expanded")) === "false" && (await toggle.evaluate((el) => el === document.activeElement)));
   } else {
     const toggle = page.locator("[data-pilot-open]");
-    await toggle.click();
+    const popover = await pilotPopover(page, width, "sector");
     const panel = page.locator("#fides-uc-pilot-filter-panel");
     check(`filters @${width}: Filters opens the panel as a dialog`, (await panel.getAttribute("role")) === "dialog");
-    await panel.locator('details[data-pilot-dropdown="sector"] summary').click();
-    await panel.locator('details[data-pilot-dropdown="sector"] .fides-uc-pilot__option').first().click();
-    await page.keyboard.press("Escape");
-    check(`filters @${width}: Escape closes the panel and returns focus`, (await panel.getAttribute("role")) === null && (await toggle.evaluate((el) => el === document.activeElement)));
+    await popover.locator('input[type="checkbox"]').first().check();
+    await page.locator("[data-pilot-apply]").click();
+    await page.waitForTimeout(200);
+    check(`filters @${width}: Apply filters closes the panel and returns focus`, (await panel.getAttribute("role")) === null && (await toggle.evaluate((el) => el === document.activeElement)));
     check(`filters @${width}: a sector option narrows the results`, (await countText(page)) !== total, `${total} -> ${await countText(page)}`);
   }
   await page.locator("#fides-clear").click();
   await page.waitForTimeout(200);
   check(`filters @${width}: Clear filters restores all results`, (await countText(page)) === total, `${await countText(page)} vs ${total}`);
 
-  // Theme dropdown replaces the theme chips; a theme becomes a removable active filter.
-  const theme = await pilotDropdown(page, width, "theme");
-  const themeOptions = theme.locator(".fides-uc-pilot__option");
+  // Theme list; a theme becomes a removable active filter.
+  const theme = await pilotPopover(page, width, "theme");
+  const themeOptions = theme.locator(".fides-ds-option");
   const themeCount = await themeOptions.count();
-  check(`filters @${width}: Theme lists All themes plus every theme with a count`, themeCount > 2 && (await theme.locator(".fides-uc-pilot__option-count").count()) === themeCount, String(themeCount));
-  const themeName = (await themeOptions.nth(1).locator(".fides-uc-pilot__option-label").textContent()).trim();
-  await themeOptions.nth(1).click();
+  check(`filters @${width}: Theme lists All themes plus every theme with a count`, themeCount > 2 && (await theme.locator(".fides-ds-option__count").count()) === themeCount, String(themeCount));
+  const themeName = (await themeOptions.nth(1).locator(".fides-ds-option__label").textContent()).trim();
+  await themeOptions.nth(1).locator("input").check();
   await page.waitForTimeout(200);
-  await page.keyboard.press("Escape");
+  await commitFilters(page, width);
   const themed = await countText(page);
   check(`filters @${width}: a theme narrows the results`, themed !== total, `${total} -> ${themed}`);
   const themePill = page.locator(`.fides-uc-pilot__pill[data-pilot-remove-group="theme"]`);
@@ -135,21 +143,24 @@ async function filterChecks(page, width) {
   await page.waitForTimeout(200);
   check(`filters @${width}: removing the theme filter restores all results`, (await countText(page)) === total && (await themePill.count()) === 0);
 
-  // Status lives under More filters.
-  const more = await pilotDropdown(page, width, "more");
-  const statusGroup = more.locator(".fides-uc-pilot__option-group", { has: page.locator(".fides-uc-pilot__option-group-title", { hasText: "Status" }) });
-  check(`filters @${width}: More filters contains Status`, (await statusGroup.locator('input[data-filter-group="productionDeployment"]').count()) >= 1);
-  check(`filters @${width}: no separate Status dropdown`, (await page.locator('details[data-pilot-dropdown="status"]').count()) === 0);
-  await statusGroup.locator(".fides-uc-pilot__option").first().click();
+  // Production deployment lives under More filters.
+  if (width < 600) await page.locator("[data-pilot-open]").click();
+  else await page.locator("[data-pilot-more-toggle]").click();
+  const status = page.locator("#fides-uc-pilot-status");
+  check(`filters @${width}: More filters contains Production deployment`, await status.isVisible());
+  check(`filters @${width}: no separate Status list in the filter row`, (await page.locator('[data-pilot-keys="productionDeployment"]').count()) === 0);
+  await status.selectOption({ index: 1 });
   await page.waitForTimeout(200);
-  await page.keyboard.press("Escape");
+  await commitFilters(page, width);
   check(`filters @${width}: a status narrows the results`, (await countText(page)) !== total);
   check(`filters @${width}: the status shows as an active filter`, (await page.locator('.fides-uc-pilot__pill[data-pilot-remove-group="productionDeployment"]').count()) === 1);
   await page.locator("#fides-clear").click();
   await page.waitForTimeout(200);
   check(`filters @${width}: Clear filters resets status too`, (await countText(page)) === total);
+  if (width >= 600 && (await page.locator("[data-pilot-more-toggle]").getAttribute("aria-expanded")) === "true") await page.locator("[data-pilot-more-toggle]").click();
 
   await page.locator("#fides-search-input").fill("wallet");
+  await page.locator("#fides-search-input").press("Enter");
   await page.waitForTimeout(500);
   const searched = await countText(page);
   check(`filters @${width}: search narrows the results`, searched !== total && searched !== "0 use cases", searched);
@@ -230,14 +241,14 @@ async function run() {
       await page.evaluate(() => window.scrollTo(0, 0));
 
       const first = page.locator(".fides-ds-card--row a.fides-ds-card__link").first();
-      const title = (await first.textContent()).trim();
+      const title = (await first.textContent()).replace(/→\s*$/, "").trim();
       await first.click();
       await page.waitForURL(/\/fides-design-pilot\/use-case\/\?usecase=/, DOM_READY);
       check(`route @${width}: overview row opens the pilot detail`, (await page.locator("h1").first().textContent()).trim() === title, title);
       await shellChecks(page, "detail", width);
 
       const ecosystemLink = page.locator(".fides-uc-ecosystem-summary__link");
-      if (await ecosystemLink.count()) {
+      if (await ecosystemLink.isVisible()) {
         await ecosystemLink.click();
         await page.waitForTimeout(400);
         const anchor = await page.evaluate(() => {
@@ -276,7 +287,8 @@ async function run() {
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: path.join(OUT, `detail-top-${width}.png`) });
 
-      await page.getByRole("link", { name: "← All use cases" }).click();
+      check(`route @${width}: back link reads "Back to results" after coming from the overview`, /Back to results/.test(await page.locator("[data-fides-ds-back]").textContent()));
+      await page.locator("[data-fides-ds-back]").click();
       await page.waitForURL(/\/fides-design-pilot\/overview\/?$/, DOM_READY);
       check(`route @${width}: back link returns to the overview`, true);
       // History is overview -> detail (-> #section) -> overview; step back past the detail entries.

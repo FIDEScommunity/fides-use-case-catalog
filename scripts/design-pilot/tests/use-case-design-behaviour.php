@@ -55,6 +55,7 @@ $fixture_items = array(
             ),
             'organizations' => array(
                 array('refId' => null, 'labelRaw' => 'Issuer 1', 'source' => 'manual'),
+                array('refId' => null, 'labelRaw' => 'Bad Link Org', 'url' => 'http://Bad%20Link%20Org', 'source' => 'manual'),
             ),
         ),
     ),
@@ -141,39 +142,47 @@ $check(preg_match('/href="[^"]*urn:/', $html) === 0, 'URNs are never rendered as
 $check(strpos($html, 'href="https://example.org/credential"') !== false, 'http(s) relation URL stays a link');
 $check(strpos($html, '?credential=cred%3Acanonical%3Aone') !== false, 'credential alias links to the canonical credential record');
 $check(strpos($html, 'cred%3Aalias%3Aone') === false, 'alias id is not used in credential links');
-$check(strpos($html, 'data-fides-ds-copy="' . esc_attr($alpha_url) . '"') !== false, 'Copy link uses the detail route of the page');
-$check(strpos($html, 'href="' . esc_url($beta_url) . '"') !== false, 'related card uses the same detail route');
+$check(strpos($html, 'share-offsite/?url=' . rawurlencode($alpha_url)) !== false, 'Share on LinkedIn uses the detail route of the page');
+$check(strpos($html, 'fides-uc-detail__related') === false && strpos($html, 'fides-uc-detail__contribute') === false, 'no related use cases or contribute promo');
+$check(strpos($html, 'data-fides-ds-back="usecase" data-fides-ds-back-id="' . UC_ALPHA . '"') !== false && strpos($html, '<span data-fides-ds-back-label>All use cases</span>') !== false, 'back link can become Back to results, plain overview link by default');
 $check(preg_match('#<h1 class="fides-ds-heading-1 fides-ds-heading-1--detail fides-uc-detail__title"#', $html) === 1, 'detail title uses the detail heading role');
+$check(strpos($html, 'Org Alpha') === false, 'organisation name is not repeated in the hero');
 
-// Connected ecosystem: role summary in the sidebar, full section before Video & links.
-preg_match_all('#<div class="fides-uc-ecosystem-summary__role">\s*<dt>([^<]+)</dt>\s*<dd>(\d+)</dd>#', $html, $roles, PREG_SET_ORDER);
+// Organisations involved: own block, all records, invalid source link without destination.
+$orgs_pos = strpos($html, 'id="organisations"');
+$check($orgs_pos !== false && strpos($html, 'data-fides-ds-show-all="3"') !== false, 'organisations involved block with Show all on narrow screens');
+$check(preg_match('#<span class="fides-uc-relations__label">Bad Link Org</span>#', $html) === 1 && strpos($html, 'Bad%20Link') === false, 'invalid source URL gets no link and is not shown as identifier');
+
+// Connected ecosystem: role summary in the sidebar, full section after the story.
+preg_match_all('#<div class="fides-uc-ecosystem-summary__role">\s*<dt><a href="\#(ecosystem-[a-z]+)">([^<]+)</a></dt>\s*<dd>(\d+)</dd>#', $html, $roles, PREG_SET_ORDER);
 $summary = array();
 foreach ($roles as $role) {
-    $summary[$role[1]] = (int) $role[2];
+    $summary[$role[2]] = (int) $role[3];
 }
-$check($summary === array('Issuers' => 8, 'Credential types' => 4, 'Organizations' => 1), 'summary lists only roles with records, with their entry counts: ' . wp_json_encode($summary));
+$check($summary === array('Issuers' => 8, 'Credential types' => 4), 'summary lists only roles with records, without organisations: ' . wp_json_encode($summary));
 $check(strpos($html, 'One party can appear in more than one role.') !== false, 'summary says counts are entries per role, not unique parties');
 $check(strpos($html, 'href="#ecosystem">View connected ecosystem') !== false, 'summary links to the full ecosystem section');
 $aside_pos     = strpos($html, 'fides-uc-detail__aside');
 $summary_pos   = strpos($html, 'fides-uc-ecosystem-summary');
 $technical_pos = strpos($html, 'id="technical-details"');
-$section_pos   = strpos($html, '<section class="fides-uc-ecosystem" id="ecosystem"');
+$section_pos   = strpos($html, '<section class="fides-uc-ecosystem fides-uc-ecosystem--wide" id="ecosystem"');
 $check($aside_pos < $summary_pos && ($technical_pos === false || $summary_pos < $technical_pos), 'summary sits in the sidebar before the technical details');
-$check($section_pos !== false && $section_pos > strpos($html, 'id="overview"') && substr_count($html, 'id="ecosystem"') === 1, 'one full ecosystem section after the story');
+$check($section_pos !== false && $section_pos > strpos($html, 'id="overview"') && substr_count($html, 'id="ecosystem"') === 1, 'one full ecosystem section (wide: a role has more than 3 records) after the story');
 $check(strpos($html, '<li><a href="#ecosystem">Ecosystem</a></li>') !== false, 'page navigation points at the full ecosystem section');
-preg_match('#<section class="fides-uc-ecosystem".*?</section>#s', $html, $section);
-$section = $section[0] ?? '';
-$check(substr_count($section, 'class="fides-uc-relations__item"') === 13, 'full section lists every record (8 issuers, 4 credentials, 1 organization)');
-$check(substr_count($section, '<details class="fides-uc-ecosystem__more">') === 1 && strpos($section, 'Show all 8') !== false, 'a long role group gets a Show all disclosure with its count');
-$check(preg_match('#Show all 8.*?Issuer 7.*?Issuer 8#s', $section) === 1, 'records beyond the first six stay in the HTML inside the disclosure');
+$section = $section_pos !== false ? substr($html, $section_pos, strpos($html, 'id="update"') - $section_pos) : '';
+$check(substr_count($section, 'class="fides-uc-relations__item"') === 12, 'full section lists every record (8 issuers, 4 credentials), organisations excluded');
+$check(preg_match('#<section class="fides-uc-ecosystem__group" id="ecosystem-issuers" aria-labelledby="ecosystem-issuers-title" data-fides-ds-collapsible="closed">#', $section) === 1, 'a role with more than 3 records starts closed on narrow screens');
+$check(preg_match('#Issuer 7.*?Issuer 8#s', $section) === 1, 'every record stays in the HTML');
 $check(substr_count($section, '>Issuer 2<') === 1, 'an identical record listed twice in one role is shown and counted once');
-$check(preg_match('#<span class="fides-uc-relations__label">Issuer 1</span>#', $section) === 1 && substr_count($section, '>Issuer 1<') === 2, 'the same party can be listed under two roles');
+$check(substr_count($section, '>Issuer 1<') === 1 && substr_count($html, '>Issuer 1<') === 2, 'the same party can be listed under a role and as organisation');
 $check(strpos($section, 'rel="noopener" target="_blank">Web credential') !== false, 'external relation stays an external link');
 $check(strpos($section, '?credential=cred%3Acanonical%3Aone') !== false, 'catalog relation stays an internal catalog link');
+$check(strpos($html, 'data-fides-ds-collapsible="closed">' . "\n" . '            <h2 class="fides-ds-panel__title" id="technical-details-title"') !== false || $technical_pos === false, 'technical details start closed on narrow screens');
+$check(strpos($html, '>Tags<') === false && strpos($html, '>Themes</h2>') !== false && strpos($html, '>Topics<') === false, 'themes shown as their own field; no Topics heading');
+$check(strpos($html, 'id="update"') > $section_pos && strpos($html, 'Updated <time datetime="2026-09-21">21 September 2026</time>') !== false, 'Updated and the update action sit at the bottom');
 $beta_html = do_shortcode('[fides_use_case_detail id="' . UC_BETA . '" detail_url="' . DETAIL_BASE . '"]');
 $check(strpos($beta_html, 'fides-uc-ecosystem') === false && strpos($beta_html, 'href="#ecosystem"') === false, 'no ecosystem summary, section or navigation item without relations');
-$check(strpos($html, 'fides-uc-detail__award">Finalist 2026<') !== false, 'award badge in header');
-$check(strpos($html, 'Finalist 2026, Test Awards 2026 (Impact)') !== false, 'award listed in At a glance');
+$check(strpos($html, 'fides-uc-detail__award" href="https://example.org/awards/"') !== false && strpos($html, '>Finalist 2026<span class="fides-ds-visually-hidden">, Test Awards 2026 (Impact)</span>') !== false, 'award badge in the hero, with programme and category');
 $check(strpos($html, '>3 likes<') !== false, 'like count in header');
 $check(preg_match('#<details class="fides-ds-section-nav[^"]*" data-fides-ds-section-nav>\s*<summary>On this page#', $html) === 1, 'section navigation is a collapsible "On this page" disclosure');
 $check(preg_match('#<nav aria-label="On this page">\s*<ul>\s*<li><a href="\#overview">Overview</a>#', $html) === 1, 'section navigation links to the page sections');
