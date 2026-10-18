@@ -105,6 +105,8 @@ final class Fides_Use_Case_Detail_Page {
         if ($hero_image === '' && $videos && $videos[0]['poster'] !== '') {
             $hero_image = $videos[0]['poster'];
         }
+        // A video still in the hero must play, not look playable and do nothing.
+        $hero_poster = $videos && $hero_image !== '' && $hero_image === $videos[0]['poster'];
         $has_media   = $videos || count($images) > 1;
         // Without a media section, a single image is only reachable through this link.
         $original    = ! $has_media && count($images) === 1 ? $images[0] : '';
@@ -172,6 +174,12 @@ final class Fides_Use_Case_Detail_Page {
           </figure>
           <a class="fides-ds-action-link fides-uc-detail__original" href="<?php echo esc_url($original); ?>" rel="noopener" target="_blank">Open original image <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
         </div>
+      <?php elseif ($hero_poster) : ?>
+        <a class="fides-uc-detail__media fides-uc-detail__media--video" href="#media" data-fides-ds-play>
+          <img class="fides-ds-card__img" src="<?php echo esc_url($hero_image); ?>" alt="" decoding="async" fetchpriority="high">
+          <span class="fides-ds-gallery__play" aria-hidden="true"></span>
+          <span class="fides-ds-visually-hidden">Play video: <?php echo esc_html($title); ?></span>
+        </a>
       <?php elseif ($hero_image !== '') : ?>
         <figure class="fides-uc-detail__media">
           <img class="fides-ds-card__img" src="<?php echo esc_url($hero_image); ?>" alt="" decoding="async" fetchpriority="high">
@@ -387,7 +395,7 @@ final class Fides_Use_Case_Detail_Page {
         }
         $poster = $media['poster'] !== '' ? '<img src="' . esc_url($media['poster']) . '" alt="" loading="lazy" decoding="async">' : '';
         $play   = $media['embed'] !== ''
-            ? '<button type="button" class="fides-ds-gallery__play" data-fides-ds-gallery-play><span class="fides-ds-visually-hidden">Play ' . esc_html($media['label']) . '</span></button>'
+            ? '<button type="button" class="fides-ds-gallery__play" data-fides-ds-gallery-play data-embed="' . esc_url($media['embed']) . '" data-label="' . esc_attr($media['label']) . '"><span class="fides-ds-visually-hidden">Play ' . esc_html($media['label']) . '</span></button>'
             : '<a class="fides-ds-gallery__play" href="' . esc_url($media['url']) . '" rel="noopener" target="_blank"><span class="fides-ds-visually-hidden">Play ' . esc_html($media['label']) . ' (opens in a new tab)</span></a>';
         return '<figure class="fides-ds-gallery__frame fides-ds-gallery__frame--video">' . $poster . $play . '</figure>'
             . '<p class="fides-ds-gallery__caption"><span>' . esc_html($media['label']) . '</span>'
