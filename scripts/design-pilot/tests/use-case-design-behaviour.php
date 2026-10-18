@@ -16,6 +16,8 @@ require_once ABSPATH . 'wp-admin/includes/template.php';
 const UC_ALPHA = 'pilot-test-alpha-AAAAAA';
 const UC_BETA  = 'pilot-test-beta-BBBBBB';
 const UC_GONE  = 'pilot-test-gone-ZZZZZZ';
+const UC_SOLO  = 'pilot-test-solo-CCCCCC';
+const UC_DUO   = 'pilot-test-duo-DDDDDD';
 const DETAIL_BASE = 'http://localhost/pilot/detail/';
 
 $results = array('pass' => 0, 'fail' => array());
@@ -69,6 +71,21 @@ $fixture_items = array(
         'productionDeployment' => 'no',
         'updatedAt'            => '2026-08-01T10:00:00Z',
         'summary'              => 'Beta summary.',
+    ),
+    array(
+        'id'                   => UC_SOLO,
+        'title'                => 'Solo image use case',
+        'productionDeployment' => 'no',
+        'summary'              => 'Solo summary.',
+        'imageUrl'             => 'https://example.org/media/solo-original.png',
+    ),
+    array(
+        'id'                   => UC_DUO,
+        'title'                => 'Two images use case',
+        'productionDeployment' => 'no',
+        'summary'              => 'Duo summary.',
+        'imageUrl'             => 'https://example.org/media/duo-1.png',
+        'imageUrls'            => array('https://example.org/media/duo-2.png'),
     ),
 );
 
@@ -187,6 +204,14 @@ $check(strpos($html, '>3 likes<') !== false, 'like count in header');
 $check(preg_match('#<details class="fides-ds-section-nav[^"]*" data-fides-ds-section-nav>\s*<summary>On this page#', $html) === 1, 'section navigation is a collapsible "On this page" disclosure');
 $check(preg_match('#<nav aria-label="On this page">\s*<ul>\s*<li><a href="\#overview">Overview</a>#', $html) === 1, 'section navigation links to the page sections');
 $check(preg_match('#<details[^>]*\sopen#', $html) === 0, 'section navigation is collapsed until the script opens it on desktop');
+
+// One image and no video: no media section, so the hero offers the original.
+$solo_html = do_shortcode('[fides_use_case_detail id="' . UC_SOLO . '" detail_url="' . DETAIL_BASE . '"]');
+$check(strpos($solo_html, 'id="media"') === false, 'a single image gets no media section');
+$check(preg_match('#<a class="fides-ds-action-link fides-uc-detail__original" href="https://example.org/media/solo-original.png" rel="noopener" target="_blank">Open original image#', $solo_html) === 1, 'a single image is reachable at original size from the hero');
+$check(strpos($beta_html, 'fides-uc-detail__original') === false, 'no original-image link without an image');
+$duo_html = do_shortcode('[fides_use_case_detail id="' . UC_DUO . '" detail_url="' . DETAIL_BASE . '"]');
+$check(strpos($duo_html, 'id="media"') !== false && strpos($duo_html, 'fides-uc-detail__original') === false, 'two images use the media section instead of the hero link');
 
 $missing = do_shortcode('[fides_use_case_detail id="' . UC_GONE . '"]');
 $check(strpos($missing, 'This use case is not in the current FIDES catalog.') !== false, 'missing record shows the not-in-catalog state');

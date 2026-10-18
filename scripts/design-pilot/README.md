@@ -114,7 +114,12 @@ non-zero on failure):
   (`DETAIL_SLUGS`): 800/64/480 columns, mobile order, accordions, technical
   details closed, Show all organisations, Read full / Show less position,
   anchors opening hidden content, gallery selection and in-place play,
-  invalid links, 44 px targets and overflow.
+  invalid links, 44 px targets and overflow. Repair round: Production
+  deployment with two values through the URL, Back/Forward and the mobile
+  dialog (Cancel/Apply); the narrow-screen preview ending on whole blocks
+  with the rest hidden for focus and the accessibility tree, independent
+  overview/journey toggles, focus after Show less, full text without JS;
+  hero 792/520 and title 42/48 at 1440.
 - `tests/run-measure-density.sh <label>`: first row and image positions,
   text sizes, the catalog source per viewport and GitHub request timings;
   fails on small controls or horizontal overflow.
@@ -157,6 +162,23 @@ refresh.
   `[data-fides-ds-collapsible]`, `[data-fides-ds-readmore]`,
   `[data-fides-ds-show-all]`, `[data-fides-ds-gallery]` and anchors that open
   hidden content. Without JavaScript all content stays visible.
+
+## Repair round (2026-10-18)
+
+- Preview (`[data-fides-ds-readmore]`): whole blocks only. The first
+  paragraph or step always shows in full, also when it is longer than the
+  soft limit; later blocks get `hidden` (no `max-height` clip, no gradient),
+  so sight, the accessibility tree and keyboard focus agree.
+- Production deployment is a multi-select list like the other filters (OR
+  within the group, `status=a,b` in the URL).
+- More filters: one short head and one row (Production deployment, Awards,
+  Technical filters); the technical group names only show while closed.
+  Mobile: search and Search share a line, Ask FIDES sits next to the label,
+  Filters and Sort share a row with the count under them, and row cards put
+  the title before the image.
+- Detail: hero 792/520 with a 32 gap and title 42/48 from 1100 px. A record
+  with one image and no video gets an Open original image link under the
+  hero image (fixture-tested; catalog data unchanged).
 
 ## Not restored yet (no content parity claimed)
 

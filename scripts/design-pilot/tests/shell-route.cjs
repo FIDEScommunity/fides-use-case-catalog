@@ -146,10 +146,10 @@ async function filterChecks(page, width) {
   // Production deployment lives under More filters.
   if (width < 600) await page.locator("[data-pilot-open]").click();
   else await page.locator("[data-pilot-more-toggle]").click();
-  const status = page.locator("#fides-uc-pilot-status");
+  const status = page.locator('#fides-uc-pilot-more [data-fides-ds-popover][data-pilot-keys="productionDeployment"]');
   check(`filters @${width}: More filters contains Production deployment`, await status.isVisible());
-  check(`filters @${width}: no separate Status list in the filter row`, (await page.locator('[data-pilot-keys="productionDeployment"]').count()) === 0);
-  await status.selectOption({ index: 1 });
+  check(`filters @${width}: no separate Status list in the filter row`, (await page.locator('.fides-uc-pilot__filter-row [data-pilot-keys="productionDeployment"]').count()) === 0);
+  await (await pilotPopover(page, width, "productionDeployment")).locator('input[type="checkbox"]').first().check();
   await page.waitForTimeout(200);
   await commitFilters(page, width);
   check(`filters @${width}: a status narrows the results`, (await countText(page)) !== total);

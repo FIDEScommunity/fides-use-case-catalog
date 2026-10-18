@@ -338,6 +338,155 @@ async function detailChecks(browser, width, slug) {
   await context.close();
 }
 
+/* Production deployment is a multi-select list: both values survive the URL, history and the mobile dialog. */
+async function statusChecks(browser) {
+  const context = await newContext(browser, 1440, 900);
+  const page = await context.newPage();
+  await open(page, OVERVIEW);
+  await page.locator(".fides-ds-card--row").first().waitFor({ timeout: 20000 });
+  const values = await page.$$eval('[data-pilot-keys="productionDeployment"] input[type="checkbox"]', (inputs) => inputs.map((i) => i.value));
+  check("status: Production deployment is a multi-select list in More filters", values.length >= 2 && (await page.locator('#fides-uc-pilot-more [data-pilot-keys="productionDeployment"] .fides-ds-popover__toggle').count()) === 1 && (await page.locator("select[data-pilot-status], #fides-uc-pilot-status").count()) === 0, JSON.stringify(values));
+  const both = values.slice(0, 2);
+  const state = () => page.evaluate(() => ({
+    checked: [...document.querySelectorAll('[data-pilot-keys="productionDeployment"] input:checked')].map((i) => i.value),
+    summary: document.querySelector('[data-pilot-keys="productionDeployment"] .fides-ds-popover__toggle').textContent.replace(/\s+/g, " ").trim(),
+    pills: document.querySelectorAll('.fides-uc-pilot__pill[data-pilot-remove-group="productionDeployment"]').length,
+    status: new URL(location.href).searchParams.get("status"),
+  }));
+  await open(page, `${OVERVIEW}?status=${both.map(encodeURIComponent).join(",")}`);
+  await page.locator(".fides-ds-card--row").first().waitFor({ timeout: 20000 });
+  const fromUrl = await state();
+  check("status: a URL with two values shows both selected, not All statuses", fromUrl.checked.length === 2 && !/All statuses/.test(fromUrl.summary) && fromUrl.pills === 2, JSON.stringify(fromUrl));
+  const withBoth = await count(page);
+  await page.locator(`.fides-uc-pilot__pill[data-pilot-remove-group="productionDeployment"][data-pilot-remove-value="${both[1]}"]`).click();
+  await page.waitForTimeout(250);
+  const one = await state();
+  check("status: removing one value keeps the other in the URL", one.status === both[0] && one.checked.length === 1, JSON.stringify(one));
+  await page.goBack();
+  await page.waitForTimeout(400);
+  const back = await state();
+  check("status: Back restores both values and the count", back.checked.length === 2 && back.status === both.join(",") && (await count(page)) === withBoth, JSON.stringify(back));
+  await page.goForward();
+  await page.waitForTimeout(400);
+  check("status: Forward returns to one value", (await state()).checked.length === 1);
+  await context.close();
+
+  const mobile = await newContext(browser, 390, 844);
+  const m = await mobile.newPage();
+  await open(m, `${OVERVIEW}?status=${both.map(encodeURIComponent).join(",")}`);
+  await m.locator(".fides-ds-card--row").first().waitFor({ timeout: 20000 });
+  const mState = () => m.evaluate(() => ({
+    checked: [...document.querySelectorAll('[data-pilot-keys="productionDeployment"] input:checked')].map((i) => i.value),
+    status: new URL(location.href).searchParams.get("status"),
+  }));
+  await m.locator("[data-pilot-open]").click();
+  const inDialog = await mState();
+  check("status @390: the Filters dialog shows both values selected", inDialog.checked.length === 2, JSON.stringify(inDialog));
+  const pop = m.locator('[data-fides-ds-popover][data-pilot-keys="productionDeployment"]');
+  if ((await pop.locator(".fides-ds-popover__toggle").getAttribute("aria-expanded")) !== "true") await pop.locator(".fides-ds-popover__toggle").click();
+  await pop.locator(`input[value="${both[1]}"]`).uncheck();
+  await m.locator(".fides-uc-pilot__panel-actions [data-pilot-cancel]").click();
+  await m.waitForTimeout(250);
+  const cancelled = await mState();
+  check("status @390: Cancel keeps both values", cancelled.checked.length === 2 && cancelled.status === both.join(","), JSON.stringify(cancelled));
+  await m.locator("[data-pilot-open]").click();
+  if ((await pop.locator(".fides-ds-popover__toggle").getAttribute("aria-expanded")) !== "true") await pop.locator(".fides-ds-popover__toggle").click();
+  await pop.locator(`input[value="${both[1]}"]`).uncheck();
+  await m.locator("[data-pilot-apply]").click();
+  await m.waitForTimeout(300);
+  const applied = await mState();
+  check("status @390: Apply commits one value", applied.status === both[0] && applied.checked.length === 1, JSON.stringify(applied));
+  await m.goBack();
+  await m.waitForTimeout(400);
+  check("status @390: Back restores both values", (await mState()).checked.length === 2);
+  await mobile.close();
+}
+
+/* The preview is whole blocks: shown blocks are complete, later blocks are hidden for everyone. */
+function readmoreState(page) {
+  return page.evaluate(() => [...document.querySelectorAll("[data-fides-ds-readmore]")].map((root) => {
+    const body = root.querySelector(".fides-ds-readmore__body");
+    const toggle = root.querySelector(".fides-ds-readmore__toggle");
+    const blocks = [...body.querySelectorAll("p, li")];
+    const shown = blocks.filter((n) => n.getClientRects().length);
+    const hidden = blocks.filter((n) => !n.getClientRects().length);
+    const bodyRect = body.getBoundingClientRect();
+    const focusableHidden = [...body.querySelectorAll("a[href], button, input, select, textarea, [tabindex]")].filter((n) => !n.getClientRects().length && n.closest("[hidden]") === null).length;
+    return {
+      id: body.id,
+      expanded: toggle ? toggle.getAttribute("aria-expanded") : null,
+      blocks: blocks.length,
+      shown: shown.length,
+      firstWhole: blocks.length > 0 && shown[0] === blocks[0],
+      prefix: shown.every((n, i) => n === blocks[i]),
+      unclipped: body.scrollHeight <= body.clientHeight + 1 && !body.style.maxHeight && shown.every((n) => n.getBoundingClientRect().bottom <= bodyRect.bottom + 1),
+      hiddenOut: hidden.every((n) => n.closest("[hidden]") !== null),
+      focusableHidden,
+    };
+  }));
+}
+
+async function readmoreChecks(browser) {
+  for (const width of [390, 320]) {
+    for (const slug of RECORDS) {
+      const context = await newContext(browser, width, 844);
+      const page = await context.newPage();
+      const tag = `preview @${width} ${slug.slice(0, 20)}`;
+      await open(page, DETAIL + slug);
+      await page.locator(".fides-uc-detail__hero").waitFor();
+      await page.waitForTimeout(300);
+      const boxes = await readmoreState(page);
+      for (const b of boxes) {
+        if (b.expanded === null) {
+          check(`${tag} ${b.id}: short text stays whole without a button`, b.shown === b.blocks, JSON.stringify(b));
+          continue;
+        }
+        check(`${tag} ${b.id}: preview ends on a whole block (${b.shown}/${b.blocks})`, b.expanded === "false" && b.firstWhole && b.prefix && b.unclipped && b.shown < b.blocks, JSON.stringify(b));
+        check(`${tag} ${b.id}: collapsed blocks are hidden from the accessibility tree and focus`, b.hiddenOut && b.focusableHidden === 0, JSON.stringify(b));
+      }
+      const toggles = page.locator(".fides-ds-readmore__toggle");
+      if ((await toggles.count()) >= 2) {
+        await toggles.nth(0).click();
+        const after = await readmoreState(page);
+        const [first, second] = after.filter((b) => b.expanded !== null);
+        check(`${tag}: overview and journey expand independently`, first.expanded === "true" && first.shown === first.blocks && second.expanded === "false" && second.shown < second.blocks, JSON.stringify([first, second]));
+        await toggles.nth(0).click();
+        const focus = await toggles.nth(0).evaluate((b) => b === document.activeElement && b.getAttribute("aria-expanded") === "false");
+        check(`${tag}: Show less keeps keyboard focus on the toggle`, focus);
+      }
+      await context.close();
+    }
+  }
+  const noJs = await browser.newContext({ viewport: { width: 390, height: 844 }, javaScriptEnabled: false });
+  const page = await noJs.newPage();
+  await open(page, DETAIL + RECORDS[0]);
+  const plain = await page.evaluate(() => [...document.querySelectorAll("[data-fides-ds-readmore] .fides-ds-readmore__body")].map((body) => ({
+    hidden: body.querySelectorAll("[hidden]").length,
+    toggle: body.parentElement.querySelectorAll(".fides-ds-readmore__toggle").length,
+  })));
+  check("preview without JS: the full text is shown, no toggle", plain.length > 0 && plain.every((b) => b.hidden === 0 && b.toggle === 0), JSON.stringify(plain));
+  await noJs.close();
+}
+
+/* Hero at 1440 (Paper): title 42/48, text column 792 and image column 520. */
+async function heroChecks(browser) {
+  const context = await newContext(browser, 1440, 900);
+  const page = await context.newPage();
+  for (const slug of RECORDS) {
+    await open(page, DETAIL + slug);
+    await page.locator(".fides-uc-detail__hero").waitFor();
+    const h = await page.evaluate(() => {
+      const hero = document.querySelector(".fides-uc-detail__hero");
+      const cols = getComputedStyle(hero).gridTemplateColumns.split(" ").map((v) => Math.round(parseFloat(v)));
+      const title = getComputedStyle(document.querySelector(".fides-uc-detail__title"));
+      return { cols, size: title.fontSize, leading: title.lineHeight, media: hero.classList.contains("fides-uc-detail__hero--no-media") ? null : true };
+    });
+    check(`hero @1440 ${slug.slice(0, 20)}: title 42/48`, h.size === "42px" && h.leading === "48px", JSON.stringify(h));
+    check(`hero @1440 ${slug.slice(0, 20)}: columns 792 / 520`, h.media === null || (h.cols[0] === 792 && h.cols[1] === 520), JSON.stringify(h.cols));
+  }
+  await context.close();
+}
+
 async function run() {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch({
@@ -347,6 +496,9 @@ async function run() {
   try {
     await overviewDesktop(browser);
     for (const width of [390, 320]) await overviewMobile(browser, width);
+    await statusChecks(browser);
+    await readmoreChecks(browser);
+    await heroChecks(browser);
     for (const width of DETAIL_WIDTHS) for (const slug of RECORDS) await detailChecks(browser, width, slug);
   } finally {
     await browser.close();
