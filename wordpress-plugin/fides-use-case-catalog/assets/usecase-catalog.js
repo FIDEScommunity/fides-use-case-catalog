@@ -3432,7 +3432,16 @@
     if (!fromDetail && !(navigation && navigation.type === "back_forward")) return;
     window.scrollTo(0, Number(stored.scrollY) || 0);
     const link = root.querySelector(`[data-use-case-id="${CSS.escape(stored.id)}"] .fides-ds-card__link`);
-    if (link) link.focus({ preventScroll: true });
+    if (link) {
+      const row = link.closest(".fides-ds-card--row");
+      if (row && stored.keyboard === false) {
+        row.setAttribute("data-fides-ds-pointer-return", "");
+        const clearPointerReturn = () => row.removeAttribute("data-fides-ds-pointer-return");
+        link.addEventListener("keydown", clearPointerReturn, { once: true });
+        link.addEventListener("blur", clearPointerReturn, { once: true });
+      }
+      link.focus({ preventScroll: true });
+    }
   }
 
   /* ---------- Pilot rendering ---------- */
@@ -3946,7 +3955,7 @@
       if (cardLink) {
         const card = cardLink.closest("[data-use-case-id]");
         if (card && window.FidesDS && window.FidesDS.rememberReturn) {
-          window.FidesDS.rememberReturn(PILOT_RETURN_KEY, card.getAttribute("data-use-case-id"), window.location.href);
+          window.FidesDS.rememberReturn(PILOT_RETURN_KEY, card.getAttribute("data-use-case-id"), window.location.href, event.detail === 0);
         }
         try {
           history.replaceState(Object.assign({}, history.state, { fidesPilot: true, scrollY: Math.round(window.scrollY) }), "");

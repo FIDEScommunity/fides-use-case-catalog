@@ -91,7 +91,7 @@ async function overviewDesktop(browser) {
   });
   check("overview: title and arrow are one link", card.links === 1 && card.arrowInLink, JSON.stringify(card));
   check("overview: media box is 180x112", !card.media || (card.media[0] === 180 && card.media[1] === 112), JSON.stringify(card.media));
-  check("overview: summary clamps to 2 lines; title 22/28 bold", card.clamp === "2" && card.title && card.title[0] === "22px" && card.title[1] === "28px" && Number(card.title[2]) >= 700, JSON.stringify(card));
+  check("overview: summary clamps to 2 lines; compact title 20/26 bold", card.clamp === "2" && card.title && card.title[0] === "20px" && card.title[1] === "26px" && Number(card.title[2]) >= 700, JSON.stringify(card));
 
   await page.fill("#fides-search-input", "wallet");
   await page.press("#fides-search-input", "Enter");
