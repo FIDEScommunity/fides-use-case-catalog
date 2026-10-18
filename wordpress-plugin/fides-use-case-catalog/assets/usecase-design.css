@@ -101,6 +101,12 @@
   appearance: none;
 }
 
+/* Blocksy's input:is([type=search]):focus outranks the rule above. */
+.fides-ds .fides-uc-pilot__search-input:focus {
+  background: var(--fides-ds-ground);
+  color: var(--fides-ds-ink);
+}
+
 .fides-ds .fides-uc-pilot__search-input::placeholder {
   color: var(--fides-ds-muted);
   opacity: 1;

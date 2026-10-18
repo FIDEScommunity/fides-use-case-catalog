@@ -96,6 +96,13 @@ async function overviewDesktop(browser) {
   check("overview: summary clamps to 2 lines; compact title 20/26 bold", card.clamp === "2" && card.title && card.title[0] === "20px" && card.title[1] === "26px" && Number(card.title[2]) >= 700, JSON.stringify(card));
 
   await page.fill("#fides-search-input", "wallet");
+  await page.waitForTimeout(400);
+  const typed = await page.$eval("#fides-search-input", (el) => [document.activeElement === el, getComputedStyle(el).color, getComputedStyle(el).backgroundColor]);
+  check("overview: focused search text is dark on white", typed[0] && typed[1] === "rgb(14, 14, 14)" && typed[2] === "rgb(255, 255, 255)", JSON.stringify(typed));
+  await page.hover(".fides-uc-pilot__search-submit");
+  await page.waitForTimeout(400);
+  const lift = await page.$eval(".fides-uc-pilot__search-submit", (el) => getComputedStyle(el).transform);
+  check("overview: Search button does not move on hover", lift === "none", lift);
   await page.press("#fides-search-input", "Enter");
   await page.waitForFunction(() => new URL(location.href).searchParams.get("q") === "wallet");
   const searched = await count(page);

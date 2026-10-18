@@ -180,6 +180,25 @@ refresh.
   with one image and no video gets an Open original image link under the
   hero image (fixture-tested; catalog data unchanged).
 
+## Compact desktop (UX review 2026-10-18)
+
+- Header bar 64 px from 1100 px (was 79). Catalog title 30/36, detail title
+  34/40 from 600 px and 36/42 from 1100 px, detail section headings 26/32
+  (24/30 below 1100 px).
+- Controls are 40 px high only at 1100 px and wider with a fine pointer
+  (mouse/trackpad); touch and narrower screens keep 44 px. The tests use the
+  same threshold. Blocksy sets `height` on search inputs, so the override
+  sets `height` too.
+- From 1200 px search and the four filter buttons share one row.
+- Row card media 120x75 from a 600 px card container; hidden below it.
+- Detail: reading column (prose and steps) max 720 px, smaller section gaps.
+  A video still used as hero is a link to `#media` with `data-fides-ds-play`
+  that opens the gallery and starts the first video. A gallery with one
+  video and no strip now plays from its stage button (`data-embed` on the
+  button); before, that button did nothing.
+- 1280x800 still shows two full result rows: row height is set by the text,
+  not the controls. 1440x900 shows three.
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.
