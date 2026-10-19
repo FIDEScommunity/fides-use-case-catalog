@@ -218,6 +218,11 @@ refresh.
 - Rows without an image keep the media column with a placeholder (organization
   name, else the title, in a light blue box); a broken image shows the same
   placeholder. Hidden on narrow rows like the image.
+- Focused Sort shows a 2 px line under the value instead of an outline box;
+  Chrome treats a clicked select as `:focus-visible`.
+- The result count lives only in the results bar and stays visible when More
+  filters opens (it moves down with the panel). The "More filters · N use
+  cases" head count from Paper 02 is dropped so the number does not jump.
 
 ## Not restored yet (no content parity claimed)
 

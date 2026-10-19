@@ -112,6 +112,10 @@ async function overviewDesktop(browser) {
   });
   check("overview: row text starts on the heading edge, arrow ends on the bar edge", layout.h1 === layout.title && layout.bar === layout.arrow, JSON.stringify(layout));
   check("overview: Sort is plain text without a box", layout.sortBorder === "0px" && layout.sortBg === "rgba(0, 0, 0, 0)", JSON.stringify(layout));
+  await page.locator("#fides-sort-select").focus();
+  const sortFocus = await page.$eval("#fides-sort-select", (s) => { const cs = getComputedStyle(s); return [cs.outlineStyle, cs.borderTopWidth, cs.boxShadow]; });
+  check("overview: focused Sort shows a line under the value, not a box", sortFocus[0] === "none" && sortFocus[1] === "0px" && /inset/.test(sortFocus[2]) && /-2px/.test(sortFocus[2]), JSON.stringify(sortFocus));
+  await page.locator("#fides-sort-select").blur();
   await page.hover(".fides-uc-pilot__add");
   await page.waitForTimeout(150);
   const addDeco = await page.$eval(".fides-uc-pilot__add", (a) => [getComputedStyle(a).textDecorationLine, getComputedStyle(a.querySelector("span:not([aria-hidden])")).textDecorationLine]);
@@ -136,11 +140,14 @@ async function overviewDesktop(browser) {
   const more = await page.evaluate(() => ({
     expanded: document.querySelector("[data-pilot-more-toggle]").getAttribute("aria-expanded"),
     visible: !document.getElementById("fides-uc-pilot-more").hidden,
-    repeated: document.querySelector("[data-pilot-count]").classList.contains("is-repeated"),
+    countTop: Math.round(document.querySelector("[data-pilot-count]").getBoundingClientRect().top - document.getElementById("fides-uc-pilot-more").getBoundingClientRect().bottom),
+    countVisible: document.querySelector("[data-pilot-count]").getBoundingClientRect().width > 1,
+    headCount: Boolean(document.querySelector("#fides-uc-pilot-more .fides-uc-pilot__more-head p")),
     technical: document.querySelector("[data-pilot-tech-toggle]") && document.querySelector("[data-pilot-tech-toggle]").getAttribute("aria-expanded"),
     modal: document.getElementById("fides-uc-pilot-more").getAttribute("aria-modal"),
   }));
-  check("overview: More filters opens in flow, not modal, count not repeated", more.expanded === "true" && more.visible && more.repeated && more.modal !== "true", JSON.stringify(more));
+  check("overview: More filters opens in flow, not modal", more.expanded === "true" && more.visible && more.modal !== "true", JSON.stringify(more));
+  check("overview: the count stays in the results bar under More filters, not repeated in its head", more.countVisible && more.countTop >= 0 && !more.headCount, JSON.stringify(more));
   check("overview: Technical filters start closed", more.technical === "false", JSON.stringify(more));
   await page.locator("[data-pilot-tech-toggle]").click();
 
