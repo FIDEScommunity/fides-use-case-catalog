@@ -104,7 +104,7 @@ pilot_upsert_page(
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"55%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:55%\">"
     . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-hero\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-hero\">Accelerating Digital Trust</h1>\n<!-- /wp:heading -->\n"
     . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">The new international movement dedicated to the continuous improvement of digital trust on the internet.</p>\n<!-- /wp:paragraph -->"
-    . "\n<!-- wp:paragraph {\"className\":\"fides-uc-fragment__action\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"32px\"}}}} -->\n<p class=\"fides-uc-fragment__action\" style=\"margin-top:32px\"><a class=\"fides-ds-action-link\" href=\"/fides-design-pilot/overview/\">Explore use cases <span aria-hidden=\"true\">→</span></a></p>\n<!-- /wp:paragraph -->"
+    . "\n<!-- wp:paragraph {\"className\":\"fides-uc-fragment__action\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"32px\"}}}} -->\n<p class=\"fides-uc-fragment__action\" style=\"margin-top:32px\"><a class=\"fides-ds-action-link\" href=\"/fides-design-pilot/overview/\"><span>Explore use cases</span> <span aria-hidden=\"true\">→</span></a></p>\n<!-- /wp:paragraph -->"
     . "</div>\n<!-- /wp:column -->\n"
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"45%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:45%\">"
     . "<!-- wp:shortcode -->[fides_use_case_featured detail_url=\"/fides-design-pilot/use-case/\"]<!-- /wp:shortcode -->"

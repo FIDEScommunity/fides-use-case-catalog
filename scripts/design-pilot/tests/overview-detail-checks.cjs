@@ -9,7 +9,7 @@
  * order, ecosystem accordions (<=3 open), technical details closed, Show all
  * organisations, Read full / Show less without losing position, anchors
  * opening hidden content, media gallery selection and in-place play, invalid
- * source links without destination, no related or promo block, 44 px targets
+ * source links without destination, Keep exploring (no promo block), 44 px targets
  * and no horizontal overflow.
  *
  * Run through run-overview-detail-checks.sh.
@@ -103,6 +103,19 @@ async function overviewDesktop(browser) {
   await page.waitForTimeout(400);
   const lift = await page.$eval(".fides-uc-pilot__search-submit", (el) => getComputedStyle(el).transform);
   check("overview: Search button does not move on hover", lift === "none", lift);
+
+  const layout = await page.evaluate(() => {
+    const left = (sel) => { const n = document.querySelector(sel); return n ? Math.round(n.getBoundingClientRect().left) : null; };
+    const right = (sel) => { const n = document.querySelector(sel); return n ? Math.round(n.getBoundingClientRect().right) : null; };
+    const sort = getComputedStyle(document.querySelector(".fides-uc-pilot__sort-select"));
+    return { h1: left(".fides-uc-pilot h1"), title: left(".fides-ds-card--row > :first-child"), bar: right(".fides-uc-pilot__results-bar"), arrow: right(".fides-ds-card--row .fides-ds-card__arrow"), sortBorder: sort.borderTopWidth, sortBg: sort.backgroundColor };
+  });
+  check("overview: row text starts on the heading edge, arrow ends on the bar edge", layout.h1 === layout.title && layout.bar === layout.arrow, JSON.stringify(layout));
+  check("overview: Sort is plain text without a box", layout.sortBorder === "0px" && layout.sortBg === "rgba(0, 0, 0, 0)", JSON.stringify(layout));
+  await page.hover(".fides-uc-pilot__add");
+  await page.waitForTimeout(150);
+  const addDeco = await page.$eval(".fides-uc-pilot__add", (a) => [getComputedStyle(a).textDecorationLine, getComputedStyle(a.querySelector("span:not([aria-hidden])")).textDecorationLine]);
+  check("overview: hover underlines the link label, not its arrow", addDeco[0] === "none" && addDeco[1] === "underline", JSON.stringify(addDeco));
   await page.press("#fides-search-input", "Enter");
   await page.waitForFunction(() => new URL(location.href).searchParams.get("q") === "wallet");
   const searched = await count(page);
@@ -138,6 +151,8 @@ async function overviewDesktop(browser) {
   await page.press("#fides-search-input", "Enter");
   await page.waitForFunction(() => !new URL(location.href).searchParams.get("q"));
   if ((await page.locator("[data-pilot-more-toggle]").getAttribute("aria-expanded")) !== "true") await page.locator("[data-pilot-more-toggle]").click();
+  const techEdge = await page.evaluate(() => Math.round(document.querySelector("[data-pilot-tech-toggle]").getBoundingClientRect().left - document.querySelector(".fides-uc-pilot__more-grid").getBoundingClientRect().left));
+  check("overview: Technical filters starts on the left edge of More filters", techEdge === 0, String(techEdge));
   if ((await page.locator("[data-pilot-tech-toggle]").getAttribute("aria-expanded")) !== "true") await page.locator("[data-pilot-tech-toggle]").click();
 
   const format = page.locator('[data-fides-ds-popover][data-pilot-keys="vcFormats"]');
@@ -271,7 +286,14 @@ async function detailChecks(browser, width, slug) {
       technical: document.querySelector("#technical-details .fides-ds-collapsible__toggle") ? document.querySelector("#technical-details .fides-ds-collapsible__toggle").getAttribute("aria-expanded") : null,
       orgs: document.querySelectorAll("#organisations-list > li").length,
       orgsVisible: [...document.querySelectorAll("#organisations-list > li")].filter((n) => n.getClientRects().length).length,
-      related: Boolean(document.querySelector(".fides-uc-detail__related, .fides-uc-detail__contribute")),
+      promo: Boolean(document.querySelector(".fides-uc-detail__contribute")),
+      related: (() => {
+        const r = document.querySelector(".fides-uc-detail__related");
+        const u = document.querySelector("#update");
+        if (!r) return null;
+        const cards = [...r.querySelectorAll(".fides-ds-card__link")];
+        return { n: cards.length, self: cards.some((a) => a.href.includes(document.querySelector(".fides-uc-detail").dataset.useCaseId)), before: Boolean(u && r.getBoundingClientRect().bottom <= u.getBoundingClientRect().top) };
+      })(),
       topics: [...document.querySelectorAll("h2")].some((h) => /^Topics$/i.test(h.textContent.trim())),
       badHref: [...document.querySelectorAll(".fides-uc-detail a[href]")].filter((a) => /^https?:\/\/[^/]*(%20|\s)/i.test(a.getAttribute("href"))).length,
       heroOrg: Boolean(document.querySelector(".fides-uc-detail__hero .fides-uc-detail__owner")),
@@ -291,7 +313,8 @@ async function detailChecks(browser, width, slug) {
     check(`${tag}: ecosystem summary card hidden`, !s.summaryVisible);
   }
   check(`${tag}: ecosystem variant follows the <=3 rule`, s.compact === null || s.compact === s.groups.every((g) => g.n <= 3), JSON.stringify(s.groups));
-  check(`${tag}: no related use cases or contribute promo; no Topics heading; no organisation in hero`, !s.related && !s.topics && !s.heroOrg);
+  check(`${tag}: Keep exploring has 1-3 other use cases above the update bar`, s.related && s.related.n >= 1 && s.related.n <= 3 && !s.related.self && s.related.before, JSON.stringify(s.related));
+  check(`${tag}: no contribute promo; no Topics heading; no organisation in hero`, !s.promo && !s.topics && !s.heroOrg);
   check(`${tag}: invalid source links get no destination`, s.badHref === 0, String(s.badHref));
   check(`${tag}: no horizontal overflow`, !s.overflow);
   const small = await smallTargets(page);

@@ -168,7 +168,13 @@ $check(strpos($html, 'href="https://example.org/credential"') !== false, 'http(s
 $check(strpos($html, '?credential=cred%3Acanonical%3Aone') !== false, 'credential alias links to the canonical credential record');
 $check(strpos($html, 'cred%3Aalias%3Aone') === false, 'alias id is not used in credential links');
 $check(strpos($html, 'share-offsite/?url=' . rawurlencode($alpha_url)) !== false, 'Share on LinkedIn uses the detail route of the page');
-$check(strpos($html, 'fides-uc-detail__related') === false && strpos($html, 'fides-uc-detail__contribute') === false, 'no related use cases or contribute promo');
+$related_pos = strpos($html, 'class="fides-uc-detail__related"');
+$related     = $related_pos !== false ? substr($html, $related_pos, (int) strpos($html, '</section>', $related_pos) - $related_pos) : '';
+$check($related !== '' && strpos($related, '>Keep exploring</h2>') !== false && $related_pos < strpos($html, 'id="update"'), 'Keep exploring sits above the update bar');
+$check(strpos($related, 'href="' . esc_url($beta_url) . '"') !== false && strpos($related, 'href="' . esc_url($alpha_url) . '"') === false, 'related use cases link others, never the page itself');
+$check(strpos($related, 'Org Beta</p>') !== false && strpos($related, '<span class="fides-ds-card__cta-label">Read use case</span> →') !== false, 'related tile: sector · organization kicker, arrow outside the CTA label');
+$check(strpos($related, '<span>All use cases</span> <span aria-hidden="true">→</span>') !== false, 'All use cases link keeps its arrow out of the label');
+$check(strpos($html, 'fides-uc-detail__contribute') === false, 'no contribute promo');
 $check(strpos($html, 'data-fides-ds-back="usecase" data-fides-ds-back-id="' . UC_ALPHA . '"') !== false && strpos($html, '<span data-fides-ds-back-label>All use cases</span>') !== false, 'back link can become Back to results, plain overview link by default');
 $check(preg_match('#<h1 class="fides-ds-heading-1 fides-ds-heading-1--detail fides-uc-detail__title"#', $html) === 1, 'detail title uses the detail heading role');
 $check(strpos($html, 'Org Alpha') === false, 'organisation name is not repeated in the hero');
@@ -186,7 +192,7 @@ foreach ($roles as $role) {
 }
 $check($summary === array('Issuers' => 8, 'Credential types' => 4), 'summary lists only roles with records, without organisations: ' . wp_json_encode($summary));
 $check(strpos($html, 'One party can appear in more than one role.') !== false, 'summary says counts are entries per role, not unique parties');
-$check(strpos($html, 'href="#ecosystem">View connected ecosystem') !== false, 'summary links to the full ecosystem section');
+$check(strpos($html, 'href="#ecosystem"><span>View connected ecosystem</span>') !== false, 'summary links to the full ecosystem section');
 $aside_pos     = strpos($html, 'fides-uc-detail__aside');
 $summary_pos   = strpos($html, 'fides-uc-ecosystem-summary');
 $technical_pos = strpos($html, 'id="technical-details"');
@@ -216,7 +222,7 @@ $check(preg_match('#<details[^>]*\sopen#', $html) === 0, 'section navigation is 
 // One image and no video: no media section, so the hero offers the original.
 $solo_html = do_shortcode('[fides_use_case_detail id="' . UC_SOLO . '" detail_url="' . DETAIL_BASE . '"]');
 $check(strpos($solo_html, 'id="media"') === false, 'a single image gets no media section');
-$check(preg_match('#<a class="fides-ds-action-link fides-uc-detail__original" href="https://example.org/media/solo-original.png" rel="noopener" target="_blank">Open original image#', $solo_html) === 1, 'a single image is reachable at original size from the hero');
+$check(preg_match('#<a class="fides-ds-action-link fides-uc-detail__original" href="https://example.org/media/solo-original.png" rel="noopener" target="_blank"><span>Open original image</span>#', $solo_html) === 1, 'a single image is reachable at original size from the hero');
 $check(strpos($beta_html, 'fides-uc-detail__original') === false, 'no original-image link without an image');
 $duo_html = do_shortcode('[fides_use_case_detail id="' . UC_DUO . '" detail_url="' . DETAIL_BASE . '"]');
 $check(strpos($duo_html, 'id="media"') !== false && strpos($duo_html, 'fides-uc-detail__original') === false, 'two images use the media section instead of the hero link');
