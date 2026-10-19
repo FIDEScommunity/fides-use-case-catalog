@@ -395,12 +395,19 @@
   flex: 0 0 auto;
 }
 
+/* Each list starts at its own label + value width and the row wraps, so a
+   long label such as "Presentation protocol" never truncates a short value. */
 .fides-ds .fides-uc-pilot__technical-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--fides-ds-space-3);
   padding-top: var(--fides-ds-space-2);
   border-top: 1px solid var(--fides-ds-line);
+}
+
+.fides-ds .fides-uc-pilot__technical-grid > * {
+  flex: 1 1 auto;
+  min-width: min(100%, 200px);
 }
 
 .fides-ds .fides-uc-pilot__technical-grid[hidden] {
@@ -626,8 +633,10 @@
   line-height: 22px;
 }
 
+/* Own row under the closing text: "Page X of Y" on the left edge, the page
+   actions on the right. */
 .fides-ds.fides-uc-pilot .fides-uc-pilot__footer-row .fides-catalog-pagination {
-  flex: 1 1 auto;
+  flex: 1 0 100%;
   padding-top: 0;
 }
 
@@ -684,6 +693,24 @@
   border-color: var(--fides-ds-brand);
   background: var(--fides-ds-brand);
   color: #ffffff;
+}
+
+.fides-ds.fides-uc-pilot .fides-catalog-pagination [aria-disabled="true"] {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid var(--fides-ds-line);
+  color: var(--fides-ds-muted);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+@media (max-width: 599px) {
+  .fides-ds.fides-uc-pilot .fides-catalog-pagination__pages {
+    display: none;
+  }
 }
 
 /* Compact (Paper 19.4 M): one Filters dialog with temporary choices. */
@@ -1171,7 +1198,7 @@ html.fides-uc-pilot-panel-open {
   color: #ffffff;
 }
 
-/* Keep exploring: three related use cases above the update bar. */
+/* Explore further: up to three similar use cases above the update bar. */
 .fides-ds .fides-uc-detail__related {
   display: grid;
   gap: var(--fides-ds-space-5);
@@ -1193,6 +1220,22 @@ html.fides-uc-pilot-panel-open {
 .fides-ds .fides-uc-detail__related .fides-ds-cards > li {
   display: grid;
   margin: 0;
+}
+
+/* At most three equal columns over the full width, never a fourth empty one. */
+.fides-ds .fides-uc-detail__related .fides-uc-detail__related-cards {
+  grid-template-columns: repeat(auto-fit, minmax(max(240px, calc((100% - 2 * var(--fides-ds-space-6)) / 3)), 1fr));
+}
+
+/* Equal-height tiles; the call to action sits on the bottom edge. */
+.fides-ds .fides-uc-detail__related .fides-ds-card {
+  grid-template-rows: auto 1fr;
+  align-content: stretch;
+}
+
+.fides-ds .fides-uc-detail__related .fides-ds-card__title {
+  font-size: 20px;
+  line-height: 26px;
 }
 
 /* Update bar: last block before the footer. */
@@ -1308,10 +1351,6 @@ html.fides-uc-pilot-panel-open {
   }
   .fides-ds .fides-uc-ecosystem-summary {
     display: grid;
-  }
-  .fides-ds .fides-uc-ecosystem__head h2 {
-    font-size: 28px;
-    line-height: 34px;
   }
   .fides-ds .fides-uc-ecosystem--compact .fides-uc-ecosystem__groups {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1433,8 +1472,11 @@ html.fides-uc-pilot-panel-open {
   background: var(--fides-ds-link);
 }
 
-/* Section headings stay clearly below the page title. */
-.fides-ds.fides-uc-detail .fides-uc-detail__section .fides-ds-heading-2 {
+/* One section-heading role on the detail page, clearly below the page title. */
+.fides-ds.fides-uc-detail .fides-uc-detail__section .fides-ds-heading-2,
+.fides-ds.fides-uc-detail .fides-uc-ecosystem__head h2,
+.fides-ds.fides-uc-detail .fides-uc-detail__band-text h2,
+.fides-ds.fides-uc-detail .fides-uc-detail__related-head h2 {
   font-size: 24px;
   line-height: 30px;
 }
@@ -1489,7 +1531,10 @@ html.fides-uc-pilot-panel-open {
   .fides-ds.fides-uc-detail .fides-uc-detail__aside {
     gap: var(--fides-ds-space-7);
   }
-  .fides-ds.fides-uc-detail .fides-uc-detail__section .fides-ds-heading-2 {
+  .fides-ds.fides-uc-detail .fides-uc-detail__section .fides-ds-heading-2,
+  .fides-ds.fides-uc-detail .fides-uc-ecosystem__head h2,
+  .fides-ds.fides-uc-detail .fides-uc-detail__band-text h2,
+  .fides-ds.fides-uc-detail .fides-uc-detail__related-head h2 {
     font-size: 26px;
     line-height: 32px;
   }

@@ -2946,7 +2946,35 @@
     return pages.filter((number, index, list) => list.indexOf(number) === index);
   }
 
+  /* Paper: "Page X of Y" plus Previous / numbers / Next; the edge action stays
+     visible but disabled. No pager for zero or one page. Below 600px the
+     numbers are hidden (usecase-design.css). */
+  function renderPilotPagination(items) {
+    const total = Array.isArray(items) ? items.length : 0;
+    if (total === 0) return "";
+    const totalPages = paginationBounds(items, listingPage).totalPages;
+    if (totalPages <= 1) return "";
+    const page = Math.min(listingPage, totalPages);
+    let previousPage = 0;
+    const pageLinks = paginationPageNumbers(page, totalPages).map((number) => {
+      const ellipsis = previousPage > 0 && number > previousPage + 1
+        ? '<li class="fides-catalog-pagination__ellipsis" aria-hidden="true">…</li>'
+        : "";
+      previousPage = number;
+      const current = number === page ? ' aria-current="page"' : "";
+      return `${ellipsis}<li><a href="${escapeHtml(listingHrefForPage(number))}" data-catalog-page="${number}" aria-label="Page ${number}"${current}>${number}</a></li>`;
+    }).join("");
+    const edge = (className, label, target, enabled, rel) => enabled
+      ? `<a class="${className}" href="${escapeHtml(listingHrefForPage(target))}" data-catalog-page="${target}" rel="${rel}">${label}</a>`
+      : `<span class="${className}" aria-disabled="true">${label}</span>`;
+    return `<nav class="fides-catalog-pagination" data-fides-use-case-pagination aria-label="Catalog pages">
+      <p class="fides-catalog-pagination__meta">Page ${page} of ${totalPages}</p>
+      <div class="fides-catalog-pagination__nav">${edge("fides-catalog-pagination__prev", "Previous", page - 1, page > 1, "prev")}<ol class="fides-catalog-pagination__pages">${pageLinks}</ol>${edge("fides-catalog-pagination__next", "Next", page + 1, page < totalPages, "next")}</div>
+    </nav>`;
+  }
+
   function renderPaginationBar(items) {
+    if (DESIGN_PILOT) return renderPilotPagination(items);
     const total = Array.isArray(items) ? items.length : 0;
     if (total === 0) return "";
     const bounds = paginationBounds(items, listingPage);
