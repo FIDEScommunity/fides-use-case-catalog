@@ -91,7 +91,7 @@ final class Fides_Use_Case_Design {
 
     /** True when the shared design system from fides-community-tools-tiles is loaded. */
     public static function available(): bool {
-        return class_exists('Fides_DS_Card');
+        return class_exists('Fides_DS_Card') && class_exists('Fides_DS_Gallery');
     }
 
     public static function register_assets(): void {

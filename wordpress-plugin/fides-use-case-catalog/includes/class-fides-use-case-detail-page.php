@@ -111,7 +111,7 @@ final class Fides_Use_Case_Detail_Page {
         $has_media   = $videos || count($images) > 1;
         // Without a media section, a single image is only reachable through this link.
         $original    = ! $has_media && count($images) === 1 ? $images[0] : '';
-        $media_title = $images && $videos ? 'Images & video' : ($videos ? (count($videos) > 1 ? 'Videos' : 'Video') : 'Images');
+        $media_title = Fides_DS_Gallery::title(count($images), count($videos));
 
         $sections = array();
         if ($summary) {
@@ -348,73 +348,20 @@ final class Fides_Use_Case_Detail_Page {
     }
 
     /**
-     * Images first (Image 1…N), then videos (Video 1…N), in one gallery. The
-     * stage starts on the first item; thumbnails select within the stage and
-     * fall back to the original file or video page without JS.
+     * Media band around the shared design-system gallery (Fides_DS_Gallery).
      *
      * @param list<string> $images
      * @param list<array{url:string, provider_label:string, poster:string, embed:string}> $videos
      */
     private static function media_html(array $images, array $videos, string $title, string $more_info): string {
-        $items = array();
-        foreach ($images as $index => $image) {
-            $items[] = array('kind' => 'image', 'url' => $image, 'label' => 'Image ' . ($index + 1), 'poster' => $image, 'embed' => '', 'provider' => '');
-        }
-        foreach ($videos as $index => $video) {
-            $items[] = array('kind' => 'video', 'url' => $video['url'], 'label' => 'Video ' . ($index + 1), 'poster' => $video['poster'], 'embed' => $video['embed'], 'provider' => $video['provider_label']);
-        }
-        $counts = array();
-        if ($images) {
-            $counts[] = count($images) === 1 ? '1 image' : count($images) . ' images';
-        }
-        if ($videos) {
-            $counts[] = count($videos) === 1 ? '1 video' : count($videos) . ' videos';
-        }
-        $first = $items[0];
-        $html  = '<section class="fides-ds-band--dark fides-uc-detail__band" id="media" aria-labelledby="media-title">'
+        $html = '<section class="fides-ds-band--dark fides-uc-detail__band" id="media" aria-labelledby="media-title">'
             . '<div class="fides-uc-detail__band-text">'
             . '<h2 class="fides-ds-heading-3" id="media-title">' . esc_html($title) . '</h2>'
-            . '<p class="fides-uc-detail__band-count">' . esc_html(implode(' · ', $counts)) . '</p>';
+            . '<p class="fides-uc-detail__band-count">' . esc_html(Fides_DS_Gallery::count_label(count($images), count($videos))) . '</p>';
         if ($more_info !== '') {
             $html .= '<p><a class="fides-ds-action-link" href="' . esc_url($more_info) . '" rel="noopener" target="_blank"><span>More information</span> <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a></p>';
         }
-        $html .= '</div><div class="fides-ds-gallery" data-fides-ds-gallery>'
-            . '<div class="fides-ds-gallery__stage" aria-live="polite">' . self::media_stage_html($first) . '</div>';
-        if (count($items) > 1) {
-            $html .= '<ul class="fides-ds-gallery__strip" aria-label="' . esc_attr($title) . '">';
-            foreach ($items as $index => $media) {
-                $html .= '<li><a class="fides-ds-gallery__thumb" href="' . esc_url($media['url']) . '" data-kind="' . esc_attr($media['kind']) . '"'
-                    . ' data-label="' . esc_attr($media['label']) . '" data-poster="' . esc_url($media['poster']) . '"'
-                    . ' data-embed="' . esc_url($media['embed']) . '" data-provider="' . esc_attr($media['provider']) . '"'
-                    . ($index === 0 ? ' aria-current="true"' : '') . '>'
-                    . '<span class="fides-ds-gallery__thumb-media">' . ($media['poster'] !== '' ? '<img src="' . esc_url($media['poster']) . '" alt="" loading="lazy" decoding="async">' : '') . '</span>'
-                    . '<span class="fides-ds-gallery__thumb-label">' . esc_html($media['label']) . '</span></a></li>';
-            }
-            $html .= '</ul>';
-        }
-        return $html . '</div></section>';
-    }
-
-    /**
-     * Server-rendered stage for the first gallery item (same markup the
-     * gallery script renders for later selections).
-     *
-     * @param array{kind:string, url:string, label:string, poster:string, embed:string, provider:string} $media
-     */
-    private static function media_stage_html(array $media): string {
-        $new_tab = '<span class="fides-ds-visually-hidden"> (opens in a new tab)</span>';
-        if ($media['kind'] === 'image') {
-            return '<figure class="fides-ds-gallery__frame"><img src="' . esc_url($media['url']) . '" alt="' . esc_attr($media['label']) . '" loading="lazy" decoding="async"></figure>'
-                . '<p class="fides-ds-gallery__caption"><span>' . esc_html($media['label']) . '</span>'
-                . '<a href="' . esc_url($media['url']) . '" rel="noopener" target="_blank">Open image<span aria-hidden="true"> ↗</span>' . $new_tab . '</a></p>';
-        }
-        $poster = $media['poster'] !== '' ? '<img src="' . esc_url($media['poster']) . '" alt="" loading="lazy" decoding="async">' : '';
-        $play   = $media['embed'] !== ''
-            ? '<button type="button" class="fides-ds-gallery__play" data-fides-ds-gallery-play data-embed="' . esc_url($media['embed']) . '" data-label="' . esc_attr($media['label']) . '"><span class="fides-ds-visually-hidden">Play ' . esc_html($media['label']) . '</span></button>'
-            : '<a class="fides-ds-gallery__play" href="' . esc_url($media['url']) . '" rel="noopener" target="_blank"><span class="fides-ds-visually-hidden">Play ' . esc_html($media['label']) . ' (opens in a new tab)</span></a>';
-        return '<figure class="fides-ds-gallery__frame fides-ds-gallery__frame--video">' . $poster . $play . '</figure>'
-            . '<p class="fides-ds-gallery__caption"><span>' . esc_html($media['label']) . '</span>'
-            . '<a href="' . esc_url($media['url']) . '" rel="noopener" target="_blank">Watch on ' . esc_html($media['provider'] !== '' ? $media['provider'] : 'the original site') . '<span aria-hidden="true"> ↗</span>' . $new_tab . '</a></p>';
+        return $html . '</div>' . Fides_DS_Gallery::render(Fides_DS_Gallery::items($images, $videos), $title) . '</section>';
     }
 
     /**
@@ -690,20 +637,8 @@ final class Fides_Use_Case_Detail_Page {
         );
     }
 
-    /**
-     * http(s) URL with a real host name; source values such as
-     * "http://Robert%20Bosch%20GmbH" get no destination.
-     */
     private static function http_url(string $url): string {
-        $url = trim($url);
-        if (preg_match('~^https?://~i', $url) !== 1 || preg_match('~\s~', $url) === 1) {
-            return '';
-        }
-        $host = (string) wp_parse_url($url, PHP_URL_HOST);
-        if ($host === '' || preg_match('~^(localhost|[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+)$~i', $host) !== 1) {
-            return '';
-        }
-        return $url;
+        return Fides_DS_Gallery::http_url($url);
     }
 
     /**
@@ -716,23 +651,13 @@ final class Fides_Use_Case_Detail_Page {
             $rows = array($item['video']);
         }
         $videos = array();
-        $seen   = array();
         foreach ($rows as $row) {
-            $url = is_array($row) ? self::http_url((string) ($row['url'] ?? '')) : '';
-            if ($url === '' || isset($seen[$url])) {
-                continue;
+            $video = is_array($row) ? Fides_DS_Gallery::video((string) ($row['url'] ?? ''), (string) ($row['provider'] ?? '')) : null;
+            if ($video !== null && ! isset($videos[$video['url']])) {
+                $videos[$video['url']] = $video;
             }
-            $seen[$url] = true;
-            $provider   = strtolower((string) ($row['provider'] ?? ''));
-            $vimeo      = $provider === 'vimeo' && preg_match('~vimeo\.com/(?:video/)?(\d+)~i', $url, $match) === 1 ? $match[1] : '';
-            $videos[]   = array(
-                'url'            => $url,
-                'provider_label' => $provider === 'youtube' ? 'YouTube' : ($provider === 'vimeo' ? 'Vimeo' : (string) wp_parse_url($url, PHP_URL_HOST)),
-                'poster'         => $provider === 'youtube' ? fides_use_case_catalog_youtube_thumbnail_url($url) : '',
-                'embed'          => $provider === 'youtube' ? fides_use_case_catalog_youtube_embed_url($url) : ($vimeo !== '' ? 'https://player.vimeo.com/video/' . $vimeo : ''),
-            );
         }
-        return $videos;
+        return array_values($videos);
     }
 
     /**
