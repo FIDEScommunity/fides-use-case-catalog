@@ -9,7 +9,7 @@
  * order, ecosystem accordions (<=3 open), technical details closed, Show all
  * organisations, Read full / Show less without losing position, anchors
  * opening hidden content, media gallery selection and in-place play, invalid
- * source links without destination, Keep exploring (no promo block), 44 px targets
+ * source links without destination, Explore further (no promo block), 44 px targets
  * and no horizontal overflow.
  *
  * Run through run-overview-detail-checks.sh.
@@ -299,14 +299,43 @@ async function detailChecks(browser, width, slug) {
         const u = document.querySelector("#update");
         if (!r) return null;
         const cards = [...r.querySelectorAll(".fides-ds-card__link")];
-        return { n: cards.length, self: cards.some((a) => a.href.includes(document.querySelector(".fides-uc-detail").dataset.useCaseId)), before: Boolean(u && r.getBoundingClientRect().bottom <= u.getBoundingClientRect().top) };
+        const list = r.querySelector(".fides-ds-cards");
+        const items = [...list.children].map((li) => li.getBoundingClientRect());
+        const firstRow = items.filter((b) => Math.round(b.top) === Math.round(items[0].top));
+        const font = (n) => (n ? `${getComputedStyle(n).fontSize}/${getComputedStyle(n).lineHeight}` : null);
+        const title = r.querySelector(".fides-ds-card__title");
+        return {
+          n: cards.length,
+          self: cards.some((a) => a.href.includes(document.querySelector(".fides-uc-detail").dataset.useCaseId)),
+          before: Boolean(u && r.getBoundingClientRect().bottom <= u.getBoundingClientRect().top),
+          heading: r.querySelector("h2").textContent.trim(),
+          cols: getComputedStyle(list).gridTemplateColumns.split(" ").length,
+          firstRow: firstRow.length,
+          used: Math.round(firstRow[firstRow.length - 1].right - firstRow[0].left),
+          width: Math.round(list.getBoundingClientRect().width),
+          ctaBottoms: [...r.querySelectorAll(".fides-ds-card__cta")].filter((c) => Math.round(c.closest("li").getBoundingClientRect().top) === Math.round(items[0].top)).map((c) => Math.round(c.getBoundingClientRect().bottom)),
+          clipped: [...r.querySelectorAll(".fides-ds-card__title")].some((t) => t.scrollHeight > t.clientHeight + 1),
+          h2: font(r.querySelector("h2")), title: font(title),
+          kicker: (r.querySelector(".fides-ds-card__kicker") || {}).textContent || "",
+        };
       })(),
       topics: [...document.querySelectorAll("h2")].some((h) => /^Topics$/i.test(h.textContent.trim())),
       badHref: [...document.querySelectorAll(".fides-uc-detail a[href]")].filter((a) => /^https?:\/\/[^/]*(%20|\s)/i.test(a.getAttribute("href"))).length,
       heroOrg: Boolean(document.querySelector(".fides-uc-detail__hero .fides-uc-detail__owner")),
+      sectionHeads: [".fides-uc-detail__section h2", ".fides-uc-ecosystem__head h2", ".fides-uc-detail__band-text h2", ".fides-uc-detail__related-head h2"]
+        .map((sel) => document.querySelector(sel)).filter(Boolean)
+        .map((h) => `${h.textContent.trim()} ${getComputedStyle(h).fontSize}/${getComputedStyle(h).lineHeight}`),
       overflow: document.documentElement.scrollWidth > innerWidth + 1,
     };
   });
+  const rel = s.related;
+  if (rel) {
+    check(`${tag}: Explore further, at most three columns over the full width`, rel.heading === "Explore further" && rel.cols <= 3 && (rel.firstRow < 3 || Math.abs(rel.used - rel.width) <= 1), JSON.stringify(rel));
+    check(`${tag}: Explore further calls to action share the bottom edge, titles not cut`, new Set(rel.ctaBottoms).size <= 1 && !rel.clipped, JSON.stringify(rel.ctaBottoms));
+    check(`${tag}: Explore further shows a match reason`, /^(Shared theme|Shared credential|\d+ shared credentials|Shared wallet|\d+ shared wallets|Shared organisation|\d+ shared organisations|Same sector)/.test(rel.kicker.trim()), rel.kicker);
+  }
+  const headSize = wide ? "26px/32px" : "24px/30px";
+  check(`${tag}: section headings share one role (${headSize}); related titles 20/26`, s.sectionHeads.every((h) => h.endsWith(headSize)) && (!rel || rel.title === "20px/26px"), JSON.stringify([s.sectionHeads, rel && rel.title]));
   if (wide) {
     check(`${tag}: 800 / 64 / 480 columns`, s.main && s.aside && s.main.width === 800 && s.aside.width === 480 && s.aside.left - (s.main.left + s.main.width) === 64, JSON.stringify([s.main, s.aside]));
     check(`${tag}: ecosystem summary in the side column, no accordions`, s.summaryVisible && s.groups.every((g) => g.expanded === null) && s.technical === null, JSON.stringify(s.groups));
@@ -320,7 +349,7 @@ async function detailChecks(browser, width, slug) {
     check(`${tag}: ecosystem summary card hidden`, !s.summaryVisible);
   }
   check(`${tag}: ecosystem variant follows the <=3 rule`, s.compact === null || s.compact === s.groups.every((g) => g.n <= 3), JSON.stringify(s.groups));
-  check(`${tag}: Keep exploring has 1-3 other use cases above the update bar`, s.related && s.related.n >= 1 && s.related.n <= 3 && !s.related.self && s.related.before, JSON.stringify(s.related));
+  check(`${tag}: Explore further has 1-3 other use cases above the update bar`, s.related && s.related.n >= 1 && s.related.n <= 3 && !s.related.self && s.related.before, JSON.stringify(s.related));
   check(`${tag}: no contribute promo; no Topics heading; no organisation in hero`, !s.promo && !s.topics && !s.heroOrg);
   check(`${tag}: invalid source links get no destination`, s.badHref === 0, String(s.badHref));
   check(`${tag}: no horizontal overflow`, !s.overflow);
@@ -540,6 +569,104 @@ async function heroChecks(browser) {
   await context.close();
 }
 
+/* Review 2026-10-19: similar-case parity with the listing modal, Sign in
+   return, pager pattern, metadata separators, technical filter widths. */
+async function reviewRoundChecks(browser) {
+  const context = await newContext(browser, 1280, 900);
+  const page = await context.newPage();
+
+  await open(page, OVERVIEW);
+  await page.locator(".fides-ds-card--row").first().waitFor({ timeout: 45000 });
+  const listed = await page.$$eval(".fides-ds-card--row[data-use-case-id]", (n) => n.slice(0, 4).map((c) => c.dataset.useCaseId));
+  for (const slug of [...new Set([...RECORDS, ...listed])]) {
+    await open(page, `${BASE}/fides-design-pilot/existing-listing/?usecase=${encodeURIComponent(slug)}`);
+    let modal = [];
+    try {
+      await page.locator("[data-similar-use-case-id]").first().waitFor({ timeout: 30000 });
+      modal = await page.$$eval("[data-similar-use-case-id]", (n) => n.map((a) => a.dataset.similarUseCaseId));
+    } catch (err) {
+      modal = [];
+    }
+    await open(page, DETAIL + slug);
+    await page.locator(".fides-uc-detail__hero").waitFor();
+    const detail = await page.$$eval(".fides-uc-detail__related [data-use-case-id]", (n) => n.map((c) => c.dataset.useCaseId));
+    check(`similar @${slug.slice(0, 20)}: detail shows the listing modal's selection in its order`, JSON.stringify(modal) === JSON.stringify(detail), JSON.stringify({ modal, detail }));
+  }
+
+  const returnTo = async (selector) => page.evaluate((sel) => {
+    const link = document.querySelector(sel);
+    if (!link) return null;
+    link.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+    return new URL(link.href).searchParams.get("return_to");
+  }, selector);
+  const q = (u) => (u ? new URL(u).searchParams.get("q") : null);
+  await open(page, `${OVERVIEW}?q=Open+Bank+Account`);
+  await page.locator(".fides-ds-card--row").first().waitFor({ timeout: 45000 });
+  await page.fill(".fides-uc-pilot__search-input", "Tax Splitter");
+  await page.press(".fides-uc-pilot__search-input", "Enter");
+  await page.waitForFunction(() => new URL(location.href).searchParams.get("q") === "Tax Splitter");
+  const header = await returnTo(".fides-ds-site-header__account[data-fides-ds-sign-in]");
+  const menu = await returnTo(".fides-ds-menu a[data-fides-ds-sign-in]");
+  check("sign in: header and menu return to the current search after a UI change", q(header) === "Tax Splitter" && q(menu) === "Tax Splitter", JSON.stringify({ header, menu }));
+  await page.goBack();
+  await page.waitForFunction(() => new URL(location.href).searchParams.get("q") === "Open Bank Account");
+  const back = await returnTo(".fides-ds-site-header__account[data-fides-ds-sign-in]");
+  check("sign in: return follows Back", q(back) === "Open Bank Account", back);
+
+  await open(page, OVERVIEW);
+  await page.locator(".fides-catalog-pagination").waitFor({ timeout: 45000 });
+  const pager = () => page.$eval(".fides-catalog-pagination", (n) => {
+    const edge = (sel) => { const e = n.querySelector(sel); return e ? `${e.tagName}:${e.getAttribute("aria-disabled") || ""}` : "missing"; };
+    return {
+      meta: n.querySelector(".fides-catalog-pagination__meta").textContent.trim(),
+      prev: edge(".fides-catalog-pagination__prev"),
+      next: edge(".fides-catalog-pagination__next"),
+      metaLeft: n.querySelector(".fides-catalog-pagination__meta").getBoundingClientRect().left < n.querySelector(".fides-catalog-pagination__nav").getBoundingClientRect().left,
+    };
+  });
+  const first = await pager();
+  const pages = Number((first.meta.match(/of (\d+)$/) || [])[1]);
+  check("pager: Page 1 of N on the left, Previous disabled, Next a link", /^Page 1 of \d+$/.test(first.meta) && first.metaLeft && first.prev === "SPAN:true" && first.next === "A:", JSON.stringify(first));
+  await page.click(`.fides-catalog-pagination__pages a[data-catalog-page="${pages}"]`);
+  await page.waitForFunction((n) => ((document.querySelector(".fides-catalog-pagination__meta") || {}).textContent || "").trim() === `Page ${n} of ${n}`, pages);
+  const last = await pager();
+  check("pager: last page disables Next, Previous a link", last.prev === "A:" && last.next === "SPAN:true", JSON.stringify(last));
+  await open(page, `${OVERVIEW}?q=Tax+Splitter`);
+  await page.locator(".fides-ds-card--row").first().waitFor({ timeout: 45000 });
+  check("pager: no pager for a single page", (await page.locator(".fides-catalog-pagination").count()) === 0);
+
+  await open(page, OVERVIEW);
+  await page.locator(".fides-ds-card--row").first().waitFor({ timeout: 45000 });
+  await page.locator("button", { hasText: /more filters/i }).first().click();
+  await page.locator(".fides-uc-pilot__technical-toggle").first().click();
+  await page.waitForTimeout(300);
+  const cut = await page.$$eval(".fides-uc-pilot__technical-grid .fides-ds-popover__toggle", (n) => n
+    .filter((t) => [...t.querySelectorAll("span")].some((s) => s.scrollWidth > s.clientWidth + 1))
+    .map((t) => t.textContent.trim().replace(/\s+/g, " ")));
+  check("technical filters @1280: no label or value truncated", cut.length === 0, JSON.stringify(cut));
+  await context.close();
+
+  const mobile = await newContext(browser, 390, 844);
+  const m = await mobile.newPage();
+  await open(m, OVERVIEW);
+  await m.locator(".fides-ds-card--row").first().waitFor({ timeout: 45000 });
+  const mp = await m.$eval(".fides-catalog-pagination", (n) => ({
+    numbers: getComputedStyle(n.querySelector(".fides-catalog-pagination__pages")).display,
+    prev: Boolean(n.querySelector(".fides-catalog-pagination__prev").getClientRects().length),
+    next: Boolean(n.querySelector(".fides-catalog-pagination__next").getClientRects().length),
+  }));
+  check("pager @390: status with Previous / Next, no page numbers", mp.numbers === "none" && mp.prev && mp.next, JSON.stringify(mp));
+  const seps = await m.$$eval(".fides-ds-card__facts", (lists) => lists.map((ul) => {
+    const left = ul.getBoundingClientRect().left;
+    const starts = [...ul.children].filter((li) => li.getBoundingClientRect().left - left < 1).length;
+    return { pull: getComputedStyle(ul).marginLeft, clip: getComputedStyle(ul).clipPath, starts };
+  }));
+  check("metadata @390: separators sit in the clipped strip at each line start", seps.length > 0 && seps.every((x) => x.pull === "-20px" && /inset\(-8px -8px -8px 16px\)/.test(x.clip)), JSON.stringify(seps[0]));
+  check("metadata @390: wrapped rows exist, so the rule is exercised", seps.some((x) => x.starts > 1), String(seps.filter((x) => x.starts > 1).length));
+  await m.screenshot({ path: path.join(OUT, "review-overview-390.png") });
+  await mobile.close();
+}
+
 async function run() {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch({
@@ -552,6 +679,7 @@ async function run() {
     await statusChecks(browser);
     await readmoreChecks(browser);
     await heroChecks(browser);
+    await reviewRoundChecks(browser);
     for (const width of DETAIL_WIDTHS) for (const slug of RECORDS) await detailChecks(browser, width, slug);
   } finally {
     await browser.close();

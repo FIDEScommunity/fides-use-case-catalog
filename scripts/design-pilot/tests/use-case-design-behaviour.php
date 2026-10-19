@@ -107,7 +107,7 @@ $fixture_credentials = array(
 
 $selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA);
 
-add_filter('fides_use_case_design_items', static function () use ($fixture_items) {
+add_filter('fides_use_case_design_items', static function () use (&$fixture_items) {
     return $fixture_items;
 }, PHP_INT_MAX);
 add_filter('fides_use_case_design_credentials', static function () use ($fixture_credentials) {
@@ -138,7 +138,7 @@ add_filter('rest_pre_dispatch', static function ($result, $server, WP_REST_Reque
         return new WP_REST_Response(array('ok' => false), 200);
     }
     if ($route === '/fides-catalog/v1/ratings/batch') {
-        $likes = array(UC_ALPHA => 3, UC_BETA => 0);
+        $likes = array(UC_ALPHA => 3, UC_BETA => 0) + ($GLOBALS['pilot_test_likes'] ?? array());
         $out   = array();
         foreach (explode(',', (string) $request->get_param('ids')) as $id) {
             $out[$id] = array('likes' => $likes[$id] ?? 0, 'count' => 0, 'my_like' => null);
@@ -170,9 +170,13 @@ $check(strpos($html, 'cred%3Aalias%3Aone') === false, 'alias id is not used in c
 $check(strpos($html, 'share-offsite/?url=' . rawurlencode($alpha_url)) !== false, 'Share on LinkedIn uses the detail route of the page');
 $related_pos = strpos($html, 'class="fides-uc-detail__related"');
 $related     = $related_pos !== false ? substr($html, $related_pos, (int) strpos($html, '</section>', $related_pos) - $related_pos) : '';
-$check($related !== '' && strpos($related, '>Keep exploring</h2>') !== false && $related_pos < strpos($html, 'id="update"'), 'Keep exploring sits above the update bar');
+$check($related !== '' && strpos($related, '>Explore further</h2>') !== false && $related_pos < strpos($html, 'id="update"'), 'Explore further sits above the update bar');
 $check(strpos($related, 'href="' . esc_url($beta_url) . '"') !== false && strpos($related, 'href="' . esc_url($alpha_url) . '"') === false, 'related use cases link others, never the page itself');
-$check(strpos($related, 'Org Beta</p>') !== false && strpos($related, '<span class="fides-ds-card__cta-label">Read use case</span> →') !== false, 'related tile: sector · organization kicker, arrow outside the CTA label');
+$check(strpos($related, '>Same sector: Digital<') !== false && strpos($related, 'Org Beta</p>') !== false && strpos($related, '<span class="fides-ds-card__cta-label">Read use case</span> →') !== false, 'related tile: match reason, organization, arrow outside the CTA label');
+$check(strpos(do_shortcode('[fides_use_case_detail id="' . UC_SOLO . '" detail_url="' . DETAIL_BASE . '"]'), 'fides-uc-detail__related') === false, 'no Explore further section without matches');
+add_filter('fides_use_case_catalog_show_similar_cases', '__return_false');
+$check(strpos(do_shortcode('[fides_use_case_detail id="' . UC_ALPHA . '" detail_url="' . DETAIL_BASE . '"]'), 'fides-uc-detail__related') === false, 'similar-cases setting off hides Explore further, as in the listing modal');
+remove_filter('fides_use_case_catalog_show_similar_cases', '__return_false');
 $check(strpos($related, '<span>All use cases</span> <span aria-hidden="true">→</span>') !== false, 'All use cases link keeps its arrow out of the label');
 $check(strpos($html, 'fides-uc-detail__contribute') === false, 'no contribute promo');
 $check(strpos($html, 'data-fides-ds-back="usecase" data-fides-ds-back-id="' . UC_ALPHA . '"') !== false && strpos($html, '<span data-fides-ds-back-label>All use cases</span>') !== false, 'back link can become Back to results, plain overview link by default');
@@ -296,6 +300,48 @@ $GLOBALS['wp_settings_errors'] = array();
 // Card meta mirrors pilotEngagementMeta() in the listing.
 $check(Fides_Use_Case_Design::card_props($fixture_items[0], 'row')['meta'] === 'Updated 21 Sep 2026 · Finalist 2026 · 3 likes', 'row meta: date, award, likes');
 $check(Fides_Use_Case_Design::card_props($fixture_items[1], 'row')['meta'] === 'Updated 1 Aug 2026 · Winner 2026', 'row meta without likes');
+
+// Similar use cases: the listing modal's selection, order and reasons.
+$bundles = Fides_Use_Case_Discovery_Shortcode::theme_config()['bundles'];
+$bundle  = $bundles ? $bundles[0] : null;
+$sim     = static function (string $id, array $extra = array()): array {
+    return array_merge(array('id' => $id, 'title' => $id, 'productionDeployment' => 'no', 'summary' => ''), $extra);
+};
+$fixture_items = array(
+    $sim('sim-source', array(
+        'sector'  => 'finance',
+        'country' => 'NL',
+        'themes'  => $bundle ? array($bundle['themeCodes'][0]) : array(),
+        'links'   => array(
+            'credentials'     => array(array('refId' => 'cred-1')),
+            'personalWallets' => array(array('refId' => 'wallet-1')),
+            'organizations'   => array(array('refId' => 'org-1')),
+        ),
+    )),
+    $sim('sim-country-only', array('country' => 'NL', 'sector' => 'energy')),
+    $sim('sim-sector', array('sector' => 'finance')),
+    $sim('sim-wallet', array('links' => array('businessWallets' => array(array('refId' => 'wallet-1'))))),
+    $sim('sim-cred-b', array('links' => array('credentials' => array(array('refId' => 'cred-1'))))),
+    $sim('sim-cred-a', array('links' => array('credentials' => array(array('refId' => 'cred-1'))))),
+    $sim('sim-cred-liked', array('links' => array('credentials' => array(array('refId' => 'cred-1'))))),
+    $sim('sim-theme', array('themes' => $bundle ? array($bundle['themeCodes'][0]) : array())),
+);
+$GLOBALS['pilot_test_likes'] = array('sim-cred-liked' => 4);
+Fides_Use_Case_Design::flush_cache();
+$matches = Fides_Use_Case_Design::similar_matches($fixture_items[0], 10);
+$ids     = wp_list_pluck(wp_list_pluck($matches, 'item'), 'id');
+$expect  = array_merge($bundle ? array('sim-theme') : array(), array('sim-cred-liked', 'sim-cred-a', 'sim-cred-b', 'sim-wallet', 'sim-sector'));
+$check($ids === $expect, 'similar order: theme, credential (likes, then title), wallet, sector: ' . wp_json_encode($ids));
+$check(! in_array('sim-country-only', $ids, true) && ! in_array('sim-source', $ids, true), 'country alone is no match; the record itself is excluded');
+$reasons = array_combine($ids, wp_list_pluck($matches, 'reason'));
+$check(($reasons['sim-cred-a'] ?? '') === 'Shared credential' && ($reasons['sim-wallet'] ?? '') === 'Shared wallet' && ($reasons['sim-sector'] ?? '') === 'Same sector: ' . fides_use_case_catalog_sectors()['finance'], 'reasons come from the match: ' . wp_json_encode($reasons));
+if ($bundle) {
+    $check(($reasons['sim-theme'] ?? '') === 'Shared theme: ' . $bundle['title'], 'theme reason names the shared theme bundle');
+}
+$check(count(Fides_Use_Case_Design::similar_matches($fixture_items[0])) === 3, 'at most three similar use cases by default');
+$detail = do_shortcode('[fides_use_case_detail id="sim-source" detail_url="' . DETAIL_BASE . '"]');
+$check(substr_count($detail, 'class="fides-ds-card fides-ds-card--tile') === 3, 'detail page shows three similar tiles');
+unset($GLOBALS['pilot_test_likes']);
 
 Fides_Use_Case_Design::flush_cache();
 

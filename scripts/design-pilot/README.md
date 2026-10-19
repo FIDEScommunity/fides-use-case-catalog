@@ -211,10 +211,9 @@ refresh.
 - Arrow links: `<span>Label</span> <span aria-hidden="true">→</span>`. The
   shared rule in `design-system.css` underlines only the label (hover and
   current page); card CTAs split the arrow off the same way (PHP and JS).
-- Keep exploring is back on the detail page: up to three related use cases
-  (`Fides_Use_Case_Design::related`: themes, then sector, then country), tile
-  cards with sector · organization, above the update bar. The contribute promo
-  stays removed.
+- Explore further (Paper label) is back on the detail page, above the update
+  bar; the contribute promo stays removed. See the review round below for the
+  selection.
 - Rows without an image keep the media column with a placeholder (organization
   name, else the title, in a light blue box); a broken image shows the same
   placeholder. Hidden on narrow rows like the image.
@@ -223,6 +222,37 @@ refresh.
 - The result count lives only in the results bar and stays visible when More
   filters opens (it moves down with the panel). The "More filters · N use
   cases" head count from Paper 02 is dropped so the number does not jump.
+
+## Review round (2026-10-19, second review)
+
+- Explore further uses `Fides_Use_Case_Design::similar_matches()`, a server
+  port of `similarUseCaseMatch` / `similarUseCases` in `usecase-catalog.js`:
+  shared theme bundle, credential, wallet, organisation or sector (no country
+  match), the same rank, like count and title tie-breaks, the same reason
+  text, own record excluded, at most three. It honours
+  `fides_use_case_catalog_similar_cases_enabled()`; no match means no
+  section. Tiles show that reason above the title and the organization below.
+  `create-pages.php` adds `/fides-design-pilot/existing-listing/` (the
+  existing listing with its modal) so the browser checks can compare both
+  routes record by record.
+- Sign in in the shared shell (`data-fides-ds-sign-in`, header and menu)
+  rewrites `return_to` / `redirect_to` to the current URL when it is used, so
+  client-side search, filters, sort, page and Back/Forward are kept. The login
+  route and its redirect validation are unchanged.
+- Explore further grid: at most three equal columns over the full width, CTAs
+  on the bottom edge, tile titles 20/26. Detail section headings (Overview,
+  User journey, Connected ecosystem, media, Explore further) share one role:
+  26/32 from 1100 px, 24/30 below.
+- Pager (Paper): "Page X of Y" on the left, Previous / numbers / Next on the
+  right, with the edge action visible but disabled; below 600 px status plus
+  Previous / Next; no pager for zero or one page. The existing listing keeps
+  "Showing a–b of n".
+- Row facts: every fact carries a 20 px separator and the list is pulled
+  20 px left and clipped, so a wrapped line never starts with "·".
+- Technical filters wrap as a flex row from each list's own width, so
+  "Presentation protocol · Any" is not truncated at 1280 px.
+- Not changed: the mobile detail hero (known review point) and the like
+  toggle.
 
 ## Not restored yet (no content parity claimed)
 

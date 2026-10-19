@@ -102,7 +102,9 @@ if ($admins) {
     $signed_in = Fides_DS_Site_Shell::render_header();
     wp_set_current_user(0);
     $check(strpos($signed_in, '>Account<') !== false && strpos($signed_in, '>Sign in<') === false, 'signed-in visitor sees Account instead of Sign in');
+    $check(strpos($signed_in, 'data-fides-ds-sign-in') === false, 'Account link is not rewritten as a sign-in route');
 }
+$check(preg_match_all('#<a [^>]*data-fides-ds-sign-in[^>]*>Sign in</a>#', $header) === 2, 'header and menu Sign in links refresh their return URL on use');
 $check(strpos(Fides_DS_Site_Shell::sign_in_url(), 'return_to=') !== false || strpos(Fides_DS_Site_Shell::sign_in_url(), 'redirect_to=') !== false, 'Sign in returns the visitor to the current page');
 
 // Footer markup.

@@ -168,12 +168,11 @@ async function filterChecks(page, width) {
   await page.waitForTimeout(300);
   check(`filters @${width}: clearing search restores all results`, (await countText(page)) === total);
 
-  const next = page.locator('.fides-catalog-pagination a[data-catalog-page="2"]').first();
-  await next.click();
+  await page.locator(".fides-catalog-pagination a[rel=next]").first().click();
   await page.waitForTimeout(300);
   const meta = (await page.locator(".fides-catalog-pagination__meta").textContent()).trim();
-  check(`filters @${width}: pagination shows the second page`, /^Showing 25–/.test(meta), meta);
-  await page.locator('.fides-catalog-pagination a[data-catalog-page="1"]').first().click();
+  check(`filters @${width}: pagination shows the second page`, /^Page 2 of \d+$/.test(meta), meta);
+  await page.locator(".fides-catalog-pagination a[rel=prev]").first().click();
   await page.waitForTimeout(300);
 }
 

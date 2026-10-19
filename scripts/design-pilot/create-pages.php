@@ -93,6 +93,15 @@ pilot_upsert_page(
     PILOT_SHELL_TEMPLATE
 );
 
+// The existing listing with its modal: reference for the similar-use-case parity check.
+pilot_upsert_page(
+    'fides-design-pilot/existing-listing',
+    'Use cases (existing listing)',
+    '<!-- wp:shortcode -->[fides_use_case_catalog]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta
+);
+
 // Hero text is the existing homepage hero (page 771); the card comes from the catalog.
 // "Explore use cases" is the secondary hero action from Paper 11.1, pointing at the pilot overview.
 pilot_upsert_page(
