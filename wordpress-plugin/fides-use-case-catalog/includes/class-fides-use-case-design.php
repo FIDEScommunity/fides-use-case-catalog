@@ -497,13 +497,6 @@ final class Fides_Use_Case_Design {
     }
 
     /**
-     * Related use cases: shared themes first, then sector, then country;
-     * ties broken by most recent update.
-     *
-     * @param array<string, mixed> $item
-     * @return array<int, array<string, mixed>>
-     */
-    /**
      * Dark "Contribute" band closing the overview (Paper 02 Use cases). Rendered
      * next to the JS root so the client-side overview never replaces it.
      */
@@ -525,6 +518,13 @@ final class Fides_Use_Case_Design {
             . '</div></div></section>';
     }
 
+    /**
+     * Related use cases: shared themes first, then sector, then country;
+     * ties broken by most recent update.
+     *
+     * @param array<string, mixed> $item
+     * @return array<int, array<string, mixed>>
+     */
     public static function related(array $item, int $limit = 3): array {
         $id      = (string) ($item['id'] ?? '');
         $themes  = isset($item['themes']) && is_array($item['themes']) ? $item['themes'] : array();

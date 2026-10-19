@@ -65,7 +65,7 @@ final class Fides_Use_Case_Detail_Page {
             return '<div class="fides-ds fides-uc-detail"><div class="fides-ds-page fides-uc-detail__missing">'
                 . '<p class="fides-ds-kicker">Use case</p>'
                 . '<h1 class="fides-ds-heading-2">This use case is not in the current FIDES catalog.</h1>'
-                . '<p><a class="fides-ds-action-link" href="' . esc_url($listing_url) . '">← All use cases</a></p>'
+                . '<p><a class="fides-ds-action-link" href="' . esc_url($listing_url) . '"><span aria-hidden="true">←</span> <span>All use cases</span></a></p>'
                 . '</div></div>';
         }
 
@@ -101,6 +101,7 @@ final class Fides_Use_Case_Detail_Page {
         $page_url    = Fides_Use_Case_Design::detail_url($id, $detail_base);
         $awards      = Fides_Use_Case_Design::award_recognitions($id);
         $likes       = Fides_Use_Case_Design::like_count($id);
+        $related     = Fides_Use_Case_Design::related($item, 3);
         $hero_image  = self::http_url(Fides_Use_Case_Design::image_url($item));
         if ($hero_image === '' && $videos && $videos[0]['poster'] !== '') {
             $hero_image = $videos[0]['poster'];
@@ -162,7 +163,7 @@ final class Fides_Use_Case_Detail_Page {
             <a class="fides-ds-button" href="<?php echo esc_url($more_info); ?>" rel="noopener" target="_blank">More information <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
           <?php endif; ?>
           <?php if ($has_media) : ?>
-            <a class="fides-ds-action-link" href="#media"><?php echo $videos ? 'Watch media' : 'View images'; ?> <span aria-hidden="true">↓</span></a>
+            <a class="fides-ds-action-link" href="#media"><span><?php echo $videos ? 'Watch media' : 'View images'; ?></span> <span aria-hidden="true">↓</span></a>
           <?php endif; ?>
           <a class="fides-ds-action-link" href="<?php echo esc_url('https://www.linkedin.com/sharing/share-offsite/?url=' . rawurlencode($page_url)); ?>" rel="noopener" target="_blank">Share on LinkedIn<span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
         </div>
@@ -172,7 +173,7 @@ final class Fides_Use_Case_Detail_Page {
           <figure class="fides-uc-detail__media">
             <img class="fides-ds-card__img" src="<?php echo esc_url($hero_image); ?>" alt="" decoding="async" fetchpriority="high">
           </figure>
-          <a class="fides-ds-action-link fides-uc-detail__original" href="<?php echo esc_url($original); ?>" rel="noopener" target="_blank">Open original image <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
+          <a class="fides-ds-action-link fides-uc-detail__original" href="<?php echo esc_url($original); ?>" rel="noopener" target="_blank"><span>Open original image</span> <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
         </div>
       <?php elseif ($hero_poster) : ?>
         <a class="fides-uc-detail__media fides-uc-detail__media--video" href="#media" data-fides-ds-play>
@@ -195,7 +196,7 @@ final class Fides_Use_Case_Detail_Page {
             <?php foreach ($sections as $anchor => $label) : ?>
               <li><a href="#<?php echo esc_attr($anchor); ?>"><?php echo esc_html($label); ?></a></li>
             <?php endforeach; ?>
-            <li class="fides-uc-detail__sections-update"><a href="#update">Suggest an update <span aria-hidden="true">→</span></a></li>
+            <li class="fides-uc-detail__sections-update"><a href="#update"><span>Suggest an update</span> <span aria-hidden="true">→</span></a></li>
           </ul>
         </nav>
       </details>
@@ -256,7 +257,7 @@ final class Fides_Use_Case_Detail_Page {
                 </div>
               <?php endforeach; ?>
             </dl>
-            <a class="fides-ds-action-link fides-uc-ecosystem-summary__link" href="#ecosystem">View connected ecosystem <span aria-hidden="true">↓</span></a>
+            <a class="fides-ds-action-link fides-uc-ecosystem-summary__link" href="#ecosystem"><span>View connected ecosystem</span> <span aria-hidden="true">↓</span></a>
           </section>
         <?php endif; ?>
 
@@ -316,6 +317,20 @@ final class Fides_Use_Case_Detail_Page {
         <?php echo self::media_html($images, $videos, $media_title, $more_info); // phpcs:ignore WordPress.Security.EscapeOutput ?>
       <?php endif; ?>
 
+      <?php if ($related) : ?>
+        <section class="fides-uc-detail__related" aria-labelledby="related-title">
+          <div class="fides-uc-detail__related-head">
+            <h2 class="fides-ds-heading-2" id="related-title">Keep exploring</h2>
+            <a class="fides-ds-action-link" href="<?php echo esc_url($listing_url); ?>"><span>All use cases</span> <span aria-hidden="true">→</span></a>
+          </div>
+          <ul class="fides-ds-cards fides-ds-cards--tiles">
+            <?php foreach ($related as $related_item) : ?>
+              <li><?php echo self::related_card_html($related_item, $detail_base); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
+            <?php endforeach; ?>
+          </ul>
+        </section>
+      <?php endif; ?>
+
       <section class="fides-uc-detail__update" id="update" aria-labelledby="update-title">
         <div>
           <h2 class="fides-ds-heading-3" id="update-title">Help keep this use case current.</h2>
@@ -361,7 +376,7 @@ final class Fides_Use_Case_Detail_Page {
             . '<h2 class="fides-ds-heading-3" id="media-title">' . esc_html($title) . '</h2>'
             . '<p class="fides-uc-detail__band-count">' . esc_html(implode(' · ', $counts)) . '</p>';
         if ($more_info !== '') {
-            $html .= '<p><a class="fides-ds-action-link" href="' . esc_url($more_info) . '" rel="noopener" target="_blank">More information <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a></p>';
+            $html .= '<p><a class="fides-ds-action-link" href="' . esc_url($more_info) . '" rel="noopener" target="_blank"><span>More information</span> <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a></p>';
         }
         $html .= '</div><div class="fides-ds-gallery" data-fides-ds-gallery>'
             . '<div class="fides-ds-gallery__stage" aria-live="polite">' . self::media_stage_html($first) . '</div>';
@@ -405,6 +420,19 @@ final class Fides_Use_Case_Detail_Page {
     /**
      * @param array{program_label:string, program_url:string, year:int, category_label:string, place:int} $award
      */
+    /**
+     * Keep exploring tile (Paper detail): sector · organization above the title.
+     *
+     * @param array<string, mixed> $item
+     */
+    private static function related_card_html(array $item, string $detail_base): string {
+        $kicker = implode(' · ', array_filter(array(
+            Fides_Use_Case_Design::sector_label($item),
+            trim((string) ($item['organizationName'] ?? '')),
+        )));
+        return Fides_Use_Case_Design::render_card($item, 'tile', $detail_base, array('kicker' => $kicker, 'meta' => ''));
+    }
+
     private static function award_html(array $award): string {
         $text   = Fides_Use_Case_Design::award_label($award);
         $detail = $award['program_label'] . ($award['category_label'] !== '' ? ' (' . $award['category_label'] . ')' : '');
