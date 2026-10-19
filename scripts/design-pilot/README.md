@@ -215,6 +215,9 @@ refresh.
   (`Fides_Use_Case_Design::related`: themes, then sector, then country), tile
   cards with sector · organization, above the update bar. The contribute promo
   stays removed.
+- Rows without an image keep the media column with a placeholder (organization
+  name, else the title, in a light blue box); a broken image shows the same
+  placeholder. Hidden on narrow rows like the image.
 
 ## Not restored yet (no content parity claimed)
 
