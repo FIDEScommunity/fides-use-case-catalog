@@ -3696,7 +3696,7 @@
           <p class="fides-ds-kicker">Ecosystem Explorer</p>
           <div class="fides-uc-pilot__title-row">
             <h1 class="fides-ds-heading-1 fides-ds-heading-1--catalog">${escapeHtml(title)}</h1>
-            ${addUrl ? `<a class="fides-ds-action-link fides-uc-pilot__add" href="${escapeHtml(addUrl)}">Add a use case <span aria-hidden="true">→</span></a>` : ""}
+            ${addUrl ? `<a class="fides-ds-action-link fides-uc-pilot__add" href="${escapeHtml(addUrl)}"><span>Add a use case</span> <span aria-hidden="true">→</span></a>` : ""}
           </div>
           ${intro.lead ? `<div class="fides-uc-pilot__lead">${intro.lead}</div>` : ""}
         </header>
@@ -3705,7 +3705,7 @@
           <form class="fides-uc-pilot__search-row" role="search" data-pilot-search-form>
             <div class="fides-uc-pilot__search-head">
               <label class="fides-uc-pilot__search-label" for="fides-search-input">Search use cases</label>
-              ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-text-button fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button">Ask FIDES <span aria-hidden="true">→</span></button>' : ""}
+              ${ASK_FIDES_AVAILABLE ? '<button class="fides-ds-text-button fides-uc-pilot__ask" id="fides-ask-fides-trigger" type="button"><span>Ask FIDES</span> <span aria-hidden="true">→</span></button>' : ""}
             </div>
             <div class="fides-uc-pilot__search-line">
               <div class="fides-uc-pilot__search">
