@@ -282,12 +282,6 @@
   letter-spacing: 0;
 }
 
-.fides-ds .fides-uc-pilot__more-result {
-  color: var(--fides-ds-muted);
-  font-size: 14px;
-  line-height: 22px;
-}
-
 .fides-ds .fides-uc-pilot__more-close {
   display: flex;
   align-items: center;
@@ -482,16 +476,6 @@
   line-height: 22px;
   font-weight: 500;
   letter-spacing: 0;
-}
-
-.fides-ds .fides-uc-pilot__count.is-repeated {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
 }
 
 .fides-ds .fides-uc-pilot__count:focus {
@@ -789,9 +773,6 @@
     padding: var(--fides-ds-space-4) var(--fides-ds-gutter);
     border-top: 0;
     box-shadow: none;
-  }
-  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__more-result {
-    display: none;
   }
   .fides-ds .fides-uc-pilot__filter-panel .fides-ds-popover__panel {
     position: static;
@@ -1604,9 +1585,13 @@ html.fides-uc-pilot-panel-open {
   cursor: pointer;
 }
 
+/* Chrome marks a clicked select as :focus-visible, so a box would also show on
+   mouse use; a line under the value keeps the plain-text look. */
+.fides-ds.fides-uc-pilot .fides-uc-pilot__sort-select:focus,
 .fides-ds.fides-uc-pilot .fides-uc-pilot__sort-select:focus-visible {
-  outline: 3px solid var(--fides-ds-link);
-  outline-offset: 2px;
+  outline: none;
+  box-shadow: inset 0 -2px 0 var(--fides-ds-link);
+  color: var(--fides-ds-link);
 }
 
 /* Technical filters: own row, from the left edge like the rest of the panel. */

@@ -3636,12 +3636,11 @@
       </button>`;
   }
 
-  function renderPilotMore(count) {
+  function renderPilotMore() {
     const technical = renderPilotTechnicalPopovers();
     return `<section class="fides-uc-pilot__more" id="fides-uc-pilot-more" aria-labelledby="fides-uc-pilot-more-title" ${pilotMoreOpen ? "" : "hidden"}>
       <div class="fides-uc-pilot__more-head">
         <h3 class="fides-uc-pilot__more-title" id="fides-uc-pilot-more-title">More filters</h3>
-        <p class="fides-uc-pilot__more-result" data-pilot-more-count>${pilotCountLabel(count)}</p>
         <button type="button" class="fides-uc-pilot__more-close" data-pilot-more-close aria-label="Close more filters">${icons.x}</button>
       </div>
       <div class="fides-uc-pilot__more-grid">
@@ -3732,7 +3731,7 @@
                   <span class="fides-uc-pilot__more-icon" aria-hidden="true">${icons.chevronDown}</span>
                 </button>
               </div>
-              ${renderPilotMore(filtered.length)}
+              ${renderPilotMore()}
               <div class="fides-uc-pilot__panel-actions">
                 <button type="button" class="fides-ds-button fides-ds-button--secondary" data-pilot-cancel>Cancel</button>
                 <button type="button" class="fides-ds-button" data-pilot-apply>Apply filters <span class="fides-uc-pilot__apply-count">(<span data-pilot-count-inline>${filtered.length}</span>)</span></button>
@@ -3746,7 +3745,7 @@
           <button class="fides-ds-button fides-ds-button--secondary fides-uc-pilot__filters-toggle" type="button" aria-expanded="false" aria-controls="fides-uc-pilot-filter-panel" data-pilot-open>
             Filters <span class="fides-filter-count ${activeCount > 0 ? "" : "hidden"}">${activeCount || 0}</span><span class="fides-ds-visually-hidden"> active</span>
           </button>
-          <h2 class="fides-uc-pilot__count${pilotMoreOpen ? " is-repeated" : ""}" data-pilot-count tabindex="-1">${pilotCountLabel(filtered.length)}</h2>
+          <h2 class="fides-uc-pilot__count" data-pilot-count tabindex="-1">${pilotCountLabel(filtered.length)}</h2>
           <label class="fides-uc-pilot__sort" for="fides-sort-select">
             <span>Sort by</span>
             <select id="fides-sort-select" class="fides-uc-pilot__select fides-uc-pilot__sort-select">
@@ -3788,12 +3787,7 @@
   function updatePilotChrome(filtered) {
     const label = pilotCountLabel(filtered.length);
     const count = root.querySelector("[data-pilot-count]");
-    if (count) {
-      count.textContent = label;
-      count.classList.toggle("is-repeated", pilotMoreOpen && !pilotSnapshot);
-    }
-    const moreCount = root.querySelector("[data-pilot-more-count]");
-    if (moreCount) moreCount.textContent = label;
+    if (count) count.textContent = label;
     const inline = root.querySelector("[data-pilot-count-inline]");
     if (inline) inline.textContent = String(filtered.length);
     root.querySelectorAll("[data-fides-ds-popover][data-pilot-keys]").forEach((popover) => {
@@ -3885,7 +3879,6 @@
     const toggle = root.querySelector("[data-pilot-more-toggle]");
     if (section) section.hidden = !open;
     if (toggle) toggle.setAttribute("aria-expanded", open ? "true" : "false");
-    root.querySelector("[data-pilot-count]")?.classList.toggle("is-repeated", open && !pilotSnapshot);
     if (!open && focusTarget) toggle?.focus();
   }
 
