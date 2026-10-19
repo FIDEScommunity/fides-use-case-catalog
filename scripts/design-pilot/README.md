@@ -199,6 +199,23 @@ refresh.
 - 1280x800 still shows two full result rows: row height is set by the text,
   not the controls. 1440x900 shows three.
 
+## Review fixes (2026-10-19)
+
+- Result rows keep 12 px inner padding for the hover fill but sit on the page
+  edge (negative margin), flush with the heading; the arrow ends on the bar edge.
+- Sort is plain text ("Sort by" + value + chevron, no box, Paper 02). Blocksy
+  sets `height` on selects, so the rule sets it too.
+- Search label and Ask FIDES share a baseline; the one-row search uses 12 px
+  between every control.
+- Technical filters has its own row in More filters, from the left edge.
+- Arrow links: `<span>Label</span> <span aria-hidden="true">→</span>`. The
+  shared rule in `design-system.css` underlines only the label (hover and
+  current page); card CTAs split the arrow off the same way (PHP and JS).
+- Keep exploring is back on the detail page: up to three related use cases
+  (`Fides_Use_Case_Design::related`: themes, then sector, then country), tile
+  cards with sector · organization, above the update bar. The contribute promo
+  stays removed.
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.
