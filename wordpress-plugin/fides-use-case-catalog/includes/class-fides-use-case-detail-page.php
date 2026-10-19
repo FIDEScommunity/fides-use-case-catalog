@@ -101,7 +101,7 @@ final class Fides_Use_Case_Detail_Page {
         $page_url    = Fides_Use_Case_Design::detail_url($id, $detail_base);
         $awards      = Fides_Use_Case_Design::award_recognitions($id);
         $likes       = Fides_Use_Case_Design::like_count($id);
-        $related     = Fides_Use_Case_Design::related($item, 3);
+        $related     = fides_use_case_catalog_similar_cases_enabled() ? Fides_Use_Case_Design::similar_matches($item, 3) : array();
         $hero_image  = self::http_url(Fides_Use_Case_Design::image_url($item));
         if ($hero_image === '' && $videos && $videos[0]['poster'] !== '') {
             $hero_image = $videos[0]['poster'];
@@ -320,12 +320,12 @@ final class Fides_Use_Case_Detail_Page {
       <?php if ($related) : ?>
         <section class="fides-uc-detail__related" aria-labelledby="related-title">
           <div class="fides-uc-detail__related-head">
-            <h2 class="fides-ds-heading-2" id="related-title">Keep exploring</h2>
+            <h2 class="fides-ds-heading-2" id="related-title">Explore further</h2>
             <a class="fides-ds-action-link" href="<?php echo esc_url($listing_url); ?>"><span>All use cases</span> <span aria-hidden="true">→</span></a>
           </div>
-          <ul class="fides-ds-cards fides-ds-cards--tiles">
-            <?php foreach ($related as $related_item) : ?>
-              <li><?php echo self::related_card_html($related_item, $detail_base); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
+          <ul class="fides-ds-cards fides-ds-cards--tiles fides-uc-detail__related-cards">
+            <?php foreach ($related as $match) : ?>
+              <li><?php echo self::related_card_html($match['item'], $match['reason'], $detail_base); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
             <?php endforeach; ?>
           </ul>
         </section>
@@ -421,16 +421,16 @@ final class Fides_Use_Case_Detail_Page {
      * @param array{program_label:string, program_url:string, year:int, category_label:string, place:int} $award
      */
     /**
-     * Keep exploring tile (Paper detail): sector · organization above the title.
+     * Explore further tile: the match reason from similar_matches() above the
+     * title, the organization below it.
      *
      * @param array<string, mixed> $item
      */
-    private static function related_card_html(array $item, string $detail_base): string {
-        $kicker = implode(' · ', array_filter(array(
-            Fides_Use_Case_Design::sector_label($item),
-            trim((string) ($item['organizationName'] ?? '')),
-        )));
-        return Fides_Use_Case_Design::render_card($item, 'tile', $detail_base, array('kicker' => $kicker, 'meta' => ''));
+    private static function related_card_html(array $item, string $reason, string $detail_base): string {
+        return Fides_Use_Case_Design::render_card($item, 'tile', $detail_base, array(
+            'kicker' => $reason,
+            'meta'   => trim((string) ($item['organizationName'] ?? '')),
+        ));
     }
 
     private static function award_html(array $award): string {

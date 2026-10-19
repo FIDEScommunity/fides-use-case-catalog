@@ -519,39 +519,210 @@ final class Fides_Use_Case_Design {
     }
 
     /**
-     * Related use cases: shared themes first, then sector, then country;
-     * ties broken by most recent update.
+     * Load like counts for many ids with one batch request per 100 ids.
      *
-     * @param array<string, mixed> $item
-     * @return array<int, array<string, mixed>>
+     * @param list<string> $ids
      */
-    public static function related(array $item, int $limit = 3): array {
-        $id      = (string) ($item['id'] ?? '');
-        $themes  = isset($item['themes']) && is_array($item['themes']) ? $item['themes'] : array();
-        $sector  = (string) ($item['sector'] ?? '');
-        $country = strtoupper((string) ($item['country'] ?? ''));
-        $scored  = array();
-        foreach (self::items() as $candidate) {
-            if ((string) $candidate['id'] === $id) {
-                continue;
-            }
-            $candidate_themes = isset($candidate['themes']) && is_array($candidate['themes']) ? $candidate['themes'] : array();
-            $score = 3 * count(array_intersect($themes, $candidate_themes));
-            if ($sector !== '' && (string) ($candidate['sector'] ?? '') === $sector) {
-                $score += 2;
-            }
-            if ($country !== '' && strtoupper((string) ($candidate['country'] ?? '')) === $country) {
-                $score += 1;
-            }
-            if ($score > 0) {
-                $scored[] = array($score, (string) ($candidate['updatedAt'] ?? ''), $candidate);
+    public static function prime_likes(array $ids): void {
+        $missing = array_values(array_filter(array_unique($ids), static function ($id) {
+            return $id !== '' && ! array_key_exists($id, self::$likes);
+        }));
+        if (! $missing || ! function_exists('rest_do_request')) {
+            return;
+        }
+        foreach (array_chunk($missing, 100) as $chunk) {
+            $request = new WP_REST_Request('GET', '/fides-catalog/v1/ratings/batch');
+            $request->set_query_params(array('type' => 'usecase', 'ids' => implode(',', $chunk)));
+            $response = rest_do_request($request);
+            $data     = $response instanceof WP_REST_Response && $response->get_status() === 200 ? $response->get_data() : null;
+            foreach ($chunk as $id) {
+                $row = is_array($data) && isset($data['results'][$id]) && is_array($data['results'][$id]) ? $data['results'][$id] : array();
+                self::$likes[$id] = max(0, (int) ($row['likes'] ?? $row['count'] ?? 0));
             }
         }
-        usort($scored, static function ($a, $b) {
-            return $b[0] <=> $a[0] ?: strcmp($b[1], $a[1]);
+    }
+
+    /**
+     * Theme bundle codes for an item, as itemThemeBundleCodes() in the listing.
+     *
+     * @param array<string, mixed> $item
+     * @return list<string>
+     */
+    private static function theme_bundle_codes(array $item): array {
+        $config = class_exists('Fides_Use_Case_Discovery_Shortcode') ? Fides_Use_Case_Discovery_Shortcode::theme_config() : array();
+        $themes = isset($item['themes']) && is_array($item['themes']) ? $item['themes'] : array();
+        if (! $themes) {
+            $assigned = $config['assignments'][ (string) ($item['id'] ?? '') ] ?? array();
+            $themes   = is_array($assigned) ? $assigned : array();
+        }
+        $themes = array_map('strval', $themes);
+        $codes  = array();
+        if ($themes) {
+            foreach ($config['bundles'] ?? array() as $bundle) {
+                if (array_intersect($themes, $bundle['themeCodes'])) {
+                    $codes[] = (string) $bundle['code'];
+                }
+            }
+        }
+        return $codes;
+    }
+
+    /** @return array<string, string> code => title */
+    private static function theme_bundle_titles(): array {
+        $config = class_exists('Fides_Use_Case_Discovery_Shortcode') ? Fides_Use_Case_Discovery_Shortcode::theme_config() : array();
+        $titles = array();
+        foreach ($config['bundles'] ?? array() as $bundle) {
+            $titles[ (string) $bundle['code'] ] = (string) ($bundle['title'] !== '' ? $bundle['title'] : $bundle['code']);
+        }
+        return $titles;
+    }
+
+    /**
+     * Unique link refIds under one or more links keys, as itemLinkRefIds().
+     *
+     * @param array<string, mixed> $item
+     * @param list<string> $keys
+     * @return list<string>
+     */
+    private static function link_ref_ids(array $item, array $keys): array {
+        $ids = array();
+        foreach ($keys as $key) {
+            $links = isset($item['links'][ $key ]) && is_array($item['links'][ $key ]) ? $item['links'][ $key ] : array();
+            foreach ($links as $link) {
+                $ref = is_array($link) ? trim((string) ($link['refId'] ?? '')) : '';
+                if ($ref !== '' && ! in_array($ref, $ids, true)) {
+                    $ids[] = $ref;
+                }
+            }
+        }
+        return $ids;
+    }
+
+    /**
+     * Primary sector (sector, else first legacy sector, else themeKey), as itemSector().
+     *
+     * @param array<string, mixed> $item
+     */
+    private static function primary_sector(array $item): string {
+        if (! empty($item['sector'])) {
+            return (string) $item['sector'];
+        }
+        $legacy = isset($item['sectors']) && is_array($item['sectors']) ? array_values(array_filter($item['sectors'])) : array();
+        if ($legacy) {
+            return (string) $legacy[0];
+        }
+        return ! empty($item['themeKey']) ? (string) $item['themeKey'] : '';
+    }
+
+    /**
+     * Known sector codes, primary first, as itemSectorCodes().
+     *
+     * @param array<string, mixed> $item
+     * @return list<string>
+     */
+    private static function sector_codes(array $item): array {
+        $known   = function_exists('fides_use_case_catalog_sectors') ? fides_use_case_catalog_sectors() : array();
+        $codes   = array();
+        $primary = self::primary_sector($item);
+        if ($primary !== '') {
+            $codes[] = $primary;
+        }
+        foreach (isset($item['sectors']) && is_array($item['sectors']) ? $item['sectors'] : array() as $code) {
+            $code = trim((string) $code);
+            if ($code !== '' && ! in_array($code, $codes, true)) {
+                $codes[] = $code;
+            }
+        }
+        return array_values(array_filter($codes, static function ($code) use ($known) {
+            return array_key_exists($code, $known);
+        }));
+    }
+
+    /**
+     * Similar use cases: the same selection, order and reason as
+     * similarUseCases() in assets/usecase-catalog.js (listing modal). Shared
+     * theme bundle, credential, wallet, organisation or sector; nothing else.
+     *
+     * @param array<string, mixed> $item
+     * @return list<array{item: array<string, mixed>, reason: string}>
+     */
+    public static function similar_matches(array $item, int $limit = 3): array {
+        $id      = (string) ($item['id'] ?? '');
+        $wallets = array('personalWallets', 'businessWallets');
+        $source  = array(
+            'themes'        => self::theme_bundle_codes($item),
+            'credentials'   => self::link_ref_ids($item, array('credentials')),
+            'wallets'       => self::link_ref_ids($item, $wallets),
+            'organizations' => self::link_ref_ids($item, array('organizations')),
+            'sectors'       => self::sector_codes($item),
+        );
+        $titles  = self::theme_bundle_titles();
+        $matches = array();
+        foreach (self::items() as $candidate) {
+            $candidate_id = (string) ($candidate['id'] ?? '');
+            if ($candidate_id === '' || $candidate_id === $id) {
+                continue;
+            }
+            $themes        = array_values(array_intersect($source['themes'], self::theme_bundle_codes($candidate)));
+            $credentials   = array_values(array_intersect($source['credentials'], self::link_ref_ids($candidate, array('credentials'))));
+            $wallet_ids    = array_values(array_intersect($source['wallets'], self::link_ref_ids($candidate, $wallets)));
+            $organizations = array_values(array_intersect($source['organizations'], self::link_ref_ids($candidate, array('organizations'))));
+            $sectors       = array_values(array_intersect($source['sectors'], self::sector_codes($candidate)));
+            $rank          = array(
+                $themes ? 1 : 0,
+                $credentials ? 1 : 0,
+                $wallet_ids ? 1 : 0,
+                $organizations ? 1 : 0,
+                $sectors ? 1 : 0,
+                count($themes),
+                count($credentials),
+                count($wallet_ids),
+                count($organizations),
+            );
+            if (! array_sum(array_slice($rank, 0, 5))) {
+                continue;
+            }
+            if ($themes) {
+                $reason = isset($titles[ $themes[0] ]) ? 'Shared theme: ' . $titles[ $themes[0] ] : 'Shared theme';
+            } elseif ($credentials) {
+                $reason = count($credentials) === 1 ? 'Shared credential' : count($credentials) . ' shared credentials';
+            } elseif ($wallet_ids) {
+                $reason = count($wallet_ids) === 1 ? 'Shared wallet' : count($wallet_ids) . ' shared wallets';
+            } elseif ($organizations) {
+                $reason = count($organizations) === 1 ? 'Shared organisation' : count($organizations) . ' shared organisations';
+            } else {
+                $code   = self::primary_sector($candidate);
+                $known  = fides_use_case_catalog_sectors();
+                $reason = 'Same sector: ' . ($code === '' ? '—' : (string) ($known[ $code ] ?? $code));
+            }
+            $matches[] = array('item' => $candidate, 'rank' => $rank, 'reason' => $reason);
+        }
+        if (! $matches) {
+            return array();
+        }
+        self::prime_likes(array_map(static function ($match) {
+            return (string) $match['item']['id'];
+        }, $matches));
+        $collator = class_exists('Collator') ? new Collator('en') : null;
+        if ($collator) {
+            $collator->setStrength(Collator::PRIMARY);
+        }
+        usort($matches, static function ($left, $right) use ($collator) {
+            foreach ($left['rank'] as $index => $value) {
+                if ($value !== $right['rank'][ $index ]) {
+                    return $right['rank'][ $index ] <=> $value;
+                }
+            }
+            $likes = self::like_count((string) $right['item']['id']) <=> self::like_count((string) $left['item']['id']);
+            if ($likes !== 0) {
+                return $likes;
+            }
+            $a = (string) ($left['item']['title'] ?? '');
+            $b = (string) ($right['item']['title'] ?? '');
+            return $collator ? (int) $collator->compare($a, $b) : strcasecmp(remove_accents($a), remove_accents($b));
         });
-        return array_map(static function ($row) {
-            return $row[2];
-        }, array_slice($scored, 0, $limit));
+        return array_map(static function ($match) {
+            return array('item' => $match['item'], 'reason' => $match['reason']);
+        }, array_slice($matches, 0, $limit));
     }
 }
