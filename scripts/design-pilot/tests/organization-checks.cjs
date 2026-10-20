@@ -439,6 +439,45 @@ async function detail(browser, width, id) {
       relationsHeads: [...document.querySelectorAll(".fides-org-detail__relations h3")].map((el) => el.textContent.replace(/\s+/g, " ").trim()),
       emptyPanels,
       update: q("#update .fides-ds-button, #update a")?.textContent.trim() || "",
+      top: (() => {
+        const row = q(".fides-ds-detail-top");
+        const share = q(".fides-ds-detail-top__share");
+        const crumbs = q(".fides-ds-detail-top__crumbs");
+        if (!row || !share) return null;
+        const label = (share.getAttribute("aria-label") || share.textContent).replace(/\s+/g, " ").trim();
+        return {
+          h: Math.round(box(row).height),
+          share: [Math.round(box(share).width), Math.round(box(share).height)],
+          shareRight: Math.round(innerWidth - box(share).right),
+          label,
+          title: share.getAttribute("title"),
+          crumbs: crumbs && crumbs.offsetParent !== null ? [...crumbs.querySelectorAll("li")].map((li) => li.textContent.trim()).join(" / ") : "",
+        };
+      })(),
+      shares: document.querySelectorAll('.fides-org-detail a[href*="share-offsite"]').length,
+      copy: !!q(".fides-org-detail [data-fides-ds-copy]"),
+      name: h1 ? h1.textContent.trim() : "",
+      logo: (() => {
+        const logo = q(".fides-org-detail__logo");
+        const identity = q(".fides-org-detail__identity");
+        return logo ? { w: Math.round(box(logo).width), h: Math.round(box(logo).height), right: box(logo).left >= box(identity).right - 1 } : null;
+      })(),
+      official: !!q(".fides-org-detail__badge--official"),
+      signIn: /Sign in to suggest an update/.test(q(".fides-org-detail").textContent),
+      eco: (() => {
+        const panel = q("#ecosystem");
+        if (!panel) return null;
+        const body = q("#ecosystem-body");
+        return {
+          open: !body.hidden,
+          groups: [...panel.querySelectorAll(".fides-org-eco__list")].map((list) => ({
+            total: list.children.length,
+            visible: [...list.children].filter((li) => !li.hidden).length,
+            toggle: list.nextElementSibling?.classList.contains("fides-ds-show-all__toggle") ? list.nextElementSibling.textContent.trim() : "",
+          })),
+        };
+      })(),
+      closingBg: q("#update") ? getComputedStyle(q("#update")).backgroundColor : "",
     };
   });
   const tag = `detail ${id} @${width}`;
@@ -447,7 +486,32 @@ async function detail(browser, width, id) {
   const small = await smallTargets(page);
   check(`${tag}: 44 px targets`, small.length === 0, small.slice(0, 5).join("; "));
   check(`${tag}: no empty sections`, info.emptyPanels === 0, String(info.emptyPanels));
-  check(`${tag}: update action present`, info.update !== "", info.update);
+  check(`${tag}: profile closing has an action`, info.update !== "", info.update);
+  check(`${tag}: profile closing #F1F6FF`, info.closingBg === "rgb(241, 246, 255)", info.closingBg);
+  check(`${tag}: one share action, no Copy link`, info.shares === 1 && !info.copy, `${info.shares} ${info.copy}`);
+  check(`${tag}: share named Share on LinkedIn with tooltip`, info.top && /^Share on LinkedIn/.test(info.top.label) && info.top.title === "Share on LinkedIn", JSON.stringify(info.top));
+  if (info.official) check(`${tag}: guest on Official listing gets no sign-in update call`, !info.signIn);
+  if (width >= 600) {
+    check(`${tag}: breadcrumb to the catalog only`, info.top && info.top.crumbs === "Ecosystem Explorer / Organizations" && !info.top.crumbs.includes(info.name), info.top && info.top.crumbs);
+  } else {
+    check(`${tag}: no breadcrumb, 44 x 44 share`, info.top && info.top.crumbs === "" && info.top.share[0] === 44 && info.top.share[1] === 44, JSON.stringify(info.top));
+  }
+  if (width >= 1100) check(`${tag}: top row 40 px`, info.top && info.top.h === 40, JSON.stringify(info.top));
+  if (info.logo) {
+    const size = width < 600 ? [88, 80] : [144, 112];
+    check(`${tag}: logo right, ${size.join(" x ")}`, info.logo.right && info.logo.w === size[0] && info.logo.h === size[1], JSON.stringify(info.logo));
+  }
+  if (info.eco) {
+    if (width >= 1100) {
+      check(`${tag}: ecosystem open on desktop`, info.eco.open);
+      for (const group of info.eco.groups) {
+        const ok = group.total <= 3 ? group.visible === group.total && !group.toggle : group.visible === 3 && /^Show all \d+ /.test(group.toggle) && group.toggle.includes(String(group.total));
+        check(`${tag}: ecosystem group of ${group.total} shows ${Math.min(3, group.total)}`, ok, JSON.stringify(group));
+      }
+    } else {
+      check(`${tag}: ecosystem closed accordion`, !info.eco.open);
+    }
+  }
   if (width === 1440) {
     check(`${tag}: columns 792/520, gap 32`, Math.abs(info.mainW - 792) <= 2 && Math.abs(info.asideW - 520) <= 2 && info.gap === 32, `${info.mainW}/${info.asideW}/${info.gap}`);
     check(`${tag}: name 36/42`, info.h1 && info.h1[0] === "36px" && info.h1[1] === "42px", JSON.stringify(info.h1));
@@ -470,10 +534,103 @@ async function detail(browser, width, id) {
   return info;
 }
 
+/** Ecosystem Show all / Show fewer, row states, accordion anchors and the cross-catalog route. */
+async function ecosystemInteractions(browser) {
+  const context = await newContext(browser, 1440, 900);
+  const page = await context.newPage();
+  await open(page, DETAIL + encodeURIComponent("org:fides"));
+  await page.waitForSelector("#ecosystem .fides-ds-show-all__toggle");
+  const list = page.locator(".fides-org-eco__list").filter({ has: page.locator("li:nth-child(4)") }).first();
+  const listId = await list.getAttribute("id");
+  const names = () => page.evaluate((id) => [...document.getElementById(id).children].filter((li) => !li.hidden).map((li) => li.textContent.trim()), listId);
+  const before = await names();
+  const all = await page.evaluate((id) => [...document.getElementById(id).children].map((li) => li.textContent.trim()), listId);
+  const toggle = page.locator(`[aria-controls="${listId}"]`);
+  await toggle.click();
+  const opened = await names();
+  check("ecosystem: Show all opens in place, order unchanged", JSON.stringify(opened) === JSON.stringify(all) && JSON.stringify(before) === JSON.stringify(all.slice(0, 3)), `${before.length} -> ${opened.length}`);
+  check("ecosystem: toggle becomes Show fewer", (await toggle.textContent()).trim() === "Show fewer" && (await toggle.getAttribute("aria-expanded")) === "true");
+  await toggle.click();
+  check("ecosystem: Show fewer returns to three", (await names()).length === 3);
+
+  const row = page.locator("#ecosystem a.fides-org-eco__row").first();
+  const rest = await row.evaluate((el) => getComputedStyle(el).backgroundColor);
+  await row.hover();
+  await page.waitForTimeout(600);
+  const hover = await row.evaluate((el) => getComputedStyle(el).backgroundColor);
+  check("ecosystem: row hover light blue", rest !== hover && hover === "rgb(241, 246, 255)", `${rest} -> ${hover}`);
+  const metrics = await row.evaluate((el) => ({
+    name: [getComputedStyle(el.querySelector(".fides-org-eco__name")).fontSize, getComputedStyle(el.querySelector(".fides-org-eco__name")).lineHeight],
+    arrow: Math.round(el.querySelector(".fides-org-eco__arrow").getBoundingClientRect().width),
+    label: [getComputedStyle(document.querySelector(".fides-org-eco__label")).fontSize, getComputedStyle(document.querySelector(".fides-org-eco__label")).lineHeight],
+    h: Math.round(el.getBoundingClientRect().height),
+  }));
+  check("ecosystem: names 16/24, counts 14/22, 24 px arrow, 44 px row", metrics.name.join("/") === "16px/24px" && metrics.label.join("/") === "14px/22px" && metrics.arrow === 24 && metrics.h >= 44, JSON.stringify(metrics));
+  await page.mouse.move(0, 0);
+  await row.focus();
+  await page.keyboard.press("Shift+Tab");
+  await page.keyboard.press("Tab");
+  const focus = await row.evaluate((el) => ({ focused: document.activeElement === el, outline: getComputedStyle(el).outlineStyle, width: getComputedStyle(el).outlineWidth }));
+  check("ecosystem: row has a visible focus ring", focus.focused && focus.outline === "solid" && focus.width === "2px", JSON.stringify(focus));
+  await page.screenshot({ path: path.join(OUT, "ecosystem-focus-1440.png"), clip: await page.locator("#ecosystem").boundingBox() });
+
+  // Route: organization -> use case -> organization (owner link), then Back.
+  const useCase = page.locator(".fides-org-detail__use-cases .fides-ds-card__link").first();
+  await useCase.click();
+  await page.waitForSelector(".fides-uc-detail .fides-ds-detail-top");
+  check("route: organization opens the pilot use case", page.url().includes("/fides-design-pilot/use-case/"), page.url());
+  const ucTop = await page.evaluate(() => ({
+    shares: document.querySelectorAll('.fides-uc-detail a[href*="share-offsite"]').length,
+    crumbs: [...document.querySelectorAll(".fides-ds-detail-top__crumbs li")].map((li) => li.textContent.trim()).join(" / "),
+  }));
+  check("route: use case has the shared top row", ucTop.shares === 1 && ucTop.crumbs === "Ecosystem Explorer / Use cases", JSON.stringify(ucTop));
+  const owner = page.locator('.fides-uc-detail a[href*="/fides-design-pilot/organization/?org="]').first();
+  if (await owner.count()) {
+    await owner.click();
+    await page.waitForSelector(".fides-org-detail");
+    check("route: use case links back to the pilot organization", page.url().includes("/fides-design-pilot/organization/?org="), page.url());
+  }
+  await page.goBack();
+  await page.waitForSelector(".fides-uc-detail");
+  check("route: Back returns to the use case", page.url().includes("/fides-design-pilot/use-case/"), page.url());
+  await context.close();
+
+  // Narrow: anchors open the closed Ecosystem accordion.
+  const narrow = await newContext(browser, 390, 844);
+  const mobile = await narrow.newPage();
+  await open(mobile, DETAIL + encodeURIComponent("org:fides"));
+  await mobile.waitForSelector("#ecosystem .fides-ds-collapsible__toggle");
+  check("ecosystem 390: closed accordion with total", (await mobile.locator("#ecosystem-body").isHidden()) && /Ecosystem\s*\d+/.test(await mobile.locator("#ecosystem-title").textContent()));
+  await mobile.locator("details.fides-uc-detail__sections summary").click();
+  await mobile.locator('nav[aria-label="On this page"] a[href="#ecosystem"]').click();
+  await mobile.waitForTimeout(300);
+  check("ecosystem 390: section link opens the accordion", await mobile.locator("#ecosystem-body").isVisible());
+  const narrowLimit = await mobile.evaluate(() => [...document.querySelectorAll(".fides-org-eco__list")].every((list) => [...list.children].filter((li) => !li.hidden).length <= 3));
+  check("ecosystem 390: at most three per group until Show all", narrowLimit);
+  await narrow.close();
+
+  // Classic organization route and deep link still open their own page.
+  const classic = await newContext(browser, 1440, 900);
+  const old = await classic.newPage();
+  const errors = [];
+  old.on("pageerror", (err) => errors.push(err.message));
+  await open(old, `${BASE}/organizations/?org=org%3Acredenco`);
+  await old.waitForLoadState("load");
+  await old.waitForTimeout(3000);
+  const state = await old.evaluate(() => ({
+    pilot: !!document.querySelector(".fides-org-detail, .fides-org-pilot"),
+    root: !!document.querySelector("#fides-org-catalog-root"),
+    text: document.body.textContent.includes("Credenco"),
+  }));
+  check("classic route: /organizations/?org= keeps the classic catalog", state.root && !state.pilot && state.text && errors.length === 0, `${JSON.stringify(state)} ${errors.join(" | ")}`);
+  await classic.close();
+}
+
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch();
   try {
+    await ecosystemInteractions(browser);
     await overviewServerRender(browser);
     await overviewDesktop(browser);
     for (const width of [390, 320]) await overviewMobile(browser, width);

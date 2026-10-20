@@ -298,6 +298,32 @@ refresh.
 - `organization-catalog.js` and the classic plugin assets use the plugin
   version, not `filemtime`: hard-refresh after pulling JS changes.
 
+## Organizations and use cases finishing round (2026-10-20, Paper 20.2 / 20.3 / 20.4 / 20.15 / 20.22)
+
+- Shared top row (`Fides_DS_Detail_Top`, tiles): Back link, breadcrumb up to
+  the catalog (never the record name) and one LinkedIn Share for the record
+  URL. Below 600px the breadcrumb is hidden and Share is a 44×44 icon with
+  the accessible name and tooltip "Share on LinkedIn". Copy link and the
+  second LinkedIn action (organization section nav, use-case hero) are gone.
+- Organization header: identity left, logo right (144×112 / 88×80,
+  `contain`), no logo box without a logo; Official listing is a blue status
+  badge; Manifesto supporter is a small secondary link.
+- Ecosystem panel (`#ecosystem`, was `#relations`): separate groups in source
+  order, three rows per group on every width through the opt-in
+  `data-fides-ds-show-all-wide` (the default `data-fides-ds-show-all` stays
+  narrow-only, so use cases are unchanged), full-row links. Below 1100px a
+  closed accordion; section links open it.
+- News: one source is named once in the intro; mixed sources stay per article.
+- Profile closing "Profile information" replaces "Help keep this profile
+  current": Contact (email / meeting link only, no second contact panel),
+  "Update profile →" only when `update_url()` allows it, a sign-in route for
+  guests only on Community listings (`sign_in_update_url()`), and "Catalog
+  data on GitHub ↗" instead of the Sources section. The update form keeps its
+  own server-side check.
+- Contribute band: `Fides_Use_Case_Design::contribute_band()` renders both
+  overviews (compact Paper 20.3 size); GitHub is named as data source only.
+- Use-case detail keeps its own closing and "Suggest an update" route.
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.

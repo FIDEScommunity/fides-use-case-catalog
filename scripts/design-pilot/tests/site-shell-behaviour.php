@@ -120,6 +120,15 @@ $check(strpos($band, 'aria-labelledby="fides-uc-contribute-title"') !== false &&
 $check(strpos($band, 'Add or update<br>a listing.') !== false, 'contribute band title');
 $check(strpos($band, 'href="http://localhost/add/"') !== false && strpos($band, 'Add a use case') !== false, 'contribute band links to the submission form');
 $check(strpos(Fides_Use_Case_Design::contribute_band_html(''), 'fides-ds-button') === false, 'contribute band without a form URL has no button');
+$check(strpos($band, 'Catalog data is available on GitHub') !== false && strpos($band, 'Contribute via GitHub') === false, 'GitHub is named as data source, not as a contribution route');
+if (class_exists('Fides_Organization_Design')) {
+    $org_band = Fides_Organization_Design::contribute_band_html('http://localhost/org-add/', 'http://localhost/org-update/');
+    $check(strpos($org_band, 'Add or update<br>a listing.') !== false && strpos($org_band, 'Help keep the ecosystem visible and useful.') !== false, 'organization band shares the use-case hierarchy');
+    $check(preg_match('~class="fides-ds-button" href="http://localhost/org-add/"><span>Add organization</span>~', $org_band) === 1 && strpos($org_band, 'class="fides-uc-contribute__link" href="http://localhost/org-update/"><span>Update organization</span>') !== false, 'organization band: Add as button, Update as text link');
+    $check(strpos($org_band, 'Use the FIDES forms to submit an organization or request an update. A FIDES account is required. Submissions are reviewed before publication.') !== false, 'organization band explanation');
+    $check(strpos($org_band, 'Catalog data is available on GitHub') !== false && strpos($org_band, 'Contribute via GitHub') === false && strpos($org_band, 'mailto:catalog@fides.community') !== false, 'organization band: GitHub as data source, contact kept');
+    $check(strpos($org_band, 'does not guarantee completeness') !== false, 'organization band keeps the disclaimer');
+}
 $overview = get_page_by_path('fides-design-pilot/overview');
 if ($overview instanceof WP_Post) {
     $check(strpos(apply_filters('the_content', $overview->post_content), 'fides-uc-contribute') !== false, 'pilot overview renders the contribute band');

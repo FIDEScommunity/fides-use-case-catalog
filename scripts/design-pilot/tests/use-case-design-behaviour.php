@@ -168,6 +168,10 @@ $check(strpos($html, 'href="https://example.org/credential"') !== false, 'http(s
 $check(strpos($html, '?credential=cred%3Acanonical%3Aone') !== false, 'credential alias links to the canonical credential record');
 $check(strpos($html, 'cred%3Aalias%3Aone') === false, 'alias id is not used in credential links');
 $check(strpos($html, 'share-offsite/?url=' . rawurlencode($alpha_url)) !== false, 'Share on LinkedIn uses the detail route of the page');
+$top = preg_match('~<div class="fides-ds-detail-top">.*?</div>~s', $html, $m) ? $m[0] : '';
+$check(substr_count($html, 'share-offsite') === 1 && strpos($top, 'share-offsite') !== false, 'one share action, in the shared top row');
+$check(strpos($top, 'data-fides-ds-back="usecase"') !== false && strpos($top, '>Use cases</a></li></ol>') !== false, 'top row: Back with restore attributes, breadcrumb to the catalog');
+$check(strpos($html, 'Suggest an update') !== false || strpos($html, 'Sign in to suggest an update') !== false, 'use cases keep their update route');
 $related_pos = strpos($html, 'class="fides-uc-detail__related"');
 $related     = $related_pos !== false ? substr($html, $related_pos, (int) strpos($html, '</section>', $related_pos) - $related_pos) : '';
 $check($related !== '' && strpos($related, '>Explore further</h2>') !== false && $related_pos < strpos($html, 'id="update"'), 'Explore further sits above the update bar');
