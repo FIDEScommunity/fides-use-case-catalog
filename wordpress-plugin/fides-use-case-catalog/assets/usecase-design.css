@@ -883,10 +883,6 @@ html.fides-uc-pilot-panel-open {
   padding-block: var(--fides-ds-space-5) 0;
 }
 
-.fides-ds .fides-uc-detail__back {
-  margin-bottom: var(--fides-ds-space-4);
-}
-
 .fides-ds .fides-uc-detail__hero {
   display: grid;
   gap: var(--fides-ds-space-6);
@@ -1383,7 +1379,7 @@ html.fides-uc-pilot-panel-open {
 /* ---------- Overview contribute band ---------- */
 
 .fides-ds.fides-uc-contribute {
-  padding-block: var(--fides-ds-space-7);
+  padding-block: var(--fides-ds-space-6);
 }
 
 .fides-ds .fides-uc-contribute__inner {
@@ -1404,38 +1400,58 @@ html.fides-uc-pilot-panel-open {
 }
 
 .fides-ds .fides-uc-contribute__title {
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 30px;
+  line-height: 36px;
   letter-spacing: -0.04em;
 }
 
 .fides-ds .fides-uc-contribute p {
   max-width: 500px;
+  margin: 0;
 }
 
-.fides-ds .fides-uc-contribute .fides-uc-contribute__note {
-  color: #c8c8c8;
+.fides-ds .fides-uc-contribute__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fides-ds-space-3) var(--fides-ds-space-4);
+}
+
+.fides-ds .fides-uc-contribute__link,
+.fides-ds .fides-uc-contribute__sources a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.fides-ds .fides-uc-contribute__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.fides-ds .fides-uc-contribute .fides-uc-contribute__note,
+.fides-ds .fides-uc-contribute .fides-uc-contribute__sources {
   font-size: 14px;
   line-height: 22px;
 }
 
-.fides-ds .fides-uc-contribute .fides-ds-button:focus-visible {
-  outline-color: #ffffff;
+.fides-ds .fides-uc-contribute .fides-uc-contribute__note {
+  color: #c8c8c8;
+}
+
+.fides-ds .fides-uc-contribute :is(.fides-ds-button, a):focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
 }
 
 @media (min-width: 1100px) {
-  .fides-ds.fides-uc-contribute {
-    padding-block: var(--fides-ds-space-8);
-  }
-
   .fides-ds .fides-uc-contribute__inner {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 36px;
-  }
-
-  .fides-ds .fides-uc-contribute__title {
-    font-size: 48px;
-    line-height: 50px;
+    gap: 32px;
   }
 }
 

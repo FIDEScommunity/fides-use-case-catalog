@@ -531,20 +531,56 @@ final class Fides_Use_Case_Design {
      * next to the JS root so the client-side overview never replaces it.
      */
     public static function contribute_band_html(string $add_url): string {
-        $button = $add_url !== ''
-            ? '<a class="fides-ds-button" href="' . esc_url($add_url) . '">Add a use case <span aria-hidden="true">→</span></a>'
-            : '';
-        return '<section class="fides-ds fides-ds-band--dark fides-uc-contribute" aria-labelledby="fides-uc-contribute-title">'
+        return self::contribute_band(array(
+            'id'      => 'fides-uc-contribute-title',
+            'actions' => $add_url !== '' ? array(array('Add a use case', $add_url)) : array(),
+            'text'    => 'List your organization first, then submit a use case or suggest an update.',
+            'note'    => 'A FIDES Community account is required. Submissions are reviewed before publication.',
+            'data'    => 'https://github.com/FIDEScommunity/fides-use-case-catalog',
+        ));
+    }
+
+    /**
+     * Shared overview contribute band for use cases and organizations
+     * (Paper 20.3): title and form actions left; explanation, disclaimer and
+     * GitHub as data source right. The first action is the button, the
+     * others are text links.
+     *
+     * @param array{
+     *   id:string,
+     *   actions:list<array{0:string, 1:string}>,
+     *   text:string,
+     *   note?:string,
+     *   data?:string,
+     *   email?:string,
+     *   class?:string
+     * } $args
+     */
+    public static function contribute_band(array $args): string {
+        $actions = array();
+        foreach ($args['actions'] as $index => [$label, $url]) {
+            $actions[] = '<a class="' . ($index === 0 ? 'fides-ds-button' : 'fides-uc-contribute__link') . '" href="' . esc_url($url) . '"><span>' . esc_html($label) . '</span> <span aria-hidden="true">→</span></a>';
+        }
+        $sources = array();
+        if (! empty($args['data'])) {
+            $sources[] = '<a href="' . esc_url($args['data']) . '" rel="noopener" target="_blank">Catalog data is available on GitHub <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>';
+        }
+        if (! empty($args['email'])) {
+            $sources[] = '<a href="' . esc_url('mailto:' . $args['email']) . '">' . esc_html($args['email']) . '</a>';
+        }
+        $id = esc_attr($args['id']);
+        return '<section class="fides-ds fides-ds-band--dark fides-uc-contribute' . (! empty($args['class']) ? ' ' . esc_attr($args['class']) : '') . '" aria-labelledby="' . $id . '">'
             . '<div class="fides-ds-page fides-uc-contribute__inner">'
             . '<div class="fides-uc-contribute__intro">'
             . '<p class="fides-ds-kicker">Contribute</p>'
-            . '<h2 class="fides-uc-contribute__title" id="fides-uc-contribute-title">Add or update<br>a listing.</h2>'
+            . '<h2 class="fides-uc-contribute__title" id="' . $id . '">Add or update<br>a listing.</h2>'
             . '<p>Help keep the ecosystem visible and useful.</p>'
+            . ($actions ? '<p class="fides-uc-contribute__actions">' . implode(' ', $actions) . '</p>' : '')
             . '</div>'
             . '<div class="fides-uc-contribute__steps">'
-            . '<p>List your organization first, then submit a use case or suggest an update.</p>'
-            . '<p class="fides-uc-contribute__note">A FIDES Community account is required. Submissions are reviewed before publication.</p>'
-            . $button
+            . '<p>' . esc_html($args['text']) . '</p>'
+            . (! empty($args['note']) ? '<p class="fides-uc-contribute__note">' . esc_html($args['note']) . '</p>' : '')
+            . ($sources ? '<p class="fides-uc-contribute__sources">' . implode(' <span aria-hidden="true">·</span> ', $sources) . '</p>' : '')
             . '</div></div></section>';
     }
 

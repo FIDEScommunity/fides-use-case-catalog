@@ -137,7 +137,18 @@ final class Fides_Use_Case_Detail_Page {
         ?>
 <div class="fides-ds fides-uc-detail" data-use-case-id="<?php echo esc_attr($id); ?>">
   <div class="fides-ds-page">
-    <p class="fides-uc-detail__back"><a class="fides-ds-action-link" href="<?php echo esc_url($listing_url); ?>" data-fides-ds-back="usecase" data-fides-ds-back-id="<?php echo esc_attr($id); ?>"><span aria-hidden="true">←</span> <span data-fides-ds-back-label>All use cases</span></a></p>
+    <?php
+    echo Fides_DS_Detail_Top::render(array( // phpcs:ignore WordPress.Security.EscapeOutput
+        'back_url'   => $listing_url,
+        'back_label' => 'All use cases',
+        'back_attrs' => array('data-fides-ds-back' => 'usecase', 'data-fides-ds-back-id' => $id),
+        'crumbs'     => array(
+            array('Ecosystem Explorer', class_exists('Fides_DS_Site_Shell') ? Fides_DS_Site_Shell::url('/ecosystem-explorer/') : home_url('/ecosystem-explorer/')),
+            array('Use cases', $listing_url),
+        ),
+        'share_url'  => $page_url,
+    ));
+    ?>
 
     <header class="fides-uc-detail__hero<?php echo $hero_image === '' ? ' fides-uc-detail__hero--no-media' : ''; ?>">
       <div class="fides-uc-detail__intro">
@@ -158,15 +169,16 @@ final class Fides_Use_Case_Detail_Page {
             <?php endif; ?>
           </ul>
         <?php endif; ?>
-        <div class="fides-uc-detail__actions">
-          <?php if ($more_info !== '') : ?>
-            <a class="fides-ds-button" href="<?php echo esc_url($more_info); ?>" rel="noopener" target="_blank">More information <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
-          <?php endif; ?>
-          <?php if ($has_media) : ?>
-            <a class="fides-ds-action-link" href="#media"><span><?php echo $videos ? 'Watch media' : 'View images'; ?></span> <span aria-hidden="true">↓</span></a>
-          <?php endif; ?>
-          <a class="fides-ds-action-link" href="<?php echo esc_url('https://www.linkedin.com/sharing/share-offsite/?url=' . rawurlencode($page_url)); ?>" rel="noopener" target="_blank">Share on LinkedIn<span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
-        </div>
+        <?php if ($more_info !== '' || $has_media) : ?>
+          <div class="fides-uc-detail__actions">
+            <?php if ($more_info !== '') : ?>
+              <a class="fides-ds-button" href="<?php echo esc_url($more_info); ?>" rel="noopener" target="_blank">More information <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (opens in a new tab)</span></a>
+            <?php endif; ?>
+            <?php if ($has_media) : ?>
+              <a class="fides-ds-action-link" href="#media"><span><?php echo $videos ? 'Watch media' : 'View images'; ?></span> <span aria-hidden="true">↓</span></a>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
       </div>
       <?php if ($hero_image !== '' && $original !== '') : ?>
         <div class="fides-uc-detail__visual">
