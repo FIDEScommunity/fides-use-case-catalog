@@ -73,7 +73,11 @@ descriptions; article text stays 18/29.
 - `/fides-design-pilot/organizations/`: `[fides_organization_catalog design="pilot" title="Organizations" detail_url="/fides-design-pilot/organization/" add_url="/organizations-submit/" intro="…"]`
 - `/fides-design-pilot/organization/`: `[fides_organization_detail id="org:credenco" listing_url="/fides-design-pilot/organizations/" use_case_detail_url="/fides-design-pilot/use-case/"]`; other records open with `?org=<id>`
 
-Without `design="pilot"` both catalog shortcodes render exactly as before.
+- `/fides-design-pilot/personal-wallets/`: `[fides_wallet_catalog type="personal" design="pilot" title="Personal wallets" detail_url="/fides-design-pilot/wallet/" add_url="/wallet-submit/" cross_url="/fides-design-pilot/business-wallets/" intro="…"]`
+- `/fides-design-pilot/business-wallets/`: the same with `type="organizational"` and `cross_url` to the personal overview
+- `/fides-design-pilot/wallet/`: `[fides_wallet_detail id="credenco-business-wallet" personal_listing_url="…" business_listing_url="…" use_case_detail_url="/fides-design-pilot/use-case/"]`; other records open with `?wallet=<id>`
+
+Without `design="pilot"` the catalog shortcodes render exactly as before.
 
 ## Changing the featured use case
 
@@ -324,6 +328,31 @@ refresh.
   overviews (compact Paper 20.3 size); GitHub is named as data source only.
 - Use-case detail keeps its own closing and "Suggest an update" route.
 
+## Wallet catalog (pilot brief 2026-10-20)
+
+- One plugin, one template: personal and business overviews are the same
+  `wallet-catalog.js` pilot path (`data-design="pilot"`, organization-style
+  rows, popovers, More filters, mobile Filters dialog, pager, return context);
+  the detail page is `Fides_Wallet_Detail_Page` for both types
+  (`fides-wallet-detail--personal|business`). Styles: `wallet-design.css` on
+  top of `organization-design.css` (the wallet pilot depends on the
+  organization pilot plugin).
+- URL state: `q`, `sort` (default `explore`), `catalog_page`, one parameter per
+  filter (`platform`, `availability`, `capability`, `country`, `profile`,
+  `format`, `issuance`, `presentation`, `identifier`, `keystorage`, `alg`,
+  `credstatus`, `provider`, `license`) and the flags `new`, `eudi`, `official`.
+  Old `?wallet=` links on a pilot overview open the pilot detail.
+- Rights: `Fides_Wallet_Design::can_edit()` mirrors `userCanEditWallet()`
+  (tier UI off: admin or signed in; on: admin, unlinked, not Pro, or owner).
+  Guests only see "Sign in to suggest an update" on Community listings.
+  Full fields follow `walletListingTierIsPro` / curated-full / `fullOrgIds`.
+- If the catalog data does not load, the classic server list is revealed with
+  an alert instead of an empty catalog.
+- Tests: `tests/wallet-design-behaviour.php` (in `run-tests.sh`, fixtures only)
+  and `tests/run-wallet-checks.sh` (overviews, six detail records at
+  1440/1280/768/390/320, glossary, eIDAS, classic modal deep links; screens in
+  `screens/wallets`).
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.
@@ -349,6 +378,6 @@ refresh.
 ## Rollback
 
 1. `scripts/design-pilot/teardown-site.sh` (stops the server, drops `fides_design_pilot`, deletes the pilot WordPress copy).
-2. From each main checkout (tiles, use-case, organization): `git worktree remove ../fides-design-pilot/<repo>` and `git branch -D feature/fides-design-pilot`.
+2. From each main checkout (tiles, use-case, organization, wallet): `git worktree remove ../fides-design-pilot/<repo>` and `git branch -D feature/fides-design-pilot`.
 
 Nothing outside the pilot folder, the pilot database and these branches is touched.

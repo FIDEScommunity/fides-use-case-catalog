@@ -15,6 +15,7 @@ if (! defined('ABSPATH') || ! defined('FIDES_DESIGN_PILOT')) {
 const PILOT_DETAIL_ID   = 'verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J';
 const PILOT_FEATURED_ID = 'digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC';
 const PILOT_ORG_ID      = 'org:credenco';
+const PILOT_WALLET_ID   = 'credenco-business-wallet';
 /** Shared header/footer page template from fides-community-tools-tiles. */
 const PILOT_SHELL_TEMPLATE = 'fides-site-shell';
 
@@ -68,6 +69,9 @@ $parent = pilot_upsert_page(
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/homepage-fragment/\">Homepage fragment</a></li><!-- /wp:list-item -->"
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/organizations/\">Organization overview</a></li><!-- /wp:list-item -->"
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/organization/\">Organization detail</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/personal-wallets/\">Personal wallets</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/business-wallets/\">Business wallets</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/wallet/\">Wallet detail</a></li><!-- /wp:list-item -->"
     . "</ul>\n<!-- /wp:list -->",
     0,
     array('has_hero_section' => 'enabled')
@@ -111,6 +115,36 @@ pilot_upsert_page(
     'fides-design-pilot/organization',
     'Organization detail (design pilot)',
     '<!-- wp:shortcode -->[fides_organization_detail id="' . PILOT_ORG_ID . '" listing_url="/fides-design-pilot/organizations/" use_case_detail_url="/fides-design-pilot/use-case/"]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+// Wallet pilot: one plugin, shared templates for personal and business wallets. Intro texts are the ones in Paper.
+pilot_upsert_page(
+    'fides-design-pilot/personal-wallets',
+    'Personal wallets (design pilot)',
+    '<!-- wp:shortcode -->[fides_wallet_catalog type="personal" design="pilot" title="Personal wallets" detail_url="/fides-design-pilot/wallet/" add_url="/wallet-submit/"'
+    . ' cross_url="/fides-design-pilot/business-wallets/" intro="Explore digital wallets for individuals."]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+pilot_upsert_page(
+    'fides-design-pilot/business-wallets',
+    'Business wallets (design pilot)',
+    '<!-- wp:shortcode -->[fides_wallet_catalog type="organizational" design="pilot" title="Business wallets" detail_url="/fides-design-pilot/wallet/" add_url="/wallet-submit/"'
+    . ' cross_url="/fides-design-pilot/personal-wallets/" intro="Explore digital wallets and related tooling that allow organizations to receive, store, present, issue or verify verifiable credentials."]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+pilot_upsert_page(
+    'fides-design-pilot/wallet',
+    'Wallet detail (design pilot)',
+    '<!-- wp:shortcode -->[fides_wallet_detail id="' . PILOT_WALLET_ID . '" personal_listing_url="/fides-design-pilot/personal-wallets/" business_listing_url="/fides-design-pilot/business-wallets/" use_case_detail_url="/fides-design-pilot/use-case/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

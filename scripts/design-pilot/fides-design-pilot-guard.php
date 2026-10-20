@@ -86,6 +86,25 @@ add_filter(
  */
 add_filter('fides_use_case_catalog_prefer_local_source', '__return_false');
 
+/*
+ * On localhost the shared loader prefers the plugin's bundled wallet
+ * aggregate, which lags the crawler output GitHub serves. Read the
+ * crawler output of the pilot worktree instead, so the server-rendered
+ * pages and the browser (GitHub first) show the same wallets.
+ */
+add_filter(
+    'fides_catalog_local_json_path_for',
+    static function ($path, $catalog_type) {
+        if ($catalog_type !== 'wallet') {
+            return $path;
+        }
+        $crawler = dirname(__DIR__, 3) . '/wallet-catalog/data/aggregated.json';
+        return is_readable($crawler) ? $crawler : $path;
+    },
+    10,
+    2
+);
+
 add_action(
     'wp_footer',
     static function () {

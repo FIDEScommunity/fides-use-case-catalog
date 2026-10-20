@@ -550,6 +550,7 @@ final class Fides_Use_Case_Design {
      *   id:string,
      *   actions:list<array{0:string, 1:string}>,
      *   text:string,
+     *   about?:string,
      *   note?:string,
      *   data?:string,
      *   email?:string,
@@ -579,6 +580,7 @@ final class Fides_Use_Case_Design {
             . '</div>'
             . '<div class="fides-uc-contribute__steps">'
             . '<p>' . esc_html($args['text']) . '</p>'
+            . (! empty($args['about']) ? '<h3 class="fides-uc-contribute__about-title">About this catalog</h3><p class="fides-uc-contribute__note">' . esc_html($args['about']) . '</p>' : '')
             . (! empty($args['note']) ? '<p class="fides-uc-contribute__note">' . esc_html($args['note']) . '</p>' : '')
             . ($sources ? '<p class="fides-uc-contribute__sources">' . implode(' <span aria-hidden="true">·</span> ', $sources) . '</p>' : '')
             . '</div></div></section>';
