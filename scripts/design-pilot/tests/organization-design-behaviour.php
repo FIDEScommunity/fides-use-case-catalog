@@ -333,6 +333,22 @@ $check($titles === array('Full Org', $many_name, 'Media Org', 'Minimal Org', 'Qu
 $check($overview(array('q' => 'wallet')) === '', 'a search in the URL keeps the client-side path');
 $check($overview(array('role' => 'issuer')) === '', 'a filter in the URL keeps the client-side path');
 $check(Fides_Organization_Overview::logo_url(array('logoUri' => 'https://www.pec.it/logo.png', 'website' => 'https://www.pec.it/')) === 'https://www.google.com/s2/favicons?domain=www.pec.it&sz=128', 'blocked logo hosts use the favicon like the script');
+
+// Sign-in return URL keeps the whole current URL, including the use-case origin.
+$saved_server = array($_SERVER['HTTP_HOST'] ?? null, $_SERVER['REQUEST_URI'] ?? null);
+$_SERVER['HTTP_HOST']   = 'pilot.example';
+$_SERVER['REQUEST_URI'] = '/organization/?org=org%3Aacme&from=usecase%3Aalpha';
+$oid4vp = static function () {
+    return array('loginUrl' => 'https://pilot.example/signin/');
+};
+add_filter('pre_option_universal_openid4vp_options', $oid4vp);
+$login = Fides_Organization_Catalog_Submission_Forms::form_login_url();
+remove_filter('pre_option_universal_openid4vp_options', $oid4vp);
+parse_str((string) wp_parse_url($login, PHP_URL_QUERY), $login_query);
+$check(array_keys($login_query) === array('return_to')
+    && ($login_query['return_to'] ?? '') === 'http://pilot.example/organization/?org=org%3Aacme&from=usecase%3Aalpha',
+    'sign-in return_to wraps the full URL with the use-case origin: ' . $login);
+list($_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI']) = $saved_server;
 $_GET = array();
 
 Fides_Organization_Design::flush_cache();
