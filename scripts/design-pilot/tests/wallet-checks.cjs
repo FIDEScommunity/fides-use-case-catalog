@@ -110,13 +110,14 @@ async function overviewDesktop(browser, type) {
       title: [title.fontSize, title.lineHeight],
       h1: h1 ? [getComputedStyle(h1).fontSize, getComputedStyle(h1).lineHeight, h1.textContent.trim()] : null,
       tags: row.querySelectorAll(".fides-ds-card__tags .fides-ds-tag").length,
-      facts: row.querySelector(".fides-ds-card__facts")?.textContent.replace(/\s+/g, " ").trim() || "",
+      facts: row.querySelector(".fides-ds-card__facts")?.textContent.replace(/[ \t\n]+/g, " ").trim() || "",
       href: row.querySelector(".fides-ds-card__link")?.getAttribute("href") || "",
       counts: root.querySelectorAll("[data-pilot-count]").length,
       countText: root.querySelector("[data-pilot-count]")?.textContent.trim() || "",
       pager: !!root.querySelector("[data-pilot-pagination-slot] .fides-catalog-pagination"),
       add: add ? getComputedStyle(add).display !== "none" : false,
       ask: !!ask,
+      provider: [...root.querySelectorAll(".fides-ds-popover__label")].map((el) => el.textContent.trim()).filter((t) => /Provider/.test(t)),
       cross: [...root.querySelectorAll(".fides-uc-pilot__intro a, header a, a.fides-ds-action-link")].map((a) => a.getAttribute("href") || "").find((href) => /(personal|business)-wallets\/$/.test(href)) || "",
       sort: root.querySelector("#fides-sort-select")?.value || "",
       tiers: !!document.querySelector(".fides-wallet-tiers"),
@@ -127,7 +128,7 @@ async function overviewDesktop(browser, type) {
   check(`${tag}: H1 30/36`, first.h1 && first.h1[0] === "30px" && first.h1[1] === "36px", JSON.stringify(first.h1));
   check(`${tag}: logo slot 120 x 75 contain`, first.media[0] === 120 && first.media[1] === 75 && (first.fit === "contain" || first.fit === "none"), `${first.media.join("x")} ${first.fit}`);
   check(`${tag}: name 20/26`, first.title[0] === "20px" && first.title[1] === "26px", first.title.join("/"));
-  check(`${tag}: facts with Updated date`, /Updated \d{1,2} [A-Z][a-z]{2} \d{4}/.test(first.facts), first.facts);
+  check(`${tag}: facts with Updated date`, /Updated\u00a0\d{1,2}\u00a0[A-Z][a-z]{2}\u00a0\d{4}/.test(first.facts), first.facts);
   if (type === "business") check(`${tag}: capability chips`, first.tags > 0, String(first.tags));
   else check(`${tag}: no capability chips on personal rows`, first.tags === 0, String(first.tags));
   check(`${tag}: row links to pilot detail`, first.href.includes("/fides-design-pilot/wallet/?wallet="), first.href);
@@ -137,6 +138,7 @@ async function overviewDesktop(browser, type) {
   check(`${tag}: Ask FIDES link`, first.ask);
   check(`${tag}: cross link to the other type`, first.cross.includes(type === "personal" ? "business-wallets" : "personal-wallets"), first.cross);
   check(`${tag}: default sort explore`, first.sort === "explore", first.sort);
+  if (type === "personal") check(`${tag}: Provider type label`, first.provider.length === 1 && first.provider[0] === "Provider type", JSON.stringify(first.provider));
   check(`${tag}: tiers strip and contribute band`, first.tiers && first.contribute);
 
   // Search runs only on submit.
@@ -197,7 +199,22 @@ async function overviewDesktop(browser, type) {
     return { visible: !!panel && !panel.hidden && panel.offsetParent !== null, groups: panel ? panel.querySelectorAll("[data-pilot-group], [data-pilot-flag]").length : 0 };
   });
   check(`${tag}: More filters opens with options`, more.visible && more.groups > 0, JSON.stringify(more));
+  const tech = await page.evaluate(() => {
+    const toggle = document.querySelector("[data-pilot-tech-toggle]");
+    const grid = document.querySelector("#fides-wallet-pilot-technical");
+    const general = [...document.querySelectorAll("#fides-wallet-pilot-more .fides-uc-pilot__more-grid [data-pilot-key]")].map((el) => el.dataset.pilotKey);
+    return { expanded: toggle && toggle.getAttribute("aria-expanded"), hidden: grid && grid.hidden, technicalInGeneral: general.some((key) => ["vcFormat", "issuanceProtocols", "keyStorage"].includes(key)), count: grid ? grid.querySelectorAll("[data-pilot-key]").length : 0 };
+  });
+  check(`${tag}: technical filters closed behind their own toggle`, tech.expanded === "false" && tech.hidden && !tech.technicalInGeneral && tech.count >= 7, JSON.stringify(tech));
+  await page.click("[data-pilot-tech-toggle]");
+  await page.click('#fides-wallet-pilot-technical [data-pilot-key="vcFormat"] .fides-ds-popover__toggle');
+  await page.click('#fides-wallet-pilot-technical [data-pilot-key="vcFormat"] input[type=checkbox] >> nth=0');
+  await page.waitForTimeout(200);
+  const techActive = await page.evaluate(() => ({ badge: document.querySelector("[data-pilot-tech-count]")?.textContent.trim(), hidden: document.querySelector("[data-pilot-tech-count]")?.hidden, url: location.search }));
+  check(`${tag}: technical selection counted and kept in the URL`, techActive.badge === "1 selected" && !techActive.hidden && /format=/.test(techActive.url), JSON.stringify(techActive));
   await page.keyboard.press("Escape");
+  await page.click('.fides-uc-pilot__pill[data-pilot-remove-group="vcFormat"]');
+  await page.waitForTimeout(150);
 
   // Back restores filters, scroll and focus.
   await page.evaluate(() => window.scrollTo(0, 600));
@@ -243,6 +260,13 @@ async function overviewMobile(browser, type, width) {
   const small = await smallTargets(page);
   check(`${tag}: 44 px targets`, small.length === 0, small.slice(0, 5).join("; "));
 
+  const accessibleName = () => page.evaluate(() => {
+    const button = document.querySelector("[data-pilot-open]");
+    const walk = (node) => [...node.childNodes].map((child) => child.nodeType === 3 ? child.textContent : child.getAttribute && child.getAttribute("aria-hidden") === "true" ? "" : walk(child)).join("");
+    return walk(button).replace(/\s+/g, " ").trim();
+  });
+  const nameBefore = await accessibleName();
+  check(`${tag}: Filters button named "Filters" without selections`, nameBefore === "Filters", nameBefore);
   await page.click("[data-pilot-open]");
   const dialog = await page.$("#fides-wallet-pilot-filter-panel[role=dialog]");
   check(`${tag}: Filters dialog opens`, !!dialog);
@@ -257,9 +281,13 @@ async function overviewMobile(browser, type, width) {
     await page.click("[data-pilot-open]");
     await page.click(`${first} >> .fides-ds-popover__toggle`);
     await page.click(`${first} >> input[type=checkbox] >> nth=0`);
+    const applyText = await page.textContent("[data-pilot-count-inline]");
+    check(`${tag}: apply button reads Show N wallets`, /^Show \d+ wallets?$/.test(applyText.trim()), applyText);
     await page.click("[data-pilot-apply]");
     await page.waitForTimeout(200);
     check(`${tag}: Apply commits`, page.url() !== before, page.url());
+    const nameAfter = await accessibleName();
+    check(`${tag}: Filters button names the active count`, /^Filters, \d+ active$/.test(nameAfter), nameAfter);
   }
   await context.close();
 }
