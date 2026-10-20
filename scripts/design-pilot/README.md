@@ -1,15 +1,17 @@
 # FIDES design pilot (local only)
 
-A local trial of the new FIDES design for the use-case catalog. It runs on a
-separate WordPress copy with its own database. Nothing here is deployed, and
-the existing pages (`/use-cases/`, the homepage) are not changed.
+A local trial of the new FIDES design for the use-case and organization
+catalogs. It runs on a separate WordPress copy with its own database. Nothing
+here is deployed, and the existing pages (`/use-cases/`, `/organizations/`,
+the homepage) are not changed.
 
-Branch `feature/fides-design-pilot` in two worktrees:
+Branch `feature/fides-design-pilot` in three worktrees:
 
 | Worktree | Contents |
 | --- | --- |
 | `fides-community-tools-tiles` | Shared design layer: `assets/design-system.css`, `assets/design-system.js` (`window.FidesDS.card`), `includes/class-fides-ds-card.php` (`Fides_DS_Card::render`), self-hosted Inter, and the site shell (`includes/class-fides-ds-site-shell.php`, `templates/site-shell.php`) |
 | `use-case-catalog` | Use-case mapping and pilot views (this folder plus the plugin includes below) |
+| `organization-catalog` | Organization pilot overview (`design="pilot"` in `organization-catalog.js`) and detail page (`includes/class-fides-organization-design.php`, `includes/class-fides-organization-detail-page.php`, `assets/organization-design.css`) |
 
 ## Scripts
 
@@ -18,11 +20,12 @@ utrecht-demo, so that site must be running in Local.
 
 | Script | Purpose |
 | --- | --- |
-| `setup-site.sh` | Copy utrecht-demo into `$PILOT_SITE`, create database `fides_design_pilot`, symlink the two pilot plugins, install the guard mu-plugin |
+| `setup-site.sh` | Copy utrecht-demo into `$PILOT_SITE`, create database `fides_design_pilot`, symlink the three pilot plugins, install the guard mu-plugin |
 | `start-server.sh` | Serve the pilot on `http://localhost:10088` (IPv4 and IPv6; port 10080 is blocked by Chrome) |
 | `create-pages.sh` | Create or update the pilot pages and the default homepage feature |
 | `teardown-site.sh` | Stop the server, drop the pilot database, delete the pilot files |
-| `run-tests.sh` | Run `tests/use-case-design-behaviour.php` and `tests/site-shell-behaviour.php` in the pilot WordPress (fixture data, mocked REST, no database writes) |
+| `run-tests.sh` | Run `tests/use-case-design-behaviour.php`, `tests/site-shell-behaviour.php` and `tests/organization-design-behaviour.php` in the pilot WordPress (fixture data, mocked REST, no database writes) |
+| `tests/run-organization-checks.sh` | Organization overview and detail in headless Chrome (overview 1440/390/320, seven records at 1440/768/390/320); screenshots in `../screens/organizations/` |
 | `tests/run-shell-route.sh` | Visitor route in headless Chrome at 1366×768 and 1440/1100/1024/768/390/320 px: homepage fragment → overview → detail → back, dropdowns, mobile menu, section navigation, filters with Escape/focus, pagination, long titles and the logo back to the homepage fragment; screenshots in `../screens/shell/`. Uses an existing Playwright install (`PLAYWRIGHT_MODULE`) and the server from `start-server.sh` |
 | `tests/run-overview-detail-checks.sh` | Overview and detail behaviour (brief 2026-10-18) in headless Chrome; screenshots in `../screens/overview-detail/` |
 | `tests/run-measure-density.sh <label>` | Measure computed type sizes, Explore panel height, first result position, controls under 44 px and overflow at seven viewports; writes `measurements.json` and screenshots to `../screens/density-<label>/` |
@@ -67,7 +70,10 @@ descriptions; article text stays 18/29.
 - `/fides-design-pilot/use-case/`: `[fides_use_case_detail id="…" listing_url="/fides-design-pilot/overview/"]`; other records open with `?usecase=<id>`
 - `/fides-design-pilot/homepage-fragment/`: existing homepage hero text plus `[fides_use_case_featured detail_url="/fides-design-pilot/use-case/"]`
 
-Without `design="pilot"` the catalog shortcode renders exactly as before.
+- `/fides-design-pilot/organizations/`: `[fides_organization_catalog design="pilot" title="Organizations" detail_url="/fides-design-pilot/organization/" add_url="/organizations-submit/" intro="…"]`
+- `/fides-design-pilot/organization/`: `[fides_organization_detail id="org:credenco" listing_url="/fides-design-pilot/organizations/" use_case_detail_url="/fides-design-pilot/use-case/"]`; other records open with `?org=<id>`
+
+Without `design="pilot"` both catalog shortcodes render exactly as before.
 
 ## Changing the featured use case
 
@@ -254,6 +260,30 @@ refresh.
 - Not changed: the mobile detail hero (known review point) and the like
   toggle.
 
+## Organization catalog (pilot brief v1, Paper 20.3 / 20.4 / 20.14 / 20.15 / 20.21)
+
+- Overview: the existing organization filters, facets, search fields, sort
+  and 48-row pages, rendered with the use-case pilot toolbar and the shared
+  `FidesDS.card` row (logo 120×75 `contain`, name placeholder, role chips,
+  "Country · N use cases · Updated date", arrow). Ecosystem role, Country and
+  Sector are popovers; Certification (with QTSP / DIACC sub-options) and
+  Official accounts only sit under More filters. URL state: `q`, `role`,
+  `country`, `sector`, `cert`, `official`, `sort`, `catalog_page`; a legacy
+  `?org=` on the overview opens the pilot detail. The contribute band is
+  rendered by PHP next to the JS root.
+- Detail: one server template (`[fides_organization_detail]`) from the same
+  catalog source as the SSR core. Use cases come from the use-case catalog's
+  `links.organizations[].refId` (the listing's runtime join), sorted by title;
+  relations are listed per kind without derivation; news is the listing's
+  `pro-news.json` (max five, http links only, `listingNewsEnabled`); media use
+  the shared `Fides_DS_Gallery`. Suggest an update follows the modal's access
+  rule; guests get the sign-in route. Community listings keep the content
+  limits of the modal.
+- The classic `style.css` still loads (dependency of the shared catalog UI
+  CSS); `organization-design.css` resets its ID-level root panel.
+- `organization-catalog.js` and the classic plugin assets use the plugin
+  version, not `filemtime`: hard-refresh after pulling JS changes.
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.
@@ -279,6 +309,6 @@ refresh.
 ## Rollback
 
 1. `scripts/design-pilot/teardown-site.sh` (stops the server, drops `fides_design_pilot`, deletes the pilot WordPress copy).
-2. From each main checkout: `git worktree remove ../fides-design-pilot/<repo>` and `git branch -D feature/fides-design-pilot`.
+2. From each main checkout (tiles, use-case, organization): `git worktree remove ../fides-design-pilot/<repo>` and `git branch -D feature/fides-design-pilot`.
 
 Nothing outside the pilot folder, the pilot database and these branches is touched.

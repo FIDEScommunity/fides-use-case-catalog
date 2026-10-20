@@ -14,6 +14,7 @@ if (! defined('ABSPATH') || ! defined('FIDES_DESIGN_PILOT')) {
 
 const PILOT_DETAIL_ID   = 'verifiable-ai-fairness-a-seal-for-the-system-a-receipt-for-the-person-O0S54J';
 const PILOT_FEATURED_ID = 'digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC';
+const PILOT_ORG_ID      = 'org:credenco';
 /** Shared header/footer page template from fides-community-tools-tiles. */
 const PILOT_SHELL_TEMPLATE = 'fides-site-shell';
 
@@ -65,6 +66,8 @@ $parent = pilot_upsert_page(
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/overview/\">Use case overview</a></li><!-- /wp:list-item -->"
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/use-case/\">Use case detail</a></li><!-- /wp:list-item -->"
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/homepage-fragment/\">Homepage fragment</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/organizations/\">Organization overview</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/organization/\">Organization detail</a></li><!-- /wp:list-item -->"
     . "</ul>\n<!-- /wp:list -->",
     0,
     array('has_hero_section' => 'enabled')
@@ -88,6 +91,26 @@ pilot_upsert_page(
     'fides-design-pilot/use-case',
     'Use case detail (design pilot)',
     '<!-- wp:shortcode -->[fides_use_case_detail id="' . PILOT_DETAIL_ID . '" listing_url="/fides-design-pilot/overview/"]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+// Organization pilot (Paper 20.3/20.4). Intro text is the one in Paper 20.3.
+pilot_upsert_page(
+    'fides-design-pilot/organizations',
+    'Organizations (design pilot)',
+    '<!-- wp:shortcode -->[fides_organization_catalog design="pilot" title="Organizations" detail_url="/fides-design-pilot/organization/" add_url="/organizations-submit/"'
+    . ' intro="Discover organizations shaping the global ecosystem of digital wallets and verifiable credentials and explore their roles."]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+pilot_upsert_page(
+    'fides-design-pilot/organization',
+    'Organization detail (design pilot)',
+    '<!-- wp:shortcode -->[fides_organization_detail id="' . PILOT_ORG_ID . '" listing_url="/fides-design-pilot/organizations/" use_case_detail_url="/fides-design-pilot/use-case/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

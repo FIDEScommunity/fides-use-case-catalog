@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Create the local-only design pilot site from a snapshot of utrecht-demo.
-#   - files:    $PILOT_SITE (copy; the two pilot plugins are symlinks to the worktrees)
+#   - files:    $PILOT_SITE (copy; the three pilot plugins are symlinks to the worktrees)
 #   - database: $PILOT_DB (new database on the Local MySQL server of utrecht-demo)
 #   - URL:      $PILOT_URL (served by start-server.sh)
 # utrecht-demo itself is only read (rsync source + mysqldump), never written.
@@ -17,11 +17,12 @@ if pilot_mysql -N -e "SHOW DATABASES LIKE '$PILOT_DB'" | grep -q "$PILOT_DB"; th
   exit 1
 fi
 
-echo "1/6 Copy WordPress files (without the two pilot plugins)"
+echo "1/6 Copy WordPress files (without the three pilot plugins)"
 mkdir -p "$PILOT_SITE"
 rsync -a \
   --exclude='wp-content/plugins/fides-use-case-catalog' \
   --exclude='wp-content/plugins/fides-community-tools-tiles' \
+  --exclude='wp-content/plugins/fides-organization-catalog' \
   --exclude='wp-content/debug.log' \
   --exclude='wp-content/cache' \
   "$SOURCE_SITE/" "$PILOT_SITE/"
@@ -29,6 +30,7 @@ rsync -a \
 echo "2/6 Symlink pilot plugins to the worktrees"
 ln -s "$PILOT_USE_CASE_PLUGIN" "$PILOT_SITE/wp-content/plugins/fides-use-case-catalog"
 ln -s "$PILOT_TILES_PLUGIN" "$PILOT_SITE/wp-content/plugins/fides-community-tools-tiles"
+ln -s "$PILOT_ORG_PLUGIN" "$PILOT_SITE/wp-content/plugins/fides-organization-catalog"
 
 echo "3/6 Install the pilot guard mu-plugin"
 mkdir -p "$PILOT_SITE/wp-content/mu-plugins"

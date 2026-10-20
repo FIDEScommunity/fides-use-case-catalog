@@ -63,6 +63,7 @@ add_filter(
             '/ecosystem-explorer/issuer-catalog/'           => '/issuer-catalog/',
             '/ecosystem-explorer/relying-party-catalog/'    => '/relying-party-websites/',
             '/community-tools/glossary/'                    => '/glossary/',
+            '/organizations/'                               => '/fides-design-pilot/organizations/',
             '/organizations/submit-organization/'           => '/organizations-submit/',
             '/organizations/update-organization/'           => '/organizations-update/',
         );

@@ -24,6 +24,7 @@ WP_CLI_PHAR="/Applications/Local.app/Contents/Resources/extraResources/bin/wp-cl
 # Pilot plugins are symlinked from these worktrees (branch feature/fides-design-pilot).
 PILOT_USE_CASE_PLUGIN="$PILOT_ROOT/use-case-catalog/wordpress-plugin/fides-use-case-catalog"
 PILOT_TILES_PLUGIN="$PILOT_ROOT/fides-community-tools-tiles"
+PILOT_ORG_PLUGIN="$PILOT_ROOT/organization-catalog/wordpress-plugin/fides-organization-catalog"
 
 pilot_mysql() {
   "$MYSQL_BIN_DIR/mysql" -uroot -proot -S "$MYSQL_SOCK" "$@" 2> >(grep -v 'Using a password' >&2)
