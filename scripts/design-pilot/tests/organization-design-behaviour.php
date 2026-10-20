@@ -166,6 +166,12 @@ $check($media !== '' && strpos($media, '<img') !== false, 'one image renders the
 $check(strpos($media, 'fides-ds-gallery__thumb') === false, 'one media item has no selector strip');
 
 $check(strpos($html, 'mailto:hello@full.example.org') !== false, 'contact email is offered');
+$update = $section($html, 'update');
+$check(substr_count($update, 'mailto:hello@full.example.org') === 1, 'contact action repeats at the end of the profile');
+$check(strpos($update, 'Visit Full Org') === false, 'closing contact does not add the website visit');
+$media_at = strpos($html, 'id="media"');
+$aside_at = strpos($html, 'fides-org-detail__aside');
+$check($media_at !== false && $aside_at !== false && $media_at > $aside_at, 'media band sits outside the main column');
 $check($section($html, 'certifications') === '' && $section($html, 'identifiers') === '', 'certifications and identifiers are hidden when empty');
 $check(strpos($html, 'Legal name') !== false, 'legal name is shown when it differs from the name');
 
@@ -188,6 +194,7 @@ $img   = strpos($media, '<img');
 $vid   = strpos($media, 'youtube');
 $check($img !== false && $vid !== false && $img < $vid, 'gallery starts with images, then videos');
 $check(strpos($media, 'autoplay=1') === false && strpos($media, ' autoplay') === false, 'videos do not autoplay');
+$check(strpos($section($html, 'update'), '>Contact') === false, 'no closing contact action without email or a meeting link');
 
 // Minimal profile.
 $html = $render(ORG_MIN);

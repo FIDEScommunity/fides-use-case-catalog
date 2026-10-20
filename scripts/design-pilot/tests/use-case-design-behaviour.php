@@ -298,6 +298,34 @@ $check($codes() === array(), 'published ids save without messages');
 $GLOBALS['wp_settings_errors'] = array();
 
 // Card meta mirrors pilotEngagementMeta() in the listing.
+$owner_item = array(
+    'id'               => 'pilot-owner-route',
+    'organizationName' => 'Credenco',
+    'links'            => array('organizations' => array(array('labelRaw' => 'Credenco', 'refId' => 'org:credenco'))),
+);
+add_filter('fides_organization_pilot_detail_base', static function () {
+    return 'http://localhost/fides-design-pilot/organization/';
+});
+if (class_exists('Fides_Organization_Design')) {
+    Fides_Organization_Design::flush_cache();
+}
+$pilot_href = Fides_Use_Case_Design::owner_href($owner_item, 'Credenco');
+$check(strpos($pilot_href, '/fides-design-pilot/organization/?org=org%3Acredenco') !== false, 'pilot owner link uses the organization detail page: ' . $pilot_href);
+$check(strpos($pilot_href, 'from=usecase%3Apilot-owner-route') !== false, 'pilot owner link keeps the use-case origin: ' . $pilot_href);
+remove_all_filters('fides_organization_pilot_detail_base');
+add_filter('fides_organization_pilot_detail_base', static function () {
+    return '';
+});
+if (class_exists('Fides_Organization_Design')) {
+    Fides_Organization_Design::flush_cache();
+}
+$classic_href = Fides_Use_Case_Design::owner_href($owner_item, 'Credenco');
+$check(strpos($classic_href, '/organization/org%3Acredenco/') !== false && strpos($classic_href, 'org=') === false, 'without a pilot page, owner links stay on the classic route: ' . $classic_href);
+remove_all_filters('fides_organization_pilot_detail_base');
+if (class_exists('Fides_Organization_Design')) {
+    Fides_Organization_Design::flush_cache();
+}
+
 $check(Fides_Use_Case_Design::card_props($fixture_items[0], 'row')['meta'] === 'Updated 21 Sep 2026 · Finalist 2026 · 3 likes', 'row meta: date, award, likes');
 $check(Fides_Use_Case_Design::card_props($fixture_items[1], 'row')['meta'] === 'Updated 1 Aug 2026 · Winner 2026', 'row meta without likes');
 

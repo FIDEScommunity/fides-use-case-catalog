@@ -616,8 +616,8 @@ final class Fides_Use_Case_Detail_Page {
         if ($ref !== '' && isset(self::RELATION_GROUPS[$key])) {
             [, $url_key, $param] = self::RELATION_GROUPS[$key];
             $base = isset($urls[$url_key]) ? rtrim((string) $urls[$url_key], '/') : '';
-            if ($base !== '' && $key === 'organizations') {
-                $href = add_query_arg('from', rawurlencode('usecase:' . $use_case_id), $base . '/' . rawurlencode($ref) . '/');
+            if ($key === 'organizations') {
+                $href = Fides_Use_Case_Design::organization_profile_href($ref, 'usecase:' . $use_case_id);
             } elseif ($base !== '' && $param !== '') {
                 $href = $base . '/?' . $param . '=' . rawurlencode($ref);
             }

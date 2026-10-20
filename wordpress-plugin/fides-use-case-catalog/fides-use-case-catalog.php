@@ -2249,6 +2249,9 @@ function fides_use_case_catalog_list_shortcode($atts = array(), $content = ''): 
         ),
         fides_use_case_catalog_catalog_urls()
     );
+    if ($design === 'pilot' && class_exists('Fides_Organization_Design')) {
+        $config['pilotOrganizationDetailUrl'] = Fides_Organization_Design::pilot_detail_base();
+    }
 
     wp_add_inline_script(
         'fides-use-case-catalog-list',

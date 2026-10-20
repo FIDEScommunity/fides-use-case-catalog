@@ -451,9 +451,7 @@ final class Fides_Use_Case_Design {
      * @param array<string, mixed> $item
      */
     public static function owner_href(array $item, string $owner): string {
-        $urls = function_exists('fides_use_case_catalog_catalog_urls') ? fides_use_case_catalog_catalog_urls() : array();
-        $base = isset($urls['organizationDetailUrl']) ? rtrim((string) $urls['organizationDetailUrl'], '/') : '';
-        if ($owner === '' || $base === '') {
+        if ($owner === '') {
             return '';
         }
         $orgs = isset($item['links']['organizations']) && is_array($item['links']['organizations']) ? $item['links']['organizations'] : array();
@@ -463,10 +461,42 @@ final class Fides_Use_Case_Design {
             }
             $ref = trim((string) ($org['refId'] ?? ''));
             if ($ref !== '') {
-                return $base . '/' . rawurlencode($ref) . '/?from=' . rawurlencode('usecase:' . (string) ($item['id'] ?? ''));
+                return self::organization_profile_href($ref, 'usecase:' . (string) ($item['id'] ?? ''));
             }
         }
         return '';
+    }
+
+    /**
+     * Organization profile for a catalog ref. On the design pilot this is
+     * /fides-design-pilot/organization/?org=…; otherwise the classic
+     * /organization/{id}/ route. The from value is kept when present.
+     */
+    public static function organization_profile_href(string $ref, string $from = ''): string {
+        $ref = trim($ref);
+        if ($ref === '') {
+            return '';
+        }
+        if (class_exists('Fides_Organization_Design')) {
+            $pilot = Fides_Organization_Design::pilot_detail_base();
+            if ($pilot !== '') {
+                $url = Fides_Organization_Design::detail_url($ref, $pilot);
+                if ($from !== '') {
+                    $url .= (strpos($url, '?') === false ? '?' : '&') . 'from=' . rawurlencode($from);
+                }
+                return $url;
+            }
+        }
+        $urls = function_exists('fides_use_case_catalog_catalog_urls') ? fides_use_case_catalog_catalog_urls() : array();
+        $base = isset($urls['organizationDetailUrl']) ? rtrim((string) $urls['organizationDetailUrl'], '/') : '';
+        if ($base === '') {
+            return '';
+        }
+        $url = $base . '/' . rawurlencode($ref) . '/';
+        if ($from !== '') {
+            $url .= '?from=' . rawurlencode($from);
+        }
+        return $url;
     }
 
     /**

@@ -3311,16 +3311,34 @@
     return `${SHARE_PATH}${encodeURIComponent(id)}/`;
   }
 
+  function pilotOrganizationHref(ref, from) {
+    const pilotBase = String(config.pilotOrganizationDetailUrl || "").trim();
+    if (pilotBase) {
+      try {
+        const built = new URL(pilotBase, window.location.origin);
+        built.searchParams.set("org", ref);
+        if (from) built.searchParams.set("from", from);
+        return built.pathname + built.search + built.hash;
+      } catch (_err) {
+        const join = pilotBase.includes("?") ? "&" : "?";
+        const fromPart = from ? `&from=${encodeURIComponent(from)}` : "";
+        return `${pilotBase.replace(/\/$/, "")}${join}org=${encodeURIComponent(ref)}${fromPart}`;
+      }
+    }
+    if (!CATALOG_URLS.organizationDetail) return "";
+    const fromPart = from ? `?from=${encodeURIComponent(from)}` : "";
+    return `${CATALOG_URLS.organizationDetail}/${encodeURIComponent(ref)}/${fromPart}`;
+  }
+
   function pilotOwnerHref(item, owner) {
-    if (!owner || !CATALOG_URLS.organizationDetail) return "";
+    if (!owner) return "";
     const match = getLinkItems(item, "organizations").find((link) =>
       link && typeof link === "object" &&
       String(link.labelRaw || "").trim().toLowerCase() === owner.toLowerCase() &&
       String(link.refId || "").trim() !== ""
     );
     if (!match) return "";
-    const ref = String(match.refId).trim();
-    return `${CATALOG_URLS.organizationDetail}/${encodeURIComponent(ref)}/?from=${encodeURIComponent(`usecase:${String(item.id || "")}`)}`;
+    return pilotOrganizationHref(String(match.refId).trim(), `usecase:${String(item.id || "")}`);
   }
 
   /** Mirrors Fides_Use_Case_Design::card_props() for the row variant. */
