@@ -25,7 +25,7 @@ utrecht-demo, so that site must be running in Local.
 | `create-pages.sh` | Create or update the pilot pages and the default homepage feature |
 | `teardown-site.sh` | Stop the server, drop the pilot database, delete the pilot files |
 | `run-tests.sh` | Run `tests/use-case-design-behaviour.php`, `tests/site-shell-behaviour.php` and `tests/organization-design-behaviour.php` in the pilot WordPress (fixture data, mocked REST, no database writes) |
-| `tests/run-organization-checks.sh` | Organization overview and detail in headless Chrome (overview 1440/390/320, seven records at 1440/768/390/320); screenshots in `../screens/organizations/` |
+| `tests/run-organization-checks.sh` | Organization overview and detail in headless Chrome (server render without JavaScript and the hand-over to the script, overview 1440/390/320, seven records at 1440/768/390/320); screenshots in `../screens/organizations/` |
 | `tests/run-shell-route.sh` | Visitor route in headless Chrome at 1366×768 and 1440/1100/1024/768/390/320 px: homepage fragment → overview → detail → back, dropdowns, mobile menu, section navigation, filters with Escape/focus, pagination, long titles and the logo back to the homepage fragment; screenshots in `../screens/shell/`. Uses an existing Playwright install (`PLAYWRIGHT_MODULE`) and the server from `start-server.sh` |
 | `tests/run-overview-detail-checks.sh` | Overview and detail behaviour (brief 2026-10-18) in headless Chrome; screenshots in `../screens/overview-detail/` |
 | `tests/run-measure-density.sh <label>` | Measure computed type sizes, Explore panel height, first result position, controls under 44 px and overflow at seven viewports; writes `measurements.json` and screenshots to `../screens/density-<label>/` |
@@ -279,6 +279,20 @@ refresh.
   the shared `Fides_DS_Gallery`. Suggest an update follows the modal's access
   rule; guests get the sign-in route. Community listings keep the content
   limits of the modal.
+- Server-rendered first page (`includes/class-fides-organization-overview.php`):
+  without a search or filter in the URL, PHP renders the whole overview
+  (header, search, filter buttons, count, sort, the 48 rows of the requested
+  page and sort through `Fides_DS_Card`, and the pager with real
+  `?catalog_page=` links). No skeleton, and the page works without
+  JavaScript. Once the catalog data has loaded, `renderPilot()` takes over
+  search, filters, sort and paging; it keeps the server rows when they match
+  its own render (no logo reload, no shift) and keeps typed text and focus.
+  A stored sort preference or fresher browser data re-renders the rows. If the
+  browser cannot load the data, the server page stays with a notice. URLs
+  with `q`, `role`, `country`, `sector`, `cert` or `official` keep the
+  client-side path (skeleton): the filter logic lives in the script only.
+  Gated by `fides_catalog_ssr_enabled()`; otherwise the classic hidden SSR
+  fallback is used as before.
 - The classic `style.css` still loads (dependency of the shared catalog UI
   CSS); `organization-design.css` resets its ID-level root panel.
 - `organization-catalog.js` and the classic plugin assets use the plugin

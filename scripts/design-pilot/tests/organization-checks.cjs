@@ -1,6 +1,9 @@
 /**
  * Organization overview and detail browser checks (organization pilot brief v1).
  *
+ * Server render: first page, count and pager without JavaScript, page and
+ * sort from the URL, the script keeping the server rows (no shift, typed text
+ * and focus kept), a stored sort preference, and failed catalog data.
  * Overview: rows (120 × 75 contain logo, name placeholder, role chips, facts
  * line, arrow), search only on submit, popover filters with URL state, pager
  * on its own row, zero results, Back restoring filters, page, scroll and focus,
@@ -71,8 +74,125 @@ function overflowX(page) {
   return page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 }
 
+/** Rows rendered by the script (the server-rendered first state is replaced on mount). */
 async function waitForRows(page) {
   await page.waitForSelector("#fides-org-catalog-root .fides-uc-pilot__count", { timeout: 30000 });
+  await page.waitForFunction(() => !document.querySelector("#fides-org-catalog-root [data-pilot-ssr]"), null, { timeout: 30000 });
+}
+
+function firstRowBox(page) {
+  return page.evaluate(() => {
+    const row = document.querySelector(".fides-uc-pilot__list .fides-ds-card--row");
+    if (!row) return null;
+    const box = row.getBoundingClientRect();
+    return { y: Math.round(box.top + scrollY), h: Math.round(box.height), title: row.querySelector(".fides-ds-card__title")?.textContent.trim() || "" };
+  });
+}
+
+/** Server-rendered first page: without JavaScript, hand-over to the script, and the fallbacks. */
+async function overviewServerRender(browser) {
+  const noJs = await browser.newContext({ viewport: { width: 1440, height: 900 }, javaScriptEnabled: false });
+  const plain = await noJs.newPage();
+  await open(plain, OVERVIEW);
+  const html = await plain.evaluate(() => {
+    const root = document.querySelector("#fides-org-catalog-root");
+    const visible = (el) => !!el && el.getClientRects().length > 0;
+    const rows = [...root.querySelectorAll(".fides-uc-pilot__list > li")];
+    const next = root.querySelector(".fides-catalog-pagination__next");
+    return {
+      rows: rows.length,
+      rowsVisible: rows.length > 0 && rows.every(visible),
+      count: root.querySelector("[data-pilot-count]")?.textContent.trim() || "",
+      pagerMeta: root.querySelector(".fides-catalog-pagination__meta")?.textContent.trim() || "",
+      next: next ? next.getAttribute("href") : "",
+      title: root.querySelector("h1")?.textContent.trim() || "",
+      href: root.querySelector(".fides-ds-card__link")?.getAttribute("href") || "",
+      spinner: visible(root.querySelector(".fides-loading, [data-pilot-loading]")),
+    };
+  });
+  await plain.screenshot({ path: path.join(OUT, "overview-ssr-nojs-1440.png") });
+  check("ssr: 48 visible rows without JavaScript", html.rows === 48 && html.rowsVisible, `${html.rows} ${html.rowsVisible}`);
+  check("ssr: count and pager without JavaScript", /^\d+ organizations$/.test(html.count) && /^Page 1 of \d+$/.test(html.pagerMeta), `${html.count} ${html.pagerMeta}`);
+  check("ssr: Next is a real page link", /[?&]catalog_page=2\b/.test(html.next), html.next);
+  check("ssr: title and row link to pilot detail", html.title === "Organizations" && html.href.includes("/fides-design-pilot/organization/?org=org%3A"), `${html.title} ${html.href}`);
+  check("ssr: no loading state", !html.spinner);
+  await open(plain, `${OVERVIEW}?catalog_page=2&sort=name`);
+  const page2 = await plain.evaluate(() => ({
+    meta: document.querySelector(".fides-catalog-pagination__meta")?.textContent.trim() || "",
+    sort: document.querySelector("#fides-sort-select")?.value || "",
+    current: document.querySelector(".fides-catalog-pagination [aria-current=page]")?.textContent.trim() || "",
+  }));
+  check("ssr: page and sort from the URL", /^Page 2 of/.test(page2.meta) && page2.sort === "name" && page2.current === "2", JSON.stringify(page2));
+  await noJs.close();
+
+  // Slow catalog data: the server page is usable at once, typed text and focus survive the hand-over.
+  const context = await newContext(browser, 1440);
+  const page = await context.newPage();
+  const errors = [];
+  page.on("pageerror", (err) => errors.push(err.message));
+  await page.addInitScript(() => {
+    document.addEventListener("DOMContentLoaded", () => {
+      window.__ssrList = document.querySelector("[data-pilot-ssr-results]");
+    });
+  });
+  await page.route(/aggregated/, async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 2500));
+    await route.continue();
+  });
+  await open(page, OVERVIEW);
+  await page.waitForSelector("[data-pilot-ssr] .fides-ds-card--row");
+  const before = await firstRowBox(page);
+  await page.locator("#fides-search-input").click();
+  await page.keyboard.type("cred");
+  await waitForRows(page);
+  await page.waitForLoadState("load");
+  const after = await firstRowBox(page);
+  const handover = await page.evaluate(() => ({
+    kept: !!window.__ssrList && document.querySelector(".fides-results > .fides-uc-pilot__list") === window.__ssrList,
+    value: document.querySelector("#fides-search-input")?.value || "",
+    focus: document.activeElement && document.activeElement.id,
+    url: location.search,
+    options: document.querySelectorAll("#fides-org-pilot-options-role input[type=checkbox]").length,
+  }));
+  check("ssr: no script errors during hand-over", errors.length === 0, errors.join(" | "));
+  check("ssr: server rows kept by the script", handover.kept);
+  check("ssr: first row does not move on hand-over", before && after && before.y === after.y && before.h === after.h && before.title === after.title, `${JSON.stringify(before)} -> ${JSON.stringify(after)}`);
+  check("ssr: typed search text and focus kept", handover.value === "cred" && handover.focus === "fides-search-input" && !/q=/.test(handover.url), JSON.stringify(handover));
+  check("ssr: filter options filled after hand-over", handover.options > 0, String(handover.options));
+  await page.keyboard.press("Enter");
+  await page.waitForFunction(() => /q=cred/.test(location.search));
+  check("ssr: search works after hand-over", /q=cred/.test(page.url()), page.url());
+  await context.close();
+
+  // A stored sort preference differs from the server order: the script re-renders the rows.
+  const sorted = await newContext(browser, 1440);
+  const sortedPage = await sorted.newPage();
+  await sortedPage.addInitScript(() => {
+    try { localStorage.setItem("fides-org-sort-v2", "name"); } catch { /* ignore */ }
+  });
+  await open(sortedPage, OVERVIEW);
+  await waitForRows(sortedPage);
+  const byName = await sortedPage.evaluate(() => {
+    const titles = [...document.querySelectorAll(".fides-uc-pilot__list .fides-ds-card__title")].slice(0, 5).map((el) => el.textContent.trim());
+    return { sort: document.querySelector("#fides-sort-select").value, titles };
+  });
+  const expected = byName.titles.slice().sort((a, b) => a.localeCompare(b));
+  check("ssr: stored sort preference still applies", byName.sort === "name" && JSON.stringify(expected) === JSON.stringify(byName.titles), JSON.stringify(byName));
+  await sorted.close();
+
+  // Catalog data unavailable in the browser: the server page stays, with a notice.
+  const offline = await newContext(browser, 1440);
+  const offlinePage = await offline.newPage();
+  await offlinePage.route(/aggregated/, (route) => route.abort());
+  await open(offlinePage, OVERVIEW);
+  await offlinePage.waitForSelector("[data-pilot-data-error]", { timeout: 30000 });
+  const kept = await offlinePage.evaluate(() => ({
+    rows: document.querySelectorAll(".fides-uc-pilot__list > li").length,
+    alert: document.querySelector("[data-pilot-data-error]")?.getAttribute("role") || "",
+  }));
+  await offlinePage.screenshot({ path: path.join(OUT, "overview-ssr-offline-1440.png") });
+  check("ssr: rows stay when catalog data fails", kept.rows === 48 && kept.alert === "alert", JSON.stringify(kept));
+  await offline.close();
 }
 
 async function overviewDesktop(browser) {
@@ -354,6 +474,7 @@ async function detail(browser, width, id) {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await chromium.launch();
   try {
+    await overviewServerRender(browser);
     await overviewDesktop(browser);
     for (const width of [390, 320]) await overviewMobile(browser, width);
     for (const width of WIDTHS) {

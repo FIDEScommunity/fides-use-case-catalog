@@ -217,6 +217,32 @@ if ($admins) {
     wp_set_current_user(0);
 }
 
+// Server-rendered overview (first state before the script takes over).
+$overview = static function (array $get): string {
+    Fides_Organization_Design::flush_cache();
+    if (class_exists('Fides_Use_Case_Design')) {
+        Fides_Use_Case_Design::flush_cache();
+    }
+    $_GET = $get;
+    return Fides_Organization_Overview::render(array('title' => 'Organizations', 'detail_url' => '/pilot/organization/'));
+};
+$html   = $overview(array());
+$titles = preg_match_all('~class="fides-ds-card__link" href="[^"]*">([^<]+)<~', $html, $m) ? $m[1] : array();
+$check(count($titles) === 4 && strpos($html, 'data-pilot-ssr-results') !== false, 'overview renders every row on the server');
+$check(($titles[0] ?? '') === 'Full Org', 'default sort puts the most linked use cases first');
+$check(array_slice($titles, 1) === array('Media Org', 'Minimal Org', 'Quiet Org'), 'equal use-case counts sort by name: ' . implode(', ', $titles));
+$check(strpos($html, '>4 organizations</h2>') !== false, 'server count matches the rows');
+$check(strpos($html, 'href="/pilot/organization/?org=org%3Apilot-test-full"') !== false, 'row links to the detail page like the script');
+$check(strpos($html, 'Netherlands · 2 use cases · Updated 12 Jul 2026') !== false, 'facts line: country, use cases, updated');
+$check(strpos($html, 'fides-catalog-pagination') === false, 'no pager for one page');
+$html   = $overview(array('sort' => 'name'));
+$titles = preg_match_all('~class="fides-ds-card__link" href="[^"]*">([^<]+)<~', $html, $m) ? $m[1] : array();
+$check($titles === array('Full Org', 'Media Org', 'Minimal Org', 'Quiet Org') && strpos($html, '<option value="name" selected>') !== false, 'sort from the URL');
+$check($overview(array('q' => 'wallet')) === '', 'a search in the URL keeps the client-side path');
+$check($overview(array('role' => 'issuer')) === '', 'a filter in the URL keeps the client-side path');
+$check(Fides_Organization_Overview::logo_url(array('logoUri' => 'https://www.pec.it/logo.png', 'website' => 'https://www.pec.it/')) === 'https://www.google.com/s2/favicons?domain=www.pec.it&sz=128', 'blocked logo hosts use the favicon like the script');
+$_GET = array();
+
 Fides_Organization_Design::flush_cache();
 if (class_exists('Fides_Use_Case_Design')) {
     Fides_Use_Case_Design::flush_cache();
