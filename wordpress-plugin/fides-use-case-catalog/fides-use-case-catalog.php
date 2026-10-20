@@ -184,7 +184,7 @@ function fides_use_case_catalog_form_login_url(): string {
         // submission form after signing in (same pattern as the catalog like
         // buttons), instead of being dropped on the homepage.
         return esc_url_raw(
-            add_query_arg('return_to', $current_url, (string) $oid4vp_options['loginUrl'])
+            add_query_arg('return_to', rawurlencode($current_url), (string) $oid4vp_options['loginUrl'])
         );
     }
     return wp_login_url($current_url);
