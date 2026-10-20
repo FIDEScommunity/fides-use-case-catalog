@@ -247,7 +247,15 @@ $check(strpos($section($pers, 'eidas'), 'Q_CERT_ESEAL') === false, 'personal wal
 // Pricing, license, recognitions.
 $check(strpos($section($biz, 'pricing'), 'No pricing information provided.') !== false, 'business without pricing says so');
 $check(strpos($section($pers, 'pricing'), 'Free for individuals.') !== false, 'personal full pricing is shown');
-$check(strpos($section($pers, 'pricing'), 'Apache-2.0') !== false, 'license shown when given');
+$glance = static function (string $html): string {
+    $start = strpos($html, 'aria-labelledby="glance-title"');
+    return $start === false ? '' : substr($html, $start, strpos($html, '</section>', $start) - $start);
+};
+$check(strpos($glance($pers), '<dt>License</dt><dd>Open Source (Apache') !== false, 'open-source license in At a glance');
+$check(strpos($glance($biz), '<dt>License</dt><dd>Proprietary</dd>') !== false, 'no license data: Proprietary, as in the modal');
+$check(strpos($glance($biz), '<dt>Status</dt><dd>Production</dd>') !== false, 'status in At a glance');
+$check(strpos($section($pers, 'pricing'), 'License') === false, 'license not repeated under pricing');
+$check(strpos($biz, 'fill="#34A853"') === false && strpos($pers, 'fill="#34A853"') !== false, 'Google Play button uses the Play mark');
 $recog = $section($pers, 'recognitions');
 $check(strpos($recog, 'Plain certificate') !== false && strpos($recog, '<a ') === false, 'certificate without URL is plain text');
 
