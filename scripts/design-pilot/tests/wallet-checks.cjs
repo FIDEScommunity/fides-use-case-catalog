@@ -264,6 +264,31 @@ async function overviewMobile(browser, type, width) {
   await context.close();
 }
 
+async function overviewSearchRow(browser) {
+  for (const type of ["personal", "business"]) {
+    const context = await newContext(browser, 1440);
+    const page = await context.newPage();
+    await open(page, `${OVERVIEWS[type]}?platform=iOS,bogus&availability=production`);
+    await waitForRows(page);
+    const pills = await page.evaluate(() => [...document.querySelectorAll(".fides-uc-pilot__pill")].map((el) => el.textContent.replace(/\s+/g, " ").trim()));
+    if (type === "personal") check("overview personal: unknown URL values dropped", pills.length === 1 && /Platform: iOS/.test(pills[0]) && !/bogus|production/.test(page.url()), `${pills.join(" | ")} ${page.url()}`);
+    for (const width of [1100, 1199, 1200, 1280, 1319, 1320, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.waitForTimeout(150);
+      const row = await page.evaluate(() => {
+        const box = (s) => document.querySelector(s).getBoundingClientRect();
+        const field = box(".fides-uc-pilot__search");
+        const button = box(".fides-uc-pilot__search-submit");
+        const filters = box(".fides-uc-pilot__filter-row");
+        return { pair: Math.abs(field.top - button.top) < 2 && button.left > field.right, field: Math.round(field.width), oneRow: Math.abs(filters.top - field.top) < 2 };
+      });
+      const expectOneRow = width >= 1320;
+      check(`overview ${type} @${width}: search field and button one pair${expectOneRow ? ", filters beside" : ", filters below"}`, row.pair && row.oneRow === expectOneRow && row.field >= 240, JSON.stringify(row));
+    }
+    await context.close();
+  }
+}
+
 async function overviewFallbacks(browser) {
   const context = await newContext(browser, 1440);
   const page = await context.newPage();
@@ -375,6 +400,29 @@ async function detailInteractions(browser, width) {
   await page.waitForLoadState("load");
   const tag = `detail interactions @${width}`;
 
+  if (width < 1100) {
+    const closed = await page.evaluate(() => ["technical", "eidas"].map((id) => {
+      const toggle = document.querySelector(`#${id} .fides-ds-collapsible__toggle`);
+      return { id, toggle: !!toggle, expanded: toggle && toggle.getAttribute("aria-expanded"), hidden: document.getElementById(`${id}-body`).hidden };
+    }));
+    check(`${tag}: technical details and eIDAS start as closed accordions`, closed.every((c) => c.toggle && c.expanded === "false" && c.hidden), JSON.stringify(closed));
+    const height = await page.evaluate(() => Math.round(document.getElementById("technical").getBoundingClientRect().height));
+    check(`${tag}: closed technical block is compact`, height < 120, String(height));
+    await page.evaluate(() => { document.querySelector(".fides-uc-detail__sections").open = true; });
+    await page.click('.fides-uc-detail__sections a[href="#technical"]');
+    await page.waitForFunction(() => { const top = document.getElementById("technical").getBoundingClientRect().top; return top >= -2 && top < 200; }, null, { timeout: 4000 }).catch(() => {});
+    const opened = await page.evaluate(() => ({
+      hidden: document.getElementById("technical-body").hidden,
+      expanded: document.querySelector("#technical .fides-ds-collapsible__toggle").getAttribute("aria-expanded"),
+      top: Math.round(document.getElementById("technical").getBoundingClientRect().top),
+    }));
+    check(`${tag}: section link opens and reaches technical details`, !opened.hidden && opened.expanded === "true" && opened.top >= -2 && opened.top < 400, JSON.stringify(opened));
+    await page.click("#eidas .fides-ds-collapsible__toggle");
+  } else {
+    const wide = await page.evaluate(() => ({ toggles: document.querySelectorAll("#technical .fides-ds-collapsible__toggle, #eidas .fides-ds-collapsible__toggle").length, hidden: document.getElementById("technical-body").hidden || document.getElementById("eidas-body").hidden }));
+    check(`${tag}: technical details and eIDAS visible on desktop`, wide.toggles === 0 && !wide.hidden, JSON.stringify(wide));
+  }
+
   const toggle = page.locator("#features .fides-ds-show-all__toggle");
   if (await toggle.count()) {
     const before = await page.$$eval("#features-list > li", (els) => els.filter((el) => !el.hidden).length);
@@ -385,7 +433,7 @@ async function detailInteractions(browser, width) {
     check(`${tag}: features show-all control present`, false, "no toggle");
   }
 
-  const term = page.locator("[data-fides-ds-term]").first();
+  const term = page.locator("#technical [data-fides-ds-term]").first();
   await term.scrollIntoViewIfNeeded();
   const scrollBefore = await page.evaluate(() => scrollY);
   await term.click();
@@ -449,6 +497,7 @@ async function classic(browser) {
       await overviewDesktop(browser, type);
       for (const width of [390, 320]) await overviewMobile(browser, type, width);
     }
+    await overviewSearchRow(browser);
     await overviewFallbacks(browser);
     for (const id of RECORDS) {
       for (const width of WIDTHS) await detail(browser, width, id);

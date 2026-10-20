@@ -95,12 +95,15 @@ $wallets = array(
         'orgId'       => ORG_COMM,
         'provider'    => array('name' => 'Community Provider'),
         'website'     => 'https://community-biz.example.org/',
+        'openSource'  => false,
     ),
     array(
         'id'       => W_LINKED,
         'name'     => 'Linked Pro Wallet',
         'type'     => 'organizational',
         'provider' => array('name' => 'Linked Provider', 'orgId' => ORG_LINKED),
+        'openSource' => true,
+        'vcFormat'   => array('sd_jwt_vc'),
     ),
     array(
         'id'          => W_EDGE,
@@ -110,6 +113,7 @@ $wallets = array(
         'orgId'       => ORG_PRO,
         'provider'    => array('name' => 'Pro Provider'),
         'logo'        => 'https://broken.invalid/logo.png',
+        'license'     => 'MIT',
         'description' => $long,
         'features'    => array(),
     ),
@@ -252,7 +256,15 @@ $glance = static function (string $html): string {
     return $start === false ? '' : substr($html, $start, strpos($html, '</section>', $start) - $start);
 };
 $check(strpos($glance($pers), '<dt>License</dt><dd>Open Source (Apache') !== false, 'open-source license in At a glance');
-$check(strpos($glance($biz), '<dt>License</dt><dd>Proprietary</dd>') !== false, 'no license data: Proprietary, as in the modal');
+$check(strpos($glance($biz), '<dt>License</dt>') === false, 'no license data: no license row (not Proprietary)');
+$check(strpos($glance($render(W_BIZ_COMM)), '<dt>License</dt><dd>Proprietary</dd>') !== false, 'openSource false: Proprietary');
+$check(strpos($glance($render(W_LINKED)), '<dt>License</dt><dd>Open Source</dd>') !== false, 'openSource true without license: Open Source');
+$check(strpos($glance($render(W_EDGE)), '<dt>License</dt><dd>MIT</dd>') !== false, 'explicit license without openSource: the license');
+$tech_section = $section($biz, 'technical');
+$check(strpos($biz, 'id="technical" aria-labelledby="technical-title" data-fides-ds-collapsible="closed"') !== false && strpos($biz, 'data-fides-ds-collapsible-body id="technical-body"') !== false, 'technical details use the shared narrow-screen accordion');
+$check(strpos($biz, 'id="eidas" aria-labelledby="eidas-title" data-fides-ds-collapsible="closed"') !== false && strpos($biz, 'data-fides-ds-collapsible-body id="eidas-body"') !== false, 'eIDAS uses the shared narrow-screen accordion');
+$linked_html = $render(W_LINKED);
+$check(strpos($linked_html, 'fides-wallet-detail__technical--main" id="technical" aria-labelledby="technical-title" data-fides-ds-collapsible="closed"') !== false, 'technical in the main column (no use cases) keeps the accordion');
 $check(strpos($glance($biz), '<dt>Status</dt><dd>Production</dd>') !== false, 'status in At a glance');
 $check(strpos($section($pers, 'pricing'), 'License') === false, 'license not repeated under pricing');
 $check(strpos($biz, 'fill="#34A853"') === false && strpos($pers, 'fill="#34A853"') !== false, 'Google Play button uses the Play mark');
