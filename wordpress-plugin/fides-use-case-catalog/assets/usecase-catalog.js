@@ -3893,7 +3893,7 @@
     panel.setAttribute("role", "dialog");
     panel.setAttribute("aria-modal", "true");
     toggle.setAttribute("aria-expanded", "true");
-    document.documentElement.classList.add("fides-uc-pilot-panel-open");
+    pilotLockPage(true);
     updatePilotChrome(getFilteredUseCases());
     panel.querySelector(".fides-uc-pilot__panel-close")?.focus();
   }
@@ -3908,7 +3908,7 @@
     panel.classList.remove("is-open");
     panel.removeAttribute("role");
     panel.removeAttribute("aria-modal");
-    document.documentElement.classList.remove("fides-uc-pilot-panel-open");
+    pilotLockPage(false);
     if (toggle) toggle.setAttribute("aria-expanded", "false");
     if (apply) {
       pilotCommit();
@@ -4105,6 +4105,20 @@
     window.addEventListener("resize", debounce(() => {
       if (!pilotIsCompact() && pilotSnapshot) closePilotDialog(false);
     }, 150));
+
+    // A page restored from the back/forward cache comes back without the dialog or its scroll lock.
+    window.addEventListener("pageshow", (event) => {
+      if (event.persisted && pilotSnapshot) closePilotDialog(false);
+    });
+  }
+
+  /** Filters dialog: the page keeps its scroll position behind it (shared FidesDS lock, counted per layer). */
+  function pilotLockPage(lock) {
+    document.documentElement.classList.toggle("fides-uc-pilot-panel-open", lock);
+    const ds = window.FidesDS;
+    if (!ds || !ds.lockScroll) return;
+    if (lock) ds.lockScroll("catalog-filters");
+    else ds.unlockScroll("catalog-filters");
   }
 
   /** Back/Forward between overview states: restore state, controls and scroll. */
@@ -4116,7 +4130,7 @@
       panel?.classList.remove("is-open");
       panel?.removeAttribute("role");
       panel?.removeAttribute("aria-modal");
-      document.documentElement.classList.remove("fides-uc-pilot-panel-open");
+      pilotLockPage(false);
     }
     pilotReadUrl(false);
     const search = root.querySelector("#fides-search-input");

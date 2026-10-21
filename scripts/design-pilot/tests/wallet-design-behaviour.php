@@ -65,8 +65,9 @@ $wallets = array(
         'status'         => 'beta',
         'catalogListingDepth' => 'full',
         'orgId'          => ORG_COMM,
-        'provider'       => array('name' => 'Community Provider', 'country' => 'BE'),
+        'provider'       => array('name' => 'Community Provider', 'country' => 'BE', 'fidesManifestoSupporter' => true),
         'description'    => 'A personal wallet.',
+        'capabilities'   => array('holder'),
         'platforms'      => array('iOS', 'Android'),
         'appStoreLinks'  => array('iOS' => 'https://apps.apple.com/app/id1', 'android' => 'https://play.google.com/store/apps/details?id=x'),
         'features'       => array('Only feature'),
@@ -93,7 +94,7 @@ $wallets = array(
         'type'        => 'organizational',
         'catalogTier' => 'Community',
         'orgId'       => ORG_COMM,
-        'provider'    => array('name' => 'Community Provider'),
+        'provider'    => array('name' => 'Community Provider', 'fidesManifestoSupporter' => false),
         'website'     => 'https://community-biz.example.org/',
         'openSource'  => false,
     ),
@@ -268,6 +269,15 @@ $check(strpos($linked_html, 'fides-wallet-detail__technical--main" id="technical
 $check(strpos($glance($biz), '<dt>Status</dt><dd>Production</dd>') !== false, 'status in At a glance');
 $check(strpos($section($pers, 'pricing'), 'License') === false, 'license not repeated under pricing');
 $check(strpos($biz, 'fill="#34A853"') === false && strpos($pers, 'fill="#34A853"') !== false, 'Google Play button uses the Play mark');
+$check(strpos($glance($pers), '<dt>Capabilities</dt><dd>Holder</dd>') !== false, 'personal wallet shows its explicit capabilities');
+$check(strpos($glance($edge), '<dt>Capabilities</dt>') === false, 'no capabilities field: no capabilities row');
+$check(strpos($section($pers, 'provider'), 'FIDES Manifesto supporter') !== false, 'provider marked as FIDES Manifesto supporter from the explicit field');
+$check(strpos($section($comm_biz, 'provider'), 'Manifesto') === false && strpos($section($biz, 'provider'), 'Manifesto') === false, 'supporter false or absent: no supporter mark');
+$identity = static function (string $html): string {
+    $start = strpos($html, 'class="fides-org-detail__identity"');
+    return $start === false ? '' : substr($html, $start, strpos($html, '</div>', $start) - $start);
+};
+$check(strpos($identity($pers), 'fides-wallet-detail__actions') === false && strpos($identity($pers), 'fides-wallet-detail__meta') === false && strpos($pers, 'fides-wallet-detail__actions') !== false, 'status and actions sit below the identity, not in its text column');
 $recog = $section($pers, 'recognitions');
 $check(strpos($recog, 'Plain certificate') !== false && strpos($recog, '<a ') === false, 'certificate without URL is plain text');
 
@@ -276,6 +286,7 @@ $comm = $render(W_PERS_COMM);
 $check(strpos($comm, 'Community listing') !== false, 'community listing badge');
 $check(strpos($comm, 'id="features"') === false, 'community listing hides features');
 $check(strpos($comm, 'fides-wallet-store') === false, 'community listing has no store buttons');
+$check(strpos($comm, 'fides-wallet-detail__actions') === false, 'no clickable store links: no empty action row');
 $check(strpos($comm, 'community.example.org') === false, 'community listing hides the website');
 $check(strpos($comm_biz, 'Visit wallet website') === false, 'community business listing has no website action');
 

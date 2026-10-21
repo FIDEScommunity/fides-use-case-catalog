@@ -574,7 +574,7 @@ final class Fides_Use_Case_Detail_Page {
         return '<section class="fides-uc-ecosystem__group" id="' . esc_attr($id) . '" aria-labelledby="' . esc_attr($id . '-title') . '"'
             . ' data-fides-ds-collapsible="' . (count($items) <= 3 ? 'open' : 'closed') . '">'
             . '<h3 class="fides-uc-ecosystem__role" id="' . esc_attr($id . '-title') . '" data-fides-ds-collapsible-title>'
-            . '<span>' . esc_html($group['label']) . ' <span class="fides-uc-ecosystem__count">' . esc_html((string) count($items)) . '</span></span></h3>'
+            . esc_html($group['label']) . ' <span class="fides-uc-ecosystem__count">' . esc_html((string) count($items)) . '</span></h3>'
             . '<div data-fides-ds-collapsible-body id="' . esc_attr($id . '-body') . '"><ul class="fides-uc-relations">'
             . implode('', array_map(array(__CLASS__, 'relation_item_html'), $items))
             . '</ul></div></section>';
