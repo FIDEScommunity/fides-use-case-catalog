@@ -281,6 +281,30 @@ $check(strpos($identity($pers), 'fides-wallet-detail__actions') === false && str
 $recog = $section($pers, 'recognitions');
 $check(strpos($recog, 'Plain certificate') !== false && strpos($recog, '<a ') === false, 'certificate without URL is plain text');
 
+// Award band: stable anchor and one Recognition link in the section nav.
+$award_prop = new ReflectionProperty(Fides_Wallet_Design::class, 'awards');
+$award_prop->setAccessible(true);
+$award = array('program_label' => 'FIDES Community Awards 2026', 'program_url' => 'https://example.org/awards/', 'year' => 2026, 'category_label' => 'Best Business Wallet 2026', 'place' => 1);
+$render_awarded = static function (string $id) use ($render, $flush, $award_prop, $award): string {
+    $render($id);
+    $flush();
+    $award_prop->setValue(null, array(W_BIZ_PRO => array($award), W_PERS_FULL => array($award)));
+    return Fides_Wallet_Detail_Page::shortcode(array(
+        'id'                   => $id,
+        'personal_listing_url' => '/pilot/personal/',
+        'business_listing_url' => '/pilot/business/',
+        'use_case_detail_url'  => '/pilot/use-case/',
+    ));
+};
+$biz_award = $render_awarded(W_BIZ_PRO);
+$check(strpos($biz_award, '<section class="fides-wallet-award" id="recognition"') !== false, 'award band has the stable recognition anchor');
+$check(strpos($biz_award, '<a href="#recognition">Recognition</a>') !== false, 'award band: Recognition link in the section nav');
+$check(substr_count($biz_award, 'Best Business Wallet 2026') === 1, 'award content is shown once');
+$check(strpos($biz_award, 'href="#technical"') < strpos($biz_award, 'href="#recognition"') && strpos($biz_award, 'href="#recognition"') < strpos($biz_award, 'href="#pricing"'), 'Recognition sits between Technical details and Pricing in the nav');
+$pers_award = $render_awarded(W_PERS_FULL);
+$check(strpos($pers_award, 'href="#recognitions"') !== false && strpos($pers_award, 'href="#recognition"') === false && strpos($pers_award, 'id="recognition"') !== false, 'with a Recognitions section and an award band: one Recognitions link');
+$check(strpos($biz, 'id="recognition"') === false && strpos($biz, 'href="#recognition"') === false, 'no award data: no award band and no Recognition link');
+
 // Limited (Community) listings.
 $comm = $render(W_PERS_COMM);
 $check(strpos($comm, 'Community listing') !== false, 'community listing badge');

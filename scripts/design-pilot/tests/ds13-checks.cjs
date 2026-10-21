@@ -319,14 +319,49 @@ async function accordionChecks(browser) {
       check(`${tag}: count follows its title at 8px`, counts.length > 0 && looseCounts.length === 0, JSON.stringify(looseCounts.length ? looseCounts : counts));
       check(`${tag}: count 14/22 regular`, counts.every((row) => row.count === "14px/22px/400"), JSON.stringify(counts.map((row) => row.count)));
       const toggle = page.locator(".fides-ds-collapsible__toggle").first();
-      await toggle.focus();
+      await page.evaluate(() => { document.activeElement && document.activeElement.blur(); });
+      await toggle.evaluate((el) => {
+        const prev = [...document.querySelectorAll("a[href], button, summary, [tabindex='0']")].filter((node) => node.offsetParent && node.compareDocumentPosition(el) & Node.DOCUMENT_POSITION_FOLLOWING).pop();
+        if (prev) prev.focus();
+      });
+      await page.keyboard.press("Tab");
+      const ring = await page.evaluate(() => {
+        const el = document.activeElement;
+        const isToggle = !!(el && el.matches(".fides-ds-collapsible__toggle"));
+        const cs = getComputedStyle(el);
+        const probe = document.createElement("span");
+        probe.style.color = "var(--fides-ds-link)";
+        el.closest(".fides-ds").appendChild(probe);
+        const link = getComputedStyle(probe).color;
+        probe.remove();
+        const box = el.getBoundingClientRect();
+        const reach = parseFloat(cs.outlineWidth) + parseFloat(cs.outlineOffset);
+        let clipped = null;
+        for (let node = el.parentElement; node && node !== document.body; node = node.parentElement) {
+          const ns = getComputedStyle(node);
+          if (/(hidden|clip|auto|scroll)/.test(ns.overflowX + ns.overflowY)) {
+            const nb = node.getBoundingClientRect();
+            if (box.left - reach < nb.left - 0.5 || box.right + reach > nb.right + 0.5 || box.top - reach < nb.top - 0.5 || box.bottom + reach > nb.bottom + 0.5) {
+              clipped = node.className;
+              break;
+            }
+          }
+        }
+        return { isToggle, focusVisible: el.matches(":focus-visible"), style: cs.outlineStyle, width: cs.outlineWidth, offset: cs.outlineOffset, color: cs.outlineColor, link, clipped };
+      });
+      check(`${tag}: Tab reaches the toggle with the shared 3px link-blue focus ring at 3px offset`, ring.isToggle && ring.focusVisible && ring.style === "solid" && ring.width === "3px" && ring.offset === "3px" && ring.color === ring.link && !ring.clipped, JSON.stringify(ring));
       const before = await toggle.getAttribute("aria-expanded");
-      const outline = await toggle.evaluate((el) => getComputedStyle(el).outlineStyle);
       await page.keyboard.press("Enter");
       const after = await toggle.getAttribute("aria-expanded");
       await page.keyboard.press("Space");
       const again = await toggle.getAttribute("aria-expanded");
-      check(`${tag}: Enter and Space toggle with a visible focus ring`, before !== after && after !== again && outline !== "none", JSON.stringify({ before, after, again, outline }));
+      check(`${tag}: Enter and Space toggle`, before !== after && after !== again, JSON.stringify({ before, after, again }));
+      if (width === 390) {
+        await page.keyboard.press("Enter");
+        await toggle.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "instant" }));
+        const box = await toggle.boundingBox();
+        await page.screenshot({ path: path.join(OUT, `focus-ring-${kind.replace(/ /g, "-")}-${width}.png`), clip: { x: 0, y: Math.max(0, box.y - 16), width, height: box.height + 32 } });
+      }
       if (width === 320) {
         const heads = await page.$$(".fides-ds-collapsible__toggle");
         for (let i = 0; i < heads.length; i += 1) {
@@ -379,6 +414,40 @@ async function sectionNavChecks(browser) {
       await page.waitForTimeout(1200);
       const back = await page.evaluate(() => window.location.hash);
       check(`${tag}: Back marks the section it returns to`, (await current())[0] === `${back}|location`, JSON.stringify({ back, current: await current() }));
+      if (kind.endsWith("wallet")) {
+        const award = await page.evaluate(() => ({
+          bands: document.querySelectorAll(".fides-wallet-award").length,
+          anchor: !!document.querySelector(".fides-wallet-award#recognition"),
+          links: document.querySelectorAll("[data-fides-ds-section-nav] a[href='#recognition'], [data-fides-ds-section-nav] a[href='#recognitions']").length,
+          recognitionLink: !!document.querySelector("[data-fides-ds-section-nav] a[href='#recognition']"),
+          recognitionsSection: !!document.getElementById("recognitions"),
+        }));
+        if (award.bands === 0) {
+          check(`${tag}: no award data, no Recognition link`, !award.recognitionLink && !award.anchor, JSON.stringify(award));
+        } else {
+          check(`${tag}: award band has its anchor and exactly one recognition link`, award.bands === 1 && award.anchor && award.links === 1 && award.recognitionLink !== award.recognitionsSection, JSON.stringify(award));
+          if (award.recognitionLink) {
+            await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+            await page.waitForTimeout(300);
+            if (width < 1100) await page.click("[data-fides-ds-section-nav] > summary");
+            await page.click("[data-fides-ds-section-nav] a[href='#recognition']");
+            await page.waitForTimeout(1400);
+            const hit = await page.evaluate(() => {
+              const band = document.getElementById("recognition").getBoundingClientRect();
+              const nav = document.querySelector("[data-fides-ds-section-nav]").getBoundingClientRect();
+              return {
+                current: [...document.querySelectorAll("[data-fides-ds-section-nav] a[aria-current]")].map((a) => `${a.getAttribute("href")}|${a.getAttribute("aria-current")}`),
+                top: Math.round(band.top),
+                navBottom: Math.round(nav.bottom),
+                hash: window.location.hash,
+                open: document.querySelector("[data-fides-ds-section-nav]").open,
+              };
+            });
+            check(`${tag}: Recognition link scrolls to the award band below the sticky nav and becomes current`, hit.current.length === 1 && hit.current[0] === "#recognition|location" && hit.top >= hit.navBottom - 1 && hit.top < 260 && (width >= 1100 || !hit.open), JSON.stringify(hit));
+            await (await page.$("[data-fides-ds-section-nav]")).screenshot({ path: path.join(OUT, `section-nav-recognition-${width}.png`) });
+          }
+        }
+      }
       if (width === 1440 && kind === "business wallet") {
         await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
         await page.click("[data-fides-ds-section-nav] a[href='#use-cases']");
