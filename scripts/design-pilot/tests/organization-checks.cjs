@@ -487,7 +487,7 @@ async function detail(browser, width, id) {
   check(`${tag}: 44 px targets`, small.length === 0, small.slice(0, 5).join("; "));
   check(`${tag}: no empty sections`, info.emptyPanels === 0, String(info.emptyPanels));
   check(`${tag}: profile closing has an action`, info.update !== "", info.update);
-  check(`${tag}: profile closing #F1F6FF`, info.closingBg === "rgb(241, 246, 255)", info.closingBg);
+  check(`${tag}: profile closing #F2F7FF (DS1.4 surface-info)`, info.closingBg === "rgb(242, 247, 255)", info.closingBg);
   check(`${tag}: one share action, no Copy link`, info.shares === 1 && !info.copy, `${info.shares} ${info.copy}`);
   check(`${tag}: share named Share on LinkedIn with tooltip`, info.top && /^Share on LinkedIn/.test(info.top.label) && info.top.title === "Share on LinkedIn", JSON.stringify(info.top));
   if (info.official) check(`${tag}: guest on Official listing gets no sign-in update call`, !info.signIn);

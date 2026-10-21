@@ -215,7 +215,7 @@ final class Fides_Use_Case_Detail_Page {
     <?php endif; ?>
 
     <div class="fides-uc-detail__body<?php echo $compact ? ' fides-uc-detail__body--compact' : ''; ?>">
-      <div class="fides-uc-detail__main">
+      <div class="fides-uc-detail__main fides-ds-main">
         <?php if ($summary) : ?>
           <section class="fides-uc-detail__section" id="overview" aria-labelledby="overview-title">
             <h2 class="fides-ds-heading-2" id="overview-title">Overview</h2>

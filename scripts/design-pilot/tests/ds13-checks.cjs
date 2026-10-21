@@ -431,6 +431,7 @@ async function contextChecks(browser) {
         const kids = [...col.children].filter((el) => el.getClientRects().length);
         const lastBottom = kids.length ? kids[kids.length - 1].getBoundingClientRect().bottom : box.top;
         const heavy = [...col.querySelectorAll("*")].filter((el) => el.getClientRects().length && ["Top", "Bottom"].some((side) => {
+          if (side === "Top" && el.parentElement === col) return false;
           const s = getComputedStyle(el);
           return parseFloat(s[`border${side}Width`]) >= 2 && s[`border${side}Style`] !== "none";
         })).map((el) => el.className);
@@ -442,7 +443,7 @@ async function contextChecks(browser) {
           padding: cs.padding,
           fitsContent: Math.abs(box.bottom - (lastBottom + parseFloat(cs.paddingBottom))) <= 1,
           first: kids.length ? getComputedStyle(kids[0]).borderTopStyle : null,
-          rules: kids.slice(1).map((el) => `${getComputedStyle(el).borderTopWidth} ${getComputedStyle(el).borderTopColor === token.softLine}`),
+          rules: kids.slice(1).map((el) => `${getComputedStyle(el).borderTopWidth} ${getComputedStyle(el).borderTopColor === "rgb(143, 168, 198)"} ${getComputedStyle(el).paddingTop}`),
           heavy,
           overflow: document.documentElement.scrollWidth - window.innerWidth,
           module: module ? { surface: ms.backgroundColor === token.soft, border: ms.borderTopColor === token.softLine && ms.borderTopWidth === "1px", padding: ms.padding, title: module.querySelector(".fides-ds-module__title").textContent.trim().replace(/\s+/g, " ") } : null,
@@ -452,7 +453,7 @@ async function contextChecks(browser) {
       if (width >= 1100) {
         check(`${tag}: side column is one light-blue surface with 24px padding`, m.display === "grid" && m.surface && m.padding === "24px", JSON.stringify(m));
         check(`${tag}: side column height follows its content (no stretch)`, m.fitsContent, JSON.stringify(m));
-        check(`${tag}: first section unruled, later sections on a subtle 1px line, no heavy rules inside`, m.first === "none" && m.rules.every((r) => r === "1px true") && m.heavy.length === 0, JSON.stringify({ first: m.first, rules: m.rules, heavy: m.heavy }));
+        check(`${tag}: first section unruled, later main sections 2px #8FA8C6 + 24px (DS1.4), no other heavy rules inside`, m.first === "none" && m.rules.every((r) => r === "2px true 24px") && m.heavy.length === 0, JSON.stringify({ first: m.first, rules: m.rules, heavy: m.heavy }));
       } else {
         check(`${tag}: side column joins the page flow without a surface`, m.display === "contents", m.display);
       }

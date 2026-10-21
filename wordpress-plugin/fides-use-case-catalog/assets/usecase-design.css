@@ -1174,12 +1174,12 @@ html.fides-uc-pilot-panel-open {
   font-weight: 400;
 }
 
-/* Media band with the shared gallery. */
+/* Media band with the shared gallery; its height follows the content (DS1.4). */
 .fides-ds .fides-uc-detail__band {
   display: grid;
   gap: var(--fides-ds-space-5);
   margin-inline: calc(-1 * var(--fides-ds-gutter));
-  padding: var(--fides-ds-space-7) var(--fides-ds-gutter);
+  padding: var(--fides-ds-space-5) var(--fides-ds-gutter);
 }
 
 .fides-ds .fides-uc-detail__band-text {
@@ -1250,13 +1250,19 @@ html.fides-uc-pilot-panel-open {
   justify-content: space-between;
   gap: var(--fides-ds-space-4) var(--fides-ds-space-6);
   margin-bottom: var(--fides-ds-space-8);
-  padding-top: var(--fides-ds-space-6);
-  border-top: 2px solid var(--fides-ds-ink);
+  padding-top: var(--fides-ds-space-5);
+  border-top: 1px solid var(--fides-ds-detail-divider);
 }
 
 .fides-ds .fides-uc-detail__update > div {
   display: grid;
   gap: var(--fides-ds-space-1);
+}
+
+.fides-ds .fides-uc-detail__update h2 {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 26px;
 }
 
 .fides-ds .fides-uc-detail__band + .fides-uc-detail__update {
@@ -1285,7 +1291,7 @@ html.fides-uc-pilot-panel-open {
 
   .fides-ds .fides-uc-ecosystem {
     padding-top: var(--fides-ds-space-5);
-    border-top: 2px solid var(--fides-ds-ink);
+    border-top: 1px solid var(--fides-ds-detail-divider);
   }
 }
 
@@ -1368,9 +1374,9 @@ html.fides-uc-pilot-panel-open {
   }
   .fides-ds .fides-uc-detail__band {
     grid-template-columns: minmax(0, 1fr) minmax(0, 800px);
-    gap: 64px;
+    gap: var(--fides-ds-space-6);
     margin-inline: 0;
-    padding: var(--fides-ds-space-8) var(--fides-ds-space-7);
+    padding: var(--fides-ds-space-6) var(--fides-ds-space-7);
   }
 }
 
@@ -1548,7 +1554,7 @@ html.fides-uc-pilot-panel-open {
     margin-bottom: var(--fides-ds-space-6);
   }
   .fides-ds.fides-uc-detail .fides-uc-detail__main {
-    gap: var(--fides-ds-space-7);
+    gap: var(--fides-ds-space-6);
   }
   .fides-ds.fides-uc-detail .fides-uc-detail__section .fides-ds-heading-2,
   .fides-ds.fides-uc-detail .fides-uc-ecosystem__head h2,

@@ -209,8 +209,10 @@ $check(strpos($media, 'fides-ds-gallery__thumb') === false, 'one media item has 
 $check(substr_count($html, 'mailto:hello@full.example.org') === 1, 'contact email is offered once');
 $update = $section($html, 'update');
 $check(strpos($update, 'mailto:hello@full.example.org') !== false && strpos($update, 'id="contact"') !== false, 'contact sits in the profile closing');
-$check(strpos($update, '>Profile information</h2>') !== false && strpos($update, 'Profile updated <time datetime="2026-07-12">') !== false, 'closing is Profile information with the date');
-$check(strpos($update, 'Help keep this profile current') === false, 'no large update call');
+$check(strpos($update, '>Help keep this profile current.</h2>') !== false && strpos($update, 'Updated <time datetime="2026-07-12">') !== false, 'Official closing is Help keep this profile current. with the date (DS1.4)');
+$check(! Fides_Organization_Design::tier_ui_enabled() || strpos($update, 'Official listing · managed by the organisation.') !== false, 'Official closing explains that the organisation manages the record');
+$check(strpos($update, 'Is this your organisation?') === false && strpos($update, 'Manage your Official Listing') === false, 'Official closing has no claim call');
+$check(strpos($update, 'fides-org-closing--claim') === false, 'Official closing is the standard bar, not the claim block');
 $check(strpos($update, 'Visit Full Org') === false, 'closing contact does not add the website visit');
 $check(strpos($update, 'Catalog data on GitHub') === false, 'no GitHub link without a catalog record path');
 $check(strpos($html, 'id="sources-title"') === false && strpos($html, 'Catalog record on GitHub') === false, 'no separate Sources section');
@@ -236,6 +238,12 @@ $guest_pro = $html;
 $check(strpos($guest_pro, 'Sign in to suggest an update') === false || ! Fides_Organization_Design::tier_ui_enabled(), 'guest on an Official listing gets no sign-in update call');
 $check(strpos($guest_pro, 'Update profile') === false && strpos($guest_pro, 'Suggest an update') === false, 'guest on an Official listing gets no update action, also not in the section navigation');
 $check(strpos($section($guest_pro, 'update'), 'class="fides-ds-button"') !== false, 'without an update action Contact is the main button');
+if (Fides_Organization_Design::tier_ui_enabled()) {
+    $guest_update = $section($guest_pro, 'update');
+    $check(strpos($guest_update, 'Authorised profile managers can sign in to make updates.') !== false && strpos($guest_update, 'Profile managers: sign in') !== false, 'guest on an Official listing gets the manager-only sign-in (DS1.4)');
+    $check(strpos($guest_update, 'Profile managers: sign in') > strpos($guest_update, 'mailto:'), 'contact stays available before the manager sign-in');
+    $check(strpos($guest_update, 'Catalog data on GitHub') === false || strpos($guest_update, 'Catalog data on GitHub') > strpos($guest_update, 'Profile managers: sign in'), 'GitHub stays the last, subordinate link');
+}
 
 // Media order: images first.
 $html  = $render(ORG_MEDIA);
@@ -266,6 +274,15 @@ $check(strpos(Fides_Use_Case_Design::render_card(array('id' => 'x', 'title' => '
 // Community listing: guests may sign in, because signing in grants the form there.
 $check(strpos($html, 'Sign in to suggest an update') !== false, 'guest on a Community listing gets the sign-in route');
 $check(strpos($html, 'Update profile') === false, 'guest on a Community listing has no direct update action');
+$check(strpos($html, 'Profile managers: sign in') === false, 'Community listing has no manager-only sign-in');
+$claim_url = Fides_Organization_Design::official_profile_url(Fides_Organization_Design::find(ORG_MANY));
+if ($claim_url !== '') {
+    $update = $section($html, 'update');
+    $check(strpos($update, 'fides-org-closing--claim') !== false && strpos($update, '>Is this your organisation?</h2>') !== false, 'Community organisation closing is the claim call (DS1.4)');
+    $check(strpos($update, 'class="fides-ds-button" href="' . esc_url($claim_url) . '">Manage your Official Listing') !== false, 'claim uses the existing Official Listing route as the main button');
+    $check(strpos($claim_url, 'intent=official-profile') !== false && strpos($claim_url, 'org=') !== false, 'Official Listing route keeps the org id and intent');
+    $check(strpos($update, 'Sign in to suggest an update') > strpos($update, 'Manage your Official Listing'), 'suggesting an update stays secondary after the claim');
+}
 
 // Minimal profile.
 $html = $render(ORG_MIN);
@@ -273,7 +290,7 @@ foreach (array('use-cases', 'media', 'news', 'ecosystem', 'contact', 'certificat
     $check(strpos($html, 'id="' . $id . '"') === false, "minimal profile hides {$id}");
 }
 $check(strpos($html, 'id="update"') !== false, 'minimal profile keeps the profile closing');
-$check(strpos($html, 'Profile updated') === false, 'no update date without data');
+$check(strpos($html, 'fides-org-closing__date') === false, 'no update date without data');
 $check(strpos($html, 'fides-org-detail__logo') === false, 'minimal profile has no logo slot');
 
 // News switched off on the record.
@@ -290,8 +307,9 @@ foreach ($members as $member) {
     $html = $render(ORG_FULL);
     $check(Fides_Organization_Design::update_url(Fides_Organization_Design::find(ORG_FULL)) === '' || ! Fides_Organization_Design::tier_ui_enabled(), 'member without rights is denied the Official update form by the access rule');
     $check(strpos($html, 'Update profile') === false && strpos($html, 'Sign in to suggest an update') === false, 'member without rights sees no update call on an Official listing');
+    $check(strpos($html, 'Profile managers: sign in') === false, 'signed-in member gets no extra sign-in or rights on an Official listing');
     $html = $render(ORG_MANY);
-    $check(strpos($html, 'Update profile') !== false && strpos($html, 'Sign in to suggest an update') === false, 'member gets Update profile on a Community listing');
+    $check(strpos($section($html, 'update'), 'Suggest an update') !== false && strpos($html, 'Sign in to suggest an update') === false, 'member gets Suggest an update on a Community listing');
     break;
 }
 wp_set_current_user(0);

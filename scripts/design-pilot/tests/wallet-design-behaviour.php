@@ -256,7 +256,8 @@ $glance = static function (string $html): string {
     $start = strpos($html, 'aria-labelledby="glance-title"');
     return $start === false ? '' : substr($html, $start, strpos($html, '</section>', $start) - $start);
 };
-$check(strpos($glance($pers), '<dt>License</dt><dd>Open Source (Apache') !== false, 'open-source license in At a glance');
+$check(strpos($glance($pers), '<dt>License</dt><dd>Open Source (Apache') !== false, 'open-source license in Wallet details');
+$check(strpos($biz, 'id="glance-title">Wallet details</h2>') !== false && strpos($biz, 'At a glance') === false, 'core facts are titled Wallet details (DS1.4)');
 $check(strpos($glance($biz), '<dt>License</dt>') === false, 'no license data: no license row (not Proprietary)');
 $check(strpos($glance($render(W_BIZ_COMM)), '<dt>License</dt><dd>Proprietary</dd>') !== false, 'openSource false: Proprietary');
 $check(strpos($glance($render(W_LINKED)), '<dt>License</dt><dd>Open Source</dd>') !== false, 'openSource true without license: Open Source');
@@ -266,7 +267,7 @@ $check(strpos($biz, 'id="technical" aria-labelledby="technical-title" data-fides
 $check(strpos($biz, 'id="eidas" aria-labelledby="eidas-title" data-fides-ds-collapsible="closed"') !== false && strpos($biz, 'data-fides-ds-collapsible-body id="eidas-body"') !== false, 'eIDAS uses the shared narrow-screen accordion');
 $linked_html = $render(W_LINKED);
 $check(strpos($linked_html, 'fides-wallet-detail__technical--main" id="technical" aria-labelledby="technical-title" data-fides-ds-collapsible="closed"') !== false, 'technical in the main column (no use cases) keeps the accordion');
-$check(strpos($glance($biz), '<dt>Status</dt><dd>Production</dd>') !== false, 'status in At a glance');
+$check(strpos($glance($biz), '<dt>Status</dt><dd>Production</dd>') !== false, 'status in Wallet details');
 $check(strpos($section($pers, 'pricing'), 'License') === false, 'license not repeated under pricing');
 $check(strpos($biz, 'fill="#34A853"') === false && strpos($pers, 'fill="#34A853"') !== false, 'Google Play button uses the Play mark');
 $check(strpos($glance($pers), '<dt>Capabilities</dt><dd>Holder</dd>') !== false, 'personal wallet shows its explicit capabilities');
@@ -332,8 +333,16 @@ $check(strpos($missing, 'This wallet is not in the current FIDES catalog.') !== 
 $guest = array('isLoggedIn' => false, 'isAdmin' => false, 'ownedOrgIds' => array(), 'proOrgIds' => array(), 'fullOrgIds' => array());
 $html  = $render(W_BIZ_PRO, $guest);
 $check(strpos($html, 'Sign in to suggest an update') === false && strpos($html, 'Suggest an update') === false, 'guest on an Official listing: no update or sign-in call');
+$closing = $section($html, 'listing');
+$check(strpos($closing, '>Help keep this wallet current.</h2>') !== false, 'wallet closing is Help keep this wallet current. (DS1.4)');
+$check(strpos($closing, 'Official listing · managed by the wallet provider.') !== false, 'Official closing explains that the provider manages the record');
+$check(strpos($closing, 'Authorised profile managers can sign in to make updates.') !== false && strpos($closing, 'Profile managers: sign in') !== false, 'guest on an Official listing gets the manager-only sign-in');
+$check(strpos($closing, 'Catalog data on GitHub') === false || strpos($closing, 'Catalog data on GitHub') > strpos($closing, 'Profile managers: sign in'), 'GitHub stays the last, subordinate link');
 $html = $render(W_PERS_COMM, $guest);
 $check(strpos($html, 'Sign in to suggest an update') !== false, 'guest on a Community listing gets the sign-in call');
+$closing = $section($html, 'listing');
+$check(strpos($closing, 'Community listing · catalog data from public sources.') !== false && strpos($closing, 'Suggest a correction using the existing update form.') !== false, 'Community closing explains the public-source record and the update route');
+$check(strpos($html, 'Profile managers: sign in') === false, 'Community listing has no manager-only sign-in');
 $html = $render(W_LINKED, $guest + array());
 $check(strpos($html, 'Sign in to suggest an update') !== false, 'linked listing without tier is Community for a guest without Pro ids');
 $html = $render(W_LINKED, array_merge($guest, array('proOrgIds' => array(ORG_LINKED))));
@@ -347,13 +356,14 @@ if ($members) {
     $member = array('isLoggedIn' => true, 'isAdmin' => false, 'ownedOrgIds' => array(), 'proOrgIds' => array(), 'fullOrgIds' => array());
     $html   = $render(W_BIZ_PRO, $member);
     $check(strpos($html, 'Suggest an update') === false && strpos($html, 'Sign in to suggest an update') === false, 'member without rights: no update call on an Official listing');
+    $check(strpos($html, 'Update profile') === false && strpos($html, 'Profile managers: sign in') === false, 'signing in grants no update action or extra sign-in on an Official listing');
     $html = $render(W_PERS_COMM, $member);
     $check(strpos($html, 'Suggest an update') !== false && strpos($html, 'Sign in to suggest an update') === false, 'member gets Suggest an update on a Community listing');
     $check(strpos($html, 'wallet=' . W_PERS_COMM) !== false, 'update link carries the wallet id');
     $html = $render(W_BIZ_PRO, array_merge($member, array('ownedOrgIds' => array(ORG_PRO))));
-    $check(strpos($html, 'Suggest an update') !== false, 'owner of the Pro organization gets Suggest an update');
+    $check(strpos($section($html, 'listing'), 'Update profile') !== false, 'owner of the Pro organization gets Update profile');
     $html = $render(W_LINKED, array_merge($member, array('proOrgIds' => array(ORG_LINKED))));
-    $check(strpos($html, 'Suggest an update') === false, 'member without ownership is denied a linked Pro listing');
+    $check(strpos($html, 'Suggest an update') === false && strpos($html, 'Update profile') === false, 'member without ownership is denied a linked Pro listing');
     $html = $render(W_BIZ_COMM, array_merge($member, array('fullOrgIds' => array(ORG_COMM))));
     $check(strpos($html, 'Visit wallet website') !== false, 'fullOrgIds unlock full fields on a Community listing');
 } else {
@@ -362,7 +372,7 @@ if ($members) {
 if ($admins) {
     wp_set_current_user((int) $admins[0]);
     $html = $render(W_BIZ_PRO, array('isLoggedIn' => true, 'isAdmin' => true, 'ownedOrgIds' => array(), 'proOrgIds' => array(), 'fullOrgIds' => array()));
-    $check(strpos($html, 'Suggest an update') !== false, 'administrator gets Suggest an update on an Official listing');
+    $check(strpos($section($html, 'listing'), 'Update profile') !== false && strpos($html, 'Profile managers: sign in') === false, 'administrator gets Update profile on an Official listing');
     $check(preg_match('~fides-uc-detail__sections-update"><a href="[^"#]+"~', $html) === 1, 'section nav links to the update form for an authorised user');
 }
 wp_set_current_user(0);
