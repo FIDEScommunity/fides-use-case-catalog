@@ -967,17 +967,21 @@ html.fides-uc-pilot-panel-open {
 }
 
 .fides-ds .fides-uc-detail__body {
+  --fides-uc-detail-gap: var(--fides-ds-space-8);
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--fides-ds-space-8);
+  gap: var(--fides-uc-detail-gap);
 }
 
 .fides-ds .fides-uc-detail__main,
 .fides-ds .fides-uc-detail__aside {
   display: grid;
-  gap: var(--fides-ds-space-8);
   align-content: start;
   min-width: 0;
+}
+
+.fides-ds .fides-uc-detail__main {
+  gap: var(--fides-ds-space-8);
 }
 
 .fides-ds .fides-uc-detail__section,
@@ -1017,6 +1021,15 @@ html.fides-uc-pilot-panel-open {
   padding: var(--fides-ds-space-5);
   background: var(--fides-ds-soft);
   border: 1px solid var(--fides-ds-soft-line);
+}
+
+/* Inside the light-blue side column the summary is a section, not a second framed surface. */
+.fides-ds .fides-ds-context > .fides-uc-ecosystem-summary {
+  padding-inline: 0;
+  padding-bottom: 0;
+  border-inline: 0;
+  border-bottom: 0;
+  background: none;
 }
 
 .fides-ds .fides-uc-ecosystem-summary__intro {
@@ -1105,16 +1118,9 @@ html.fides-uc-pilot-panel-open {
   letter-spacing: 0;
 }
 
-.fides-ds .fides-uc-ecosystem__group.is-collapsible {
-  padding-block: var(--fides-ds-space-1);
-}
-
-.fides-ds .fides-uc-ecosystem__group.is-collapsible .fides-uc-ecosystem__role {
-  margin-bottom: 0;
-}
-
-.fides-ds .fides-uc-ecosystem__group.is-collapsible [data-fides-ds-collapsible-body] {
-  padding-bottom: var(--fides-ds-space-3);
+/* Narrow screens: each role is its own light-blue module, 8px apart. */
+.fides-ds .fides-uc-ecosystem__groups:has(> .is-collapsible) {
+  row-gap: var(--fides-ds-space-2);
 }
 
 .fides-ds .fides-uc-ecosystem .fides-uc-relations__item:first-child {
@@ -1277,12 +1283,6 @@ html.fides-uc-pilot-panel-open {
   .fides-ds .fides-uc-detail__related { order: 7; }
   .fides-ds .fides-uc-detail__update { order: 8; }
 
-  .fides-ds .fides-uc-detail__technical.is-collapsible {
-    padding-top: var(--fides-ds-space-1);
-  }
-  .fides-ds .fides-uc-detail__technical.is-collapsible .fides-ds-panel__title {
-    margin-bottom: 0;
-  }
   .fides-ds .fides-uc-ecosystem {
     padding-top: var(--fides-ds-space-5);
     border-top: 2px solid var(--fides-ds-ink);
@@ -1297,7 +1297,9 @@ html.fides-uc-pilot-panel-open {
   .fides-ds .fides-uc-detail__sections {
     margin-bottom: var(--fides-ds-space-6);
   }
-  .fides-ds .fides-uc-detail__body,
+  .fides-ds .fides-uc-detail__body {
+    --fides-uc-detail-gap: var(--fides-ds-space-7);
+  }
   .fides-ds .fides-uc-detail__main {
     gap: var(--fides-ds-space-7);
   }
@@ -1545,8 +1547,7 @@ html.fides-uc-pilot-panel-open {
   .fides-ds.fides-uc-detail .fides-uc-detail__sections {
     margin-bottom: var(--fides-ds-space-6);
   }
-  .fides-ds.fides-uc-detail .fides-uc-detail__main,
-  .fides-ds.fides-uc-detail .fides-uc-detail__aside {
+  .fides-ds.fides-uc-detail .fides-uc-detail__main {
     gap: var(--fides-ds-space-7);
   }
   .fides-ds.fides-uc-detail .fides-uc-detail__section .fides-ds-heading-2,

@@ -525,7 +525,10 @@ async function detail(browser, width, id) {
     const sorted = info.useCaseTitles.slice().sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
     check(`${tag}: use cases alphabetical`, JSON.stringify(sorted) === JSON.stringify(info.useCaseTitles), info.useCaseTitles.join(" | "));
   }
-  if (info.newsBg) check(`${tag}: news band #F1F6FF`, info.newsBg === "rgb(241, 246, 255)", info.newsBg);
+  if (info.newsBg) {
+    if (width >= 1100) check(`${tag}: news band #F1F6FF`, info.newsBg === "rgb(241, 246, 255)", info.newsBg);
+    else check(`${tag}: news is a light-blue module #F2F7FF (Paper 20.32)`, info.newsBg === "rgb(242, 247, 255)", info.newsBg);
+  }
   if (info.gallery) {
     check(`${tag}: gallery starts with an image`, info.gallery.first === "IMG", info.gallery.first);
     check(`${tag}: gallery no autoplay`, !info.gallery.autoplay);

@@ -245,7 +245,7 @@ final class Fides_Use_Case_Detail_Page {
         <?php endif; ?>
       </div>
 
-      <div class="fides-uc-detail__aside">
+      <div class="fides-uc-detail__aside fides-ds-context">
         <?php if ($orgs) : ?>
           <section class="fides-ds-panel fides-uc-detail__panel fides-uc-detail__orgs" id="organisations" aria-labelledby="organisations-title">
             <h2 class="fides-ds-panel__title" id="organisations-title">Organisations involved <span class="fides-uc-detail__count"><?php echo esc_html((string) count($orgs['items'])); ?></span></h2>

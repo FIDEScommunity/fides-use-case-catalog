@@ -29,6 +29,13 @@ const DETAILS = {
   "business wallet": `${BASE}/fides-design-pilot/wallet/?wallet=credenco-business-wallet`,
   "personal wallet": `${BASE}/fides-design-pilot/wallet/?wallet=credenco-wallet`,
 };
+/* Rich and sparse profiles for the side column and Recognitions module (Paper 20.32). */
+const CONTEXT_PROFILES = {
+  ...DETAILS,
+  "wallet with recognitions and award": `${BASE}/fides-design-pilot/wallet/?wallet=sphereon-business-wallet`,
+  "organization with recognitions": `${BASE}/fides-design-pilot/organization/?org=org:airship`,
+  "sparse organization": `${BASE}/fides-design-pilot/organization/?org=org:sda-dms-zartkoruen-mukodo-reszvenytarsasag`,
+};
 const GLOSSARY = {
   "business wallet": `${BASE}/fides-design-pilot/wallet/?wallet=sphereon-business-wallet`,
   "personal wallet": `${BASE}/fides-design-pilot/wallet/?wallet=credenco-wallet`,
@@ -298,10 +305,21 @@ async function accordionChecks(browser) {
           gap = sameLine ? Math.round(countBox.left - titleRight) : null;
         }
         const body = document.getElementById(toggle.getAttribute("aria-controls") || "");
+        const root = toggle.closest("[data-fides-ds-collapsible]");
+        const rs = getComputedStyle(root);
+        const probe = document.createElement("span");
+        probe.style.cssText = "color:var(--fides-ds-soft);background:var(--fides-ds-soft-line);border-color:var(--fides-ds-link)";
+        root.appendChild(probe);
+        const ps = getComputedStyle(probe);
+        const token = { soft: ps.color, softLine: ps.backgroundColor, link: ps.borderTopColor };
+        probe.remove();
         return {
           text: toggle.textContent.trim().replace(/\s+/g, " "),
           height: Math.round(box.height),
           right: Math.round(box.right - chevron.right),
+          padding: getComputedStyle(toggle).padding,
+          frame: rs.backgroundColor === token.soft && rs.borderLeftColor === token.softLine && rs.borderLeftWidth === "1px",
+          titleColor: getComputedStyle(toggle).color === token.link,
           gap,
           sameLine,
           count: count ? `${getComputedStyle(count).fontSize}/${getComputedStyle(count).lineHeight}/${getComputedStyle(count).fontWeight}` : null,
@@ -312,8 +330,26 @@ async function accordionChecks(browser) {
         };
       }));
       check(`${tag}: accordions present`, rows.length > 0, "none");
-      const bad = rows.filter((row) => row.height < 44 || !row.controls || (row.expanded === "true") === row.hidden || row.overflow > 0 || row.right > 1);
-      check(`${tag}: 44px rows, chevron on the right, aria-controls and state in sync`, bad.length === 0, JSON.stringify(bad));
+      const bad = rows.filter((row) => row.height < 56 || !row.controls || (row.expanded === "true") === row.hidden || row.overflow > 0 || Math.abs(row.right - 16) > 1 || row.padding !== "16px");
+      check(`${tag}: 56px rows with 16px padding, chevron 16px from the right, aria-controls and state in sync`, bad.length === 0, JSON.stringify(bad));
+      const unframed = rows.filter((row) => !row.frame || !row.titleColor);
+      check(`${tag}: every accordion is a light-blue module with a link-blue title row (Paper 20.32)`, unframed.length === 0, JSON.stringify(unframed));
+      if (kind.endsWith("wallet")) {
+        const join = await page.evaluate(() => {
+          const tech = document.querySelector(".fides-wallet-detail__technical.is-collapsible");
+          const eidas = document.querySelector(".fides-wallet-detail__eidas.is-collapsible");
+          if (!tech || !eidas) return null;
+          const t = tech.getBoundingClientRect();
+          const e = eidas.getBoundingClientRect();
+          const probe = document.createElement("span");
+          probe.style.color = "var(--fides-ds-line)";
+          eidas.appendChild(probe);
+          const line = getComputedStyle(probe).color;
+          probe.remove();
+          return { seam: Math.round(e.top - t.bottom), techBottom: getComputedStyle(tech).borderBottomWidth, divider: getComputedStyle(eidas).borderTopColor === line, sameLeft: Math.abs(t.left - e.left) < 0.5 && Math.abs(t.width - e.width) < 0.5 };
+        });
+        check(`${tag}: Technical details and eIDAS are two adjoining rows in one frame`, join && join.seam === 0 && join.techBottom === "0px" && join.divider && join.sameLeft, JSON.stringify(join));
+      }
       const counts = rows.filter((row) => row.count);
       const looseCounts = counts.filter((row) => row.sameLine ? Math.abs(row.gap - 8) > 1 : false);
       check(`${tag}: count follows its title at 8px`, counts.length > 0 && looseCounts.length === 0, JSON.stringify(looseCounts.length ? looseCounts : counts));
@@ -376,6 +412,58 @@ async function accordionChecks(browser) {
   }
 }
 
+async function contextChecks(browser) {
+  for (const width of [1440, 1280, 768, 390]) {
+    const context = await newContext(browser, width, 900, 1);
+    const page = await context.newPage();
+    for (const [kind, url] of Object.entries(CONTEXT_PROFILES)) {
+      const tag = `context column ${kind} @${width}`;
+      await open(page, url);
+      const m = await page.evaluate(() => {
+        const col = document.querySelector(".fides-ds-context");
+        const probe = document.createElement("span");
+        probe.style.cssText = "color:var(--fides-ds-soft);background:var(--fides-ds-soft-line)";
+        col.appendChild(probe);
+        const token = { soft: getComputedStyle(probe).color, softLine: getComputedStyle(probe).backgroundColor };
+        probe.remove();
+        const cs = getComputedStyle(col);
+        const box = col.getBoundingClientRect();
+        const kids = [...col.children].filter((el) => el.getClientRects().length);
+        const lastBottom = kids.length ? kids[kids.length - 1].getBoundingClientRect().bottom : box.top;
+        const heavy = [...col.querySelectorAll("*")].filter((el) => el.getClientRects().length && ["Top", "Bottom"].some((side) => {
+          const s = getComputedStyle(el);
+          return parseFloat(s[`border${side}Width`]) >= 2 && s[`border${side}Style`] !== "none";
+        })).map((el) => el.className);
+        const module = document.querySelector(".fides-ds-module");
+        const ms = module && getComputedStyle(module);
+        return {
+          display: cs.display,
+          surface: cs.backgroundColor === token.soft,
+          padding: cs.padding,
+          fitsContent: Math.abs(box.bottom - (lastBottom + parseFloat(cs.paddingBottom))) <= 1,
+          first: kids.length ? getComputedStyle(kids[0]).borderTopStyle : null,
+          rules: kids.slice(1).map((el) => `${getComputedStyle(el).borderTopWidth} ${getComputedStyle(el).borderTopColor === token.softLine}`),
+          heavy,
+          overflow: document.documentElement.scrollWidth - window.innerWidth,
+          module: module ? { surface: ms.backgroundColor === token.soft, border: ms.borderTopColor === token.softLine && ms.borderTopWidth === "1px", padding: ms.padding, title: module.querySelector(".fides-ds-module__title").textContent.trim().replace(/\s+/g, " ") } : null,
+        };
+      });
+      check(`${tag}: no horizontal overflow`, m.overflow <= 0, String(m.overflow));
+      if (width >= 1100) {
+        check(`${tag}: side column is one light-blue surface with 24px padding`, m.display === "grid" && m.surface && m.padding === "24px", JSON.stringify(m));
+        check(`${tag}: side column height follows its content (no stretch)`, m.fitsContent, JSON.stringify(m));
+        check(`${tag}: first section unruled, later sections on a subtle 1px line, no heavy rules inside`, m.first === "none" && m.rules.every((r) => r === "1px true") && m.heavy.length === 0, JSON.stringify({ first: m.first, rules: m.rules, heavy: m.heavy }));
+      } else {
+        check(`${tag}: side column joins the page flow without a surface`, m.display === "contents", m.display);
+      }
+      if (m.module) {
+        check(`${tag}: Recognitions is one bounded light-blue module`, m.module.surface && m.module.border && m.module.padding === (width >= 600 ? "24px" : "20px") && /^Recognitions? \d+$/.test(m.module.title), JSON.stringify(m.module));
+      }
+    }
+    await context.close();
+  }
+}
+
 async function sectionNavChecks(browser) {
   for (const width of [1440, 1280, 768, 390]) {
     const context = await newContext(browser, width, 900, 1);
@@ -396,8 +484,11 @@ async function sectionNavChecks(browser) {
       await page.click(`[data-fides-ds-section-nav] a[href='${pick}']`);
       await page.waitForTimeout(1400);
       const chosen = await current();
-      const landed = await page.evaluate((href) => Math.round(document.getElementById(decodeURIComponent(href.slice(1))).getBoundingClientRect().top), pick);
-      check(`${tag}: chosen link becomes current and its section is in view`, chosen.length === 1 && chosen[0] === `${pick}|location` && landed >= 0 && landed < 200, JSON.stringify({ chosen, landed }));
+      const { landed, atEnd } = await page.evaluate((href) => ({
+        landed: Math.round(document.getElementById(decodeURIComponent(href.slice(1))).getBoundingClientRect().top),
+        atEnd: Math.ceil(window.scrollY) >= document.documentElement.scrollHeight - window.innerHeight - 1,
+      }), pick);
+      check(`${tag}: chosen link becomes current and its section is in view`, chosen.length === 1 && chosen[0] === `${pick}|location` && landed >= 0 && (landed < 200 || (atEnd && landed < 900)), JSON.stringify({ chosen, landed, atEnd }));
       if (width < 1100) check(`${tag}: On this page closes after choosing`, !(await page.$eval("[data-fides-ds-section-nav]", (nav) => nav.open)));
       await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
       await page.waitForTimeout(300);
@@ -416,8 +507,10 @@ async function sectionNavChecks(browser) {
       check(`${tag}: Back marks the section it returns to`, (await current())[0] === `${back}|location`, JSON.stringify({ back, current: await current() }));
       if (kind.endsWith("wallet")) {
         const award = await page.evaluate(() => ({
-          bands: document.querySelectorAll(".fides-wallet-award").length,
-          anchor: !!document.querySelector(".fides-wallet-award#recognition"),
+          bands: document.querySelectorAll(".fides-ds-module .fides-wallet-award").length,
+          loose: document.querySelectorAll(".fides-wallet-award").length - document.querySelectorAll(".fides-ds-module .fides-wallet-award").length,
+          modules: document.querySelectorAll(".fides-wallet-detail__recognitions.fides-ds-module").length,
+          anchor: !!document.querySelector(".fides-wallet-detail__recognitions#recognition, .fides-wallet-detail__recognitions #recognition"),
           links: document.querySelectorAll("[data-fides-ds-section-nav] a[href='#recognition'], [data-fides-ds-section-nav] a[href='#recognitions']").length,
           recognitionLink: !!document.querySelector("[data-fides-ds-section-nav] a[href='#recognition']"),
           recognitionsSection: !!document.getElementById("recognitions"),
@@ -425,7 +518,7 @@ async function sectionNavChecks(browser) {
         if (award.bands === 0) {
           check(`${tag}: no award data, no Recognition link`, !award.recognitionLink && !award.anchor, JSON.stringify(award));
         } else {
-          check(`${tag}: award band has its anchor and exactly one recognition link`, award.bands === 1 && award.anchor && award.links === 1 && award.recognitionLink !== award.recognitionsSection, JSON.stringify(award));
+          check(`${tag}: awards sit inside the one Recognitions module with their anchor and exactly one recognition link`, award.bands === 1 && award.loose === 0 && award.modules === 1 && award.anchor && award.links === 1 && award.recognitionLink !== award.recognitionsSection, JSON.stringify(award));
           if (award.recognitionLink) {
             await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
             await page.waitForTimeout(300);
@@ -513,6 +606,7 @@ async function walletActionChecks(browser) {
     await glossaryChecks(browser);
     await filterDialogChecks(browser);
     await accordionChecks(browser);
+    await contextChecks(browser);
     await sectionNavChecks(browser);
     await walletActionChecks(browser);
   } finally {

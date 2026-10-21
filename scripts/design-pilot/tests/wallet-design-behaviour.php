@@ -297,12 +297,17 @@ $render_awarded = static function (string $id) use ($render, $flush, $award_prop
     ));
 };
 $biz_award = $render_awarded(W_BIZ_PRO);
-$check(strpos($biz_award, '<section class="fides-wallet-award" id="recognition"') !== false, 'award band has the stable recognition anchor');
+$check(preg_match('~<section class="fides-ds-module [^"]*fides-wallet-detail__recognitions" id="recognition"~', $biz_award) === 1, 'awards only: the Recognition module carries the stable recognition anchor');
+$check(strpos($biz_award, '<section class="fides-wallet-award"') === false && substr_count($biz_award, 'class="fides-wallet-award"') === 1, 'awards sit inside the module, no separate award band');
+$check(preg_match('~id="recognitions-title">Recognition <span class="fides-uc-detail__count">1</span>~', $biz_award) === 1, 'awards only: module title Recognition with the award count');
 $check(strpos($biz_award, '<a href="#recognition">Recognition</a>') !== false, 'award band: Recognition link in the section nav');
 $check(substr_count($biz_award, 'Best Business Wallet 2026') === 1, 'award content is shown once');
 $check(strpos($biz_award, 'href="#technical"') < strpos($biz_award, 'href="#recognition"') && strpos($biz_award, 'href="#recognition"') < strpos($biz_award, 'href="#pricing"'), 'Recognition sits between Technical details and Pricing in the nav');
 $pers_award = $render_awarded(W_PERS_FULL);
-$check(strpos($pers_award, 'href="#recognitions"') !== false && strpos($pers_award, 'href="#recognition"') === false && strpos($pers_award, 'id="recognition"') !== false, 'with a Recognitions section and an award band: one Recognitions link');
+$check(strpos($pers_award, 'href="#recognitions"') !== false && strpos($pers_award, 'href="#recognition"') === false && strpos($pers_award, 'id="recognition"') !== false, 'with own recognitions and awards: one Recognitions link, the award anchor is kept');
+$pers_module = $section($pers_award, 'recognitions');
+$check(substr_count($pers_award, 'fides-ds-module ') === 1 && strpos($pers_module, 'class="fides-wallet-award" id="recognition" role="group" aria-label="FIDES awards"') !== false && strpos($pers_module, 'Plain certificate') !== false, 'own recognitions and FIDES awards share one module without merging entries');
+$check(preg_match('~id="recognitions-title">Recognitions <span class="fides-uc-detail__count">(\d+)</span>~', $pers_award, $m) === 1 && (int) $m[1] === substr_count($section($pers, 'recognitions'), '<li>') + 1, 'module count covers own recognitions plus awards');
 $check(strpos($biz, 'id="recognition"') === false && strpos($biz, 'href="#recognition"') === false, 'no award data: no award band and no Recognition link');
 
 // Limited (Community) listings.
