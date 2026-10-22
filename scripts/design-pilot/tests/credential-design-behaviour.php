@@ -177,6 +177,104 @@ $check($has($vlei, 'is not numeric') && $has($vlei, 'no TS11 format identifier')
 $mdl = $render('cred:iso:mdl');
 $check($has($mdl, 'recorded, not resolved') || $has($mdl, 'scheme'), 'mDL: trusted authority reference shown');
 
+// ---------- Ecosystem connections (Paper 20.36-20.38) ----------
+
+$section_of = static function (string $html): string {
+    $start = strpos($html, '<section class="fides-credential-eco"');
+    return $start === false ? '' : substr($html, $start, strpos($html, '</section>', $start) - $start);
+};
+$names_in = static function (string $html, string $list_id): array {
+    $start = strpos($html, 'id="' . $list_id . '"');
+    if ($start === false) {
+        return array();
+    }
+    $list = substr($html, $start, strpos($html, '</ul>', $start) - $start);
+    preg_match_all('#<span class="fides-org-eco__name fides-credential-eco__name">(.*?)</span>#', $list, $m);
+    return array_map('html_entity_decode', $m[1]);
+};
+
+$av_id      = 'cred:eu:age-verification';
+$av_html    = $render($av_id);
+$av_eco     = $section_of($av_html);
+$av_issuers = Fides_Credential_Design::issuers_for($av_id);
+$av_rps     = Fides_Credential_Design::relying_parties_for($av_id);
+$av_wallets = Fides_Credential_Design::wallets_for($av_id);
+$ni = count($av_issuers);
+$nr = count($av_rps);
+$nw = count($av_wallets);
+$check($ni > 3 && $nr > 3 && $nw > 1, "AV: rich ecosystem snapshot ($ni issuers, $nr relying parties, $nw wallets)");
+$check($av_eco !== '' && $has($av_html, 'href="#ecosystem"'), 'AV: ecosystem section and nav entry');
+$p_aside   = strpos($av_html, 'fides-credential-detail__aside');
+$p_eco     = strpos($av_html, '<section class="fides-credential-eco"');
+$p_closing = strpos($av_html, 'id="listing"');
+$check($p_aside !== false && $p_eco > $p_aside && $p_eco < $p_closing, 'AV: ecosystem sits below main/aside and above the closing');
+$check($has($av_eco, 'Who issues it?') && $has($av_eco, 'Issuers · ' . $ni), 'AV: issuer group with dynamic count');
+$check($has($av_eco, 'Where is it accepted?') && $has($av_eco, 'Relying parties · ' . $nr), 'AV: relying-party group with dynamic count');
+$check(substr_count($av_eco, 'fides-credential-eco__row"') === $ni + $nr, 'AV: one shared relation row per issuer and relying party');
+$check(substr_count($av_eco, 'class="fides-org-eco__row fides-credential-eco__row" href="') === $ni + $nr, 'AV: every row is one link');
+$check(substr_count($av_eco, 'data-fides-ds-show-all="3" data-fides-ds-show-all-wide data-fides-ds-show-all-follow') === 2, 'AV: both lists show three rows until View all, and open fully in the accordion');
+$check($has($av_eco, 'data-fides-ds-show-all-more="View all"') && $has($av_eco, 'data-fides-ds-show-all-fewer="Show fewer issuers"') && $has($av_eco, 'data-fides-ds-show-all-fewer="Show fewer relying parties"'), 'AV: View all / Show fewer labels per group');
+$check(substr_count($av_eco, 'data-fides-ds-collapsible="closed"') === 2, 'AV: groups are shared collapsibles, closed by default');
+$check(! $has($av_eco, 'overflow') && ! $has($av_html, 'fides-credential-flow') && ! $has($av_html, 'fides-credential-rel'), 'AV: no conceptual flow or old relation markup');
+$sorted = static function (array $names): array {
+    $copy = $names;
+    if (class_exists('Collator')) {
+        (new Collator('en'))->sort($copy);
+    } else {
+        usort($copy, 'strcasecmp');
+    }
+    return $copy;
+};
+$issuer_names = $names_in($av_eco, 'eco-issuers-list');
+$rp_names     = $names_in($av_eco, 'eco-rps-list');
+$check(count($issuer_names) === $ni && $issuer_names === $sorted($issuer_names), 'AV: issuers listed alphabetically');
+$check(count($rp_names) === $nr && $rp_names === $sorted($rp_names), 'AV: relying parties listed alphabetically');
+$issuer_ids = array_column($av_issuers, 'id');
+$rp_ids     = array_column($av_rps, 'id');
+$check($has($av_eco, 'Open these ' . $ni . ' in the issuer catalog') && $has($av_eco, esc_url(Fides_Credential_Design::issuers_catalog_url($issuer_ids))), 'AV: filtered issuer catalog route');
+$check($has(Fides_Credential_Design::issuers_catalog_url($issuer_ids), 'issuers=' . rawurlencode((string) $issuer_ids[0])), 'AV: issuer route lists the issuer ids');
+$check($has($av_eco, 'Open these ' . $nr . ' in the relying party catalog') && $has(Fides_Credential_Design::rps_catalog_url($rp_ids), 'rps='), 'AV: filtered relying-party catalog route');
+$check($has(Fides_Credential_Design::issuer_url('x y'), 'issuer=x%20y') && $has(Fides_Credential_Design::rp_url('a'), 'rp=a'), 'single records keep the ?issuer= / ?rp= deeplinks');
+$check($has($av_eco, 'Wallets linked through these relying parties · ' . $nw) && $has(Fides_Credential_Design::wallets_catalog_url(array_column($av_wallets, 'id')), 'wallets='), 'AV: wallets as an indirect route through the relying parties');
+$check($has($av_eco, 'Named by a relying party above, not by this credential type.') && $has($av_eco, 'do not guarantee'), 'AV: indirect wallet link is not presented as compatibility');
+$readiness = array_filter(array_map(static fn($rp) => (string) ($rp['readiness'] ?? ''), $av_rps));
+foreach (array_unique($readiness) as $value) {
+    $label = Fides_Credential_Design::rp_status(array('readiness' => $value));
+    $check($has($av_eco, 'Status: </span>' . esc_html($label) . '</span>'), "AV: relying-party readiness $value shows as $label");
+}
+$check(Fides_Credential_Design::rp_status(array('readiness' => 'production-pilot')) === 'Pilot' && Fides_Credential_Design::rp_status(array('readiness' => 'technical-demo')) === 'Technical demo' && Fides_Credential_Design::rp_status(array('readiness' => 'use-case-demo')) === 'Demo' && Fides_Credential_Design::rp_status(array()) === '', 'RP readiness labels keep Pilot, Demo and Technical demo apart, and invent none');
+$check($has($av_html, 'Help keep this credential type current.') && $has($av_html, 'class="fides-org-closing__date"'), 'AV: closing title and date kept below the ecosystem');
+
+$ehic_eco = $section_of($render('cred:eu:ehic'));
+$check($has($ehic_eco, 'Issuers · ' . count(Fides_Credential_Design::issuers_for('cred:eu:ehic'))) && $has($ehic_eco, 'Relying parties · ' . count(Fides_Credential_Design::relying_parties_for('cred:eu:ehic'))), 'EHIC: shared template shows both groups');
+
+$eucc_eco = $section_of($render('cred:webuild:eucc'));
+$check($eucc_eco !== '' && $has($eucc_eco, 'Who issues it?') && ! $has($eucc_eco, 'Where is it accepted?') && ! $has($eucc_eco, 'fides-credential-eco__wallets'), 'EUCC: empty relying-party group and wallet route are left out');
+
+$obc_eco = $section_of($render('cred:eduwallet:open-badge'));
+$check($obc_eco !== '' && ! $has($obc_eco, 'Who issues it?') && $has($obc_eco, 'Where is it accepted?'), 'OBC: empty issuer group is left out');
+$check(! $has($obc_eco, 'fides-credential-eco__catalog') && $has($obc_eco, 'Wallet linked through this relying party · 1'), 'OBC: single record needs no catalog list route; wallet copy is singular');
+
+$eco_method = new ReflectionMethod('Fides_Credential_Detail_Page', 'ecosystem_html');
+$eco_method->setAccessible(true);
+$long_name = 'Municipal age attestation service for the Kingdom of the Netherlands and its overseas <b>territories</b>';
+$fixture = $eco_method->invoke(
+    null,
+    'Fixture <i>type</i>',
+    array(
+        array('id' => 'iss-long', 'displayName' => $long_name, 'organization' => array('name' => 'Org & Co', 'country' => 'nl')),
+        array('id' => 'iss-prod', 'displayName' => 'Live issuer', 'environment' => 'production', 'organization' => array('name' => 'Live org')),
+    ),
+    array(array('id' => 'rp-none', 'name' => 'Unlabelled verifier')),
+    array()
+);
+$check(substr_count($fixture, 'Not specified') === 2 && substr_count($fixture, 'fides-credential-eco__status--unknown') === 2, 'fixture: missing status says Not specified, never a guessed one');
+$check($has($fixture, 'fides-credential-eco__status--production"><span class="fides-ds-visually-hidden">Status: </span>Production'), 'fixture: production status gets its own badge');
+$check($has($fixture, esc_html($long_name)) && ! $has($fixture, '<b>territories</b>') && ! $has($fixture, '<i>type</i>'), 'fixture: long and unsafe names are escaped, not shortened');
+$check($has($fixture, 'Org &amp; Co · NL'), 'fixture: organization with country code');
+$check($has($fixture, 'Open these 2 in the issuer catalog') && ! $has($fixture, 'relying party catalog'), 'fixture: list route only for groups with more than one record');
+$check(! $has($fixture, 'fides-credential-eco__wallets'), 'fixture: no wallet route without linked wallets');
+
 // ---------- Fixtures: escaping, long URI, nested attributes, bare record ----------
 
 $bare = $render('cred:pilot-test:bare');

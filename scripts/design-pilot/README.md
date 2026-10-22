@@ -356,7 +356,7 @@ refresh.
   1440/1280/768/390/320, glossary, eIDAS, classic modal deep links; screens in
   `screens/wallets`).
 
-## Credential catalog (Paper 20.7 / 20.8 / 20.18 / 20.19 / 20.33–20.35)
+## Credential catalog (Paper 20.7 / 20.8 / 20.18 / 20.19 / 20.33–20.38)
 
 - Overview: `credential-catalog.js` pilot path (`data-design="pilot"`), same
   rows, popovers, More filters, mobile Filters dialog, pager and return
@@ -387,11 +387,31 @@ refresh.
   `catalogUrl` paths); without it the source note is simply absent.
 - Mobile (< 600 px): the logo sits on its own compact row above the kicker so
   long names get the full width.
+- Ecosystem connections (Paper 20.36–20.38): a full-width band between the
+  main/context columns and the closing, with "Who issues it?" and "Where is it
+  accepted?" (counts from the data; Age Verification is the rich example, its
+  numbers are a snapshot). From 1100 px the groups sit side by side with three
+  rows each and their own "View all N" / "Show fewer"; below that they are
+  shared collapsibles, closed by default, that open with the full list
+  (`data-fides-ds-show-all-follow`). Rows are the shared relation row
+  (`.fides-org-eco__row`) with name, organization · country and the recorded
+  status: issuer `environment`, relying-party `readiness` as Production /
+  Pilot / Demo / Technical demo, otherwise "Not specified". Rows open
+  `?issuer=` / `?rp=`; under a full list the filtered catalog route
+  (`?issuers=a,b` / `?rps=a,b`) appears. Wallets named by these relying parties
+  are an indirect route (`?wallets=`) with a note that this does not imply
+  compatibility. Empty groups are left out; up to three rows need no toggle.
+  No internal scroll areas. The closing is the shared light-blue band of 20.6.
+- Shared show-all (tiles `design-system.js`): optional
+  `data-fides-ds-show-all-more` / `-fewer` labels and `-follow` (open the list
+  with its collapsible). "Show fewer" keeps its button in the same place on
+  screen, for every show-all list.
 - Rights: `Fides_Credential_Design::can_edit()` mirrors
   `userCanEditCatalogItem`; guests see "Sign in to suggest an update".
 - Tests: `tests/credential-design-behaviour.php` (in `run-tests.sh`, real
   records plus fixtures) and `tests/run-credential-checks.sh` (overview
-  state, dialogs, five records at 1440/1280/768/390/320; screens in
+  state, dialogs, five records at 1440/1280/768/390/320, the ecosystem band
+  for Age Verification at 1440/390/320 plus EHIC and EUCC; screens in
   `screens/credentials`).
 - Not in the data, so not shown: resolved trust schemes for mDL. "View API record"
   links to `https://api.fides.community/api/public/credentialtype/<id>`
