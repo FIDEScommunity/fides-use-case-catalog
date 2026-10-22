@@ -123,6 +123,7 @@ $check($has($ehic, 'projected from catalog version 1'), 'EHIC: semantic version 
 $check($has($ehic, 'data-fides-ds-term="' . Fides_Credential_Design::TS11_TEMPLATE . '"') && $has($ehic, '<template id="' . Fides_Credential_Design::TS11_TEMPLATE . '"'), 'EHIC: Explain opens the per-record TS11 template');
 $check($has($ehic, 'id="sources"') && $has($ehic, 'Catalog record'), 'EHIC: sources section');
 $check($has($ehic, 'not provided in this record'), 'EHIC: missing legal metadata is stated, not filled in');
+$check($has($ehic, 'https://api.fides.community/api/public/credentialtype/cred%3Aeu%3Aehic'), 'EHIC: API record links to the public credentialtype endpoint');
 $check($has($ehic, 'Help keep this credential type current.'), 'EHIC: shared closing');
 
 $ehic_ts11 = Fides_Credential_Design::ts11(Fides_Credential_Design::find('cred:eu:ehic'));

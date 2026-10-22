@@ -386,9 +386,9 @@ refresh.
   state, dialogs, five records at 1440/1280/768/390/320; screens in
   `screens/credentials`).
 - Not in the data, so not shown: the EHIC `$comment` source warning (only in
-  the schema files), a public API host ("View API record" appears once
-  `fides_credential_catalog_public_api_base` is set), resolved trust schemes
-  for mDL.
+  the schema files) and resolved trust schemes for mDL. "View API record"
+  links to `https://api.fides.community/api/public/credentialtype/<id>`
+  (override with the `fides_credential_catalog_public_api_base` option).
 
 ## Not restored yet (no content parity claimed)
 
