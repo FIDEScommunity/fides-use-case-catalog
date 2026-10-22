@@ -59,7 +59,7 @@ add_filter(
             '/ecosystem-explorer/theme/'                    => '/theme/',
             '/ecosystem-explorer/personal-wallets/'         => '/fides-design-pilot/personal-wallets/',
             '/ecosystem-explorer/organizational-wallets/'   => '/fides-design-pilot/business-wallets/',
-            '/ecosystem-explorer/credential-catalog/'       => '/credential-catalog/',
+            '/ecosystem-explorer/credential-catalog/'       => '/fides-design-pilot/credentials/',
             '/ecosystem-explorer/issuer-catalog/'           => '/issuer-catalog/',
             '/ecosystem-explorer/relying-party-catalog/'    => '/relying-party-websites/',
             '/community-tools/glossary/'                    => '/glossary/',
@@ -87,18 +87,19 @@ add_filter(
 add_filter('fides_use_case_catalog_prefer_local_source', '__return_false');
 
 /*
- * On localhost the shared loader prefers the plugin's bundled wallet
- * aggregate, which lags the crawler output GitHub serves. Read the
- * crawler output of the pilot worktree instead, so the server-rendered
- * pages and the browser (GitHub first) show the same wallets.
+ * On localhost the shared loader prefers the plugin's bundled wallet and
+ * credential aggregates, which lag the crawler output GitHub serves. Read
+ * the crawler output of the pilot worktree instead, so the server-rendered
+ * pages and the browser (GitHub first) show the same records.
  */
 add_filter(
     'fides_catalog_local_json_path_for',
     static function ($path, $catalog_type) {
-        if ($catalog_type !== 'wallet') {
+        $repos = array('wallet' => 'wallet-catalog', 'credential' => 'credential-catalog');
+        if (! isset($repos[ $catalog_type ])) {
             return $path;
         }
-        $crawler = dirname(__DIR__, 3) . '/wallet-catalog/data/aggregated.json';
+        $crawler = dirname(__DIR__, 3) . '/' . $repos[ $catalog_type ] . '/data/aggregated.json';
         return is_readable($crawler) ? $crawler : $path;
     },
     10,

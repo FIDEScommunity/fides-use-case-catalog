@@ -16,6 +16,8 @@ const PILOT_DETAIL_ID   = 'verifiable-ai-fairness-a-seal-for-the-system-a-receip
 const PILOT_FEATURED_ID = 'digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC';
 const PILOT_ORG_ID      = 'org:credenco';
 const PILOT_WALLET_ID   = 'credenco-business-wallet';
+const PILOT_CREDENTIAL_ID      = 'cred:eu:ehic';
+const PILOT_CREDENTIAL_ADD_URL = '/credential-submit/';
 /** Shared header/footer page template from fides-community-tools-tiles. */
 const PILOT_SHELL_TEMPLATE = 'fides-site-shell';
 
@@ -72,6 +74,8 @@ $parent = pilot_upsert_page(
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/personal-wallets/\">Personal wallets</a></li><!-- /wp:list-item -->"
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/business-wallets/\">Business wallets</a></li><!-- /wp:list-item -->"
     . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/wallet/\">Wallet detail</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/credentials/\">Credential types</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"/fides-design-pilot/credential/\">Credential type detail</a></li><!-- /wp:list-item -->"
     . "</ul>\n<!-- /wp:list -->",
     0,
     array('has_hero_section' => 'enabled')
@@ -145,6 +149,26 @@ pilot_upsert_page(
     'fides-design-pilot/wallet',
     'Wallet detail (design pilot)',
     '<!-- wp:shortcode -->[fides_wallet_detail id="' . PILOT_WALLET_ID . '" personal_listing_url="/fides-design-pilot/personal-wallets/" business_listing_url="/fides-design-pilot/business-wallets/" use_case_detail_url="/fides-design-pilot/use-case/"]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+// Credential pilot (Paper 20.7 / 20.8 / 20.33–20.35). Lead text is the one in Paper 20.7.
+pilot_upsert_page(
+    'fides-design-pilot/credentials',
+    'Credential types (design pilot)',
+    '<!-- wp:shortcode -->[fides_credential_catalog design="pilot" title="Credential Types" detail_url="/fides-design-pilot/credential/" add_url="' . PILOT_CREDENTIAL_ADD_URL . '"'
+    . ' intro="Find credential types, inspect their attributes and reuse the published schemas."]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+pilot_upsert_page(
+    'fides-design-pilot/credential',
+    'Credential type detail (design pilot)',
+    '<!-- wp:shortcode -->[fides_credential_detail id="' . PILOT_CREDENTIAL_ID . '" listing_url="/fides-design-pilot/credentials/" use_case_detail_url="/fides-design-pilot/use-case/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

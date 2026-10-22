@@ -77,6 +77,9 @@ descriptions; article text stays 18/29.
 - `/fides-design-pilot/business-wallets/`: the same with `type="organizational"` and `cross_url` to the personal overview
 - `/fides-design-pilot/wallet/`: `[fides_wallet_detail id="credenco-business-wallet" personal_listing_url="…" business_listing_url="…" use_case_detail_url="/fides-design-pilot/use-case/"]`; other records open with `?wallet=<id>`
 
+- `/fides-design-pilot/credentials/`: `[fides_credential_catalog design="pilot" title="Credential Types" detail_url="/fides-design-pilot/credential/" add_url="/credential-submit/" intro="…"]`
+- `/fides-design-pilot/credential/`: `[fides_credential_detail id="cred:eu:ehic" listing_url="/fides-design-pilot/credentials/" use_case_detail_url="/fides-design-pilot/use-case/"]`; other records open with `?credential=<id>`
+
 Without `design="pilot"` the catalog shortcodes render exactly as before.
 
 ## Changing the featured use case
@@ -353,6 +356,40 @@ refresh.
   1440/1280/768/390/320, glossary, eIDAS, classic modal deep links; screens in
   `screens/wallets`).
 
+## Credential catalog (Paper 20.7 / 20.8 / 20.18 / 20.19 / 20.33–20.35)
+
+- Overview: `credential-catalog.js` pilot path (`data-design="pilot"`), same
+  rows, popovers, More filters, mobile Filters dialog, pager and return
+  context as the other catalogs; list is the default, Grid from 1024 px
+  (remembered in `localStorage`). Styles: `credential-design.css` on top of
+  `organization-design.css`. Detail: `Fides_Credential_Detail_Page`
+  (`[fides_credential_detail]`), data and rules in `Fides_Credential_Design`.
+- URL state: `q`, `sort` (default `rating`), `catalog_page`, `subject`,
+  `format`, `ecosystem`, `authority`, `sector`, `theme`, `schema`, the flags
+  `new`, `rp`, `ts11`, and `credentials` (aliases are canonicalized). Old
+  `?credential=` links on the pilot overview open the pilot detail; the detail
+  page accepts format ids and legacy aliases and sets the canonical to the type id.
+- "TS11 metadata" marker (same criteria as the classic "TS11 compliant"
+  filter, `isTs11SchemaMetaComplete`): attestationLoS, bindingType, rulebook,
+  a format with a TS11 identifier and any schema URI. The API check
+  (`toTs11SchemaMeta`) additionally needs a semantic version and trusted
+  authorities, so a marked record (EUCC) can still be "Partial" there. The
+  detail shows both; the Explain dialog lists provided and missing fields.
+- Formats: identifiers and schema links per format (tabs when there is more
+  than one); the attribute index is shared at type level and labelled as such.
+  Source notes (schema description, metadata endpoint) are shown as given;
+  missing data reads "Not provided".
+- Rights: `Fides_Credential_Design::can_edit()` mirrors
+  `userCanEditCatalogItem`; guests see "Sign in to suggest an update".
+- Tests: `tests/credential-design-behaviour.php` (in `run-tests.sh`, real
+  records plus fixtures) and `tests/run-credential-checks.sh` (overview
+  state, dialogs, five records at 1440/1280/768/390/320; screens in
+  `screens/credentials`).
+- Not in the data, so not shown: the EHIC `$comment` source warning (only in
+  the schema files), a public API host ("View API record" appears once
+  `fides_credential_catalog_public_api_base` is set), resolved trust schemes
+  for mDL.
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.
@@ -378,6 +415,6 @@ refresh.
 ## Rollback
 
 1. `scripts/design-pilot/teardown-site.sh` (stops the server, drops `fides_design_pilot`, deletes the pilot WordPress copy).
-2. From each main checkout (tiles, use-case, organization, wallet): `git worktree remove ../fides-design-pilot/<repo>` and `git branch -D feature/fides-design-pilot`.
+2. From each main checkout (tiles, use-case, organization, wallet, credential): `git worktree remove ../fides-design-pilot/<repo>` and `git branch -D feature/fides-design-pilot`.
 
 Nothing outside the pilot folder, the pilot database and these branches is touched.
