@@ -386,6 +386,8 @@ async function detail(browser, width, id) {
       logo: logo ? { w: Math.round(box(logo).width), h: Math.round(box(logo).height), right: box(logo).left >= box(identity).right - 1 || box(logo).top >= box(identity).bottom - 1 } : null,
       official: !!q(".fides-org-detail__badge--official"),
       signIn: /Sign in to suggest an update/.test(q(".fides-wallet-detail").textContent),
+      managerSignIn: /Profile managers: sign in/.test(q("#listing")?.textContent || ""),
+      communityClosing: /Community listing · catalog data from public sources\./.test(q("#listing")?.textContent || ""),
       features: !!q("#features"),
       featureLink: !!q('.fides-uc-detail__sections a[href="#features"]'),
       tops,
@@ -403,7 +405,8 @@ async function detail(browser, width, id) {
   check(`${tag}: no empty sections`, info.emptySections === 0, String(info.emptySections));
   check(`${tag}: LinkedIn share, no Copy link`, info.share && /LinkedIn/.test(info.share[2]) && !info.copy, JSON.stringify(info.share));
   check(`${tag}: features block and nav link go together`, info.features === info.featureLink || width < 1100, `${info.features} ${info.featureLink}`);
-  if (info.official) check(`${tag}: guest on Official listing: no sign-in call`, !info.signIn);
+  if (info.official) check(`${tag}: guest on Official listing: no sign-in call`, !info.signIn && info.managerSignIn);
+  else check(`${tag}: guest on Community listing: sign-in call, no manager-only sign-in`, info.signIn && !info.managerSignIn && info.communityClosing);
   const h1 = width >= 1100 ? ["36px", "42px"] : width >= 600 ? ["34px", "40px"] : ["30px", "34px"];
   check(`${tag}: H1 ${h1.join("/")}`, info.h1 && info.h1[0] === h1[0] && info.h1[1] === h1[1], JSON.stringify(info.h1));
   if (info.logo) {

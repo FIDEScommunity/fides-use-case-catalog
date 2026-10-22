@@ -3,7 +3,8 @@
  * shared across use cases, organizations and both wallet catalogs:
  * - Sections: context column 24px padding, first section without a rule, later
  *   main sections 2px #8FA8C6 with 24px to the heading, side headings 20/26;
- *   white main column sections 1px #C8CDD3 with 24px; Wallet details title.
+ *   white main column sections 1px #C8CDD3 with 24px on every width (modules
+ *   and narrow-screen accordions keep their own frame); Wallet details title.
  * - Media: band padding 32 (desktop) / 24 (narrow), stage at most
  *   min(360px, 50svh) / min(240px, 40svh), gap 12, thumbnails 112 x 76; every
  *   image (square award, portrait screenshots) drawn whole inside the stage,
@@ -11,7 +12,8 @@
  *   the band without overflow; video only after Play.
  * - Closings: per catalog and listing tier, the DS1.4 title, no general
  *   sign-in call on Official listings, the claim call on Community
- *   organisations, GitHub last; 44px targets below 1100px.
+ *   organisations, the guest sign-in route on Community wallets (Auth0
+ *   Platform), GitHub last; 44px targets below 1100px.
  *
  * Run through run-ds14-checks.sh.
  */
@@ -32,6 +34,7 @@ const PAGES = {
   biz: { url: `${P}/wallet/?wallet=credenco-business-wallet`, kind: "official", closing: "#listing", title: "Help keep this wallet current.", square: true },
   pers: { url: `${P}/wallet/?wallet=credenco-wallet`, kind: "official", closing: "#listing", title: "Help keep this wallet current.", portrait: true },
   sph: { url: `${P}/wallet/?wallet=sphereon-business-wallet`, kind: "official", closing: "#listing", title: "Help keep this wallet current.", contact: true },
+  auth0: { url: `${P}/wallet/?wallet=auth0-platform`, kind: "community", closing: "#listing", title: "Help keep this wallet current." },
 };
 
 const results = [];
@@ -73,13 +76,20 @@ async function sections(page, key, w) {
         kids: kids(ctx).map((c) => ({ id: c.id || c.className.split(" ")[0], bt: cs(c).borderTopWidth + " " + cs(c).borderTopColor, pt: cs(c).paddingTop, rowBorders: [...c.querySelectorAll(".fides-ds-facts__row, .fides-uc-detail__org")].map((r) => cs(r).borderTopWidth).filter((b) => parseFloat(b) > 1) })),
         titles: [...ctx.querySelectorAll(".fides-ds-panel__title, .fides-uc-detail__aside-title, h2")].filter((t) => t.getClientRects().length).map((t) => ({ t: t.textContent.trim().slice(0, 30), f: cs(t).fontSize + "/" + cs(t).lineHeight })),
       },
-      main: main && kids(main).map((c) => ({ id: c.id || c.className.split(" ")[0], module: c.classList.contains("fides-ds-module"), bt: cs(c).borderTopWidth + " " + cs(c).borderTopColor, pt: cs(c).paddingTop })),
+      main: main && kids(main).map((c) => ({ id: c.id || c.className.split(" ")[0], module: c.classList.contains("fides-ds-module"), accordion: c.classList.contains("is-collapsible"), bt: cs(c).borderTopWidth + " " + cs(c).borderTopColor, pt: cs(c).paddingTop })),
       glance: (document.getElementById("glance-title") || {}).textContent || null,
       atAGlance: document.body.textContent.includes("At a glance"),
     };
   });
-  if (key === "biz" || key === "pers" || key === "sph") {
+  if (["biz", "pers", "sph", "auth0"].includes(key)) {
     check(`${key}@${w}: core facts titled Wallet details, no At a glance`, r.glance === "Wallet details" && !r.atAGlance, r.glance);
+  }
+  const [mainFirst, ...mainRest] = r.main || [];
+  check(`${key}@${w}: first main section without a rule`, !mainFirst || mainFirst.bt.startsWith("0px"), mainFirst);
+  const badMain = mainRest.filter((k) => !k.module && !k.accordion && (k.bt !== `1px ${DETAIL}` || k.pt !== "24px"));
+  check(`${key}@${w}: white main sections 1px #C8CDD3 + 24px on every width`, badMain.length === 0, badMain);
+  if (w < 1100 && ["uc", "org", "biz", "pers"].includes(key)) {
+    check(`${key}@${w}: narrow screens keep a rule between main sections`, mainRest.some((k) => k.bt === `1px ${DETAIL}`), r.main);
   }
   if (w < 1100 || !r.ctx) return;
   check(`${key}@${w}: context column #F2F7FF with 24px padding`, r.ctx.pad === "24px" && r.ctx.bg === "rgb(242, 247, 255)", r.ctx);
@@ -90,9 +100,6 @@ async function sections(page, key, w) {
   check(`${key}@${w}: context data rows stay light (no rule above 1px)`, r.ctx.kids.every((k) => k.rowBorders.length === 0), r.ctx.kids.filter((k) => k.rowBorders.length));
   const badTitles = r.ctx.titles.filter((t) => t.f !== "20px/26px");
   check(`${key}@${w}: side headings 20/26`, badTitles.length === 0, badTitles);
-  const [, ...mainRest] = r.main;
-  const badMain = mainRest.filter((k) => !k.module && (k.bt !== `1px ${DETAIL}` || k.pt !== "24px"));
-  check(`${key}@${w}: white main sections 1px #C8CDD3 + 24px`, mainRest.length === 0 || badMain.length === 0, badMain);
 }
 
 async function media(page, key, w, h, cfg) {
@@ -201,6 +208,13 @@ async function closing(page, key, w, cfg) {
     check(`${key}@${w}: Official guest: manager-only sign-in`, /Authorised profile managers can sign in to make updates\./.test(r.text) && r.links.some((l) => l.t.startsWith("Profile managers: sign in")), r.links);
     check(`${key}@${w}: Official closing names who manages the record`, /Official listing · managed by the (organisation|wallet provider)\./.test(r.text), r.text);
     if (cfg.contact) check(`${key}@${w}: public contact stays available`, r.links.some((l) => /^Contact/.test(l.t)), r.links);
+  } else if (cfg.kind === "community") {
+    check(`${key}@${w}: Community wallet badge`, await page.locator(".fides-org-detail__badge--official").count() === 0 && /Community listing/.test(await page.locator(".fides-wallet-detail").textContent()));
+    check(`${key}@${w}: Community closing has 1px #C8CDD3 rule, no claim block`, r.bt === `1px ${DETAIL}` && !/fides-org-closing--claim/.test(r.cls), r);
+    check(`${key}@${w}: Community closing names public sources`, /Community listing · catalog data from public sources\./.test(r.text), r.text);
+    const signIn = r.links.find((l) => l.t.startsWith("Sign in to suggest an update"));
+    check(`${key}@${w}: Community guest keeps Sign in to suggest an update`, signIn && !signIn.btn && /Suggest a correction using the existing update form\./.test(r.text), r.links);
+    check(`${key}@${w}: Community closing has no manager-only sign-in or update action`, !r.links.some((l) => /Profile managers|Update profile|^Suggest an update/.test(l.t)), r.links);
   } else if (cfg.kind === "claim") {
     check(`${key}@${w}: Community claim block with 3px brand rule`, /fides-org-closing--claim/.test(r.cls) && r.bt === "3px rgb(10, 110, 243)", r);
     check(`${key}@${w}: claim title ${w >= 768 ? 24 : 20}px`, r.font === (w >= 768 ? "24px" : "20px"), r.font);
