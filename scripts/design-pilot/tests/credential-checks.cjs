@@ -314,12 +314,27 @@ async function smallTargets(page, selector) {
         check(`${tag}: arrow keys move between formats`, (await tabs.nth(0).getAttribute("aria-selected")) === "true"
           && (await page.evaluate(() => document.activeElement && document.activeElement.getAttribute("role") === "tab")));
         check(`${tag}: 8 top-level fields need no show-all`, (await page.locator("[aria-controls='attributes-list']").count()) === 0);
+        const note = await page.textContent("[data-credential-source-note]").catch(() => "");
+        check(`${tag}: schema source note shown`, /automatically generated/i.test(note || "") && /provisional/i.test(note || ""), note);
+      }
+      if (width <= 390) {
+        const hero = await page.evaluate(() => {
+          const title = document.querySelector(".fides-credential-detail .fides-org-detail__title");
+          const hero = title && title.closest(".fides-credential-detail__hero");
+          if (!title || !hero) return null;
+          const lh = parseFloat(getComputedStyle(title).lineHeight);
+          return { lines: Math.round(title.getBoundingClientRect().height / lh), titleWidth: Math.round(title.getBoundingClientRect().width), heroWidth: Math.round(hero.clientWidth) };
+        });
+        check(`${tag}: title uses the full hero width`, hero && hero.titleWidth >= hero.heroWidth - 1, JSON.stringify(hero));
+        check(`${tag}: title at most three lines`, hero && hero.lines <= 3, JSON.stringify(hero));
       }
       if (id === "cred:eduwallet:open-badge") {
         check(`${tag}: no-index message`, await page.isVisible("text=No attribute index is available for this catalog record yet."));
       }
       if (id === "cred:webuild:eucc") {
         check(`${tag}: TS11 metadata marker`, (await page.locator(".fides-credential-ts11-status").count()) > 0);
+        const topLevel = await page.locator("#attributes-list > li").count();
+        check(`${tag}: 30 top-level fields`, topLevel === 30, String(topLevel));
         const showAll = page.locator("#attributes-list ~ [data-fides-ds-show-all-button], [aria-controls='attributes-list']").first();
         if (await showAll.count()) {
           const hiddenBefore = await page.locator("#attributes-list > li[hidden]").count();

@@ -47,7 +47,11 @@ $fixtures = array(
         'attributes'           => array(
             array('name' => 'address', 'type' => 'object', 'required' => true),
             array('name' => 'address/street', 'type' => 'string', 'description' => 'Street <b>name</b>'),
+            array('name' => 'contacts', 'type' => 'array'),
+            array('name' => 'contacts/item/email', 'type' => 'string'),
+            array('name' => 'contacts/item/phone', 'type' => 'string'),
         ),
+        'schemaComment'        => 'Generated <i>draft</i> schema.',
     ),
 );
 
@@ -125,6 +129,7 @@ $check($has($ehic, 'id="sources"') && $has($ehic, 'Catalog record'), 'EHIC: sour
 $check($has($ehic, 'not provided in this record'), 'EHIC: missing legal metadata is stated, not filled in');
 $check($has($ehic, 'https://api.fides.community/api/public/credentialtype/cred%3Aeu%3Aehic'), 'EHIC: API record links to the public credentialtype endpoint');
 $check($has($ehic, 'Help keep this credential type current.'), 'EHIC: shared closing');
+$check($has($ehic, 'data-credential-source-note') && $has($ehic, 'This schema was automatically generated from EUDI issuer metadata and may be provisional or incomplete.'), 'EHIC: schema source note from the schema $comment');
 
 $ehic_ts11 = Fides_Credential_Design::ts11(Fides_Credential_Design::find('cred:eu:ehic'));
 $check(in_array('trustedAuthorities', $ehic_ts11['missing'], true) && in_array('attestationLoS', $ehic_ts11['missing'], true), 'EHIC: API missing list names trustedAuthorities and attestationLoS');
@@ -137,7 +142,14 @@ $eucc      = $render('cred:webuild:eucc');
 $check(Fides_Credential_Design::has_ts11_marker($eucc_item), 'EUCC: TS11 metadata marker');
 $check($has($eucc, 'fides-ds-status fides-credential-ts11-status">TS11 metadata<'), 'EUCC: marker in the TS11 panel');
 $check(! $has($eucc, 'data-credential-format-panel') && ! $has($eucc, 'role="tablist"') && $has($eucc, 'urn:eudi:eucc:1'), 'EUCC: single format without tabs, VCT shown');
-$check($has($eucc, '66 indexed fields'), 'EUCC: 66 indexed fields');
+$check($has($eucc, '66 indexed fields · 30 top-level'), 'EUCC: 66 indexed fields, 30 top-level');
+$eucc_tree = Fides_Credential_Design::attribute_tree($eucc_item);
+$eucc_rep  = array_values(array_filter($eucc_tree, static function ($node) {
+    return $node['path'] === 'legal_representative';
+}));
+$check(count($eucc_tree) === 30, 'EUCC: attribute tree has 30 roots (' . count($eucc_tree) . ')');
+$check(count($eucc_rep) === 1 && count($eucc_rep[0]['children'] ?? array()) === 7, 'EUCC: seven representative fields nest under legal_representative');
+$check(count($eucc_rep) === 1 && in_array('full_name', array_column($eucc_rep[0]['children'] ?? array(), 'name'), true), 'EUCC: nested labels drop the array item segment');
 $check($has($eucc, 'High · ISO/IEC 18045'), 'EUCC: attestationLoS label');
 $check($has($eucc, 'View rulebook'), 'EUCC: rulebook link');
 $check($has($eucc, 'Trusted authorities are not provided.'), 'EUCC: marker summary still names missing trusted authorities');
@@ -176,6 +188,11 @@ $long = $render('cred:pilot-test:long');
 $check($has($long, esc_url($long_uri)) && $has($long, 'fides-credential-uri'), 'long URI: full link kept with the wrapping class');
 $check($has($long, '<details class="fides-credential-attr__details">') && $has($long, 'street'), 'nested attributes render inside their object');
 $check(! $has($long, 'Street <b>name</b>') && $has($long, 'Street &lt;b&gt;name&lt;/b&gt;'), 'attribute descriptions are escaped');
+$long_tree = Fides_Credential_Design::attribute_tree(Fides_Credential_Design::find('cred:pilot-test:long'));
+$check(array_column($long_tree, 'path') === array('address', 'contacts'), 'array item fields without their own item row nest under the array');
+$check(array_column($long_tree[1]['children'] ?? array(), 'name') === array('email', 'phone'), 'array item labels are relative to the array');
+$check($has($long, 'Schema source note') && $has($long, 'Generated &lt;i&gt;draft&lt;/i&gt; schema.'), 'schema source note is escaped');
+$check(! $has($render('cred:eduwallet:open-badge'), 'data-credential-source-note'), 'no source note without a schema $comment');
 
 // ---------- Marker parity and overview shortcode ----------
 

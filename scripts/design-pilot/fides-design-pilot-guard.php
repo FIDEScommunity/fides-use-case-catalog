@@ -99,6 +99,11 @@ add_filter(
         if (! isset($repos[ $catalog_type ])) {
             return $path;
         }
+        // A local crawl (not committed: it holds local catalogUrl paths) wins while present.
+        $local_crawl = dirname(__DIR__, 3) . '/local-data/' . $catalog_type . '-aggregated.json';
+        if (is_readable($local_crawl)) {
+            return $local_crawl;
+        }
         $crawler = dirname(__DIR__, 3) . '/' . $repos[ $catalog_type ] . '/data/aggregated.json';
         return is_readable($crawler) ? $crawler : $path;
     },

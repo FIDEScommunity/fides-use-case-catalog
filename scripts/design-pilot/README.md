@@ -377,16 +377,23 @@ refresh.
   detail shows both; the Explain dialog lists provided and missing fields.
 - Formats: identifiers and schema links per format (tabs when there is more
   than one); the attribute index is shared at type level and labelled as such.
-  Source notes (schema description, metadata endpoint) are shown as given;
-  missing data reads "Not provided".
+  Fields under an array (`<array>/item/<field>`) nest under the array. Source
+  notes (schema `$comment` as "Schema source note", schema description,
+  metadata endpoint) are shown as given; missing data reads "Not provided".
+- `schemaComment` comes from the crawler and is not in the committed
+  `aggregated.json` until the next CI crawl. The guard serves
+  `<pilot>/local-data/credential-aggregated.json` when that file exists (a
+  local `npm run crawl` output, kept out of git because it holds local
+  `catalogUrl` paths); without it the source note is simply absent.
+- Mobile (< 600 px): the logo sits on its own compact row above the kicker so
+  long names get the full width.
 - Rights: `Fides_Credential_Design::can_edit()` mirrors
   `userCanEditCatalogItem`; guests see "Sign in to suggest an update".
 - Tests: `tests/credential-design-behaviour.php` (in `run-tests.sh`, real
   records plus fixtures) and `tests/run-credential-checks.sh` (overview
   state, dialogs, five records at 1440/1280/768/390/320; screens in
   `screens/credentials`).
-- Not in the data, so not shown: the EHIC `$comment` source warning (only in
-  the schema files) and resolved trust schemes for mDL. "View API record"
+- Not in the data, so not shown: resolved trust schemes for mDL. "View API record"
   links to `https://api.fides.community/api/public/credentialtype/<id>`
   (override with the `fides_credential_catalog_public_api_base` option).
 
