@@ -116,7 +116,7 @@ $check(substr_count($ehic, 'data-credential-format-panel') === 2, 'EHIC: one pan
 $check($has($ehic, 'role="tablist"') && preg_match('/<div[^>]*role="tablist"[^>]*hidden/', $ehic) === 1, 'EHIC: tablist stays hidden until JS enhances it');
 $check($has($ehic, 'eu.europa.ec.eudi.ehic.1') && $has($ehic, 'urn:eudi:ehic:1'), 'EHIC: docType and VCT per format');
 $check($has($ehic, 'docType') && $has($ehic, '>VCT<'), 'EHIC: format-specific identifier labels');
-$check($has($ehic, 'The attribute index below is shared at credential-type level.'), 'EHIC: shared attribute index note');
+$check($has($ehic, 'The attribute index is shared at credential-type level.'), 'EHIC: shared attribute index note');
 $check($has($ehic, '12 indexed fields · 8 top-level'), 'EHIC: attribute counts');
 $check($has($ehic, 'data-fides-ds-show-all="8"') && $has($ehic, 'id="attributes-list"'), 'EHIC: attributes show-all');
 $check($has($ehic, 'Schema metadata · TS11') && $has($ehic, 'data-fides-ds-collapsible="closed"'), 'EHIC: TS11 panel (accordion on narrow screens)');
@@ -125,8 +125,8 @@ $check($has($ehic, 'Some source metadata is not provided.'), 'EHIC: TS11 summary
 $check($has($ehic, 'Partial <span class="fides-ds-meta">· missing'), 'EHIC: API conformance is partial');
 $check($has($ehic, 'projected from catalog version 1'), 'EHIC: semantic version is labelled as a projection');
 $check($has($ehic, 'data-fides-ds-term="' . Fides_Credential_Design::TS11_TEMPLATE . '"') && $has($ehic, '<template id="' . Fides_Credential_Design::TS11_TEMPLATE . '"'), 'EHIC: Explain opens the per-record TS11 template');
-$check($has($ehic, 'id="sources"') && $has($ehic, 'Catalog record'), 'EHIC: sources section');
-$check($has($ehic, 'not provided in this record'), 'EHIC: missing legal metadata is stated, not filled in');
+$check($has($ehic, 'id="sources"') && $has($ehic, 'Catalog data on GitHub'), 'EHIC: sources section with the data source');
+$check(! $has($ehic, 'QEAA</span>') && ! $has($ehic, 'fides-credential-qeaa') && ! preg_match('/class="fides-ds-status[^"]*">(EAA|QEAA|PID)</', $ehic), 'EHIC: no EAA/QEAA/PID status is derived');
 $check($has($ehic, 'https://api.fides.community/api/public/credentialtype/cred%3Aeu%3Aehic'), 'EHIC: API record links to the public credentialtype endpoint');
 $check($has($ehic, 'Help keep this credential type current.'), 'EHIC: shared closing');
 $check($has($ehic, 'data-credential-source-note') && $has($ehic, 'This schema was automatically generated from EUDI issuer metadata and may be provisional or incomplete.'), 'EHIC: schema source note from the schema $comment');
@@ -176,6 +176,95 @@ $check($has($vlei, 'is not numeric') && $has($vlei, 'no TS11 format identifier')
 
 $mdl = $render('cred:iso:mdl');
 $check($has($mdl, 'recorded, not resolved') || $has($mdl, 'scheme'), 'mDL: trusted authority reference shown');
+
+// ---------- Column split, Credential details, Tags, navigation (Paper 20.8 / 20.19 / 20.33-20.35) ----------
+
+$columns = static function (string $html): array {
+    $main  = strpos($html, 'fides-credential-detail__main');
+    $aside = strpos($html, 'fides-credential-detail__aside');
+    $after = strpos($html, '<section class="fides-credential-eco"');
+    if ($after === false) {
+        $after = strpos($html, 'id="listing"');
+    }
+    return array(
+        'main'  => $main === false || $aside === false ? '' : substr($html, $main, $aside - $main),
+        'aside' => $aside === false || $after === false ? '' : substr($html, $aside, $after - $aside),
+    );
+};
+$section_ids = static function (string $html): array {
+    preg_match_all('/<section class="[^"]*" id="([a-z0-9-]+)"/', $html, $m);
+    return $m[1];
+};
+$block = static function (string $html, string $id): string {
+    $start = strpos($html, 'id="' . $id . '"');
+    if ($start === false) {
+        return '';
+    }
+    $start = strrpos(substr($html, 0, $start), '<section');
+    return substr($html, $start, strpos($html, '</section>', $start) - $start);
+};
+
+foreach (array('cred:eu:ehic' => 'EHIC', 'cred:webuild:eucc' => 'EUCC', 'cred:eduwallet:open-badge' => 'OBC') as $layout_id => $label) {
+    $html = $render($layout_id);
+    $item = Fides_Credential_Design::find($layout_id);
+    $cols = $columns($html);
+    $main_ids  = $section_ids($cols['main']);
+    $aside_ids = $section_ids($cols['aside']);
+    $expected_main = array_values(array_filter(array('overview', Fides_Credential_Design::use_cases_for($layout_id) ? 'use-cases' : '', 'attributes')));
+    $check($main_ids === $expected_main, "$label: main column holds " . implode(', ', $expected_main) . ' (' . implode(', ', $main_ids) . ')');
+    $check($aside_ids === array('details', 'formats', 'ts11', 'tags', 'sources'), "$label: context column holds details, formats, TS11, tags, sources (" . implode(', ', $aside_ids) . ')');
+    $check($has($cols['aside'], 'data-credential-formats') && ! $has($cols['aside'], 'id="attributes-list"') && ! $has($cols['aside'], 'No attribute index'), "$label: attributes stay in the main column");
+
+    $details = $block($html, 'details');
+    $check($has($details, '<h2 class="fides-ds-panel__title" id="details-title">Credential details</h2>'), "$label: Credential details block");
+    $check($has($details, '<dt>Authority</dt>') && $has($details, esc_html(Fides_Credential_Design::authority_name($item))), "$label: authority in Credential details");
+    $subject = trim((string) ($item['subjectType'] ?? ''));
+    $check($subject === '' || $has($details, '<dt>Subject type</dt><dd>' . esc_html($subject) . '</dd>'), "$label: subject type in Credential details");
+    $category = trim((string) ($item['category'] ?? ''));
+    $check($category === '' || $has($details, '<dt>Category</dt><dd>' . esc_html($category) . '</dd>'), "$label: category in Credential details");
+    foreach (array('ecosystems' => 'Ecosystem', 'themes' => 'Theme', 'sectors' => 'Sectors') as $field => $dt) {
+        $labels = Fides_Credential_Design::taxonomy_labels($item, $field);
+        $check($labels ? $has($details, '<dt>' . $dt . '</dt><dd>' . esc_html(implode(' · ', $labels)) . '</dd>') : ! $has($details, '<dt>' . $dt . '</dt>'), "$label: $dt only when recorded");
+    }
+    $check($has($details, 'data-fides-ds-term="' . Fides_Credential_Design::ATTESTATIONS_TEMPLATE . '"') && $has($html, '<template id="' . Fides_Credential_Design::ATTESTATIONS_TEMPLATE . '"'), "$label: Credentials & attestations explained from Credential details");
+
+    $tags = array_values(array_unique(array_filter(array_map('trim', array_filter((array) ($item['tags'] ?? array()), 'is_string')), 'strlen')));
+    $tag_block = $block($html, 'tags');
+    $check(substr_count($tag_block, '<li class="fides-ds-tag">') === count($tags) && $has($tag_block, 'fides-ds-tags'), "$label: separate tag block with the recorded tags (" . count($tags) . ')');
+    foreach ($tags as $tag) {
+        $check($has($tag_block, '<span aria-hidden="true">#</span>' . esc_html($tag) . '</li>'), "$label: tag $tag shown as #label, value unchanged");
+    }
+
+    $sources = $block($html, 'sources');
+    $check($has($sources, 'Catalog data on GitHub') && $has($sources, 'View API record'), "$label: Sources keeps the data source and API record");
+    $check(! $has($sources, 'Schema sources') && ! $has($sources, 'Classification') && ! $has($sources, '<dt>Tags</dt>') && ! $has($sources, 'Sectors'), "$label: Sources holds no schema, classification or tag rows");
+    foreach (Fides_Credential_Design::formats($item) as $format) {
+        foreach ($format['schemas'] as $schema) {
+            $check(! $has($sources, esc_url($schema['uri'])) && substr_count($cols['aside'], 'href="' . esc_url($schema['uri']) . '"') === 1, "$label: schema link listed once, with its format");
+        }
+    }
+
+    $check($has($html, 'href="#attributes">Attributes</a>') && $has($html, 'href="#formats">Formats &amp; identifiers</a>') && $has($html, 'href="#ts11">Schema metadata · TS11</a>'), "$label: separate Attributes, Formats & identifiers and TS11 links");
+    $check(! $has($html, 'Formats &amp; attributes') && ! $has($html, 'Formats & attributes'), "$label: no combined Formats & attributes link");
+    $check($has($block($html, 'attributes'), '<h2 class="fides-ds-heading-2 fides-credential-attrs__title" id="attributes-title">Attributes</h2>'), "$label: Attributes is its own section");
+
+    $check(preg_match('/id="formats"[^>]*data-fides-ds-collapsible="open"/', $html) === 1, "$label: Formats accordion starts open");
+    $check(preg_match('/id="ts11"[^>]*data-fides-ds-collapsible="closed"/', $html) === 1 && preg_match('/id="sources"[^>]*data-fides-ds-collapsible="closed"/', $html) === 1, "$label: TS11 and Sources accordions start closed");
+    $check(! $has($details, 'data-fides-ds-collapsible') && ! $has($tag_block, 'data-fides-ds-collapsible'), "$label: Credential details and Tags are not accordions");
+}
+
+$ehic_formats = $block($ehic, 'formats');
+$check($has($ehic_formats, 'data-credential-source-note') && $has($ehic_formats, 'Schema description'), 'EHIC: schema source note and description sit with Formats & identifiers');
+$obc_formats = $block($render('cred:eduwallet:open-badge'), 'formats');
+$check($has($obc_formats, 'Metadata endpoint') && $has($obc_formats, 'Schema type: Other'), 'OBC: metadata endpoint and schema type stay with the format');
+
+$about = Fides_Credential_Design::attestations_template();
+$check($has($about, 'data-fides-ds-term-title="Credentials &amp; attestations"') && $has($about, 'Credential is the broad term used in this catalog.') && $has($about, 'QEAA: a qualified EAA') && $has($about, 'it does not mean “non-qualified”'), 'Credentials & attestations: approved text of Paper 20.35');
+$check($has($about, esc_url(Fides_Credential_Design::EIDAS_REGULATION_URL)) && $has($about, 'Regulation (EU) 2024/1183 · Article 3(44–46), Annex V'), 'Credentials & attestations: regulation source');
+
+$bare_details = $block($render('cred:pilot-test:bare'), 'details');
+$check($bare_details !== '' && ! $has($bare_details, '<dl'), 'bare: Credential details shows no empty rows');
+$check(! $has($render('cred:pilot-test:bare'), 'id="tags"'), 'bare: no tag block without tags');
 
 // ---------- Ecosystem connections (Paper 20.36-20.38) ----------
 

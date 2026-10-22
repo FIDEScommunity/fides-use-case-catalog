@@ -387,6 +387,21 @@ refresh.
   `catalogUrl` paths); without it the source note is simply absent.
 - Mobile (< 600 px): the logo sits on its own compact row above the kicker so
   long names get the full width.
+- Detail layout (Paper 20.8 / 20.19 / 20.33–20.35): the main column holds
+  Overview, Use cases and Attributes (its own section, `#attributes`); the
+  context column holds Credential details (Authority, Subject type, Category,
+  Ecosystem, Theme, Sectors — only when recorded), Formats & identifiers (with
+  the Schema description and Schema source note), Schema metadata · TS11, Tags
+  (shared `fides-ds-tags`, `#` is presentation only) and Sources & catalog data
+  (data source and API record only; schema links stay with their format).
+  The page navigation lists Attributes and Formats & identifiers separately.
+  Below 1100 px the context blocks follow the main content as light-blue
+  frames; Formats, TS11 and Sources are the shared accordions (Formats open,
+  TS11 and Sources closed, 56 px rows), Credential details and Tags stay open.
+- "Credentials & attestations" (Paper 20.35): a `<template>` opened through the
+  shared term dialog from Credential details and from the overview intro
+  ("EUDI terminology"). It explains EAA, QEAA, PID and the public-sector
+  category; no record is classified and no EAA/QEAA status is derived.
 - Ecosystem connections (Paper 20.36–20.38): a full-width band between the
   main/context columns and the closing, with "Who issues it?" and "Where is it
   accepted?" (counts from the data; Age Verification is the rich example, its
@@ -410,7 +425,8 @@ refresh.
   `userCanEditCatalogItem`; guests see "Sign in to suggest an update".
 - Tests: `tests/credential-design-behaviour.php` (in `run-tests.sh`, real
   records plus fixtures) and `tests/run-credential-checks.sh` (overview
-  state, dialogs, five records at 1440/1280/768/390/320, the ecosystem band
+  state, dialogs, five records at 1440/1280/768/390/320 including the column
+  split, navigation and narrow-screen accordion states, the ecosystem band
   for Age Verification at 1440/390/320 plus EHIC and EUCC; screens in
   `screens/credentials`).
 - Not in the data, so not shown: resolved trust schemes for mDL. "View API record"

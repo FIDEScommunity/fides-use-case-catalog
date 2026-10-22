@@ -142,6 +142,15 @@ async function smallTargets(page, selector) {
     check("Explain: Escape closes and unlocks", !(await page.evaluate(() => document.documentElement.classList.contains("fides-ds-scroll-locked"))));
     check("Explain: focus returns to the button", await page.evaluate(() => document.activeElement && document.activeElement.classList.contains("fides-credential-explain")));
 
+    const terms = page.locator(".fides-credential-pilot__terms .fides-credential-explain");
+    check("overview: EUDI terminology line links to Credentials & attestations", (await terms.count()) === 1 && /Credentials & attestations explained/.test(await terms.textContent()));
+    await terms.click();
+    await page.waitForSelector("dialog.fides-ds-dialog[open]", { timeout: 5000 });
+    const termsText = await page.evaluate(() => (document.querySelector("dialog.fides-ds-dialog[open]") || {}).textContent || "");
+    check("overview: Credentials & attestations dialog", /Credential is the broad term used in this catalog/.test(termsText) && /does not mean “non-qualified”/.test(termsText), termsText.slice(0, 120));
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(300);
+
     // Format popover filter, URL state and reload.
     await page.click("[data-pilot-key='vcFormat'] summary, [data-pilot-key='vcFormat'] button");
     await page.waitForTimeout(200);
@@ -288,13 +297,61 @@ async function smallTargets(page, selector) {
         const toggle = panel && panel.querySelector(".fides-ds-collapsible__toggle");
         return { toggle: !!toggle, expanded: toggle ? toggle.getAttribute("aria-expanded") : null };
       });
+      const layout = await page.evaluate(() => {
+        const main = document.querySelector(".fides-credential-detail__main");
+        const aside = document.querySelector(".fides-credential-detail__aside");
+        const where = (sel) => {
+          const el = document.querySelector(sel);
+          if (!el) return null;
+          return main.contains(el) ? "main" : aside.contains(el) ? "aside" : "other";
+        };
+        const top = (sel) => { const el = document.querySelector(sel); return el ? Math.round(el.getBoundingClientRect().top + scrollY) : null; };
+        const acc = (sel) => {
+          const el = document.querySelector(sel);
+          const t = el && el.querySelector(":scope > h2 .fides-ds-collapsible__toggle");
+          return t ? { expanded: t.getAttribute("aria-expanded"), height: Math.round(t.getBoundingClientRect().height) } : null;
+        };
+        const navLinks = [...document.querySelectorAll(".fides-uc-detail__sections nav a")].map((a) => a.textContent.trim());
+        return {
+          where: Object.fromEntries(["#overview", "#use-cases", "#attributes", "#details", "#formats", "#ts11", "#tags", "#sources"].map((s) => [s, where(s)])),
+          tops: Object.fromEntries(["#overview", "#attributes", "#details", "#formats", "#ts11", "#tags", "#sources", ".fides-credential-eco", "#listing"].map((s) => [s, top(s)])),
+          asideLeft: Math.round(aside.getBoundingClientRect().left),
+          mainRight: Math.round(main.getBoundingClientRect().right),
+          acc: { formats: acc("#formats"), ts11: acc("#ts11"), sources: acc("#sources"), details: acc("#details"), tags: acc("#tags") },
+          formatsBody: !!document.querySelector("#formats-body") && document.querySelector("#formats-body").offsetParent !== null,
+          sourcesBody: !!document.querySelector("#sources-body") && document.querySelector("#sources-body").offsetParent !== null,
+          nav: navLinks,
+          schemaInSources: [...document.querySelectorAll("#sources a")].some((a) => /schema|metadata/i.test(a.textContent) && !/API record/.test(a.textContent)),
+        };
+      });
+      const inMain = ["#overview", "#attributes"].every((s) => layout.where[s] === "main") && (layout.where["#use-cases"] === null || layout.where["#use-cases"] === "main");
+      const inAside = ["#details", "#formats", "#ts11", "#sources"].every((s) => layout.where[s] === "aside") && (layout.where["#tags"] === null || layout.where["#tags"] === "aside");
+      check(`${tag}: Overview, Use cases and Attributes in the main column`, inMain, JSON.stringify(layout.where));
+      check(`${tag}: details, formats, TS11, tags and sources in the context column`, inAside, JSON.stringify(layout.where));
+      check(`${tag}: navigation lists Attributes and Formats & identifiers separately`, layout.nav.includes("Attributes") && layout.nav.includes("Formats & identifiers") && !layout.nav.some((l) => /Formats & attributes/.test(l)), layout.nav.join(" | "));
+      check(`${tag}: no schema link repeated in Sources`, !layout.schemaInSources);
+      if (width >= 1100) {
+        check(`${tag}: context column sits right of the main column`, layout.asideLeft >= layout.mainRight, `${layout.mainRight} -> ${layout.asideLeft}`);
+        check(`${tag}: context blocks open, no accordions`, !layout.acc.formats && !layout.acc.ts11 && !layout.acc.sources && layout.formatsBody && layout.sourcesBody, JSON.stringify(layout.acc));
+        const t = layout.tops;
+        check(`${tag}: context order details, formats, TS11, tags, sources`, t["#details"] < t["#formats"] && t["#formats"] < t["#ts11"] && (t["#tags"] === null || (t["#ts11"] < t["#tags"] && t["#tags"] < t["#sources"])) && t["#ts11"] < t["#sources"], JSON.stringify(t));
+      } else {
+        const t = layout.tops;
+        check(`${tag}: one column in Paper order`, t["#overview"] < t["#attributes"] && t["#attributes"] < t["#details"] && t["#details"] < t["#formats"] && t["#formats"] < t["#ts11"] && t["#ts11"] < t["#sources"] && t["#sources"] < (t[".fides-credential-eco"] || t["#listing"]) && (t[".fides-credential-eco"] || 0) < t["#listing"], JSON.stringify(t));
+        check(`${tag}: Formats accordion open`, layout.acc.formats && layout.acc.formats.expanded === "true" && layout.formatsBody, JSON.stringify(layout.acc.formats));
+        check(`${tag}: TS11 and Sources accordions closed`, layout.acc.ts11 && layout.acc.ts11.expanded === "false" && layout.acc.sources && layout.acc.sources.expanded === "false" && !layout.sourcesBody, JSON.stringify([layout.acc.ts11, layout.acc.sources]));
+        check(`${tag}: accordion rows at least 56px`, ["formats", "ts11", "sources"].every((k) => layout.acc[k] && layout.acc[k].height >= 56), JSON.stringify(layout.acc));
+        check(`${tag}: Credential details and Tags are not accordions`, !layout.acc.details && !layout.acc.tags);
+        const framed = await page.evaluate(() => ["#details", "#tags", "#formats"].filter((s) => document.querySelector(s)).every((s) => {
+          const cs = getComputedStyle(document.querySelector(s));
+          return cs.borderTopStyle === "solid" && cs.borderLeftStyle === "solid" && cs.backgroundColor !== "rgba(0, 0, 0, 0)";
+        }));
+        check(`${tag}: context blocks framed as their own group`, framed);
+        await page.click("#sources .fides-ds-collapsible__toggle");
+        check(`${tag}: Sources accordion opens`, (await page.getAttribute("#sources .fides-ds-collapsible__toggle", "aria-expanded")) === "true" && (await page.isVisible("#sources-body")));
+      }
       if (width < 1100) {
         check(`${tag}: TS11 is a closed accordion`, ts11Collapsible.toggle && ts11Collapsible.expanded === "false", JSON.stringify(ts11Collapsible));
-        const order = await page.evaluate(() => {
-          const top = (sel) => { const el = document.querySelector(sel); return el ? el.getBoundingClientRect().top : null; };
-          return { formats: top("#formats"), ts11: top("#ts11"), sources: top("#sources") };
-        });
-        check(`${tag}: TS11 between attributes and sources`, order.formats < order.ts11 && order.ts11 < order.sources, JSON.stringify(order));
         await page.click(".fides-credential-ts11 .fides-ds-collapsible__toggle");
         check(`${tag}: TS11 accordion opens`, (await page.getAttribute(".fides-credential-ts11 .fides-ds-collapsible__toggle", "aria-expanded")) === "true"
           && (await page.isVisible("#ts11-body")));
@@ -306,7 +363,9 @@ async function smallTargets(page, selector) {
         const tabs = page.locator("[role='tab']");
         check(`${tag}: two format tabs`, (await tabs.count()) === 2);
         const firstPanel = await page.locator("[data-credential-format-panel]").first().getAttribute("id");
+        const attrsBefore = await page.locator("#attributes-list > li").count();
         await tabs.nth(1).click();
+        check(`${tag}: format switch keeps the type-level attribute index`, (await page.locator("#attributes-list > li").count()) === attrsBefore && (await page.isVisible("#attributes")));
         check(`${tag}: second tab shows its panel`, (await tabs.nth(1).getAttribute("aria-selected")) === "true"
           && (await page.locator(`#${firstPanel}`).isHidden()));
         await tabs.nth(1).focus();
@@ -520,6 +579,15 @@ async function smallTargets(page, selector) {
     await page.keyboard.press("Escape");
     await page.waitForTimeout(200);
     check("detail Explain: Escape unlocks", !(await page.evaluate(() => document.documentElement.classList.contains("fides-ds-scroll-locked"))));
+    const terms = page.locator("#details .fides-credential-explain");
+    await terms.focus();
+    await page.keyboard.press("Enter");
+    await page.waitForTimeout(300);
+    const termsText = await page.evaluate(() => (document.querySelector("dialog.fides-ds-dialog[open]") || {}).textContent || "");
+    check("Credentials & attestations: opens the shared dialog from Credential details", /Credentials & attestations/.test(termsText) && /QEAA: a qualified EAA/.test(termsText) && /Regulation \(EU\) 2024\/1183/.test(termsText), termsText.slice(0, 120));
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(200);
+    check("Credentials & attestations: focus returns to Explain", await page.evaluate(() => document.activeElement && document.activeElement.closest("#details") !== null));
     const like = page.locator(".fides-credential-like__button").first();
     const likeHref = await like.getAttribute("href");
     check("guest like: sign-in link with return", (likeHref || "").length > 0 && /return|redirect/i.test(likeHref), likeHref);
