@@ -28,6 +28,7 @@ utrecht-demo, so that site must be running in Local.
 | `tests/run-organization-checks.sh` | Organization overview and detail in headless Chrome (server render without JavaScript and the hand-over to the script, overview 1440/390/320, seven records at 1440/768/390/320); screenshots in `../screens/organizations/` |
 | `tests/run-shell-route.sh` | Visitor route in headless Chrome at 1366×768 and 1440/1100/1024/768/390/320 px: homepage fragment → overview → detail → back, dropdowns, mobile menu, section navigation, filters with Escape/focus, pagination, long titles and the logo back to the homepage fragment; screenshots in `../screens/shell/`. Uses an existing Playwright install (`PLAYWRIGHT_MODULE`) and the server from `start-server.sh` |
 | `tests/run-overview-detail-checks.sh` | Overview and detail behaviour (brief 2026-10-18) in headless Chrome; screenshots in `../screens/overview-detail/` |
+| `tests/run-more-filters-checks.sh` | Shared More filters pattern (Paper 20.45) on the credential, personal and business wallet, organization and use-case overviews at 1440/1280/1100/1024/768/390/320 (`MORE_WIDTHS`); screenshots in `../screens/more-filters/` |
 | `tests/run-measure-density.sh <label>` | Measure computed type sizes, Explore panel height, first result position, controls under 44 px and overflow at seven viewports; writes `measurements.json` and screenshots to `../screens/density-<label>/` |
 
 `fides-design-pilot-guard.php` (installed as mu-plugin) blocks outgoing mail
@@ -184,8 +185,7 @@ refresh.
   so sight, the accessibility tree and keyboard focus agree.
 - Production deployment is a multi-select list like the other filters (OR
   within the group, `status=a,b` in the URL).
-- More filters: one short head and one row (Production deployment, Awards,
-  Technical filters); the technical group names only show while closed.
+- More filters: superseded by the shared pattern (2026-10-23, below).
   Mobile: search and Search share a line, Ask FIDES sits next to the label,
   Filters and Sort share a row with the count under them, and row cards put
   the title before the image.
@@ -220,7 +220,8 @@ refresh.
   sets `height` on selects, so the rule sets it too.
 - Search label and Ask FIDES share a baseline; the one-row search uses 12 px
   between every control.
-- Technical filters has its own row in More filters, from the left edge.
+- Technical filters has its own row in More filters, from the left edge
+  (full-width disclosure row since 2026-10-23).
 - Arrow links: `<span>Label</span> <span aria-hidden="true">→</span>`. The
   shared rule in `design-system.css` underlines only the label (hover and
   current page); card CTAs split the arrow off the same way (PHP and JS).
@@ -503,9 +504,11 @@ refresh.
   `tests/run-credential-checks.sh` (offline, labelled stub for external
   links; the search contract on its pure helpers with synthetic and source
   fixtures, no fixed totals; overview state, search relevance, explicit
-  sort, Clear, pager and detail/Back with a query, dialogs, the overview
-  layout at 1440/1320/1319/1280/1279/1200/1199/1100/768/390/320 with a long
-  selected label; five records at 1440/1280/768/390/320 including the column
+  sort, Clear, pager and detail/Back with a query, dialogs, More filters
+  with Listing, TS11 Explain and the Technical filters row, the compact bar
+  at 1440/1320/1280/1200/1100/1024/768/390/320 (expected layout per width,
+  one Ecosystem control, a long selected label) and Ecosystem keeping its
+  value across 1280 → 1440 → 768 → 1280; five records at 1440/1280/768/390/320 including the column
   split, static format labels, navigation and narrow-screen accordion states;
   the ecosystem band for Age Verification at 1440/1280/1279/1200/768/390/320
   including the count badge, wallet links and back navigation, plus EHIC,
@@ -515,6 +518,45 @@ refresh.
 - Not in the data, so not shown: resolved trust schemes for mDL. "View API record"
   links to `https://api.fides.community/api/public/credentialtype/<id>`
   (override with the `fides_credential_catalog_public_api_base` option).
+
+## Shared More filters and compact credential bar (2026-10-23)
+
+Paper 20.45 / 20.42 and `docs/site-redesign/shared-more-filters-2026-10-23.md`
+plus `credential-compact-filterbar-2026-10-23.md`.
+
+- One More filters pattern in `usecase-design.css` for credentials, personal
+  and business wallets, organizations and use cases: a white in-flow panel
+  under the primary row with a 2px brand top line and a 1px bottom line, no
+  shadow; "More filters" 20/26 semibold with a 44px close button and no
+  total; extra lists side by side (300px, 16/24 gaps); checkbox groups
+  (Listing, or Awards for use cases) on their own line below; then the
+  Technical filters disclosure row (16/24 title, muted field summary, chevron
+  at the far end, at least 56px, closed by default; `aria-expanded` /
+  `aria-controls`) with its lists below a light line. Organizations have no
+  technical row. Mobile: the same groups stacked in the Filters dialog.
+- Field mapping only; no filters added or removed. Credentials: Sector and
+  Theme as lists, Listing (Added in last 30 days, Used by relying parties,
+  TS11 metadata with Explain) inside More filters, Schema type under
+  Technical filters. The More filters badge counts these selections; the
+  intro sentence and the separate Listing row are gone.
+- Credential bar: the script measures the bar on render, resize and
+  selection changes and sets `data-pilot-layout` on the root: `full` (search,
+  Search, Subject, Format, Ecosystem, Authority, More filters on one line;
+  1440), `reduced` (Ecosystem first in More filters; 1200–1320) and, when
+  that still leaves less than 280px for the input, `data-pilot-short` hides
+  unselected values visually (labels only, value kept in the accessible name;
+  1024–1100). Otherwise `compact`: the search group plus the Filters dialog
+  (768 and below; the dialog CSS above 600px is mirrored in
+  `credential-design.css`). Ecosystem is one DOM node that moves, so its value,
+  pill and URL never reset; a selection change never moves it while it holds
+  focus, a resize does and returns focus to it or to More filters. An open
+  Filters dialog stays open on resize.
+- Controls stay 40px only at 1100px+ with a fine pointer; the More filters
+  close button and option labels keep 44px, the technical row 56px.
+- Deviations from Paper: the search input takes the width the bar leaves
+  (about 390px at 1440, up to about 450px at 1320); at 1024px the three lists
+  in credential More filters wrap to two lines (300px fields); the Filters
+  dialog above 600px is full-screen with its content capped at 720px.
 
 ## Not restored yet (no content parity claimed)
 

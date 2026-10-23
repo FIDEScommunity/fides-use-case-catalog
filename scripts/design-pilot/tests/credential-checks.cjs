@@ -8,8 +8,10 @@
  * attribute names), Relevance by default with a query, explicit sort, Clear,
  * filters and the TS11 metadata flag in the URL, reload keeps state, sort,
  * list / grid, pager, zero results, old ?credential= deeplinks, Back with
- * filters and focus, TS11 Explain dialog (scroll lock, Escape, focus return),
- * mobile Filters dialog (Apply / Cancel, scroll lock).
+ * filters and focus, More filters (Listing, TS11 Explain dialog with scroll
+ * lock, Escape and focus return, Technical filters row), the compact bar per
+ * width (full / reduced / compact, one Ecosystem control kept on resize),
+ * Filters dialog (groups, Apply / Cancel, scroll lock, only the body scrolls).
  * Detail: EHIC, EUCC, Open Badge, vLEI and mDL at every width without
  * horizontal overflow; format tabs (click and arrow keys); attributes
  * show-all; TS11 and relations as accordions below 1100 px; 44 px targets;
@@ -296,6 +298,54 @@ async function smallTargets(page, selector) {
     sortNow = await sortState();
     check("Clear: back to Likes without a query", sortNow.value === "rating" && sortNow.url === null && (await count(page)) === total, JSON.stringify(sortNow));
 
+    // More filters (Paper 20.45): lists, Listing with TS11 + Explain, closed Technical filters row.
+    check("More filters: Listing flags are not visible while More filters is closed", !(await page.isVisible("[data-pilot-flag='ts11CompliantOnly']")) && (await page.locator("[data-pilot-quick]").count()) === 1);
+    await page.click("[data-pilot-more-toggle]");
+    await page.waitForTimeout(200);
+    const morePanel = await page.evaluate(() => {
+      const more = document.querySelector("#fides-credential-pilot-more");
+      const rect = (el) => el && el.getBoundingClientRect();
+      const tech = more.querySelector("[data-pilot-tech-toggle]");
+      const grid = more.querySelector("[data-pilot-more-grid]");
+      const lists = [...grid.querySelectorAll(":scope > [data-pilot-key]")];
+      const listing = more.querySelector("[data-pilot-quick]");
+      const title = more.querySelector(".fides-uc-pilot__more-title");
+      const close = more.querySelector("[data-pilot-more-close]");
+      const style = getComputedStyle(more);
+      return {
+        lists: lists.map((el) => el.dataset.pilotKey),
+        listsOneLine: new Set(lists.map((el) => Math.round(rect(el).top))).size === 1,
+        listWidths: lists.map((el) => Math.round(rect(el).width)),
+        listingBelow: rect(listing).top >= Math.max(...lists.map((el) => rect(el).bottom)),
+        listingInside: more.contains(listing),
+        explainInside: !!listing.querySelector(".fides-credential-explain"),
+        intro: !!more.querySelector(".fides-ds-meta"),
+        techLabel: tech && tech.textContent.replace(/\s+/g, " ").trim(),
+        techExpanded: tech && tech.getAttribute("aria-expanded"),
+        techControls: tech && tech.getAttribute("aria-controls"),
+        techHeight: tech && Math.round(rect(tech).height),
+        techChevronRight: tech && Math.round(rect(tech).right - rect(tech.querySelector(".fides-uc-pilot__technical-icon")).right),
+        techGridHidden: document.getElementById("fides-credential-pilot-technical").hidden,
+        title: [getComputedStyle(title).fontSize, getComputedStyle(title).lineHeight, getComputedStyle(title).fontWeight].join("/"),
+        close: close && Math.round(rect(close).width),
+        border: style.borderTopWidth,
+        background: style.backgroundColor,
+      };
+    });
+    check("More filters: Sector and Theme side by side", morePanel.lists.join(",") === "sector,theme" && morePanel.listsOneLine && morePanel.listWidths.every((w) => w <= 300), JSON.stringify(morePanel));
+    check("More filters: Listing with TS11 Explain below the lists, inside the panel", morePanel.listingBelow && morePanel.listingInside && morePanel.explainInside);
+    check("More filters: no intro text, title 20/26 semibold, close at least 44px", !morePanel.intro && morePanel.title === "20px/26px/600" && morePanel.close >= 44, `${morePanel.title} ${morePanel.close}`);
+    check("More filters: white panel with a 2px top line", morePanel.border === "2px" && morePanel.background === "rgb(255, 255, 255)", `${morePanel.border} ${morePanel.background}`);
+    check("Technical filters: closed row with the Schema type summary", morePanel.techExpanded === "false" && morePanel.techGridHidden && /Technical filters/.test(morePanel.techLabel) && /Schema type/.test(morePanel.techLabel) && morePanel.techControls === "fides-credential-pilot-technical", morePanel.techLabel);
+    check("Technical filters: row at least 56px, chevron at the far end", morePanel.techHeight >= 56 && morePanel.techChevronRight <= 2, `${morePanel.techHeight}px, ${morePanel.techChevronRight}`);
+    await page.locator("[data-pilot-tech-toggle]").focus();
+    await page.keyboard.press("Enter");
+    await page.waitForTimeout(150);
+    check("Technical filters: Enter opens the Schema type list", (await page.getAttribute("[data-pilot-tech-toggle]", "aria-expanded")) === "true" && (await page.isVisible("#fides-credential-pilot-technical [data-pilot-key='schemaType']")));
+    await page.keyboard.press("Enter");
+    await page.waitForTimeout(150);
+    check("Technical filters: Enter closes it again and keeps focus", (await page.getAttribute("[data-pilot-tech-toggle]", "aria-expanded")) === "false" && (await page.evaluate(() => document.activeElement && document.activeElement.hasAttribute("data-pilot-tech-toggle"))));
+
     // TS11 metadata flag.
     const ts11Label = page.locator("label:has([data-pilot-flag='ts11CompliantOnly'])");
     check("TS11 flag: labelled 'TS11 metadata'", ((await ts11Label.textContent()) || "").includes("TS11 metadata"));
@@ -317,6 +367,17 @@ async function smallTargets(page, selector) {
     await page.waitForTimeout(300);
     check("Explain: Escape closes and unlocks", !(await page.evaluate(() => document.documentElement.classList.contains("fides-ds-scroll-locked"))));
     check("Explain: focus returns to the button", await page.evaluate(() => document.activeElement && document.activeElement.classList.contains("fides-credential-explain")));
+    check("Explain: More filters stays open after the dialog", await page.isVisible("#fides-credential-pilot-more"));
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(200);
+    check("More filters: Escape closes the panel and returns focus to More filters", !(await page.isVisible("#fides-credential-pilot-more")) && (await page.evaluate(() => document.activeElement && document.activeElement.hasAttribute("data-pilot-more-toggle"))));
+    const closedState = await page.evaluate(() => ({
+      pill: [...document.querySelectorAll("[data-pilot-remove-group='ts11CompliantOnly']")].map((b) => ({ text: b.textContent.replace(/\s+/g, " ").trim(), height: Math.round(b.getBoundingClientRect().height) })),
+      badge: (document.querySelector("[data-pilot-more-badge]") || {}).textContent,
+      expanded: document.querySelector("[data-pilot-more-toggle]").getAttribute("aria-expanded"),
+    }));
+    check("More filters closed: TS11 metadata stays visible as a removable pill", closedState.pill.length === 1 && /TS11 metadata/.test(closedState.pill[0].text) && /remove filter/.test(closedState.pill[0].text), JSON.stringify(closedState));
+    check("More filters closed: the button counts the hidden selection", closedState.badge === "1" && closedState.expanded === "false", JSON.stringify(closedState));
 
     const terms = page.locator(".fides-credential-pilot__terms .fides-credential-explain");
     check("overview: EUDI terminology line links to Credentials & attestations", (await terms.count()) === 1 && /Credentials & attestations explained/.test(await terms.textContent()));
@@ -406,61 +467,70 @@ async function smallTargets(page, selector) {
     await context.close();
   }
 
-  // ---------- Overview layout (Paper 20.7): search row, then the five filters, then quick filters ----------
+  // ---------- Overview bar (Paper 20.42): one line while it fits, then Ecosystem in More filters, then the Filters dialog ----------
   const LONG_AUTHORITY = "Unique Identification Authority of India";
-  for (const width of [1440, 1320, 1319, 1280, 1279, 1200, 1199, 1100, 768, 390, 320]) {
+  const EXPECTED_LAYOUT = { 1440: "full", 1320: "reduced", 1280: "reduced", 1200: "reduced", 1100: "reduced", 1024: "reduced", 768: "compact", 390: "compact", 320: "compact" };
+  for (const width of [1440, 1320, 1280, 1200, 1100, 1024, 768, 390, 320]) {
     const context = await newContext(browser, width);
     const page = await context.newPage();
     page.on("pageerror", (e) => errors.push(`overview layout ${width}: ${e.message}`));
     await open(page, OVERVIEW);
     await overviewReady(page);
-    const tag = `overview layout ${width}`;
+    const tag = `overview bar ${width}`;
     const measure = () => page.evaluate(() => {
+      const root = document.querySelector("#fides-credential-catalog-root");
       const box = (el) => { if (!el || el.offsetParent === null) return null; const r = el.getBoundingClientRect(); return { top: Math.round(r.top), bottom: Math.round(r.bottom), left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height) }; };
-      const q = (s) => document.querySelector(`#fides-credential-catalog-root ${s}`);
-      const controls = [...document.querySelectorAll("#fides-credential-catalog-root .fides-uc-pilot__filter-row > *")]
-        .map((el) => ({ label: (el.querySelector(".fides-ds-popover__label, span") || el).textContent.trim(), box: box(el), target: box(el.querySelector(".fides-ds-popover__toggle") || el) }));
+      const q = (s) => root.querySelector(s);
+      const controls = [...root.querySelectorAll(".fides-uc-pilot__filter-row > *")]
+        .map((el) => ({ key: el.dataset.pilotKey || "more", label: (el.querySelector(".fides-ds-popover__label, span") || el).textContent.trim(), box: box(el), target: box(el.querySelector(".fides-ds-popover__toggle") || el) }));
+      const eco = root.querySelectorAll("[data-pilot-key='ecosystem']");
       return {
-        search: box(q(".fides-uc-pilot__search-row")),
+        layout: root.dataset.pilotLayout,
+        ecoCount: eco.length,
+        ecoIn: eco[0] ? (eco[0].closest("#fides-credential-pilot-more") ? "more" : "row") : null,
         label: box(q(".fides-uc-pilot__search-label")),
         ask: box(q(".fides-uc-pilot__ask")),
+        search: box(q(".fides-uc-pilot__search")),
         input: box(q(".fides-uc-pilot__search-input")),
         submit: box(q(".fides-uc-pilot__search-submit")),
-        quick: box(q(".fides-credential-pilot__quick")),
         toggle: box(q("[data-pilot-open]")),
+        listingVisible: !!box(q("[data-pilot-quick]")),
         controls,
       };
     });
     const m = await measure();
     check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
+    check(`${tag}: layout ${EXPECTED_LAYOUT[width]}`, m.layout === EXPECTED_LAYOUT[width], m.layout);
+    check(`${tag}: exactly one Ecosystem control`, m.ecoCount === 1 && m.ecoIn === (m.layout === "reduced" ? "more" : "row"), `${m.ecoCount} in ${m.ecoIn}`);
+    check(`${tag}: no Listing row outside More filters`, !m.listingVisible);
     check(`${tag}: input and Search stay one pair`, m.input && m.submit && Math.abs(m.input.top - m.submit.top) <= 6 && m.submit.left > m.input.left, JSON.stringify([m.input, m.submit]));
     if (m.ask) check(`${tag}: Ask FIDES beside the search label`, Math.abs(m.ask.top + m.ask.height / 2 - (m.label.top + m.label.height / 2)) <= 4 && m.ask.left > m.label.right, JSON.stringify([m.label, m.ask]));
     const minTarget = width >= 1100 ? 40 : 44;
-    if (width >= 600) {
-      check(`${tag}: search group at most 720px including Search`, m.search.width <= 720 && m.submit.right - m.search.left <= 720, JSON.stringify(m.search));
+    if (m.layout !== "compact") {
       const visible = m.controls.filter((c) => c.box);
-      check(`${tag}: five filter buttons`, visible.length === 5 && /Subject/.test(visible[0].label) && /More filters/.test(visible[4].label), visible.map((c) => c.label).join(" | "));
-      check(`${tag}: filters on their own row below the search`, visible.every((c) => c.box.top >= m.search.bottom), JSON.stringify(visible.map((c) => c.box.top)));
-      const rows = [...new Set(visible.map((c) => c.box.top))].map((top) => visible.filter((c) => c.box.top === top).length);
-      if (width >= 1100) check(`${tag}: the five filters together on one row`, rows.length === 1, rows.join("+"));
-      check(`${tag}: no grid with one loose fifth button`, !(rows.length === 2 && rows[1] === 1), rows.join("+"));
-      check(`${tag}: filters start at the search edge`, visible[0].box.left === m.search.left, `${visible[0].box.left}/${m.search.left}`);
-      check(`${tag}: quick filters below the filter row`, m.quick && m.quick.top >= Math.max(...visible.map((c) => c.box.bottom)), JSON.stringify(m.quick));
+      const keys = visible.map((c) => c.key).join(",");
+      check(`${tag}: ${m.layout === "full" ? "four lists" : "three lists"} and More filters`, keys === (m.layout === "full" ? "subjectType,vcFormat,ecosystem,authority,more" : "subjectType,vcFormat,authority,more"), keys);
+      check(`${tag}: search, Search and filters on one line`, visible.every((c) => Math.abs(c.box.top + c.box.height / 2 - (m.submit.top + m.submit.height / 2)) <= 3), JSON.stringify(visible.map((c) => c.box.top)));
+      check(`${tag}: search input at least 280px`, m.search.width >= 280, String(m.search.width));
+      if (width >= 1440) check(`${tag}: search input about 350-400px on wide desktop`, m.search.width >= 340 && m.search.width <= 420, String(m.search.width));
+      check(`${tag}: no Filters dialog button`, !m.toggle);
       check(`${tag}: controls ${minTarget}px or more`, visible.every((c) => c.target.height >= minTarget) && m.submit.height >= minTarget && m.input.height >= minTarget, visible.map((c) => c.target.height).concat(m.submit.height).join("/"));
       if (width >= 1100) check(`${tag}: controls 40px with a fine pointer`, visible.every((c) => c.target.height === 40) && m.submit.height === 40, visible.map((c) => c.target.height).join("/"));
-      if ([1440, 1200, 768].includes(width)) {
-        await page.click("[data-pilot-key='authority'] summary, [data-pilot-key='authority'] button");
+      if ([1440, 1200, 1100].includes(width)) {
+        await page.click("[data-pilot-key='authority'] .fides-ds-popover__toggle");
         await page.waitForTimeout(200);
         const option = page.locator(`[data-pilot-key='authority'] input[value='${LONG_AUTHORITY}']`);
         if (await option.count()) {
           await option.check();
           await page.waitForTimeout(400);
           await page.keyboard.press("Escape");
-          await page.waitForTimeout(200);
+          await page.waitForTimeout(300);
           const after = await measure();
-          const authority = after.controls[3];
-          const rowsAfter = [...new Set(after.controls.filter((c) => c.box).map((c) => c.box.top))].length;
-          check(`${tag}: long selected label stays within its button`, authority.box.width <= 260 && (await overflow(page)) <= 0 && (width < 1100 || rowsAfter === 1), `${authority.box.width}px, ${rowsAfter} rows`);
+          const authority = after.controls.find((c) => c.key === "authority");
+          const name = await page.evaluate(() => document.querySelector("[data-pilot-key='authority'] .fides-ds-popover__toggle").textContent.replace(/\s+/g, " ").trim());
+          const tops = new Set(after.controls.filter((c) => c.box).map((c) => c.box.top));
+          check(`${tag}: long selected value truncated visually, full accessible name`, authority.box.width <= 220 && name.includes(LONG_AUTHORITY), `${authority.box.width}px ${name}`);
+          check(`${tag}: long selection keeps one line without overflow`, tops.size === 1 && (await overflow(page)) <= 0 && after.layout !== "compact" && after.search.width >= 280, `${after.layout} ${after.search.width}`);
         } else {
           check(`${tag}: long authority option present`, false);
         }
@@ -469,7 +539,56 @@ async function smallTargets(page, selector) {
       check(`${tag}: one Filters button instead of the filter row`, !!m.toggle && m.controls.every((c) => !c.box) && m.toggle.height >= 44, JSON.stringify(m.toggle));
       check(`${tag}: search controls at least 44px`, m.input.height >= 44 && m.submit.height >= 44, `${m.input.height}/${m.submit.height}`);
     }
-    if ([1440, 1200, 768, 390].includes(width)) await page.screenshot({ path: path.join(OUT, `overview-layout-${width}.png`) });
+    if ([1440, 1280, 1100, 768, 390].includes(width)) await page.screenshot({ path: path.join(OUT, `overview-bar-${width}.png`) });
+    await context.close();
+  }
+
+  // ---------- Ecosystem keeps one value across resizes (full, reduced, compact) ----------
+  {
+    const context = await newContext(browser, 1280);
+    const page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(`ecosystem resize: ${e.message}`));
+    await open(page, OVERVIEW);
+    await overviewReady(page);
+    const where = () => page.evaluate(() => {
+      const root = document.querySelector("#fides-credential-catalog-root");
+      const eco = root.querySelectorAll("[data-pilot-key='ecosystem']");
+      return {
+        layout: root.dataset.pilotLayout,
+        count: eco.length,
+        inMore: !!(eco[0] && eco[0].closest("#fides-credential-pilot-more")),
+        checked: [...root.querySelectorAll("[data-pilot-key='ecosystem'] input:checked")].map((i) => i.value),
+        pills: [...root.querySelectorAll("[data-pilot-remove-group='ecosystem']")].length,
+        badge: (root.querySelector("[data-pilot-more-badge]") || {}).textContent,
+      };
+    });
+    await page.click("[data-pilot-more-toggle]");
+    await page.waitForTimeout(200);
+    let s = await where();
+    check("ecosystem 1280: first list in More filters", s.layout === "reduced" && s.inMore && (await page.evaluate(() => document.querySelector("[data-pilot-more-grid] > *").dataset.pilotKey)) === "ecosystem", JSON.stringify(s));
+    await page.click("#fides-credential-pilot-more [data-pilot-key='ecosystem'] .fides-ds-popover__toggle");
+    await page.waitForTimeout(200);
+    const ecoOption = page.locator("[data-pilot-key='ecosystem'] input[type='checkbox']").first();
+    const ecoValue = await ecoOption.getAttribute("value");
+    await ecoOption.check();
+    await page.waitForTimeout(400);
+    await page.keyboard.press("Escape");
+    await page.waitForTimeout(200);
+    const urlReduced = page.url();
+    s = await where();
+    check("ecosystem 1280: selection in the URL, pill and More count", new URL(urlReduced).searchParams.get("ecosystem") === ecoValue && s.pills === 1 && s.badge === "1", JSON.stringify(s));
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.waitForTimeout(500);
+    s = await where();
+    check("ecosystem 1440: back in the bar, same value, no reset", s.layout === "full" && !s.inMore && s.count === 1 && s.checked.join() === ecoValue && page.url() === urlReduced && s.badge !== "1", JSON.stringify(s));
+    await page.setViewportSize({ width: 768, height: 900 });
+    await page.waitForTimeout(500);
+    s = await where();
+    check("ecosystem 768: compact keeps the value and the pill", s.layout === "compact" && s.count === 1 && s.checked.join() === ecoValue && s.pills === 1 && page.url() === urlReduced, JSON.stringify(s));
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.waitForTimeout(500);
+    s = await where();
+    check("ecosystem 1280 again: one control in More filters, value kept", s.layout === "reduced" && s.inMore && s.count === 1 && s.checked.join() === ecoValue && (await overflow(page)) <= 0, JSON.stringify(s));
     await context.close();
   }
 
@@ -491,6 +610,39 @@ async function smallTargets(page, selector) {
       const close = page.locator("#fides-credential-pilot-filter-panel .fides-uc-pilot__panel-close");
       const apply = page.locator("#fides-credential-pilot-filter-panel [data-pilot-apply]");
       check(`filters ${width}: close and apply reachable`, (await close.isVisible()) && (await apply.isVisible()));
+      const dialog = await page.evaluate(() => {
+        const panel = document.querySelector("#fides-credential-pilot-filter-panel");
+        const vis = (el) => !!(el && el.offsetParent !== null);
+        const order = [...panel.querySelectorAll("[data-pilot-key], [data-pilot-quick], [data-pilot-tech-toggle]")].filter(vis)
+          .map((el) => el.dataset.pilotKey || (el.hasAttribute("data-pilot-quick") ? "listing" : "technical"));
+        const lefts = [...panel.querySelectorAll(".fides-uc-pilot__filter-row > [data-pilot-key], [data-pilot-more-grid] > [data-pilot-key]")].filter(vis).map((el) => Math.round(el.getBoundingClientRect().left));
+        const tech = panel.querySelector("[data-pilot-tech-toggle]");
+        return {
+          order: order.join(","),
+          stacked: new Set(lefts).size === 1,
+          moreTitle: vis(panel.querySelector(".fides-uc-pilot__more-title")),
+          moreClose: vis(panel.querySelector("[data-pilot-more-close]")),
+          moreToggle: vis(document.querySelector("[data-pilot-more-toggle]")),
+          techHeight: tech ? Math.round(tech.getBoundingClientRect().height) : 0,
+          wide: panel.scrollWidth - panel.clientWidth,
+        };
+      });
+      check(`filters ${width}: primary lists, More filters lists, Listing, Technical filters in order`, dialog.order === "subjectType,vcFormat,ecosystem,authority,sector,theme,listing,technical", dialog.order);
+      check(`filters ${width}: stacked controls without a nested More toggle or close`, dialog.stacked && dialog.moreTitle && !dialog.moreClose && !dialog.moreToggle && dialog.wide <= 0, JSON.stringify(dialog));
+      check(`filters ${width}: Technical filters row at least 56px`, dialog.techHeight >= 56, String(dialog.techHeight));
+      await page.click("#fides-credential-pilot-filter-panel [data-pilot-tech-toggle]");
+      await page.waitForTimeout(150);
+      check(`filters ${width}: Technical filters opens inside the dialog`, await page.isVisible("#fides-credential-pilot-filter-panel #fides-credential-pilot-technical [data-pilot-key='schemaType']"));
+      const scroll = await page.evaluate(async () => {
+        const panel = document.querySelector("#fides-credential-pilot-filter-panel");
+        const before = window.scrollY;
+        panel.scrollTop = panel.scrollHeight;
+        await new Promise((r) => setTimeout(r, 100));
+        return { panel: panel.scrollTop, page: window.scrollY - before, scrollable: panel.scrollHeight > panel.clientHeight };
+      });
+      check(`filters ${width}: only the dialog body scrolls`, scroll.page === 0 && (!scroll.scrollable || scroll.panel > 0), JSON.stringify(scroll));
+      await page.click("#fides-credential-pilot-filter-panel [data-pilot-tech-toggle]");
+      await page.waitForTimeout(150);
       await page.check("#fides-credential-pilot-filter-panel [data-pilot-flag='ts11CompliantOnly']");
       await page.waitForTimeout(200);
       check(`filters ${width}: change stays pending until Apply`, new URL(page.url()).searchParams.get("ts11") === null);
