@@ -121,8 +121,16 @@ $check($has($ehic, '12 indexed fields · 8 top-level'), 'EHIC: attribute counts'
 $check($has($ehic, 'data-fides-ds-show-all="8"') && $has($ehic, 'id="attributes-list"'), 'EHIC: attributes show-all');
 $check($has($ehic, 'Schema metadata · TS11') && $has($ehic, 'data-fides-ds-collapsible="closed"'), 'EHIC: TS11 panel (accordion on narrow screens)');
 $check(! $has($ehic, 'fides-ds-status fides-credential-ts11-status'), 'EHIC: no TS11 metadata marker');
-$check($has($ehic, 'Some source metadata is not provided.'), 'EHIC: TS11 summary explains missing metadata');
-$check($has($ehic, 'Partial <span class="fides-ds-meta">· missing'), 'EHIC: API conformance is partial');
+$check($has($ehic, '<p class="fides-credential-ts11__summary">2 supported formats. Rulebook, trusted authorities, security level and holder binding are not provided.</p>'), 'EHIC: short TS11 explanation from field presence');
+$check($has($ehic, '<dt>API metadata coverage</dt><dd>Partial</dd>'), 'EHIC: API metadata coverage is partial');
+$check($has($ehic, '<dt>Source URIs</dt><dd>2 schema links</dd>'), 'EHIC: two typed schema links');
+$check(preg_match('/<button type="button" class="fides-credential-ts11__toggle" data-credential-ts11-toggle aria-expanded="true" aria-controls="ts11-technical" hidden>/', $ehic) === 1 && $has($ehic, 'id="ts11-technical"'), 'EHIC: technical metadata toggle (hidden until JS closes the panel)');
+$check($has($ehic, 'Technical metadata · EHIC'), 'EHIC: technical metadata caption');
+$labels = array('Metadata ID', 'Version', 'Rulebook', 'Trusted authorities', 'Security level', 'Holder binding', 'Formats (TS11)', 'Source URIs', 'API metadata coverage');
+preg_match_all('/<dt>([^<]+)<\/dt>/', substr($ehic, strpos($ehic, 'id="ts11-technical"'), strpos($ehic, 'fides-credential-ts11__foot') - strpos($ehic, 'id="ts11-technical"')), $ts11_dts);
+$check($ts11_dts[1] === $labels, 'EHIC: TS11 rows use the readable labels in order (' . implode(', ', $ts11_dts[1]) . ')');
+$check(! $has($ehic, '<dt>SchemaMeta.id</dt>') && ! $has($ehic, '<dt>schemaURIs</dt>'), 'EHIC: no raw TS11 keys as row labels');
+$check($has($ehic, '<code class="fides-credential-code">mso_mdoc · dc+sd-jwt</code>') || $has($ehic, '<code class="fides-credential-code">dc+sd-jwt · mso_mdoc</code>'), 'EHIC: TS11 formats');
 $check($has($ehic, 'projected from catalog version 1'), 'EHIC: semantic version is labelled as a projection');
 $check($has($ehic, 'data-fides-ds-term="' . Fides_Credential_Design::TS11_TEMPLATE . '"') && $has($ehic, '<template id="' . Fides_Credential_Design::TS11_TEMPLATE . '"'), 'EHIC: Explain opens the per-record TS11 template');
 $check($has($ehic, 'id="sources"') && $has($ehic, 'Catalog data on GitHub'), 'EHIC: sources section with the data source');
@@ -152,7 +160,8 @@ $check(count($eucc_rep) === 1 && count($eucc_rep[0]['children'] ?? array()) === 
 $check(count($eucc_rep) === 1 && in_array('full_name', array_column($eucc_rep[0]['children'] ?? array(), 'name'), true), 'EUCC: nested labels drop the array item segment');
 $check($has($eucc, 'High · ISO/IEC 18045'), 'EUCC: attestationLoS label');
 $check($has($eucc, 'View rulebook'), 'EUCC: rulebook link');
-$check($has($eucc, 'Trusted authorities are not provided.'), 'EUCC: marker summary still names missing trusted authorities');
+$check($has($eucc, '<p class="fides-credential-ts11__summary">Format, source, rulebook, security level and holder binding are provided. Trusted authorities are not provided.</p>'), 'EUCC: short TS11 explanation names provided and missing fields');
+$check($has($eucc, '<dt>Source URIs</dt><dd>1 schema link</dd>') && $has($eucc, '<dt>API metadata coverage</dt><dd>Partial</dd>'), 'EUCC: one schema link, partial coverage');
 $eucc_ts11 = Fides_Credential_Design::ts11($eucc_item);
 $check($eucc_ts11['missing'] === array('trustedAuthorities'), 'EUCC: API only misses trustedAuthorities (' . implode(',', $eucc_ts11['missing']) . ')');
 $check($eucc_ts11['version'] === '0.1.0', 'EUCC: SemVer kept');
@@ -166,6 +175,14 @@ $check($has($obc, 'OpenID credential issuer metadata'), 'OBC: metadata endpoint 
 $check($has($obc, 'View metadata endpoint'), 'OBC: hero action names the metadata endpoint');
 $check($has($obc, 'Type identifier') && $has($obc, 'OpenBadgeCredential'), 'OBC: native type identifier');
 $check($has($obc, 'Schema type: Other'), 'OBC: schema type Other is shown');
+$check($has($obc, '<p class="fides-credential-ts11__summary">Issuer metadata is linked; an attribute index is not available. Rulebook, trusted authorities, security level and holder binding are not provided.</p>'), 'OBC: short TS11 explanation names the issuer metadata endpoint');
+$check($has($obc, '<dt>Source URIs</dt><dd>1 issuer metadata endpoint; not an attribute-schema link</dd>'), 'OBC: TS11 names the issuer metadata endpoint, not a schema link');
+$obc_ts11 = Fides_Credential_Design::ts11(Fides_Credential_Design::find('cred:eduwallet:open-badge'));
+$check($obc_ts11['schema_uris'] === 1 && ! in_array('schemaURIs', $obc_ts11['missing'], true), 'OBC: API projection still counts the URI under schemaURIs');
+$obc_tpl = substr($obc, strpos($obc, '<template id="' . Fides_Credential_Design::TS11_TEMPLATE . '"'));
+$check($has($obc_tpl, 'issuer metadata endpoint') && preg_match('/Provided:<\/strong>[^<]*schema/', $obc_tpl) !== 1 && preg_match('/Not provided:<\/strong>[^<]*attribute-schema link/', $obc_tpl) === 1, 'OBC: Explain dialog does not count the endpoint as a schema link');
+$check(Fides_Credential_Design::source_uri_kind('https://example.org/s.json', '') === 'source' && Fides_Credential_Design::source_uris_label(array('endpoint' => 0, 'schema' => 0, 'source' => 2)) === '2 source links', 'Untyped URIs are generic source links');
+$check(Fides_Credential_Design::category_label('health') === 'Health' && Fides_Credential_Design::category_label('identity') === 'Identity' && Fides_Credential_Design::category_label('professional') === 'Professional' && Fides_Credential_Design::category_label('custom-x') === 'custom-x', 'Category display labels by explicit mapping');
 
 // ---------- vLEI and mDL edge cases ----------
 
@@ -221,7 +238,8 @@ foreach (array('cred:eu:ehic' => 'EHIC', 'cred:webuild:eucc' => 'EUCC', 'cred:ed
     $subject = trim((string) ($item['subjectType'] ?? ''));
     $check($subject === '' || $has($details, '<dt>Subject type</dt><dd>' . esc_html($subject) . '</dd>'), "$label: subject type in Credential details");
     $category = trim((string) ($item['category'] ?? ''));
-    $check($category === '' || $has($details, '<dt>Category</dt><dd>' . esc_html($category) . '</dd>'), "$label: category in Credential details");
+    $check($category === '' || $has($details, '<dt>Category</dt><dd>' . esc_html(Fides_Credential_Design::category_label($category)) . '</dd>'), "$label: category display label in Credential details");
+    $check($category === '' || ! $has($details, '<dd>' . esc_html($category) . '</dd>') || $category === Fides_Credential_Design::category_label($category), "$label: raw category code not shown");
     foreach (array('ecosystems' => 'Ecosystem', 'themes' => 'Theme', 'sectors' => 'Sectors') as $field => $dt) {
         $labels = Fides_Credential_Design::taxonomy_labels($item, $field);
         $check($labels ? $has($details, '<dt>' . $dt . '</dt><dd>' . esc_html(implode(' · ', $labels)) . '</dd>') : ! $has($details, '<dt>' . $dt . '</dt>'), "$label: $dt only when recorded");

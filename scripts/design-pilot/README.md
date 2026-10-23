@@ -398,6 +398,21 @@ refresh.
   Below 1100 px the context blocks follow the main content as light-blue
   frames; Formats, TS11 and Sources are the shared accordions (Formats open,
   TS11 and Sources closed, 56 px rows), Credential details and Tags stay open.
+  Category shows a display label (`Fides_Credential_Design::category_label`,
+  e.g. health → Health); the recorded code, filters and API are unchanged.
+- Compact TS11 (Paper 20.39): the marker line with Explain, then a short
+  explanation built from field presence only (e.g. EHIC "2 supported formats.
+  Rulebook, trusted authorities, security level and holder binding are not
+  provided."). All fields sit behind "View technical metadata" /
+  "Hide technical metadata" (a real button with `aria-expanded` /
+  `aria-controls`, 44 px, closed at every width; visible without JS) with
+  readable labels: Metadata ID, Version, Rulebook, Trusted authorities,
+  Security level, Holder binding, Formats (TS11), Source URIs, API metadata
+  coverage. Source URIs are named by kind with the existing
+  `is_metadata_endpoint` check: "issuer metadata endpoint" (Open Badge:
+  "1 issuer metadata endpoint; not an attribute-schema link"), "schema link"
+  for a typed schema, otherwise a generic "source link". The API projection
+  (`schemaURIs`, missing list, level) is unchanged.
 - "Credentials & attestations" (Paper 20.35): a `<template>` opened through the
   shared term dialog from Credential details and from the overview intro
   ("EUDI terminology"). It explains EAA, QEAA, PID and the public-sector
@@ -409,7 +424,10 @@ refresh.
   rows each and their own "View all N" / "Show fewer"; below that they are
   shared collapsibles, closed by default, that open with the full list
   (`data-fides-ds-show-all-follow`). Rows are the shared relation row
-  (`.fides-org-eco__row`) with name, organization · country and the recorded
+  (`.fides-org-eco__row`: no negative margins, so row, divider, hover and
+  focus share one outer edge; 16 px / 12 px padding; hover is the info
+  surface `--fides-ds-soft` with only the name underlined; focus is a 2 px
+  brand ring inset in the row) with name, organization · country and the recorded
   status: issuer `environment`, relying-party `readiness` as Production /
   Pilot / Demo / Technical demo, otherwise "Not specified". Rows open
   `?issuer=` / `?rp=`; under a full list the filtered catalog route

@@ -561,7 +561,21 @@ async function ecosystemInteractions(browser) {
   await row.hover();
   await page.waitForTimeout(600);
   const hover = await row.evaluate((el) => getComputedStyle(el).backgroundColor);
-  check("ecosystem: row hover light blue", rest !== hover && hover === "rgb(241, 246, 255)", `${rest} -> ${hover}`);
+  check("ecosystem: row hover uses the info surface token", rest !== hover && hover === "rgb(242, 247, 255)", `${rest} -> ${hover}`);
+  const edge = await row.evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    const l = el.parentElement.getBoundingClientRect();
+    const cs = getComputedStyle(el);
+    return { same: Math.abs(r.left - l.left) < 1 && Math.abs(r.right - l.right) < 1, margin: cs.marginLeft + "," + cs.marginRight, padding: [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].join(","), underline: getComputedStyle(el.querySelector(".fides-org-eco__name")).textDecorationLine };
+  });
+  check("ecosystem: row, divider and hover share one outer edge; 16/12 padding; underlined name", edge.same && edge.margin === "0px,0px" && edge.padding === "16px,12px,16px,12px" && /underline/.test(edge.underline), JSON.stringify(edge));
+  const likesRow = page.locator("#ecosystem a.fides-org-eco__row:has(.fides-org-eco__likes)").first();
+  if (await likesRow.count()) {
+    await likesRow.hover();
+    await page.waitForTimeout(300);
+    const likesDeco = await likesRow.evaluate((el) => getComputedStyle(el.querySelector(".fides-org-eco__likes")).textDecorationLine);
+    check("ecosystem: hover leaves the like count plain", likesDeco === "none", likesDeco);
+  }
   const metrics = await row.evaluate((el) => ({
     name: [getComputedStyle(el.querySelector(".fides-org-eco__name")).fontSize, getComputedStyle(el.querySelector(".fides-org-eco__name")).lineHeight],
     arrow: Math.round(el.querySelector(".fides-org-eco__arrow").getBoundingClientRect().width),

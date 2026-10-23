@@ -359,6 +359,58 @@ async function smallTargets(page, selector) {
         check(`${tag}: TS11 panel open in the context column`, !ts11Collapsible.toggle && (await page.isVisible("#ts11-body")));
       }
 
+      // Compact TS11 (Paper 20.39): short explanation, technical metadata closed at every width.
+      const tech = () => page.evaluate(() => {
+        const b = document.querySelector("[data-credential-ts11-toggle]");
+        const p = document.getElementById("ts11-technical");
+        const r = b.getBoundingClientRect();
+        return {
+          expanded: b.getAttribute("aria-expanded"),
+          controls: b.getAttribute("aria-controls"),
+          label: b.textContent.trim(),
+          visible: b.offsetParent !== null,
+          height: Math.round(r.height),
+          top: Math.round(r.top),
+          panel: p.offsetParent !== null,
+          focused: document.activeElement === b,
+        };
+      });
+      const summary = (await page.textContent(".fides-credential-ts11__summary")) || "";
+      check(`${tag}: TS11 short explanation visible`, (await page.isVisible(".fides-credential-ts11__summary")) && /provided|supported format|Issuer metadata is linked/.test(summary), summary);
+      let t11 = await tech();
+      check(`${tag}: technical metadata closed by default`, t11.visible && t11.expanded === "false" && t11.label === "View technical metadata" && !t11.panel && t11.controls === "ts11-technical", JSON.stringify(t11));
+      check(`${tag}: technical metadata toggle at least 44px`, t11.height >= 44, String(t11.height));
+      await page.locator("[data-credential-ts11-toggle]").scrollIntoViewIfNeeded();
+      await page.locator("[data-credential-ts11-toggle]").focus();
+      const before = (await tech()).top;
+      await page.keyboard.press("Enter");
+      await page.waitForTimeout(100);
+      t11 = await tech();
+      check(`${tag}: Enter opens the technical metadata`, t11.expanded === "true" && t11.label === "Hide technical metadata" && t11.panel && t11.focused, JSON.stringify(t11));
+      check(`${tag}: toggle stays in place (no scroll jump)`, Math.abs(t11.top - before) <= 1, `${before} -> ${t11.top}`);
+      const facts = await page.evaluate(() => {
+        const rows = [...document.querySelectorAll("#ts11-technical .fides-ds-facts__row")];
+        return {
+          labels: rows.map((r) => r.querySelector("dt").textContent.trim()),
+          stacked: rows.every((r) => r.querySelector("dd").getBoundingClientRect().top >= r.querySelector("dt").getBoundingClientRect().bottom - 1),
+          source: (rows.find((r) => r.querySelector("dt").textContent.trim() === "Source URIs") || { textContent: "" }).textContent,
+          caption: (document.querySelector(".fides-credential-ts11__caption") || {}).textContent || "",
+        };
+      });
+      check(`${tag}: all nine technical fields with readable labels`, facts.labels.join("|") === "Metadata ID|Version|Rulebook|Trusted authorities|Security level|Holder binding|Formats (TS11)|Source URIs|API metadata coverage", facts.labels.join("|"));
+      check(`${tag}: technical metadata caption`, /^Technical metadata · /.test(facts.caption), facts.caption);
+      if (width < 600) check(`${tag}: labels above values`, facts.stacked);
+      check(`${tag}: no horizontal overflow with technical metadata open`, (await overflow(page)) <= 0, String(await overflow(page)));
+      if (id === "cred:eduwallet:open-badge") {
+        check(`${tag}: Source URIs names the issuer metadata endpoint`, /1 issuer metadata endpoint; not an attribute-schema link/.test(facts.source) && !/schema link(?!;)/.test(facts.source.replace("attribute-schema link", "")), facts.source);
+        check(`${tag}: short explanation names the issuer metadata endpoint`, /^Issuer metadata is linked; an attribute index is not available\./.test(summary.trim()), summary);
+      }
+      if (id === "cred:webuild:eucc") check(`${tag}: EUCC source is one schema link`, /1 schema link/.test(facts.source), facts.source);
+      await page.keyboard.press("Space");
+      await page.waitForTimeout(100);
+      t11 = await tech();
+      check(`${tag}: Space closes the technical metadata and keeps focus`, t11.expanded === "false" && t11.label === "View technical metadata" && !t11.panel && t11.focused, JSON.stringify(t11));
+
       if (id === "cred:eu:ehic") {
         const tabs = page.locator("[role='tab']");
         check(`${tag}: two format tabs`, (await tabs.count()) === 2);
@@ -498,12 +550,48 @@ async function smallTargets(page, selector) {
         return cs.outlineStyle !== "none" && parseFloat(cs.outlineWidth) >= 2;
       });
       check(`${tag}: row has a visible keyboard focus`, focusRing);
+      const focusStyle = await page.evaluate(() => {
+        const cs = getComputedStyle(document.activeElement);
+        return { color: cs.outlineColor, offset: cs.outlineOffset, width: cs.outlineWidth };
+      });
+      check(`${tag}: focus is a 2px brand-blue ring inside the row`, focusStyle.color === "rgb(10, 110, 243)" && focusStyle.offset === "-2px" && focusStyle.width === "2px", JSON.stringify(focusStyle));
+      const geometry = () => page.evaluate(() => {
+        const row = document.querySelector("#eco-rps-list .fides-credential-eco__row");
+        const li = row.parentElement;
+        const r = row.getBoundingClientRect();
+        const l = li.getBoundingClientRect();
+        const cs = getComputedStyle(row);
+        const pos = (sel) => { const e = row.querySelector(sel).getBoundingClientRect(); return [Math.round(e.left), Math.round(e.top)]; };
+        return {
+          sameEdge: Math.abs(r.left - l.left) < 1 && Math.abs(r.right - l.right) < 1,
+          margin: [cs.marginLeft, cs.marginRight],
+          padding: [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft],
+          status: pos(".fides-credential-eco__slot"),
+          arrow: pos(".fides-org-eco__arrow"),
+          bg: cs.backgroundColor,
+          underline: getComputedStyle(row.querySelector(".fides-org-eco__name")).textDecorationLine,
+          slotDeco: getComputedStyle(row.querySelector(".fides-credential-eco__slot")).textDecorationLine,
+        };
+      });
+      const rest = await geometry();
+      check(`${tag}: row, divider and hover share one outer edge`, rest.sameEdge && rest.margin.join() === "0px,0px", JSON.stringify(rest));
+      check(`${tag}: row padding 16px vertical, 12px horizontal`, rest.padding.join() === "16px,12px,16px,12px", rest.padding.join());
       await page.hover("#eco-rps-list .fides-credential-eco__row >> nth=0");
       await page.waitForTimeout(250);
-      const hoverBg = await page.evaluate(() => getComputedStyle(document.querySelector("#eco-rps-list .fides-credential-eco__row")).backgroundColor);
-      check(`${tag}: row hover is light blue`, hoverBg === "rgb(241, 246, 255)", hoverBg);
+      const hovered = await geometry();
+      check(`${tag}: row hover uses the info surface token`, hovered.bg === "rgb(242, 247, 255)", hovered.bg);
+      check(`${tag}: row hover underlines the name only`, /underline/.test(hovered.underline) && hovered.slotDeco === "none", `${hovered.underline} / status ${hovered.slotDeco}`);
+      check(`${tag}: status and arrow do not move on hover`, hovered.status.join() === rest.status.join() && hovered.arrow.join() === rest.arrow.join(), JSON.stringify([rest.status, hovered.status, rest.arrow, hovered.arrow]));
       const rowHref = await page.getAttribute("#eco-rps-list .fides-credential-eco__row >> nth=0", "href");
       check(`${tag}: rows open the existing record route`, /[?&]rp=/.test(rowHref || ""), rowHref);
+      const detailUrl = page.url();
+      await page.route("https://fides.community/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>stub</title>" }));
+      await page.click("#eco-rps-list .fides-credential-eco__row >> nth=0");
+      await page.waitForLoadState("domcontentloaded");
+      check(`${tag}: row navigates to the relying party`, /[?&]rp=/.test(page.url()), page.url());
+      await page.goBack();
+      await page.waitForSelector(".fides-credential-detail");
+      check(`${tag}: browser back returns to the credential`, page.url() === detailUrl && (await page.getAttribute(".fides-credential-detail", "data-credential-id")) === "cred:eu:age-verification", page.url());
     } else {
       const tops = await page.evaluate(() => [...document.querySelectorAll(".fides-credential-eco__group")].map((g) => Math.round(g.getBoundingClientRect().top)));
       check(`${tag}: groups stacked`, tops.length === 2 && tops[1] > tops[0], JSON.stringify(tops));
