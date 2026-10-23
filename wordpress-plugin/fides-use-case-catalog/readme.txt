@@ -19,6 +19,7 @@ how use cases connect the other FIDES catalogs.
 == Changelog ==
 
 = Unreleased (design pilot) =
+* Pilot Filters dialog: an open dialog keeps its dialog layout above 600px, so resizing never cancels draft choices (Apply or Cancel only); focus after closing goes to the visible Filters button or More filters. Removable filter pills are at least 44px at every width and pointer type.
 * Shared More filters pattern (Paper 20.45) in `usecase-design.css`, used by the use-case, credential, wallet and organization pilot overviews: white panel with a 2px brand top line, 20/26 title and 44px close, lists side by side at 300px, checkbox groups on their own line, and a full-width Technical filters disclosure row (at least 56px, field summary, chevron at the end) with its lists below. Mobile shows the same groups stacked in the Filters dialog. No filters were added or removed.
 
 = 0.21.11 =

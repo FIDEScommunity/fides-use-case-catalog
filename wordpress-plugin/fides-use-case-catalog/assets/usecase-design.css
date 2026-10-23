@@ -1623,12 +1623,6 @@ html.fides-uc-pilot-panel-open {
     min-height: 40px;
     padding-block: 8px;
   }
-  .fides-ds.fides-uc-pilot .fides-uc-pilot__pill {
-    min-height: 40px;
-  }
-  .fides-ds.fides-uc-pilot .fides-uc-pilot__pill {
-    padding-block: 6px;
-  }
 }
 
 /* Wide screens: search and the four filter lists share one row. */
@@ -1722,4 +1716,114 @@ html.fides-uc-pilot-panel-open {
 /* Skeleton rows line up with the result rows (see .fides-ds-card--row). */
 .fides-ds .fides-uc-pilot__skeleton-row {
   margin-inline: calc(-1 * var(--fides-ds-space-3));
+}
+
+/* An open Filters dialog keeps its dialog layout when the window grows past
+   the compact breakpoint: draft choices stay until Apply or Cancel. */
+@media (min-width: 600px) {
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: var(--fides-ds-ground);
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open > * {
+    width: 100%;
+    max-width: 720px;
+    margin-inline: auto;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__panel-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fides-ds-space-4);
+    padding: var(--fides-ds-space-2) var(--fides-ds-space-2) var(--fides-ds-space-2) var(--fides-ds-gutter);
+    border-bottom: 1px solid var(--fides-ds-line);
+    background: var(--fides-ds-ground);
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__panel-title {
+    color: var(--fides-ds-ink);
+    font-size: 20px;
+    line-height: 28px;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__panel-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--fides-ds-ink);
+    cursor: pointer;
+    box-shadow: none;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__filter-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-column: auto;
+    grid-row: auto;
+    gap: var(--fides-ds-space-3);
+    padding: var(--fides-ds-space-4) var(--fides-ds-gutter) 0;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__filter-row > * {
+    max-width: none;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__more-toggle,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__more-close {
+    display: none;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__more,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__more[hidden] {
+    display: grid;
+    margin-block: 0;
+    padding: var(--fides-ds-space-4) var(--fides-ds-gutter);
+    border: 0;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-ds-popover__panel {
+    position: static;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    margin-top: var(--fides-ds-space-1);
+    overflow: visible;
+    overscroll-behavior: auto;
+    border-color: var(--fides-ds-line);
+    box-shadow: none;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__panel-actions {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--fides-ds-space-3);
+    margin-top: auto;
+    padding: var(--fides-ds-space-3) var(--fides-ds-gutter) calc(var(--fides-ds-space-3) + env(safe-area-inset-bottom, 0px));
+    border-top: 1px solid var(--fides-ds-line);
+    background: var(--fides-ds-ground);
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__panel-actions .fides-ds-button {
+    justify-content: center;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__more-grid,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__technical-grid,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__more-field,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__inline-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__more-grid > *,
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-panel.is-open .fides-uc-pilot__technical-grid > * {
+    flex: 0 0 auto;
+    min-width: 0;
+  }
 }

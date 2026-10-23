@@ -3288,7 +3288,6 @@
 
   const PILOT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const PILOT_MORE_FILTER_KEYS = ["productionDeployment", "awardRecognition", ...TAXONOMY_FILTER_GROUPS.map((group) => group.key)];
-  const PILOT_COMPACT_BREAKPOINT = 600;
   let pilotEventsBound = false;
 
   function pilotStatusLabel(item) {
@@ -3864,10 +3863,6 @@
     updateFilterChrome();
   }
 
-  function pilotIsCompact() {
-    return window.innerWidth < PILOT_COMPACT_BREAKPOINT;
-  }
-
   function pilotPanel() {
     return root.querySelector("#fides-uc-pilot-filter-panel");
   }
@@ -3916,7 +3911,16 @@
       pilotRestoreSnapshot(snapshot);
       updatePilotChrome(getFilteredUseCases());
     }
-    toggle?.focus();
+    pilotFocusFilterOpener();
+  }
+
+  /** After the dialog closes, focus the Filters button if the current layout shows it, else More filters. */
+  function pilotFocusFilterOpener() {
+    const visible = (el) => !!(el && el.offsetParent !== null);
+    const opener = root.querySelector("[data-pilot-open]");
+    const more = root.querySelector("[data-pilot-more-toggle]");
+    const target = visible(opener) ? opener : visible(more) ? more : root.querySelector("#fides-search-input");
+    target?.focus();
   }
 
   function setPilotMoreOpen(open, focusTarget) {
@@ -4102,9 +4106,7 @@
       }
     });
 
-    window.addEventListener("resize", debounce(() => {
-      if (!pilotIsCompact() && pilotSnapshot) closePilotDialog(false);
-    }, 150));
+    // Resizing is not a cancel: an open Filters dialog keeps its draft choices until Apply or Cancel.
 
     // A page restored from the back/forward cache comes back without the dialog or its scroll lock.
     window.addEventListener("pageshow", (event) => {
