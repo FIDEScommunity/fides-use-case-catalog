@@ -28,6 +28,7 @@ utrecht-demo, so that site must be running in Local.
 | `tests/run-organization-checks.sh` | Organization overview and detail in headless Chrome (server render without JavaScript and the hand-over to the script, overview 1440/390/320, seven records at 1440/768/390/320); screenshots in `../screens/organizations/` |
 | `tests/run-shell-route.sh` | Visitor route in headless Chrome at 1366×768 and 1440/1100/1024/768/390/320 px: homepage fragment → overview → detail → back, dropdowns, mobile menu, section navigation, filters with Escape/focus, pagination, long titles and the logo back to the homepage fragment; screenshots in `../screens/shell/`. Uses an existing Playwright install (`PLAYWRIGHT_MODULE`) and the server from `start-server.sh` |
 | `tests/run-overview-detail-checks.sh` | Overview and detail behaviour (brief 2026-10-18) in headless Chrome; screenshots in `../screens/overview-detail/` |
+| `tests/run-filter-dialog-checks.sh` | Filters dialog on all five overviews: a draft choice at 390 kept through 390 → 1440 → 390 → 1440 (dialog, scroll lock, focus trap) until Apply or Cancel / Escape, focus on a visible Filters or More filters button afterwards, normal close at 390, removable pills ≥44px at 1100/1440 with mouse and touch and at 320/390, and no wheel chaining at the bottom of a long dialog; screenshots in `../screens/filter-dialog/` |
 | `tests/run-more-filters-checks.sh` | Shared More filters pattern (Paper 20.45) on the credential, personal and business wallet, organization and use-case overviews at 1440/1280/1100/1024/768/390/320 (`MORE_WIDTHS`); screenshots in `../screens/more-filters/` |
 | `tests/run-measure-density.sh <label>` | Measure computed type sizes, Explore panel height, first result position, controls under 44 px and overflow at seven viewports; writes `measurements.json` and screenshots to `../screens/density-<label>/` |
 
@@ -549,10 +550,16 @@ plus `credential-compact-filterbar-2026-10-23.md`.
   (768 and below; the dialog CSS above 600px is mirrored in
   `credential-design.css`). Ecosystem is one DOM node that moves, so its value,
   pill and URL never reset; a selection change never moves it while it holds
-  focus, a resize does and returns focus to it or to More filters. An open
-  Filters dialog stays open on resize.
-- Controls stay 40px only at 1100px+ with a fine pointer; the More filters
-  close button and option labels keep 44px, the technical row 56px.
+  focus, a resize does and returns focus to it or to More filters.
+- Filters dialog (all five overviews): resizing is not a cancel. An open
+  dialog keeps its dialog layout above 600px (shared `.is-open` rules at the
+  end of `usecase-design.css`), with its draft choices, scroll lock and focus
+  trap, until Apply or Cancel / Escape. After closing, the final layout is
+  settled first; focus then goes to the visible Filters button or, when the
+  layout no longer shows it, to More filters.
+- Controls stay 40px only at 1100px+ with a fine pointer; removable filter
+  pills, the More filters close button and option labels keep 44px at every
+  width and pointer type, the technical row 56px.
 - Deviations from Paper: the search input takes the width the bar leaves
   (about 390px at 1440, up to about 450px at 1320); at 1024px the three lists
   in credential More filters wrap to two lines (300px fields); the Filters
