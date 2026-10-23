@@ -472,29 +472,44 @@ async function smallTargets(page, selector) {
       const toggle = list.nextElementSibling && list.nextElementSibling.classList.contains("fides-ds-show-all__toggle") ? list.nextElementSibling : null;
       const catalog = list.parentElement.querySelector(".fides-credential-eco__catalog");
       const body = document.getElementById(`eco-${key}-body`);
-      const head = list.closest(".fides-credential-eco__group").querySelector(".fides-ds-collapsible__toggle");
+      const groupEl = list.closest(".fides-credential-eco__group");
+      const head = groupEl.querySelector(".fides-ds-collapsible__toggle");
+      const cs = getComputedStyle(groupEl);
+      const r = groupEl.getBoundingClientRect();
       return {
         total: rows.length,
         visible: rows.filter((li) => li.offsetParent !== null).length,
         toggle: toggle ? { text: toggle.textContent.trim(), expanded: toggle.getAttribute("aria-expanded"), visible: toggle.offsetParent !== null } : null,
         catalog: !!catalog && catalog.offsetParent !== null,
+        catalogHref: catalog ? catalog.querySelector("a").getAttribute("href") : null,
         bodyVisible: !!body && body.offsetParent !== null,
-        accordion: head ? { expanded: head.getAttribute("aria-expanded"), height: Math.round(head.getBoundingClientRect().height) } : null,
+        accordion: head ? { expanded: head.getAttribute("aria-expanded"), height: Math.round(head.getBoundingClientRect().height), label: head.innerText.replace(/\s+/g, " ").trim() } : null,
+        box: { top: Math.round(r.top + scrollY), left: Math.round(r.left), width: Math.round(r.width), bg: cs.backgroundColor, border: `${cs.borderTopWidth} ${cs.borderTopStyle} ${cs.borderTopColor}` },
+        chevron: head ? !!head.querySelector(".fides-ds-collapsible__chevron") : false,
+        names: rows.map((li) => li.querySelector(".fides-credential-eco__name").textContent.trim()),
       };
     };
     const eco = document.querySelector(".fides-credential-eco");
     const top = (sel) => { const el = document.querySelector(sel); return el ? Math.round(el.getBoundingClientRect().top + scrollY) : null; };
     const scrollers = eco ? [...eco.querySelectorAll("*")].filter((el) => /(auto|scroll)/.test(getComputedStyle(el).overflowY) && el.scrollHeight > el.clientHeight + 1).length : -1;
     return {
+      present: !!eco,
       issuers: group("issuers"),
+      wallets: group("wallets"),
       rps: group("rps"),
+      groupKeys: eco ? [...eco.querySelectorAll(".fides-credential-eco__group")].map((g) => g.querySelector("ul").id.replace(/^eco-|-list$/g, "")) : [],
+      note: eco ? (eco.querySelector(".fides-credential-eco__note") || {}).textContent || "" : "",
+      arrowsBetween: eco ? eco.querySelectorAll(".fides-credential-flow, .fides-credential-eco__connector").length : 0,
       scrollers,
       order: { main: top(".fides-credential-detail .fides-uc-detail__main"), eco: top(".fides-credential-eco"), closing: top("#listing") },
       width: eco ? Math.round(eco.getBoundingClientRect().width) : 0,
       layoutWidth: Math.round(document.querySelector(".fides-credential-detail__body").getBoundingClientRect().width),
     };
   });
-  for (const width of [1440, 390, 320]) {
+  const sortedNames = (names) => [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
+  const NOTE = "These catalog connections do not guarantee that every issuer, wallet and service works together.";
+
+  for (const width of [1440, 1280, 1200, 768, 390, 320]) {
     const context = await newContext(browser, width);
     const page = await context.newPage();
     page.on("pageerror", (e) => errors.push(`eco ${width}: ${e.message}`));
@@ -503,141 +518,216 @@ async function smallTargets(page, selector) {
     await page.waitForTimeout(300);
     const tag = `eco AV ${width}`;
     let s = await ecoState(page);
-    check(`${tag}: both groups with records`, s.issuers && s.rps && s.issuers.total > 3 && s.rps.total > 3, JSON.stringify([s.issuers && s.issuers.total, s.rps && s.rps.total]));
+    check(`${tag}: three groups in order issuers, wallets, relying parties`, s.groupKeys.join() === "issuers,wallets,rps", s.groupKeys.join());
+    check(`${tag}: counts follow the data`, s.issuers.total > 3 && s.wallets.total > 3 && s.rps.total > 3, JSON.stringify([s.issuers.total, s.wallets.total, s.rps.total]));
+    check(`${tag}: each group alphabetical`, ["issuers", "wallets", "rps"].every((k) => JSON.stringify(s[k].names) === JSON.stringify(sortedNames(s[k].names))));
     check(`${tag}: below main and aside, above the closing`, s.order.eco > s.order.main && s.order.eco < s.order.closing, JSON.stringify(s.order));
     check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     check(`${tag}: no internal scroll areas`, s.scrollers === 0, String(s.scrollers));
-    const headCount = await page.textContent("#eco-issuers-title");
-    check(`${tag}: heading count follows the data`, headCount.includes(String(s.issuers.total)), headCount);
+    check(`${tag}: catalog note kept`, s.note.trim() === NOTE, s.note);
+    check(`${tag}: no connectors between groups`, s.arrowsBetween === 0);
+    const heads = {
+      issuers: await page.textContent("#eco-issuers-title"),
+      wallets: await page.textContent("#eco-wallets-title"),
+      rps: await page.textContent("#eco-rps-title"),
+    };
+    check(`${tag}: headings keep question and dynamic count`, /Who issues it\?/.test(heads.issuers) && heads.issuers.includes(String(s.issuers.total)) && /Which wallets\?/.test(heads.wallets) && heads.wallets.includes(String(s.wallets.total)) && /Where is it accepted\?/.test(heads.rps) && heads.rps.includes(String(s.rps.total)), JSON.stringify(heads));
 
-    if (width >= 1100) {
+    if (width >= 1280) {
       check(`${tag}: full content width`, s.width >= s.layoutWidth - 2, `${s.width}/${s.layoutWidth}`);
-      const tops = await page.evaluate(() => [...document.querySelectorAll(".fides-credential-eco__group")].map((g) => Math.round(g.getBoundingClientRect().top)));
-      check(`${tag}: groups side by side`, tops.length === 2 && tops[0] === tops[1], JSON.stringify(tops));
-      check(`${tag}: three rows per group by default`, s.issuers.visible === 3 && s.rps.visible === 3, `${s.issuers.visible}/${s.rps.visible}`);
-      check(`${tag}: View all N per group`, s.issuers.toggle && s.issuers.toggle.text.startsWith(`View all ${s.issuers.total}`) && s.rps.toggle.text.startsWith(`View all ${s.rps.total}`), `${s.issuers.toggle && s.issuers.toggle.text} | ${s.rps.toggle && s.rps.toggle.text}`);
-      check(`${tag}: catalog route hidden while collapsed`, !s.issuers.catalog && !s.rps.catalog);
+      check(`${tag}: three columns side by side`, s.issuers.box.top === s.wallets.box.top && s.wallets.box.top === s.rps.box.top && s.issuers.box.left < s.wallets.box.left && s.wallets.box.left < s.rps.box.left, JSON.stringify([s.issuers.box, s.wallets.box, s.rps.box]));
+      check(`${tag}: equal column widths`, Math.abs(s.issuers.box.width - s.wallets.box.width) <= 1 && Math.abs(s.wallets.box.width - s.rps.box.width) <= 1, JSON.stringify([s.issuers.box.width, s.wallets.box.width, s.rps.box.width]));
+      check(`${tag}: no accordions`, !s.issuers.accordion && !s.wallets.accordion && !s.rps.accordion);
+      check(`${tag}: three rows per group by default`, s.issuers.visible === 3 && s.wallets.visible === 3 && s.rps.visible === 3, `${s.issuers.visible}/${s.wallets.visible}/${s.rps.visible}`);
+      check(`${tag}: View all N per group`, ["issuers", "wallets", "rps"].every((k) => s[k].toggle && s[k].toggle.text.startsWith(`View all ${s[k].total}`)), ["issuers", "wallets", "rps"].map((k) => s[k].toggle && s[k].toggle.text).join(" | "));
+      check(`${tag}: catalog routes hidden while collapsed`, !s.issuers.catalog && !s.wallets.catalog && !s.rps.catalog);
+      const slots = await page.evaluate(() => {
+        const slot = document.querySelector("#eco-issuers-list .fides-credential-eco__slot");
+        const arrow = document.querySelector("#eco-issuers-list .fides-org-eco__arrow");
+        const wallet = document.querySelector("#eco-wallets-list .fides-credential-eco__row");
+        return { slot: Math.round(slot.getBoundingClientRect().width), arrow: Math.round(arrow.getBoundingClientRect().width), walletSlot: !!wallet.querySelector(".fides-credential-eco__slot") };
+      });
+      check(`${tag}: 96px status slot, 24px arrow; wallets have no status`, slots.slot === 96 && slots.arrow === 24 && !slots.walletSlot, JSON.stringify(slots));
 
-      await page.locator("#eco-issuers-list + .fides-ds-show-all__toggle").focus();
+      await page.locator("#eco-wallets-list + .fides-ds-show-all__toggle").focus();
       await page.keyboard.press("Enter");
       s = await ecoState(page);
-      check(`${tag}: keyboard View all expands only the issuers`, s.issuers.visible === s.issuers.total && s.rps.visible === 3, `${s.issuers.visible}/${s.rps.visible}`);
-      check(`${tag}: issuer catalog route under the full list`, s.issuers.catalog && !s.rps.catalog);
-      check(`${tag}: toggle becomes Show fewer`, s.issuers.toggle.expanded === "true" && /Show fewer issuers/.test(s.issuers.toggle.text), s.issuers.toggle.text);
-      const catalogHref = await page.getAttribute("#eco-issuers-body .fides-credential-eco__catalog a", "href");
-      check(`${tag}: catalog route lists the issuers`, /[?&]issuers=/.test(catalogHref || ""), catalogHref);
-
-      await page.click("#eco-rps-list + .fides-ds-show-all__toggle");
+      check(`${tag}: keyboard View all expands only the wallets`, s.wallets.visible === s.wallets.total && s.issuers.visible === 3 && s.rps.visible === 3, `${s.issuers.visible}/${s.wallets.visible}/${s.rps.visible}`);
+      check(`${tag}: wallet catalog route under the full list`, s.wallets.catalog && !s.issuers.catalog && !s.rps.catalog && /[?&]wallets=/.test(s.wallets.catalogHref || ""), s.wallets.catalogHref);
+      check(`${tag}: wallet toggle becomes Show fewer wallets`, s.wallets.toggle.expanded === "true" && /Show fewer wallets/.test(s.wallets.toggle.text), s.wallets.toggle.text);
+      await page.click("#eco-issuers-list + .fides-ds-show-all__toggle");
       s = await ecoState(page);
-      check(`${tag}: relying parties expand independently`, s.rps.visible === s.rps.total && s.issuers.visible === s.issuers.total);
+      check(`${tag}: issuers expand independently`, s.issuers.visible === s.issuers.total && s.wallets.visible === s.wallets.total && s.rps.visible === 3);
+      check(`${tag}: issuer catalog route lists the issuers`, s.issuers.catalog && /[?&]issuers=/.test(s.issuers.catalogHref || ""), s.issuers.catalogHref);
 
-      const toggle = page.locator("#eco-issuers-list + .fides-ds-show-all__toggle");
+      const toggle = page.locator("#eco-wallets-list + .fides-ds-show-all__toggle");
       await toggle.scrollIntoViewIfNeeded();
       await toggle.focus();
-      const toggleTop = () => page.evaluate(() => Math.round(document.querySelector("#eco-issuers-list + .fides-ds-show-all__toggle").getBoundingClientRect().top));
+      await page.waitForTimeout(200);
+      const toggleTop = () => page.evaluate(() => Math.round(document.querySelector("#eco-wallets-list + .fides-ds-show-all__toggle").getBoundingClientRect().top));
       const topBefore = await toggleTop();
       await page.keyboard.press("Space");
       await page.waitForTimeout(100);
       s = await ecoState(page);
       const topAfter = await toggleTop();
-      const focused = await page.evaluate(() => document.activeElement === document.querySelector("#eco-issuers-list + .fides-ds-show-all__toggle"));
-      check(`${tag}: Show fewer collapses only the issuers`, s.issuers.visible === 3 && s.rps.visible === s.rps.total, `${s.issuers.visible}/${s.rps.visible}`);
+      const focused = await page.evaluate(() => document.activeElement === document.querySelector("#eco-wallets-list + .fides-ds-show-all__toggle"));
+      check(`${tag}: Show fewer collapses only the wallets`, s.wallets.visible === 3 && s.issuers.visible === s.issuers.total, `${s.issuers.visible}/${s.wallets.visible}`);
       check(`${tag}: Show fewer keeps focus and the button in place`, focused && Math.abs(topAfter - topBefore) <= 1 && topAfter >= 0 && topAfter < 900, `${topBefore} -> ${topAfter}`);
 
-      await page.locator("#eco-issuers-list .fides-credential-eco__row").first().focus();
-      const focusRing = await page.evaluate(() => {
-        const cs = getComputedStyle(document.activeElement);
-        return cs.outlineStyle !== "none" && parseFloat(cs.outlineWidth) >= 2;
-      });
-      check(`${tag}: row has a visible keyboard focus`, focusRing);
-      const focusStyle = await page.evaluate(() => {
-        const cs = getComputedStyle(document.activeElement);
-        return { color: cs.outlineColor, offset: cs.outlineOffset, width: cs.outlineWidth };
-      });
-      check(`${tag}: focus is a 2px brand-blue ring inside the row`, focusStyle.color === "rgb(10, 110, 243)" && focusStyle.offset === "-2px" && focusStyle.width === "2px", JSON.stringify(focusStyle));
-      const geometry = () => page.evaluate(() => {
-        const row = document.querySelector("#eco-rps-list .fides-credential-eco__row");
-        const li = row.parentElement;
-        const r = row.getBoundingClientRect();
-        const l = li.getBoundingClientRect();
-        const cs = getComputedStyle(row);
-        const pos = (sel) => { const e = row.querySelector(sel).getBoundingClientRect(); return [Math.round(e.left), Math.round(e.top)]; };
-        return {
-          sameEdge: Math.abs(r.left - l.left) < 1 && Math.abs(r.right - l.right) < 1,
-          margin: [cs.marginLeft, cs.marginRight],
-          padding: [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft],
-          status: pos(".fides-credential-eco__slot"),
-          arrow: pos(".fides-org-eco__arrow"),
-          bg: cs.backgroundColor,
-          underline: getComputedStyle(row.querySelector(".fides-org-eco__name")).textDecorationLine,
-          slotDeco: getComputedStyle(row.querySelector(".fides-credential-eco__slot")).textDecorationLine,
-        };
-      });
-      const rest = await geometry();
-      check(`${tag}: row, divider and hover share one outer edge`, rest.sameEdge && rest.margin.join() === "0px,0px", JSON.stringify(rest));
-      check(`${tag}: row padding 16px vertical, 12px horizontal`, rest.padding.join() === "16px,12px,16px,12px", rest.padding.join());
-      await page.hover("#eco-rps-list .fides-credential-eco__row >> nth=0");
-      await page.waitForTimeout(250);
-      const hovered = await geometry();
-      check(`${tag}: row hover uses the info surface token`, hovered.bg === "rgb(242, 247, 255)", hovered.bg);
-      check(`${tag}: row hover underlines the name only`, /underline/.test(hovered.underline) && hovered.slotDeco === "none", `${hovered.underline} / status ${hovered.slotDeco}`);
-      check(`${tag}: status and arrow do not move on hover`, hovered.status.join() === rest.status.join() && hovered.arrow.join() === rest.arrow.join(), JSON.stringify([rest.status, hovered.status, rest.arrow, hovered.arrow]));
-      const rowHref = await page.getAttribute("#eco-rps-list .fides-credential-eco__row >> nth=0", "href");
-      check(`${tag}: rows open the existing record route`, /[?&]rp=/.test(rowHref || ""), rowHref);
-      const detailUrl = page.url();
-      await page.route("https://fides.community/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>stub</title>" }));
-      await page.click("#eco-rps-list .fides-credential-eco__row >> nth=0");
-      await page.waitForLoadState("domcontentloaded");
-      check(`${tag}: row navigates to the relying party`, /[?&]rp=/.test(page.url()), page.url());
-      await page.goBack();
-      await page.waitForSelector(".fides-credential-detail");
-      check(`${tag}: browser back returns to the credential`, page.url() === detailUrl && (await page.getAttribute(".fides-credential-detail", "data-credential-id")) === "cred:eu:age-verification", page.url());
-    } else {
-      const tops = await page.evaluate(() => [...document.querySelectorAll(".fides-credential-eco__group")].map((g) => Math.round(g.getBoundingClientRect().top)));
-      check(`${tag}: groups stacked`, tops.length === 2 && tops[1] > tops[0], JSON.stringify(tops));
-      check(`${tag}: accordions closed by default`, s.issuers.accordion && s.issuers.accordion.expanded === "false" && s.rps.accordion.expanded === "false" && !s.issuers.bodyVisible && !s.rps.bodyVisible);
-      check(`${tag}: accordion heads at least 56px`, s.issuers.accordion.height >= 56 && s.rps.accordion.height >= 56, `${s.issuers.accordion.height}/${s.rps.accordion.height}`);
+      if (width === 1440) {
+        await page.locator("#eco-issuers-list .fides-credential-eco__row").first().focus();
+        const focusStyle = await page.evaluate(() => {
+          const cs = getComputedStyle(document.activeElement);
+          return { color: cs.outlineColor, offset: cs.outlineOffset, width: cs.outlineWidth, style: cs.outlineStyle };
+        });
+        check(`${tag}: focus is a 2px brand-blue ring inside the row`, focusStyle.style !== "none" && focusStyle.color === "rgb(10, 110, 243)" && focusStyle.offset === "-2px" && focusStyle.width === "2px", JSON.stringify(focusStyle));
+        const geometry = (sel) => page.evaluate((sel) => {
+          const row = document.querySelector(sel);
+          const li = row.parentElement;
+          const r = row.getBoundingClientRect();
+          const l = li.getBoundingClientRect();
+          const cs = getComputedStyle(row);
+          const pos = (q) => { const e = row.querySelector(q); if (!e) return null; const b = e.getBoundingClientRect(); return [Math.round(b.left), Math.round(b.top)]; };
+          return {
+            sameEdge: Math.abs(r.left - l.left) < 1 && Math.abs(r.right - l.right) < 1,
+            margin: [cs.marginLeft, cs.marginRight].join(),
+            padding: [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].join(),
+            status: pos(".fides-credential-eco__slot"),
+            arrow: pos(".fides-org-eco__arrow"),
+            bg: cs.backgroundColor,
+            underline: getComputedStyle(row.querySelector(".fides-org-eco__name")).textDecorationLine,
+            metaDeco: row.querySelector(".fides-credential-eco__meta") ? getComputedStyle(row.querySelector(".fides-credential-eco__meta")).textDecorationLine : "none",
+            slotDeco: row.querySelector(".fides-credential-eco__slot") ? getComputedStyle(row.querySelector(".fides-credential-eco__slot")).textDecorationLine : "none",
+          };
+        }, sel);
+        for (const [key, sel] of [["rps", "#eco-rps-list .fides-credential-eco__row"], ["wallets", "#eco-wallets-list .fides-credential-eco__row"]]) {
+          await page.mouse.move(0, 0);
+          await page.waitForTimeout(250);
+          const rest = await geometry(sel);
+          check(`${tag}: ${key} row, divider and hover share one outer edge; 16/12 padding`, rest.sameEdge && rest.margin === "0px,0px" && rest.padding === "16px,12px,16px,12px", JSON.stringify(rest));
+          await page.hover(`${sel} >> nth=0`);
+          await page.waitForTimeout(250);
+          const hovered = await geometry(sel);
+          check(`${tag}: ${key} row hover: info surface, name underlined only`, hovered.bg === "rgb(242, 247, 255)" && /underline/.test(hovered.underline) && hovered.slotDeco === "none", JSON.stringify(hovered));
+          check(`${tag}: ${key} status and arrow do not move on hover`, JSON.stringify([rest.status, rest.arrow]) === JSON.stringify([hovered.status, hovered.arrow]));
+        }
+        const rowHref = await page.getAttribute("#eco-rps-list .fides-credential-eco__row >> nth=0", "href");
+        check(`${tag}: relying-party rows use the configured ?rp= route`, /[?&]rp=/.test(rowHref || ""), rowHref);
 
-      await page.locator("#eco-rps-title .fides-ds-collapsible__toggle").focus();
+        // Wallet rows open the matching local wallet record; Back returns here.
+        const detailUrl = page.url();
+        const walletHref = await page.getAttribute("#eco-wallets-list .fides-credential-eco__row >> nth=0", "href");
+        const walletId = new URL(walletHref).searchParams.get("wallet") || new URL(walletHref).searchParams.get("wallets");
+        await page.click("#eco-wallets-list .fides-credential-eco__row >> nth=0");
+        await page.waitForSelector("[data-wallet-id], .fides-wallet-detail, .fides-ds-detail-top", { timeout: 30000 });
+        const opened = await page.evaluate(() => {
+          const el = document.querySelector("[data-wallet-id]");
+          const h1 = document.querySelector("h1");
+          return { id: el ? el.getAttribute("data-wallet-id") : null, h1: h1 ? h1.textContent.trim() : "" };
+        });
+        const walletName = s.wallets.names[0];
+        check(`${tag}: wallet row opens the matching wallet record`, /\/fides-design-pilot\/wallet\//.test(page.url()) && new URL(page.url()).searchParams.get("wallet") === walletId && (opened.id === null || opened.id === walletId) && opened.h1.includes(walletName), `${page.url()} ${JSON.stringify(opened)} expected ${walletName}`);
+        await page.goBack();
+        await page.waitForSelector(".fides-credential-eco");
+        check(`${tag}: browser back returns to the credential`, page.url() === detailUrl && (await page.getAttribute(".fides-credential-detail", "data-credential-id")) === "cred:eu:age-verification", page.url());
+
+        // Relying-party rows: only navigation and Back, with a stubbed external page.
+        await page.route("https://fides.community/**", (route) => route.fulfill({ status: 200, contentType: "text/html", body: "<!doctype html><title>stub</title>" }));
+        await page.click("#eco-rps-list .fides-credential-eco__row >> nth=0");
+        await page.waitForLoadState("domcontentloaded");
+        check(`${tag}: relying-party row navigates to its ?rp= link`, /[?&]rp=/.test(page.url()), page.url());
+        await page.goBack();
+        await page.waitForSelector(".fides-credential-detail");
+        check(`${tag}: browser back from a relying party returns to the credential`, page.url() === detailUrl, page.url());
+        await page.unroute("https://fides.community/**");
+      }
+    } else {
+      check(`${tag}: three stacked accordions`, s.issuers.box.top < s.wallets.box.top && s.wallets.box.top < s.rps.box.top && s.issuers.box.left === s.wallets.box.left, JSON.stringify([s.issuers.box, s.wallets.box, s.rps.box]));
+      check(`${tag}: accordions closed by default`, ["issuers", "wallets", "rps"].every((k) => s[k].accordion && s[k].accordion.expanded === "false" && !s[k].bodyVisible));
+      check(`${tag}: accordion heads at least 56px`, ["issuers", "wallets", "rps"].every((k) => s[k].accordion.height >= 56), ["issuers", "wallets", "rps"].map((k) => s[k].accordion.height).join("/"));
+      check(`${tag}: heads show question and Role · N`, /Who issues it\?\s*Issuers · \d+/.test(s.issuers.accordion.label) && /Which wallets\?\s*Wallets · \d+/.test(s.wallets.accordion.label) && /Where is it accepted\?\s*Relying parties · \d+/.test(s.rps.accordion.label), [s.issuers.accordion.label, s.wallets.accordion.label, s.rps.accordion.label].join(" | "));
+      check(`${tag}: equal heads: background, border and chevron`, s.issuers.box.bg === s.wallets.box.bg && s.wallets.box.bg === s.rps.box.bg && s.issuers.box.border === s.wallets.box.border && s.wallets.box.border === s.rps.box.border && s.issuers.chevron && s.wallets.chevron && s.rps.chevron, JSON.stringify([s.issuers.box, s.wallets.box, s.rps.box]));
+
+      await page.locator("#eco-wallets-title .fides-ds-collapsible__toggle").focus();
       await page.keyboard.press("Enter");
       await page.waitForTimeout(100);
       s = await ecoState(page);
-      check(`${tag}: keyboard opens the relying parties with the full list`, s.rps.accordion.expanded === "true" && s.rps.visible === s.rps.total, `${s.rps.visible}/${s.rps.total}`);
-      check(`${tag}: issuers stay closed`, s.issuers.accordion.expanded === "false" && !s.issuers.bodyVisible);
-      check(`${tag}: catalog route under the open list`, s.rps.catalog);
-      check(`${tag}: Show fewer offered in the open group`, s.rps.toggle && /Show fewer relying parties/.test(s.rps.toggle.text), s.rps.toggle && s.rps.toggle.text);
-      const stacked = await page.evaluate(() => {
-        const row = document.querySelector("#eco-rps-list .fides-credential-eco__row");
-        const meta = row.querySelector(".fides-credential-eco__meta");
-        const status = row.querySelector(".fides-credential-eco__slot");
-        return !!meta && !!status && status.getBoundingClientRect().top >= meta.getBoundingClientRect().bottom - 1;
-      });
-      check(`${tag}: status sits under the organization`, stacked);
-      await page.click("#eco-issuers-title .fides-ds-collapsible__toggle");
+      check(`${tag}: keyboard opens the wallets with the full list`, s.wallets.accordion.expanded === "true" && s.wallets.visible === s.wallets.total, `${s.wallets.visible}/${s.wallets.total}`);
+      check(`${tag}: issuers and relying parties stay closed`, s.issuers.accordion.expanded === "false" && !s.issuers.bodyVisible && s.rps.accordion.expanded === "false" && !s.rps.bodyVisible);
+      check(`${tag}: wallet catalog route and Show fewer in the open group`, s.wallets.catalog && s.wallets.toggle && /Show fewer wallets/.test(s.wallets.toggle.text), s.wallets.toggle && s.wallets.toggle.text);
+      const walletText = await page.textContent("#eco-wallets-body");
+      check(`${tag}: wallet group says who names the wallets`, /Wallets named by these relying parties\./.test(walletText) && /Named by /.test(walletText), walletText.slice(0, 120));
+      if (width <= 390) {
+        const stacked = await page.evaluate(() => {
+          const row = document.querySelector("#eco-rps-list .fides-credential-eco__row");
+          const meta = row.querySelector(".fides-credential-eco__meta");
+          const status = row.querySelector(".fides-credential-eco__slot");
+          const wrow = document.querySelector("#eco-wallets-list .fides-credential-eco__row");
+          const name = wrow.querySelector(".fides-credential-eco__name").getBoundingClientRect();
+          const arrow = wrow.querySelector(".fides-org-eco__arrow").getBoundingClientRect();
+          return { status: !!meta && !!status && status.getBoundingClientRect().top >= meta.getBoundingClientRect().bottom - 1, walletArrowRight: arrow.left >= name.right - 1 };
+        });
+        check(`${tag}: status under the organization; wallet arrow beside the name`, stacked.status && stacked.walletArrowRight, JSON.stringify(stacked));
+      }
+      await page.click("#eco-rps-title .fides-ds-collapsible__toggle");
       s = await ecoState(page);
-      check(`${tag}: second group opens independently`, s.issuers.accordion.expanded === "true" && s.rps.accordion.expanded === "true" && s.issuers.visible === s.issuers.total);
+      check(`${tag}: relying parties open independently`, s.rps.accordion.expanded === "true" && s.wallets.accordion.expanded === "true" && s.rps.visible === s.rps.total && s.issuers.accordion.expanded === "false");
       const small = await smallTargets(page, ".fides-credential-eco .fides-ds-collapsible__toggle, .fides-credential-eco .fides-ds-show-all__toggle, .fides-credential-eco__row, .fides-credential-eco a");
       check(`${tag}: targets at least 44px`, small.length === 0, small.slice(0, 4).join(", "));
-      const wallets = await page.textContent(".fides-credential-eco__wallets").catch(() => "");
-      check(`${tag}: wallets named as an indirect route`, /linked through these relying parties/.test(wallets) && /do not guarantee/.test(wallets), wallets.slice(0, 120));
+      check(`${tag}: no horizontal overflow with groups open`, (await overflow(page)) <= 0);
     }
     const closing = await page.textContent("#listing");
     check(`${tag}: closing kept`, /Help keep this credential type current\./.test(closing) && /Updated/.test(closing));
     await page.screenshot({ path: path.join(OUT, `ecosystem-age-verification-${width}.png`), fullPage: true });
     await context.close();
   }
-  {
-    const context = await newContext(browser, 1440);
+
+  // Records with few or no relations.
+  for (const width of [1440, 1100, 768, 390, 320]) {
+    const context = await newContext(browser, width);
     const page = await context.newPage();
-    await open(page, DETAIL + encodeURIComponent("cred:eu:ehic"));
-    await page.waitForSelector(".fides-credential-eco");
-    await page.waitForTimeout(300);
-    const s = await ecoState(page);
-    check("eco EHIC 1440: up to three relying parties need no View all", s.rps && s.rps.total <= 3 && !s.rps.toggle && s.rps.visible === s.rps.total, JSON.stringify(s.rps));
-    check("eco EHIC 1440: catalog route shown for the full short list", s.rps.total < 2 || s.rps.catalog);
-    await open(page, DETAIL + encodeURIComponent("cred:webuild:eucc"));
-    await page.waitForSelector(".fides-credential-detail");
-    check("eco EUCC 1440: empty relying-party group left out", (await page.locator("#eco-issuers-list").count()) === 1 && (await page.locator("#eco-rps-list").count()) === 0);
+    const cases = [
+      { id: "cred:eu:ehic", groups: "issuers,wallets,rps" },
+      { id: "cred:eu:loyalty", groups: "issuers,rps" },
+      { id: "cred:eduwallet:open-badge", groups: "wallets,rps" },
+      { id: "cred:webuild:eucc", groups: "issuers" },
+      { id: "cred:eduwallet:exam-enrollment", groups: "" },
+    ];
+    for (const c of cases) {
+      await open(page, DETAIL + encodeURIComponent(c.id));
+      await page.waitForSelector(".fides-credential-detail");
+      await page.waitForTimeout(200);
+      const tag = `eco ${c.id.split(":").pop()} ${width}`;
+      const s = await ecoState(page);
+      if (!c.groups) {
+        check(`${tag}: no ecosystem band without relations`, !s.present && (await page.locator("a[href='#ecosystem']").count()) === 0);
+        continue;
+      }
+      check(`${tag}: groups ${c.groups}`, s.groupKeys.join() === c.groups, s.groupKeys.join());
+      check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
+      const wantNote = c.groups.includes("wallets") ? NOTE : "These catalog connections do not guarantee that every issuer and service works together.";
+      check(`${tag}: catalog note`, s.note.trim() === wantNote, s.note);
+      const keys = c.groups.split(",");
+      const columns = width >= 1280 || (width >= 1100 && keys.length < 3);
+      if (columns) {
+        const tops = keys.map((k) => s[k].box.top);
+        check(`${tag}: groups side by side as columns`, tops.every((t) => t === tops[0]) && keys.every((k) => !s[k].accordion), JSON.stringify(tops));
+        if (keys.length > 1) check(`${tag}: ${keys.length} equal columns fill the band`, Math.abs(s[keys[0]].box.width - s[keys[1]].box.width) <= 1 && s[keys[0]].box.width * keys.length + 32 * (keys.length - 1) >= s.width - 2, `${s[keys[0]].box.width}/${s.width}`);
+        for (const k of keys) {
+          const n = s[k].total;
+          check(`${tag}: ${k} shows ${Math.min(n, 3)} of ${n}; toggle only above three`, s[k].visible === Math.min(n, 3) && (n > 3 ? !!s[k].toggle : !s[k].toggle), JSON.stringify(s[k].toggle));
+          check(`${tag}: ${k} catalog route only for more than one record`, n > 1 && n <= 3 ? s[k].catalog : n === 1 ? !s[k].catalog : true);
+        }
+      } else {
+        check(`${tag}: closed accordions`, keys.every((k) => s[k].accordion && s[k].accordion.expanded === "false"));
+      }
+      if (c.id === "cred:eduwallet:open-badge") {
+        const walletHref = await page.getAttribute("#eco-wallets-list .fides-credential-eco__row", "href");
+        check(`${tag}: single wallet links to its local record`, /\/fides-design-pilot\/wallet\/\?wallet=/.test(walletHref || ""), walletHref);
+        const intro = await page.evaluate(() => document.querySelector("#eco-wallets-body .fides-credential-eco__intro").textContent);
+        check(`${tag}: singular wallet intro`, intro.trim() === "Wallets named by this relying party.", intro);
+      }
+    }
     await context.close();
   }
 

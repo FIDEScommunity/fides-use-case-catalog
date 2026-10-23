@@ -317,11 +317,15 @@ $p_closing = strpos($av_html, 'id="listing"');
 $check($p_aside !== false && $p_eco > $p_aside && $p_eco < $p_closing, 'AV: ecosystem sits below main/aside and above the closing');
 $check($has($av_eco, 'Who issues it?') && $has($av_eco, 'Issuers · ' . $ni), 'AV: issuer group with dynamic count');
 $check($has($av_eco, 'Where is it accepted?') && $has($av_eco, 'Relying parties · ' . $nr), 'AV: relying-party group with dynamic count');
-$check(substr_count($av_eco, 'fides-credential-eco__row"') === $ni + $nr, 'AV: one shared relation row per issuer and relying party');
-$check(substr_count($av_eco, 'class="fides-org-eco__row fides-credential-eco__row" href="') === $ni + $nr, 'AV: every row is one link');
-$check(substr_count($av_eco, 'data-fides-ds-show-all="3" data-fides-ds-show-all-wide data-fides-ds-show-all-follow') === 2, 'AV: both lists show three rows until View all, and open fully in the accordion');
-$check($has($av_eco, 'data-fides-ds-show-all-more="View all"') && $has($av_eco, 'data-fides-ds-show-all-fewer="Show fewer issuers"') && $has($av_eco, 'data-fides-ds-show-all-fewer="Show fewer relying parties"'), 'AV: View all / Show fewer labels per group');
-$check(substr_count($av_eco, 'data-fides-ds-collapsible="closed"') === 2, 'AV: groups are shared collapsibles, closed by default');
+$check($has($av_eco, 'Which wallets?') && $has($av_eco, 'Wallets · ' . $nw), 'AV: wallet group with dynamic count');
+$check(strpos($av_eco, 'Who issues it?') < strpos($av_eco, 'Which wallets?') && strpos($av_eco, 'Which wallets?') < strpos($av_eco, 'Where is it accepted?'), 'AV: order issuers, wallets, relying parties');
+$check($has($av_eco, 'fides-credential-eco__groups--3') && substr_count($av_eco, 'data-fides-ds-wide-min="1280"') === 3, 'AV: three groups switch to columns from 1280px');
+$check(substr_count($av_eco, 'class="fides-org-eco__row fides-credential-eco__row" href="') === $ni + $nr, 'AV: one shared relation row (with status) per issuer and relying party');
+$check(substr_count($av_eco, 'class="fides-org-eco__row fides-credential-eco__row fides-credential-eco__row--plain" href="') === $nw, 'AV: one plain relation row per wallet, without a status slot');
+$check(substr_count($av_eco, 'data-fides-ds-show-all="3" data-fides-ds-show-all-wide data-fides-ds-show-all-follow') === 3, 'AV: all three lists show three rows until View all, and open fully in the accordion');
+$check($has($av_eco, 'data-fides-ds-show-all-more="View all"') && $has($av_eco, 'data-fides-ds-show-all-fewer="Show fewer issuers"') && $has($av_eco, 'data-fides-ds-show-all-fewer="Show fewer wallets"') && $has($av_eco, 'data-fides-ds-show-all-fewer="Show fewer relying parties"'), 'AV: View all / Show fewer labels per group');
+$check(substr_count($av_eco, 'data-fides-ds-collapsible="closed"') === 3, 'AV: groups are shared collapsibles, closed by default');
+$check($has($av_eco, '<p class="fides-credential-eco__intro">Wallets named by these relying parties.</p>'), 'AV: wallet group says the wallets are named by these relying parties');
 $check(! $has($av_eco, 'overflow') && ! $has($av_html, 'fides-credential-flow') && ! $has($av_html, 'fides-credential-rel'), 'AV: no conceptual flow or old relation markup');
 $sorted = static function (array $names): array {
     $copy = $names;
@@ -342,8 +346,30 @@ $check($has($av_eco, 'Open these ' . $ni . ' in the issuer catalog') && $has($av
 $check($has(Fides_Credential_Design::issuers_catalog_url($issuer_ids), 'issuers=' . rawurlencode((string) $issuer_ids[0])), 'AV: issuer route lists the issuer ids');
 $check($has($av_eco, 'Open these ' . $nr . ' in the relying party catalog') && $has(Fides_Credential_Design::rps_catalog_url($rp_ids), 'rps='), 'AV: filtered relying-party catalog route');
 $check($has(Fides_Credential_Design::issuer_url('x y'), 'issuer=x%20y') && $has(Fides_Credential_Design::rp_url('a'), 'rp=a'), 'single records keep the ?issuer= / ?rp= deeplinks');
-$check($has($av_eco, 'Wallets linked through these relying parties · ' . $nw) && $has(Fides_Credential_Design::wallets_catalog_url(array_column($av_wallets, 'id')), 'wallets='), 'AV: wallets as an indirect route through the relying parties');
-$check($has($av_eco, 'Named by a relying party above, not by this credential type.') && $has($av_eco, 'do not guarantee'), 'AV: indirect wallet link is not presented as compatibility');
+$wallet_ids = array_column($av_wallets, 'id');
+$check(count($wallet_ids) === count(array_unique($wallet_ids)), 'AV: wallets deduplicated by id');
+$expected_via = array();
+foreach ($av_rps as $rp) {
+    foreach ((array) ($rp['supportedWallets'] ?? array()) as $sw) {
+        $wid = is_array($sw) ? trim((string) ($sw['walletCatalogId'] ?? '')) : '';
+        if ($wid !== '') {
+            $expected_via[ $wid ][ (string) $rp['id'] ] = (string) $rp['name'];
+        }
+    }
+}
+$check(array_keys($expected_via) == array_values($wallet_ids) || count(array_diff($wallet_ids, array_keys($expected_via))) === 0 && count($expected_via) === $nw, 'AV: wallets come only from supportedWallets.walletCatalogId of the linked relying parties');
+$wallet_names = $names_in($av_eco, 'eco-wallets-list');
+$check(count($wallet_names) === $nw && $wallet_names === $sorted($wallet_names), 'AV: wallets listed alphabetically');
+foreach ($av_wallets as $wallet) {
+    $via = array_values($expected_via[ $wallet['id'] ] ?? array());
+    $via = $sorted($via);
+    $meta = 'Named by ' . $via[0] . (count($via) > 1 ? ' and other services' : '');
+    $check($wallet['via'] === $via && $has($av_eco, 'href="' . esc_url(Fides_Credential_Design::wallet_url($wallet['id'])) . '"><span class="fides-credential-eco__text"><span class="fides-org-eco__name fides-credential-eco__name">' . esc_html($wallet['name']) . '</span><span class="fides-credential-eco__meta">' . esc_html($meta) . '</span>'), "AV: wallet {$wallet['id']} row names its relying party and opens its record ($meta)");
+    $check($has(Fides_Credential_Design::wallet_url($wallet['id']), 'wallet=' . rawurlencode($wallet['id'])) || $has(Fides_Credential_Design::wallet_url($wallet['id']), 'wallets=' . rawurlencode($wallet['id'])), "AV: wallet {$wallet['id']} link targets that wallet id");
+}
+$check($has($av_eco, 'Open these ' . $nw . ' in the wallet catalog') && $has($av_eco, esc_url(Fides_Credential_Design::wallets_catalog_url($wallet_ids))) && $has(Fides_Credential_Design::wallets_catalog_url($wallet_ids), 'wallets='), 'AV: filtered wallet catalog route');
+$check($has($av_eco, '<p class="fides-ds-meta fides-credential-eco__note">These catalog connections do not guarantee that every issuer, wallet and service works together.</p>'), 'AV: catalog connections are not presented as compatibility');
+$check(! $has($av_eco, 'Wallets linked through') && ! $has($av_eco, 'fides-credential-eco__wallets'), 'AV: the separate wallet link is replaced by the wallet group');
 $readiness = array_filter(array_map(static fn($rp) => (string) ($rp['readiness'] ?? ''), $av_rps));
 foreach (array_unique($readiness) as $value) {
     $label = Fides_Credential_Design::rp_status(array('readiness' => $value));
@@ -356,11 +382,13 @@ $ehic_eco = $section_of($render('cred:eu:ehic'));
 $check($has($ehic_eco, 'Issuers · ' . count(Fides_Credential_Design::issuers_for('cred:eu:ehic'))) && $has($ehic_eco, 'Relying parties · ' . count(Fides_Credential_Design::relying_parties_for('cred:eu:ehic'))), 'EHIC: shared template shows both groups');
 
 $eucc_eco = $section_of($render('cred:webuild:eucc'));
-$check($eucc_eco !== '' && $has($eucc_eco, 'Who issues it?') && ! $has($eucc_eco, 'Where is it accepted?') && ! $has($eucc_eco, 'fides-credential-eco__wallets'), 'EUCC: empty relying-party group and wallet route are left out');
+$check($eucc_eco !== '' && $has($eucc_eco, 'Who issues it?') && ! $has($eucc_eco, 'Where is it accepted?') && ! $has($eucc_eco, 'Which wallets?') && $has($eucc_eco, 'fides-credential-eco__groups--1') && ! $has($eucc_eco, 'data-fides-ds-wide-min'), 'EUCC: empty relying-party and wallet groups are left out');
+$check($has($eucc_eco, 'every issuer and service works together.'), 'EUCC: note without wallets names issuers and services only');
 
 $obc_eco = $section_of($render('cred:eduwallet:open-badge'));
 $check($obc_eco !== '' && ! $has($obc_eco, 'Who issues it?') && $has($obc_eco, 'Where is it accepted?'), 'OBC: empty issuer group is left out');
-$check(! $has($obc_eco, 'fides-credential-eco__catalog') && $has($obc_eco, 'Wallet linked through this relying party · 1'), 'OBC: single record needs no catalog list route; wallet copy is singular');
+$check(! $has($obc_eco, 'fides-credential-eco__catalog') && $has($obc_eco, 'Wallets · 1') && $has($obc_eco, 'Wallets named by this relying party.'), 'OBC: single records need no catalog list route; wallet intro is singular');
+$check($has($obc_eco, 'fides-credential-eco__groups--2') && ! $has($obc_eco, 'data-fides-ds-wide-min'), 'OBC: two groups use two columns from 1100px');
 
 $eco_method = new ReflectionMethod('Fides_Credential_Detail_Page', 'ecosystem_html');
 $eco_method->setAccessible(true);
@@ -380,7 +408,16 @@ $check($has($fixture, 'fides-credential-eco__status--production"><span class="fi
 $check($has($fixture, esc_html($long_name)) && ! $has($fixture, '<b>territories</b>') && ! $has($fixture, '<i>type</i>'), 'fixture: long and unsafe names are escaped, not shortened');
 $check($has($fixture, 'Org &amp; Co · NL'), 'fixture: organization with country code');
 $check($has($fixture, 'Open these 2 in the issuer catalog') && ! $has($fixture, 'relying party catalog'), 'fixture: list route only for groups with more than one record');
-$check(! $has($fixture, 'fides-credential-eco__wallets'), 'fixture: no wallet route without linked wallets');
+$check(! $has($fixture, 'Which wallets?') && $has($fixture, 'fides-credential-eco__groups--2') && ! $has($fixture, 'data-fides-ds-wide-min'), 'fixture: wallet group left out without linked wallets; two columns');
+$fixture_w = $eco_method->invoke(
+    null,
+    'Fixture',
+    array(),
+    array(array('id' => 'rp-a', 'name' => 'A verifier'), array('id' => 'rp-b', 'name' => 'B verifier')),
+    array(array('id' => 'w-long', 'name' => $long_name, 'via' => array('A verifier', 'B verifier')))
+);
+$wallet_list = substr($fixture_w, strpos($fixture_w, 'id="eco-wallets-list"'), strpos($fixture_w, 'id="eco-rps-title"') - strpos($fixture_w, 'id="eco-wallets-list"'));
+$check($has($wallet_list, esc_html($long_name)) && $has($wallet_list, 'Named by A verifier and other services') && ! $has($wallet_list, 'Status: '), 'fixture: long wallet name kept whole, provenance names the first relying party, no status');
 
 // ---------- Fixtures: escaping, long URI, nested attributes, bare record ----------
 

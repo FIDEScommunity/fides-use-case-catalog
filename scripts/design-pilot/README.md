@@ -418,34 +418,47 @@ refresh.
   ("EUDI terminology"). It explains EAA, QEAA, PID and the public-sector
   category; no record is classified and no EAA/QEAA status is derived.
 - Ecosystem connections (Paper 20.36–20.38): a full-width band between the
-  main/context columns and the closing, with "Who issues it?" and "Where is it
-  accepted?" (counts from the data; Age Verification is the rich example, its
-  numbers are a snapshot). From 1100 px the groups sit side by side with three
-  rows each and their own "View all N" / "Show fewer"; below that they are
-  shared collapsibles, closed by default, that open with the full list
-  (`data-fides-ds-show-all-follow`). Rows are the shared relation row
+  main/context columns and the closing, with "Who issues it?", "Which
+  wallets?" and "Where is it accepted?" (counts from the data; Age
+  Verification is the rich example, its numbers are a snapshot). Wallets are
+  the ones the linked relying parties name in `supportedWallets` with a
+  `walletCatalogId` (deduplicated by id, intro "Wallets named by these
+  relying parties.", second line "Named by X [and other services]" from the
+  same links, no status slot); no compatibility is derived and without such
+  links the group is left out. Three groups sit side by side from 1280 px
+  (`data-fides-ds-wide-min="1280"` on the collapsible), one or two from
+  1100 px; each shows three rows A–Z with its own "View all N" / "Show
+  fewer". Narrower, the groups are shared collapsibles in the same order,
+  closed by default, with equal heads (question, "Role · N", chevron) that
+  open with the full list (`data-fides-ds-show-all-follow`). A note below
+  the band says the catalog connections do not guarantee that every issuer,
+  wallet and service works together; no arrows or row alignment. Rows are the shared relation row
   (`.fides-org-eco__row`: no negative margins, so row, divider, hover and
   focus share one outer edge; 16 px / 12 px padding; hover is the info
   surface `--fides-ds-soft` with only the name underlined; focus is a 2 px
   brand ring inset in the row) with name, organization · country and the recorded
   status: issuer `environment`, relying-party `readiness` as Production /
   Pilot / Demo / Technical demo, otherwise "Not specified". Rows open
-  `?issuer=` / `?rp=`; under a full list the filtered catalog route
-  (`?issuers=a,b` / `?rps=a,b`) appears. Wallets named by these relying parties
-  are an indirect route (`?wallets=`) with a note that this does not imply
-  compatibility. Empty groups are left out; up to three rows need no toggle.
+  `?issuer=` / `?rp=` / the wallet record (pilot `?wallet=`, otherwise
+  `?wallets=`); under a full list the filtered catalog route (`?issuers=a,b` /
+  `?wallets=a,b` / `?rps=a,b`) appears. Empty groups are left out; up to
+  three rows need no toggle.
   No internal scroll areas. The closing is the shared light-blue band of 20.6.
 - Shared show-all (tiles `design-system.js`): optional
   `data-fides-ds-show-all-more` / `-fewer` labels and `-follow` (open the list
   with its collapsible). "Show fewer" keeps its button in the same place on
-  screen, for every show-all list.
+  screen, for every show-all list. A collapsible may set
+  `data-fides-ds-wide-min="<px>"` to stay an accordion up to a wider
+  breakpoint than the default 1100 px.
 - Rights: `Fides_Credential_Design::can_edit()` mirrors
   `userCanEditCatalogItem`; guests see "Sign in to suggest an update".
 - Tests: `tests/credential-design-behaviour.php` (in `run-tests.sh`, real
   records plus fixtures) and `tests/run-credential-checks.sh` (overview
   state, dialogs, five records at 1440/1280/768/390/320 including the column
   split, navigation and narrow-screen accordion states, the ecosystem band
-  for Age Verification at 1440/390/320 plus EHIC and EUCC; screens in
+  for Age Verification at 1440/1280/1200/768/390/320 including wallet links
+  and back navigation, plus EHIC, loyalty, Open Badge, EUCC and a record
+  without relations at 1440/1100/768/390/320; screens in
   `screens/credentials`).
 - Not in the data, so not shown: resolved trust schemes for mDL. "View API record"
   links to `https://api.fides.community/api/public/credentialtype/<id>`
