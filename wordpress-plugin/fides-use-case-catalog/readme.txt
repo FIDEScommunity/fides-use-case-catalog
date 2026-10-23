@@ -18,6 +18,9 @@ how use cases connect the other FIDES catalogs.
 
 == Changelog ==
 
+= Unreleased (design pilot) =
+* Shared More filters pattern (Paper 20.45) in `usecase-design.css`, used by the use-case, credential, wallet and organization pilot overviews: white panel with a 2px brand top line, 20/26 title and 44px close, lists side by side at 300px, checkbox groups on their own line, and a full-width Technical filters disclosure row (at least 56px, field summary, chevron at the end) with its lists below. Mobile shows the same groups stacked in the Filters dialog. No filters were added or removed.
+
 = 0.21.11 =
 * Support type-level credential links and alias resolution in the catalog UI and forms (TS11 / tiles ≥ 1.13.32).
 

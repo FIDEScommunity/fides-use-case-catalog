@@ -252,16 +252,18 @@
   display: none;
 }
 
-/* More filters (compact 19.8): in-flow panel, one short head and one row
-   with status, awards and the technical toggle; technical lists below. */
+/* More filters (shared pattern, Paper 20.45): white in-flow panel under the
+   primary row. Extra lists side by side, checkbox groups on their own line,
+   then the closed Technical filters row with its lists below. */
 .fides-ds .fides-uc-pilot__more {
   display: grid;
-  gap: var(--fides-ds-space-2);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--fides-ds-space-4);
   margin-top: var(--fides-ds-space-3);
-  padding: var(--fides-ds-space-1) var(--fides-ds-space-4) var(--fides-ds-space-3);
+  padding: var(--fides-ds-space-4) var(--fides-ds-space-4) var(--fides-ds-space-5);
   border-top: 2px solid var(--fides-ds-link);
+  border-bottom: 1px solid var(--fides-ds-line);
   background: var(--fides-ds-ground);
-  box-shadow: inset 0 -1px 0 var(--fides-ds-line);
 }
 
 .fides-ds .fides-uc-pilot__more[hidden] {
@@ -270,15 +272,16 @@
 
 .fides-ds .fides-uc-pilot__more-head {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 0 var(--fides-ds-space-4);
+  margin-block: calc(-1 * var(--fides-ds-space-2));
 }
 
 .fides-ds .fides-uc-pilot__more-title {
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 700;
+  margin: 0;
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 600;
   letter-spacing: 0;
 }
 
@@ -298,23 +301,31 @@
   box-shadow: none;
 }
 
+/* Lists side by side at the reference width; checkbox groups and the
+   Technical filters row each take a full line below them. */
 .fides-ds .fides-uc-pilot__more-grid {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: var(--fides-ds-space-2) var(--fides-ds-space-6);
+  align-items: flex-start;
+  gap: var(--fides-ds-space-4) var(--fides-ds-space-5);
 }
 
-.fides-ds .fides-uc-pilot__more-grid > .fides-uc-pilot__popover {
+.fides-ds .fides-uc-pilot__more-grid > .fides-uc-pilot__popover,
+.fides-ds .fides-uc-pilot__technical-grid > .fides-uc-pilot__popover {
   flex: 0 1 300px;
-  min-width: min(100%, 260px);
+  min-width: min(100%, 240px);
+}
+
+.fides-ds .fides-uc-pilot__more-grid > .fides-uc-pilot__more-field,
+.fides-ds .fides-uc-pilot__more-grid > .fides-uc-pilot__technical-toggle {
+  flex: 1 0 100%;
 }
 
 .fides-ds .fides-uc-pilot__more-field {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0 var(--fides-ds-space-4);
+  gap: 0 var(--fides-ds-space-5);
   min-width: 0;
   margin: 0;
   padding: 0;
@@ -327,32 +338,43 @@
   color: var(--fides-ds-ink);
   font-size: 14px;
   line-height: 22px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .fides-ds .fides-uc-pilot__inline-options {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 var(--fides-ds-space-4);
+  align-items: center;
+  gap: 0 var(--fides-ds-space-5);
+  min-width: 0;
 }
 
 .fides-ds .fides-uc-pilot__inline-options .fides-ds-option {
-  padding-inline: 0 var(--fides-ds-space-2);
+  gap: var(--fides-ds-space-2);
+  padding-inline: 0;
+  line-height: 22px;
 }
 
 .fides-ds .fides-uc-pilot__inline-options .fides-ds-option:hover {
   background: none;
 }
 
+.fides-ds .fides-uc-pilot__inline-options .fides-ds-option__label {
+  flex: 0 1 auto;
+}
+
+/* Technical filters: a closed disclosure row with a short field summary and
+   the chevron at the far end; the row stays in place when it opens. */
 .fides-ds .fides-uc-pilot__technical-toggle {
   display: flex;
   align-items: center;
-  gap: var(--fides-ds-space-2) var(--fides-ds-space-3);
+  gap: var(--fides-ds-space-1) var(--fides-ds-space-4);
+  width: 100%;
   min-width: 0;
-  min-height: 44px;
-  margin-left: auto;
-  padding: 0;
+  min-height: 56px;
+  padding: var(--fides-ds-space-2) 0;
   border: 0;
+  border-top: 1px solid var(--fides-ds-line);
   background: none;
   color: var(--fides-ds-ink);
   font: inherit;
@@ -363,51 +385,51 @@
 
 .fides-ds .fides-uc-pilot__technical-toggle:hover {
   background: none;
-  color: var(--fides-ds-ink);
+  color: var(--fides-ds-link);
+}
+
+.fides-ds .fides-uc-pilot__technical-toggle:focus-visible {
+  outline: 3px solid var(--fides-ds-link);
+  outline-offset: 2px;
 }
 
 .fides-ds .fides-uc-pilot__technical-title {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   gap: var(--fides-ds-space-2);
-  font-size: 14px;
-  line-height: 22px;
-  font-weight: 700;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
   white-space: nowrap;
 }
 
 .fides-ds .fides-uc-pilot__technical-names {
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   color: var(--fides-ds-muted);
-  font-size: 13px;
-  line-height: 20px;
+  font-size: 14px;
+  line-height: 22px;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.fides-ds .fides-uc-pilot__technical-toggle[aria-expanded="true"] .fides-uc-pilot__technical-names {
-  display: none;
 }
 
 .fides-ds .fides-uc-pilot__technical-icon {
   display: inline-flex;
   flex: 0 0 auto;
+  margin-left: auto;
 }
 
-/* Each list starts at its own label + value width and the row wraps, so a
-   long label such as "Presentation protocol" never truncates a short value. */
+/* Technical lists below a light line, at the same width as the other lists. */
 .fides-ds .fides-uc-pilot__technical-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--fides-ds-space-3);
-  padding-top: var(--fides-ds-space-2);
+  align-items: flex-start;
+  gap: var(--fides-ds-space-4) var(--fides-ds-space-5);
+  margin-top: calc(-1 * var(--fides-ds-space-4));
+  padding-top: var(--fides-ds-space-4);
   border-top: 1px solid var(--fides-ds-line);
-}
-
-.fides-ds .fides-uc-pilot__technical-grid > * {
-  flex: 1 1 auto;
-  min-width: min(100%, 200px);
 }
 
 .fides-ds .fides-uc-pilot__technical-grid[hidden] {
@@ -851,11 +873,18 @@
   .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__more-grid > .fides-uc-pilot__popover {
     flex-basis: auto;
   }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__more-grid > * {
+    flex: 0 0 auto;
+  }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__more-field,
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__inline-options {
+    flex-direction: column;
+    align-items: stretch;
+  }
   .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__technical-toggle {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 2px var(--fides-ds-space-3);
-    margin-left: 0;
   }
   .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__technical-names {
     grid-column: 1;
@@ -864,6 +893,14 @@
   .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__technical-icon {
     grid-column: 2;
     grid-row: 1 / span 2;
+  }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__technical-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .fides-ds .fides-uc-pilot__filter-panel .fides-uc-pilot__technical-grid > .fides-uc-pilot__popover {
+    flex-basis: auto;
+    min-width: 0;
   }
   .fides-ds .fides-uc-pilot__skeleton-row {
     grid-template-columns: minmax(0, 1fr);
@@ -1586,11 +1623,6 @@ html.fides-uc-pilot-panel-open {
     min-height: 40px;
     padding-block: 8px;
   }
-  .fides-ds.fides-uc-pilot .fides-uc-pilot__more-close {
-    width: 40px;
-    height: 40px;
-  }
-  .fides-ds.fides-uc-pilot .fides-uc-pilot__technical-toggle,
   .fides-ds.fides-uc-pilot .fides-uc-pilot__pill {
     min-height: 40px;
   }
