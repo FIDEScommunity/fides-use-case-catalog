@@ -356,7 +356,7 @@ refresh.
   1440/1280/768/390/320, glossary, eIDAS, classic modal deep links; screens in
   `screens/wallets`).
 
-## Credential catalog (Paper 20.7 / 20.8 / 20.18 / 20.19 / 20.33–20.38)
+## Credential catalog (Paper 20.7 / 20.8 / 20.18 / 20.19 / 20.33–20.41)
 
 - Overview: `credential-catalog.js` pilot path (`data-design="pilot"`), same
   rows, popovers, More filters, mobile Filters dialog, pager and return
@@ -364,7 +364,26 @@ refresh.
   in Paper; a stored grid preference is ignored). Styles: `credential-design.css` on top of
   `organization-design.css`. Detail: `Fides_Credential_Detail_Page`
   (`[fides_credential_detail]`), data and rules in `Fides_Credential_Design`.
-- URL state: `q`, `sort` (default `rating`), `catalog_page`, `subject`,
+- Overview controls (Paper 20.7): search label with Ask FIDES, then field and
+  Search as one group (at most 720 px from 600 px), then the five filter
+  buttons together (wrapping on tablets, never a four-slot grid), then the
+  quick filters; 40 px controls from 1100 px with a fine pointer, otherwise
+  44 px. Credential-only overrides in `credential-design.css`.
+- Search (credential-refinements-2026-10-23 § 5, pilot only; the classic
+  listing keeps its substring search): applied on Enter / Search. Fields are
+  title, description, native identifier, authority, tags, taxonomy codes and
+  labels and attribute names, split on separators and camelCase (keeping the
+  unsplit word, so "mDL" is also "mdl"). Words of up to four characters match
+  a whole word or a word start; longer words, and words with an inner
+  separator (`birth_date`, `eu.europa.ec`), match as a substring. Every word
+  must occur in the record. "Relevance" tiers: exact title; every word a title
+  word, or a title prefix; every word an exact tag, identifier segment or
+  authority word; other title matches; the rest — ties by title, then id. The
+  pure helpers sit between `pilot-search:begin` / `:end` and are checked on
+  their own by `credential-checks.cjs`.
+- URL state: `q`, `sort` (only an explicit choice; the default is Relevance
+  with a query and `rating` without; an explicit sort survives a new query and
+  Clear, an explicit Relevance ends with the query), `catalog_page`, `subject`,
   `format`, `ecosystem`, `authority`, `sector`, `theme`, `schema`, the flags
   `new`, `rp`, `ts11`, and `credentials` (aliases are canonicalized). Old
   `?credential=` links on the pilot overview open the pilot detail; the detail
@@ -425,12 +444,19 @@ refresh.
   `walletCatalogId` (deduplicated by id, intro "Wallets named by these
   relying parties.", second line "Named by X [and other services]" from the
   same links, no status slot); no compatibility is derived and without such
-  links the group is left out. Three groups sit side by side from 1280 px
-  (`data-fides-ds-wide-min="1280"` on the collapsible), one or two from
-  1100 px; each shows three rows A–Z with its own "View all N" / "Show
-  fewer". Narrower, the groups are shared collapsibles in the same order,
-  closed by default, with equal heads (question, "Role · N", chevron) that
-  open with the full list (`data-fides-ds-show-all-follow`). A note below
+  links that role is "Not specified". With at least one link all three roles
+  show (Paper 20.41), side by side from 1280 px
+  (`data-fides-ds-wide-min="1280"` on the collapsible) and stacked below;
+  each shows three rows A–Z with its own "View all N" / "Show fewer" and the
+  count as the shared small badge (14/22, 400, info surface) beside the
+  20/26 heading. Narrower, roles with links are shared collapsibles in the
+  same order, closed by default, with equal heads (question, "Role · N",
+  chevron; the badge only when open) that open with the full list
+  (`data-fides-ds-show-all-follow`). A role without links is a static block
+  in the same box: wide "Not specified" plus its reason, narrow
+  "Role · Not specified" and the shared line "Not specified means no link is
+  recorded in this catalog." — no badge, list, button, link or chevron.
+  Without any link the section and its navigation entry are hidden. A note below
   the band says the catalog connections do not guarantee that every issuer,
   wallet and service works together; no arrows or row alignment. Rows are the shared relation row
   (`.fides-org-eco__row`: no negative margins, so row, divider, hover and
@@ -441,8 +467,11 @@ refresh.
   Pilot / Demo / Technical demo, otherwise "Not specified". Rows open
   `?issuer=` / `?rp=` / the wallet record (pilot `?wallet=`, otherwise
   `?wallet=` in the wallet catalog, which opens `/wallet/<id>/`); under a full list the filtered catalog route (`?issuers=a,b` /
-  `?wallets=a,b` / `?rps=a,b`) appears. Empty groups are left out; up to
-  three rows need no toggle.
+  `?wallets=a,b` / `?rps=a,b`) appears; up to three rows need no toggle.
+- Hero formats (Paper 20.8): "Formats" with one static label per format
+  (14/22, 500, brand-strong on the info surface, 1px divider border; no
+  cursor, role, hover or tab stop), then "Subject · …", the TS11 marker and
+  the update date as separate metadata.
   No internal scroll areas. The closing is the shared light-blue band of 20.6.
 - Shared show-all (tiles `design-system.js`): optional
   `data-fides-ds-show-all-more` / `-fewer` labels and `-follow` (open the list
@@ -472,12 +501,16 @@ refresh.
   fides.community destinations of the classic modal and pilot links and checks
   HTML, the selected record or filter, and Back from a real click) and
   `tests/run-credential-checks.sh` (offline, labelled stub for external
-  links; overview
-  state, dialogs, five records at 1440/1280/768/390/320 including the column
-  split, navigation and narrow-screen accordion states, the ecosystem band
-  for Age Verification at 1440/1280/1200/768/390/320 including wallet links
-  and back navigation, plus EHIC, loyalty, Open Badge, EUCC and a record
-  without relations at 1440/1100/768/390/320; screens in
+  links; the search contract on its pure helpers with synthetic and source
+  fixtures, no fixed totals; overview state, search relevance, explicit
+  sort, Clear, pager and detail/Back with a query, dialogs, the overview
+  layout at 1440/1320/1319/1280/1279/1200/1199/1100/768/390/320 with a long
+  selected label; five records at 1440/1280/768/390/320 including the column
+  split, static format labels, navigation and narrow-screen accordion states;
+  the ecosystem band for Age Verification at 1440/1280/1279/1200/768/390/320
+  including the count badge, wallet links and back navigation, plus EHIC,
+  loyalty, Open Badge, EUCC, Aadhaar and a record without relations at
+  1440/1320/1319/1280/1279/1200/1199/1100/768/390/320; screens in
   `screens/credentials`).
 - Not in the data, so not shown: resolved trust schemes for mDL. "View API record"
   links to `https://api.fides.community/api/public/credentialtype/<id>`

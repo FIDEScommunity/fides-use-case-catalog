@@ -112,6 +112,10 @@ $_GET = array();
 $ehic = $render('cred:eu:ehic');
 $check($has($ehic, '<h1 class="fides-ds-heading-1 fides-ds-heading-1--detail fides-org-detail__title">EHIC</h1>'), 'EHIC: H1');
 $check($has($ehic, 'data-fides-ds-back="credential"') && $has($ehic, 'All credential types'), 'EHIC: shared back link');
+$ehic_meta = substr($ehic, strpos($ehic, 'fides-credential-detail__meta'), strpos($ehic, 'fides-credential-detail__actions') - strpos($ehic, 'fides-credential-detail__meta'));
+$check($has($ehic_meta, '<span class="fides-credential-detail__formats"><span class="fides-credential-detail__formats-label">Formats</span><span class="fides-credential-format-label">mDoc</span><span class="fides-credential-format-label">SD-JWT VC</span></span>'), 'EHIC hero: one static label per format');
+$check($has($ehic_meta, '<span class="fides-credential-detail__facts">Subject · Person</span>') && ! $has($ehic_meta, 'mDoc · ') && ! preg_match('/<(a|button)\b|tabindex|role="button"/', substr($ehic_meta, 0, strpos($ehic_meta, 'fides-credential-detail__facts'))), 'EHIC hero: subject apart from the formats; labels are not controls');
+$check(substr_count($render('cred:webuild:eucc'), 'class="fides-credential-format-label"') === 1, 'EUCC hero: one format label');
 $check(substr_count($ehic, 'data-credential-format-panel') === 2, 'EHIC: one panel per format');
 $check($has($ehic, 'role="tablist"') && preg_match('/<div[^>]*role="tablist"[^>]*hidden/', $ehic) === 1, 'EHIC: tablist stays hidden until JS enhances it');
 $check($has($ehic, 'eu.europa.ec.eudi.ehic.1') && $has($ehic, 'urn:eudi:ehic:1'), 'EHIC: docType and VCT per format');
@@ -315,9 +319,13 @@ $p_aside   = strpos($av_html, 'fides-credential-detail__aside');
 $p_eco     = strpos($av_html, '<section class="fides-credential-eco"');
 $p_closing = strpos($av_html, 'id="listing"');
 $check($p_aside !== false && $p_eco > $p_aside && $p_eco < $p_closing, 'AV: ecosystem sits below main/aside and above the closing');
-$check($has($av_eco, 'Who issues it?') && $has($av_eco, 'Issuers · ' . $ni), 'AV: issuer group with dynamic count');
-$check($has($av_eco, 'Where is it accepted?') && $has($av_eco, 'Relying parties · ' . $nr), 'AV: relying-party group with dynamic count');
-$check($has($av_eco, 'Which wallets?') && $has($av_eco, 'Wallets · ' . $nw), 'AV: wallet group with dynamic count');
+$role_count = static fn(string $role, int $n): string => $role . '<span class="fides-credential-eco__role-count"> · ' . $n . '</span>';
+$badge      = static fn(int $n): string => '<span class="fides-uc-detail__count fides-credential-eco__count">' . $n . '</span>';
+$check($has($av_eco, 'Who issues it?') && $has($av_eco, $badge($ni)) && $has($av_eco, $role_count('Issuers', $ni)), 'AV: issuer group with the small count badge and the accordion role line');
+$check($has($av_eco, 'Where is it accepted?') && $has($av_eco, $badge($nr)) && $has($av_eco, $role_count('Relying parties', $nr)), 'AV: relying-party group with dynamic count');
+$check($has($av_eco, 'Which wallets?') && $has($av_eco, $badge($nw)) && $has($av_eco, $role_count('Wallets', $nw)), 'AV: wallet group with dynamic count');
+$check(! $has($av_eco, '<span aria-hidden="true">·</span> '), 'AV: the badge carries the number only');
+$check(! $has($av_eco, 'Not specified</p>') && ! $has($av_eco, 'fides-credential-eco__missing-note'), 'AV: no Not specified state when every role has links');
 $check(strpos($av_eco, 'Who issues it?') < strpos($av_eco, 'Which wallets?') && strpos($av_eco, 'Which wallets?') < strpos($av_eco, 'Where is it accepted?'), 'AV: order issuers, wallets, relying parties');
 $check($has($av_eco, 'fides-credential-eco__groups--3') && substr_count($av_eco, 'data-fides-ds-wide-min="1280"') === 3, 'AV: three groups switch to columns from 1280px');
 $check(substr_count($av_eco, 'class="fides-org-eco__row fides-credential-eco__row" href="') === $ni + $nr, 'AV: one shared relation row (with status) per issuer and relying party');
@@ -379,16 +387,57 @@ $check(Fides_Credential_Design::rp_status(array('readiness' => 'production-pilot
 $check($has($av_html, 'Help keep this credential type current.') && $has($av_html, 'class="fides-org-closing__date"'), 'AV: closing title and date kept below the ecosystem');
 
 $ehic_eco = $section_of($render('cred:eu:ehic'));
-$check($has($ehic_eco, 'Issuers · ' . count(Fides_Credential_Design::issuers_for('cred:eu:ehic'))) && $has($ehic_eco, 'Relying parties · ' . count(Fides_Credential_Design::relying_parties_for('cred:eu:ehic'))), 'EHIC: shared template shows both groups');
+$check($has($ehic_eco, $role_count('Issuers', count(Fides_Credential_Design::issuers_for('cred:eu:ehic')))) && $has($ehic_eco, $role_count('Relying parties', count(Fides_Credential_Design::relying_parties_for('cred:eu:ehic')))), 'EHIC: shared template shows both groups');
 
-$eucc_eco = $section_of($render('cred:webuild:eucc'));
-$check($eucc_eco !== '' && $has($eucc_eco, 'Who issues it?') && ! $has($eucc_eco, 'Where is it accepted?') && ! $has($eucc_eco, 'Which wallets?') && $has($eucc_eco, 'fides-credential-eco__groups--1') && ! $has($eucc_eco, 'data-fides-ds-wide-min'), 'EUCC: empty relying-party and wallet groups are left out');
-$check($has($eucc_eco, 'every issuer and service works together.'), 'EUCC: note without wallets names issuers and services only');
-
+// Roles without links: always the three roles, a static "Not specified" state, no zero count or empty action.
+$missing_texts = array(
+    'issuers' => 'No issuer is recorded for this credential type.',
+    'wallets' => 'No wallet is recorded through the linked relying parties.',
+    'rps'     => 'No relying party is recorded for this credential type.',
+);
+$group_of = static function (string $eco, string $key): string {
+    $start = strpos($eco, 'fides-credential-eco__group--' . $key);
+    if ($start === false) {
+        return '';
+    }
+    $next = strpos($eco, 'class="fides-credential-eco__group ', $start + 1);
+    $end  = $next !== false ? $next : strpos($eco, '</div><p class="fides-ds-meta', $start);
+    return substr($eco, $start, $end - $start);
+};
+$eco_cases = array(
+    'cred:eu:loyalty'           => array('wallets'),
+    'cred:eduwallet:open-badge' => array('issuers'),
+    'cred:webuild:eucc'         => array('wallets', 'rps'),
+    'cred:uidai:aadhaar'        => array('issuers', 'wallets'),
+);
+foreach ($eco_cases as $id => $missing_keys) {
+    $label = $id;
+    $html  = $render($id);
+    $eco   = $section_of($html);
+    $check($eco !== '' && $has($html, 'href="#ecosystem"'), "$label: ecosystem section and nav entry with at least one link");
+    $check(strpos($eco, 'Who issues it?') !== false && strpos($eco, 'Who issues it?') < strpos($eco, 'Which wallets?') && strpos($eco, 'Which wallets?') < strpos($eco, 'Where is it accepted?') && $has($eco, 'fides-credential-eco__groups--3'), "$label: all three roles in order");
+    $check(substr_count($eco, 'data-fides-ds-wide-min="1280"') === 3 - count($missing_keys), "$label: only roles with links are collapsibles (columns from 1280px)");
+    $check($has($eco, '<p class="fides-ds-meta fides-credential-eco__missing-note">Not specified means no link is recorded in this catalog.</p>'), "$label: shared Not specified note");
+    $check($has($eco, '<p class="fides-ds-meta fides-credential-eco__note">These catalog connections do not guarantee that every issuer, wallet and service works together.</p>'), "$label: compatibility note kept");
+    foreach (array('issuers' => 'Issuers', 'wallets' => 'Wallets', 'rps' => 'Relying parties') as $key => $role) {
+        $group = $group_of($eco, $key);
+        if (in_array($key, $missing_keys, true)) {
+            $check($has($group, 'fides-credential-eco__group--missing') && $has($group, '<p class="fides-credential-eco__role">' . $role . '<span class="fides-credential-eco__role-state"> · Not specified</span></p>') && $has($group, '<p class="fides-credential-eco__missing">Not specified</p>') && $has($group, '<p class="fides-credential-eco__missing-text">' . $missing_texts[$key] . '</p>'), "$label: $key says Not specified with its explanation");
+            $check((bool) preg_match('#<h3 class="fides-credential-eco__title" id="eco-' . $key . '-title">#', $group), "$label: $key keeps a real heading");
+            $check(! preg_match('/<(a|button|ul)\b|tabindex|aria-expanded|data-fides-ds-collapsible|data-fides-ds-show-all|__count|View all|catalog/', $group), "$label: $key has no badge, list, button, link or accordion");
+        } else {
+            $check($has($group, 'data-fides-ds-collapsible="closed"') && ! $has($group, 'Not specified</p>') && ! $has($group, '>0</span>'), "$label: $key with links stays a collapsible, no zero count");
+        }
+    }
+}
+$aad_eco = $section_of($render('cred:uidai:aadhaar'));
+$aad_rps = Fides_Credential_Design::relying_parties_for('cred:uidai:aadhaar');
+$check(count($aad_rps) === 1 && $has($aad_eco, $badge(1)) && $has($aad_eco, $role_count('Relying parties', 1)) && ! $has($aad_eco, 'relying party catalog'), 'Aadhaar: one relying party, count 1, no list route');
+$check(Fides_Credential_Design::wallets_for('cred:uidai:aadhaar') === array() && $has($aad_eco, 'No wallet is recorded through the linked relying parties.'), 'Aadhaar: no wallet is derived from the relying party without a wallet reference');
 $obc_eco = $section_of($render('cred:eduwallet:open-badge'));
-$check($obc_eco !== '' && ! $has($obc_eco, 'Who issues it?') && $has($obc_eco, 'Where is it accepted?'), 'OBC: empty issuer group is left out');
-$check(! $has($obc_eco, 'fides-credential-eco__catalog') && $has($obc_eco, 'Wallets · 1') && $has($obc_eco, 'Wallets named by this relying party.'), 'OBC: single records need no catalog list route; wallet intro is singular');
-$check($has($obc_eco, 'fides-credential-eco__groups--2') && ! $has($obc_eco, 'data-fides-ds-wide-min'), 'OBC: two groups use two columns from 1100px');
+$check(! $has($obc_eco, 'fides-credential-eco__catalog') && $has($obc_eco, $role_count('Wallets', 1)) && $has($obc_eco, 'Wallets named by this relying party.'), 'OBC: single records need no catalog list route; wallet intro is singular');
+$exam = $render('cred:eduwallet:exam-enrollment');
+$check(Fides_Credential_Design::issuers_for('cred:eduwallet:exam-enrollment') === array() && ! $has($exam, 'id="ecosystem"') && ! $has($exam, 'href="#ecosystem"') && ! $has($exam, 'Not specified means'), 'exam enrollment: no links at all hides the section and its nav entry');
 
 $eco_method = new ReflectionMethod('Fides_Credential_Detail_Page', 'ecosystem_html');
 $eco_method->setAccessible(true);
@@ -403,12 +452,14 @@ $fixture = $eco_method->invoke(
     array(array('id' => 'rp-none', 'name' => 'Unlabelled verifier')),
     array()
 );
-$check(substr_count($fixture, 'Not specified') === 2 && substr_count($fixture, 'fides-credential-eco__status--unknown') === 2, 'fixture: missing status says Not specified, never a guessed one');
+$check(substr_count($fixture, 'fides-credential-eco__status--unknown">') === 2 && substr_count($fixture, '<span class="fides-ds-visually-hidden">Status: </span>Not specified') === 2, 'fixture: missing status says Not specified, never a guessed one');
 $check($has($fixture, 'fides-credential-eco__status--production"><span class="fides-ds-visually-hidden">Status: </span>Production'), 'fixture: production status gets its own badge');
 $check($has($fixture, esc_html($long_name)) && ! $has($fixture, '<b>territories</b>') && ! $has($fixture, '<i>type</i>'), 'fixture: long and unsafe names are escaped, not shortened');
 $check($has($fixture, 'Org &amp; Co · NL'), 'fixture: organization with country code');
 $check($has($fixture, 'Open these 2 in the issuer catalog') && ! $has($fixture, 'relying party catalog'), 'fixture: list route only for groups with more than one record');
-$check(! $has($fixture, 'Which wallets?') && $has($fixture, 'fides-credential-eco__groups--2') && ! $has($fixture, 'data-fides-ds-wide-min'), 'fixture: wallet group left out without linked wallets; two columns');
+$check($has($fixture, 'Which wallets?') && $has($fixture, 'No wallet is recorded through the linked relying parties.') && substr_count($fixture, 'data-fides-ds-wide-min="1280"') === 2, 'fixture: wallet role stays as Not specified without linked wallets');
+$none = $eco_method->invoke(null, 'Fixture', array(), array(), array(array('id' => 'w-only', 'name' => 'Only wallet', 'via' => array())));
+$check($has($none, 'Which wallets?') && substr_count($none, 'fides-credential-eco__group--missing') === 2 && $has($none, 'No issuer is recorded for this credential type.') && $has($none, 'No relying party is recorded for this credential type.'), 'fixture: one role with links shows the other two as Not specified');
 $fixture_w = $eco_method->invoke(
     null,
     'Fixture',

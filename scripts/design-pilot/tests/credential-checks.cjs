@@ -1,8 +1,11 @@
 /**
  * Credential overview and detail browser checks (Paper 20.7 / 20.8 /
- * 20.18 / 20.19 / 20.33–20.35).
+ * 20.18 / 20.19 / 20.33–20.41).
  *
- * Overview: rows, search only on Enter / Search (including attribute names),
+ * Search contract (pure helpers, synthetic and source fixtures): short-term
+ * word starts, technical paths, AND, relevance tiers, exact names first.
+ * Overview: layout per width, rows, search only on Enter / Search (including
+ * attribute names), Relevance by default with a query, explicit sort, Clear,
  * filters and the TS11 metadata flag in the URL, reload keeps state, sort,
  * list / grid, pager, zero results, old ?credential= deeplinks, Back with
  * filters and focus, TS11 Explain dialog (scroll lock, Escape, focus return),
@@ -99,6 +102,67 @@ async function smallTargets(page, selector) {
     }
   }
 
+  // Pilot search contract (credential-refinements-2026-10-23 § 5), without a browser.
+  const PLUGIN = path.resolve(__dirname, "../../../../credential-catalog/wordpress-plugin/fides-credential-catalog");
+  const SOURCE = JSON.parse(fs.readFileSync(path.join(PLUGIN, "data/aggregated.json"), "utf8"));
+  const SOURCE_LIST = SOURCE.credentials || SOURCE;
+  {
+    const source = fs.readFileSync(path.join(PLUGIN, "assets/credential-catalog.js"), "utf8");
+    const block = source.match(/\/\* pilot-search:begin \*\/([\s\S]*?)\/\* pilot-search:end \*\//);
+    check("search contract: pure search block present", !!block);
+    if (block) {
+      const api = new Function(`${block[1]}; return { pilotSearchTerms, pilotSearchIndex, pilotSearchMatches, pilotSearchTier };`)();
+      const index = (f) => api.pilotSearchIndex(Object.assign({ title: "", identifier: "", authority: "", tags: [], taxonomy: [], description: "", attributes: [] }, f));
+      const hit = (q, f) => api.pilotSearchMatches(index(f), api.pilotSearchTerms(q));
+      const tier = (q, f) => api.pilotSearchTier(index(f), q, api.pilotSearchTerms(q));
+      check("search contract: a short term is no mid-word match (EHIC / vehicle)", !hit("ehic", { title: "Vehicle Registration" }) && hit("ehic", { title: "EHIC" }));
+      check("search contract: PID is not found inside LPID", !hit("pid", { tags: ["LPID"] }) && !hit("pid", { attributes: ["lpid_issuer"] }) && !hit("pid,", { tags: ["LPID"] }));
+      check("search contract: a separate PID tag or attribute segment still matches", hit("pid", { tags: ["PID"] }) && hit("pid", { attributes: ["pid_issuer"] }) && hit("pid", { identifier: "urn:eudi:pid:1" }));
+      check("search contract: a short term matches a word start", hit("veri", { title: "Age Verification" }) && hit("eu", { taxonomy: ["eudi-wallet"] }));
+      check("search contract: camelCase and separators split words", hit("birth", { attributes: ["dateOfBirth"] }) && hit("of", { attributes: ["dateOfBirth"] }) && hit("mdl", { title: "mDL" }) && hit("invoice", { title: "eInvoice" }));
+      check("search contract: longer terms keep substring matching", hit("nvoice", { title: "eInvoice" }) && hit("verification", { description: "Proof of age verification." }));
+      check("search contract: technical paths match as a substring", hit("birth_date", { attributes: ["place_of_birth_date"] }) && hit("date_of_birth", { attributes: ["date_of_birth"] }) && hit("eu.europa.ec.eudi", { identifier: "eu.europa.ec.eudi.ehic.1" }) && !hit("birth_date", { attributes: ["date_of_birth"] }));
+      check("search contract: every word in the same record, any field", hit("age health", { title: "Age", description: "health" }) && !hit("age health", { title: "Age" }));
+      check("search contract: case and whitespace do not matter", hit("  EHIC  ", { title: "ehic" }) && api.pilotSearchTerms("  Age   Verification ").map((t) => t.text).join() === "age,verification");
+      check("search contract: punctuation-only input is no query", api.pilotSearchTerms(" -- , ").length === 0);
+      check("search contract: relevance tiers 0 exact title, 1 title words or prefix, 2 exact tag/identifier/authority, 3 other title, 4 the rest",
+        tier("ehic", { title: "EHIC" }) === 0
+        && tier("pid", { title: "PID (WE BUILD SD-JWT VC)" }) === 1
+        && tier("age veri", { title: "Age Verification" }) === 1
+        && tier("pid", { title: "Citizen ID", tags: ["PID"] }) === 2
+        && tier("ehic", { title: "Card", identifier: "urn:eudi:ehic:1" }) === 2
+        && tier("india", { title: "Aadhaar", authority: "Unique Identification Authority of India" }) === 2
+        && tier("veri", { title: "Verifier Pass" }) === 1
+        && tier("ification", { title: "Age Verification" }) === 3
+        && tier("ehic", { title: "Card", description: "An EHIC card" }) === 4);
+
+      // Source fixtures: expectations from the catalog data itself, no fixed totals.
+      const sourceIndex = (c) => api.pilotSearchIndex({ title: c.displayName, identifier: c.nativeIdentifier, authority: c.authority && c.authority.name, tags: c.tags, taxonomy: [].concat(c.sectors || [], c.ecosystems || [], c.themes || []), description: c.shortDescription || c.schemaDescription, attributes: (c.attributes || []).map((a) => a && a.name) });
+      const rank = (q) => {
+        const terms = api.pilotSearchTerms(q);
+        return SOURCE_LIST.filter((c) => api.pilotSearchMatches(sourceIndex(c), terms))
+          .map((c) => ({ id: c.id, name: c.displayName, tier: api.pilotSearchTier(sourceIndex(c), q, terms) }))
+          .sort((a, b) => a.tier - b.tier || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
+      };
+      const withVehicle = SOURCE_LIST.filter((c) => /vehicle/i.test(JSON.stringify(c)) && !/\behic\b/i.test(JSON.stringify(c))).map((c) => c.id);
+      const ehic = rank("ehic");
+      check("source: EHIC first for ehic", ehic.length > 0 && ehic[0].id === "cred:eu:ehic", ehic.map((r) => r.id).join(","));
+      check("source: records with only 'vehicle' do not match ehic", withVehicle.length > 0 && withVehicle.every((id) => !ehic.some((r) => r.id === id)), withVehicle.join(","));
+      const withLpid = SOURCE_LIST.filter((c) => /lpid/i.test(JSON.stringify(c)) && !/(^|[^a-z])pid([^a-z]|$)/i.test(JSON.stringify(c).replace(/lpid/gi, ""))).map((c) => c.id);
+      const pid = rank("pid");
+      check("source: PID first for pid", pid.length > 0 && pid[0].id === "cred:eu:pid" && pid[0].tier === 0, pid.slice(0, 3).map((r) => r.id).join(","));
+      check("source: eInvoice does not match pid through LPID", withLpid.length > 0 && withLpid.every((id) => !pid.some((r) => r.id === id)), withLpid.join(","));
+      const withBirthDate = SOURCE_LIST.filter((c) => (c.attributes || []).some((a) => a && /birth_date/i.test(a.name || ""))).map((c) => c.id);
+      const birth = rank("birth_date").map((r) => r.id);
+      check("source: birth_date finds every record with that attribute", withBirthDate.length > 0 && withBirthDate.every((id) => birth.includes(id)), `${withBirthDate.length}/${birth.length}`);
+      const av = rank("age verification");
+      check("source: two words put the exact title first", av[0] && av[0].id === "cred:eu:age-verification", av.map((r) => r.id).join(","));
+      const exactNames = SOURCE_LIST.filter((c) => c.displayName && SOURCE_LIST.filter((o) => (o.displayName || "").toLowerCase() === c.displayName.toLowerCase()).length === 1).slice(0, 40);
+      const misses = exactNames.filter((c) => { const r = rank(c.displayName); return !r[0] || r[0].id !== c.id; }).map((c) => c.displayName);
+      check("source: an exact name is first for its own title", misses.length === 0, misses.slice(0, 5).join(" | "));
+    }
+  }
+
   const browser = await chromium.launch();
   const errors = [];
 
@@ -137,6 +201,100 @@ async function smallTargets(page, selector) {
     await page.press("#fides-search-input", "Enter");
     await page.waitForTimeout(400);
     check("search: clearing restores all results", (await count(page)) === total);
+
+    // Relevance: default with a query, visible in the select; ranking from the source.
+    const ids5 = () => page.$$eval(".fides-ds-card[data-credential-id]", (cards) => cards.map((c) => c.getAttribute("data-credential-id")));
+    const sortState = () => page.evaluate(() => {
+      const sel = document.querySelector("#fides-sort-select");
+      return { value: sel.value, label: sel.options[sel.selectedIndex].textContent, options: [...sel.options].map((o) => o.value).join(","), url: new URL(location.href).searchParams.get("sort") };
+    });
+    const submit = async (q, how) => {
+      await page.fill("#fides-search-input", q);
+      if (how === "button") await page.click(".fides-uc-pilot__search-submit");
+      else await page.press("#fides-search-input", "Enter");
+      await page.waitForTimeout(400);
+    };
+    let sortNow = await sortState();
+    check("relevance: not offered without a query; Likes is the default", sortNow.value === "rating" && !sortNow.options.includes("relevance") && sortNow.url === null, JSON.stringify(sortNow));
+    await submit("ehic");
+    sortNow = await sortState();
+    let hits = await ids5();
+    check("relevance: a query selects Relevance visibly, without ?sort=", sortNow.value === "relevance" && sortNow.label === "Relevance" && sortNow.options.startsWith("relevance,") && sortNow.url === null, JSON.stringify(sortNow));
+    check("relevance: EHIC first for ehic; vehicle records not matched", hits[0] === "cred:eu:ehic" && !hits.includes("cred:iso:mvrc") && !hits.includes("cred:uncefact:packing-list"), hits.join(","));
+    await submit("  EHIC ", "button");
+    check("relevance: case and whitespace give the same result", JSON.stringify(await ids5()) === JSON.stringify(hits) && new URL(page.url()).searchParams.get("q") === "EHIC", page.url());
+    await submit("pid");
+    hits = await ids5();
+    check("relevance: PID first for pid; eInvoice not matched through LPID", hits[0] === "cred:eu:pid" && !hits.includes("cred:fides:einvoicing") && !hits.includes("cred:webuild:einvoice"), hits.join(","));
+    await submit("birth_date");
+    hits = await ids5();
+    const birthIds = SOURCE_LIST.filter((c) => (c.attributes || []).some((a) => a && /birth_date/i.test(a.name || ""))).map((c) => c.id);
+    check("search: technical attribute path finds every record with it", birthIds.length > 0 && (await count(page)) >= birthIds.length && birthIds.filter((id) => hits.includes(id)).length === Math.min(birthIds.length, hits.length), `${birthIds.length} in source, ${await count(page)} shown`);
+    await submit("age verification");
+    hits = await ids5();
+    check("search: two words, exact title first", hits[0] === "cred:eu:age-verification" && (await count(page)) >= 1, hits.slice(0, 3).join(","));
+
+    // A facet with the query; an explicit sort survives a new query and Clear.
+    await submit("pid");
+    const pidCount = await count(page);
+    await page.click("[data-pilot-key='vcFormat'] summary, [data-pilot-key='vcFormat'] button");
+    await page.waitForTimeout(200);
+    await page.check("[data-pilot-key='vcFormat'] input[value='sd_jwt_vc']");
+    await page.waitForTimeout(400);
+    await page.keyboard.press("Escape");
+    const facetCount = await count(page);
+    const metas = await page.$$eval(".fides-ds-card", (cards) => cards.map((c) => c.textContent));
+    check("search + facet: both in the URL, results narrow to SD-JWT VC", new URL(page.url()).searchParams.get("q") === "pid" && new URL(page.url()).searchParams.get("format") === "sd_jwt_vc" && facetCount >= 1 && facetCount <= pidCount && metas.every((t) => /SD-JWT VC/.test(t)), `${facetCount}/${pidCount} ${page.url()}`);
+    check("search + facet: sort stays Relevance", (await sortState()).value === "relevance");
+    await page.selectOption("#fides-sort-select", "name");
+    await page.waitForTimeout(400);
+    sortNow = await sortState();
+    check("explicit sort: A–Z with a query writes sort=name", sortNow.value === "name" && sortNow.url === "name", JSON.stringify(sortNow));
+    await submit("eu");
+    sortNow = await sortState();
+    const azNames = await page.$$eval(".fides-ds-card__title", (els) => els.slice(0, 8).map((e) => e.textContent.trim()));
+    check("explicit sort: a new query keeps A–Z", sortNow.value === "name" && sortNow.url === "name" && azNames.join("|") === [...azNames].sort((a, b) => a.localeCompare(b)).join("|"), `${JSON.stringify(sortNow)} ${azNames.join(" | ")}`);
+    await page.click("#fides-search-clear");
+    await page.waitForTimeout(400);
+    sortNow = await sortState();
+    check("Clear: query gone, facet and explicit sort kept", new URL(page.url()).searchParams.get("q") === null && new URL(page.url()).searchParams.get("format") === "sd_jwt_vc" && sortNow.value === "name" && !sortNow.options.includes("relevance"), `${page.url()} ${JSON.stringify(sortNow)}`);
+    check("Clear: focus back in the search field", await page.evaluate(() => document.activeElement && document.activeElement.id === "fides-search-input"));
+    await open(page, OVERVIEW);
+    await overviewReady(page);
+
+    // Pagination with a query, Clear back to the default sort, detail and Back.
+    await submit("eu");
+    const euCount = await count(page);
+    sortNow = await sortState();
+    check("relevance: default again for a fresh query", sortNow.value === "relevance" && sortNow.url === null, JSON.stringify(sortNow));
+    const firstPage = await ids5();
+    const page2 = page.locator("[data-pilot-pagination-slot] a[data-catalog-page='2']").first();
+    if (euCount > 30 && (await page2.count())) {
+      await page2.click();
+      await page.waitForTimeout(400);
+      const secondPage = await ids5();
+      check("pager with a query: page 2 keeps q and Relevance", new URL(page.url()).searchParams.get("catalog_page") === "2" && new URL(page.url()).searchParams.get("q") === "eu" && (await sortState()).value === "relevance" && secondPage.every((id) => !firstPage.includes(id)), page.url());
+      await submit("eu");
+      check("search: a new search returns to page 1", new URL(page.url()).searchParams.get("catalog_page") === null, page.url());
+    } else {
+      check("pager with a query: more than one page for eu", false, String(euCount));
+    }
+    await submit("ehic");
+    const ehicUrl = page.url();
+    await page.locator(".fides-ds-card[data-credential-id='cred:eu:ehic'] .fides-ds-card__link").focus();
+    await page.keyboard.press("Enter");
+    await page.waitForSelector(".fides-credential-detail", { timeout: 30000 });
+    const backFromQuery = await page.getAttribute("[data-fides-ds-back]", "href");
+    check("detail from a query: back link keeps q", (backFromQuery || "").includes("q=ehic"), backFromQuery);
+    await page.goBack({ waitUntil: "domcontentloaded" });
+    await overviewReady(page).catch(() => {});
+    await page.waitForTimeout(600);
+    check("Back from detail: query, Relevance and first row restored", page.url() === ehicUrl && (await page.inputValue("#fides-search-input")) === "ehic" && (await sortState()).value === "relevance" && (await ids5())[0] === "cred:eu:ehic", page.url());
+    check("Back from detail: focus on the opened row", await page.evaluate(() => !!(document.activeElement && document.activeElement.closest && document.activeElement.closest("[data-credential-id='cred:eu:ehic']"))));
+    await page.click("#fides-search-clear");
+    await page.waitForTimeout(400);
+    sortNow = await sortState();
+    check("Clear: back to Likes without a query", sortNow.value === "rating" && sortNow.url === null && (await count(page)) === total, JSON.stringify(sortNow));
 
     // TS11 metadata flag.
     const ts11Label = page.locator("label:has([data-pilot-flag='ts11CompliantOnly'])");
@@ -248,6 +406,73 @@ async function smallTargets(page, selector) {
     await context.close();
   }
 
+  // ---------- Overview layout (Paper 20.7): search row, then the five filters, then quick filters ----------
+  const LONG_AUTHORITY = "Unique Identification Authority of India";
+  for (const width of [1440, 1320, 1319, 1280, 1279, 1200, 1199, 1100, 768, 390, 320]) {
+    const context = await newContext(browser, width);
+    const page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(`overview layout ${width}: ${e.message}`));
+    await open(page, OVERVIEW);
+    await overviewReady(page);
+    const tag = `overview layout ${width}`;
+    const measure = () => page.evaluate(() => {
+      const box = (el) => { if (!el || el.offsetParent === null) return null; const r = el.getBoundingClientRect(); return { top: Math.round(r.top), bottom: Math.round(r.bottom), left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), height: Math.round(r.height) }; };
+      const q = (s) => document.querySelector(`#fides-credential-catalog-root ${s}`);
+      const controls = [...document.querySelectorAll("#fides-credential-catalog-root .fides-uc-pilot__filter-row > *")]
+        .map((el) => ({ label: (el.querySelector(".fides-ds-popover__label, span") || el).textContent.trim(), box: box(el), target: box(el.querySelector(".fides-ds-popover__toggle") || el) }));
+      return {
+        search: box(q(".fides-uc-pilot__search-row")),
+        label: box(q(".fides-uc-pilot__search-label")),
+        ask: box(q(".fides-uc-pilot__ask")),
+        input: box(q(".fides-uc-pilot__search-input")),
+        submit: box(q(".fides-uc-pilot__search-submit")),
+        quick: box(q(".fides-credential-pilot__quick")),
+        toggle: box(q("[data-pilot-open]")),
+        controls,
+      };
+    });
+    const m = await measure();
+    check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
+    check(`${tag}: input and Search stay one pair`, m.input && m.submit && Math.abs(m.input.top - m.submit.top) <= 6 && m.submit.left > m.input.left, JSON.stringify([m.input, m.submit]));
+    if (m.ask) check(`${tag}: Ask FIDES beside the search label`, Math.abs(m.ask.top + m.ask.height / 2 - (m.label.top + m.label.height / 2)) <= 4 && m.ask.left > m.label.right, JSON.stringify([m.label, m.ask]));
+    const minTarget = width >= 1100 ? 40 : 44;
+    if (width >= 600) {
+      check(`${tag}: search group at most 720px including Search`, m.search.width <= 720 && m.submit.right - m.search.left <= 720, JSON.stringify(m.search));
+      const visible = m.controls.filter((c) => c.box);
+      check(`${tag}: five filter buttons`, visible.length === 5 && /Subject/.test(visible[0].label) && /More filters/.test(visible[4].label), visible.map((c) => c.label).join(" | "));
+      check(`${tag}: filters on their own row below the search`, visible.every((c) => c.box.top >= m.search.bottom), JSON.stringify(visible.map((c) => c.box.top)));
+      const rows = [...new Set(visible.map((c) => c.box.top))].map((top) => visible.filter((c) => c.box.top === top).length);
+      if (width >= 1100) check(`${tag}: the five filters together on one row`, rows.length === 1, rows.join("+"));
+      check(`${tag}: no grid with one loose fifth button`, !(rows.length === 2 && rows[1] === 1), rows.join("+"));
+      check(`${tag}: filters start at the search edge`, visible[0].box.left === m.search.left, `${visible[0].box.left}/${m.search.left}`);
+      check(`${tag}: quick filters below the filter row`, m.quick && m.quick.top >= Math.max(...visible.map((c) => c.box.bottom)), JSON.stringify(m.quick));
+      check(`${tag}: controls ${minTarget}px or more`, visible.every((c) => c.target.height >= minTarget) && m.submit.height >= minTarget && m.input.height >= minTarget, visible.map((c) => c.target.height).concat(m.submit.height).join("/"));
+      if (width >= 1100) check(`${tag}: controls 40px with a fine pointer`, visible.every((c) => c.target.height === 40) && m.submit.height === 40, visible.map((c) => c.target.height).join("/"));
+      if ([1440, 1200, 768].includes(width)) {
+        await page.click("[data-pilot-key='authority'] summary, [data-pilot-key='authority'] button");
+        await page.waitForTimeout(200);
+        const option = page.locator(`[data-pilot-key='authority'] input[value='${LONG_AUTHORITY}']`);
+        if (await option.count()) {
+          await option.check();
+          await page.waitForTimeout(400);
+          await page.keyboard.press("Escape");
+          await page.waitForTimeout(200);
+          const after = await measure();
+          const authority = after.controls[3];
+          const rowsAfter = [...new Set(after.controls.filter((c) => c.box).map((c) => c.box.top))].length;
+          check(`${tag}: long selected label stays within its button`, authority.box.width <= 260 && (await overflow(page)) <= 0 && (width < 1100 || rowsAfter === 1), `${authority.box.width}px, ${rowsAfter} rows`);
+        } else {
+          check(`${tag}: long authority option present`, false);
+        }
+      }
+    } else {
+      check(`${tag}: one Filters button instead of the filter row`, !!m.toggle && m.controls.every((c) => !c.box) && m.toggle.height >= 44, JSON.stringify(m.toggle));
+      check(`${tag}: search controls at least 44px`, m.input.height >= 44 && m.submit.height >= 44, `${m.input.height}/${m.submit.height}`);
+    }
+    if ([1440, 1200, 768, 390].includes(width)) await page.screenshot({ path: path.join(OUT, `overview-layout-${width}.png`) });
+    await context.close();
+  }
+
   // ---------- Overview, tablet and mobile ----------
   for (const width of [768, 390, 320]) {
     const context = await newContext(browser, width);
@@ -307,6 +532,32 @@ async function smallTargets(page, selector) {
       const tag = `${id.split(":").pop()} ${width}`;
       check(`${tag}: renders the record`, (await page.getAttribute(".fides-credential-detail", "data-credential-id")) === id);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, String(await overflow(page)));
+      const formatLabels = await page.evaluate(() => {
+        const labels = [...document.querySelectorAll(".fides-credential-detail__hero .fides-credential-format-label")];
+        const hero = document.querySelector(".fides-credential-detail__hero").getBoundingClientRect();
+        const facts = document.querySelector(".fides-credential-detail__facts");
+        return {
+          texts: labels.map((l) => l.textContent.trim()),
+          styles: labels.map((l) => { const cs = getComputedStyle(l); return `${cs.fontSize}/${cs.lineHeight}/${cs.fontWeight} ${cs.color} ${cs.backgroundColor} ${cs.borderTopWidth} ${cs.borderTopColor} ${cs.paddingTop} ${cs.paddingLeft} ${cs.cursor}`; }),
+          focusable: labels.filter((l) => l.tabIndex >= 0 || l.closest("a, button") || l.getAttribute("role")).length,
+          inside: labels.every((l) => { const r = l.getBoundingClientRect(); return r.left >= hero.left - 1 && r.right <= hero.right + 1; }),
+          subjectApart: !facts || !labels.some((l) => facts.contains(l)),
+          facts: facts ? facts.textContent.trim() : "",
+          formatsSection: !!document.querySelector("#formats[data-credential-formats]"),
+        };
+      });
+      check(`${tag}: one static Formats label per format`, formatLabels.texts.length > 0 && new Set(formatLabels.texts).size === formatLabels.texts.length && formatLabels.focusable === 0 && formatLabels.formatsSection, JSON.stringify(formatLabels.texts));
+      check(`${tag}: format labels 14/22/500, brand-strong on info surface, 1px divider border, default cursor`, formatLabels.styles.every((st) => st === "14px/22px/500 rgb(8, 72, 163) rgb(241, 246, 255) 1px rgb(143, 168, 198) 2px 8px default"), formatLabels.styles[0]);
+      check(`${tag}: format labels wrap inside the hero; subject kept apart`, formatLabels.inside && formatLabels.subjectApart && (!formatLabels.facts || /^Subject · /.test(formatLabels.facts)), formatLabels.facts);
+      if (id === "cred:eu:ehic") check(`${tag}: EHIC labels mDoc and SD-JWT VC`, formatLabels.texts.join() === "mDoc,SD-JWT VC", formatLabels.texts.join());
+      if (width === 1440 && id === "cred:eu:ehic") {
+        const label = page.locator(".fides-credential-format-label").first();
+        const before = await label.evaluate((l) => getComputedStyle(l).backgroundColor + getComputedStyle(l).textDecorationLine);
+        await label.hover();
+        await page.waitForTimeout(200);
+        check(`${tag}: format label has no hover state`, (await label.evaluate((l) => getComputedStyle(l).backgroundColor + getComputedStyle(l).textDecorationLine)) === before);
+        await page.mouse.move(0, 0);
+      }
       if (width <= 390) {
         const small = await smallTargets(page, ".fides-credential-detail .fides-ds-button, .fides-credential-detail .fides-credential-like__button, .fides-credential-detail .fides-credential-explain, .fides-credential-detail .fides-ds-collapsible__toggle, .fides-credential-detail [data-fides-ds-show-all-button], .fides-credential-detail .fides-ds-show-all__toggle, .fides-credential-detail .fides-credential-eco__row, .fides-credential-detail .fides-credential-formats__tab");
         check(`${tag}: interactive targets at least 44px`, small.length === 0, small.slice(0, 4).join(", "));
@@ -484,18 +735,43 @@ async function smallTargets(page, selector) {
 
   // ---------- Ecosystem connections (Paper 20.36 / 20.37 / 20.38) ----------
   const ecoState = (page) => page.evaluate(() => {
+    const visibleText = (el) => (el && el.offsetParent !== null ? el.innerText.replace(/\s+/g, " ").trim() : "");
     const group = (key) => {
+      const groupEl = document.querySelector(`.fides-credential-eco__group--${key}`);
+      if (!groupEl) return null;
+      const cs = getComputedStyle(groupEl);
+      const r = groupEl.getBoundingClientRect();
+      const box = { top: Math.round(r.top + scrollY), left: Math.round(r.left), width: Math.round(r.width), height: Math.round(r.height), bg: cs.backgroundColor, border: `${cs.borderTopWidth} ${cs.borderTopStyle} ${cs.borderTopColor}`, side: `${cs.borderLeftWidth} ${cs.borderLeftStyle} ${cs.borderLeftColor}` };
+      const badgeEl = groupEl.querySelector(".fides-credential-eco__count");
+      const bs = badgeEl ? getComputedStyle(badgeEl) : null;
+      const badge = badgeEl && badgeEl.offsetParent !== null && bs.display !== "none"
+        ? { text: badgeEl.textContent.trim(), font: `${bs.fontSize}/${bs.lineHeight}/${bs.fontWeight}`, bg: bs.backgroundColor, padding: `${bs.paddingTop} ${bs.paddingRight}`, gap: Math.round(badgeEl.getBoundingClientRect().left - groupEl.querySelector(".fides-credential-eco__question").getBoundingClientRect().right) }
+        : null;
+      const title = groupEl.querySelector(".fides-credential-eco__title");
+      const ts = getComputedStyle(title.querySelector(".fides-credential-eco__question") || title);
+      if (groupEl.classList.contains("fides-credential-eco__group--missing")) {
+        return {
+          missing: true,
+          box,
+          badge,
+          headingTag: title.tagName,
+          titleFont: `${ts.fontSize}/${ts.lineHeight}`,
+          role: visibleText(groupEl.querySelector(".fides-credential-eco__role")),
+          state: visibleText(groupEl.querySelector(".fides-credential-eco__missing")),
+          explanation: visibleText(groupEl.querySelector(".fides-credential-eco__missing-text")),
+          controls: groupEl.querySelectorAll("a, button, ul, [tabindex], [aria-expanded], .fides-ds-collapsible__chevron, svg").length,
+          collapsible: groupEl.hasAttribute("data-fides-ds-collapsible"),
+          text: groupEl.innerText.replace(/\s+/g, " ").trim(),
+        };
+      }
       const list = document.getElementById(`eco-${key}-list`);
-      if (!list) return null;
       const rows = [...list.children];
       const toggle = list.nextElementSibling && list.nextElementSibling.classList.contains("fides-ds-show-all__toggle") ? list.nextElementSibling : null;
       const catalog = list.parentElement.querySelector(".fides-credential-eco__catalog");
       const body = document.getElementById(`eco-${key}-body`);
-      const groupEl = list.closest(".fides-credential-eco__group");
       const head = groupEl.querySelector(".fides-ds-collapsible__toggle");
-      const cs = getComputedStyle(groupEl);
-      const r = groupEl.getBoundingClientRect();
       return {
+        missing: false,
         total: rows.length,
         visible: rows.filter((li) => li.offsetParent !== null).length,
         toggle: toggle ? { text: toggle.textContent.trim(), expanded: toggle.getAttribute("aria-expanded"), visible: toggle.offsetParent !== null } : null,
@@ -503,7 +779,9 @@ async function smallTargets(page, selector) {
         catalogHref: catalog ? catalog.querySelector("a").getAttribute("href") : null,
         bodyVisible: !!body && body.offsetParent !== null,
         accordion: head ? { expanded: head.getAttribute("aria-expanded"), height: Math.round(head.getBoundingClientRect().height), label: head.innerText.replace(/\s+/g, " ").trim() } : null,
-        box: { top: Math.round(r.top + scrollY), left: Math.round(r.left), width: Math.round(r.width), bg: cs.backgroundColor, border: `${cs.borderTopWidth} ${cs.borderTopStyle} ${cs.borderTopColor}` },
+        box,
+        badge,
+        titleFont: `${ts.fontSize}/${ts.lineHeight}`,
         chevron: head ? !!head.querySelector(".fides-ds-collapsible__chevron") : false,
         names: rows.map((li) => li.querySelector(".fides-credential-eco__name").textContent.trim()),
       };
@@ -516,7 +794,9 @@ async function smallTargets(page, selector) {
       issuers: group("issuers"),
       wallets: group("wallets"),
       rps: group("rps"),
-      groupKeys: eco ? [...eco.querySelectorAll(".fides-credential-eco__group")].map((g) => g.querySelector("ul").id.replace(/^eco-|-list$/g, "")) : [],
+      groupKeys: eco ? [...eco.querySelectorAll(".fides-credential-eco__group")].map((g) => (g.className.match(/__group--(issuers|wallets|rps)\b/) || [])[1]) : [],
+      missingNote: eco ? visibleText(eco.querySelector(".fides-credential-eco__missing-note")) : "",
+      navLink: !!document.querySelector(".fides-uc-detail__sections a[href='#ecosystem']"),
       note: eco ? (eco.querySelector(".fides-credential-eco__note") || {}).textContent || "" : "",
       arrowsBetween: eco ? eco.querySelectorAll(".fides-credential-flow, .fides-credential-eco__connector").length : 0,
       scrollers,
@@ -528,7 +808,9 @@ async function smallTargets(page, selector) {
   const sortedNames = (names) => [...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
   const NOTE = "These catalog connections do not guarantee that every issuer, wallet and service works together.";
 
-  for (const width of [1440, 1280, 1200, 768, 390, 320]) {
+  const BADGE = { font: "14px/22px/400", bg: "rgb(241, 246, 255)", padding: "2px 8px" };
+  const badgeOk = (b, n) => !!b && b.text === String(n) && b.font === BADGE.font && b.bg === BADGE.bg && b.padding === BADGE.padding;
+  for (const width of [1440, 1280, 1279, 1200, 768, 390, 320]) {
     const context = await newContext(browser, width);
     const page = await context.newPage();
     page.on("pageerror", (e) => errors.push(`eco ${width}: ${e.message}`));
@@ -551,6 +833,13 @@ async function smallTargets(page, selector) {
       rps: await page.textContent("#eco-rps-title"),
     };
     check(`${tag}: headings keep question and dynamic count`, /Who issues it\?/.test(heads.issuers) && heads.issuers.includes(String(s.issuers.total)) && /Which wallets\?/.test(heads.wallets) && heads.wallets.includes(String(s.wallets.total)) && /Where is it accepted\?/.test(heads.rps) && heads.rps.includes(String(s.rps.total)), JSON.stringify(heads));
+    check(`${tag}: no Not specified state when every role has links`, !s.issuers.missing && !s.wallets.missing && !s.rps.missing && s.missingNote === "", s.missingNote);
+    check(`${tag}: ecosystem nav entry`, s.navLink);
+    if (width >= 1280) {
+      check(`${tag}: small 14/22 count badge beside the 20/26 heading, 8px apart`, ["issuers", "wallets", "rps"].every((k) => badgeOk(s[k].badge, s[k].total) && s[k].titleFont === "20px/26px" && Math.abs(s[k].badge.gap - 8) <= 1), JSON.stringify(["issuers", "wallets", "rps"].map((k) => [s[k].badge, s[k].titleFont])));
+    } else {
+      check(`${tag}: closed heads show the count once, in Role · N`, ["issuers", "wallets", "rps"].every((k) => !s[k].badge && (s[k].accordion.label.match(/\d+/g) || []).length === 1), ["issuers", "wallets", "rps"].map((k) => s[k].accordion.label).join(" | "));
+    }
 
     if (width >= 1280) {
       check(`${tag}: full content width`, s.width >= s.layoutWidth - 2, `${s.width}/${s.layoutWidth}`);
@@ -679,6 +968,7 @@ async function smallTargets(page, selector) {
       await page.waitForTimeout(100);
       s = await ecoState(page);
       check(`${tag}: keyboard opens the wallets with the full list`, s.wallets.accordion.expanded === "true" && s.wallets.visible === s.wallets.total, `${s.wallets.visible}/${s.wallets.total}`);
+      check(`${tag}: open head shows the small badge, the role line without a second count`, badgeOk(s.wallets.badge, s.wallets.total) && !/Wallets · \d/.test(s.wallets.accordion.label) && (s.wallets.accordion.label.match(/\d+/g) || []).length === 1, `${s.wallets.accordion.label} ${JSON.stringify(s.wallets.badge)}`);
       check(`${tag}: issuers and relying parties stay closed`, s.issuers.accordion.expanded === "false" && !s.issuers.bodyVisible && s.rps.accordion.expanded === "false" && !s.rps.bodyVisible);
       check(`${tag}: wallet catalog route and Show fewer in the open group`, s.wallets.catalog && s.wallets.toggle && /Show fewer wallets/.test(s.wallets.toggle.text), s.wallets.toggle && s.wallets.toggle.text);
       const walletText = await page.textContent("#eco-wallets-body");
@@ -708,16 +998,23 @@ async function smallTargets(page, selector) {
     await context.close();
   }
 
-  // Records with few or no relations.
-  for (const width of [1440, 1100, 768, 390, 320]) {
+  // Records with few or no relations: the three roles stay; a role without links says Not specified.
+  const MISSING = {
+    issuers: ["Issuers", "No issuer is recorded for this credential type."],
+    wallets: ["Wallets", "No wallet is recorded through the linked relying parties."],
+    rps: ["Relying parties", "No relying party is recorded for this credential type."],
+  };
+  for (const width of [1440, 1320, 1319, 1280, 1279, 1200, 1199, 1100, 768, 390, 320]) {
     const context = await newContext(browser, width);
     const page = await context.newPage();
+    page.on("pageerror", (e) => errors.push(`eco cases ${width}: ${e.message}`));
     const cases = [
-      { id: "cred:eu:ehic", groups: "issuers,wallets,rps" },
-      { id: "cred:eu:loyalty", groups: "issuers,rps" },
-      { id: "cred:eduwallet:open-badge", groups: "wallets,rps" },
-      { id: "cred:webuild:eucc", groups: "issuers" },
-      { id: "cred:eduwallet:exam-enrollment", groups: "" },
+      { id: "cred:eu:ehic", missing: [] },
+      { id: "cred:eu:loyalty", missing: ["wallets"] },
+      { id: "cred:eduwallet:open-badge", missing: ["issuers"] },
+      { id: "cred:webuild:eucc", missing: ["wallets", "rps"] },
+      { id: "cred:uidai:aadhaar", missing: ["issuers", "wallets"] },
+      { id: "cred:eduwallet:exam-enrollment", missing: null },
     ];
     for (const c of cases) {
       await open(page, DETAIL + encodeURIComponent(c.id));
@@ -725,28 +1022,64 @@ async function smallTargets(page, selector) {
       await page.waitForTimeout(200);
       const tag = `eco ${c.id.split(":").pop()} ${width}`;
       const s = await ecoState(page);
-      if (!c.groups) {
-        check(`${tag}: no ecosystem band without relations`, !s.present && (await page.locator("a[href='#ecosystem']").count()) === 0);
+      if (!c.missing) {
+        check(`${tag}: no links at all hides the section and its nav entry`, !s.present && !s.navLink && (await page.locator("a[href='#ecosystem']").count()) === 0);
         continue;
       }
-      check(`${tag}: groups ${c.groups}`, s.groupKeys.join() === c.groups, s.groupKeys.join());
+      const keys = ["issuers", "wallets", "rps"];
+      const known = keys.filter((k) => !c.missing.includes(k));
+      check(`${tag}: all three roles in order`, s.groupKeys.join() === "issuers,wallets,rps", s.groupKeys.join());
+      check(`${tag}: ecosystem nav entry`, s.navLink);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
-      const wantNote = c.groups.includes("wallets") ? NOTE : "These catalog connections do not guarantee that every issuer and service works together.";
-      check(`${tag}: catalog note`, s.note.trim() === wantNote, s.note);
-      const keys = c.groups.split(",");
-      const columns = width >= 1280 || (width >= 1100 && keys.length < 3);
-      if (columns) {
+      check(`${tag}: compatibility note kept`, s.note.trim() === NOTE, s.note);
+      const wide = width >= 1280;
+      if (wide) {
         const tops = keys.map((k) => s[k].box.top);
-        check(`${tag}: groups side by side as columns`, tops.every((t) => t === tops[0]) && keys.every((k) => !s[k].accordion), JSON.stringify(tops));
-        if (keys.length > 1) check(`${tag}: ${keys.length} equal columns fill the band`, Math.abs(s[keys[0]].box.width - s[keys[1]].box.width) <= 1 && s[keys[0]].box.width * keys.length + 32 * (keys.length - 1) >= s.width - 2, `${s[keys[0]].box.width}/${s.width}`);
-        for (const k of keys) {
-          const n = s[k].total;
+        check(`${tag}: three equal columns from 1280px`, tops.every((t) => t === tops[0]) && s.issuers.box.left < s.wallets.box.left && s.wallets.box.left < s.rps.box.left && Math.abs(s.issuers.box.width - s.wallets.box.width) <= 1 && Math.abs(s.wallets.box.width - s.rps.box.width) <= 1, JSON.stringify(keys.map((k) => s[k].box)));
+        check(`${tag}: same 2px top rule on every column`, keys.every((k) => s[k].box.border === s.issuers.box.border && /^2px solid/.test(s[k].box.border)), JSON.stringify(keys.map((k) => s[k].box.border)));
+      } else {
+        const lefts = keys.map((k) => s[k].box.left);
+        check(`${tag}: stacked below 1280px`, s.issuers.box.top < s.wallets.box.top && s.wallets.box.top < s.rps.box.top && lefts.every((l) => l === lefts[0]), JSON.stringify(keys.map((k) => s[k].box)));
+      }
+      check(`${tag}: Not specified note only below 1280px and only with a missing role`, s.missingNote === (!wide && c.missing.length ? "Not specified means no link is recorded in this catalog." : ""), s.missingNote);
+      for (const k of c.missing) {
+        const g = s[k];
+        check(`${tag}: ${k} is a static section with a real heading`, g.missing && !g.collapsible && g.controls === 0 && g.headingTag === "H3" && !g.badge, JSON.stringify({ controls: g.controls, collapsible: g.collapsible, tag: g.headingTag, badge: g.badge }));
+        if (wide) {
+          check(`${tag}: ${k} says Not specified and why`, g.role === MISSING[k][0] && g.state === "Not specified" && g.explanation === MISSING[k][1], JSON.stringify([g.role, g.state, g.explanation]));
+        } else {
+          check(`${tag}: ${k} shows Role · Not specified directly`, g.role === `${MISSING[k][0]} · Not specified` && g.state === "" && g.explanation === "", JSON.stringify([g.role, g.state, g.explanation]));
+          if (known.length) {
+            const ref = s[known[0]].box;
+            check(`${tag}: ${k} has the same box as a closed accordion`, g.box.bg === ref.bg && g.box.border === ref.border && g.box.side === ref.side && [-26, 0, 26].some((line) => Math.abs(g.box.height - ref.height - line) <= 2) && g.box.width === ref.width, JSON.stringify([g.box, ref]));
+          }
+        }
+        check(`${tag}: ${k} has no zero count or empty action`, !/\b0\b|View all|Open these/.test(g.text), g.text);
+      }
+      for (const k of known) {
+        const n = s[k].total;
+        if (wide) {
+          check(`${tag}: ${k} column without accordion, badge ${n}`, !s[k].accordion && badgeOk(s[k].badge, n), JSON.stringify(s[k].badge));
           check(`${tag}: ${k} shows ${Math.min(n, 3)} of ${n}; toggle only above three`, s[k].visible === Math.min(n, 3) && (n > 3 ? !!s[k].toggle : !s[k].toggle), JSON.stringify(s[k].toggle));
           check(`${tag}: ${k} catalog route only for more than one record`, n > 1 && n <= 3 ? s[k].catalog : n === 1 ? !s[k].catalog : true);
+        } else {
+          check(`${tag}: ${k} closed accordion, count once in Role · ${n}`, s[k].accordion && s[k].accordion.expanded === "false" && s[k].chevron && !s[k].badge && s[k].accordion.label.endsWith(`· ${n}`) && (s[k].accordion.label.match(/\d+/g) || []).length === 1, s[k].accordion && s[k].accordion.label);
         }
-      } else {
-        check(`${tag}: closed accordions`, keys.every((k) => s[k].accordion && s[k].accordion.expanded === "false"));
       }
+      if (!wide && width <= 390) {
+        const small = await smallTargets(page, ".fides-credential-eco .fides-ds-collapsible__toggle, .fides-credential-eco a, .fides-credential-eco button");
+        check(`${tag}: targets at least 44px`, small.length === 0, small.slice(0, 4).join(", "));
+      }
+      if (c.id === "cred:uidai:aadhaar") {
+        check(`${tag}: one relying party (Multipaz Verifier)`, s.rps.total === 1 && s.rps.names[0] === "Multipaz Verifier", JSON.stringify(s.rps.names));
+        if (!wide) {
+          await page.click("#eco-rps-title .fides-ds-collapsible__toggle");
+          const open1 = await ecoState(page);
+          check(`${tag}: relying parties open to the one row, no View all or list route`, open1.rps.visible === 1 && !open1.rps.toggle && !open1.rps.catalog && badgeOk(open1.rps.badge, 1), JSON.stringify(open1.rps));
+        }
+        if (width === 1440 || width === 390) await page.screenshot({ path: path.join(OUT, `ecosystem-aadhaar-${width}.png`), fullPage: true });
+      }
+      if (c.id === "cred:webuild:eucc" && (width === 1440 || width === 390)) await page.screenshot({ path: path.join(OUT, `ecosystem-eucc-${width}.png`), fullPage: true });
       if (c.id === "cred:eduwallet:open-badge") {
         const walletHref = await page.getAttribute("#eco-wallets-list .fides-credential-eco__row", "href");
         check(`${tag}: single wallet links to its local record`, /\/fides-design-pilot\/wallet\/\?wallet=/.test(walletHref || ""), walletHref);
