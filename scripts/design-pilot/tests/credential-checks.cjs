@@ -81,6 +81,24 @@ async function smallTargets(page, selector) {
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
+
+  // Classic modal link builder (catalogDeepLink in credential-catalog.js), without a browser.
+  {
+    const source = fs.readFileSync(path.resolve(__dirname, "../../../../credential-catalog/wordpress-plugin/fides-credential-catalog/assets/credential-catalog.js"), "utf8");
+    const match = source.match(/\n  function catalogDeepLink\([\s\S]*?\n  }\n/);
+    check("classic links: catalogDeepLink present", !!match);
+    if (match) {
+      const link = new Function(`${match[0]}; return catalogDeepLink;`)();
+      const rp = "https://fides.community/ecosystem-explorer/relying-party-catalog/";
+      check("classic links: one relying party", link(rp, "rp", "eideasy-afterhours-cinema-demo") === `${rp}?rp=eideasy-afterhours-cinema-demo`);
+      check("classic links: several ids, literal commas, encoded once", link(rp, "rps", ["a", "b:c"]) === `${rp}?rps=a,b%3Ac`);
+      check("classic links: base without trailing slash", link("https://example.org/rp", "rp", "a") === "https://example.org/rp/?rp=a");
+      check("classic links: base query kept", link("https://example.org/rp/?lang=nl", "rps", ["a", "b"]) === "https://example.org/rp/?lang=nl&rps=a,b");
+      check("classic links: same parameter and fragment replaced", link("https://example.org/rp/?rp=old&lang=nl#top", "rp", "new") === "https://example.org/rp/?lang=nl&rp=new");
+      check("classic links: empty base gives no link", link("", "rp", "a") === "");
+    }
+  }
+
   const browser = await chromium.launch();
   const errors = [];
 
@@ -190,22 +208,23 @@ async function smallTargets(page, selector) {
       return !!(el && el.closest && el.closest(`[data-credential-id="${id}"]`));
     }, rowId));
 
-    // Sort, view mode, pager.
+    // Sort, list only (no list/grid switch, also with a stored grid preference), pager.
+    await page.evaluate(() => localStorage.setItem("fides-credential-pilot-view", "grid"));
     await open(page, OVERVIEW);
     await overviewReady(page);
+    check("view: no list/grid switch", (await page.locator("[data-pilot-view-mode], .fides-credential-pilot__view").count()) === 0);
+    check("view: rows only, no tiles (old grid preference ignored)", (await page.locator(".fides-ds-card--tile, .fides-ds-cards--tiles").count()) === 0 && (await page.locator(".fides-ds-card--row").count()) > 0);
     await page.selectOption(".fides-uc-pilot__sort-select", "name");
     await page.waitForTimeout(300);
     check("sort: sort=name in the URL", new URL(page.url()).searchParams.get("sort") === "name");
     const names = await page.$$eval(".fides-ds-card__title", (els) => els.slice(0, 5).map((e) => e.textContent.trim().toLowerCase()));
     check("sort: names ascending", names.join("|") === [...names].sort((a, b) => a.localeCompare(b)).join("|"), names.join(" | "));
-    await page.click("[data-pilot-view-mode='grid']");
-    await page.waitForTimeout(300);
-    check("view: grid shows tiles", (await page.locator(".fides-ds-cards--tiles .fides-ds-card--tile").count()) > 0);
-    await page.reload({ waitUntil: "domcontentloaded" });
-    await overviewReady(page);
-    check("view: grid remembered after reload", (await page.locator(".fides-ds-card--tile").count()) > 0);
-    await page.click("[data-pilot-view-mode='list']");
-    await page.waitForTimeout(200);
+    const barRight = await page.evaluate(() => {
+      const bar = document.querySelector(".fides-uc-pilot__results-bar").getBoundingClientRect();
+      const sort = document.querySelector(".fides-uc-pilot__sort").getBoundingClientRect();
+      return Math.round(bar.right - sort.right);
+    });
+    check("results bar: sort sits at the right edge", barRight >= 0 && barRight <= 2, `${barRight}px`);
     const next = page.locator(".fides-catalog-pagination a, [data-pilot-pagination-slot] a").filter({ hasText: "2" }).first();
     if (await next.count()) {
       const before = await page.$$eval(".fides-ds-card[data-credential-id]", (cards) => cards.map((c) => c.getAttribute("data-credential-id")).join(","));
@@ -237,7 +256,7 @@ async function smallTargets(page, selector) {
     await open(page, OVERVIEW);
     await overviewReady(page);
     check(`overview ${width}: no horizontal overflow`, (await overflow(page)) <= 0);
-    check(`overview ${width}: list only (no view toggle)`, !(await page.isVisible(".fides-credential-pilot__view")));
+    check(`overview ${width}: list only (no view toggle)`, (await page.locator("[data-pilot-view-mode], .fides-credential-pilot__view, .fides-ds-card--tile").count()) === 0);
     const toggle = page.locator("[data-pilot-open]");
     if (await toggle.isVisible()) {
       await toggle.click();
@@ -563,9 +582,16 @@ async function smallTargets(page, selector) {
       const toggle = page.locator("#eco-wallets-list + .fides-ds-show-all__toggle");
       await toggle.scrollIntoViewIfNeeded();
       await toggle.focus();
-      await page.waitForTimeout(200);
       const toggleTop = () => page.evaluate(() => Math.round(document.querySelector("#eco-wallets-list + .fides-ds-show-all__toggle").getBoundingClientRect().top));
-      const topBefore = await toggleTop();
+      // Wait until late layout (fonts, logos) has settled with the button in view.
+      let topBefore = await toggleTop();
+      for (let i = 0; i < 20; i++) {
+        await page.waitForTimeout(150);
+        const now = await toggleTop();
+        if (now === topBefore && now >= 0 && now < 860) break;
+        if (now < 0 || now >= 860) await toggle.scrollIntoViewIfNeeded();
+        topBefore = await toggleTop();
+      }
       await page.keyboard.press("Space");
       await page.waitForTimeout(100);
       s = await ecoState(page);

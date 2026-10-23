@@ -360,8 +360,8 @@ refresh.
 
 - Overview: `credential-catalog.js` pilot path (`data-design="pilot"`), same
   rows, popovers, More filters, mobile Filters dialog, pager and return
-  context as the other catalogs; list is the default, Grid from 1024 px
-  (remembered in `localStorage`). Styles: `credential-design.css` on top of
+  context as the other catalogs; compact rows only (no list/grid switch, as
+  in Paper; a stored grid preference is ignored). Styles: `credential-design.css` on top of
   `organization-design.css`. Detail: `Fides_Credential_Detail_Page`
   (`[fides_credential_detail]`), data and rules in `Fides_Credential_Design`.
 - URL state: `q`, `sort` (default `rating`), `catalog_page`, `subject`,
@@ -440,7 +440,7 @@ refresh.
   status: issuer `environment`, relying-party `readiness` as Production /
   Pilot / Demo / Technical demo, otherwise "Not specified". Rows open
   `?issuer=` / `?rp=` / the wallet record (pilot `?wallet=`, otherwise
-  `?wallets=`); under a full list the filtered catalog route (`?issuers=a,b` /
+  `?wallet=` in the wallet catalog, which opens `/wallet/<id>/`); under a full list the filtered catalog route (`?issuers=a,b` /
   `?wallets=a,b` / `?rps=a,b`) appears. Empty groups are left out; up to
   three rows need no toggle.
   No internal scroll areas. The closing is the shared light-blue band of 20.6.
@@ -450,10 +450,29 @@ refresh.
   screen, for every show-all list. A collapsible may set
   `data-fides-ds-wide-min="<px>"` to stay an accordion up to a wider
   breakpoint than the default 1100 px.
+- Public catalog links (classic modal and pilot): defaults are constants in
+  `fides-credential-catalog.php` — relying parties
+  `https://fides.community/ecosystem-explorer/relying-party-catalog/`
+  (the former `/community-tools/relying-party-catalog/` now redirects to an
+  image), wallets `https://fides.community/ecosystem-explorer/personal-wallets/`
+  (the former `/community-tools/personal-wallets/` works only through a
+  WordPress redirect; `https://wallets.fides.community` does not resolve).
+  Stored options win; missing or empty options use the default. A query in a
+  stored base is kept. Local sites keep their local wallet, organization and
+  trust-scheme routes. Stored former defaults are not rewritten at runtime:
+  `credential-catalog/scripts/migrate-catalog-url-options.php` (WP-CLI
+  `eval-file`; dry run by default, `apply <backup.json>`, `rollback
+  <backup.json>`) replaces only those exact values and keeps custom ones.
 - Rights: `Fides_Credential_Design::can_edit()` mirrors
   `userCanEditCatalogItem`; guests see "Sign in to suggest an update".
 - Tests: `tests/credential-design-behaviour.php` (in `run-tests.sh`, real
-  records plus fixtures) and `tests/run-credential-checks.sh` (overview
+  records plus fixtures, including link building for defaults, stored
+  options and the public wallet fallback),
+  `tests/run-public-link-checks.sh` (read-only, needs network: opens the real
+  fides.community destinations of the classic modal and pilot links and checks
+  HTML, the selected record or filter, and Back from a real click) and
+  `tests/run-credential-checks.sh` (offline, labelled stub for external
+  links; overview
   state, dialogs, five records at 1440/1280/768/390/320 including the column
   split, navigation and narrow-screen accordion states, the ecosystem band
   for Age Verification at 1440/1280/1200/768/390/320 including wallet links

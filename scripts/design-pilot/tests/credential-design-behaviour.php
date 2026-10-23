@@ -365,7 +365,7 @@ foreach ($av_wallets as $wallet) {
     $via = $sorted($via);
     $meta = 'Named by ' . $via[0] . (count($via) > 1 ? ' and other services' : '');
     $check($wallet['via'] === $via && $has($av_eco, 'href="' . esc_url(Fides_Credential_Design::wallet_url($wallet['id'])) . '"><span class="fides-credential-eco__text"><span class="fides-org-eco__name fides-credential-eco__name">' . esc_html($wallet['name']) . '</span><span class="fides-credential-eco__meta">' . esc_html($meta) . '</span>'), "AV: wallet {$wallet['id']} row names its relying party and opens its record ($meta)");
-    $check($has(Fides_Credential_Design::wallet_url($wallet['id']), 'wallet=' . rawurlencode($wallet['id'])) || $has(Fides_Credential_Design::wallet_url($wallet['id']), 'wallets=' . rawurlencode($wallet['id'])), "AV: wallet {$wallet['id']} link targets that wallet id");
+    $check((bool) preg_match('/[?&]wallet=' . preg_quote(rawurlencode($wallet['id']), '/') . '(&|$)/', Fides_Credential_Design::wallet_url($wallet['id'])), "AV: wallet {$wallet['id']} link opens that wallet record (?wallet=)");
 }
 $check($has($av_eco, 'Open these ' . $nw . ' in the wallet catalog') && $has($av_eco, esc_url(Fides_Credential_Design::wallets_catalog_url($wallet_ids))) && $has(Fides_Credential_Design::wallets_catalog_url($wallet_ids), 'wallets='), 'AV: filtered wallet catalog route');
 $check($has($av_eco, '<p class="fides-ds-meta fides-credential-eco__note">These catalog connections do not guarantee that every issuer, wallet and service works together.</p>'), 'AV: catalog connections are not presented as compatibility');
@@ -454,6 +454,55 @@ $check($has($overview, '<template id="' . Fides_Credential_Design::TS11_TEMPLATE
 $check($has($overview, 'Add credential type'), 'overview: contribute band');
 $classic = do_shortcode('[fides_credential_catalog]');
 $check(! $has($classic, 'data-design="pilot"'), 'classic shortcode stays classic');
+
+// ---------- Public catalog links (defaults, stored options, public wallet fallback) ----------
+
+$rp_default     = 'https://fides.community/ecosystem-explorer/relying-party-catalog/';
+$wallet_default = 'https://fides.community/ecosystem-explorer/personal-wallets/';
+$check(FIDES_CREDENTIAL_CATALOG_DEFAULT_RP_CATALOG_URL === $rp_default, 'RP default is the ecosystem-explorer catalog');
+$check(FIDES_CREDENTIAL_CATALOG_DEFAULT_WALLET_CATALOG_URL === $wallet_default, 'wallet default is the ecosystem-explorer personal wallets catalog');
+
+$with_option = static function (string $option, $value, callable $run) {
+    $filter = static function () use ($value) {
+        return $value;
+    };
+    add_filter("pre_option_{$option}", $filter);
+    try {
+        return $run();
+    } finally {
+        remove_filter("pre_option_{$option}", $filter);
+    }
+};
+$rp_opt     = 'fides_credential_catalog_rp_catalog_url';
+$wallet_opt = 'fides_credential_catalog_wallet_catalog_url';
+
+$check(Fides_Credential_Design::rp_url('eideasy-afterhours-cinema-demo') === $rp_default . '?rp=eideasy-afterhours-cinema-demo', 'default: one relying party opens ?rp= in the ecosystem-explorer catalog');
+$check(Fides_Credential_Design::rps_catalog_url(array('a', 'b:c')) === $rp_default . '?rps=a,b%3Ac', 'default: several relying parties filter ?rps= with literal commas and ids encoded once');
+$check(fides_credential_catalog_url_option($rp_opt, $rp_default) === $rp_default, 'missing option: default');
+$check($with_option($rp_opt, '', static fn() => Fides_Credential_Design::rp_url('a')) === $rp_default . '?rp=a', 'empty stored option: falls back to the default');
+$check($with_option($rp_opt, '   ', static fn() => Fides_Credential_Design::rp_url('a')) === $rp_default . '?rp=a', 'blank stored option: falls back to the default');
+$check($with_option($rp_opt, 'https://staging.example.org/rp', static fn() => Fides_Credential_Design::rp_url('a')) === 'https://staging.example.org/rp/?rp=a', 'custom host and route are kept (trailing slash added)');
+$check($with_option($rp_opt, 'https://example.org/rp/?lang=nl', static fn() => Fides_Credential_Design::rps_catalog_url(array('a', 'b'))) === 'https://example.org/rp/?lang=nl&rps=a,b', 'a query in the stored base is kept');
+$check($with_option($rp_opt, 'https://example.org/rp/?rp=old#top', static fn() => Fides_Credential_Design::rp_url('new')) === 'https://example.org/rp/?rp=new', 'a stale ?rp= and fragment in the base are replaced');
+$check($with_option($rp_opt, 'https://fides.community/community-tools/relying-party-catalog/', static fn() => Fides_Credential_Design::rp_url('a')) === 'https://fides.community/community-tools/relying-party-catalog/?rp=a', 'a stored former default is not rewritten at runtime (migration script)');
+
+// Public wallet fallback: a non-local site and a wallet without a pilot record.
+$public_site = static function () {
+    return 'https://fides.community';
+};
+add_filter('site_url', $public_site);
+$check(! fides_credential_catalog_is_local_site(), 'public-site simulation is active');
+$check(Fides_Credential_Design::wallet_url('no-pilot-wallet') === $wallet_default . '?wallet=no-pilot-wallet', 'public fallback: one wallet opens its record with ?wallet=');
+$check(Fides_Credential_Design::wallets_catalog_url(array('paradym-wallet', 'altid')) === $wallet_default . '?wallets=paradym-wallet,altid', 'public fallback: several wallets filter ?wallets=');
+$check(Fides_Credential_Design::wallet_catalog_record_url('paradym-wallet') === $wallet_default . '?wallet=paradym-wallet', 'public fallback without the pilot: record link for a known wallet');
+$check($with_option($wallet_opt, 'https://example.org/wallets?lang=nl', static fn() => Fides_Credential_Design::wallet_url('x y')) === 'https://example.org/wallets/?lang=nl&wallet=x%20y', 'custom wallet base with query is kept; id encoded once');
+$check($with_option($wallet_opt, 'https://wallets.fides.community', static fn() => Fides_Credential_Design::wallet_catalog_record_url('a')) === 'https://wallets.fides.community/?wallet=a', 'a stored former wallet default is not rewritten at runtime (migration script)');
+remove_filter('site_url', $public_site);
+$check(fides_credential_catalog_is_local_site(), 'local site restored');
+$check(Fides_Credential_Design::wallet_catalog_record_url('a') === home_url('/community-tools/personal-wallets/') . '?wallet=a', 'local site: wallet fallback stays on the local catalog route');
+if (class_exists('Fides_Wallet_Design') && Fides_Wallet_Design::find('paradym-wallet') !== null) {
+    $check($has(Fides_Credential_Design::wallet_url('paradym-wallet'), '/fides-design-pilot/wallet/?wallet=paradym-wallet'), 'local pilot: wallet with a pilot record keeps the pilot detail route');
+}
 
 // ---------- Access ----------
 
