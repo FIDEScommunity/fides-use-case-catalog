@@ -58,9 +58,9 @@ refute "forced page is back at the seeded content" "$(pilot_wp post get "$ID_BIG
 
 # Cleanup: restore the remaining edited pages explicitly, remove the test tree.
 LEARN_FORCE="topics,topics/the-big-picture/how-credentials-connect" "$SEED" >/dev/null 2>&1
-pilot_wp eval "foreach (get_posts(array('post_type'=>'page','post_status'=>'any','numberposts'=>-1,'meta_key'=>'_fides_learn_seed')) as \$p) { if (strpos(get_page_uri(\$p), 'learn-seedtest') === 0) wp_delete_post(\$p->ID, true); } wp_delete_post($UNMARKED, true);" >/dev/null
+pilot_wp eval "foreach (get_posts(array('post_type'=>'page','post_status'=>'any','numberposts'=>-1,'meta_key'=>'_fides_learn_seed')) as \$p) { if (strpos((string) get_post_meta(\$p->ID, '_fides_learn_seed', true), '$TEST_BASE') === 0) wp_delete_post(\$p->ID, true); } wp_delete_post($UNMARKED, true);" >/dev/null
 out="$("$SEED" 2>&1)"; expect "pilot restored: every page unchanged" "$out" '"unchanged":6'
-[[ -z "$(pilot_wp post list --post_type=page --post_status=any --name=learn-seedtest --format=ids)" ]] && ok "test tree removed" || bad "test tree removed"
+[[ "$(pilot_wp eval "echo count(get_posts(array('post_type'=>'page','post_status'=>'any','numberposts'=>-1,'meta_key'=>'_fides_learn_seed')));")" == "6" ]] && ok "test tree removed (six seeded pages remain)" || bad "test tree removed"
 
 echo "# fail $FAIL"
 exit $((FAIL>0 ? 1 : 0))
