@@ -49,7 +49,7 @@ async function navigateToOverview(page, width) {
     check(`desktop @${width}: Explore opens its panel`, await panel.isVisible());
     await page.keyboard.press("Escape");
     check(`desktop @${width}: Escape closes the panel and returns focus`, !(await panel.isVisible()) && (await explore.evaluate((el) => el === document.activeElement)));
-    await page.getByRole("button", { name: "Community" }).click();
+    await page.getByRole("button", { name: "Ecosystem" }).click();
     await explore.click();
     const open = await page.locator(".fides-ds-site-nav__panel:not([hidden])").count();
     check(`desktop @${width}: one panel at a time`, open === 1, `open=${open}`);
@@ -59,7 +59,7 @@ async function navigateToOverview(page, width) {
     await page.screenshot({ path: path.join(OUT, `nav-explore-${width}.png`) });
     await page.getByRole("button", { name: "Tools & API" }).click();
     await page.screenshot({ path: path.join(OUT, `nav-tools-${width}.png`) });
-    await page.getByRole("button", { name: "Community" }).click();
+    await page.getByRole("button", { name: "Ecosystem" }).click();
     await page.screenshot({ path: path.join(OUT, `nav-community-${width}.png`) });
     await explore.click();
     await page.locator("#fides-ds-panel-explore").getByRole("link", { name: /^Use cases/ }).click();
@@ -74,8 +74,8 @@ async function navigateToOverview(page, width) {
     await page.keyboard.press("Escape");
     check(`menu @${width}: Escape closes and returns focus`, !(await dialog.isVisible()) && (await menuButton.evaluate((el) => el === document.activeElement)));
     await menuButton.click();
-    await dialog.getByText("Community").first().click();
-    check(`menu @${width}: Community group expands`, await dialog.getByRole("link", { name: "Community Awards" }).isVisible());
+    await dialog.getByText("Ecosystem", { exact: true }).first().click();
+    check(`menu @${width}: Ecosystem group expands`, await dialog.getByRole("link", { name: "Community Awards" }).isVisible());
     await dialog.getByRole("link", { name: "Use cases", exact: true }).click();
   }
   await page.waitForURL(/\/fides-design-pilot\/overview\/?$/, DOM_READY);

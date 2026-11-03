@@ -140,8 +140,8 @@ pilot_upsert_page(
     'Business wallets (design pilot)',
     '<!-- wp:shortcode -->[fides_wallet_catalog type="organizational" design="pilot" title="Business wallets" detail_url="/fides-design-pilot/wallet/" add_url="/wallet-submit/"'
     . ' cross_url="/fides-design-pilot/personal-wallets/" intro="Explore digital wallets and related tooling that allow organizations to receive, store, present, issue or verify verifiable credentials."]<!-- /wp:shortcode -->'
-    // Editor-chosen explanation below the list; renders nothing without an entry (Paper 25.0).
-    . "\n\n<!-- wp:shortcode -->[fides_editorial_link context=\"wallet-overview:organizational\" variant=\"card\"]<!-- /wp:shortcode -->",
+    // The editor-chosen Learn link (context wallet-overview:organizational) is rendered by the wallet plugin in the intro.
+    ,
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
@@ -196,7 +196,8 @@ pilot_upsert_page(
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"55%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:55%\">"
     . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-hero\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-hero\">Accelerating Digital Trust</h1>\n<!-- /wp:heading -->\n"
     . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">The new international movement dedicated to the continuous improvement of digital trust on the internet.</p>\n<!-- /wp:paragraph -->"
-    . "\n<!-- wp:paragraph {\"className\":\"fides-uc-fragment__action\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"32px\"}}}} -->\n<p class=\"fides-uc-fragment__action\" style=\"margin-top:32px\"><a class=\"fides-ds-action-link\" href=\"/fides-design-pilot/overview/\"><span>Explore use cases</span> <span aria-hidden=\"true\">→</span></a></p>\n<!-- /wp:paragraph -->"
+    // Primary entry to the starting point (Paper 22.HOME hero), next to the existing secondary action.
+    . "\n<!-- wp:html -->\n<div class=\"fides-uc-fragment__actions\" style=\"margin-top:32px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px\"><a class=\"fides-ds-button\" href=\"/fides-design-pilot/start/\">Find your starting point <span aria-hidden=\"true\">→</span></a><a class=\"fides-ds-action-link\" href=\"/fides-design-pilot/overview/\"><span>Explore use cases</span> <span aria-hidden=\"true\">→</span></a></div>\n<!-- /wp:html -->"
     . "</div>\n<!-- /wp:column -->\n"
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"45%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:45%\">"
     . "<!-- wp:shortcode -->[fides_use_case_featured detail_url=\"/fides-design-pilot/use-case/\"]<!-- /wp:shortcode -->"

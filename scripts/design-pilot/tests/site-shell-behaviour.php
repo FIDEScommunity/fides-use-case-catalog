@@ -57,9 +57,26 @@ wp_reset_query();
 
 // Header markup.
 $header = Fides_DS_Site_Shell::render_header();
-foreach (array('Explore', 'Learn', 'Updates', 'Community', 'Tools &amp; API', 'Plans', 'About FIDES', 'Sign in', 'Search', 'Menu') as $label) {
+foreach (array('Learn', 'Explore', 'Updates', 'Ecosystem', 'Tools &amp; API', 'About FIDES', 'Contact', 'Search', 'Sign in', 'Menu') as $label) {
     $check(strpos($header, '>' . $label) !== false, "header shows {$label}");
 }
+// Paper page 02: Learn, Explore, Services, Updates, Ecosystem, Tools & API, About FIDES; Contact, Search and Sign in on the right.
+preg_match('#<nav[^>]*aria-label="Main">(.*?)</nav>#s', $header, $main_nav);
+preg_match_all('#fides-ds-site-nav__(?:link|toggle)"[^>]*>([^<]+)#', $main_nav[1] ?? '', $main_labels);
+$check(array_map('html_entity_decode', $main_labels[1]) === array('Learn', 'Explore', 'Updates', 'Ecosystem', 'Tools & API', 'About FIDES'), 'main items follow Paper (Services stays out until it exists): ' . implode(' | ', $main_labels[1]));
+$check(strpos($header, '>Community<') === false && strpos($header, '>Services<') === false, 'no Community item and no Services link without a Services page');
+$check(strpos($header, '>Plans<') !== false && preg_match('#class="fides-ds-site-nav__link"[^>]*>Plans#', $header) === 0, 'Plans lives under Ecosystem > Contribute, not in the main items');
+$check(strpos($header, 'Intermediaries') === false && strpos($header, 'Trust schemes') === false && strpos($header, 'Get help choosing') === false && strpos($header, 'Ask FIDES') === false && strpos($header, 'Interop Testbed') === false, 'links to pages that do not exist yet are not shown');
+preg_match('#fides-ds-site-header__actions">(.*?)</div>#s', $header, $actions);
+preg_match_all('#>(Contact|Search|Sign in|Menu)<#', $actions[1] ?? '', $action_labels);
+$check($action_labels[1] === array('Contact', 'Search', 'Sign in', 'Menu'), 'header actions: Contact, Search, Sign in: ' . implode(' | ', $action_labels[1]));
+preg_match('#id="fides-ds-panel-ecosystem".*?</div></div></div>#s', $header, $eco_panel);
+preg_match_all('#fides-ds-site-nav__group-label"[^>]*>([^<]+)<#', $eco_panel[0] ?? '', $eco_groups);
+$check($eco_groups[1] === array('Meet & participate', 'Awards', 'Contribute') || array_map('html_entity_decode', $eco_groups[1]) === array('Meet & participate', 'Awards', 'Contribute'), 'Ecosystem groups follow Paper: ' . implode(' | ', $eco_groups[1]));
+preg_match('#id="fides-ds-panel-tools".*?</div></div></div>#s', $header, $tools_panel);
+preg_match_all('#fides-ds-site-nav__group-label"[^>]*>([^<]+)<#', $tools_panel[0] ?? '', $tools_groups);
+$check(array_map('html_entity_decode', $tools_groups[1]) === array('Ask & learn', 'Data & integration', 'Build & test'), 'Tools & API groups follow Paper: ' . implode(' | ', $tools_groups[1]));
+$check(preg_match('#<p class="fides-ds-menu__title">FIDES menu</p>.*?fides-ds-menu__section--lead.*?>Learn<.*?>Explore</p>#s', $header) === 1, 'mobile menu: title FIDES menu, then Learn, then the Explore section');
 $check(strpos($header, '<nav class="fides-ds-site-nav" aria-label="Main">') !== false || preg_match('#<nav[^>]*aria-label="Main"#', $header) === 1, 'main navigation is labelled');
 preg_match_all('#\sid="([^"]+)"#', $header, $ids);
 $check(count($ids[1]) === count(array_unique($ids[1])), 'header ids are unique');
@@ -94,7 +111,14 @@ remove_filter('fides_site_shell_url', $drop, PHP_INT_MAX);
 $check(strpos($header_dropped, '>Updates<') === false, 'link with an empty URL is left out of the header');
 $check(strpos($header, '>Awards</p>') !== false && strpos($header_dropped, '>Awards</p>') === false, 'group without links is left out');
 $check(strpos($footer_dropped, '>News<') === false, 'link with an empty URL is left out of the footer');
-$check(strpos($header_dropped, '>Plans<') !== false, 'other links stay when one is dropped');
+$check(strpos($header_dropped, '>Plans') !== false, 'other links stay when one is dropped');
+// A site that maps a proposed page gets the link (Services).
+$map_services = static function ($url, $path) { return $path === '/services/' ? home_url('/fides-design-pilot/learn/sessions/') : $url; };
+add_filter('fides_site_shell_url', $map_services, PHP_INT_MAX, 2);
+$header_services = Fides_DS_Site_Shell::render_header();
+remove_filter('fides_site_shell_url', $map_services, PHP_INT_MAX);
+preg_match_all('#fides-ds-site-nav__(?:link|toggle)"[^>]*>([^<]+)#', $header_services, $svc_labels);
+$check(array_slice($svc_labels[1], 0, 3) === array('Learn', 'Explore', 'Services'), 'a mapped Services page appears after Explore: ' . implode(' | ', $svc_labels[1]));
 
 // A site that does not map the proposed routes shows no Learn item and keeps the Explorer entry.
 $unmapped = static function ($url, $path) {

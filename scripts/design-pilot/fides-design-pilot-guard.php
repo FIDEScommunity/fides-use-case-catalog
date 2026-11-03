@@ -73,6 +73,10 @@ add_filter(
         if (isset($local[$path])) {
             return home_url($local[$path]);
         }
+        // A proposed destination without a pilot page stays hidden: no live fallback for it.
+        if ($url === '') {
+            return '';
+        }
         if (get_page_by_path(trim((string) $path, '/')) instanceof WP_Post) {
             return $url;
         }

@@ -40,6 +40,12 @@ context whose target page is published; nothing is derived from record text.
 Editors change a link by editing the option entry or a context in the JSON file.
 The pilot guard maps `/learn/`, `/learn/topics/` and `/ecosystem-explorer/start/`;
 a site that does not map them shows no Learn item and no dead links.
+The homepage fragment has a primary "Find your starting point" button to `/fides-design-pilot/start/`.
+The business wallet overview shows its editorial link as one compact line in the intro
+(`data-learn-*` attributes from `Fides_DS_Editorial_Links::resolved()`, rendered by the wallet script).
+Header menu: Learn, Explore, Updates, Ecosystem, Tools & API, About FIDES; Services and the other
+not-yet-existing destinations are `proposed` in `Fides_DS_Site_Shell::navigation()` and appear as soon as a site
+maps them through `fides_site_shell_url` (the pilot guard returns '' for unmapped proposed paths).
 Open questions: a credential-types explanation (no existing article fits).
 
 ### Sessions & workshops route
