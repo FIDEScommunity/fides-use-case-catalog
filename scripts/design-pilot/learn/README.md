@@ -208,3 +208,10 @@ bash tests/run-learn-seed-checks.sh   # overwrite protection
 bash tests/run-connect-checks.sh      # home > start > receive > VOG > Learn, both ways
 bash run-tests.sh                     # PHP behaviour (includes tests/learn-behaviour.php)
 ```
+
+## UX round: strip, featured block, Receive
+
+- `Fides_DS_Editorial_Links` variants are `band`, `card` and `strip`. The compact `strip` (light-blue, title, one line, one action link) replaces `inline`; the business wallet overview renders it above the search field.
+- The homepage featured use case (`[fides_use_case_featured]`) is one block: existing image, title, status and, only when the programme name and the result are both known, an award ("Winner · FIDES Community Awards 2026"). The option `fides_use_case_featured` has an editorial field `short_title` (max 90 characters). It applies to the primary use case only; nothing is derived from submitter input.
+- `[fides_learn_record heading="2"]` renders the title as `h2`; the Receive page uses it for the VOG practice card with the existing image (above the text below 600px).
+- Tests: `tests/run-ux-round-checks.sh` (one browser per width).

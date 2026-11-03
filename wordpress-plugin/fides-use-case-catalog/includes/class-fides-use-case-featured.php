@@ -5,7 +5,9 @@
  * Editors choose a published use case by its stable catalog id under
  * Settings → FIDES Use Case Catalog → Homepage feature, plus an optional
  * fallback. Title, image, organization and status always come from the
- * catalog; the slot only stores ids.
+ * catalog; the slot stores ids and one optional editorial field, the short
+ * title for the primary use case. A short title is never derived from the
+ * catalog record or from submitted text.
  *
  * Attributes:
  *  - id         Override the configured primary id (e.g. on a test page).
@@ -32,14 +34,15 @@ final class Fides_Use_Case_Featured {
     }
 
     /**
-     * @return array{primary:string, fallback:string}
+     * @return array{primary:string, fallback:string, short_title:string}
      */
     public static function selection(): array {
         $value = get_option(self::OPTION, array());
         $value = is_array($value) ? $value : array();
         return array(
-            'primary'  => isset($value['primary']) ? (string) $value['primary'] : '',
-            'fallback' => isset($value['fallback']) ? (string) $value['fallback'] : '',
+            'primary'     => isset($value['primary']) ? (string) $value['primary'] : '',
+            'fallback'    => isset($value['fallback']) ? (string) $value['fallback'] : '',
+            'short_title' => isset($value['short_title']) ? (string) $value['short_title'] : '',
         );
     }
 
@@ -49,7 +52,7 @@ final class Fides_Use_Case_Featured {
             self::OPTION,
             array(
                 'type'              => 'array',
-                'default'           => array('primary' => '', 'fallback' => ''),
+                'default'           => array('primary' => '', 'fallback' => '', 'short_title' => ''),
                 'sanitize_callback' => array(__CLASS__, 'sanitize'),
             )
         );
@@ -57,7 +60,7 @@ final class Fides_Use_Case_Featured {
 
     /**
      * @param mixed $value
-     * @return array{primary:string, fallback:string}
+     * @return array{primary:string, fallback:string, short_title:string}
      */
     public static function sanitize($value): array {
         $value = is_array($value) ? $value : array();
@@ -77,6 +80,8 @@ final class Fides_Use_Case_Featured {
                 );
             }
         }
+        $short = isset($value['short_title']) ? sanitize_text_field(wp_unslash((string) $value['short_title'])) : '';
+        $clean['short_title'] = function_exists('mb_substr') ? mb_substr($short, 0, 90) : substr($short, 0, 90);
         return $clean;
     }
 
@@ -129,11 +134,23 @@ final class Fides_Use_Case_Featured {
         }
         Fides_Use_Case_Design::enqueue();
         $variant = $atts['variant'] === 'tile' ? 'tile' : 'feature';
+        $overrides = array('title_tag' => 'h2', 'image_loading' => 'eager');
+        if ($variant === 'feature') {
+            // One coherent block: availability and the award (only with name and result) share one meta line.
+            $selection = self::selection();
+            $props     = Fides_Use_Case_Design::card_props($resolved['item'], 'feature', (string) $atts['detail_url']);
+            $overrides['meta']   = implode(' · ', array_filter(array((string) ($props['status'] ?? ''), Fides_Use_Case_Design::award_line($resolved['used']))));
+            $overrides['status'] = '';
+            // Explicit editorial short title, only for the primary use case it was written for.
+            if ($selection['short_title'] !== '' && $resolved['used'] === $selection['primary']) {
+                $overrides['title'] = $selection['short_title'];
+            }
+        }
         $card    = Fides_Use_Case_Design::render_card(
             $resolved['item'],
             $variant,
             (string) $atts['detail_url'],
-            array('title_tag' => 'h2', 'image_loading' => 'eager')
+            $overrides
         );
         return '<div class="fides-ds fides-uc-featured" data-fides-featured-source="' . esc_attr($resolved['used']) . '">' . $card . '</div>';
     }
@@ -187,6 +204,13 @@ final class Fides_Use_Case_Featured {
                     </td>
                 </tr>
             <?php endforeach; ?>
+            <tr>
+                <th scope="row"><label for="fides-use-case-featured-short-title"><?php esc_html_e('Short homepage title', 'fides-use-case-catalog'); ?></label></th>
+                <td>
+                    <input type="text" class="regular-text" maxlength="90" id="fides-use-case-featured-short-title" name="<?php echo esc_attr(self::OPTION . '[short_title]'); ?>" value="<?php echo esc_attr($selection['short_title']); ?>">
+                    <p class="description"><?php esc_html_e('Optional editorial title for the featured use case on the homepage. It applies to the featured use case only, never to the fallback. Leave empty to show the catalog title.', 'fides-use-case-catalog'); ?></p>
+                </td>
+            </tr>
             <tr>
                 <th scope="row"><?php esc_html_e('Preview', 'fides-use-case-catalog'); ?></th>
                 <td>

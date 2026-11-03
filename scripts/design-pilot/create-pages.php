@@ -212,4 +212,10 @@ pilot_upsert_page(
 if (! get_option(Fides_Use_Case_Featured::OPTION)) {
     update_option(Fides_Use_Case_Featured::OPTION, array('primary' => PILOT_FEATURED_ID, 'fallback' => PILOT_DETAIL_ID));
 }
+// Explicit editorial short title for the featured use case (Paper 25.7); set once, an editor's value is kept.
+$featured_option = get_option(Fides_Use_Case_Featured::OPTION);
+if (is_array($featured_option) && ! array_key_exists('short_title', $featured_option) && ($featured_option['primary'] ?? '') === PILOT_FEATURED_ID) {
+    $featured_option['short_title'] = 'Digital Certificate of Good Conduct in a wallet';
+    update_option(Fides_Use_Case_Featured::OPTION, $featured_option);
+}
 WP_CLI::log('Homepage feature: ' . wp_json_encode(get_option(Fides_Use_Case_Featured::OPTION)));

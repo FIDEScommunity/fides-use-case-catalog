@@ -278,6 +278,28 @@ final class Fides_Use_Case_Design {
         return $recognition['year'] > 0 ? $result . ' ' . $recognition['year'] : $result;
     }
 
+    /**
+     * Award line for the featured slot: "Winner 2026 · Global Digital Trust Awards".
+     * Empty unless both the award name and its result (winner or finalist) are known.
+     */
+    public static function award_line(string $id): string {
+        $recognitions = $id !== '' ? self::award_recognitions($id) : array();
+        if (! $recognitions) {
+            return '';
+        }
+        $name = trim((string) ($recognitions[0]['program_label'] ?? ''));
+        if ($name === '' || ! isset($recognitions[0]['place'])) {
+            return '';
+        }
+        $year   = (int) ($recognitions[0]['year'] ?? 0);
+        $result = $recognitions[0]['place'] === 1 ? 'Winner' : 'Finalist';
+        // The programme name often carries the year already ("FIDES Community Awards 2026").
+        if ($year > 0 && strpos($name, (string) $year) === false) {
+            $name .= ' ' . $year;
+        }
+        return $result . ' · ' . $name;
+    }
+
     /** Like count from the shared ratings REST route. */
     public static function like_count(string $id): int {
         if (! array_key_exists($id, self::$likes)) {

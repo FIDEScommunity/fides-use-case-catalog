@@ -1421,6 +1421,56 @@ html.fides-uc-pilot-panel-open {
 
 .fides-ds.fides-uc-featured {
   background: transparent;
+  container-type: inline-size;
+}
+
+/* One coherent block (Paper 25.7 · 02): image, then a light-blue body with title, availability and action. */
+.fides-ds.fides-uc-featured .fides-ds-card--feature {
+  gap: 0;
+  background: var(--fides-ds-soft);
+  transition: background-color 120ms ease;
+}
+
+.fides-ds.fides-uc-featured .fides-ds-card--feature:hover {
+  background: #e3eefd;
+}
+
+.fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__body {
+  justify-content: center;
+  gap: var(--fides-ds-space-2);
+  padding: var(--fides-ds-space-5);
+}
+
+.fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__title {
+  font-size: 24px;
+  line-height: 30px;
+}
+
+.fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__cta {
+  margin-top: var(--fides-ds-space-2);
+  padding-top: 0;
+}
+
+.fides-ds.fides-uc-featured .fides-ds-card:has(.fides-ds-card__link:focus-visible) {
+  outline: 2px solid var(--fides-ds-link);
+  outline-offset: 0;
+}
+
+/* Wide containers (tablet and below the hero, admin preview): image left, text right. */
+@container (min-width: 640px) {
+  .fides-ds.fides-uc-featured .fides-ds-card--feature {
+    grid-template-columns: minmax(200px, 34%) 1fr;
+  }
+
+  .fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__media {
+    aspect-ratio: auto;
+    min-height: 200px;
+  }
+
+  .fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__title {
+    font-size: 28px;
+    line-height: 34px;
+  }
 }
 
 /* ---------- Overview contribute band ---------- */

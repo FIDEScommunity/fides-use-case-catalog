@@ -273,8 +273,16 @@ $check($resolved['used'] === UC_BETA && $resolved['skipped'] === array(UC_GONE),
 $check(Fides_Use_Case_Featured::resolve(UC_ALPHA)['used'] === UC_ALPHA, 'shortcode id overrides the setting');
 $feature = do_shortcode('[fides_use_case_featured detail_url="' . DETAIL_BASE . '"]');
 $check(strpos($feature, 'data-fides-featured-source="' . UC_BETA . '"') !== false, 'featured shortcode renders the fallback');
-$check(strpos($feature, 'fides-ds-card__meta">Winner 2026<') !== false, 'featured card shows the award');
+preg_match('#fides-ds-card__meta">([^<]*)<#', $feature, $meta_match);
+$check(isset($meta_match[1]) && strpos($meta_match[1], 'Winner · Test Awards 2026') !== false && substr_count($meta_match[1], '2026') === 1, 'featured card shows the award once, with programme name and no duplicate year');
 $check(strpos($feature, 'href="' . esc_url($beta_url) . '"') !== false, 'featured card links to the detail route');
+// Short homepage title: explicit editorial field, primary only, never derived from the record.
+$selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA, 'short_title' => 'Short editorial title');
+$check(strpos(do_shortcode('[fides_use_case_featured detail_url="' . DETAIL_BASE . '"]'), 'Short editorial title') !== false, 'short title replaces the title of the primary');
+$selection = array('primary' => UC_GONE, 'fallback' => UC_BETA, 'short_title' => 'Short editorial title');
+$check(strpos(do_shortcode('[fides_use_case_featured detail_url="' . DETAIL_BASE . '"]'), 'Short editorial title') === false, 'short title is not applied to the fallback');
+$selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA, 'short_title' => '');
+$check(strpos(do_shortcode('[fides_use_case_featured detail_url="' . DETAIL_BASE . '"]'), 'Short editorial title') === false, 'no short title: the record title is shown');
 $selection = array('primary' => UC_GONE, 'fallback' => '');
 $check(do_shortcode('[fides_use_case_featured]') === '', 'no published selection renders nothing for visitors');
 $admins = get_users(array('role' => 'administrator', 'number' => 1, 'fields' => 'ID'));
@@ -290,7 +298,7 @@ $codes = static function (): array {
 };
 $GLOBALS['wp_settings_errors'] = array();
 $clean = Fides_Use_Case_Featured::sanitize(array('primary' => 'not a valid id!', 'fallback' => UC_BETA));
-$check($clean === array('primary' => '', 'fallback' => UC_BETA), 'malformed id is cleared');
+$check($clean === array('primary' => '', 'fallback' => UC_BETA, 'short_title' => ''), 'malformed id is cleared');
 $check(($codes()['invalid-primary'] ?? '') === 'error', 'malformed id reports an error');
 $GLOBALS['wp_settings_errors'] = array();
 $clean = Fides_Use_Case_Featured::sanitize(array('primary' => UC_GONE, 'fallback' => UC_BETA));
