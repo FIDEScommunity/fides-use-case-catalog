@@ -145,7 +145,7 @@ async function route(page, width) {
     link: Boolean(li.querySelector("a")),
     tag: getComputedStyle(li.querySelector(".fides-learn-rows__title"), "::after").content,
   })));
-  check(`overview @${width}: design-only rows are not links and are labelled`, planned.length >= 4 && planned.every((p) => !p.link && /Design preview/.test(p.tag)), JSON.stringify(planned));
+  check(`overview @${width}: design-only rows are not links and are labelled`, planned.length >= 2 && planned.every((p) => !p.link && /Design preview/.test(p.tag)), JSON.stringify(planned));
   check(`overview @${width}: no request form or search field is pretended`, (await page.locator(".fides-learn form, .fides-learn input[type=search], .fides-learn input[type=text]").count()) === 0);
 
   await page.getByRole("link", { name: /^Explore topics/ }).click();
@@ -246,8 +246,7 @@ async function article(page, width) {
   await open(page, "biz");
   await baseline(page, "biz", width);
   await targets(page, "biz", width);
-  const planned = await page.locator(".fides-learn-planned").innerText();
-  check(`business section @${width}: workshop step is a labelled design preview, not a link`, /Design preview/.test(planned) && (await page.locator(".fides-learn-planned a").count()) === 0, planned);
+  check(`business section @${width}: workshop step is a real link to the offering page`, (await page.locator('.fides-learn__content a[href$="/sessions/wallet-readiness-workshop/"]').count()) === 1);
   await page.screenshot({ path: path.join(OUT, `section-biz-${width}.png`), fullPage: true });
 }
 

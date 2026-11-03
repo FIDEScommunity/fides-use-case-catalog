@@ -43,7 +43,12 @@ if (! class_exists('Fides_DS_Learn')) {
 const LEARN_SEED_META  = '_fides_learn_seed';
 const LEARN_HASH_META  = '_fides_learn_seed_hash';
 const LEARN_STATE_META = '_fides_learn_seed_state';
-const LEARN_FIELDS     = array('kind', 'headline', 'eyebrow', 'sources', 'cta_title', 'cta_text', 'cta_label', 'cta_url', 'series');
+/** Fields of the first seed round; the hash of those pages was computed over exactly these keys. */
+const LEARN_LEGACY_FIELDS = array('kind', 'headline', 'eyebrow', 'sources', 'cta_title', 'cta_text', 'cta_label', 'cta_url', 'series');
+/** Editorial fields come from the template class, so the seed and the metabox cannot drift apart. */
+function learn_fields(): array {
+    return array_keys(Fides_DS_Learn::FIELDS);
+}
 const LEARN_LAYOUT_META = array(
     'has_hero_section'        => 'disabled',
     'page_structure_type'     => 'type-4',
@@ -75,7 +80,7 @@ kses_remove_filters(); // trusted, version-controlled content
 function learn_state_of(int $id): array {
     $post = get_post($id);
     $meta = array();
-    foreach (LEARN_FIELDS as $field) {
+    foreach (learn_fields() as $field) {
         $meta[ $field ] = trim((string) get_post_meta($id, '_fides_learn_' . $field, true));
     }
     $layout = get_post_meta($id, 'blocksy_post_meta_options', true);
@@ -91,7 +96,19 @@ function learn_state_of(int $id): array {
     );
 }
 
+/** Empty fields do not count, so adding a new (empty) field never makes a page look edited. */
 function learn_hash(array $state): string {
+    $state['meta'] = array_filter($state['meta'], 'strlen');
+    return sha1((string) wp_json_encode($state));
+}
+
+/** Hash as computed by the first seed round (all legacy fields, empty ones included). */
+function learn_hash_legacy(array $state): string {
+    $meta = array();
+    foreach (LEARN_LEGACY_FIELDS as $field) {
+        $meta[ $field ] = $state['meta'][ $field ] ?? '';
+    }
+    $state['meta'] = $meta;
     return sha1((string) wp_json_encode($state));
 }
 
@@ -101,7 +118,7 @@ function learn_diff(array $a, array $b): array {
     foreach ($a as $key => $value) {
         if ($key === 'meta') {
             foreach ($value as $field => $v) {
-                if (($b['meta'][ $field ] ?? null) !== $v) {
+                if (($b['meta'][ $field ] ?? '') !== $v) {
                     $out[] = 'meta:' . $field;
                 }
             }
@@ -146,7 +163,7 @@ foreach ($manifest['pages'] as $page) {
         'meta'       => array(),
         'layout'     => LEARN_LAYOUT_META,
     );
-    foreach (LEARN_FIELDS as $field) {
+    foreach (learn_fields() as $field) {
         $desired['meta'][ $field ] = trim(strtr((string) ($page[ $field ] ?? ''), $tokens));
     }
 
@@ -173,14 +190,18 @@ foreach ($manifest['pages'] as $page) {
         if ($is_marked) {
             $stored_hash  = (string) get_post_meta($post->ID, LEARN_HASH_META, true);
             $stored_state = json_decode((string) get_post_meta($post->ID, LEARN_STATE_META, true), true);
-            $edited       = learn_hash($current) !== $stored_hash;
+            $edited       = ! in_array($stored_hash, array(learn_hash($current), learn_hash_legacy($current)), true);
             if ($edited && ! in_array($seed_id, $force, true)) {
                 $changed  = is_array($stored_state) ? learn_diff($current, $stored_state) : array('unknown');
                 $report[] = array($label, 'skipped-edited', 'page ' . $post->ID . ' changed since seed: ' . implode(', ', $changed));
                 $ids[ $seed_id ] = (int) $post->ID;
                 continue;
             }
-            if (! $edited && learn_hash($desired) === $stored_hash) {
+            if (! $edited && learn_hash($desired) === learn_hash($current)) {
+                if (! $dry && $stored_hash !== learn_hash($current)) {
+                    update_post_meta($post->ID, LEARN_HASH_META, learn_hash($current)); // migrate a first-round hash
+                    update_post_meta($post->ID, LEARN_STATE_META, wp_slash((string) wp_json_encode($current)));
+                }
                 $report[] = array($label, 'unchanged', 'page ' . $post->ID);
                 $ids[ $seed_id ] = (int) $post->ID;
                 continue;
@@ -229,7 +250,7 @@ foreach ($manifest['pages'] as $page) {
         continue;
     }
     update_post_meta($id, '_wp_page_template', Fides_DS_Learn::TEMPLATE);
-    foreach (LEARN_FIELDS as $field) {
+    foreach (learn_fields() as $field) {
         update_post_meta($id, '_fides_learn_' . $field, wp_slash($desired['meta'][ $field ]));
     }
     update_post_meta($id, 'blocksy_post_meta_options', LEARN_LAYOUT_META);

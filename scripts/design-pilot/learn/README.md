@@ -13,15 +13,42 @@ pushed, deployed or synced to utrecht-demo.
 | For businesses | `topics/for-businesses/` | 24.12 | section |
 | How credentials connect issuers, wallets and services | `topics/the-big-picture/how-credentials-connect/` | 24.18, mobile 24.20 | article |
 | Business wallets: where to start | `topics/for-businesses/business-wallets-where-to-start/` | 24.19 | article |
+| Sessions & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |
+| Wallet Introduction | `sessions/wallet-introduction/` | 24.4 | offering |
+| Wallet Readiness Workshop | `sessions/wallet-readiness-workshop/` | 24.5 (same pattern) | offering |
+| Session enquiry (local preview) | `sessions/request/?offering=<slug>` | 24.6 | request |
 
 Local URLs: `http://localhost:10088/fides-design-pilot/learn/` and the paths above.
 
-Not built (shown as rows without a link and with a "Design preview" label, no
-fake request form): For you, For governments, the four concept topics, the two
-further topics per section, Wallet Introduction, Wallet Readiness Workshop
-(24.3-24.6), the Readiness Workshop step on For businesses. "Sessions &
-workshops" in the Learn bar leads to the "Learn with your team" part of the
-overview.
+Not built (shown as rows without a link and with a "Design preview" label, or as
+a dashed "Design preview, not built yet" label): For you, For governments, the
+four concept topics, the two further topics per section, Architecture Assessment
+and Use Case & Business Case Development (shown only as possible follow-up steps).
+Webinars and roundtables are topics in preparation: no dates, no booking.
+
+### Sessions & workshops route
+
+Learn > Sessions & workshops > offering > enquiry. The page kinds `sessions`,
+`offering` and `request` are set in the page's Learn metabox. Offerings are the
+children (kind `offering`) of the page that is the parent of the request page, so
+a new offering appears in the enquiry select without a code change.
+The chosen offering travels as `?offering=<slug>` (unknown values are ignored);
+`interest` is the webinar/roundtable expression of interest.
+
+The enquiry view is a **local preview**: the form has `novalidate` and never
+submits; `learn.js` validates required fields, shows a summary and a result panel
+that does not echo what was typed. Nothing is sent, stored, booked or paid, no
+mail is sent and no Matomo event fires. The request page is `noindex`.
+Sessions, offering and enquiry pages contain no prices; fees are "agreed in a
+proposal before booking".
+
+Open choices for staging: where an enquiry goes (mail address, form plugin or CRM),
+how consent and storage work, which privacy page is linked, whether the enquiry
+page stays noindex, and whether Matomo events are wanted (they are not built).
+
+Editorial fields added in this round (all in the metabox): `actions`,
+`details_title`, `details`, `closing_title`, `closing_text`, `request_question`,
+`request_placeholder`, `request_submit`. `actions` lines: `Label | URL | primary|secondary`.
 
 Routes to existing pilot parts: closing bands and article links go to
 `/fides-design-pilot/overview/` (use cases), `/business-wallets/`, `/credentials/`;
@@ -154,6 +181,7 @@ out of scope.
 
 ```bash
 bash tests/run-learn-checks.sh        # browser: desktop 1440/1100, tablet 768, mobile 390/320
+bash tests/run-sessions-checks.sh     # Sessions & workshops route, enquiry preview, nothing posted
 bash tests/run-learn-seed-checks.sh   # overwrite protection
 bash run-tests.sh                     # PHP behaviour (includes tests/learn-behaviour.php)
 ```

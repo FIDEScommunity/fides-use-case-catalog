@@ -39,7 +39,7 @@ $check(strpos($prepared['html'], '<h2 id="what-is-checked">') !== false, 'headin
 
 // Seeded pages (when the pilot has been seeded).
 $seeded = get_posts(array('post_type' => 'page', 'post_status' => 'any', 'numberposts' => 20, 'meta_key' => '_fides_learn_seed', 'fields' => 'ids'));
-$check(count($seeded) >= 6, 'six Learn seed pages exist (run create-learn-pages.sh)');
+$check(count($seeded) >= 10, 'ten Learn seed pages exist (run create-learn-pages.sh)');
 foreach ($seeded as $id) {
     $check(get_page_template_slug($id) === Fides_DS_Learn::TEMPLATE, "seed page {$id} uses the Learn template");
     $check((string) get_post_meta($id, '_fides_learn_seed_hash', true) !== '', "seed page {$id} stores a seed hash");
