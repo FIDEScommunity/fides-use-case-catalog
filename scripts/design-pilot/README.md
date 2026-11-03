@@ -565,6 +565,17 @@ plus `credential-compact-filterbar-2026-10-23.md`.
   in credential More filters wrap to two lines (300px fields); the Filters
   dialog above 600px is full-screen with its content capped at 720px.
 
+## FIDES Learn pilot (Paper page 16, 2026-11-03)
+
+Learn overview, topics, two sections and two example articles at
+`/fides-design-pilot/learn/`, built as ordinary pages on the "FIDES Learn" template
+(tiles 1.13.33) inside the shared shell. Seeding, overwrite protection, backup and
+restore check, staging dependencies and maintenance are described in
+[`learn/README.md`](learn/README.md). Scripts: `create-learn-pages.sh`,
+`backup-pilot.sh`, `restore-check.sh` (`teardown-site.sh` now requires a snapshot that
+passed the restore check). Tests: `tests/run-learn-checks.sh`,
+`tests/run-learn-seed-checks.sh`, `tests/learn-behaviour.php` (in `run-tests.sh`).
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.

@@ -1,0 +1,68 @@
+{
+ "version": 1,
+ "note": "Seed content for the FIDES Learn pilot. Paths are relative to the Learn base path (default /fides-design-pilot/learn). Tokens in content files: {{learn}}, {{pilot}}, {{glossary}}.",
+ "pages": [
+  {
+   "path": "",
+   "title": "Learn",
+   "kind": "overview",
+   "headline": "Make sense of digital trust.",
+   "excerpt": "Explore wallets, credentials and the roles behind them. Follow a knowledge route at your own pace, or bring your team to a guided session.",
+   "content": "overview.html",
+   "menu_order": 0
+  },
+  {
+   "path": "topics",
+   "title": "Topics",
+   "kind": "topics",
+   "headline": "Choose what you want to understand.",
+   "excerpt": "Start with the big picture or go straight to a question. There is no required sequence and no account is needed.",
+   "content": "topics.html",
+   "menu_order": 1
+  },
+  {
+   "path": "topics/the-big-picture",
+   "title": "The big picture",
+   "kind": "section",
+   "excerpt": "Before choosing a wallet or a standard, understand what needs to be trusted — and who can provide the evidence.",
+   "content": "the-big-picture.html",
+   "menu_order": 0
+  },
+  {
+   "path": "topics/for-businesses",
+   "title": "For businesses",
+   "kind": "section",
+   "excerpt": "Start with a business process: what must your organisation prove, receive or check?",
+   "content": "for-businesses.html",
+   "menu_order": 2
+  },
+  {
+   "path": "topics/the-big-picture/how-credentials-connect",
+   "title": "How credentials connect issuers, wallets and services",
+   "kind": "article",
+   "eyebrow": "Explainer · The big picture",
+   "excerpt": "A simple example explains the roles: a training provider issues a qualification, its recipient keeps it in a wallet, and an employer checks it.",
+   "sources": "FIDES · Verifiable Credentials | https://fides.community/topics/verifiable-credentials/\nW3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/",
+   "cta_title": "See the roles in practice",
+   "cta_text": "Browse use cases, then follow the connections to issuers, wallets and services.",
+   "cta_label": "Explore use cases",
+   "cta_url": "{{pilot}}/overview/",
+   "content": "how-credentials-connect.html",
+   "menu_order": 0
+  },
+  {
+   "path": "topics/for-businesses/business-wallets-where-to-start",
+   "title": "Business wallets: where to start",
+   "kind": "article",
+   "eyebrow": "Explainer · For businesses",
+   "excerpt": "Choose a process before choosing a product. What does your organisation need to prove, receive or check?",
+   "sources": "FIDES · Business Wallets explained | https://fides.community/topics/business-wallets/\nFIDES · Credential Types | https://fides.community/topics/credentials/",
+   "cta_title": "Explore solutions or work through your process",
+   "cta_text": "Compare business wallets independently, or explore the impact with your team.",
+   "cta_label": "Browse business wallets",
+   "cta_url": "{{pilot}}/business-wallets/",
+   "content": "business-wallets-where-to-start.html",
+   "menu_order": 0
+  }
+ ]
+}

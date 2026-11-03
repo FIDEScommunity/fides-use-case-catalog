@@ -1,0 +1,159 @@
+# FIDES Learn pilot (Paper page 16)
+
+First Learn setup in the local design pilot. Local only: nothing here is merged,
+pushed, deployed or synced to utrecht-demo.
+
+## What exists
+
+| Page | Route (base `/fides-design-pilot/learn/`) | Paper | Kind |
+|---|---|---|---|
+| Learn overview | `/` | 24.1, mobile 24.7 | overview |
+| Topics | `topics/` | 24.2 | topics |
+| The big picture | `topics/the-big-picture/` | 24.10 | section |
+| For businesses | `topics/for-businesses/` | 24.12 | section |
+| How credentials connect issuers, wallets and services | `topics/the-big-picture/how-credentials-connect/` | 24.18, mobile 24.20 | article |
+| Business wallets: where to start | `topics/for-businesses/business-wallets-where-to-start/` | 24.19 | article |
+
+Local URLs: `http://localhost:10088/fides-design-pilot/learn/` and the paths above.
+
+Not built (shown as rows without a link and with a "Design preview" label, no
+fake request form): For you, For governments, the four concept topics, the two
+further topics per section, Wallet Introduction, Wallet Readiness Workshop
+(24.3-24.6), the Readiness Workshop step on For businesses. "Sessions &
+workshops" in the Learn bar leads to the "Learn with your team" part of the
+overview.
+
+Routes to existing pilot parts: closing bands and article links go to
+`/fides-design-pilot/overview/` (use cases), `/business-wallets/`, `/credentials/`;
+"Open the glossary" and the Glossary tab go to the existing `/glossary/`.
+
+## Building blocks
+
+| Part | Where | Notes |
+|---|---|---|
+| Page template "FIDES Learn (inside site shell)" | `fides-community-tools-tiles/includes/class-fides-ds-learn.php`, `templates/learn.php` | Uses `Fides_DS_Site_Shell::render_header()/render_footer()`. One header, one footer. No new plugin. |
+| Styles / script | tiles `assets/learn.css`, `assets/learn.js` | Loaded only on Learn pages, on top of `design-system.css`. |
+| Editorial fields | metabox "FIDES Learn page" on every page | page kind, headline, article label, sources, closing band, series. Excerpt = intro. |
+| Glossary | shortcodes `[fides_learn_term]`, `[fides_learn_terms]` | Look up the existing vocabulary (`fides-vocabulary-glossary` data) and render the shared `Fides_DS_Glossary` dialog. Definitions are never typed. A term without entry (today: "Credential") is plain text and reported by the seed script. |
+| Example content | `learn/manifest.json`, `learn/content/*.html` | Block markup with tokens `{{learn}}`, `{{pilot}}`, `{{glossary}}`. |
+| Seed script | `create-learn-pages.sh/.php` | See "Seeding and overwrite protection". |
+| Backup / restore | `backup-pilot.sh`, `restore-check.sh` | See "Backup and rebuild". |
+
+## Who changes what
+
+**Editor (WordPress admin, Pages):** edit text, links, lists and buttons as normal
+blocks; title = breadcrumb and tab label; headline, intro (excerpt), article label,
+sources (`Label | URL` per line) and the closing band in the "FIDES Learn page" box.
+Use the shortcode `[fides_learn_term term="Issuer"]issuer[/fides_learn_term]` for a
+glossary term; "Terms in this article" and "On this page" are generated.
+A list item without a link is shown as a design preview. Previous/next appears only
+when two or more pages share the same series slug (menu order decides the order);
+the seed content has no series.
+
+**Agent (layout):** change `learn.css`/`learn.js`/`class-fides-ds-learn.php` in the
+tiles worktree; change example content in `learn/content` and `manifest.json`, then
+re-seed. Block classes the seed uses: `fides-learn-rows` (`--plain`, `--from-zero`),
+`fides-learn-panel` (+ `__aside`), `fides-learn-card--brand`, `fides-learn-band`
+(`--plain`), `fides-learn-flow`, `fides-learn-split`, `fides-learn-glossary`,
+`fides-learn-note`.
+
+## Seeding and overwrite protection
+
+```bash
+bash create-learn-pages.sh                       # create missing pages, update untouched seeded pages
+LEARN_DRY_RUN=1 bash create-learn-pages.sh       # report only
+LEARN_FORCE="topics" bash create-learn-pages.sh  # replace one named page explicitly
+LEARN_BASE=fides-design-pilot/learn bash create-learn-pages.sh   # route base (adjustable)
+```
+
+- Every seeded page carries `_fides_learn_seed` (the full route), a hash and a copy of
+  its seeded state. Marked pages are only updated while their hash still matches.
+- A page changed by an editor (content, title, excerpt, order, status, template or any
+  Learn field) is **skipped and reported with the changed fields** (`skipped-edited`).
+- An existing page at a seed route without the marker is never touched
+  (`skipped-unmarked`).
+- `LEARN_FORCE` takes seed ids (`""` is the root, `topics`, ...). The previous state of
+  a replaced page is written to `pilot-backup/learn-replaced/` first.
+- The script refuses to run outside the pilot (or `LEARN_ALLOW_NON_PILOT=1` on another
+  non-production test site) and on `production` environments.
+- Verified by `tests/run-learn-seed-checks.sh` (edit, re-seed, unmarked page, dry run,
+  forced replacement, cleanup).
+
+## Backup and rebuild
+
+```bash
+bash backup-pilot.sh                      # pilot-backup/snapshots/<time>/ : db.sql.gz, non-git copies, MANIFEST.txt, SHA256SUMS
+bash restore-check.sh <snapshot dir>      # imports into a scratch database, compares pages and non-git copies, writes RESTORE_CHECK_OK
+PILOT_SNAPSHOT=<snapshot dir> bash teardown-site.sh   # refuses without a snapshot that passed restore-check
+```
+
+A snapshot made on 2026-11-03 (before seeding) passed the restore check: 67 pages
+identical, the three non-git copies identical. `teardown-site.sh` was **not** run.
+
+Rebuild from nothing: `setup-site.sh` (copy of utrecht-demo, symlinked worktrees),
+restore the non-git pieces from the snapshot (`non-git/`), activate plugins, then
+`create-pages.sh` and `create-learn-pages.sh`. The Learn pages can also come back
+from `db.sql.gz`. `wp-config.php` and uploads are not in a snapshot (secrets; uploads
+come from the source site).
+
+## Staging preparation (not a deploy)
+
+### Dependencies and install order
+
+1. WordPress 7.1.x, PHP 8.2, theme `blocksy` 2.1.59 + child theme `blocksy-child` 1.0.0.
+2. `blocksy-companion-pro` 2.0.99, `complianz-gdpr` 7.4.6 (consent banner), as on the source site.
+3. `fides-community-tools-tiles` 1.13.33 (shell, design system, **Learn template**) first.
+4. `fides-vocabulary-glossary` 1.1.15 (glossary page and `data/glossary-aggregated.json`).
+5. Catalog plugins for the linked pilot pages: `fides-use-case-catalog` 0.21.11, `fides-organization-catalog` 1.18.6, `fides-credential-catalog` 1.7.0, `fides-wallet-catalog` 2.16.4.
+6. Optional: `fides-assistant` 0.6.1 (adds Ask FIDES to the Learn bar; the bar item is absent without it).
+7. Pilot guard mu-plugin (`fides-design-pilot-guard.php`), pages `fides-design-pilot` and the glossary page, then `create-learn-pages.sh`.
+
+Not needed for Learn: `fides-template-pilot` (older own header/footer; stays local).
+
+Data sources: glossary data file inside the glossary plugin; catalog listings load
+their `aggregated.json` from GitHub at runtime (read-only requests).
+
+### Outside version control today, and how it becomes available
+
+| Item | Why | Route to staging |
+|---|---|---|
+| `blocksy-child` theme | 16 lines, local only | commit to a theme repo, or ship from the snapshot `non-git/themes/` |
+| `fides-vocabulary-glossary` | the pilot copy has no git worktree | needs its own repo/release; until then copy from the snapshot `non-git/plugins/` |
+| `fides-template-pilot` | experiment, not used by Learn | do not ship |
+| guard mu-plugin | lives in `use-case-catalog/scripts/design-pilot/` (versioned); the active copy must be re-copied after edits | copy to `mu-plugins/` of the test site |
+| utrecht-demo database/uploads | source of the pilot copy | staging gets its own database; only the seeded pages are version-controlled |
+
+### Configurable per environment (nothing pinned to localhost)
+
+Content stores root-relative paths only (`/fides-design-pilot/...`); the host comes
+from the site URL. Adjust with `LEARN_BASE`, `LEARN_PILOT_BASE`, `LEARN_GLOSSARY_PATH`
+and, for shell links, the `fides_site_shell_url` filter. A site in a sub-directory
+needs those bases to include the sub-directory.
+
+### Protection a staging site needs (choose explicitly)
+
+- Restricted access (HTTP auth or IP allow-list) in front of the whole site.
+- noindex (`wp_robots`) and `Disallow: /` in robots.txt: the guard does this locally.
+- Outgoing requests: the local guard blocks every non-GET/HEAD request. For staging,
+  decide per integration (submission forms, GitHub sync, Ask FIDES gateway) whether it
+  stays blocked or points to a test endpoint.
+- Mail: the guard blocks all mail (`pre_wp_mail`). Staging needs either the same
+  block or a mail catcher; real sending must stay off until decided.
+- `WP_ENVIRONMENT_TYPE` = `staging` (the seed script refuses `production`).
+
+### Still needed before staging
+
+Own repo or release for the glossary plugin and the child theme; a decision on the
+four protection points above; a real "Credential" glossary entry (and business wallet
+wording check) in the vocabulary; content review of the two example articles by an
+assessed author (no author or date is shown, by design); build of the sessions and
+request pages (24.3-24.6) or removal of their previews; Matomo and request flow stay
+out of scope.
+
+## Tests
+
+```bash
+bash tests/run-learn-checks.sh        # browser: desktop 1440/1100, tablet 768, mobile 390/320
+bash tests/run-learn-seed-checks.sh   # overwrite protection
+bash run-tests.sh                     # PHP behaviour (includes tests/learn-behaviour.php)
+```
