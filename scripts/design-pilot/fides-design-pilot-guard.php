@@ -117,3 +117,28 @@ add_action(
         echo '<div style="position:fixed;bottom:0;right:0;z-index:99999;background:#0E0E0E;color:#fff;font:12px/18px Inter,system-ui,sans-serif;padding:4px 10px">Local design pilot · not published</div>';
     }
 );
+
+/*
+ * No update checks against wordpress.org from the local pilot: they cannot
+ * succeed here (outgoing requests are restricted) and only print warnings in
+ * the admin. Updates are handled on the source site, not in the pilot.
+ */
+add_filter(
+    'pre_site_transient_update_core',
+    static function () {
+        global $wp_version;
+        return (object) array('last_checked' => time(), 'version_checked' => $wp_version, 'updates' => array());
+    }
+);
+add_filter(
+    'pre_site_transient_update_plugins',
+    static function () {
+        return (object) array('last_checked' => time(), 'checked' => array(), 'response' => array(), 'translations' => array(), 'no_update' => array());
+    }
+);
+add_filter(
+    'pre_site_transient_update_themes',
+    static function () {
+        return (object) array('last_checked' => time(), 'checked' => array(), 'response' => array(), 'translations' => array(), 'no_update' => array());
+    }
+);
