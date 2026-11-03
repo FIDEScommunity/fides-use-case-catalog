@@ -139,7 +139,9 @@ pilot_upsert_page(
     'fides-design-pilot/business-wallets',
     'Business wallets (design pilot)',
     '<!-- wp:shortcode -->[fides_wallet_catalog type="organizational" design="pilot" title="Business wallets" detail_url="/fides-design-pilot/wallet/" add_url="/wallet-submit/"'
-    . ' cross_url="/fides-design-pilot/personal-wallets/" intro="Explore digital wallets and related tooling that allow organizations to receive, store, present, issue or verify verifiable credentials."]<!-- /wp:shortcode -->',
+    . ' cross_url="/fides-design-pilot/personal-wallets/" intro="Explore digital wallets and related tooling that allow organizations to receive, store, present, issue or verify verifiable credentials."]<!-- /wp:shortcode -->'
+    // Editor-chosen explanation below the list; renders nothing without an entry (Paper 25.0).
+    . "\n\n<!-- wp:shortcode -->[fides_editorial_link context=\"wallet-overview:organizational\" variant=\"card\"]<!-- /wp:shortcode -->",
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

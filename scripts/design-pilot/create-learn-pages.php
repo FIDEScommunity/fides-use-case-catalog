@@ -15,6 +15,7 @@
  *
  * Environment (all optional):
  *  LEARN_BASE            route base without slashes at the ends   (fides-design-pilot/learn)
+ *  LEARN_START_BASE      route base of the Explorer starting point (fides-design-pilot/start)
  *  LEARN_PILOT_BASE      base for links to the other pilot pages   (fides-design-pilot)
  *  LEARN_GLOSSARY_PATH   existing glossary page                    (/glossary/)
  *  LEARN_FORCE           comma separated seed ids to replace
@@ -62,12 +63,13 @@ const LEARN_LAYOUT_META = array(
 
 $here    = getenv('LEARN_SEED_DIR') ?: __DIR__ . '/learn';
 $base    = trim((string) (getenv('LEARN_BASE') ?: 'fides-design-pilot/learn'), '/');
+$start   = trim((string) (getenv('LEARN_START_BASE') ?: 'fides-design-pilot/start'), '/');
 $pilot   = trim((string) (getenv('LEARN_PILOT_BASE') ?: 'fides-design-pilot'), '/');
 $gloss   = '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/';
 $force   = array_filter(array_map('trim', explode(',', (string) getenv('LEARN_FORCE'))), 'strlen');
 $dry     = getenv('LEARN_DRY_RUN') === '1';
 $backup  = (string) (getenv('LEARN_BACKUP_DIR') ?: sys_get_temp_dir() . '/fides-learn-replaced');
-$tokens  = array('{{learn}}' => '/' . $base, '{{pilot}}' => '/' . $pilot, '{{glossary}}' => $gloss);
+$tokens  = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => '/' . $pilot, '{{glossary}}' => $gloss);
 
 $manifest = json_decode((string) file_get_contents($here . '/manifest.json'), true);
 if (! is_array($manifest) || empty($manifest['pages'])) {
@@ -129,26 +131,41 @@ function learn_diff(array $a, array $b): array {
     return $out;
 }
 
-$parent_path = dirname($base) === '.' ? '' : dirname($base);
-$base_parent = 0;
-if ($parent_path !== '') {
-    $parent = get_page_by_path($parent_path, OBJECT, 'page');
-    if (! $parent) {
-        fwrite(STDERR, "Parent page /{$parent_path}/ does not exist. Create it first (pilot: create-pages.sh).\n");
-        exit(1);
+/** Route base and parent page of every tree in the manifest. */
+$trees = array('learn' => array('base' => $base, 'parent' => 0), 'start' => array('base' => $start, 'parent' => 0));
+foreach ($trees as $name => $tree) {
+    $parent_path = dirname($tree['base']) === '.' ? '' : dirname($tree['base']);
+    if ($parent_path !== '') {
+        $parent_page = get_page_by_path($parent_path, OBJECT, 'page');
+        if (! $parent_page) {
+            fwrite(STDERR, "Parent page /{$parent_path}/ does not exist. Create it first (pilot: create-pages.sh).\n");
+            exit(1);
+        }
+        $trees[ $name ]['parent'] = (int) $parent_page->ID;
     }
-    $base_parent = (int) $parent->ID;
+}
+
+/** Seed id of a page: the plain path in the Learn tree, "@<tree>/<path>" in another tree. */
+function learn_seed_id(string $tree, string $path): string {
+    return $tree === 'learn' ? $path : '@' . $tree . ($path === '' ? '' : '/' . $path);
 }
 
 $report = array();
 $ids    = array();
 foreach ($manifest['pages'] as $page) {
-    $seed_id = (string) $page['path'];
-    $label   = $seed_id === '' ? '(root)' : $seed_id;
-    $full    = $seed_id === '' ? $base : $base . '/' . $seed_id;
+    $tree    = (string) ($page['tree'] ?? 'learn');
+    if (! isset($trees[ $tree ])) {
+        $report[] = array((string) $page['path'], 'error', 'unknown tree ' . $tree);
+        continue;
+    }
+    $path    = (string) $page['path'];
+    $tbase   = $trees[ $tree ]['base'];
+    $seed_id = learn_seed_id($tree, $path);
+    $label   = $path === '' ? '(' . $tree . ' root)' : ($tree === 'learn' ? $path : $tree . ': ' . $path);
+    $full    = $path === '' ? $tbase : $tbase . '/' . $path;
     $slug    = basename($full);
-    $parent  = $seed_id === '' ? $base_parent : (int) ($ids[ dirname($seed_id) === '.' ? '' : dirname($seed_id) ] ?? 0);
-    if ($seed_id !== '' && $parent === 0) {
+    $parent  = $path === '' ? $trees[ $tree ]['parent'] : (int) ($ids[ learn_seed_id($tree, dirname($path) === '.' ? '' : dirname($path)) ] ?? 0);
+    if ($path !== '' && $parent === 0) {
         $report[] = array($label, 'error', 'parent page missing');
         continue;
     }
@@ -262,6 +279,52 @@ foreach ($manifest['pages'] as $page) {
     update_post_meta($id, LEARN_STATE_META, wp_slash((string) wp_json_encode($stored)));
     $ids[ $seed_id ] = (int) $id;
     $report[]        = array($label, $action, 'page ' . $id . ' ' . get_permalink($id) . ($note !== '' ? ' (' . $note . ')' : ''));
+}
+
+// Editorial links (learn/editorial-links.json -> option fides_ds_editorial_links), with the same
+// protection as pages: an option changed by an editor is skipped unless LEARN_FORCE contains "editorial-links".
+$el_file = $here . '/editorial-links.json';
+if (is_readable($el_file) && class_exists('Fides_DS_Editorial_Links')) {
+    $el_json    = json_decode(strtr((string) file_get_contents($el_file), $tokens), true);
+    $el_desired = array('entries' => is_array($el_json['entries'] ?? null) ? $el_json['entries'] : array());
+    $el_current = get_option(Fides_DS_Editorial_Links::OPTION, null);
+    $el_hash    = (string) get_option('fides_ds_editorial_links_seed', '');
+    $el_enc     = static function ($value): string {
+        return sha1((string) wp_json_encode($value));
+    };
+    $el_action  = 'created';
+    $el_note    = '';
+    $el_skip    = false;
+    if ($el_current !== null) {
+        if ($el_hash === '' || $el_hash !== $el_enc($el_current)) {
+            if (! in_array('editorial-links', $force, true)) {
+                $el_skip  = true;
+                $report[] = array('editorial links', $el_hash === '' ? 'skipped-unmarked' : 'skipped-edited', 'option exists and is not the last seeded state; not touched');
+            } else {
+                $el_action = 'forced';
+                if (! $dry) {
+                    wp_mkdir_p($backup);
+                    $el_backup = $backup . '/' . gmdate('Ymd-His') . '-editorial-links.json';
+                    file_put_contents($el_backup, wp_json_encode($el_current, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                    $el_note = ' (previous state saved to ' . $el_backup . ')';
+                }
+            }
+        } elseif ($el_enc($el_current) === $el_enc($el_desired)) {
+            $el_skip  = true;
+            $report[] = array('editorial links', 'unchanged', count($el_desired['entries']) . ' entries');
+        } else {
+            $el_action = 'updated';
+        }
+    }
+    if (! $el_skip) {
+        if ($dry) {
+            $report[] = array('editorial links', 'would-' . $el_action, count($el_desired['entries']) . ' entries');
+        } else {
+            update_option(Fides_DS_Editorial_Links::OPTION, $el_desired, false);
+            update_option('fides_ds_editorial_links_seed', $el_enc(get_option(Fides_DS_Editorial_Links::OPTION)), false);
+            $report[] = array('editorial links', $el_action, count($el_desired['entries']) . ' entries' . $el_note);
+        }
+    }
 }
 
 // Glossary terms requested by the content that have no vocabulary entry.

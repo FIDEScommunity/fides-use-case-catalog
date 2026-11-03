@@ -26,6 +26,22 @@ four concept topics, the two further topics per section, Architecture Assessment
 and Use Case & Business Case Development (shown only as possible follow-up steps).
 Webinars and roundtables are topics in preparation: no dates, no booking.
 
+### Explorer connection (Paper 25.0-25.6)
+
+Second tree `start` (manifest `"tree":"start"`, ids `@start/<path>`, base
+`LEARN_START_BASE`, default `fides-design-pilot/start`, token `{{start}}`):
+the starting point (kind `start`) and the receive route (kind `route`). Only
+the receive route is a link; the other two rows say "In preparation".
+Editorial links live in the option `fides_ds_editorial_links`, keyed by context
+(`usecase:<id>`, `wallet-overview:organizational`), and are seeded from
+`editorial-links.json` with edit protection (`LEARN_FORCE=editorial-links`
+replaces them after saving the old state). The module renders only for a listed
+context whose target page is published; nothing is derived from record text.
+Editors change a link by editing the option entry or a context in the JSON file.
+The pilot guard maps `/learn/`, `/learn/topics/` and `/ecosystem-explorer/start/`;
+a site that does not map them shows no Learn item and no dead links.
+Open questions: a credential-types explanation (no existing article fits).
+
 ### Sessions & workshops route
 
 Learn > Sessions & workshops > offering > enquiry. The page kinds `sessions`,
@@ -183,5 +199,6 @@ out of scope.
 bash tests/run-learn-checks.sh        # browser: desktop 1440/1100, tablet 768, mobile 390/320
 bash tests/run-sessions-checks.sh     # Sessions & workshops route, enquiry preview, nothing posted
 bash tests/run-learn-seed-checks.sh   # overwrite protection
+bash tests/run-connect-checks.sh      # home > start > receive > VOG > Learn, both ways
 bash run-tests.sh                     # PHP behaviour (includes tests/learn-behaviour.php)
 ```

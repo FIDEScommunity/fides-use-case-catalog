@@ -39,7 +39,7 @@ $check(strpos($prepared['html'], '<h2 id="what-is-checked">') !== false, 'headin
 
 // Seeded pages (when the pilot has been seeded).
 $seeded = get_posts(array('post_type' => 'page', 'post_status' => 'any', 'numberposts' => 20, 'meta_key' => '_fides_learn_seed', 'fields' => 'ids'));
-$check(count($seeded) >= 10, 'ten Learn seed pages exist (run create-learn-pages.sh)');
+$check(count($seeded) >= 12, 'twelve Learn seed pages exist (run create-learn-pages.sh)');
 foreach ($seeded as $id) {
     $check(get_page_template_slug($id) === Fides_DS_Learn::TEMPLATE, "seed page {$id} uses the Learn template");
     $check((string) get_post_meta($id, '_fides_learn_seed_hash', true) !== '', "seed page {$id} stores a seed hash");
@@ -92,6 +92,55 @@ if ($root instanceof WP_Post) {
     $check(strpos($html, 'On this page') !== false && strpos($html, 'Terms in this article') !== false, 'article shows contents menu and terms');
     $check(Fides_DS_Learn::series_links($article->ID)['prev'] === null, 'seed articles are not a series');
 }
+
+// Explorer entry pages (Paper 25.1, 25.2): shared shell, no Learn bar, catalog links from the navigation.
+$start   = get_page_by_path('fides-design-pilot/start', OBJECT, 'page');
+$receive = get_page_by_path('fides-design-pilot/start/receive', OBJECT, 'page');
+$check($start instanceof WP_Post && $receive instanceof WP_Post, 'start and receive pages exist (run create-learn-pages.sh)');
+if ($start && $receive) {
+    $html = Fides_DS_Learn::render_page($start->ID);
+    $check(strpos($html, 'fides-learn-bar') === false && strpos($html, 'fides-ds-site-header') === false, 'starting point has no Learn bar and no second header');
+    $check(substr_count($html, '<h1') === 1 && strpos($html, 'Start with what you want to achieve.') !== false, 'starting point has one H1');
+    $check(strpos($html, '/fides-design-pilot/start/receive/') !== false, 'only the receive route is a link');
+    $check(substr_count($html, 'fides-learn-rows__title') >= 2 && preg_match('#fides-learn-rows__title">Issue digital credentials#', $html) === 1, 'Issue digital credentials is not a link');
+    $check(preg_match('#fides-learn-rows__title">Understand what this means for us#', $html) === 1, 'Understand what this means for us is not a link');
+    $check(strpos($html, 'data-fides-learn-catalogs') !== false && strpos($html, '/fides-design-pilot/overview/') !== false && strpos($html, '/fides-design-pilot/credentials/') !== false, 'catalog links follow the navigation mapping');
+    $check(strpos($html, 'Intermediaries') === false && strpos($html, 'Trust schemes') === false, 'catalogs without a destination are not listed');
+    $rhtml = Fides_DS_Learn::render_page($receive->ID);
+    $check(strpos($rhtml, 'fides-learn-bar') === false, 'receive route has no Learn bar');
+    $check(strpos($rhtml, '/fides-design-pilot/learn/topics/the-big-picture/how-credentials-connect/') !== false, 'receive route links to the Learn article');
+    $check(strpos($rhtml, '/fides-design-pilot/learn/sessions/wallet-readiness-workshop/') !== false, 'receive route links to the Readiness Workshop');
+    $check(strpos($rhtml, 'usecase=digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC') !== false, 'receive route links to the VOG use case detail');
+}
+
+// Practice card: record named by the editor, image from the record, hidden when it cannot be shown.
+$vog  = 'digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC';
+$card = do_shortcode('[fides_learn_record type="usecase" id="' . $vog . '" url="/fides-design-pilot/use-case/" title="Practice" label="Explore"]');
+$check(strpos($card, 'data-fides-learn-record="usecase:' . $vog . '"') !== false && strpos($card, 'usecase=' . $vog) !== false, 'record card links to the named use case');
+$check(strpos($card, '<img class="fides-learn-record__image" src="https://') !== false, 'record card uses the image of the existing record');
+$check(do_shortcode('[fides_learn_record type="usecase" id="no-such-record" url="/fides-design-pilot/use-case/"]') === '', 'record card is hidden for an unknown record');
+$check(do_shortcode('[fides_learn_record type="wallet" id="x" url="/x/"]') === '' && do_shortcode('[fides_learn_record type="usecase" id="' . $vog . '"]') === '', 'record card is hidden for an unsupported type or a missing detail page');
+
+// Editorial links: only explicit entries, and only while the target page is published.
+$check(Fides_DS_Editorial_Links::render('usecase:' . $vog) !== '', 'VOG detail has an editorial link');
+$check(Fides_DS_Editorial_Links::render('usecase:some-other-record') === '' && Fides_DS_Editorial_Links::render('') === '', 'a record without an entry shows no module');
+$entry = Fides_DS_Editorial_Links::entry('usecase:' . $vog);
+$check(is_array($entry) && ($entry['target'] ?? '') !== '' && strpos((string) ($entry['target'] ?? ''), '/learn/topics/the-big-picture/how-credentials-connect/') !== false, 'VOG link targets the issuer, wallet and service article');
+$ghost = static function ($entry, $context) {
+    return $context === 'test:ghost' ? array('title' => 'T', 'label' => 'L', 'target' => '/fides-design-pilot/learn/no-such-page/') : $entry;
+};
+add_filter('fides_ds_editorial_link_entry', $ghost, 10, 2);
+$check(Fides_DS_Editorial_Links::render('test:ghost') === '', 'a link to a page that does not exist is not rendered');
+remove_filter('fides_ds_editorial_link_entry', $ghost, 10);
+$html = Fides_DS_Editorial_Links::render('wallet-overview:organizational');
+$check(strpos($html, 'fides-ds-editorial-link--card') !== false && strpos($html, 'business-wallets-where-to-start') !== false, 'business wallet overview card links to the existing article');
+$check(Fides_DS_Editorial_Links::target_url('javascript:alert(1)') === '' && Fides_DS_Editorial_Links::target_url('relative/page') === '', 'only site paths and http(s) URLs are accepted as targets');
+$check(do_shortcode('[fides_editorial_link context="credential-overview"]') === '', 'credential overview has no link until an editor chooses one');
+
+// Overview process band and article practice card come from the seeded content.
+$overview = get_page_by_path('fides-design-pilot/learn', OBJECT, 'page');
+$check($overview && strpos((string) $overview->post_content, 'fides-learn-process') !== false && strpos((string) $overview->post_content, 'how-credentials-connect') !== false, 'Learn overview has the process band linking to the article');
+
 Fides_DS_Glossary::reset();
 
 foreach ($results['fail'] as $message) {

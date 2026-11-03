@@ -200,6 +200,13 @@ final class Fides_Use_Case_Detail_Page {
       <?php endif; ?>
     </header>
 
+    <?php
+    // Editor-chosen explanation for this record (Paper 25.3); empty without an entry.
+    if (class_exists('Fides_DS_Editorial_Links')) {
+        echo Fides_DS_Editorial_Links::render('usecase:' . $id); // phpcs:ignore WordPress.Security.EscapeOutput
+    }
+    ?>
+
     <?php if (count($sections) > 1) : ?>
       <details class="fides-ds-section-nav fides-uc-detail__sections" data-fides-ds-section-nav>
         <summary>On this page <svg class="fides-ds-section-nav__chevron" aria-hidden="true" focusable="false" width="12" height="8" viewBox="0 0 12 8"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></summary>

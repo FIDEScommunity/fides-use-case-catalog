@@ -57,7 +57,7 @@ wp_reset_query();
 
 // Header markup.
 $header = Fides_DS_Site_Shell::render_header();
-foreach (array('Explore', 'Updates', 'Community', 'Tools &amp; API', 'Plans', 'About FIDES', 'Sign in', 'Search', 'Menu') as $label) {
+foreach (array('Explore', 'Learn', 'Updates', 'Community', 'Tools &amp; API', 'Plans', 'About FIDES', 'Sign in', 'Search', 'Menu') as $label) {
     $check(strpos($header, '>' . $label) !== false, "header shows {$label}");
 }
 $check(strpos($header, '<nav class="fides-ds-site-nav" aria-label="Main">') !== false || preg_match('#<nav[^>]*aria-label="Main"#', $header) === 1, 'main navigation is labelled');
@@ -75,9 +75,10 @@ $check(strpos($header, 'fides-ds-site-nav__panel-text') === false, 'panel links 
 preg_match('#id="fides-ds-panel-explore".*?</div></div></div>#s', $header, $explore_panel);
 $explore_panel = $explore_panel[0] ?? '';
 preg_match_all('#fides-ds-site-nav__group-label"[^>]*>([^<]+)<#', $explore_panel, $explore_groups);
-$check($explore_groups[1] === array('Discover', 'Browse catalogs'), 'Explore has the groups Discover and Browse catalogs: ' . implode(', ', $explore_groups[1]));
-$check(preg_match('#>Discover</p>(?:(?!group-label).)*>Glossary\s*<#s', $explore_panel) === 1, 'Glossary is listed under Discover');
-$check(strpos($explore_panel, 'Learn &amp; connect') === false, 'Learn & connect is not shown yet');
+$check(array_map('html_entity_decode', $explore_groups[1]) === array('Discover', 'Learn & connect', 'Browse catalogs'), 'Explore has the groups Discover, Learn & connect and Browse catalogs: ' . implode(', ', $explore_groups[1]));
+$check(preg_match('#>Learn &amp; connect</p>(?:(?!group-label).)*>Topics &amp; guides\s*<(?:(?!group-label).)*>Glossary\s*<#s', $explore_panel) === 1, 'Learn & connect lists Topics & guides and Glossary');
+$check(preg_match('#class="fides-ds-site-nav__link" href="[^"]*/fides-design-pilot/learn/"#', $header) === 1, 'Learn is a primary item that maps to the pilot Learn root');
+$check(strpos($header, 'href="' . esc_url(home_url('/fides-design-pilot/start/')) . '"') !== false, 'Find your starting point maps to the pilot starting point page');
 $brand_url = Fides_DS_Site_Shell::url('/');
 $check($brand_url !== '' && strpos($header, 'class="fides-ds-site-header__brand" href="' . esc_url($brand_url) . '"') !== false, 'logo links to the mapped homepage');
 $check(preg_match('#class="fides-ds-site-header__brand" href="[^"]*/fides-design-pilot/homepage-fragment/"#', $header) === 1, 'logo links to the pilot homepage fragment in the pilot');
@@ -94,6 +95,16 @@ $check(strpos($header_dropped, '>Updates<') === false, 'link with an empty URL i
 $check(strpos($header, '>Awards</p>') !== false && strpos($header_dropped, '>Awards</p>') === false, 'group without links is left out');
 $check(strpos($footer_dropped, '>News<') === false, 'link with an empty URL is left out of the footer');
 $check(strpos($header_dropped, '>Plans<') !== false, 'other links stay when one is dropped');
+
+// A site that does not map the proposed routes shows no Learn item and keeps the Explorer entry.
+$unmapped = static function ($url, $path) {
+    return in_array($path, array('/learn/', '/learn/topics/', '/ecosystem-explorer/start/'), true) ? '' : $url;
+};
+add_filter('fides_site_shell_url', $unmapped, PHP_INT_MAX, 2);
+$header_unmapped = Fides_DS_Site_Shell::render_header();
+remove_filter('fides_site_shell_url', $unmapped, PHP_INT_MAX);
+$check(strpos($header_unmapped, '>Learn<') === false && strpos($header_unmapped, 'Topics &amp; guides') === false, 'proposed Learn links are left out when the site maps nothing');
+$check(strpos($header_unmapped, 'Find your starting point') !== false && strpos($header_unmapped, '/fides-design-pilot/start/') === false, 'starting point falls back to the Explorer entry');
 
 // Account link.
 $admins = get_users(array('role' => 'administrator', 'number' => 1, 'fields' => 'ID'));

@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "Seed content for the FIDES Learn pilot. Paths are relative to the Learn base path (default /fides-design-pilot/learn). Tokens in content files: {{learn}}, {{pilot}}, {{glossary}}.",
+ "note": "Seed content for the FIDES Learn pilot. Paths are relative to the Learn base path (default /fides-design-pilot/learn). Pages with \"tree\":\"start\" are relative to the starting point base (default /fides-design-pilot/start). Tokens in content files: {{learn}}, {{start}}, {{pilot}}, {{glossary}}.",
  "pages": [
   {
    "path": "",
@@ -110,6 +110,30 @@
    "cta_url": "{{pilot}}/overview/",
    "content": "request.html",
    "menu_order": 9
+  },
+  {
+   "tree": "start",
+   "path": "",
+   "title": "Start with your goal",
+   "kind": "start",
+   "headline": "Start with what you want to achieve.",
+   "eyebrow": "Ecosystem Explorer",
+   "excerpt": "Understand how wallets, digital credentials and organizations work together. Then find your next step.",
+   "closing_title": "Already know your way?",
+   "closing_text": "Go straight to the catalogs.",
+   "content": "start.html",
+   "menu_order": 0
+  },
+  {
+   "tree": "start",
+   "path": "receive",
+   "title": "Receive information from wallets",
+   "kind": "route",
+   "headline": "Let people share the proof you need.",
+   "eyebrow": "Receive information from wallets",
+   "excerpt": "Explore what accepting digital credentials could mean for your organization, before choosing technology or a partner.",
+   "content": "receive.html",
+   "menu_order": 0
   },
   {
    "path": "topics/for-businesses/business-wallets-where-to-start",
