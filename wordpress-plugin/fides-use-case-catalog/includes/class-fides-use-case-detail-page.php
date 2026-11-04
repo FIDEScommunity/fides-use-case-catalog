@@ -569,6 +569,24 @@ final class Fides_Use_Case_Detail_Page {
     }
 
     /**
+     * Relations of one group that point to a FIDES catalog record with an
+     * internal destination (used by the homepage spotlight).
+     *
+     * @param array<string, mixed> $item
+     * @return list<array{label:string, href:string}>
+     */
+    public static function catalog_relations(array $item, string $key): array {
+        $groups = self::relation_groups($item);
+        $rows   = array();
+        foreach ($groups[ $key ]['items'] ?? array() as $relation) {
+            if ($relation['href'] !== '' && ! $relation['external'] && $relation['source'] === 'FIDES catalog record') {
+                $rows[ $relation['href'] ] = array('label' => $relation['label'], 'href' => $relation['href']);
+            }
+        }
+        return array_values($rows);
+    }
+
+    /**
      * One role group in the Connected ecosystem section. Below 1100px it is
      * a disclosure: groups with up to three records start open, longer ones
      * closed with the count visible. All records stay in the HTML.

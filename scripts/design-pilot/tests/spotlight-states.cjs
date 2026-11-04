@@ -39,7 +39,9 @@ const read = (loc) => loc.evaluate((e) => {
       ["viewall-orgs", spot.locator(".fides-uc-spot__all").nth(0), true],
       ["viewall-wallets", spot.locator(".fides-uc-spot__all").nth(1), true],
       ["read", spot.locator(".fides-uc-spot__text > a"), true],
-      ["head", spot.locator(".fides-uc-spot__link--head"), true],
+      ["viewall-personal", spot.locator(".fides-uc-spot__all").nth(2), true],
+      ["viewall-credentials", spot.locator(".fides-uc-spot__all").nth(3), true],
+      ["name-credential", spot.locator(".fides-uc-spot__group").nth(3).locator(".fides-uc-spot__names a").first(), false],
     ];
     for (const [name, loc, arrowLink] of links) {
       await loc.scrollIntoViewIfNeeded();
@@ -72,12 +74,12 @@ const read = (loc) => loc.evaluate((e) => {
       if (arrowLink) {
         check(`${tag}: ${name} has an arrow and is underlined on hover and focus`, d.arrow && h.deco === "underline" && f.deco === "underline", JSON.stringify([d.arrow, d.deco, h.deco, f.deco]));
       } else {
-        check(`${tag}: ${name} stays underlined in every state`, d.deco === "underline" && h.deco === "underline" && f.deco === "underline");
+        check(`${tag}: ${name} is not underlined by default and is underlined on hover and focus`, d.deco === "none" && h.deco === "underline" && f.deco === "underline", JSON.stringify([d.deco, h.deco, f.deco]));
       }
     }
     // "View all" reads as a separate follow-up step: space above and below the names, arrow after the text.
     const gap = await spot.locator(".fides-uc-spot__group").nth(0).evaluate((g) => { const last = g.querySelector(".fides-uc-spot__names li:last-child a").getBoundingClientRect(); const all = g.querySelector(".fides-uc-spot__all"); const r = all.getBoundingClientRect(); const names = g.querySelectorAll(".fides-uc-spot__names a"); return { gap: Math.round(r.top - last.bottom), margin: parseFloat(getComputedStyle(all).marginTop), arrowAfter: all.querySelector(".fides-uc-spot__arrow").getBoundingClientRect().left >= all.firstChild.parentElement.getBoundingClientRect().left, namesDeco: getComputedStyle(names[0]).textDecorationLine, allDeco: getComputedStyle(all).textDecorationLine }; });
-    check(`${tag}: View all has space above it and shows no underline until hover or focus`, gap.margin >= 8 && gap.gap >= 8 && gap.allDeco === "none" && gap.namesDeco === "underline", JSON.stringify(gap));
+    check(`${tag}: View all has space above it and shows no underline until hover or focus`, gap.margin >= 8 && gap.gap >= 8 && gap.allDeco === "none" && gap.namesDeco === "none", JSON.stringify(gap));
 
     // Digital trust in practice: hover and focus of a theme row.
     const row = page.locator(".fides-uc-index__link").first();
@@ -102,6 +104,8 @@ const read = (loc) => loc.evaluate((e) => {
     await page.waitForTimeout(250);
     const rf = await read(row);
     await idx.screenshot({ path: path.join(OUT, `themes-${w}-focus.png`) });
+    const tile = await row.locator(".fides-uc-index__icon").evaluate((e) => getComputedStyle(e).backgroundColor);
+    check(`${tag}: theme icon keeps its own tile on hover (tile ${tile} differs from the row tint)`, tile !== rh.bg && tile === "rgb(255, 255, 255)", JSON.stringify([tile, rh.bg]));
     check(`${tag}: theme row hover: soft blue tint with blue text and arrow, all readable`, rh.bg === "rgb(242, 247, 255)" && rh.color === "rgb(8, 72, 163)" && rh.kids.every((k) => k === "rgb(8, 72, 163)" || k === "rgb(74, 74, 74)"), JSON.stringify(rh));
     check(`${tag}: theme row default is dark text without tint`, rd.bg === "rgba(0, 0, 0, 0)" && rd.color === "rgb(14, 14, 14)", JSON.stringify(rd));
     check(`${tag}: theme row focus: ring of at least 3px`, rf.outS === "solid" && rf.outW >= 3, JSON.stringify(rf));

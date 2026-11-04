@@ -793,6 +793,13 @@
   background: var(--fides-ds-soft, #f2f7ff);
 }
 
+/* The icon keeps its own tile on the tinted row: white with a thin blue edge. */
+.fides-ds .fides-uc-index__link:hover .fides-uc-index__icon,
+.fides-ds .fides-uc-index__link:focus-visible .fides-uc-index__icon {
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(8, 72, 163, 0.35);
+}
+
 .fides-ds .fides-uc-index__link:hover .fides-uc-index__name {
   text-decoration: underline;
   text-underline-offset: 3px;

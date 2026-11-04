@@ -5,15 +5,16 @@
  * Shows one published use case straight from its catalog record: title,
  * short preview of the description, image and status. Connected records come
  * from the explicit links of the record only, grouped as Organizations and
- * Business wallets. Each group shows the number of unique linked records that
- * exist in the catalog, at most two names, and a "View all N" link to the
- * matching section of the use case page when there are more. Empty groups are
- * left out. Only the id is stored in the page.
+ * Business wallets, Personal wallets, Credential types, Issuers and Relying
+ * parties. Each group shows the number of unique linked records that exist in
+ * the catalog, at most two names, and a "View all N" link to the matching
+ * section of the use case page when there are more. Groups without catalog
+ * records (for example submitter-listed issuers) are left out. Only the id is
+ * stored in the page.
  *
  * Attributes:
  *  - id         Catalog id of the use case (required).
  *  - detail_url Use case detail page base; default is the canonical share URL.
- *  - catalog_url Overview URL; default comes from the site shell.
  *
  * @package fides-use-case-catalog
  */
@@ -67,26 +68,20 @@ final class Fides_Use_Case_Spotlight {
      * @param array<string, mixed> $item
      */
     public static function preview(array $item): string {
-        $lines = preg_split('/\R/u', trim((string) ($item['summary'] ?? '')));
-        $text  = '';
-        foreach ((array) $lines as $line) {
-            $line = trim((string) $line);
-            if ($line !== '') {
-                $text = $line;
-                break;
-            }
+        $lines = array_values(array_filter(array_map('trim', (array) preg_split('/\R/u', trim((string) ($item['summary'] ?? '')))), static function ($line) {
+            return $line !== '';
+        }));
+        $text  = trim((string) preg_replace('/^use case\s*:\s*/iu', '', (string) ($lines[0] ?? '')));
+        $more  = count($lines) > 1;
+        $len   = function_exists('mb_strlen') ? mb_strlen($text) : strlen($text);
+        if ($len > self::PREVIEW_LENGTH) {
+            $cut = function_exists('mb_substr') ? mb_substr($text, 0, self::PREVIEW_LENGTH) : substr($text, 0, self::PREVIEW_LENGTH);
+            $pos = strrpos($cut, ' ');
+            $text = $pos !== false && $pos > 80 ? substr($cut, 0, $pos) : $cut;
+            $more = true;
         }
-        $text = trim((string) preg_replace('/^use case\s*:\s*/iu', '', $text));
-        $len  = function_exists('mb_strlen') ? mb_strlen($text) : strlen($text);
-        if ($len <= self::PREVIEW_LENGTH) {
-            return $text;
-        }
-        $cut = function_exists('mb_substr') ? mb_substr($text, 0, self::PREVIEW_LENGTH) : substr($text, 0, self::PREVIEW_LENGTH);
-        $pos = strrpos($cut, ' ');
-        if ($pos !== false && $pos > 80) {
-            $cut = substr($cut, 0, $pos);
-        }
-        return rtrim($cut, " ,;:.-") . '…';
+        // The description continues on the use case page: mark the cut.
+        return $more && $text !== '' ? rtrim($text, " ,;:.-") . '…' : $text;
     }
 
     /**
@@ -156,8 +151,75 @@ final class Fides_Use_Case_Spotlight {
     }
 
     /**
-     * Connected groups for the block; empty groups are omitted. "total" counts
-     * every unique linked catalog record, "names" holds at most two.
+     * Personal wallets the record links explicitly, resolved in the catalog.
+     *
+     * @param array<string, mixed> $item
+     * @return list<array{name:string,href:string}>
+     */
+    private static function personal_wallets(array $item): array {
+        if (! class_exists('Fides_Wallet_Design')) {
+            return array();
+        }
+        $rows = array();
+        foreach (self::linked_refs($item, 'personalWallets') as $ref) {
+            $wallet = Fides_Wallet_Design::find($ref);
+            $href   = $wallet === null ? '' : Fides_Wallet_Design::detail_url((string) $wallet['id'], Fides_Wallet_Design::pilot_detail_base());
+            if ($href !== '') {
+                $rows[] = array('name' => (string) $wallet['name'], 'href' => $href);
+            }
+        }
+        return $rows;
+    }
+
+    /**
+     * Credential types the record links explicitly, resolved in the catalog.
+     *
+     * @param array<string, mixed> $item
+     * @return list<array{name:string,href:string}>
+     */
+    private static function credential_types(array $item): array {
+        if (! class_exists('Fides_Credential_Design')) {
+            return array();
+        }
+        $rows = array();
+        $seen = array();
+        foreach (self::linked_refs($item, 'credentials') as $ref) {
+            $credential = Fides_Credential_Design::find(Fides_Use_Case_Design::credential_canonical_id($ref));
+            if ($credential === null || isset($seen[ (string) $credential['id'] ])) {
+                continue;
+            }
+            $seen[ (string) $credential['id'] ] = true;
+            $href = Fides_Credential_Design::detail_url((string) $credential['id'], Fides_Credential_Design::pilot_detail_base());
+            $name = trim((string) ($credential['displayName'] ?? ''));
+            if ($href !== '' && $name !== '') {
+                $rows[] = array('name' => $name, 'href' => $href);
+            }
+        }
+        return $rows;
+    }
+
+    /**
+     * Issuers and relying parties: only rows that point to a FIDES catalog
+     * record count. Entries the submitter listed by name are not records.
+     *
+     * @param array<string, mixed> $item
+     * @return list<array{name:string,href:string}>
+     */
+    private static function listed_catalog_records(array $item, string $key): array {
+        if (! class_exists('Fides_Use_Case_Detail_Page') || ! method_exists('Fides_Use_Case_Detail_Page', 'catalog_relations')) {
+            return array();
+        }
+        $rows = array();
+        foreach (Fides_Use_Case_Detail_Page::catalog_relations($item, $key) as $relation) {
+            $rows[] = array('name' => $relation['label'], 'href' => $relation['href']);
+        }
+        return $rows;
+    }
+
+    /**
+     * Connected groups for the block; groups without catalog records are
+     * omitted. "total" counts every unique linked catalog record, "names"
+     * holds at most two.
      *
      * @param array<string, mixed> $item
      * @return list<array{key:string,label:string,noun:string,total:int,names:list<array{name:string,href:string}>,all_url:string}>
@@ -166,6 +228,10 @@ final class Fides_Use_Case_Spotlight {
         $defs = array(
             array('organizations', 'Organizations', 'organizations', self::organizations($item), '#organisations'),
             array('businessWallets', 'Business wallets', 'business wallets', self::wallets($item), '#ecosystem-businesswallets'),
+            array('personalWallets', 'Personal wallets', 'personal wallets', self::personal_wallets($item), '#ecosystem-personalwallets'),
+            array('credentials', 'Credential types', 'credential types', self::credential_types($item), '#ecosystem-credentials'),
+            array('issuers', 'Issuers', 'issuers', self::listed_catalog_records($item, 'issuers'), '#ecosystem-issuers'),
+            array('rps', 'Relying parties', 'relying parties', self::listed_catalog_records($item, 'rps'), '#ecosystem-rps'),
         );
         $groups = array();
         foreach ($defs as [$key, $label, $noun, $rows, $anchor]) {
@@ -206,7 +272,7 @@ final class Fides_Use_Case_Spotlight {
      */
     public static function shortcode($atts = array()): string {
         $atts = shortcode_atts(
-            array('id' => '', 'detail_url' => '', 'catalog_url' => ''),
+            array('id' => '', 'detail_url' => ''),
             is_array($atts) ? $atts : array(),
             'fides_use_case_spotlight'
         );
@@ -228,7 +294,6 @@ final class Fides_Use_Case_Spotlight {
         $title    = (string) ($item['title'] ?? $id);
         $detail   = Fides_Use_Case_Design::detail_url($id, (string) $atts['detail_url']);
         $image    = Fides_Use_Case_Design::image_url($item);
-        $overview = Fides_Use_Case_Discovery_Shortcode::overview_url((string) $atts['catalog_url']);
         $preview  = self::preview($item);
         // Demo label plus the catalog's own status; the status is never rewritten.
         $kicker   = implode(' · ', array_filter(array('Demo use case', Fides_Use_Case_Design::kicker($item), Fides_Use_Case_Design::status_label($item))));
@@ -236,8 +301,7 @@ final class Fides_Use_Case_Spotlight {
 
         $html  = '<section class="fides-ds fides-uc-spot" aria-labelledby="fides-uc-spot-title"><div class="fides-uc-spot__inner">';
         $html .= '<div class="fides-uc-spot__head"><div><p class="fides-uc-spot__eyebrow">' . esc_html__('Explore in practice', 'fides-use-case-catalog') . '</p>'
-            . '<h2 class="fides-uc-spot__title" id="fides-uc-spot-title">' . esc_html__('One use case. A connected ecosystem.', 'fides-use-case-catalog') . '</h2></div>'
-            . '<a class="fides-uc-spot__link fides-uc-spot__link--head" href="' . esc_url($overview) . '">' . esc_html__('Explore the catalog', 'fides-use-case-catalog') . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a></div>';
+            . '<h2 class="fides-uc-spot__title" id="fides-uc-spot-title">' . esc_html__('One use case. A connected ecosystem.', 'fides-use-case-catalog') . '</h2></div></div>';
         $html .= '<article class="fides-uc-spot__case' . ($image === '' ? ' fides-uc-spot__case--no-media' : '') . '" data-use-case-id="' . esc_attr($id) . '">';
         if ($image !== '') {
             $html .= '<a class="fides-uc-spot__media" href="' . esc_url($detail) . '" tabindex="-1" aria-hidden="true"><img src="' . esc_url($image) . '" alt="" loading="lazy" decoding="async"></a>';

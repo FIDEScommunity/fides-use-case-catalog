@@ -172,7 +172,7 @@
 
 @media (min-width: 640px) {
   .fides-ds .fides-uc-spot__related {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   }
 }
 
@@ -220,14 +220,8 @@
   font-size: 16px;
   font-weight: 500;
   line-height: 22px;
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 4px;
+  text-decoration: none;
   overflow-wrap: anywhere;
-}
-
-.fides-ds .fides-uc-spot__names a:hover {
-  text-decoration-thickness: 2px;
 }
 
 /* "View all" is a follow-up step: own line, space above, arrow, no underline until hover/focus. */
@@ -247,13 +241,13 @@
   color: #ffffff;
 }
 
-.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__all) {
+.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__all, .fides-uc-spot__names a) {
   text-decoration: none;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
 }
 
-.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__all):is(:hover, :focus-visible) {
+.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__all, .fides-uc-spot__names a):is(:hover, :focus-visible) {
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
