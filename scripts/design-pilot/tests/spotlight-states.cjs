@@ -22,6 +22,16 @@ const read = (loc) => loc.evaluate((e) => {
   return { color: c.color, deco: c.textDecorationLine, thick: parseFloat(c.textDecorationThickness) || 0, kids, outW: parseFloat(c.outlineWidth), outS: c.outlineStyle, outC: c.outlineColor, outO: parseFloat(c.outlineOffset), bg: c.backgroundColor, arrow: !!e.querySelector(".fides-uc-spot__arrow"), mt: parseFloat(c.marginTop) };
 });
 
+
+const WHITE = "rgb(255, 255, 255)";
+const BLUE = "rgb(8, 72, 163)";
+// Everything a relation link paints, for the link and its parts, in the current state.
+const snap = (loc) => loc.evaluate((e) => {
+  const origin = e.getBoundingClientRect(); const part = (x) => { const c = getComputedStyle(x); const b = x.getBoundingClientRect(); return { color: c.color, deco: c.textDecorationLine, decoColor: c.textDecorationColor, bg: c.backgroundColor, border: [c.borderTopColor, c.borderTopWidth].join(" "), outline: `${c.outlineStyle} ${c.outlineWidth} ${c.outlineColor} ${c.outlineOffset}`, shadow: c.boxShadow, filter: c.filter, opacity: c.opacity, rect: [b.x - origin.x, b.y - origin.y, b.width, b.height].map((n) => Math.round(n * 10) / 10).join(",") }; };
+  return { link: part(e), name: part(e.querySelector(".fides-uc-spot__name")), count: part(e.querySelector(".fides-uc-spot__count")), arrow: part(e.querySelector(".fides-uc-spot__arrow")) };
+});
+const paintsBlue = (s) => Object.values(s).some((p) => [p.color, p.decoColor, p.bg, p.border, p.outline, p.shadow].some((v) => String(v).includes(BLUE)));
+
 (async () => {
   const browser = await chromium.launch();
   for (const w of WIDTHS) {
@@ -40,6 +50,44 @@ const read = (loc) => loc.evaluate((e) => {
     ];
     for (const [name, loc] of links) {
       await loc.scrollIntoViewIfNeeded();
+      if (name.startsWith("relation-")) {
+        await page.mouse.move(2, 2);
+        await page.evaluate(() => document.activeElement && document.activeElement.blur());
+        await page.waitForTimeout(250);
+        const d = await snap(loc);
+        await spot.screenshot({ path: path.join(OUT, `${name}-${w}-default.png`) });
+        let h = null;
+        for (let i = 0; i < 8; i += 1) {
+          await page.mouse.move(2, 2);
+          await loc.hover();
+          await page.waitForTimeout(250);
+          h = await snap(loc);
+          if (h.name.deco.startsWith("underline")) break;
+        }
+        await spot.screenshot({ path: path.join(OUT, `${name}-${w}-hover.png`) });
+        await page.mouse.down();
+        await page.waitForTimeout(150);
+        const a = await snap(loc);
+        await page.mouse.move(2, 2);
+        await page.mouse.up();
+        await page.mouse.move(2, 2);
+        await loc.focus();
+        await page.keyboard.press("Shift+Tab");
+        await page.keyboard.press("Tab");
+        await page.waitForTimeout(250);
+        const isFocused = await loc.evaluate((e) => e === document.activeElement && e.matches(":focus-visible"));
+        const f = await snap(loc);
+        await spot.screenshot({ path: path.join(OUT, `${name}-${w}-focus.png`) });
+        const allWhite = (x) => x.link.color === WHITE && x.name.color === WHITE && x.count.color === WHITE && x.arrow.color === WHITE;
+        const rects = (x) => [x.name.rect, x.count.rect, x.arrow.rect].join("|");
+        check(`${tag}: ${name} default: white name, count and arrow, no underline anywhere`, allWhite(d) && Object.values(d).every((p) => p.deco === "none"), JSON.stringify(d));
+        check(`${tag}: ${name} hover: everything stays white, only the name is underlined`, allWhite(h) && h.name.deco === "underline" && h.name.decoColor === WHITE && h.link.deco === "none" && h.count.deco === "none" && h.arrow.deco === "none", JSON.stringify(h));
+        check(`${tag}: ${name} pressed: still white, no blue`, allWhite(a) && !paintsBlue(a), JSON.stringify(a));
+        check(`${tag}: ${name} keyboard focus: only the name is underlined, white focus ring of 3px with offset`, isFocused && allWhite(f) && f.name.deco === "underline" && f.link.deco === "none" && f.count.deco === "none" && f.arrow.deco === "none" && /^solid 3px rgb\(255, 255, 255\) (4|5)px$/.test(f.link.outline), JSON.stringify(f));
+        check(`${tag}: ${name} no blue hover colour from the theme in any state (text, underline, background, border, outline, shadow)`, !paintsBlue(d) && !paintsBlue(h) && !paintsBlue(a) && !paintsBlue(f) && h.link.bg === "rgba(0, 0, 0, 0)" && h.link.opacity === "1", JSON.stringify([h.link.bg, h.link.opacity]));
+        check(`${tag}: ${name} name, count and arrow stay in place on hover and focus (positions relative to the link)`, rects(d) === rects(h) && rects(d) === rects(f) && rects(d) === rects(a), JSON.stringify([rects(d), rects(h), rects(f)]));
+        continue;
+      }
       await page.mouse.move(2, 2);
       await page.evaluate(() => document.activeElement && document.activeElement.blur());
       await page.waitForTimeout(200);

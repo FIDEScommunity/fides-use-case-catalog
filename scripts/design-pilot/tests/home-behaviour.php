@@ -151,7 +151,7 @@ $links = Fides_Use_Case_Spotlight::relation_links($item, '/u/');
 $totals = array();
 foreach ($links as $l) { $totals[$l['key']] = $l['total']; }
 $check($totals === array('organizations' => 7, 'businessWallets' => 4, 'personalWallets' => 5, 'credentials' => 15, 'issuers' => 13, 'rps' => 17), 'one link per explicitly linked type with the totals the use case page lists');
-$check(strpos($spot, '>Organizations <data class="fides-uc-spot__count" value="7">7</data>') !== false && strpos($spot, '>Business wallets <data class="fides-uc-spot__count" value="4">4</data>') !== false && strpos($spot, '>Relying parties <data class="fides-uc-spot__count" value="17">17</data>') !== false, 'labels carry the counts');
+$check(strpos($spot, '>Organizations</span> <data class="fides-uc-spot__count" value="7">7</data>') !== false && strpos($spot, '>Business wallets</span> <data class="fides-uc-spot__count" value="4">4</data>') !== false && strpos($spot, '>Relying parties</span> <data class="fides-uc-spot__count" value="17">17</data>') !== false, 'labels carry the counts');
 $check(strpos($spot, esc_url($base . '#organisations')) !== false && strpos($spot, esc_url($base . '#ecosystem-businesswallets')) !== false && strpos($spot, esc_url($base . '#ecosystem-personalwallets')) !== false && strpos($spot, esc_url($base . '#ecosystem-credentials')) !== false && strpos($spot, esc_url($base . '#ecosystem-issuers')) !== false && strpos($spot, esc_url($base . '#ecosystem-rps')) !== false, 'each link points to its section');
 $detail = do_shortcode('[fides_use_case_detail id="' . $bosch . '"]');
 $ok = true;

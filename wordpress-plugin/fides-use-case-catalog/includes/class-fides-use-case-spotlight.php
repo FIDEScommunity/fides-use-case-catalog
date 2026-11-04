@@ -139,7 +139,7 @@ final class Fides_Use_Case_Spotlight {
             $html .= '<nav class="fides-uc-spot__relations" aria-label="' . esc_attr__('Connected to this use case', 'fides-use-case-catalog') . '"><ul class="fides-uc-spot__relation-list">';
             foreach ($links as $link) {
                 $html .= '<li><a class="fides-uc-spot__relation" data-relation="' . esc_attr($link['key']) . '" href="' . esc_url($link['url']) . '">'
-                    . esc_html($link['label']) . ' <data class="fides-uc-spot__count" value="' . esc_attr((string) $link['total']) . '">' . esc_html((string) $link['total']) . '</data>'
+                    . '<span class="fides-uc-spot__name">' . esc_html($link['label']) . '</span> <data class="fides-uc-spot__count" value="' . esc_attr((string) $link['total']) . '">' . esc_html((string) $link['total']) . '</data>'
                     . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a></li>';
             }
             $html .= '</ul></nav>';

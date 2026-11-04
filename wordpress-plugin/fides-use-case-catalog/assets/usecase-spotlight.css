@@ -222,13 +222,13 @@
   color: #ffffff;
 }
 
-.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__relation) {
+.fides-ds .fides-uc-spot :is(.fides-uc-spot__link) {
   text-decoration: none;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
 }
 
-.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__relation):is(:hover, :focus-visible) {
+.fides-ds .fides-uc-spot :is(.fides-uc-spot__link):is(:hover, :focus-visible) {
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
@@ -240,7 +240,7 @@
   transition: transform 150ms ease;
 }
 
-.fides-ds .fides-uc-spot a:is(:hover, :focus-visible) .fides-uc-spot__arrow {
+.fides-ds .fides-uc-spot .fides-uc-spot__link:is(:hover, :focus-visible) .fides-uc-spot__arrow {
   transform: translateX(3px);
 }
 
@@ -249,7 +249,7 @@
     transition: none;
   }
 
-  .fides-ds .fides-uc-spot a:is(:hover, :focus-visible) .fides-uc-spot__arrow {
+  .fides-ds .fides-uc-spot .fides-uc-spot__link:is(:hover, :focus-visible) .fides-uc-spot__arrow {
     transform: none;
   }
 }
@@ -259,4 +259,25 @@
   outline: 3px solid #ffffff;
   outline-offset: 4px;
   border-radius: 2px;
+}
+
+/* Relation links: white text, count and arrow in every state; only the name is underlined on hover and keyboard focus. */
+.fides-ds .fides-uc-spot .fides-uc-spot__relation {
+  text-decoration: none;
+}
+
+.fides-ds .fides-uc-spot .fides-uc-spot__relation .fides-uc-spot__name {
+  text-decoration: none;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.fides-ds .fides-uc-spot .fides-uc-spot__relation:is(:hover, :focus-visible) .fides-uc-spot__name {
+  text-decoration: underline;
+}
+
+.fides-ds .fides-uc-spot .fides-uc-spot__relation .fides-uc-spot__arrow {
+  transform: none;
+  transition: none;
 }
