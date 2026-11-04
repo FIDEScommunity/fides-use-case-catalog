@@ -36,9 +36,11 @@ require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-discov
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-design.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-detail-page.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-featured.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-spotlight.php';
 Fides_Use_Case_Design::bootstrap();
 Fides_Use_Case_Detail_Page::bootstrap();
 Fides_Use_Case_Featured::bootstrap();
+Fides_Use_Case_Spotlight::bootstrap();
 
 // Boot the SSR/SEO renderer (no-op shim when the tiles base class is absent).
 Fides_Use_Case_Catalog_SSR::bootstrap();
@@ -2044,7 +2046,7 @@ function fides_use_case_catalog_enqueue_assets(): void {
         'fides-use-case-discovery',
         FIDES_USE_CASE_CATALOG_URL . 'assets/usecase-discovery.css',
         array(),
-        FIDES_USE_CASE_CATALOG_VERSION
+        file_exists($plugin_dir . 'assets/usecase-discovery.css') ? filemtime($plugin_dir . 'assets/usecase-discovery.css') : FIDES_USE_CASE_CATALOG_VERSION
     );
 
     wp_register_script(
@@ -2080,7 +2082,7 @@ function fides_use_case_catalog_enqueue_assets(): void {
         'fides-use-case-discovery',
         FIDES_USE_CASE_CATALOG_URL . 'assets/usecase-discovery.js',
         array(),
-        FIDES_USE_CASE_CATALOG_VERSION,
+        file_exists($plugin_dir . 'assets/usecase-discovery.js') ? filemtime($plugin_dir . 'assets/usecase-discovery.js') : FIDES_USE_CASE_CATALOG_VERSION,
         true
     );
 }

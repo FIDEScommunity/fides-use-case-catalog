@@ -73,9 +73,14 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     if (w >= 1024) {
       const row = page.locator(".fides-uc-index__link").nth(1);
       const bg0 = await row.evaluate((e) => getComputedStyle(e).backgroundColor);
-      await row.hover();
-      await page.waitForTimeout(200);
-      check(`${tag}: theme row shows hover`, (await row.evaluate((e) => getComputedStyle(e).backgroundColor)) !== bg0);
+      let tinted = false;
+      for (let i = 0; i < 8 && !tinted; i += 1) {
+        await page.mouse.move(2, 2);
+        await row.hover();
+        await page.waitForTimeout(150);
+        tinted = (await row.evaluate((e) => getComputedStyle(e).backgroundColor)) !== bg0;
+      }
+      check(`${tag}: theme row shows hover`, tinted);
     }
     // Follow themes: filter visible in the overview and result count equals the homepage count.
     const pick = w === 1440 ? idx.rows : [idx.rows[0], idx.rows[Math.floor(idx.rows.length / 2)], idx.rows[idx.rows.length - 1]];
@@ -116,9 +121,15 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     check(`${tag}: news item reachable by keyboard with a visible ring`, reached && ring, `${reached} ${ring}`);
     if (w >= 1024) {
       const item = page.locator(".fides-home-news__item").nth(1);
-      await item.hover();
-      await page.waitForTimeout(200);
-      check(`${tag}: news title is underlined on hover`, (await item.locator(".fides-home-news__link").evaluate((e) => getComputedStyle(e).textDecorationLine)) === "underline");
+      await item.scrollIntoViewIfNeeded();
+      let underlined = false;
+      for (let i = 0; i < 8 && !underlined; i += 1) {
+        await page.mouse.move(2, 2);
+        await item.hover();
+        await page.waitForTimeout(150);
+        underlined = (await item.locator(".fides-home-news__link").evaluate((e) => getComputedStyle(e).textDecorationLine)) === "underline";
+      }
+      check(`${tag}: news title is underlined on hover`, underlined);
     }
 
     // Click through to the original post and back.
@@ -128,6 +139,85 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     await page.goBack();
     await page.locator(".fides-home-news__item").first().waitFor();
     check(`${tag}: back returns to the homepage`, page.url().startsWith(HOME));
+
+    // Spotlight: Bosch demo use case with its explicit relations.
+    await page.goto(HOME, { waitUntil: "domcontentloaded" });
+    await page.locator(".fides-uc-spot").waitFor();
+    const spot = await page.evaluate(() => { const s = document.querySelector(".fides-uc-spot"); const r = (e) => e.getBoundingClientRect(); const rel = [...s.querySelectorAll(".fides-uc-spot__related-item")].map((li) => { const a = li.querySelector("a"); return { label: li.querySelector(".fides-uc-spot__label").textContent.trim(), name: li.querySelector(".fides-uc-spot__entity-name").textContent.trim(), href: a.getAttribute("href"), h: Math.round(r(a).height), right: Math.round(r(li).right) }; }); const main = [...s.querySelectorAll(".fides-uc-spot__case a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(r(a).height), hidden: a.getAttribute("aria-hidden") })); return { bg: getComputedStyle(s).backgroundColor, y: r(s).top + scrollY, newsBottom: r(document.querySelector(".fides-home-news")).bottom + scrollY, kicker: s.querySelector(".fides-uc-spot__kicker").textContent.trim(), title: s.querySelector(".fides-uc-spot__case-title").textContent.trim(), img: (s.querySelector(".fides-uc-spot__media img") || {}).src || "", intro: !!s.querySelector(".fides-uc-spot__intro"), rel, main, head: s.querySelector(".fides-uc-spot__link--head").getAttribute("href"), caseX: Math.round(r(s.querySelector(".fides-uc-spot__case")).x), relX: s.querySelector(".fides-uc-spot__related") ? Math.round(r(s.querySelector(".fides-uc-spot__related")).x) : 0, relY: s.querySelector(".fides-uc-spot__related") ? Math.round(r(s.querySelector(".fides-uc-spot__related")).top) : 0, caseBottom: Math.round(r(s.querySelector(".fides-uc-spot__case")).bottom) }; });
+    check(`${tag}: blue spotlight sits directly below the news`, spot.bg === "rgb(8, 72, 163)" && spot.y >= spot.newsBottom - 1 && spot.y - spot.newsBottom < 4, JSON.stringify([spot.bg, spot.y, spot.newsBottom]));
+    check(`${tag}: spotlight shows the Bosch use case as a demo with the catalog status and image`, /^Demo use case/.test(spot.kicker) && /Not in production/.test(spot.kicker) && /End-to-End Digital Business Workflows/.test(spot.title) && /^https?:/.test(spot.img) && spot.intro, JSON.stringify([spot.kicker, spot.title, spot.img]));
+    check(`${tag}: at most two connected items, one organization and one business wallet`, spot.rel.length === 2 && spot.rel[0].label === "Organization" && spot.rel[1].label === "Business wallet" && /Bosch/.test(spot.rel[0].name), JSON.stringify(spot.rel));
+    check(`${tag}: spotlight links go to the pilot detail pages of the right records`, /\/fides-design-pilot\/organization\/\?org=org%3Abosch$/.test(spot.rel[0].href) && /\/fides-design-pilot\/wallet\/\?wallet=procivis-one$/.test(spot.rel[1].href) && spot.main.some((m) => /\/fides-design-pilot\/use-case\/\?usecase=end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh$/.test(m.href)) && /\/fides-design-pilot\/overview\/$/.test(spot.head), JSON.stringify([spot.rel.map((r) => r.href), spot.main, spot.head]));
+    check(`${tag}: spotlight links are at least 44px tall and inside the viewport`, spot.rel.every((r) => r.h >= 44 && r.right <= w) && spot.main.filter((m) => !m.hidden).every((m) => m.h >= 44), JSON.stringify([spot.rel, spot.main]));
+    check(`${tag}: ${w >= 1024 ? "use case left, connected items right" : "connected items stack below the use case"}`, w >= 1024 ? spot.relX > spot.caseX && spot.relY < spot.caseBottom : spot.relY >= spot.caseBottom - 1, JSON.stringify([spot.caseX, spot.relX, spot.relY, spot.caseBottom]));
+    check(`${tag}: no horizontal overflow with the spotlight`, (await overflow(page)) <= 0);
+    for (const [name, href] of [["organization", spot.rel[0].href], ["wallet", spot.rel[1].href], ["use case", spot.main.find((m) => /usecase=/.test(m.href)).href]]) {
+      await page.goto(href, { waitUntil: "domcontentloaded" });
+      await page.locator("h1").first().waitFor({ timeout: 30000 });
+      const h1 = (await page.locator("h1").first().textContent()).trim();
+      check(`${tag}: spotlight ${name} link opens the matching detail page`, name === "organization" ? /Bosch/.test(h1) : name === "wallet" ? /Procivis One/.test(h1) : /End-to-End Digital Business Workflows/.test(h1), h1);
+    }
+    // Keyboard focus on the spotlight links: Tab through the block and check a visible white ring.
+    await page.goto(HOME, { waitUntil: "domcontentloaded" });
+    await page.locator(".fides-uc-spot").waitFor();
+    await page.locator(".fides-uc-spot__related-item a").first().focus();
+    check(`${tag}: spotlight link shows a visible focus ring`, await page.evaluate(() => { const c = getComputedStyle(document.activeElement); return parseFloat(c.outlineWidth) >= 2 && c.outlineStyle !== "none"; }));
+
+    // Counter: same values as the markup, short run, reduced motion and no JavaScript show the real values at once.
+    const counts = async (pg) => pg.evaluate(() => [...document.querySelectorAll(".fides-uc-index .fides-ct-count")].map((e) => ({ shown: e.textContent.trim().replace(/\s/g, ""), target: e.dataset.count, w: Math.round(e.getBoundingClientRect().width), hidden: e.getAttribute("aria-hidden") })));
+    const rowsPos = async (pg) => pg.evaluate(() => [...document.querySelectorAll(".fides-uc-index__link")].map((a) => { const r = a.getBoundingClientRect(); return [Math.round(r.x), Math.round(r.y + scrollY), Math.round(r.width), Math.round(r.height)].join(","); }).join("|"));
+    {
+      const rm = await browser.newContext({ viewport: { width: w, height: 900 }, reducedMotion: "reduce" });
+      await rm.addCookies(await ctx.cookies());
+      const rp = await rm.newPage();
+      await rp.goto(HOME, { waitUntil: "domcontentloaded" });
+      await rp.locator(".fides-uc-index").scrollIntoViewIfNeeded();
+      await rp.waitForTimeout(200);
+      const c = await counts(rp);
+      check(`${tag}: reduced motion shows the real values immediately`, c.length === 7 && c.every((x) => x.shown === x.target), JSON.stringify(c));
+      await rm.close();
+      const nj = await browser.newContext({ viewport: { width: w, height: 900 }, javaScriptEnabled: false });
+      const np = await nj.newPage();
+      await np.goto(HOME, { waitUntil: "domcontentloaded" });
+      const c2 = await counts(np);
+      check(`${tag}: without JavaScript the real values are in the page`, c2.length === 7 && c2.every((x) => x.shown === x.target && +x.target >= 0), JSON.stringify(c2));
+      await nj.close();
+    }
+    {
+      const mo = await browser.newContext({ viewport: { width: w, height: 900 } });
+      await mo.addCookies(await ctx.cookies());
+      const mp = await mo.newPage();
+      await mp.goto(HOME, { waitUntil: "domcontentloaded" });
+      await mp.locator(".fides-uc-index").waitFor();
+      const before = await rowsPos(mp);
+      const total = +(await mp.locator("[data-fides-uc-index-total]").getAttribute("data-fides-uc-index-total"));
+      await mp.evaluate(() => document.querySelector(".fides-uc-index").scrollIntoView({ block: "center" }));
+      let mid = null;
+      const seen = [];
+      for (let i = 0; i < 14; i += 1) {
+        await mp.waitForTimeout(120);
+        const c = await counts(mp);
+        seen.push(+c[0].shown);
+        if (mid === null && c.some((x) => +x.shown < +x.target)) mid = c;
+      }
+      const posDuring = await rowsPos(mp);
+      await mp.waitForTimeout(1600);
+      const end = await counts(mp);
+      const after = await rowsPos(mp);
+      check(`${tag}: the counter runs once when the block comes into view`, mid !== null, JSON.stringify(seen));
+      check(`${tag}: the counter ends on the catalog values (total ${total})`, end.length === 7 && end.every((x) => x.shown === x.target) && +end[0].target === total, JSON.stringify(end));
+      check(`${tag}: rows keep their place while counting`, posDuring === after && before.split("|").length === after.split("|").length, `${posDuring} / ${after}`);
+      check(`${tag}: animated figures are hidden from assistive technology, the final value stays readable`, end.every((x) => x.hidden === "true") && (await mp.locator(".fides-uc-index__total .fides-ds-visually-hidden").textContent()).trim() === String(total) && (await mp.locator(".fides-uc-index__link").first().getAttribute("aria-label")).includes(end[1].target), "");
+      await mp.evaluate(() => scrollTo(0, 0));
+      await mp.waitForTimeout(300);
+      await mp.evaluate(() => document.querySelector(".fides-uc-index").scrollIntoView({ block: "center" }));
+      await mp.waitForTimeout(500);
+      const again = await counts(mp);
+      check(`${tag}: the counter does not run a second time`, again.every((x) => x.shown === x.target), JSON.stringify(again));
+      await mo.close();
+    }
+    await page.goto(HOME, { waitUntil: "domcontentloaded" });
+    await page.locator(".fides-home-news__item").first().waitFor({ timeout: 30000 });
 
     // Learn links and hero actions navigate.
     await page.locator('.fides-home-learn [data-learn="topics"]').click();

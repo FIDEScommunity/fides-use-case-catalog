@@ -208,7 +208,9 @@ pilot_upsert_page(
     // Paper 25.15: Learn strip, theme index and latest updates under the hero (blocks read their data themselves).
     . "\n<!-- wp:shortcode -->[fides_home_learn]<!-- /wp:shortcode -->"
     . "\n<!-- wp:shortcode -->[fides_use_case_discovery layout=\"index\"]<!-- /wp:shortcode -->"
-    . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->",
+    . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->"
+    // Paper 25.12: blue spotlight on one demo use case with its explicit catalog relations.
+    . "\n<!-- wp:shortcode -->[fides_use_case_spotlight id=\"end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh\" detail_url=\"/fides-design-pilot/use-case/\" intro=\"A company proves who it is once, with a business wallet, and reuses that proof to open a bank account, be accepted as a customer or become an approved supplier. This demo shows how several organizations and wallets work together.\"]<!-- /wp:shortcode -->",
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

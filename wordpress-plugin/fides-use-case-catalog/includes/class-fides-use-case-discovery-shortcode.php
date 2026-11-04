@@ -283,7 +283,7 @@ final class Fides_Use_Case_Discovery_Shortcode {
      * shell decides (so the pilot and staging each point at their own page),
      * with the plugin default as last resort. Never a fixed host.
      */
-    private static function overview_url(string $explicit): string {
+    public static function overview_url(string $explicit): string {
         $explicit = trim($explicit);
         if ($explicit !== '') {
             return preg_match('#^https?://#i', $explicit) ? $explicit : home_url($explicit);
@@ -320,6 +320,7 @@ final class Fides_Use_Case_Discovery_Shortcode {
      */
     private static function render_index(string $catalog_url_attr): string {
         wp_enqueue_style('fides-use-case-discovery');
+        wp_enqueue_script('fides-use-case-discovery');
         if (class_exists('FIDES_Community_Tools_Tiles')) {
             FIDES_Community_Tools_Tiles::register_design_system_assets();
             wp_enqueue_style('fides-design-system');
@@ -331,11 +332,14 @@ final class Fides_Use_Case_Discovery_Shortcode {
         $total     = count($items);
         $available = $total > 0 && $config['bundles'] !== array();
 
-        $html  = '<section class="fides-ds fides-uc-index" aria-labelledby="fides-uc-index-title"><div class="fides-uc-index__inner">';
+        $html  = '<section class="fides-ds fides-uc-index" data-count-duration="1400" aria-labelledby="fides-uc-index-title"><div class="fides-uc-index__inner">';
         $html .= '<h2 class="fides-uc-index__title" id="fides-uc-index-title">' . esc_html__('Digital trust in practice', 'fides-use-case-catalog') . '</h2>';
         $html .= '<div class="fides-uc-index__sub"><p class="fides-uc-index__lead">' . esc_html__('Explore use cases by theme', 'fides-use-case-catalog') . '</p>';
         if ($available) {
-            $html .= '<p class="fides-uc-index__total"><span data-fides-uc-index-total="' . esc_attr((string) $total) . '">' . esc_html(number_format_i18n($total)) . '</span> '
+            // Real values are in the markup (no JavaScript, reduced motion). The animated figure is hidden from
+            // assistive technology and the final value stays available next to it.
+            $html .= '<p class="fides-uc-index__total"><span class="fides-ct-count fides-uc-index__figure" style="--digits:' . strlen((string) $total) . '" aria-hidden="true" data-count="' . esc_attr((string) $total) . '" data-fides-uc-index-total="' . esc_attr((string) $total) . '">' . esc_html(number_format_i18n($total)) . '</span>'
+                . '<span class="fides-ds-visually-hidden">' . esc_html(number_format_i18n($total)) . '</span> '
                 . esc_html(_n('use case', 'use cases', $total, 'fides-use-case-catalog')) . '</p>';
         }
         $html .= '</div>';
@@ -355,7 +359,7 @@ final class Fides_Use_Case_Discovery_Shortcode {
                     . ' data-matomo-category="Use Case Discovery" data-matomo-action="Open theme" data-matomo-name="' . esc_attr($bundle['title']) . '">'
                     . '<span class="fides-uc-index__icon">' . self::index_icon((string) $bundle['icon']) . '</span>'
                     . '<span class="fides-uc-index__text"><span class="fides-uc-index__name">' . esc_html($bundle['title']) . '</span> '
-                    . '<span class="fides-uc-index__count" data-count="' . esc_attr((string) $count) . '">' . esc_html(number_format_i18n($count)) . '</span></span>'
+                    . '<span class="fides-uc-index__count fides-ct-count" style="--digits:' . strlen((string) $count) . '" aria-hidden="true" data-count="' . esc_attr((string) $count) . '">' . esc_html(number_format_i18n($count)) . '</span></span>'
                     . '<span class="fides-uc-index__arrow" aria-hidden="true">→</span>'
                     . '</a></li>';
             }

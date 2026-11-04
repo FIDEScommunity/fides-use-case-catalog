@@ -849,8 +849,29 @@
 
   .fides-ds .fides-uc-index__count {
     flex: none;
-    min-width: 2.5ch;
+    min-width: max(2.5ch, calc(var(--digits, 2) * 1ch));
     margin-left: 0;
     text-align: right;
   }
+}
+
+/* Counted figures keep their final width, so rows do not shift while the numbers run. */
+.fides-ds .fides-uc-index__count,
+.fides-ds .fides-uc-index__figure {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+.fides-ds .fides-uc-index__figure {
+  min-width: calc(var(--digits, 2) * 1ch);
+}
+
+@media (min-width: 900px) {
+  .fides-ds .fides-uc-index__count {
+    min-width: calc(var(--digits, 2) * 1ch);
+  }
+}
+
+.fides-ds .fides-uc-index__figure {
+  text-align: right;
 }

@@ -115,7 +115,7 @@ $themes_html = do_shortcode('[fides_use_case_discovery layout="index"]');
 $check(strpos($themes_html, 'data-fides-uc-index-total="3"') !== false, 'total counts use cases, not theme memberships');
 $check(preg_match('#data-theme="identity_access".*?data-count="2"#s', $themes_html) === 1, 'identity count from the fixture');
 $check(preg_match('#data-theme="products_trade_supply_chains".*?data-count="1"#s', $themes_html) === 1, 'a use case in two themes of one bundle counts once');
-$check(preg_match_all('#data-count="(\d+)"#', $themes_html, $m) && array_sum($m[1]) === 4, 'theme rows add up to more than the total (use cases in several themes)');
+$check(preg_match_all('#data-count="(\d+)"#', $themes_html, $m) && array_sum($m[1]) - 3 === 4 && array_sum($m[1]) - 3 > 3, 'theme rows (4) add up to more than the total (3) because a use case can sit in several themes');
 remove_all_filters('fides_use_case_discovery_items');
 add_filter('fides_use_case_discovery_items', '__return_empty_array');
 $themes_html = do_shortcode('[fides_use_case_discovery layout="index"]');
@@ -124,6 +124,28 @@ $check(strpos($themes_html, 'Browse all use cases') !== false && strpos($themes_
 remove_all_filters('fides_use_case_discovery_items');
 $src = (string) file_get_contents(dirname(dirname(dirname(__DIR__))) . '/wordpress-plugin/fides-use-case-catalog/includes/class-fides-use-case-discovery-shortcode.php');
 $check(strpos($src, 'localhost') === false && strpos($src, '10088') === false, 'no hard-coded local host in the discovery shortcode');
+
+// ---- Counter markup: real values in the page, animated figure hidden from assistive technology
+remove_all_filters('fides_use_case_discovery_items');
+$idx = do_shortcode('[fides_use_case_discovery layout="index"]');
+$check(preg_match_all('#fides-ct-count[^>]*aria-hidden="true"[^>]*data-count="(\d+)"[^>]*>(\d+)</span>#', $idx, $m) && count($m[1]) === count($cfg['bundles']) + 1 && $m[1] === $m[2], 'every counted figure shows its real value in the markup');
+$check(strpos($idx, 'data-count-duration="1400"') !== false && preg_match('#fides-ds-visually-hidden">\d+</span> use cases#', $idx) === 1, 'short run, final total stays readable');
+$check(preg_match_all('#aria-label="[^"]+, \d+ use cases?"#', $idx) === count($cfg['bundles']), 'each theme link keeps its final count in its accessible name');
+
+// ---- Spotlight (Bosch demo use case)
+$bosch = 'end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh';
+$spot  = do_shortcode('[fides_use_case_spotlight id="' . $bosch . '" detail_url="/fides-design-pilot/use-case/" intro="Plain words."]');
+$check(strpos($spot, 'One use case. A connected ecosystem.') !== false && strpos($spot, 'Demo use case') !== false && strpos($spot, 'Not in production') !== false, 'spotlight heading, demo label and catalog status');
+$check(strpos($spot, home_url('/fides-design-pilot/use-case/?usecase=' . $bosch)) !== false, 'spotlight links to the pilot detail page');
+$check(substr_count($spot, 'fides-uc-spot__related-item') === 2 && strpos($spot, 'org=org%3Abosch') !== false && strpos($spot, 'wallet=procivis-one') !== false, 'one organization and one business wallet from explicit relations');
+$check(strpos(do_shortcode('[fides_use_case_spotlight id="does-not-exist"]'), 'fides-uc-spot__title') === false, 'unknown use case renders no block');
+$item = Fides_Use_Case_Design::find($bosch);
+$none = array('links' => array('organizations' => array(array('refId' => 'org:does-not-exist')), 'businessWallets' => array(array('refId' => 'no-such-wallet'), array('refId' => null, 'labelRaw' => 'Manual only'))));
+$check(Fides_Use_Case_Spotlight::related_organization($none) === null && Fides_Use_Case_Spotlight::related_wallet($none) === null, 'unlinked or missing catalog records are left out');
+$check(Fides_Use_Case_Spotlight::related_organization($item)['name'] === 'Robert Bosch GmbH', 'the owner organization is preferred');
+$noorg = $item; $noorg['links']['organizations'] = array();
+$check(Fides_Use_Case_Spotlight::related_organization($noorg) === null && Fides_Use_Case_Spotlight::related_wallet($noorg) !== null, 'each relation is independent');
+$check(strpos((string) file_get_contents(dirname(dirname(dirname(__DIR__))) . '/wordpress-plugin/fides-use-case-catalog/includes/class-fides-use-case-spotlight.php'), 'localhost') === false, 'no hard-coded local host in the spotlight');
 
 echo 'home behaviour: ' . $results['pass'] . ' passed, ' . count($results['fail']) . " failed\n";
 foreach ($results['fail'] as $message) {
