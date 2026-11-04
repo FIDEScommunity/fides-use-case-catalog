@@ -698,6 +698,7 @@
 .fides-ds .fides-uc-index__sub {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--fides-ds-space-1, 4px) var(--fides-ds-space-5, 24px);
 }
@@ -710,7 +711,16 @@
   line-height: 21px;
 }
 
+/* The sentence takes the free width (max 64ch) and wraps; the total stays on one line next to it, or below on narrow screens. */
+.fides-ds .fides-uc-index__lead {
+  flex: 1 1 320px;
+  max-width: 64ch;
+  overflow-wrap: break-word;
+}
+
 .fides-ds .fides-uc-index__total {
+  flex: none;
+  white-space: nowrap;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;

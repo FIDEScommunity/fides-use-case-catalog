@@ -99,7 +99,7 @@ $own = array(array_merge($own[0], array('title' => '')));
 $themes_html = do_shortcode('[fides_use_case_discovery layout="index"]');
 $cfg   = Fides_Use_Case_Discovery_Shortcode::theme_config();
 $check(substr_count($themes_html, 'fides-uc-index__row') === count($cfg['bundles']) && count($cfg['bundles']) > 0, 'one row per existing theme bundle');
-$check(strpos($themes_html, 'Digital trust in practice') !== false && strpos($themes_html, 'Explore use cases by theme') !== false, 'index heading and subline');
+$check(strpos($themes_html, 'Digital trust in practice') !== false && strpos($themes_html, '>As AI makes it easier to create and share information, it matters more that we can verify where it comes from.</p>') !== false && strpos($themes_html, 'Explore use cases by theme') === false, 'index heading and subline');
 $check(strpos($themes_html, 'fides-uc-index__num') === false && substr_count($themes_html, '<svg') === count($cfg['bundles']), 'no sequence numbers, one line icon per theme');
 $check(strpos($themes_html, 'Browse all use cases') !== false && strpos($themes_html, 'fides-uc-index__catalogs') === false && strpos($themes_html, 'Personal wallets') === false, 'Browse all use cases replaces the catalog links');
 foreach ($cfg['bundles'] as $b) {

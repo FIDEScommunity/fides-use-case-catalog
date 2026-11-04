@@ -334,7 +334,7 @@ final class Fides_Use_Case_Discovery_Shortcode {
 
         $html  = '<section class="fides-ds fides-uc-index" data-count-duration="3000" aria-labelledby="fides-uc-index-title"><div class="fides-uc-index__inner">';
         $html .= '<h2 class="fides-uc-index__title" id="fides-uc-index-title">' . esc_html__('Digital trust in practice', 'fides-use-case-catalog') . '</h2>';
-        $html .= '<div class="fides-uc-index__sub"><p class="fides-uc-index__lead">' . esc_html__('Explore use cases by theme', 'fides-use-case-catalog') . '</p>';
+        $html .= '<div class="fides-uc-index__sub"><p class="fides-uc-index__lead">' . esc_html__('As AI makes it easier to create and share information, it matters more that we can verify where it comes from.', 'fides-use-case-catalog') . '</p>';
         if ($available) {
             // Real values are in the markup (no JavaScript, reduced motion). The animated figure is hidden from
             // assistive technology and the final value stays available next to it.
