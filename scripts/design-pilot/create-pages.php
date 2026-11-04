@@ -235,6 +235,14 @@ WP_CLI::log('Homepage feature: ' . wp_json_encode(get_option(Fides_Use_Case_Feat
 // organization-catalog/data/listing-news-sources.json. On a real site an editor maintains them
 // under Settings > FIDES Updates; an existing setting is never overwritten here.
 pilot_upsert_page(
+    'fides-design-pilot/about-fides',
+    'About FIDES',
+    '<!-- wp:shortcode -->[fides_about]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+pilot_upsert_page(
     'fides-design-pilot/updates',
     'Updates',
     "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"48px\",\"bottom\":\"0px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
