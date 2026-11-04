@@ -195,8 +195,8 @@ final class Fides_Use_Case_Spotlight {
         }
         $html .= '</ul>';
         if ($group['total'] > count($group['names'])) {
-            $html .= '<a class="fides-uc-spot__all" href="' . esc_url($group['all_url']) . '" aria-label="' . esc_attr('View all ' . $group['total'] . ' ' . $group['noun'] . ': ' . $title) . '"><span>'
-                . esc_html('View all ' . $group['total'] . ' ' . $group['noun']) . '</span></a>';
+            $html .= '<a class="fides-uc-spot__all" href="' . esc_url($group['all_url']) . '" aria-label="' . esc_attr('View all ' . $group['total'] . ' ' . $group['noun'] . ': ' . $title) . '">'
+                . esc_html('View all ' . $group['total'] . ' ' . $group['noun']) . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a>';
         }
         return $html . '</section>';
     }
@@ -237,7 +237,7 @@ final class Fides_Use_Case_Spotlight {
         $html  = '<section class="fides-ds fides-uc-spot" aria-labelledby="fides-uc-spot-title"><div class="fides-uc-spot__inner">';
         $html .= '<div class="fides-uc-spot__head"><div><p class="fides-uc-spot__eyebrow">' . esc_html__('Explore in practice', 'fides-use-case-catalog') . '</p>'
             . '<h2 class="fides-uc-spot__title" id="fides-uc-spot-title">' . esc_html__('One use case. A connected ecosystem.', 'fides-use-case-catalog') . '</h2></div>'
-            . '<a class="fides-uc-spot__link fides-uc-spot__link--head" href="' . esc_url($overview) . '"><span>' . esc_html__('Explore the catalog →', 'fides-use-case-catalog') . '</span></a></div>';
+            . '<a class="fides-uc-spot__link fides-uc-spot__link--head" href="' . esc_url($overview) . '">' . esc_html__('Explore the catalog', 'fides-use-case-catalog') . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a></div>';
         $html .= '<article class="fides-uc-spot__case' . ($image === '' ? ' fides-uc-spot__case--no-media' : '') . '" data-use-case-id="' . esc_attr($id) . '">';
         if ($image !== '') {
             $html .= '<a class="fides-uc-spot__media" href="' . esc_url($detail) . '" tabindex="-1" aria-hidden="true"><img src="' . esc_url($image) . '" alt="" loading="lazy" decoding="async"></a>';
@@ -247,7 +247,7 @@ final class Fides_Use_Case_Spotlight {
         if ($preview !== '') {
             $html .= '<p class="fides-uc-spot__preview">' . esc_html($preview) . '</p>';
         }
-        $html .= '<a class="fides-uc-spot__link" href="' . esc_url($detail) . '" aria-label="' . esc_attr('Read the use case: ' . $title) . '"><span>' . esc_html__('Read the use case →', 'fides-use-case-catalog') . '</span></a></div>';
+        $html .= '<a class="fides-uc-spot__link" href="' . esc_url($detail) . '" aria-label="' . esc_attr('Read the use case: ' . $title) . '">' . esc_html__('Read the use case', 'fides-use-case-catalog') . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a></div>';
         if ($groups) {
             $html .= '<div class="fides-uc-spot__related">';
             foreach ($groups as $group) {

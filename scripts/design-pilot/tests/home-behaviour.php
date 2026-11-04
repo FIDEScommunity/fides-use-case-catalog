@@ -149,13 +149,14 @@ $check(substr_count($spot, 'fides-uc-spot__group"') === 2 && strpos($spot, '>Org
 $uniq = function ($key) use ($item) { $r = array(); foreach ($item['links'][$key] as $l) { if (! empty($l['refId'])) { $r[$l['refId']] = 1; } } return count($r); };
 $check($uniq('organizations') === 7 && $uniq('businessWallets') === 4, 'totals equal the unique explicit refs in the catalog record');
 $check(substr_count($spot, '<li><a href=') === 4 && strpos($spot, 'org=org%3Abosch') !== false && strpos($spot, 'wallet=procivis-one') !== false, 'at most two names per group, owner and provider first');
-$check(strpos($spot, esc_url($base . '#organisations')) !== false && strpos($spot, esc_url($base . '#ecosystem-businesswallets')) !== false && strpos($spot, '>View all 7 organizations<') !== false && strpos($spot, '>View all 4 business wallets<') !== false, 'View all links name the totals and point to the sections');
+$check(strpos($spot, esc_url($base . '#organisations')) !== false && strpos($spot, esc_url($base . '#ecosystem-businesswallets')) !== false && strpos($spot, '>View all 7 organizations<span class="fides-uc-spot__arrow" aria-hidden="true">→</span>') !== false && strpos($spot, '>View all 4 business wallets<span class="fides-uc-spot__arrow" aria-hidden="true">→</span>') !== false, 'View all links name the totals and point to the sections');
 $detail = do_shortcode('[fides_use_case_detail id="' . $bosch . '"]');
 $check(strpos($detail, 'id="organisations"') !== false && strpos($detail, 'id="ecosystem-businesswallets"') !== false, 'the use case page has both target sections');
 $check(strpos($detail, 'organisations-title">Organisations involved <span class="fides-uc-detail__count">7<') !== false && strpos($detail, 'ecosystem-businesswallets-title" data-fides-ds-collapsible-title>Business wallets <span class="fides-uc-ecosystem__count">4<') !== false, 'the page sections list the same totals');
 $check(strpos(do_shortcode('[fides_use_case_spotlight id="does-not-exist"]'), 'fides-uc-spot__title') === false, 'unknown use case renders no block');
 $none = array('id' => 'x', 'links' => array('organizations' => array(array('refId' => 'org:does-not-exist')), 'businessWallets' => array(array('refId' => 'no-such-wallet'), array('refId' => null, 'labelRaw' => 'Manual only'))));
 $check(Fides_Use_Case_Spotlight::relation_groups($none, '/u/') === array(), 'unlinked or missing catalog records are not counted');
+$check(array_keys(array_filter($item['links'])) === array_keys(array_filter($item['links'])) && count(array_filter(array('personalWallets', 'issuers', 'credentials', 'rps'), static function ($k) use ($item) { return ! empty($item['links'][$k]); })) === 4 && array_column(Fides_Use_Case_Spotlight::relation_groups($item, '/u/'), 'key') === array('organizations', 'businessWallets'), 'only organizations and business wallets are shown although the record also links personal wallets, issuers, credentials and relying parties');
 $noorg = $item; $noorg['links']['organizations'] = array();
 $g = Fides_Use_Case_Spotlight::relation_groups($noorg, '/u/');
 $check(count($g) === 1 && $g[0]['key'] === 'businessWallets', 'an empty group is omitted');

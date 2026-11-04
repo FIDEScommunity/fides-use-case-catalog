@@ -152,7 +152,7 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
         title: g.querySelector(".fides-uc-spot__group-title").firstChild.textContent.trim(),
         total: +g.querySelector(".fides-uc-spot__group-count").textContent,
         names: [...g.querySelectorAll(".fides-uc-spot__names a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(r(a).height), right: Math.round(r(a).right) })),
-        all: g.querySelector(".fides-uc-spot__all") ? { t: g.querySelector(".fides-uc-spot__all").textContent.trim(), href: g.querySelector(".fides-uc-spot__all").getAttribute("href"), h: Math.round(r(g.querySelector(".fides-uc-spot__all")).height) } : null,
+        all: g.querySelector(".fides-uc-spot__all") ? { t: g.querySelector(".fides-uc-spot__all").textContent.replace(/\s*→$/, "").trim(), href: g.querySelector(".fides-uc-spot__all").getAttribute("href"), h: Math.round(r(g.querySelector(".fides-uc-spot__all")).height) } : null,
       }));
       const main = [...s.querySelectorAll(".fides-uc-spot__case > .fides-uc-spot__text > a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(r(a).height) }));
       const img = s.querySelector(".fides-uc-spot__media img");

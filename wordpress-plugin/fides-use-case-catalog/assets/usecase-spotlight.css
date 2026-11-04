@@ -154,9 +154,6 @@
   text-underline-offset: 4px;
 }
 
-.fides-ds .fides-uc-spot__link:hover {
-  text-decoration-thickness: 2px;
-}
 
 .fides-ds .fides-uc-spot :focus-visible {
   outline: 3px solid #ffffff;
@@ -229,11 +226,62 @@
   overflow-wrap: anywhere;
 }
 
-.fides-ds .fides-uc-spot__names a:hover,
-.fides-ds .fides-uc-spot__all:hover {
+.fides-ds .fides-uc-spot__names a:hover {
   text-decoration-thickness: 2px;
 }
 
+/* "View all" is a follow-up step: own line, space above, arrow, no underline until hover/focus. */
 .fides-ds .fides-uc-spot__all {
-  font-weight: 400;
+  margin-top: var(--fides-ds-space-3, 12px);
+  font-weight: 500;
+}
+
+/* ---------- Link states on the blue band ----------
+ * The active theme (Blocksy) and the design system recolour links and their
+ * children on hover. On this band text and arrows stay white in every state;
+ * arrow links gain an underline on hover and focus. */
+
+.fides-ds .fides-uc-spot a,
+.fides-ds .fides-uc-spot a:is(:visited, :hover, :active, :focus, :focus-visible),
+.fides-ds .fides-uc-spot a:is(:hover, :active, :focus, :focus-visible) * {
+  color: #ffffff;
+}
+
+.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__all) {
+  text-decoration: none;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__all):is(:hover, :focus-visible) {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+
+.fides-ds .fides-uc-spot__arrow {
+  display: inline-block;
+  margin-left: var(--fides-ds-space-2, 8px);
+  text-decoration: none;
+  transition: transform 150ms ease;
+}
+
+.fides-ds .fides-uc-spot a:is(:hover, :focus-visible) .fides-uc-spot__arrow {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fides-ds .fides-uc-spot__arrow {
+    transition: none;
+  }
+
+  .fides-ds .fides-uc-spot a:is(:hover, :focus-visible) .fides-uc-spot__arrow {
+    transform: none;
+  }
+}
+
+/* Keyboard focus: thick white ring, offset so it stays visible on the blue band. */
+.fides-ds .fides-uc-spot a:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 4px;
+  border-radius: 2px;
 }
