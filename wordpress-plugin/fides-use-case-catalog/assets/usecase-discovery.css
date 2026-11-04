@@ -789,9 +789,9 @@
   transition: transform 120ms ease;
 }
 
-/* Slightly stronger than the icon tile (soft), so the tile stays visible on the row. */
+/* Subtle row tint, lighter than the icon tile (soft), so the tile stays recognisable. */
 .fides-ds .fides-uc-index__link:hover {
-  background: #e3edfb;
+  background: #f8fbff;
 }
 
 .fides-ds .fides-uc-index__link:hover .fides-uc-index__name {

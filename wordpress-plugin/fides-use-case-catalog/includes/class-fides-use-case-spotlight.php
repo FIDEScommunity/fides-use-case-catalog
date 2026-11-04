@@ -126,17 +126,17 @@ final class Fides_Use_Case_Spotlight {
         $html .= '<div class="fides-uc-spot__head"><div><p class="fides-uc-spot__eyebrow">' . esc_html__('Explore in practice', 'fides-use-case-catalog') . '</p>'
             . '<h2 class="fides-uc-spot__title" id="fides-uc-spot-title">' . esc_html__('One use case. A connected ecosystem.', 'fides-use-case-catalog') . '</h2></div></div>';
         $html .= '<article class="fides-uc-spot__case' . ($image === '' ? ' fides-uc-spot__case--no-media' : '') . '" data-use-case-id="' . esc_attr($id) . '">';
-        if ($image !== '') {
-            $html .= '<a class="fides-uc-spot__media" href="' . esc_url($detail) . '" tabindex="-1" aria-hidden="true"><img src="' . esc_url($image) . '" alt="" loading="lazy" decoding="async"></a>';
-        }
         $html .= '<div class="fides-uc-spot__text"><p class="fides-uc-spot__kicker">' . esc_html($kicker) . '</p>'
             . '<h3 class="fides-uc-spot__case-title">' . esc_html($title) . '</h3>';
         if ($preview !== '') {
             $html .= '<p class="fides-uc-spot__preview">' . esc_html($preview) . '</p>';
         }
         $html .= '<a class="fides-uc-spot__link" href="' . esc_url($detail) . '" aria-label="' . esc_attr('Read the use case: ' . $title) . '">' . esc_html__('Read the use case', 'fides-use-case-catalog') . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a></div>';
+        if ($image !== '') {
+            $html .= '<a class="fides-uc-spot__media" href="' . esc_url($detail) . '" tabindex="-1" aria-hidden="true"><img src="' . esc_url($image) . '" alt="" loading="lazy" decoding="async"></a>';
+        }
         if ($links) {
-            $html .= '<nav class="fides-uc-spot__relations" aria-label="' . esc_attr__('Connected to this use case', 'fides-use-case-catalog') . '"><ul class="fides-uc-spot__relation-list">';
+            $html .= '<nav class="fides-uc-spot__relations" aria-labelledby="fides-uc-spot-relations"><h3 class="fides-uc-spot__relations-title" id="fides-uc-spot-relations">' . esc_html__('Connected to this use case', 'fides-use-case-catalog') . '</h3><ul class="fides-uc-spot__relation-list">';
             foreach ($links as $link) {
                 $html .= '<li><a class="fides-uc-spot__relation" data-relation="' . esc_attr($link['key']) . '" href="' . esc_url($link['url']) . '">'
                     . '<span class="fides-uc-spot__name">' . esc_html($link['label']) . '</span> <data class="fides-uc-spot__count" value="' . esc_attr((string) $link['total']) . '">' . esc_html((string) $link['total']) . '</data>'

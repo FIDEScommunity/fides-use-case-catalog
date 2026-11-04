@@ -110,11 +110,11 @@ const paintsBlue = (s) => Object.values(s).some((p) => [p.color, p.decoColor, p.
       const isFocused = await loc.evaluate((e) => e === document.activeElement);
       const f = await read(loc);
       await spot.screenshot({ path: path.join(OUT, `${name}-${w}-focus.png`) });
-      const white = (x) => x.color === "rgb(255, 255, 255)" && x.kids.every((k) => k === "rgb(255, 255, 255)");
+      const white = name === "read" ? (x) => x.color === "rgb(8, 72, 163)" && x.bg === "rgb(255, 255, 255)" && x.kids.every((k) => k === "rgb(8, 72, 163)") : (x) => x.color === "rgb(255, 255, 255)" && x.kids.every((k) => k === "rgb(255, 255, 255)");
       check(`${tag}: ${name} default: white text and arrow`, white(d), JSON.stringify(d));
       check(`${tag}: ${name} hover: text and arrow stay white and the link is underlined`, white(h) && h.deco === "underline" && h.thick >= 1, JSON.stringify(h));
       check(`${tag}: ${name} focus: reached by keyboard, white text, clear ring (>= 3px, offset >= 3px)`, isFocused && white(f) && f.outS === "solid" && f.outW >= 3 && f.outC === "rgb(255, 255, 255)" && f.outO >= 3, JSON.stringify(f));
-      check(`${tag}: ${name} has an arrow, no underline by default, underline on hover and focus`, d.arrow && d.deco === "none" && h.deco === "underline" && f.deco === "underline", JSON.stringify([d.arrow, d.deco, h.deco, f.deco]));
+      check(`${tag}: ${name} has an arrow; no underline by default, underline on hover and focus`, d.arrow && d.deco === "none" && h.deco === "underline" && f.deco === "underline", JSON.stringify([d.arrow, d.deco, h.deco, f.deco]));
     }
     // Compact row: no name lists, no View all.
     check(`${tag}: the relation row has no name lists or View all links`, (await spot.locator(".fides-uc-spot__names, .fides-uc-spot__all").count()) === 0);
@@ -147,7 +147,7 @@ const paintsBlue = (s) => Object.values(s).some((p) => [p.color, p.decoColor, p.
     const gf = await geo();
     await idx.screenshot({ path: path.join(OUT, `themes-${w}-focus.png`) });
     check(`${tag}: theme row default is dark text without tint`, rd.bg === "rgba(0, 0, 0, 0)" && rd.color === "rgb(14, 14, 14)" && gd.nameDeco === "none", JSON.stringify([rd, gd.nameDeco]));
-    check(`${tag}: theme row hover is light blue with blue text and an underlined name`, rh.bg === "rgb(227, 237, 251)" && rh.color === "rgb(8, 72, 163)" && gh.nameDeco === "underline", JSON.stringify([rh.bg, rh.color, gh.nameDeco]));
+    check(`${tag}: theme row hover is light blue with blue text and an underlined name`, rh.bg === "rgb(248, 251, 255)" && rh.color === "rgb(8, 72, 163)" && gh.nameDeco === "underline", JSON.stringify([rh.bg, rh.color, gh.nameDeco]));
     check(`${tag}: the icon keeps its own tile on hover: unchanged, no white tile and no frame, distinct from the row`, gh.iconBg === gd.iconBg && gh.iconBg === "rgb(242, 247, 255)" && gh.iconBg !== rh.bg && gh.iconShadow === "none" && gh.iconBorder === "0px", JSON.stringify([gd.iconBg, gh.iconBg, gh.iconShadow, gh.iconBorder, rh.bg]));
     check(`${tag}: icon, name, count and arrow stay in place on hover and focus`, gd.icon === gh.icon && gd.name === gh.name && gd.count === gh.count && gd.arrow === gh.arrow && gd.row === gh.row && gd.icon === gf.icon && gd.arrow === gf.arrow && gd.name === gf.name, JSON.stringify([gd, gh, gf]));
     check(`${tag}: theme row focus: ring of at least 3px, underlined name, same tile`, rf.outS === "solid" && rf.outW >= 3 && gf.nameDeco === "underline" && gf.iconBg === gd.iconBg, JSON.stringify([rf, gf.nameDeco, gf.iconBg]));

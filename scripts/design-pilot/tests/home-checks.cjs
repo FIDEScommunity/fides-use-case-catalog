@@ -29,7 +29,7 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
 
     // Hero: one introduction sentence, two actions, featured VOG card with image.
     const hero = await page.evaluate(() => ({ lead: (document.querySelector(".fides-uc-hero .fides-ds-lead") || {}).textContent || "", paras: document.querySelectorAll(".fides-uc-hero p:not(.fides-ds-kicker)").length, actions: [...document.querySelectorAll(".fides-uc-fragment__actions a")].map((a) => a.getAttribute("href")), img: !!document.querySelector(".fides-uc-featured img") }));
-    check(`${tag}: hero has the one Paper sentence and no extra line`, hero.lead.trim() === "See how organizations use digital wallets and credentials in practice." && hero.paras === 1, JSON.stringify(hero));
+    check(`${tag}: hero has the one Paper sentence and no extra line`, hero.lead.trim() === "FIDES helps organizations understand and use digital wallets and credentials through real-world examples, practical guides, catalogs and expert guidance." && hero.paras === 1, JSON.stringify(hero));
     check(`${tag}: both hero actions and the featured image stay`, hero.actions.length === 2 && /\/start\/$/.test(hero.actions[0]) && /\/overview\/$/.test(hero.actions[1]) && hero.img, JSON.stringify(hero));
     check(`${tag}: the old routes block is gone`, (await page.locator(".fides-home-routes").count()) === 0);
 
@@ -110,6 +110,18 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     check(`${tag}: overview link goes to Updates`, /\/fides-design-pilot\/updates\/$/.test(await page.locator(".fides-home-news__all").getAttribute("href")));
     check(`${tag}: overview link is at least 44px tall`, (await page.locator(".fides-home-news__all").evaluate((e) => e.getBoundingClientRect().height)) >= 44);
 
+    {
+      const meta = await page.evaluate(() => [...document.querySelectorAll(".fides-home-news__meta")].map((m) => { const box = m.getBoundingClientRect(); const parts = [...m.querySelectorAll(".fides-home-news__part")].map((p) => { const r = p.getBoundingClientRect(); return { rects: p.getClientRects().length, right: Math.round(r.right), left: Math.round(r.left), top: Math.round(r.top), text: p.textContent.trim() }; }); const lh = parseFloat(getComputedStyle(m).lineHeight); return { lines: Math.round(box.height / lh), parts, right: Math.round(box.right) }; }));
+      check(`${tag}: source lines wrap between parts, never inside a part that fits, and stay inside the screen`, meta.every((m) => m.parts.every((p) => p.rects === 1 && p.right <= w) && m.right <= w), JSON.stringify(meta));
+      check(`${tag}: no separator starts a line`, meta.every((m) => m.parts.every((p, i) => i === 0 || p.top >= m.parts[i - 1].top) && m.parts.every((p, i) => !/^·/.test(p.text))), JSON.stringify(meta));
+      const tails = await page.evaluate(() => [...document.querySelectorAll(".fides-home-news__tail")].map((t) => { const b = t.getBoundingClientRect(); const ar = t.querySelector(".fides-home-news__external").getBoundingClientRect(); const lh = parseFloat(getComputedStyle(t).lineHeight); return { oneLine: b.height <= lh * 1.3, sameLine: ar.top >= b.top - 2 && ar.bottom <= b.bottom + 2, word: t.firstChild.textContent }; }));
+      check(`${tag}: the external arrow stays with the last word of the title`, tails.length >= 1 && tails.every((t) => t.oneLine && t.sameLine), JSON.stringify(tails));
+      if (w >= 900) {
+        const learnGap = await page.evaluate(() => { const t = document.querySelector(".fides-home-learn__title").getBoundingClientRect(); const l = document.querySelector(".fides-home-learn__list").getBoundingClientRect(); return { gap: Math.round(l.left - t.right), same: Math.abs(l.top + l.height / 2 - (t.top + t.height / 2)) < 12 }; });
+        check(`${tag}: the Learn links sit close to "New to digital trust?" in the same row`, learnGap.gap <= 56 && learnGap.same, JSON.stringify(learnGap));
+      }
+    }
+
     // Keyboard: Tab reaches the first news link with a visible ring.
     await page.locator(".fides-home-news__link").first().evaluate((a) => a.setAttribute("data-probe", "1"));
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -157,12 +169,14 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
         kicker: s.querySelector(".fides-uc-spot__kicker").textContent.trim(), title: title.textContent.trim(), titleLines: Math.round(r(title).height / parseFloat(getComputedStyle(title).lineHeight)), titleRight: Math.round(r(title).right),
         preview: (s.querySelector(".fides-uc-spot__preview") || {}).textContent || "", intro: !!s.querySelector(".fides-uc-spot__intro"),
         img: img ? img.src : "", fit: img ? getComputedStyle(img).objectFit : "", imgW: img ? Math.round(r(img).width) : 0, imgH: img ? Math.round(r(img).height) : 0, boxW: box ? Math.round(r(box).width) : 0, boxX: box ? Math.round(r(box).x) : 0, boxRight: box ? Math.round(r(box).right) : 0, textX: Math.round(r(s.querySelector(".fides-uc-spot__text")).x),
-        rel, lists: s.querySelectorAll(".fides-uc-spot__names, .fides-uc-spot__all").length, main, heads: s.querySelectorAll(".fides-uc-spot__link--head").length, scrollW: document.documentElement.scrollWidth,
+        relTitle: (s.querySelector(".fides-uc-spot__relations-title") || {}).textContent || "", relFont: rel[0] ? getComputedStyle(s.querySelector(".fides-uc-spot__relation")).fontWeight + "/" + getComputedStyle(s.querySelector(".fides-uc-spot__relation")).fontSize : "", read: (() => { const a = s.querySelector(".fides-uc-spot__text > a"); const c = getComputedStyle(a); return { bg: c.backgroundColor, color: c.color, weight: c.fontWeight, size: c.fontSize, y: Math.round(r(a).y), bottom: Math.round(r(a).bottom) }; })(), titleY: Math.round(r(title).y), mediaY: box ? Math.round(r(box).y) : 0, relY: s.querySelector(".fides-uc-spot__relations") ? Math.round(r(s.querySelector(".fides-uc-spot__relations")).y) : 0, rel, lists: s.querySelectorAll(".fides-uc-spot__names, .fides-uc-spot__all").length, main, heads: s.querySelectorAll(".fides-uc-spot__link--head").length, scrollW: document.documentElement.scrollWidth,
       };
     });
     check(`${tag}: blue spotlight sits directly below the news`, spot.bg === "rgb(8, 72, 163)" && spot.y >= spot.newsBottom - 1 && spot.y - spot.newsBottom < 4, JSON.stringify([spot.bg, spot.y, spot.newsBottom]));
     check(`${tag}: spotlight shows title, status, image and preview of the catalog record, no separate intro`, /^Demo use case/.test(spot.kicker) && /Not in production/.test(spot.kicker) && /End-to-End Digital Business Workflows/.test(spot.title) && /^https?:/.test(spot.img) && spot.preview.length > 40 && spot.preview.length <= 201 && !/^use case:/i.test(spot.preview) && !spot.intro, JSON.stringify([spot.kicker, spot.title, spot.img, spot.preview]));
     check(`${tag}: the preview ends with an ellipsis because the description continues`, /…$/.test(spot.preview), spot.preview);
+    check(`${tag}: ${w < 900 ? "on mobile the title, preview and Read the use case come before the diagram" : "on desktop the diagram stands left of the text"}`, w < 900 ? spot.titleY < spot.mediaY && spot.read.bottom <= spot.mediaY + 1 && spot.mediaY < spot.relY : spot.boxX < spot.textX, JSON.stringify([spot.titleY, spot.read, spot.mediaY, spot.relY]));
+    check(`${tag}: the main action outweighs the relation links (filled white button, bold, larger) under the label "Connected to this use case"`, spot.read.bg === "rgb(255, 255, 255)" && spot.read.color === "rgb(8, 72, 163)" && +spot.read.weight >= 700 && parseFloat(spot.read.size) > parseFloat(spot.relFont.split("/")[1]) && +spot.relFont.split("/")[0] <= 400 && spot.relTitle.trim() === "Connected to this use case", JSON.stringify([spot.read, spot.relFont, spot.relTitle]));
     check(`${tag}: the block has no second "Explore the catalog" link`, spot.heads === 0);
     check(`${tag}: the image is shown whole, not cropped`, spot.fit === "contain" && Math.abs(spot.imgW / spot.imgH - 16 / 9) < 0.05, JSON.stringify([spot.fit, spot.imgW, spot.imgH]));
     check(`${tag}: ${w >= 900 ? "diagram next to the text" : "small preview above the text"}`, w >= 900 ? spot.boxRight <= spot.textX && spot.boxX < spot.textX : spot.boxW <= 240 && spot.boxW > 0, JSON.stringify([spot.boxX, spot.boxRight, spot.textX, spot.boxW]));
