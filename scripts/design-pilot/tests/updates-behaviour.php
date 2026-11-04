@@ -189,6 +189,44 @@ try {
     $html = Fides_DS_Updates::shortcode();
     $check(strpos($html, 'data-feed-origin="filter"') !== false, 'feed origin is exposed on the wrapper');
 
+    // Featured FIDES update (Paper 26.5): newest with a featured image, else newest; the editor's choice wins; it stays in the list.
+    $img = wp_insert_post(array('post_title' => 'Pilot test featured image', 'post_content' => 'x', 'post_excerpt' => 'Manual intro for the featured block.', 'post_status' => 'publish', 'post_date' => '2026-10-05 10:00:00'));
+    $att = wp_insert_attachment(array('post_title' => 'pilot-test-image', 'post_mime_type' => 'image/png', 'post_status' => 'inherit', 'guid' => 'http://localhost/pilot-test-image.png'), false, $img);
+    update_post_meta($att, '_wp_attached_file', 'pilot-test-image.png');
+    set_post_thumbnail($img, $att);
+    try {
+        $items = Fides_DS_Updates::collect()['items'];
+        $f = Fides_DS_Updates::featured_item($items);
+        $check($f !== null && $f['id'] === 'post:' . $img && $f['image_url'] !== '', 'featured update prefers the newest FIDES update with a featured image');
+        $check($f['intro'] === 'Manual intro for the featured block.', 'featured intro is the manual excerpt');
+        $html = Fides_DS_Updates::shortcode();
+        $check(strpos($html, 'fides-updates__featured-media') !== false && strpos($html, $f['image_url']) !== false, 'featured block shows the post featured image');
+        $check(strpos($html, 'Manual intro for the featured block.') !== false, 'featured block shows the manual intro');
+        $in_list = array_column(Fides_DS_Updates::query($items, array('type' => 'fides', 'per_page' => 100))['items'], 'timestamp', 'id');
+        $check(isset($in_list['post:' . $img]) && $in_list['post:' . $img] === $f['timestamp'], 'featured post is listed at its own date');
+        $check(strpos($html, 'class="fides-updates__aside"') !== false && strpos($html, 'Explore Learn') !== false, 'aside has the Learn link');
+        // Editor's choice.
+        $settings['featured_post'] = $without;
+        $f2 = Fides_DS_Updates::featured_item(Fides_DS_Updates::collect()['items']);
+        $check($f2['id'] === 'post:' . $without && $f2['image_url'] === '', 'editor-chosen featured update wins');
+        $html2 = Fides_DS_Updates::shortcode();
+        $check(strpos($html2, 'fides-updates__featured-media') === false && strpos($html2, 'fides-updates__featured-intro') === false, 'no image or intro: no empty figure or paragraph, nothing invented');
+        $check(strpos($html2, 'Pilot test own without excerpt') !== false, 'featured block still has its title');
+        $settings['featured_post'] = 999999;
+        $check(Fides_DS_Updates::featured_item(Fides_DS_Updates::collect()['items'])['id'] === 'post:' . $img, 'unknown featured id falls back');
+        $settings['featured_post'] = 0;
+        // Rows use the FIDES tile, not the post photo.
+        $_GET = array('type' => 'fides');
+        $rows = Fides_DS_Updates::shortcode();
+        $check(strpos($rows, 'fides-ds-card__media fides-ds-card__media--contain"><img') === false || strpos($rows, 'pilot-test-image') === false, 'FIDES rows do not squeeze the post photo into the logo tile');
+        $_GET = array();
+        // No FIDES update at all: no featured block, Learn stays.
+        $check(Fides_DS_Updates::featured_item(array()) === null, 'no FIDES update means no featured block');
+    } finally {
+        wp_delete_attachment($att, true);
+        wp_delete_post($img, true);
+    }
+
     // Failed feed: own posts still show, with a notice.
     $feed = null;
     remove_filter('fides_updates_feed', $feed_filter);

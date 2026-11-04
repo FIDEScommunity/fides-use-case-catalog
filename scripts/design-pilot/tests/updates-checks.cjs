@@ -40,7 +40,7 @@ const texts = (loc, sel) => loc.evaluateAll((els, s) => els.map((e) => (e.queryS
     check(`${tag}: first page has rows with title, source and date`, n0 > 0 && n0 <= 10
       && (await texts(rows(page), ".fides-ds-card__title")).every((t) => t.trim())
       && (await texts(rows(page), ".fides-ds-card__owner, .fides-ds-card__fact--owner")).every((t) => t.trim()), String(n0));
-    const dates = await texts(rows(page), ".fides-ds-card__fact:nth-child(3)");
+    const dates = await texts(rows(page), ".fides-ds-card__fact--meta");
     const stamps = dates.map((d) => Date.parse(d.trim())).filter((t) => !Number.isNaN(t));
     check(`${tag}: default order is newest first`, stamps.length > 1 && stamps.every((t, i) => i === 0 || stamps[i - 1] >= t), dates.join("|"));
 
@@ -59,6 +59,55 @@ const texts = (loc, sel) => loc.evaluateAll((els, s) => els.map((e) => (e.queryS
     }));
     check(`${tag}: organization and publication source are separate facts, link name names the source`, apart.length > 0 && apart.every((r) => r.src.startsWith("Source: ") && r.owner && !r.owner.includes(r.host) && r.name.includes(`opens the original post on ${r.host}`)), JSON.stringify(apart));
     await page.goto(PAGE_URL, { waitUntil: "domcontentloaded" });
+
+    // Layout (Paper 26.5): list and FIDES/Learn column side by side from 1024px, stacked below, list first.
+    const box = await page.evaluate(() => { const r = (s) => { const e = document.querySelector(s); if (!e) return null; const b = e.getBoundingClientRect(); return { x: b.x, y: b.y, w: b.width, b: b.bottom }; }; return { list: r(".fides-updates__list"), aside: r(".fides-updates__aside"), feat: r(".fides-updates__featured"), learn: r(".fides-updates__learn") }; });
+    check(`${tag}: FIDES and Learn column present`, !!box.aside && !!box.feat && !!box.learn);
+    if (w >= 1024) check(`${tag}: list is narrower than the page and the column sits to its right`, box.aside.x > box.list.x + box.list.w && box.list.w < 0.75 * w && box.aside.w >= 300 && box.aside.w <= 460, JSON.stringify(box));
+    else check(`${tag}: columns stack, list first`, box.aside.y >= box.list.b - 1 && box.aside.w > 0.8 * w - 80, JSON.stringify(box));
+    await page.locator(".fides-updates__featured").scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => { const i = document.querySelector(".fides-updates__featured img"); return !i || (i.complete && i.naturalWidth > 0); }, null, { timeout: 15000 }).catch(() => {});
+    const feat = await page.evaluate(() => { const f = document.querySelector(".fides-updates__featured"); const a = f.querySelector("a"); const i = f.querySelector("img"); return { links: f.querySelectorAll("a").length, href: a.href, title: a.textContent.trim(), img: i ? { w: i.naturalWidth, shown: !i.closest("figure").hidden } : null, intro: (f.querySelector(".fides-updates__featured-intro") || {}).textContent || null, meta: f.querySelector(".fides-updates__featured-meta").textContent }; });
+    check(`${tag}: featured block has one link, the post title and its date`, feat.links === 1 && feat.title.length > 0 && /\d{4} · FIDES update$/.test(feat.meta), JSON.stringify(feat));
+    // Remote hosts are stubbed here, the pilot's own uploads are not: the featured image is the post's featured image.
+    check(`${tag}: featured image loads from the post`, !feat.img || (feat.img.w > 0 && feat.img.shown), JSON.stringify(feat.img));
+    // Learn link.
+    check(`${tag}: Learn link points to the Learn page`, /\/learn\/$/.test(await page.locator(".fides-updates__learn a").getAttribute("href")));
+    // Featured post stays in the list at its own date (type filter FIDES shows all own posts).
+    const featDate = feat.meta.split(" · ")[0].trim();
+    await page.goto(`${PAGE_URL}?type=fides&sort=title&pg=1`, { waitUntil: "domcontentloaded" });
+    const inList = await page.evaluate((href) => { const a = [...document.querySelectorAll(".fides-updates__item a.fides-ds-card__link")].find((x) => x.href === href); return a ? a.closest(".fides-updates__item").querySelector(".fides-ds-card__fact--meta").textContent.trim() : null; }, feat.href);
+    check(`${tag}: featured post is also in the list with the same date`, inList === featDate, `${inList} vs ${featDate}`);
+    await page.goto(PAGE_URL, { waitUntil: "domcontentloaded" });
+
+    // Keyboard: the featured block is one tab stop with a visible ring; hover darkens the block.
+    const fl = page.locator(".fides-updates__featured a");
+    await fl.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    check(`${tag}: featured block has a visible focus ring`, await page.locator(".fides-updates__featured").evaluate((e) => { const c = getComputedStyle(e); return parseFloat(c.outlineWidth) >= 2 && c.outlineStyle !== "none"; }));
+    if (w >= 1024) {
+      const bg0 = await page.locator(".fides-updates__featured").evaluate((e) => getComputedStyle(e).backgroundColor);
+      await page.locator(".fides-updates__featured").hover();
+      await page.waitForTimeout(250);
+      const bg1 = await page.locator(".fides-updates__featured").evaluate((e) => getComputedStyle(e).backgroundColor);
+      check(`${tag}: featured block shows hover`, bg0 !== bg1, `${bg0} ${bg1}`);
+      const r0 = await rows(page).first().evaluate((e) => getComputedStyle(e).backgroundColor);
+      await rows(page).first().locator(".fides-ds-card").hover();
+      await page.waitForTimeout(250);
+      check(`${tag}: list row shows hover`, (await rows(page).first().locator(".fides-ds-card").evaluate((e) => getComputedStyle(e).backgroundColor)) !== r0);
+    }
+    // Compact row: logo, title, type, organization, date and action inside one row, titles at most two lines.
+    const compact = await page.evaluate(() => [...document.querySelectorAll(".fides-updates__item .fides-ds-card")].map((c) => { const t = c.querySelector(".fides-ds-card__title"); const d = c.querySelector(".fides-ds-card__fact--meta"); const a = c.querySelector(".fides-ds-card__arrow"); const m = c.querySelector(".fides-ds-card__media"); const cr = c.getBoundingClientRect(); const lh = parseFloat(getComputedStyle(t).lineHeight); const inside = (e) => { const b = e.getBoundingClientRect(); return b.left >= cr.left - 1 && b.right <= cr.right + 1; }; const db = d.getBoundingClientRect(), tb = t.getBoundingClientRect(), ab = a.getBoundingClientRect(); return { lines: Math.round(tb.height / lh), media: Math.round(m.getBoundingClientRect().width), inside: inside(d) && inside(a) && inside(t), dateOverTitle: db.left < tb.right - 2 && db.right > tb.left && db.top < tb.bottom && db.bottom > tb.top, dateOverArrow: db.right > ab.left && db.left < ab.right && db.top < ab.bottom && db.bottom > ab.top }; }));
+    check(`${tag}: compact rows keep logo 48px, at most two title lines, date and action apart`, compact.length > 0 && compact.every((r) => r.lines <= 2 && r.media === 48 && r.inside && !r.dateOverTitle && !r.dateOverArrow), JSON.stringify(compact.filter((r) => r.lines > 2 || r.media !== 48 || !r.inside || r.dateOverTitle || r.dateOverArrow)));
+    // Featured image that cannot be loaded: the block stays tidy (figure hidden, title and action remain).
+    const p2 = await ctx.newPage();
+    await p2.route((u) => u.href.startsWith(BASE) && /\/uploads\//.test(u.pathname), (r) => r.abort());
+    await p2.goto(PAGE_URL, { waitUntil: "load" });
+    await p2.waitForTimeout(500);
+    const brokenFeat = await p2.evaluate(() => { const f = document.querySelector(".fides-updates__featured"); const fig = f.querySelector("figure"); return { figHidden: !fig || fig.hidden, title: !!f.querySelector("a"), overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth }; });
+    check(`${tag}: featured block stays tidy when its image fails`, brokenFeat.figHidden && brokenFeat.title && brokenFeat.overflow <= 0, JSON.stringify(brokenFeat));
+    await p2.close();
 
     // Missing images: all remote images are aborted, so every logo shows the fallback tile.
     await page.waitForTimeout(600);
@@ -85,18 +134,18 @@ const texts = (loc, sel) => loc.evaluateAll((els, s) => els.map((e) => (e.queryS
     // Type filter.
     await page.goto(PAGE_URL, { waitUntil: "domcontentloaded" });
     await Promise.all([page.waitForURL(/type=programme/), page.getByLabel("Type").selectOption("programme")]);
-    const kick = await texts(rows(page), ".fides-ds-card__fact:nth-child(2)");
+    const kick = await texts(rows(page), ".fides-ds-card__fact--kicker");
     check(`${tag}: type filter shows programme updates only`, kick.length > 0 && kick.every((t) => /^Programme update/.test(t.trim())), kick.join("|"));
     await Promise.all([page.waitForURL((u) => /type=organization/.test(u.href)), page.getByLabel("Type").selectOption("organization")]);
-    const kick2 = await texts(rows(page), ".fides-ds-card__fact:nth-child(2)");
+    const kick2 = await texts(rows(page), ".fides-ds-card__fact--kicker");
     check(`${tag}: type filter shows organization news only`, kick2.length > 0 && kick2.every((t) => /^Organization news/.test(t.trim())), kick2.join("|"));
     await Promise.all([page.waitForURL((u) => /type=fides/.test(u.href)), page.getByLabel("Type").selectOption("fides")]);
-    const kick3 = await texts(rows(page), ".fides-ds-card__fact:nth-child(2)");
+    const kick3 = await texts(rows(page), ".fides-ds-card__fact--kicker");
     check(`${tag}: type filter shows FIDES updates only`, kick3.length > 0 && kick3.every((t) => /^FIDES update/.test(t.trim())), kick3.join("|"));
 
     // Sort keeps filters.
     await Promise.all([page.waitForURL(/sort=oldest/), page.getByLabel("Sort by").selectOption("oldest")]);
-    const d2 = (await texts(rows(page), ".fides-ds-card__fact:nth-child(3)")).map((d) => Date.parse(d.trim())).filter((t) => !Number.isNaN(t));
+    const d2 = (await texts(rows(page), ".fides-ds-card__fact--meta")).map((d) => Date.parse(d.trim())).filter((t) => !Number.isNaN(t));
     check(`${tag}: oldest first sorts ascending and keeps the type`, /type=fides/.test(page.url()) && d2.every((t, i) => i === 0 || d2[i - 1] <= t), page.url());
 
     // Pagination.
