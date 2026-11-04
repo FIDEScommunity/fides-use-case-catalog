@@ -342,10 +342,13 @@ async function overviewFallbacks(browser) {
 
   const broken = await newContext(browser, 1440);
   const brokenPage = await broken.newPage();
-  await brokenPage.route(/\.(png|jpe?g|svg|webp)(\?|$)/, (route) => (route.request().url().includes(BASE) ? route.continue() : route.abort()));
+  // Every remote image fails (also extension-less ones such as favicon services), so the result never depends on the network.
+  await brokenPage.route("**/*", (route) => (route.request().resourceType() === "image" && !route.request().url().startsWith(BASE) && !route.request().url().startsWith("data:") ? route.abort() : route.continue()));
   await open(brokenPage, OVERVIEWS.business);
   await waitForRows(brokenPage);
-  await brokenPage.waitForTimeout(1500);
+  // Wait until every logo has settled: loaded, or failed and swapped for the name placeholder.
+  await brokenPage.waitForFunction(() => [...document.querySelectorAll(".fides-uc-pilot__list .fides-ds-card--row .fides-ds-card__img")].slice(0, 6).every((i) => i.complete), null, { timeout: 15000 }).catch(() => {});
+  await brokenPage.waitForTimeout(500);
   const logos = await brokenPage.evaluate(() => {
     const rows = [...document.querySelectorAll(".fides-uc-pilot__list .fides-ds-card--row")].slice(0, 6);
     return rows.map((row) => {

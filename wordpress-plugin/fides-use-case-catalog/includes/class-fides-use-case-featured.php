@@ -34,7 +34,7 @@ final class Fides_Use_Case_Featured {
     }
 
     /**
-     * @return array{primary:string, fallback:string, short_title:string}
+     * @return array{primary:string, fallback:string, short_title:string, short_title_for:string}
      */
     public static function selection(): array {
         $value = get_option(self::OPTION, array());
@@ -43,7 +43,20 @@ final class Fides_Use_Case_Featured {
             'primary'     => isset($value['primary']) ? (string) $value['primary'] : '',
             'fallback'    => isset($value['fallback']) ? (string) $value['fallback'] : '',
             'short_title' => isset($value['short_title']) ? (string) $value['short_title'] : '',
+            // The record the short title was written for. Without it the title is never shown.
+            'short_title_for' => isset($value['short_title_for']) ? (string) $value['short_title_for'] : '',
         );
+    }
+
+    /**
+     * The editorial short title, only while it belongs to the record being shown.
+     */
+    public static function short_title_for(string $used): string {
+        $selection = self::selection();
+        if ($selection['short_title'] === '' || $selection['short_title_for'] === '' || $used === '') {
+            return '';
+        }
+        return $selection['short_title_for'] === $used && $selection['primary'] === $used ? $selection['short_title'] : '';
     }
 
     public static function register_setting(): void {
@@ -52,7 +65,7 @@ final class Fides_Use_Case_Featured {
             self::OPTION,
             array(
                 'type'              => 'array',
-                'default'           => array('primary' => '', 'fallback' => '', 'short_title' => ''),
+                'default'           => array('primary' => '', 'fallback' => '', 'short_title' => '', 'short_title_for' => ''),
                 'sanitize_callback' => array(__CLASS__, 'sanitize'),
             )
         );
@@ -60,7 +73,7 @@ final class Fides_Use_Case_Featured {
 
     /**
      * @param mixed $value
-     * @return array{primary:string, fallback:string, short_title:string}
+     * @return array{primary:string, fallback:string, short_title:string, short_title_for:string}
      */
     public static function sanitize($value): array {
         $value = is_array($value) ? $value : array();
@@ -81,7 +94,19 @@ final class Fides_Use_Case_Featured {
             }
         }
         $short = isset($value['short_title']) ? sanitize_text_field(wp_unslash((string) $value['short_title'])) : '';
-        $clean['short_title'] = function_exists('mb_substr') ? mb_substr($short, 0, 90) : substr($short, 0, 90);
+        $short = function_exists('mb_substr') ? mb_substr($short, 0, 90) : substr($short, 0, 90);
+
+        // The short title belongs to one record. When the primary changes and the title was
+        // left as it was, it is cleared so the old title cannot appear on the new record.
+        $stored = self::selection();
+        if ($short !== '' && $clean['primary'] === '') {
+            $short = '';
+        } elseif ($short !== '' && $clean['primary'] !== $stored['primary'] && $short === $stored['short_title']) {
+            $short = '';
+            add_settings_error(self::OPTION, 'short-title-cleared', 'The primary use case changed, so the short homepage title was cleared. Enter a new one if this record needs it.', 'warning');
+        }
+        $clean['short_title']     = $short;
+        $clean['short_title_for'] = $short !== '' ? $clean['primary'] : '';
         return $clean;
     }
 
@@ -137,13 +162,13 @@ final class Fides_Use_Case_Featured {
         $overrides = array('title_tag' => 'h2', 'image_loading' => 'eager');
         if ($variant === 'feature') {
             // One coherent block: availability and the award (only with name and result) share one meta line.
-            $selection = self::selection();
             $props     = Fides_Use_Case_Design::card_props($resolved['item'], 'feature', (string) $atts['detail_url']);
             $overrides['meta']   = implode(' · ', array_filter(array((string) ($props['status'] ?? ''), Fides_Use_Case_Design::award_line($resolved['used']))));
             $overrides['status'] = '';
             // Explicit editorial short title, only for the primary use case it was written for.
-            if ($selection['short_title'] !== '' && $resolved['used'] === $selection['primary']) {
-                $overrides['title'] = $selection['short_title'];
+            $short = self::short_title_for((string) $resolved['used']);
+            if ($short !== '') {
+                $overrides['title'] = $short;
             }
         }
         $card    = Fides_Use_Case_Design::render_card(

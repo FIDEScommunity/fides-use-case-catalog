@@ -276,13 +276,35 @@ $check(strpos($feature, 'data-fides-featured-source="' . UC_BETA . '"') !== fals
 preg_match('#fides-ds-card__meta">([^<]*)<#', $feature, $meta_match);
 $check(isset($meta_match[1]) && strpos($meta_match[1], 'Winner · Test Awards 2026') !== false && substr_count($meta_match[1], '2026') === 1, 'featured card shows the award once, with programme name and no duplicate year');
 $check(strpos($feature, 'href="' . esc_url($beta_url) . '"') !== false, 'featured card links to the detail route');
-// Short homepage title: explicit editorial field, primary only, never derived from the record.
+// Short homepage title: explicit editorial field, bound to the record it was written for.
+$short_html = static function () { return do_shortcode('[fides_use_case_featured detail_url="' . DETAIL_BASE . '"]'); };
+$selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA, 'short_title' => 'Short editorial title', 'short_title_for' => UC_ALPHA);
+$check(strpos($short_html(), 'Short editorial title') !== false, 'short title replaces the title of the primary it was written for');
+$selection = array('primary' => UC_GONE, 'fallback' => UC_BETA, 'short_title' => 'Short editorial title', 'short_title_for' => UC_GONE);
+$check(strpos($short_html(), 'Short editorial title') === false, 'short title is not applied to the fallback');
+$selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA, 'short_title' => 'Short editorial title', 'short_title_for' => UC_BETA);
+$check(strpos($short_html(), 'Short editorial title') === false, 'a title written for another record is not shown');
 $selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA, 'short_title' => 'Short editorial title');
-$check(strpos(do_shortcode('[fides_use_case_featured detail_url="' . DETAIL_BASE . '"]'), 'Short editorial title') !== false, 'short title replaces the title of the primary');
-$selection = array('primary' => UC_GONE, 'fallback' => UC_BETA, 'short_title' => 'Short editorial title');
-$check(strpos(do_shortcode('[fides_use_case_featured detail_url="' . DETAIL_BASE . '"]'), 'Short editorial title') === false, 'short title is not applied to the fallback');
-$selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA, 'short_title' => '');
-$check(strpos(do_shortcode('[fides_use_case_featured detail_url="' . DETAIL_BASE . '"]'), 'Short editorial title') === false, 'no short title: the record title is shown');
+$check(strpos($short_html(), 'Short editorial title') === false, 'a legacy title without a record link is not shown');
+$selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA, 'short_title' => '', 'short_title_for' => '');
+$check(strpos($short_html(), 'Short editorial title') === false, 'no short title: the record title is shown');
+
+// Changing the primary clears an unchanged short title; re-selecting the old record does not bring it back.
+$GLOBALS['wp_settings_errors'] = array();
+$selection = array('primary' => UC_ALPHA, 'fallback' => UC_BETA, 'short_title' => 'Alpha title', 'short_title_for' => UC_ALPHA);
+$clean = Fides_Use_Case_Featured::sanitize(array('primary' => UC_BETA, 'fallback' => '', 'short_title' => 'Alpha title'));
+$check($clean['short_title'] === '' && $clean['short_title_for'] === '', 'new primary with the old short title left in place: title cleared');
+$check(isset(wp_list_pluck(get_settings_errors(Fides_Use_Case_Featured::OPTION), 'type', 'code')['short-title-cleared']), 'the editor is told the short title was cleared');
+$selection = $clean + array('fallback' => '');
+$clean = Fides_Use_Case_Featured::sanitize(array('primary' => UC_ALPHA, 'fallback' => '', 'short_title' => ''));
+$check($clean['short_title'] === '' && strpos(do_shortcode('[fides_use_case_featured id="' . UC_ALPHA . '" detail_url="' . DETAIL_BASE . '"]'), 'Alpha title') === false, 're-selecting the old record does not bring the old title back');
+$selection = array('primary' => UC_ALPHA, 'fallback' => '', 'short_title' => 'Alpha title', 'short_title_for' => UC_ALPHA);
+$clean = Fides_Use_Case_Featured::sanitize(array('primary' => UC_BETA, 'fallback' => '', 'short_title' => 'Beta title'));
+$check($clean['short_title'] === 'Beta title' && $clean['short_title_for'] === UC_BETA, 'a new title entered with the new primary is bound to it');
+$clean = Fides_Use_Case_Featured::sanitize(array('primary' => UC_ALPHA, 'fallback' => '', 'short_title' => 'Alpha title'));
+$check($clean['short_title'] === 'Alpha title' && $clean['short_title_for'] === UC_ALPHA, 'saving the same primary keeps its title');
+$clean = Fides_Use_Case_Featured::sanitize(array('primary' => '', 'fallback' => UC_BETA, 'short_title' => 'Alpha title'));
+$check($clean['short_title'] === '', 'no primary: no short title is stored');
 $selection = array('primary' => UC_GONE, 'fallback' => '');
 $check(do_shortcode('[fides_use_case_featured]') === '', 'no published selection renders nothing for visitors');
 $admins = get_users(array('role' => 'administrator', 'number' => 1, 'fields' => 'ID'));
@@ -298,7 +320,7 @@ $codes = static function (): array {
 };
 $GLOBALS['wp_settings_errors'] = array();
 $clean = Fides_Use_Case_Featured::sanitize(array('primary' => 'not a valid id!', 'fallback' => UC_BETA));
-$check($clean === array('primary' => '', 'fallback' => UC_BETA, 'short_title' => ''), 'malformed id is cleared');
+$check($clean === array('primary' => '', 'fallback' => UC_BETA, 'short_title' => '', 'short_title_for' => ''), 'malformed id is cleared');
 $check(($codes()['invalid-primary'] ?? '') === 'error', 'malformed id reports an error');
 $GLOBALS['wp_settings_errors'] = array();
 $clean = Fides_Use_Case_Featured::sanitize(array('primary' => UC_GONE, 'fallback' => UC_BETA));

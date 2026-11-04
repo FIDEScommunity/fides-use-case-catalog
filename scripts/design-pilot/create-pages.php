@@ -194,8 +194,9 @@ pilot_upsert_page(
     . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:48px;padding-bottom:96px\">"
     . "<!-- wp:columns {\"verticalAlignment\":\"center\",\"style\":{\"spacing\":{\"blockGap\":{\"left\":\"64px\"}}}} -->\n<div class=\"wp-block-columns are-vertically-aligned-center\">"
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"55%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:55%\">"
+    . "<!-- wp:paragraph {\"className\":\"fides-ds-kicker\"} -->\n<p class=\"fides-ds-kicker\">The global digital trust ecosystem</p>\n<!-- /wp:paragraph -->\n"
     . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-hero\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-hero\">Accelerating Digital Trust</h1>\n<!-- /wp:heading -->\n"
-    . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">The new international movement dedicated to the continuous improvement of digital trust on the internet.</p>\n<!-- /wp:paragraph -->"
+    . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">Explore digital trust through use cases, practical guidance and expertise.</p>\n<!-- /wp:paragraph -->\n<!-- wp:paragraph -->\n<p>Wallets, credentials and trusted data flows, indexed in one place.</p>\n<!-- /wp:paragraph -->"
     // Primary entry to the starting point (Paper 22.HOME hero), next to the existing secondary action.
     . "\n<!-- wp:html -->\n<div class=\"fides-uc-fragment__actions\" style=\"margin-top:32px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px\"><a class=\"fides-ds-button\" href=\"/fides-design-pilot/start/\">Find your starting point <span aria-hidden=\"true\">→</span></a><a class=\"fides-ds-action-link\" href=\"/fides-design-pilot/overview/\"><span>Explore use cases</span> <span aria-hidden=\"true\">→</span></a></div>\n<!-- /wp:html -->"
     . "</div>\n<!-- /wp:column -->\n"
@@ -214,8 +215,11 @@ if (! get_option(Fides_Use_Case_Featured::OPTION)) {
 }
 // Explicit editorial short title for the featured use case (Paper 25.7); set once, an editor's value is kept.
 $featured_option = get_option(Fides_Use_Case_Featured::OPTION);
-if (is_array($featured_option) && ! array_key_exists('short_title', $featured_option) && ($featured_option['primary'] ?? '') === PILOT_FEATURED_ID) {
-    $featured_option['short_title'] = 'Digital Certificate of Good Conduct in a wallet';
+if (is_array($featured_option) && ($featured_option['primary'] ?? '') === PILOT_FEATURED_ID
+    && (! array_key_exists('short_title', $featured_option) || (($featured_option['short_title'] ?? '') !== '' && empty($featured_option['short_title_for'])))) {
+    // The title is tied to the record it was written for (short_title_for); a legacy value without that link is bound once here.
+    $featured_option['short_title']     = ($featured_option['short_title'] ?? '') !== '' ? $featured_option['short_title'] : 'Digital Certificate of Good Conduct in a wallet';
+    $featured_option['short_title_for'] = PILOT_FEATURED_ID;
     update_option(Fides_Use_Case_Featured::OPTION, $featured_option);
 }
 WP_CLI::log('Homepage feature: ' . wp_json_encode(get_option(Fides_Use_Case_Featured::OPTION)));

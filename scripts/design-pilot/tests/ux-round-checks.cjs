@@ -54,7 +54,9 @@ const ring = (loc) => loc.evaluate((e) => { const s = getComputedStyle(e); retur
     const tb = await strip.first().boundingBox();
     check(`${tag}: Learn strip above the search field`, tb && sb && tb.y + tb.height <= sb.y);
     check(`${tag}: Learn strip: one strip, no card`, (await strip.count()) === 1 && (await page.locator(".fides-ds-editorial-link--card").count()) === 0);
-    const cross = page.locator("[data-pilot-intro] a, .fides-wallet-pilot-intro a").filter({ hasText: "personal wallets" });
+    const cross = page.locator(".fides-wallet-pilot__cross a");
+    const cb = await cross.first().boundingBox();
+    check(`${tag}: cross reference "Personal wallets" sits between the strip and the search`, (await cross.count()) === 1 && /Personal wallets/.test(await cross.first().textContent()) && cb && cb.y >= tb.y + tb.height && cb.y < sb.y);
     check(`${tag}: personal wallets reference is separate from the strip`, (await strip.locator("a", { hasText: "personal" }).count()) === 0);
     if (w >= 1100) check(`${tag}: search field in first screen`, sb && sb.y + sb.height < 520, String(sb && sb.y));
     const sl = strip.locator("a").first();
