@@ -207,6 +207,7 @@ pilot_upsert_page(
     . "</div>\n<!-- /wp:group -->"
     // Paper 25.12: task routes and latest updates under the hero (blocks read their data themselves).
     . "\n<!-- wp:shortcode -->[fides_home_routes]<!-- /wp:shortcode -->"
+    . "\n<!-- wp:shortcode -->[fides_use_case_discovery layout=\"index\"]<!-- /wp:shortcode -->"
     . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->",
     $parent,
     $layout_meta,

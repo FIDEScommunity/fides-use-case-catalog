@@ -19,6 +19,7 @@ how use cases connect the other FIDES catalogs.
 == Changelog ==
 
 = Unreleased (design pilot) =
+* `[fides_use_case_discovery layout="index"]`: homepage index "Digital trust in practice" (Paper 25.12) from the existing theme bundles and published use cases. Each row links to the overview with its `?theme=` filter and shows the same count as the overview result; the total is shown separately (a use case can sit in several themes). The overview URL comes from the site shell or `catalog_url`; catalog links appear only when they resolve; without catalog data the block shows a short notice and a link to the overview. Filter `fides_use_case_discovery_items` (tests) and `fides_use_case_discovery_catalog_links`.
 * Pilot Filters dialog: an open dialog keeps its dialog layout above 600px, so resizing never cancels draft choices (Apply or Cancel only); focus after closing goes to the visible Filters button or More filters. Removable filter pills are at least 44px at every width and pointer type.
 * Shared More filters pattern (Paper 20.45) in `usecase-design.css`, used by the use-case, credential, wallet and organization pilot overviews: white panel with a 2px brand top line, 20/26 title and 44px close, lists side by side at 300px, checkbox groups on their own line, and a full-width Technical filters disclosure row (at least 56px, field summary, chevron at the end) with its lists below. Mobile shows the same groups stacked in the Filters dialog. No filters were added or removed.
 

@@ -279,6 +279,124 @@ final class Fides_Use_Case_Discovery_Shortcode {
     }
 
     /**
+     * Use case overview URL. An explicit attribute wins; otherwise the site
+     * shell decides (so the pilot and staging each point at their own page),
+     * with the plugin default as last resort. Never a fixed host.
+     */
+    private static function overview_url(string $explicit): string {
+        $explicit = trim($explicit);
+        if ($explicit !== '') {
+            return preg_match('#^https?://#i', $explicit) ? $explicit : home_url($explicit);
+        }
+        if (class_exists('Fides_DS_Site_Shell')) {
+            $mapped = Fides_DS_Site_Shell::url('/ecosystem-explorer/use-cases/');
+            if ($mapped !== '') {
+                return $mapped;
+            }
+        }
+        return home_url((string) apply_filters('fides_use_case_catalog_path', '/ecosystem-explorer/use-cases/'));
+    }
+
+    /**
+     * Links to the other catalogs. Only destinations that resolve are returned.
+     *
+     * @return array<int, array{label: string, url: string}>
+     */
+    private static function other_catalog_links(): array {
+        $fallback = function_exists('fides_use_case_catalog_catalog_urls') ? fides_use_case_catalog_catalog_urls() : array();
+        $defs = array(
+            array('Organizations', '/organizations/', 'organizationCatalogUrl'),
+            array('Personal wallets', '/ecosystem-explorer/personal-wallets/', 'personalWalletCatalogUrl'),
+            array('Business wallets', '/ecosystem-explorer/organizational-wallets/', 'businessWalletCatalogUrl'),
+            array('Credentials', '/ecosystem-explorer/credential-catalog/', 'credentialCatalogUrl'),
+            array('Issuers', '/ecosystem-explorer/issuer-catalog/', 'issuerCatalogUrl'),
+            array('Relying parties', '/ecosystem-explorer/relying-party-catalog/', 'rpCatalogUrl'),
+        );
+        $links = array();
+        foreach ($defs as $def) {
+            $url = class_exists('Fides_DS_Site_Shell') ? Fides_DS_Site_Shell::url($def[1]) : '';
+            if ($url === '') {
+                $url = (string) ($fallback[ $def[2] ] ?? '');
+            }
+            if ($url !== '') {
+                $links[] = array('label' => $def[0], 'url' => $url);
+            }
+        }
+        return (array) apply_filters('fides_use_case_discovery_catalog_links', $links);
+    }
+
+    /**
+     * Homepage index (Paper 25.12 "Digital trust in practice"): one row per
+     * theme bundle with its live count, the total shown separately. A use case
+     * can sit in several themes, so the rows do not add up to the total.
+     */
+    private static function render_index(string $catalog_url_attr): string {
+        wp_enqueue_style('fides-use-case-discovery');
+        if (class_exists('FIDES_Community_Tools_Tiles')) {
+            FIDES_Community_Tools_Tiles::register_design_system_assets();
+            wp_enqueue_style('fides-design-system');
+        }
+
+        $items       = (array) apply_filters('fides_use_case_discovery_items', self::published_items());
+        $config      = self::theme_config();
+        $overview    = self::overview_url($catalog_url_attr);
+        $total       = count($items);
+        $available   = $total > 0 && $config['bundles'] !== array();
+        $other_links = self::other_catalog_links();
+
+        $html  = '<section class="fides-ds fides-uc-index" aria-labelledby="fides-uc-index-title"><div class="fides-uc-index__inner">';
+        $html .= '<div class="fides-uc-index__head"><div class="fides-uc-index__heading">'
+            . '<p class="fides-ds-kicker">' . esc_html__('Explore by theme', 'fides-use-case-catalog') . '</p>'
+            . '<h2 class="fides-uc-index__title" id="fides-uc-index-title">' . esc_html__('Digital trust in practice', 'fides-use-case-catalog') . '</h2></div>';
+        if ($available) {
+            $html .= '<p class="fides-uc-index__total"><strong data-fides-uc-index-total="' . esc_attr((string) $total) . '">' . esc_html(number_format_i18n($total)) . '</strong> '
+                . '<span>' . esc_html(_n('use case', 'use cases', $total, 'fides-use-case-catalog')) . '</span></p>';
+        }
+        $html .= '</div>';
+
+        if ($available) {
+            $html .= '<ol class="fides-uc-index__list">';
+            $n = 0;
+            foreach ($config['bundles'] as $bundle) {
+                $n++;
+                $count = self::bundle_count($items, $bundle['themeCodes'], $config['assignments']);
+                $url   = add_query_arg('theme', $bundle['code'], $overview);
+                $label = sprintf(
+                    /* translators: 1: theme title, 2: number of use cases */
+                    _n('%1$s, %2$s use case', '%1$s, %2$s use cases', $count, 'fides-use-case-catalog'),
+                    $bundle['title'],
+                    number_format_i18n($count)
+                );
+                $html .= '<li class="fides-uc-index__row"><a class="fides-uc-index__link" href="' . esc_url($url) . '" data-theme="' . esc_attr($bundle['code']) . '" aria-label="' . esc_attr($label) . '"'
+                    . ' data-matomo-category="Use Case Discovery" data-matomo-action="Open theme" data-matomo-name="' . esc_attr($bundle['title']) . '">'
+                    . '<span class="fides-uc-index__num" aria-hidden="true">' . esc_html(sprintf('%02d', $n)) . '</span>'
+                    . '<span class="fides-uc-index__name">' . esc_html($bundle['title']) . '</span>'
+                    . '<span class="fides-uc-index__count" data-count="' . esc_attr((string) $count) . '"><span>' . esc_html(number_format_i18n($count)) . '</span> <span aria-hidden="true">→</span></span>'
+                    . '</a></li>';
+            }
+            $html .= '</ol>';
+        } else {
+            $html .= '<p class="fides-uc-index__empty">' . esc_html__('The use case themes are not available right now.', 'fides-use-case-catalog') . ' '
+                . '<a class="fides-ds-action-link" href="' . esc_url($overview) . '"><span>' . esc_html__('Browse all use cases', 'fides-use-case-catalog') . '</span> <span aria-hidden="true">→</span></a></p>';
+        }
+
+        if ($other_links !== array()) {
+            $explorer = class_exists('Fides_DS_Site_Shell') ? Fides_DS_Site_Shell::url('/ecosystem-explorer/') : '';
+            $html .= '<nav class="fides-uc-index__catalogs" aria-label="' . esc_attr__('Catalogs', 'fides-use-case-catalog') . '">';
+            if ($explorer !== '') {
+                $html .= '<a class="fides-uc-index__all" href="' . esc_url($explorer) . '"><span>' . esc_html__('All catalogs', 'fides-use-case-catalog') . '</span> <span aria-hidden="true">→</span></a>';
+            }
+            $html .= '<ul>';
+            foreach ($other_links as $link) {
+                $html .= '<li><a href="' . esc_url($link['url']) . '">' . esc_html($link['label']) . '</a></li>';
+            }
+            $html .= '</ul></nav>';
+        }
+
+        return $html . '</div></section>';
+    }
+
+    /**
      * @param array<string, mixed> $atts
      */
     public static function render(array $atts = array()): string {
@@ -287,10 +405,15 @@ final class Fides_Use_Case_Discovery_Shortcode {
                 'catalog_url'      => '',
                 'surface'          => '0',
                 'show_connection'  => '1',
+                'layout'           => '',
             ),
             $atts,
             'fides_use_case_discovery'
         );
+
+        if (strtolower(trim((string) $atts['layout'])) === 'index') {
+            return self::render_index((string) $atts['catalog_url']);
+        }
 
         wp_enqueue_style('fides-use-case-discovery');
         wp_enqueue_script('fides-use-case-discovery');

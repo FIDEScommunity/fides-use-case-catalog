@@ -22,12 +22,13 @@ $check = static function (bool $ok, string $message) use (&$results): void {
 
 // ---- Routes
 $html = Fides_DS_Home::routes();
-$check(substr_count($html, 'fides-home-routes__item') === 3, 'three routes');
+$check(substr_count($html, 'fides-home-routes__item') === 2, 'two routes while the third has no destination');
+$check(strpos($html, 'fides-home-routes__list--2') !== false, 'two-column modifier');
 $check(strpos($html, 'Where would you like to start?') !== false, 'routes heading');
 $check(strpos($html, home_url('/fides-design-pilot/start/')) !== false, 'starting point route links to the pilot start page');
 $check(strpos($html, home_url('/fides-design-pilot/overview/')) !== false, 'use case route links to the pilot overview');
-$check(strpos($html, 'Find integration help') === false && strpos($html, 'Connect your organization') !== false, 'route without an existing destination has no action (no dead link)');
-$check(substr_count($html, '<a ') === 2, 'only routes with a destination are links');
+$check(strpos($html, 'Find integration help') === false && strpos($html, 'Connect your organization') === false, 'route without an existing destination is hidden');
+$check(substr_count($html, '<a ') === 2 && substr_count($html, 'fides-home-routes__action') === 2, 'every visible route is a link');
 foreach (array('includes/class-fides-ds-home.php', 'assets/home.css') as $rel) {
     $src = (string) file_get_contents(dirname(dirname(dirname(__DIR__))) . '/../fides-community-tools-tiles/' . $rel);
     $check($src !== '' && stripos($src, 'localhost') === false && stripos($src, '10088') === false, 'no hard-coded local host in ' . $rel);
@@ -37,7 +38,8 @@ add_filter('fides_site_shell_url', static function ($url, $path) {
     return $path === '/ecosystem-explorer/get-help-choosing/' ? home_url('/help-here/') : $url;
 }, 20, 2);
 $mapped = Fides_DS_Home::routes();
-$check(strpos($mapped, 'href="' . home_url('/help-here/') . '"') !== false && strpos($mapped, 'Find integration help') !== false, 'a site that maps the destination gets the action');
+$check(strpos($mapped, 'href="' . home_url('/help-here/') . '"') !== false && strpos($mapped, 'Find integration help') !== false, 'a site that maps the destination gets the route');
+$check(substr_count($mapped, 'fides-home-routes__item') === 3 && strpos($mapped, 'fides-home-routes__list--3') !== false, 'three routes once all destinations exist');
 
 // ---- Latest from the ecosystem
 $own = array(
@@ -92,6 +94,34 @@ $own  = array(array_merge(array('id' => 'post:2', 'group' => 'fides', 'title' =>
 $html = Fides_DS_Home::updates();
 $check(substr_count($html, 'fides-home-news__item') === 1 && strpos($html, 'Only own') !== false, 'failed feed still shows own posts');
 $own = array(array_merge($own[0], array('title' => '')));
+
+// ---- Digital trust in practice (use case plugin, layout="index")
+$themes_html = do_shortcode('[fides_use_case_discovery layout="index"]');
+$cfg   = Fides_Use_Case_Discovery_Shortcode::theme_config();
+$check(substr_count($themes_html, 'fides-uc-index__row') === count($cfg['bundles']) && count($cfg['bundles']) > 0, 'one row per existing theme bundle');
+$check(strpos($themes_html, 'Digital trust in practice') !== false && strpos($themes_html, 'Explore by theme') !== false, 'index heading and kicker');
+foreach ($cfg['bundles'] as $b) {
+    $check(strpos($themes_html, 'theme=' . $b['code']) !== false && strpos($themes_html, home_url('/fides-design-pilot/overview/')) !== false, 'row links to the overview with theme filter ' . $b['code']);
+}
+$fixture = array(
+    array('id' => 'a', 'themes' => array('person_identity', 'payments')),
+    array('id' => 'b', 'themes' => array('person_identity')),
+    array('id' => 'c', 'themes' => array('dataspaces', 'trade_documents')),
+);
+add_filter('fides_use_case_discovery_items', static function () use ($fixture) { return $fixture; });
+$themes_html = do_shortcode('[fides_use_case_discovery layout="index"]');
+$check(strpos($themes_html, 'data-fides-uc-index-total="3"') !== false, 'total counts use cases, not theme memberships');
+$check(preg_match('#data-theme="identity_access".*?data-count="2"#s', $themes_html) === 1, 'identity count from the fixture');
+$check(preg_match('#data-theme="products_trade_supply_chains".*?data-count="1"#s', $themes_html) === 1, 'a use case in two themes of one bundle counts once');
+$check(preg_match_all('#data-count="(\d+)"#', $themes_html, $m) && array_sum($m[1]) === 4, 'theme rows add up to more than the total (use cases in several themes)');
+remove_all_filters('fides_use_case_discovery_items');
+add_filter('fides_use_case_discovery_items', '__return_empty_array');
+$themes_html = do_shortcode('[fides_use_case_discovery layout="index"]');
+$check(strpos($themes_html, 'not available right now') !== false && strpos($themes_html, 'fides-uc-index__row') === false && strpos($themes_html, 'data-fides-uc-index-total') === false, 'unavailable data: clean state without counts or rows');
+$check(strpos($themes_html, 'Browse all use cases') !== false && strpos($themes_html, 'Digital trust in practice') !== false, 'unavailable data keeps heading and a link to the overview');
+remove_all_filters('fides_use_case_discovery_items');
+$src = (string) file_get_contents(dirname(dirname(dirname(__DIR__))) . '/wordpress-plugin/fides-use-case-catalog/includes/class-fides-use-case-discovery-shortcode.php');
+$check(strpos($src, 'localhost') === false && strpos($src, '10088') === false, 'no hard-coded local host in the discovery shortcode');
 
 echo 'home behaviour: ' . $results['pass'] . ' passed, ' . count($results['fail']) . " failed\n";
 foreach ($results['fail'] as $message) {

@@ -671,3 +671,210 @@
     min-height: 104px;
   }
 }
+
+/* ---------- Homepage index: "Digital trust in practice" (Paper 25.12) ---------- */
+
+.fides-ds.fides-uc-index {
+  width: 100%;
+}
+
+.fides-ds .fides-uc-index__inner {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding: var(--fides-ds-space-8, 64px) var(--fides-ds-gutter, 20px) var(--fides-ds-space-7, 48px);
+}
+
+.fides-ds .fides-uc-index__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--fides-ds-space-3, 12px) var(--fides-ds-space-5, 24px);
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--fides-ds-ink, #0e0e0e);
+}
+
+.fides-ds .fides-uc-index__heading {
+  min-width: 0;
+}
+
+.fides-ds .fides-uc-index__heading .fides-ds-kicker {
+  margin: 0 0 var(--fides-ds-space-2, 8px);
+}
+
+.fides-ds .fides-uc-index__title {
+  margin: 0;
+  font-size: 32px;
+  line-height: 36px;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.fides-ds .fides-uc-index__total {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+}
+
+.fides-ds .fides-uc-index__total strong {
+  font-size: 32px;
+  line-height: 36px;
+  letter-spacing: -0.04em;
+}
+
+.fides-ds .fides-uc-index__total span {
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 18px;
+}
+
+.fides-ds .fides-uc-index__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fides-ds .fides-uc-index__row {
+  margin: 0;
+  border-bottom: 1px solid var(--fides-ds-line, #e4e4e4);
+}
+
+.fides-ds .fides-uc-index__link {
+  display: flex;
+  align-items: center;
+  gap: var(--fides-ds-space-3, 12px);
+  min-height: 44px;
+  padding-block: 18px;
+  color: var(--fides-ds-ink, #0e0e0e);
+  text-decoration: none;
+}
+
+.fides-ds .fides-uc-index__num {
+  flex: none;
+  width: 72px;
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 18px;
+}
+
+.fides-ds .fides-uc-index__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 32px;
+  overflow-wrap: anywhere;
+}
+
+.fides-ds .fides-uc-index__count {
+  flex: none;
+  min-width: 72px;
+  font-size: 26px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 32px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.fides-ds .fides-uc-index__link:hover {
+  background: var(--fides-ds-soft, #f2f7ff);
+}
+
+.fides-ds .fides-uc-index__link:hover .fides-uc-index__name {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.fides-ds .fides-uc-index__link:focus-visible {
+  outline: 3px solid var(--fides-ds-link, #0848a3);
+  outline-offset: -3px;
+}
+
+.fides-ds .fides-uc-index__empty {
+  margin: 0;
+  padding-block: var(--fides-ds-space-5, 24px);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fides-ds-space-2, 8px) var(--fides-ds-space-4, 16px);
+  border-bottom: 1px solid var(--fides-ds-line, #e4e4e4);
+}
+
+.fides-ds .fides-uc-index__catalogs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--fides-ds-space-5, 24px);
+  padding-top: var(--fides-ds-space-3, 12px);
+}
+
+.fides-ds .fides-uc-index__catalogs ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--fides-ds-space-5, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fides-ds .fides-uc-index__catalogs li {
+  margin: 0;
+}
+
+.fides-ds .fides-uc-index__catalogs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 14px;
+  line-height: 22px;
+  text-decoration: none;
+}
+
+.fides-ds .fides-uc-index__catalogs a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.fides-ds .fides-uc-index__catalogs a:focus-visible {
+  outline: 3px solid var(--fides-ds-link, #0848a3);
+  outline-offset: 2px;
+}
+
+.fides-ds .fides-uc-index__catalogs .fides-uc-index__all {
+  gap: var(--fides-ds-space-2, 8px);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .fides-ds .fides-uc-index__inner {
+    padding-top: var(--fides-ds-space-7, 48px);
+  }
+
+  .fides-ds .fides-uc-index__title {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .fides-ds .fides-uc-index__num {
+    width: 28px;
+  }
+
+  .fides-ds .fides-uc-index__name,
+  .fides-ds .fides-uc-index__count {
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  .fides-ds .fides-uc-index__count {
+    min-width: 48px;
+  }
+}
