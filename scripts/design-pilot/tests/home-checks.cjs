@@ -8,6 +8,7 @@ const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const HOME = `${BASE}/fides-design-pilot/homepage-fragment/`;
 const WIDTHS = (process.env.WIDTHS || "1440,1100,768,390,320").split(",").map(Number);
 let failures = 0;
+const heights = {};
 const check = (n, ok, d) => { if (!ok) failures += 1; console.log(`${ok ? "ok" : "not ok"} - ${n}${d && !ok ? ` (${d})` : ""}`); };
 const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 
@@ -143,24 +144,57 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     // Spotlight: Bosch demo use case with its explicit relations.
     await page.goto(HOME, { waitUntil: "domcontentloaded" });
     await page.locator(".fides-uc-spot").waitFor();
-    const spot = await page.evaluate(() => { const s = document.querySelector(".fides-uc-spot"); const r = (e) => e.getBoundingClientRect(); const rel = [...s.querySelectorAll(".fides-uc-spot__related-item")].map((li) => { const a = li.querySelector("a"); return { label: li.querySelector(".fides-uc-spot__label").textContent.trim(), name: li.querySelector(".fides-uc-spot__entity-name").textContent.trim(), href: a.getAttribute("href"), h: Math.round(r(a).height), right: Math.round(r(li).right) }; }); const main = [...s.querySelectorAll(".fides-uc-spot__case a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(r(a).height), hidden: a.getAttribute("aria-hidden") })); return { bg: getComputedStyle(s).backgroundColor, y: r(s).top + scrollY, newsBottom: r(document.querySelector(".fides-home-news")).bottom + scrollY, kicker: s.querySelector(".fides-uc-spot__kicker").textContent.trim(), title: s.querySelector(".fides-uc-spot__case-title").textContent.trim(), img: (s.querySelector(".fides-uc-spot__media img") || {}).src || "", intro: !!s.querySelector(".fides-uc-spot__intro"), rel, main, head: s.querySelector(".fides-uc-spot__link--head").getAttribute("href"), caseX: Math.round(r(s.querySelector(".fides-uc-spot__case")).x), relX: s.querySelector(".fides-uc-spot__related") ? Math.round(r(s.querySelector(".fides-uc-spot__related")).x) : 0, relY: s.querySelector(".fides-uc-spot__related") ? Math.round(r(s.querySelector(".fides-uc-spot__related")).top) : 0, caseBottom: Math.round(r(s.querySelector(".fides-uc-spot__case")).bottom) }; });
+    const spot = await page.evaluate(() => {
+      const s = document.querySelector(".fides-uc-spot");
+      const r = (e) => e.getBoundingClientRect();
+      const groups = [...s.querySelectorAll(".fides-uc-spot__group")].map((g) => ({
+        key: g.dataset.group,
+        title: g.querySelector(".fides-uc-spot__group-title").firstChild.textContent.trim(),
+        total: +g.querySelector(".fides-uc-spot__group-count").textContent,
+        names: [...g.querySelectorAll(".fides-uc-spot__names a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(r(a).height), right: Math.round(r(a).right) })),
+        all: g.querySelector(".fides-uc-spot__all") ? { t: g.querySelector(".fides-uc-spot__all").textContent.trim(), href: g.querySelector(".fides-uc-spot__all").getAttribute("href"), h: Math.round(r(g.querySelector(".fides-uc-spot__all")).height) } : null,
+      }));
+      const main = [...s.querySelectorAll(".fides-uc-spot__case > .fides-uc-spot__text > a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(r(a).height) }));
+      const img = s.querySelector(".fides-uc-spot__media img");
+      const box = s.querySelector(".fides-uc-spot__media");
+      const title = s.querySelector(".fides-uc-spot__case-title");
+      return {
+        bg: getComputedStyle(s).backgroundColor, y: r(s).top + scrollY, height: Math.round(r(s).height), newsBottom: r(document.querySelector(".fides-home-news")).bottom + scrollY,
+        kicker: s.querySelector(".fides-uc-spot__kicker").textContent.trim(), title: title.textContent.trim(), titleLines: Math.round(r(title).height / parseFloat(getComputedStyle(title).lineHeight)), titleRight: Math.round(r(title).right),
+        preview: (s.querySelector(".fides-uc-spot__preview") || {}).textContent || "", intro: !!s.querySelector(".fides-uc-spot__intro"),
+        img: img ? img.src : "", fit: img ? getComputedStyle(img).objectFit : "", imgW: img ? Math.round(r(img).width) : 0, imgH: img ? Math.round(r(img).height) : 0, boxW: box ? Math.round(r(box).width) : 0, boxX: box ? Math.round(r(box).x) : 0, boxRight: box ? Math.round(r(box).right) : 0, textX: Math.round(r(s.querySelector(".fides-uc-spot__text")).x),
+        natural: img ? [img.naturalWidth, img.naturalHeight] : [0, 0],
+        groups, main, head: s.querySelector(".fides-uc-spot__link--head").getAttribute("href"), scrollW: document.documentElement.scrollWidth,
+      };
+    });
     check(`${tag}: blue spotlight sits directly below the news`, spot.bg === "rgb(8, 72, 163)" && spot.y >= spot.newsBottom - 1 && spot.y - spot.newsBottom < 4, JSON.stringify([spot.bg, spot.y, spot.newsBottom]));
-    check(`${tag}: spotlight shows the Bosch use case as a demo with the catalog status and image`, /^Demo use case/.test(spot.kicker) && /Not in production/.test(spot.kicker) && /End-to-End Digital Business Workflows/.test(spot.title) && /^https?:/.test(spot.img) && spot.intro, JSON.stringify([spot.kicker, spot.title, spot.img]));
-    check(`${tag}: at most two connected items, one organization and one business wallet`, spot.rel.length === 2 && spot.rel[0].label === "Organization" && spot.rel[1].label === "Business wallet" && /Bosch/.test(spot.rel[0].name), JSON.stringify(spot.rel));
-    check(`${tag}: spotlight links go to the pilot detail pages of the right records`, /\/fides-design-pilot\/organization\/\?org=org%3Abosch$/.test(spot.rel[0].href) && /\/fides-design-pilot\/wallet\/\?wallet=procivis-one$/.test(spot.rel[1].href) && spot.main.some((m) => /\/fides-design-pilot\/use-case\/\?usecase=end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh$/.test(m.href)) && /\/fides-design-pilot\/overview\/$/.test(spot.head), JSON.stringify([spot.rel.map((r) => r.href), spot.main, spot.head]));
-    check(`${tag}: spotlight links are at least 44px tall and inside the viewport`, spot.rel.every((r) => r.h >= 44 && r.right <= w) && spot.main.filter((m) => !m.hidden).every((m) => m.h >= 44), JSON.stringify([spot.rel, spot.main]));
-    check(`${tag}: ${w >= 1024 ? "use case left, connected items right" : "connected items stack below the use case"}`, w >= 1024 ? spot.relX > spot.caseX && spot.relY < spot.caseBottom : spot.relY >= spot.caseBottom - 1, JSON.stringify([spot.caseX, spot.relX, spot.relY, spot.caseBottom]));
-    check(`${tag}: no horizontal overflow with the spotlight`, (await overflow(page)) <= 0);
-    for (const [name, href] of [["organization", spot.rel[0].href], ["wallet", spot.rel[1].href], ["use case", spot.main.find((m) => /usecase=/.test(m.href)).href]]) {
+    check(`${tag}: spotlight shows title, status, image and preview of the catalog record, no separate intro`, /^Demo use case/.test(spot.kicker) && /Not in production/.test(spot.kicker) && /End-to-End Digital Business Workflows/.test(spot.title) && /^https?:/.test(spot.img) && spot.preview.length > 40 && spot.preview.length <= 201 && !/^use case:/i.test(spot.preview) && !spot.intro, JSON.stringify([spot.kicker, spot.title, spot.img, spot.preview]));
+    check(`${tag}: preview stays short`, spot.preview.length <= 201, String(spot.preview.length));
+    check(`${tag}: the image is shown whole, not cropped`, spot.fit === "contain" && Math.abs(spot.imgW / spot.imgH - 16 / 9) < 0.05, JSON.stringify([spot.fit, spot.imgW, spot.imgH]));
+    check(`${tag}: ${w >= 900 ? "diagram next to the text" : "small preview above the text"}`, w >= 900 ? spot.boxRight <= spot.textX && spot.boxX < spot.textX : spot.boxW <= 240 && spot.boxW > 0, JSON.stringify([spot.boxX, spot.boxRight, spot.textX, spot.boxW]));
+    check(`${tag}: groups are Organizations and Business wallets, each with a total and at most two names`, spot.groups.length === 2 && spot.groups[0].title === "Organizations" && spot.groups[1].title === "Business wallets" && spot.groups.every((g) => g.total >= 1 && g.names.length <= 2 && g.names.length === Math.min(2, g.total)), JSON.stringify(spot.groups));
+    check(`${tag}: totals match the unique explicit links of the catalog record (7 organizations, 4 business wallets)`, spot.groups[0].total === 7 && spot.groups[1].total === 4 && JSON.stringify(spot.groups.map((g) => g.all && g.all.t)) === JSON.stringify(["View all 7 organizations", "View all 4 business wallets"]), JSON.stringify(spot.groups.map((g) => [g.total, g.all])));
+    check(`${tag}: spotlight links go to the right records`, /\/fides-design-pilot\/organization\/\?org=org%3Abosch(&|$)/.test(spot.groups[0].names[0].href) && /\/fides-design-pilot\/wallet\/\?wallet=procivis-one$/.test(spot.groups[1].names[0].href) && spot.main.some((m) => /\/fides-design-pilot\/use-case\/\?usecase=end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh$/.test(m.href) && /Read the use case/.test(m.t)) && /\/fides-design-pilot\/overview\/$/.test(spot.head), JSON.stringify([spot.groups, spot.main, spot.head]));
+    check(`${tag}: spotlight links are at least 44px tall and inside the viewport`, spot.groups.every((g) => g.names.every((n) => n.h >= 44 && n.right <= w) && (!g.all || g.all.h >= 44)) && spot.main.every((m) => m.h >= 44), JSON.stringify([spot.groups, spot.main]));
+    check(`${tag}: no horizontal overflow with the spotlight`, spot.scrollW <= w && (await overflow(page)) <= 0, String(spot.scrollW));
+    if (w <= 390) check(`${tag}: the long title wraps inside the block`, spot.titleRight <= w && spot.titleLines >= 2, JSON.stringify([spot.titleLines, spot.titleRight]));
+    heights[w] = spot.height;
+    for (const [name, href] of [["organization", spot.groups[0].names[0].href], ["wallet", spot.groups[1].names[0].href], ["use case", spot.main.find((m) => /usecase=/.test(m.href)).href], ["all organizations", spot.groups[0].all.href], ["all business wallets", spot.groups[1].all.href]]) {
       await page.goto(href, { waitUntil: "domcontentloaded" });
       await page.locator("h1").first().waitFor({ timeout: 30000 });
       const h1 = (await page.locator("h1").first().textContent()).trim();
-      check(`${tag}: spotlight ${name} link opens the matching detail page`, name === "organization" ? /Bosch/.test(h1) : name === "wallet" ? /Procivis One/.test(h1) : /End-to-End Digital Business Workflows/.test(h1), h1);
+      check(`${tag}: spotlight ${name} link opens the matching page`, name === "organization" ? /Bosch/.test(h1) : name === "wallet" ? /Procivis One/.test(h1) : /End-to-End Digital Business Workflows/.test(h1), h1);
+      if (name.startsWith("all ")) {
+        const id = name === "all organizations" ? "organisations" : "ecosystem-businesswallets";
+        const total = name === "all organizations" ? 7 : 4;
+        const info = await page.evaluate((anchor) => { const e = document.getElementById(anchor); if (!e) return null; const r = e.getBoundingClientRect(); return { visibleItems: e.querySelectorAll(".fides-uc-relations__item").length, catalogRows: [...e.querySelectorAll(".fides-uc-relations__source")].filter((x) => x.textContent === "FIDES catalog record").length, hash: location.hash, top: Math.round(r.top) }; }, id);
+        check(`${tag}: "${name}" lands on its section, which lists the same ${total} catalog records`, !!info && info.hash === "#" + id && info.catalogRows === total && info.visibleItems >= total, JSON.stringify(info));
+      }
     }
     // Keyboard focus on the spotlight links: Tab through the block and check a visible white ring.
     await page.goto(HOME, { waitUntil: "domcontentloaded" });
     await page.locator(".fides-uc-spot").waitFor();
-    await page.locator(".fides-uc-spot__related-item a").first().focus();
+    await page.locator(".fides-uc-spot__names a").first().focus();
     check(`${tag}: spotlight link shows a visible focus ring`, await page.evaluate(() => { const c = getComputedStyle(document.activeElement); return parseFloat(c.outlineWidth) >= 2 && c.outlineStyle !== "none"; }));
 
     // Counter: same values as the markup, short run, reduced motion and no JavaScript show the real values at once.
@@ -191,17 +225,26 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
       await mp.locator(".fides-uc-index").waitFor();
       const before = await rowsPos(mp);
       const total = +(await mp.locator("[data-fides-uc-index-total]").getAttribute("data-fides-uc-index-total"));
-      await mp.evaluate(() => document.querySelector(".fides-uc-index").scrollIntoView({ block: "center" }));
       let mid = null;
+      let posDuring = null;
       const seen = [];
-      for (let i = 0; i < 14; i += 1) {
-        await mp.waitForTimeout(120);
+      const t0 = Date.now();
+      await mp.evaluate(() => document.querySelector(".fides-uc-index").scrollIntoView({ block: "center" }));
+      for (let i = 0; i < 40; i += 1) {
+        await mp.waitForTimeout(100);
         const c = await counts(mp);
-        seen.push(+c[0].shown);
+        seen.push([Date.now() - t0, +c[0].shown]);
+        if (i === 6) posDuring = await rowsPos(mp);
         if (mid === null && c.some((x) => +x.shown < +x.target)) mid = c;
       }
-      const posDuring = await rowsPos(mp);
-      await mp.waitForTimeout(1600);
+      // The markup holds the real values until the run starts; time the run from its first lower value.
+      const startIdx = Math.max(0, seen.findIndex(([, v]) => v < total));
+      const run = seen.slice(startIdx).map(([t, v]) => [t - seen[startIdx][0] + 100, v]);
+      const at = (ms) => (run.find(([t]) => t >= ms) || [0, 0])[1];
+      const doneAt = (run.find(([, v]) => v === total) || [0])[0];
+      const firstHalf = at(1500) - at(0), secondHalf = total - at(1500);
+      check(`${tag}: the total counts up over about 3 seconds (done at ${doneAt} ms)`, doneAt >= 2500 && doneAt <= 3700 && at(1000) < total && at(2000) < total, JSON.stringify(seen.filter((_, i) => i % 4 === 0)));
+      check(`${tag}: the count slows down gradually and never runs backwards`, run.every(([, v], i) => i === 0 || v >= run[i - 1][1]) && at(1000) >= total * 0.5 && firstHalf > secondHalf, JSON.stringify([at(1000), at(1500), at(2000), total]));
       const end = await counts(mp);
       const after = await rowsPos(mp);
       check(`${tag}: the counter runs once when the block comes into view`, mid !== null, JSON.stringify(seen));
@@ -238,6 +281,7 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     await ctx.close();
   }
   await browser.close();
+  console.log(`spotlight block heights: ${JSON.stringify(heights)}`);
   console.log(failures ? `\n${failures} failed` : "\nall home checks passed");
   process.exit(failures ? 1 : 0);
 })();

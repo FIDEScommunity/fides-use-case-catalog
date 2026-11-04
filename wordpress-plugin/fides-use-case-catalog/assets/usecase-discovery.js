@@ -12,6 +12,12 @@
     return 1 - Math.pow(1 - progress, 4);
   }
 
+  // Gentle slow-down for the homepage index (about 3 s): the last values do not crawl,
+  // so the visible count ends close to the end of the run.
+  function easeOutQuad(progress) {
+    return 1 - (1 - progress) * (1 - progress);
+  }
+
   function prefersReducedMotion() {
     return (
       typeof window.matchMedia === "function" &&
@@ -45,14 +51,14 @@
     });
   }
 
-  function animateValue(element, target, length) {
+  function animateValue(element, target, length, easing) {
     let startTime = null;
     element.textContent = "0";
 
     function step(timestamp) {
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / length, 1);
-      element.textContent = String(Math.round(target * easeOutQuart(progress)));
+      element.textContent = String(Math.round(target * easing(progress)));
       if (progress < 1) {
         window.requestAnimationFrame(step);
       } else {
@@ -67,14 +73,16 @@
     const reducedMotion = prefersReducedMotion();
     // The homepage index counts up briefly (data-count-duration); the discovery cards keep the long default.
     const requested = Number.parseInt(container.getAttribute("data-count-duration"), 10);
-    const length = Number.isFinite(requested) && requested > 0 ? requested : duration;
+    const custom = Number.isFinite(requested) && requested > 0;
+    const length = custom ? requested : duration;
+    const easing = custom ? easeOutQuad : easeOutQuart;
     container.querySelectorAll(".fides-ct-count[data-count]").forEach((element) => {
       const target = Number.parseInt(element.getAttribute("data-count"), 10);
       if (!Number.isFinite(target) || target < 0) return;
       if (reducedMotion) {
         element.textContent = String(target);
       } else {
-        animateValue(element, target, length);
+        animateValue(element, target, length, easing);
       }
     });
   }

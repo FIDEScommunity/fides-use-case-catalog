@@ -8,11 +8,11 @@
 
 .fides-ds .fides-uc-spot__inner {
   display: grid;
-  gap: var(--fides-ds-space-6, 32px);
+  gap: var(--fides-ds-space-4, 16px);
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
-  padding: var(--fides-ds-space-7, 48px) var(--fides-ds-gutter, 20px);
+  padding: var(--fides-ds-space-5, 24px) var(--fides-ds-gutter, 20px);
 }
 
 .fides-ds .fides-uc-spot :is(h2, h3, p, li) {
@@ -28,7 +28,7 @@
 }
 
 .fides-ds .fides-uc-spot__eyebrow {
-  margin: 0 0 var(--fides-ds-space-3, 12px);
+  margin: 0 0 var(--fides-ds-space-2, 8px);
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.08em;
@@ -37,46 +37,45 @@
 
 .fides-ds .fides-uc-spot__title {
   margin: 0;
-  font-size: 32px;
-  line-height: 38px;
-  letter-spacing: -0.03em;
+  font-size: 24px;
+  line-height: 30px;
+  letter-spacing: -0.02em;
   overflow-wrap: anywhere;
 }
 
-.fides-ds .fides-uc-spot__body {
-  display: grid;
-  gap: var(--fides-ds-space-7, 48px);
-  min-width: 0;
-}
+@media (min-width: 900px) {
+  .fides-ds .fides-uc-spot__inner {
+    gap: var(--fides-ds-space-5, 24px);
+    padding-block: var(--fides-ds-space-6, 32px);
+  }
 
-@media (min-width: 1024px) {
   .fides-ds .fides-uc-spot__title {
-    font-size: 40px;
-    line-height: 44px;
-  }
-
-  .fides-ds .fides-uc-spot__body {
-    grid-template-columns: minmax(0, 800fr) minmax(0, 496fr);
-    align-items: start;
-  }
-
-  .fides-ds .fides-uc-spot__body--single {
-    grid-template-columns: minmax(0, 800px);
+    font-size: 28px;
+    line-height: 34px;
   }
 }
 
-/* ---------- The use case ---------- */
+/* ---------- The use case: diagram next to the text on desktop ---------- */
 
 .fides-ds .fides-uc-spot__case {
   display: grid;
-  gap: var(--fides-ds-space-4, 16px);
-  justify-items: start;
+  gap: var(--fides-ds-space-3, 12px) var(--fides-ds-space-6, 32px);
   min-width: 0;
 }
 
+.fides-ds .fides-uc-spot__text {
+  display: grid;
+  gap: var(--fides-ds-space-2, 8px);
+  justify-items: start;
+  align-content: start;
+  min-width: 0;
+}
+
+/* The whole diagram stays visible (contain); the box only reserves its ratio. */
 .fides-ds .fides-uc-spot__media {
   display: block;
   width: 100%;
+  max-width: 220px;
   aspect-ratio: 16 / 9;
   background: #ffffff;
   overflow: hidden;
@@ -89,8 +88,27 @@
   object-fit: contain;
 }
 
+@media (min-width: 900px) {
+  .fides-ds .fides-uc-spot__case {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: start;
+  }
+
+  .fides-ds .fides-uc-spot__case--no-media {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fides-ds .fides-uc-spot__media {
+    max-width: none;
+  }
+
+  .fides-ds .fides-uc-spot__related {
+    grid-column: 1 / -1;
+  }
+}
+
 .fides-ds .fides-uc-spot__kicker {
-  margin: var(--fides-ds-space-2, 8px) 0 0;
+  margin: 0;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 0.06em;
@@ -100,24 +118,25 @@
 
 .fides-ds .fides-uc-spot__case-title {
   margin: 0;
-  font-size: 28px;
-  line-height: 34px;
-  letter-spacing: -0.02em;
+  font-size: 20px;
+  line-height: 26px;
+  letter-spacing: -0.01em;
   overflow-wrap: anywhere;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 900px) {
   .fides-ds .fides-uc-spot__case-title {
-    font-size: 32px;
-    line-height: 38px;
+    font-size: 24px;
+    line-height: 30px;
   }
 }
 
-.fides-ds .fides-uc-spot__intro {
+.fides-ds .fides-uc-spot__preview {
   margin: 0;
   max-width: 62ch;
-  font-size: 18px;
-  line-height: 28px;
+  font-size: 16px;
+  line-height: 24px;
+  overflow-wrap: anywhere;
 }
 
 /* ---------- Links: white, underlined, 44px target ---------- */
@@ -144,110 +163,77 @@
   outline-offset: 3px;
 }
 
-/* ---------- Connected items ---------- */
+/* ---------- Connected records: compact groups ---------- */
 
 .fides-ds .fides-uc-spot__related {
   display: grid;
-  gap: var(--fides-ds-space-5, 24px);
+  gap: var(--fides-ds-space-3, 12px) var(--fides-ds-space-6, 32px);
   min-width: 0;
-}
-
-.fides-ds .fides-uc-spot__related-title {
-  margin: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 23px;
-  letter-spacing: 0;
-}
-
-.fides-ds .fides-uc-spot__related-list {
-  display: grid;
-  gap: var(--fides-ds-space-6, 32px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.fides-ds .fides-uc-spot__related-item {
-  display: grid;
-  gap: var(--fides-ds-space-4, 16px);
-  justify-items: start;
-  min-width: 0;
-  margin: 0;
-  padding-top: var(--fides-ds-space-5, 24px);
+  padding-top: var(--fides-ds-space-3, 12px);
   border-top: 1px solid rgba(255, 255, 255, 0.55);
 }
 
-.fides-ds .fides-uc-spot__label {
+@media (min-width: 640px) {
+  .fides-ds .fides-uc-spot__related {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.fides-ds .fides-uc-spot__group {
+  display: grid;
+  gap: 0;
+  align-content: start;
+  min-width: 0;
+}
+
+.fides-ds .fides-uc-spot__group-title {
+  display: flex;
+  align-items: baseline;
+  gap: var(--fides-ds-space-2, 8px);
   margin: 0;
   font-size: 12px;
+  font-weight: 400;
   line-height: 16px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-.fides-ds .fides-uc-spot__entity {
-  display: flex;
-  align-items: center;
-  gap: var(--fides-ds-space-5, 24px);
-  min-width: 0;
-  max-width: 100%;
+.fides-ds .fides-uc-spot__group-count {
+  font-variant-numeric: tabular-nums;
 }
 
-.fides-ds .fides-uc-spot__logo {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
-  width: 88px;
-  height: 88px;
-  padding: 12px;
-  background: #ffffff;
-  color: var(--fides-ds-link, #0848a3);
-}
-
-.fides-ds .fides-uc-spot__logo-img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.fides-ds .fides-uc-spot__logo-fallback {
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.fides-ds .fides-uc-spot__entity-name {
-  min-width: 0;
+.fides-ds .fides-uc-spot__names {
+  display: grid;
   margin: 0;
-  font-size: 28px;
-  line-height: 34px;
-  letter-spacing: -0.02em;
+  padding: 0;
+  list-style: none;
+}
+
+.fides-ds .fides-uc-spot__names li {
+  margin: 0;
+  min-width: 0;
+}
+
+.fides-ds .fides-uc-spot__names a,
+.fides-ds .fides-uc-spot__all {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
   overflow-wrap: anywhere;
 }
 
-.fides-ds .fides-uc-spot__meta {
-  margin: 0;
-  font-size: 14px;
-  line-height: 23px;
-  overflow-wrap: anywhere;
+.fides-ds .fides-uc-spot__names a:hover,
+.fides-ds .fides-uc-spot__all:hover {
+  text-decoration-thickness: 2px;
 }
 
-@media (max-width: 640px) {
-  .fides-ds .fides-uc-spot__logo {
-    width: 72px;
-    height: 72px;
-    padding: 8px;
-  }
-
-  .fides-ds .fides-uc-spot__entity {
-    gap: var(--fides-ds-space-4, 16px);
-  }
-
-  .fides-ds .fides-uc-spot__entity-name {
-    font-size: 22px;
-    line-height: 28px;
-  }
+.fides-ds .fides-uc-spot__all {
+  font-weight: 400;
 }

@@ -332,7 +332,7 @@ final class Fides_Use_Case_Discovery_Shortcode {
         $total     = count($items);
         $available = $total > 0 && $config['bundles'] !== array();
 
-        $html  = '<section class="fides-ds fides-uc-index" data-count-duration="1400" aria-labelledby="fides-uc-index-title"><div class="fides-uc-index__inner">';
+        $html  = '<section class="fides-ds fides-uc-index" data-count-duration="3000" aria-labelledby="fides-uc-index-title"><div class="fides-uc-index__inner">';
         $html .= '<h2 class="fides-uc-index__title" id="fides-uc-index-title">' . esc_html__('Digital trust in practice', 'fides-use-case-catalog') . '</h2>';
         $html .= '<div class="fides-uc-index__sub"><p class="fides-uc-index__lead">' . esc_html__('Explore use cases by theme', 'fides-use-case-catalog') . '</p>';
         if ($available) {
