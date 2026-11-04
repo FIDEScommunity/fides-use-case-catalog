@@ -204,7 +204,10 @@ pilot_upsert_page(
     . "<!-- wp:shortcode -->[fides_use_case_featured detail_url=\"/fides-design-pilot/use-case/\"]<!-- /wp:shortcode -->"
     . "</div>\n<!-- /wp:column -->"
     . "</div>\n<!-- /wp:columns -->"
-    . "</div>\n<!-- /wp:group -->",
+    . "</div>\n<!-- /wp:group -->"
+    // Paper 25.12: task routes and latest updates under the hero (blocks read their data themselves).
+    . "\n<!-- wp:shortcode -->[fides_home_routes]<!-- /wp:shortcode -->"
+    . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->",
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

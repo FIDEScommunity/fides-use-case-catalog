@@ -228,3 +228,10 @@ bash run-tests.sh                     # PHP behaviour (includes tests/learn-beha
 - Search matches title, organization and programme label (accents and case ignored, all words must match). Filter: FIDES / organization / programme. Sort: newest, oldest, title. 10 per page. Query: `q`, `type`, `sort`, `pg`. No topic filter yet.
 - Homepage (mobile) fixes for Paper 25.13 live in `usecase-design.css` under the class `fides-uc-hero` (set on the hero column in the seed).
 - Tests: `tests/updates-behaviour.php` (in `run-tests.sh`) and `tests/run-updates-checks.sh` (one browser per width; remote hosts are stubbed).
+
+## Homepage blocks (Paper 25.12)
+
+- `[fides_home_routes]` under the hero: "Where would you like to start?" with three routes. Links go through `Fides_DS_Site_Shell::url()`, so a site decides the destination; a route whose destination is not mapped (today "Connect your organization" / "Find integration help", the planned "Get help choosing" page) is text without a link. Filter `fides_home_routes` changes the routes.
+- `[fides_home_updates]`: the newest updates (default 3, filter `fides_home_updates_limit`, max 6) from `Fides_DS_Updates::collect()`, the same data as the Updates page. Kicker = type · organization, separate publication source in the footer, date, one link per item (original post for external items, FIDES article for own posts), "All updates" link, empty state.
+- Seed: both shortcodes sit under the hero in `homepage-fragment`. Tests: `tests/home-behaviour.php` (in `run-tests.sh`) and `tests/run-home-checks.sh`.
+- Not in this round: the secondary links row under the routes and all blocks below "Latest from the ecosystem".
