@@ -672,115 +672,121 @@
   }
 }
 
-/* ---------- Homepage index: "Digital trust in practice" (Paper 25.12) ---------- */
+/* ---------- Homepage index: "Digital trust in practice" (Paper 25.15) ---------- */
 
 .fides-ds.fides-uc-index {
   width: 100%;
 }
 
 .fides-ds .fides-uc-index__inner {
+  display: grid;
+  gap: var(--fides-ds-space-4, 16px);
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
-  padding: var(--fides-ds-space-8, 64px) var(--fides-ds-gutter, 20px) var(--fides-ds-space-7, 48px);
-}
-
-.fides-ds .fides-uc-index__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: end;
-  justify-content: space-between;
-  gap: var(--fides-ds-space-3, 12px) var(--fides-ds-space-5, 24px);
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--fides-ds-ink, #0e0e0e);
-}
-
-.fides-ds .fides-uc-index__heading {
-  min-width: 0;
-}
-
-.fides-ds .fides-uc-index__heading .fides-ds-kicker {
-  margin: 0 0 var(--fides-ds-space-2, 8px);
+  padding: 36px var(--fides-ds-gutter, 20px) 28px;
 }
 
 .fides-ds .fides-uc-index__title {
   margin: 0;
-  font-size: 32px;
+  font-size: 30px;
   line-height: 36px;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   overflow-wrap: anywhere;
 }
 
-.fides-ds .fides-uc-index__total {
+.fides-ds .fides-uc-index__sub {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--fides-ds-space-1, 4px) var(--fides-ds-space-5, 24px);
+}
+
+.fides-ds .fides-uc-index__lead,
+.fides-ds .fides-uc-index__total {
   margin: 0;
-}
-
-.fides-ds .fides-uc-index__total strong {
-  font-size: 32px;
-  line-height: 36px;
-  letter-spacing: -0.04em;
-}
-
-.fides-ds .fides-uc-index__total span {
   color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 15px;
+  line-height: 21px;
+}
+
+.fides-ds .fides-uc-index__total {
   font-size: 14px;
   font-weight: 500;
-  line-height: 18px;
+  line-height: 20px;
 }
 
 .fides-ds .fides-uc-index__list {
+  display: grid;
+  gap: 0 var(--fides-ds-space-5, 24px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
+/* Two columns of three rows from 900px; the list order runs down the first column, then the second. */
+@media (min-width: 900px) {
+  .fides-ds .fides-uc-index__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(3, auto);
+    grid-auto-flow: column;
+  }
+}
+
 .fides-ds .fides-uc-index__row {
   margin: 0;
-  border-bottom: 1px solid var(--fides-ds-line, #e4e4e4);
+  border-top: 1px solid var(--fides-ds-line, #e4e4e4);
 }
 
 .fides-ds .fides-uc-index__link {
   display: flex;
   align-items: center;
   gap: var(--fides-ds-space-3, 12px);
-  min-height: 44px;
-  padding-block: 18px;
+  min-height: 54px;
+  height: 100%;
+  padding-block: 8px;
   color: var(--fides-ds-ink, #0e0e0e);
   text-decoration: none;
 }
 
-.fides-ds .fides-uc-index__num {
+.fides-ds .fides-uc-index__icon {
+  display: inline-flex;
   flex: none;
-  width: 72px;
-  color: var(--fides-ds-muted, #4a4a4a);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  line-height: 18px;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: var(--fides-ds-soft, #f2f7ff);
+  color: var(--fides-ds-link, #0848a3);
+}
+
+.fides-ds .fides-uc-index__text {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .fides-ds .fides-uc-index__name {
-  flex: 1 1 auto;
-  min-width: 0;
-  font-size: 26px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 32px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 23px;
   overflow-wrap: anywhere;
 }
 
 .fides-ds .fides-uc-index__count {
-  flex: none;
-  min-width: 72px;
-  font-size: 26px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
-  line-height: 32px;
-  text-align: right;
+  margin-left: 6px;
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 14px;
+  line-height: 20px;
   white-space: nowrap;
+}
+
+.fides-ds .fides-uc-index__arrow {
+  flex: none;
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 24px;
+  transition: transform 120ms ease;
 }
 
 .fides-ds .fides-uc-index__link:hover {
@@ -789,7 +795,11 @@
 
 .fides-ds .fides-uc-index__link:hover .fides-uc-index__name {
   text-decoration: underline;
-  text-underline-offset: 6px;
+  text-underline-offset: 3px;
+}
+
+.fides-ds .fides-uc-index__link:hover .fides-uc-index__arrow {
+  transform: translateX(3px);
 }
 
 .fides-ds .fides-uc-index__link:focus-visible {
@@ -799,82 +809,29 @@
 
 .fides-ds .fides-uc-index__empty {
   margin: 0;
-  padding-block: var(--fides-ds-space-5, 24px);
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--fides-ds-space-2, 8px) var(--fides-ds-space-4, 16px);
-  border-bottom: 1px solid var(--fides-ds-line, #e4e4e4);
+  padding-block: var(--fides-ds-space-4, 16px);
+  border-top: 1px solid var(--fides-ds-line, #e4e4e4);
 }
 
-.fides-ds .fides-uc-index__catalogs {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 var(--fides-ds-space-5, 24px);
-  padding-top: var(--fides-ds-space-3, 12px);
-}
-
-.fides-ds .fides-uc-index__catalogs ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 var(--fides-ds-space-5, 24px);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.fides-ds .fides-uc-index__catalogs li {
-  margin: 0;
-}
-
-.fides-ds .fides-uc-index__catalogs a {
+.fides-ds .fides-uc-index__all {
   display: inline-flex;
   align-items: center;
+  gap: var(--fides-ds-space-2, 8px);
+  justify-self: start;
   min-height: 44px;
-  color: var(--fides-ds-ink, #0e0e0e);
-  font-size: 14px;
-  line-height: 22px;
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 21px;
   text-decoration: none;
 }
 
-.fides-ds .fides-uc-index__catalogs a:hover {
+.fides-ds .fides-uc-index__all:hover {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
-.fides-ds .fides-uc-index__catalogs a:focus-visible {
+.fides-ds .fides-uc-index__all:focus-visible {
   outline: 3px solid var(--fides-ds-link, #0848a3);
   outline-offset: 2px;
-}
-
-.fides-ds .fides-uc-index__catalogs .fides-uc-index__all {
-  gap: var(--fides-ds-space-2, 8px);
-  font-size: 16px;
-  font-weight: 500;
-}
-
-@media (max-width: 640px) {
-  .fides-ds .fides-uc-index__inner {
-    padding-top: var(--fides-ds-space-7, 48px);
-  }
-
-  .fides-ds .fides-uc-index__title {
-    font-size: 28px;
-    line-height: 34px;
-  }
-
-  .fides-ds .fides-uc-index__num {
-    width: 28px;
-  }
-
-  .fides-ds .fides-uc-index__name,
-  .fides-ds .fides-uc-index__count {
-    font-size: 20px;
-    line-height: 26px;
-  }
-
-  .fides-ds .fides-uc-index__count {
-    min-width: 48px;
-  }
 }

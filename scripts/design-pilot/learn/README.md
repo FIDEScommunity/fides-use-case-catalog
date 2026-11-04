@@ -229,10 +229,11 @@ bash run-tests.sh                     # PHP behaviour (includes tests/learn-beha
 - Homepage (mobile) fixes for Paper 25.13 live in `usecase-design.css` under the class `fides-uc-hero` (set on the hero column in the seed).
 - Tests: `tests/updates-behaviour.php` (in `run-tests.sh`) and `tests/run-updates-checks.sh` (one browser per width; remote hosts are stubbed).
 
-## Homepage blocks (Paper 25.12)
+## Homepage blocks (Paper 25.15)
 
-- `[fides_home_routes]` under the hero: "Where would you like to start?" with three routes. Links go through `Fides_DS_Site_Shell::url()`, so a site decides the destination; a route whose destination is not mapped (today "Connect your organization" / "Find integration help", the planned "Get help choosing" page) is hidden; it appears by itself once a site maps `/ecosystem-explorer/get-help-choosing/`. Filter `fides_home_routes` changes the routes.
-- `[fides_home_updates]`: the newest updates (default 3, filter `fides_home_updates_limit`, max 6) from `Fides_DS_Updates::collect()`, the same data as the Updates page. Kicker = type · organization, separate publication source in the footer, date, one link per item (original post for external items, FIDES article for own posts), "All updates" link, empty state.
-- Seed: both shortcodes sit under the hero in `homepage-fragment`. Tests: `tests/home-behaviour.php` (in `run-tests.sh`) and `tests/run-home-checks.sh`.
-- Not in this round: the secondary links row under the routes and all blocks below "Latest from the ecosystem".
-- `[fides_use_case_discovery layout="index"]` (use-case plugin): "Digital trust in practice" between the routes and the updates. Rows, titles and counts come from the plugin's theme bundles and published use cases (the same data as the overview), each row links to `overview/?theme=<bundle>`, the total is shown on its own. No data: heading, a notice and a link to the overview. Browser checks follow every theme at 1440 (three at other widths) and compare the homepage count with the overview result.
+Order under the hero: Learn strip, theme index, latest updates.
+
+- `[fides_home_learn]`: "New to digital trust?" with Topics & guides (book icon) and Sessions & workshops (calendar icon). The destinations come from the Learn section the site shell points at (`Fides_DS_Learn::bar_model()`); a missing page is left out. Filter `fides_home_learn_links`. `[fides_home_routes]` still exists (hides routes without a destination) but the homepage no longer uses it.
+- `[fides_use_case_discovery layout="index"]` (use-case plugin): six themes in two columns of three rows from 900px, one column below. Names, counts and links (`overview/?theme=<bundle>`) come from the plugin's theme bundles and published use cases, the same data as the overview; the total is shown on its own. "Browse all use cases" goes to the overview. No data: heading, a notice and the link.
+- `[fides_home_updates]`: newest updates (default 3, filter `fides_home_updates_limit`) from `Fides_DS_Updates::collect()`. Source (organization, programme, real publisher when it differs) and date sit above the title; the title is the only link; external items end with an arrow and an accessible name that says the link leaves the site. "All updates" and an empty state.
+- Tests: `tests/home-behaviour.php` (in `run-tests.sh`) and `tests/run-home-checks.sh` (five widths, follows every theme at 1440 and compares counts with the overview).

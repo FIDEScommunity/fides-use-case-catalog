@@ -17,7 +17,7 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     const tag = `${w}px`;
     const ctx = await browser.newContext({ viewport: { width: w, height: 900 } });
     await ctx.addCookies(Object.entries({ "banner-status": "dismissed", policy_id: "35", functional: "allow", preferences: "deny", statistics: "deny", marketing: "deny" }).map(([n, v]) => ({ name: `cmplz_${n}`, value: v, url: BASE })));
-    await ctx.route((url) => !url.href.startsWith(BASE), (route) => route.request().resourceType() === "document" ? route.fulfill({ status: 200, contentType: "text/html", body: "<title>External source</title><p>external</p>" }) : route.abort());
+    await ctx.route((url) => !url.href.startsWith(BASE), (route) => route.request().resourceType() === "document" ? route.fulfill({ status: 200, contentType: "text/html", body: "<title>External source</title><p>external</p>" }) : route.request().resourceType() === "image" ? route.fulfill({ status: 200, contentType: "image/gif", body: Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64") }) : route.abort());
     const page = await ctx.newPage();
     await page.goto(HOME, { waitUntil: "domcontentloaded" });
     await page.locator(".fides-home-news__item").first().waitFor({ timeout: 30000 });
@@ -26,24 +26,37 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     check(`${tag}: hero and featured use case are still there`, (await page.locator("h1").first().textContent()).includes("Accelerating") && (await page.locator(".fides-uc-featured .fides-ds-card--feature").count()) === 1);
     check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
 
-    // Routes.
-    const routes = await page.evaluate(() => [...document.querySelectorAll(".fides-home-routes__item")].map((li) => { const b = li.getBoundingClientRect(); const a = li.querySelector("a"); return { x: Math.round(b.x), y: Math.round(b.y), h: li.querySelector("h3").textContent.trim(), href: a ? a.getAttribute("href") : null, hh: a ? Math.round(a.getBoundingClientRect().height) : 0 }; }));
-    check(`${tag}: two routes in order (the third has no destination and is hidden)`, routes.length === 2 && routes[0].h === "Understand the possibilities" && routes[1].h === "See what works in practice" && !(await page.locator("body").innerText()).includes("Connect your organization"), JSON.stringify(routes));
-    check(`${tag}: routes sit in a row from 900px and stack below`, w >= 900 ? routes[0].y === routes[1].y && routes[0].x < routes[1].x : routes[1].y > routes[0].y, JSON.stringify(routes));
-    check(`${tag}: both routes link to the pilot pages`, /\/fides-design-pilot\/start\/$/.test(routes[0].href || "") && /\/fides-design-pilot\/overview\/$/.test(routes[1].href || ""), JSON.stringify(routes));
-    check(`${tag}: route links are at least 44px tall`, routes.every((r) => r.hh >= 44), JSON.stringify(routes));
+    // Hero: one introduction sentence, two actions, featured VOG card with image.
+    const hero = await page.evaluate(() => ({ lead: (document.querySelector(".fides-uc-hero .fides-ds-lead") || {}).textContent || "", paras: document.querySelectorAll(".fides-uc-hero p:not(.fides-ds-kicker)").length, actions: [...document.querySelectorAll(".fides-uc-fragment__actions a")].map((a) => a.getAttribute("href")), img: !!document.querySelector(".fides-uc-featured img") }));
+    check(`${tag}: hero has the one Paper sentence and no extra line`, hero.lead.trim() === "See how organizations use digital wallets and credentials in practice." && hero.paras === 1, JSON.stringify(hero));
+    check(`${tag}: both hero actions and the featured image stay`, hero.actions.length === 2 && /\/start\/$/.test(hero.actions[0]) && /\/overview\/$/.test(hero.actions[1]) && hero.img, JSON.stringify(hero));
+    check(`${tag}: the old routes block is gone`, (await page.locator(".fides-home-routes").count()) === 0);
+
+    // Learn strip.
+    const learn = await page.evaluate(() => { const s = document.querySelector(".fides-home-learn"); return s ? { title: s.querySelector("h2").textContent.trim(), bg: getComputedStyle(s).backgroundColor, y: s.getBoundingClientRect().top + scrollY, heroBottom: document.querySelector(".fides-uc-featured").getBoundingClientRect().bottom + scrollY, links: [...s.querySelectorAll("a")].map((a) => { const r = a.getBoundingClientRect(); return { t: a.textContent.trim(), href: a.getAttribute("href"), key: a.dataset.learn, h: Math.round(r.height), x: Math.round(r.x), y: Math.round(r.y), right: Math.round(r.right), svg: a.querySelectorAll("svg").length }; }) } : null; });
+    check(`${tag}: Learn strip with title and two links`, learn && learn.title === "New to digital trust?" && learn.links.length === 2 && learn.links[0].t.startsWith("Topics & guides") && learn.links[1].t.startsWith("Sessions & workshops"), JSON.stringify(learn));
+    check(`${tag}: strip is light blue, below the hero and above the themes`, learn && learn.bg === "rgb(242, 247, 255)" && learn.y >= learn.heroBottom - 1);
+    check(`${tag}: book icon at Topics, calendar icon at Sessions`, learn && learn.links[0].key === "topics" && learn.links[1].key === "sessions" && learn.links.every((l) => l.svg === 1));
+    check(`${tag}: Learn links go to existing pilot pages`, learn && /\/fides-design-pilot\/learn\/topics\/?$/.test(learn.links[0].href) && /\/fides-design-pilot\/learn\//.test(learn.links[1].href), JSON.stringify(learn.links));
+    check(`${tag}: Learn links are at least 44px tall, inside the viewport, side by side on desktop and stacked on mobile`, learn && learn.links.every((l) => l.h >= 44 && l.right <= w) && (w > 640 ? learn.links[0].y === learn.links[1].y : learn.links[1].y > learn.links[0].y), JSON.stringify(learn.links));
+    for (const l of learn.links) {
+      const status = await page.evaluate(async (u) => (await fetch(u, { credentials: "same-origin" })).status, l.href);
+      check(`${tag}: Learn link "${l.t}" resolves`, status === 200, `${status} ${l.href}`);
+    }
 
     // Digital trust in practice: themes and counts come from the use case plugin.
-    const idx = await page.evaluate(() => ({ total: +(document.querySelector("[data-fides-uc-index-total]") || {}).dataset?.fidesUcIndexTotal || 0, y: document.querySelector(".fides-uc-index").getBoundingClientRect().top + scrollY, routesY: document.querySelector(".fides-home-routes").getBoundingClientRect().top + scrollY, newsY: document.querySelector(".fides-home-news").getBoundingClientRect().top + scrollY, rows: [...document.querySelectorAll(".fides-uc-index__link")].map((a) => { const r = a.getBoundingClientRect(); return { code: a.dataset.theme, href: a.getAttribute("href"), name: a.querySelector(".fides-uc-index__name").textContent.trim(), count: +a.querySelector(".fides-uc-index__count").dataset.count, h: Math.round(r.height), right: Math.round(r.right), label: a.getAttribute("aria-label") }; }), links: [...document.querySelectorAll(".fides-uc-index__catalogs a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(a.getBoundingClientRect().height) })) }));
-    check(`${tag}: index sits between the routes and the latest updates`, idx.routesY < idx.y && idx.y < idx.newsY);
+    const idx = await page.evaluate(() => ({ total: +(document.querySelector("[data-fides-uc-index-total]") || {}).dataset?.fidesUcIndexTotal || 0, y: document.querySelector(".fides-uc-index").getBoundingClientRect().top + scrollY, learnY: document.querySelector(".fides-home-learn").getBoundingClientRect().top + scrollY, newsY: document.querySelector(".fides-home-news").getBoundingClientRect().top + scrollY, rows: [...document.querySelectorAll(".fides-uc-index__link")].map((a) => { const r = a.getBoundingClientRect(); return { code: a.dataset.theme, href: a.getAttribute("href"), name: a.querySelector(".fides-uc-index__name").textContent.trim(), count: +a.querySelector(".fides-uc-index__count").dataset.count, h: Math.round(r.height), right: Math.round(r.right), label: a.getAttribute("aria-label") }; }), links: [...document.querySelectorAll(".fides-uc-index__catalogs a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(a.getBoundingClientRect().height) })) }));
+    check(`${tag}: index sits between the Learn strip and the latest updates`, idx.learnY < idx.y && idx.y < idx.newsY);
     check(`${tag}: one row per theme, each with a theme filter link and a count`, idx.rows.length >= 1 && idx.rows.every((r) => r.code && /\/fides-design-pilot\/overview\/\?theme=/.test(r.href) && r.href.includes("theme=" + r.code) && r.count >= 0 && r.label.includes(r.name)), JSON.stringify(idx.rows));
     check(`${tag}: total shown separately and not the sum of the rows`, idx.total > 0 && idx.total >= Math.max(...idx.rows.map((r) => r.count)), `${idx.total}`);
     check(`${tag}: rows are inside the viewport and at least 44px tall`, idx.rows.every((r) => r.right <= w && r.h >= 44), JSON.stringify(idx.rows.map((r) => [r.right, r.h])));
-    check(`${tag}: catalog links exist and are pilot pages`, idx.links.length >= 4 && idx.links.every((l) => l.href && !/localhost|10088/.test(l.href.replace(BASE, "")) && l.h >= 44), JSON.stringify(idx.links));
-    for (const l of idx.links) {
-      const status = await page.evaluate(async (u) => (await fetch(u, { method: "GET", credentials: "same-origin" })).status, l.href);
-      check(`${tag}: catalog link "${l.t}" resolves`, status === 200, `${status} ${l.href}`);
-    }
+    const grid = await page.evaluate(() => [...document.querySelectorAll(".fides-uc-index__link")].map((a) => { const r = a.getBoundingClientRect(); return { x: Math.round(r.x), y: Math.round(r.y), icons: a.querySelectorAll("svg").length, arrow: !!a.querySelector(".fides-uc-index__arrow"), name: !!a.querySelector(".fides-uc-index__name"), count: !!a.querySelector(".fides-uc-index__count") }; }));
+    const colsX = [...new Set(grid.map((g) => g.x))].length;
+    check(`${tag}: each theme has an icon, name, count and arrow, and no sequence number`, grid.every((g) => g.icons === 1 && g.arrow && g.name && g.count) && (await page.locator(".fides-uc-index__num").count()) === 0, JSON.stringify(grid));
+    check(`${tag}: ${w >= 900 ? "two columns of three rows" : "one column"}`, w >= 900 ? grid.length === 6 && colsX === 2 && grid.slice(0, 3).every((g) => g.x === grid[0].x) && grid.slice(3).every((g) => g.x === grid[3].x) && grid[0].y === grid[3].y : colsX === 1 && grid.every((g, i) => i === 0 || g.y > grid[i - 1].y), JSON.stringify(grid));
+    const all = await page.evaluate(() => { const a = document.querySelector(".fides-uc-index__all"); return { href: a.getAttribute("href"), text: a.textContent.trim(), h: Math.round(a.getBoundingClientRect().height), others: document.querySelectorAll(".fides-uc-index__catalogs").length }; });
+    check(`${tag}: Browse all use cases goes to the overview, the catalog links are gone`, /^Browse all use cases/.test(all.text) && /\/fides-design-pilot\/overview\/$/.test(all.href) && all.h >= 44 && all.others === 0, JSON.stringify(all));
+
     // Keyboard: Tab reaches the first theme row with a visible ring; hover tints the row.
     await page.locator(".fides-uc-index__link").first().evaluate((a) => a.setAttribute("data-probe-theme", "1"));
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -76,8 +89,9 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     await page.locator(".fides-home-news__item").first().waitFor({ timeout: 30000 });
 
     // Latest from the ecosystem.
-    const news = await page.evaluate(() => [...document.querySelectorAll(".fides-home-news__item")].map((li) => { const t = li.querySelector(".fides-home-news__title"); const a = li.querySelector("a"); const b = li.getBoundingClientRect(); const lh = parseFloat(getComputedStyle(t).lineHeight); return { y: Math.round(b.y), x: Math.round(b.x), right: Math.round(b.right), href: a.href, title: a.textContent.trim(), date: li.querySelector("time").getAttribute("datetime"), lines: Math.round(t.getBoundingClientRect().height / lh), source: li.querySelector(".fides-home-news__source").textContent, kicker: li.querySelector(".fides-home-news__kicker").textContent, links: li.querySelectorAll("a").length }; }));
-    check(`${tag}: three news items with title, date, kicker and source`, news.length === 3 && news.every((n) => n.title && /^\d{4}-\d\d-\d\d$/.test(n.date) && n.kicker && n.source && n.links === 1), JSON.stringify(news));
+    const news = await page.evaluate(() => [...document.querySelectorAll(".fides-home-news__item")].map((li) => { const t = li.querySelector(".fides-home-news__title"); const a = t.querySelector("a"); const m = li.querySelector(".fides-home-news__meta"); const b = li.getBoundingClientRect(); const lh = parseFloat(getComputedStyle(t).lineHeight); return { y: Math.round(b.y), x: Math.round(b.x), right: Math.round(b.right), href: a.href, title: a.textContent.trim(), date: li.querySelector("time").getAttribute("datetime"), lines: Math.round(t.getBoundingClientRect().height / lh), source: li.querySelector(".fides-home-news__source").textContent.trim(), metaAbove: m.getBoundingClientRect().bottom <= t.getBoundingClientRect().top + 1, links: li.querySelectorAll("a").length, external: li.classList.contains("is-external"), marker: !!li.querySelector(".fides-home-news__external"), hidden: li.querySelector("a").getAttribute("aria-label") || "", old: li.querySelectorAll(".fides-home-news__foot, .fides-home-news__action, .fides-home-news__kicker").length }; }));
+    check(`${tag}: three items with source and date together above a linked title, one link each`, news.length === 3 && news.every((n) => n.title && /^\d{4}-\d\d-\d\d$/.test(n.date) && n.source && n.metaAbove && n.links === 1 && n.old === 0), JSON.stringify(news));
+    check(`${tag}: external links show an arrow and say so to screen readers, own links do not`, news.every((n) => (n.external ? n.marker && /external site/.test(n.hidden) : !n.marker && n.hidden === "")) && news.some((n) => n.external), JSON.stringify(news.map((n) => [n.external, n.marker, n.hidden])));
     const dates = news.map((n) => n.date);
     check(`${tag}: newest first`, dates.every((d, i) => i === 0 || dates[i - 1] >= d), dates.join(","));
     check(`${tag}: items in a row from 900px and stacked below, inside the viewport`, (w >= 900 ? news[0].y === news[1].y : news[1].y > news[0].y) && news.every((n) => n.right <= w), JSON.stringify(news.map((n) => [n.x, n.y, n.right])));
@@ -98,10 +112,9 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     check(`${tag}: news item reachable by keyboard with a visible ring`, reached && ring, `${reached} ${ring}`);
     if (w >= 1024) {
       const item = page.locator(".fides-home-news__item").nth(1);
-      const bg0 = await item.evaluate((e) => getComputedStyle(e).backgroundColor);
       await item.hover();
-      await page.waitForTimeout(250);
-      check(`${tag}: news item shows hover`, (await item.evaluate((e) => getComputedStyle(e).backgroundColor)) !== bg0);
+      await page.waitForTimeout(200);
+      check(`${tag}: news title is underlined on hover`, (await item.locator(".fides-home-news__link").evaluate((e) => getComputedStyle(e).textDecorationLine)) === "underline");
     }
 
     // Click through to the original post and back.
@@ -112,14 +125,18 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     await page.locator(".fides-home-news__item").first().waitFor();
     check(`${tag}: back returns to the homepage`, page.url().startsWith(HOME));
 
-    // Routes and overview link navigate.
-    await page.locator(".fides-home-routes__action").first().click();
-    await page.waitForURL(/\/fides-design-pilot\/start\//, { timeout: 30000 });
-    check(`${tag}: starting point route opens the start page`, true);
+    // Learn links and hero actions navigate.
+    await page.locator('.fides-home-learn [data-learn="topics"]').click();
+    await page.waitForURL(/\/fides-design-pilot\/learn\/topics/, { timeout: 30000 });
+    check(`${tag}: Topics & guides opens the Learn topics page`, true);
     await page.goto(HOME, { waitUntil: "domcontentloaded" });
-    await page.locator(".fides-home-routes__action").nth(1).click();
-    await page.waitForURL(/\/fides-design-pilot\/overview\//, { timeout: 30000 });
-    check(`${tag}: use case route opens the overview`, true);
+    await page.locator('.fides-home-learn [data-learn="sessions"]').click();
+    await page.waitForURL(/\/fides-design-pilot\/learn\//, { timeout: 30000 });
+    check(`${tag}: Sessions & workshops opens a Learn page`, true);
+    await page.goto(HOME, { waitUntil: "domcontentloaded" });
+    await page.locator(".fides-uc-index__all").click();
+    await page.waitForURL(/\/fides-design-pilot\/overview\/$/, { timeout: 30000 });
+    check(`${tag}: Browse all use cases opens the overview`, true);
     await page.goto(HOME, { waitUntil: "domcontentloaded" });
     await page.locator(".fides-home-news__all").click();
     await page.waitForURL(/\/fides-design-pilot\/updates\//, { timeout: 30000 });

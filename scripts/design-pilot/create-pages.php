@@ -190,13 +190,13 @@ pilot_upsert_page(
 pilot_upsert_page(
     'fides-design-pilot/homepage-fragment',
     'Homepage fragment (design pilot)',
-    "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"48px\",\"bottom\":\"96px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
-    . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:48px;padding-bottom:96px\">"
+    "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"48px\",\"bottom\":\"48px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
+    . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:48px;padding-bottom:48px\">"
     . "<!-- wp:columns {\"verticalAlignment\":\"center\",\"style\":{\"spacing\":{\"blockGap\":{\"left\":\"64px\"}}}} -->\n<div class=\"wp-block-columns are-vertically-aligned-center\">"
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"55%\",\"className\":\"fides-uc-hero\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center fides-uc-hero\" style=\"flex-basis:55%\">"
     . "<!-- wp:paragraph {\"className\":\"fides-ds-kicker\"} -->\n<p class=\"fides-ds-kicker\">The global digital trust ecosystem</p>\n<!-- /wp:paragraph -->\n"
-    . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-hero\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-hero\">Accelerating Digital Trust</h1>\n<!-- /wp:heading -->\n"
-    . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">Explore digital trust through use cases, practical guidance and expertise.</p>\n<!-- /wp:paragraph -->\n<!-- wp:paragraph -->\n<p>Wallets, credentials and trusted data flows, indexed in one place.</p>\n<!-- /wp:paragraph -->"
+    . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-hero\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-hero\">Accelerating<br>Digital Trust</h1>\n<!-- /wp:heading -->\n"
+    . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">See how organizations use digital wallets and credentials in practice.</p>\n<!-- /wp:paragraph -->"
     // Primary entry to the starting point (Paper 22.HOME hero), next to the existing secondary action.
     . "\n<!-- wp:html -->\n<div class=\"fides-uc-fragment__actions\" style=\"margin-top:32px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px\"><a class=\"fides-ds-button\" href=\"/fides-design-pilot/start/\">Find your starting point <span aria-hidden=\"true\">→</span></a><a class=\"fides-ds-action-link\" href=\"/fides-design-pilot/overview/\"><span>Explore use cases</span> <span aria-hidden=\"true\">→</span></a></div>\n<!-- /wp:html -->"
     . "</div>\n<!-- /wp:column -->\n"
@@ -205,8 +205,8 @@ pilot_upsert_page(
     . "</div>\n<!-- /wp:column -->"
     . "</div>\n<!-- /wp:columns -->"
     . "</div>\n<!-- /wp:group -->"
-    // Paper 25.12: task routes and latest updates under the hero (blocks read their data themselves).
-    . "\n<!-- wp:shortcode -->[fides_home_routes]<!-- /wp:shortcode -->"
+    // Paper 25.15: Learn strip, theme index and latest updates under the hero (blocks read their data themselves).
+    . "\n<!-- wp:shortcode -->[fides_home_learn]<!-- /wp:shortcode -->"
     . "\n<!-- wp:shortcode -->[fides_use_case_discovery layout=\"index\"]<!-- /wp:shortcode -->"
     . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->",
     $parent,

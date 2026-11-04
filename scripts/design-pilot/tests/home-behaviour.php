@@ -68,12 +68,12 @@ $check(strpos($html, 'Older Alpha note') === false, 'limit is respected');
 $check(strpos($html, '<b>news</b>') === false, 'titles are escaped');
 $check(strpos($html, 'href="https://alpha.example/news/1"') !== false, 'external post links to the original publication');
 $check(strpos($html, 'href="' . home_url('/fides-article/') . '"') !== false, 'own post links to the FIDES article');
-$check(strpos($html, 'Organization news · Alpha Labs') !== false, 'organization shown in the kicker');
-$check(strpos($html, 'fides-home-news__source">press.example<') !== false && strpos($html, 'Organization news · Alpha Labs') !== false, 'publication source apart from the organization when they differ');
-$check(strpos($html, 'fides-home-news__source">alpha.example<') !== false, 'publication source shown for the organization\'s own site');
-$check(strpos($html, 'fides-home-news__source">FIDES<') !== false, 'own post source is FIDES');
-$check(strpos($html, '(opens the original post on press.example)') !== false, 'link name says where the original post is published');
-$check(strpos($html, 'Read at source ↗') !== false && strpos($html, 'Read the update →') !== false, 'action hints per kind');
+$check(preg_match('#fides-home-news__source">Alpha Labs[^<]*</span><span aria-hidden="true"> · </span><time datetime="2026-10-20">20 Oct 2026</time>#', $html) === 1, 'organization and date together in one line above the title');
+$check(preg_match('#fides-home-news__meta.*?fides-home-news__title#s', $html) === 1 && strpos($html, 'fides-home-news__kicker') === false && strpos($html, 'fides-home-news__foot') === false && strpos($html, 'fides-home-news__action') === false, 'no separate action row');
+$check(strpos($html, 'fides-home-news__source">FIDES</span>') !== false, 'own post source is FIDES');
+$check(strpos($html, 'via press.example') !== false || strpos($html, 'fides-home-news__source">Alpha Labs') !== false, 'source line names the organization');
+$check(strpos($html, 'aria-label="Alpha ships') !== false && strpos($html, '(external site: ') !== false && substr_count($html, 'fides-home-news__external') === 2, 'external links are marked visibly and for screen readers');
+$check(preg_match('#<h3 class="fides-home-news__title"><a class="fides-home-news__link" href="' . preg_quote(home_url('/fides-article/'), '#') . '">FIDES &lt;b&gt;news&lt;/b&gt; item</a></h3>#', $html) === 1, 'own title is the link and has no external marker');
 $check(strpos($html, '23 Oct 2026') !== false && strpos($html, 'datetime="2026-10-23"') !== false, 'date shown and machine readable');
 $check(substr_count($html, '<a ') === 4, 'one link per item plus the overview link');
 
@@ -99,7 +99,9 @@ $own = array(array_merge($own[0], array('title' => '')));
 $themes_html = do_shortcode('[fides_use_case_discovery layout="index"]');
 $cfg   = Fides_Use_Case_Discovery_Shortcode::theme_config();
 $check(substr_count($themes_html, 'fides-uc-index__row') === count($cfg['bundles']) && count($cfg['bundles']) > 0, 'one row per existing theme bundle');
-$check(strpos($themes_html, 'Digital trust in practice') !== false && strpos($themes_html, 'Explore by theme') !== false, 'index heading and kicker');
+$check(strpos($themes_html, 'Digital trust in practice') !== false && strpos($themes_html, 'Explore use cases by theme') !== false, 'index heading and subline');
+$check(strpos($themes_html, 'fides-uc-index__num') === false && substr_count($themes_html, '<svg') === count($cfg['bundles']), 'no sequence numbers, one line icon per theme');
+$check(strpos($themes_html, 'Browse all use cases') !== false && strpos($themes_html, 'fides-uc-index__catalogs') === false && strpos($themes_html, 'Personal wallets') === false, 'Browse all use cases replaces the catalog links');
 foreach ($cfg['bundles'] as $b) {
     $check(strpos($themes_html, 'theme=' . $b['code']) !== false && strpos($themes_html, home_url('/fides-design-pilot/overview/')) !== false, 'row links to the overview with theme filter ' . $b['code']);
 }
