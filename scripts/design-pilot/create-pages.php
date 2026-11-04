@@ -243,17 +243,32 @@ pilot_upsert_page(
     $layout_meta,
     PILOT_SHELL_TEMPLATE
 );
-if (class_exists('Fides_DS_Updates') && ! get_option(Fides_DS_Updates::OPTION)) {
-    update_option(Fides_DS_Updates::OPTION, array(
-        'programmes'       => array(
-            'org:webuild'     => 'WE BUILD',
-            'org:netherlands' => 'EDI-Stelsel NL',
-            'org:germany'     => 'German EUDI Wallet',
-            'org:imda'        => 'TradeTrust',
-        ),
-        'hidden_urls'      => array(),
-        'news_url'         => '',
-        'listing_path'     => '/fides-design-pilot/updates/',
-        'article_template' => true,
-    ));
+if (class_exists('Fides_DS_Updates')) {
+    // Each programme link is limited to the host of its dedicated programme source (allowedHosts in
+    // listing-news-sources.json), so a third-party article or a release about the same organization is
+    // never labelled as programme news.
+    $seed_programmes = array(
+        'org:webuild'     => array('label' => 'WE BUILD', 'hosts' => array('webuildconsortium.eu')),
+        'org:netherlands' => array('label' => 'EDI-Stelsel NL', 'hosts' => array('edi.pleio.nl')),
+        'org:germany'     => array('label' => 'German EUDI Wallet', 'hosts' => array('eudi-wallet.gov.de')),
+        'org:imda'        => array('label' => 'TradeTrust', 'hosts' => array('tradetrust.io')),
+    );
+    $updates_option = get_option(Fides_DS_Updates::OPTION);
+    if (! $updates_option) {
+        update_option(Fides_DS_Updates::OPTION, array(
+            'programmes'       => $seed_programmes,
+            'hidden_urls'      => array(),
+            'news_url'         => '',
+            'listing_path'     => '/fides-design-pilot/updates/',
+            'article_template' => true,
+        ));
+    } elseif (is_array($updates_option)) {
+        // Upgrade only entries that still hold the earlier unscoped seed value; editor changes stay.
+        foreach ($seed_programmes as $key => $entry) {
+            if (($updates_option['programmes'][$key] ?? null) === $entry['label']) {
+                $updates_option['programmes'][$key] = $entry;
+            }
+        }
+        update_option(Fides_DS_Updates::OPTION, $updates_option);
+    }
 }

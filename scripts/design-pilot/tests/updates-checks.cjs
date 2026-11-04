@@ -49,6 +49,17 @@ const texts = (loc, sel) => loc.evaluateAll((els, s) => els.map((e) => (e.queryS
     const extInfo = await ext.evaluate((e) => { const a = e.querySelector("a.fides-ds-card__link"); return { href: a.href, arrow: e.querySelector(".fides-ds-card__arrow").textContent, hint: /opens the original post/.test(a.textContent) }; });
     check(`${tag}: external row links to the original post with ↗`, !extInfo.href.startsWith(BASE) && /^https?:/.test(extInfo.href) && extInfo.arrow === "↗" && extInfo.hint, JSON.stringify(extInfo));
 
+    // Publication source apart from the organization (data driven: needs a post on another site in the feed).
+    await page.goto(`${PAGE_URL}?q=biometric`, { waitUntil: "domcontentloaded" });
+    const apart = await page.evaluate(() => [...document.querySelectorAll(".fides-updates__item")].map((li) => {
+      const src = li.querySelector(".fides-ds-card__fact--source");
+      const owner = li.querySelector(".fides-ds-card__fact--owner");
+      const a = li.querySelector("a.fides-ds-card__link");
+      return { src: src ? src.textContent.trim() : "", owner: owner ? owner.textContent.trim() : "", name: a ? a.textContent.replace(/\s+/g, " ").trim() : "", host: src ? src.textContent.replace(/^Source:\s*/, "").trim() : "" };
+    }));
+    check(`${tag}: organization and publication source are separate facts, link name names the source`, apart.length > 0 && apart.every((r) => r.src.startsWith("Source: ") && r.owner && !r.owner.includes(r.host) && r.name.includes(`opens the original post on ${r.host}`)), JSON.stringify(apart));
+    await page.goto(PAGE_URL, { waitUntil: "domcontentloaded" });
+
     // Missing images: all remote images are aborted, so every logo shows the fallback tile.
     await page.waitForTimeout(600);
     const broken = await page.evaluate(() => [...document.querySelectorAll(".fides-updates__item .fides-ds-card")].filter((c) => c.querySelector("img.fides-ds-card__img")).map((c) => { const f = c.querySelector(".fides-ds-card__fallback"); const i = c.querySelector("img.fides-ds-card__img"); return !f.hidden || getComputedStyle(i).display === "none" || !i.isConnected; }));
