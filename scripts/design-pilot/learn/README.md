@@ -244,5 +244,5 @@ Order under the hero: Learn strip, theme index, latest updates.
 ## About FIDES (Paper 27.1)
 
 - Page `/fides-design-pilot/about-fides/` with the shortcode `[fides_about]` (tiles `Fides_DS_About`, `assets/about.css`); the shell path `/about-fides/` (menu and footer) maps to it in the pilot guard.
-- Destinations go through the shell resolver: Topics & guides and Sessions & workshops and the use case overview are pilot pages; Contact, Manifesto and Plans have no pilot page and resolve to the live fides.community paths. A destination that resolves to nothing is omitted, not linked.
+- Destinations go through the shell resolver: Topics & guides and Sessions & workshops and the use case overview are pilot pages; Submit a use case and Manage your organization's listing go to the pilot forms. Contact, Manifesto and Plans have no pilot page and resolve to the live fides.community paths. A destination that resolves to nothing is omitted, not linked.
 - Tests: `tests/run-about-checks.sh` (1440, 390 and 320 px; screenshots in `screens/about-*.png`).

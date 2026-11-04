@@ -32,12 +32,16 @@ const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA
     // Text from Paper 27.1.
     const t = await page.evaluate(() => {
       const q = (s) => (document.querySelector(s) || {}).textContent?.trim();
-      return { h1s: document.querySelectorAll("h1").length, h1: q("h1"), intro: q(".fides-about__intro"), labsKicker: q(".fides-about__labs .fides-about__kicker"), labsTitle: q(".fides-about__labs-title"), labsText: q(".fides-about__labs .fides-about__text"), h2s: [...document.querySelectorAll(".fides-about h2")].map((h) => h.textContent.trim()), items: [...document.querySelectorAll(".fides-about__item-title")].map((h) => h.textContent.trim()), note: q(".fides-about__note") };
+      return { h1s: document.querySelectorAll("h1").length, h1: q("h1"), intro: q(".fides-about__intro"), labsKicker: q(".fides-about__labs .fides-about__kicker"), labsTitle: q(".fides-about__labs-title"), labsText: q(".fides-about__labs .fides-about__text"), h2s: [...document.querySelectorAll(".fides-about h2")].map((h) => h.textContent.trim()), items: [...document.querySelectorAll(".fides-about__item-title")].map((h) => h.textContent.trim()) };
     });
     check(`${tag}: one H1 with the Paper heading and intro`, t.h1s === 1 && t.h1 === "An independent platform for wallets and verifiable credentials" && t.intro === "We help organizations understand the technology, find suitable solutions, and prepare for implementation.", JSON.stringify(t));
     check(`${tag}: FIDES Labs BV block names who builds and runs the platform`, t.labsKicker === "Who runs FIDES" && t.labsTitle === "Built and operated by FIDES Labs" && t.labsText.startsWith("FIDES Labs BV is an independent Dutch company."), JSON.stringify(t));
     check(`${tag}: section headings and item titles`, JSON.stringify(t.h2s) === JSON.stringify(["Built and operated by FIDES Labs", "Explore the platform", "How FIDES Labs can help"]) && JSON.stringify(t.items) === JSON.stringify(["Learn", "Explorer", "Workshops", "Assessments and advice", "Project coordination", "Independent by design", "Take part"]), JSON.stringify(t));
-    check(`${tag}: advice and coordination role is explicit`, t.note === "FIDES Labs advises and coordinates. Specialist partners usually carry out the technical implementation.");
+    check(`${tag}: partner role is stated once, under Project coordination, with no closing repeat`, (await page.locator(".fides-about__band").innerText()).match(/specialist partners/gi).length === 1 && (await page.locator(".fides-about__note").count()) === 0);
+    {
+      const h = await page.evaluate(() => { const e = document.querySelector(".fides-about__title"); const i = document.querySelector(".fides-about__intro"); const lh = parseFloat(getComputedStyle(e).lineHeight); return { lines: Math.round(e.getBoundingClientRect().height / lh), first: e.textContent.trim().split(" ")[0], introTop: Math.round(i.getBoundingClientRect().top), size: getComputedStyle(e).fontSize }; });
+      if (w <= 390) check(`${tag}: title is compact (at most four lines) and the intro starts above the fold`, h.lines <= 4 && h.introTop < 450, JSON.stringify(h));
+    }
 
     // Order and stacking.
     const g = await page.evaluate(() => {
@@ -59,9 +63,11 @@ const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA
       ["Explore sessions and workshops→", /\/fides-design-pilot\/learn\/sessions\/$/],
       ["Discuss your project→", /\/about-fides\/contact\/$/],
       ["Read the FIDES Manifesto→", /\/manifesto\/$/],
+      ["Submit a use case→", /\/use-case-form\/$/],
+      ["Manage your organization's listing→", /\/organizations-update\/$/],
       ["Explore FIDES Plans→", /\/plans\/$/],
     ];
-    check(`${tag}: six CTAs with the Paper labels and expected destinations`, links.length === 6 && want.every(([label, re], i) => links[i].t === label && re.test(links[i].href)), JSON.stringify(links));
+    check(`${tag}: eight CTAs with the Paper labels and expected destinations`, links.length === 8 && want.every(([label, re], i) => links[i].t === label && re.test(links[i].href)), JSON.stringify(links));
     check(`${tag}: no underline by default, white on blue and blue on white`, links.every((l) => l.td === "none" && l.color === (l.band ? "rgb(255, 255, 255)" : "rgb(8, 72, 163)")), JSON.stringify(links));
     check(`${tag}: CTAs are at least 44px tall and inside the screen`, links.every((l) => l.h >= 44 && l.right <= w), JSON.stringify(links));
     for (const l of links) {
@@ -92,14 +98,14 @@ const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA
     // Tab through the page from the top: every CTA is reachable, in DOM order, with a visible ring.
     await page.evaluate(() => { window.scrollTo(0, 0); document.activeElement && document.activeElement.blur(); });
     const seen = [];
-    for (let n = 0; n < 60 && seen.length < 6; n += 1) {
+    for (let n = 0; n < 60 && seen.length < 8; n += 1) {
       await page.keyboard.press("Tab");
       await page.waitForTimeout(700); // smooth scrolling settles
       const f = await page.evaluate(() => { const e = document.activeElement; if (!e || !e.classList.contains("fides-about__link")) return null; const cs = getComputedStyle(e); const b = e.getBoundingClientRect(); return { t: e.textContent.trim(), ow: cs.outlineWidth, os: cs.outlineStyle, oc: cs.outlineColor, oo: cs.outlineOffset, band: !!e.closest(".fides-about__band"), inView: b.top >= 0 && b.bottom <= innerHeight && e.contains(document.elementFromPoint(b.left + b.width / 2, b.top + b.height / 2)) }; });
-      if (f) { seen.push(f); if (seen.length === 3 && w === WIDTHS[0] || (w !== WIDTHS[0] && seen.length === 4)) { await page.screenshot({ path: path.join(SHOTS, `about-focus-${w}.png`) }); } }
+      if (f) { seen.push(f); if (seen.length === 3) { await page.screenshot({ path: path.join(SHOTS, `about-focus-${w}.png`) }); } }
     }
-    check(`${tag}: keyboard reaches all six CTAs in order, each scrolled into view`, seen.length === 6 && seen.map((s) => s.t).join("|") === links.map((l) => l.t).join("|") && seen.every((s) => s.inView), JSON.stringify(seen));
-    check(`${tag}: focus ring is 3px, white on blue and blue on white`, seen.length === 6 && seen.every((s) => s.os === "solid" && s.ow === "3px" && s.oc === (s.band ? "rgb(255, 255, 255)" : "rgb(8, 72, 163)")), JSON.stringify(seen));
+    check(`${tag}: keyboard reaches all eight CTAs in order, each scrolled into view`, seen.length === 8 && seen.map((s) => s.t).join("|") === links.map((l) => l.t).join("|") && seen.every((s) => s.inView), JSON.stringify(seen));
+    check(`${tag}: focus ring is 3px, white on blue and blue on white`, seen.length === 8 && seen.every((s) => s.os === "solid" && s.ow === "3px" && s.oc === (s.band ? "rgb(255, 255, 255)" : "rgb(8, 72, 163)")), JSON.stringify(seen));
 
     // Menu and footer: About FIDES points here and is marked as current; Manifesto/Contact stay.
     if (w < 1024) {
