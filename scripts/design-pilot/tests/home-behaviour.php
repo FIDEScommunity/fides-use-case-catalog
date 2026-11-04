@@ -135,40 +135,38 @@ $check(preg_match_all('#aria-label="[^"]+, \d+ use cases?"#', $idx) === count($c
 // ---- Spotlight (Bosch demo use case)
 $bosch = 'end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh';
 $spot  = do_shortcode('[fides_use_case_spotlight id="' . $bosch . '" detail_url="/fides-design-pilot/use-case/"]');
-$item = Fides_Use_Case_Design::find($bosch);
-$base = home_url('/fides-design-pilot/use-case/?usecase=' . $bosch);
+$item  = Fides_Use_Case_Design::find($bosch);
+$base  = home_url('/fides-design-pilot/use-case/?usecase=' . $bosch);
 $check(strpos($spot, 'One use case. A connected ecosystem.') !== false && strpos($spot, 'Demo use case') !== false && strpos($spot, 'Not in production') !== false, 'spotlight heading, demo label and catalog status');
 $check(strpos($spot, '>' . esc_html($item['title']) . '</h3>') !== false, 'title comes from the catalog record');
 $check(strpos($spot, 'fides-uc-spot__intro') === false && strpos($spot, 'fides-uc-spot__preview') !== false, 'no separate editorial intro, a preview instead');
 $pv = Fides_Use_Case_Spotlight::preview($item);
 $check($pv !== '' && mb_strlen($pv) <= 201 && stripos($pv, 'use case:') !== 0 && strpos($item['summary'], preg_replace('/…$/u', '', $pv)) !== false, 'preview is a short, unmodified start of the catalog description');
-$check(strpos($spot, esc_html($pv)) !== false && strpos($spot, 'Read the use case') !== false, 'preview and "Read the use case" link are shown');
-$check(strpos($spot, esc_url($base)) !== false, 'spotlight links to the pilot detail page');
+$check(mb_substr($pv, -1) === '…' && strpos($spot, esc_html($pv)) !== false && strpos($spot, 'Read the use case') !== false, 'the cut preview ends with an ellipsis, with "Read the use case"');
+$check(Fides_Use_Case_Spotlight::preview(array('summary' => 'One short line.')) === 'One short line.' && Fides_Use_Case_Spotlight::preview(array('summary' => "Use Case: First.\nMore.")) === 'First…', 'no ellipsis for a complete description, one for a continued one');
+$check(strpos($spot, esc_url($base)) !== false && strpos($spot, 'fides-uc-spot__link--head') === false && strpos($spot, 'Explore the catalog') === false, 'one link to the use case page and no second catalog link');
 $check(strpos($spot, 'src="' . esc_url(Fides_Use_Case_Design::image_url($item)) . '"') !== false, 'image comes from the catalog record');
-$check(substr_count($spot, 'fides-uc-spot__group"') === 4 && strpos($spot, '>Organizations <span class="fides-uc-spot__group-count">7<') !== false && strpos($spot, '>Business wallets <span class="fides-uc-spot__group-count">4<') !== false && strpos($spot, '>Personal wallets <span class="fides-uc-spot__group-count">5<') !== false && strpos($spot, '>Credential types <span class="fides-uc-spot__group-count">12<') !== false, 'four groups with the unique linked catalog totals 7, 4, 5 and 12');
-$uniq = function ($key) use ($item) { $r = array(); foreach ($item['links'][$key] as $l) { if (! empty($l['refId'])) { $r[$l['refId']] = 1; } } return count($r); };
-$check($uniq('organizations') === 7 && $uniq('businessWallets') === 4, 'totals equal the unique explicit refs in the catalog record');
-$check(substr_count($spot, '<li><a href=') === 8 && strpos($spot, 'org=org%3Abosch') !== false && strpos($spot, 'wallet=procivis-one') !== false, 'at most two names per group, owner and provider first');
-$check(strpos($spot, esc_url($base . '#organisations')) !== false && strpos($spot, esc_url($base . '#ecosystem-businesswallets')) !== false && strpos($spot, '>View all 7 organizations<span class="fides-uc-spot__arrow" aria-hidden="true">→</span>') !== false && strpos($spot, '>View all 4 business wallets<span class="fides-uc-spot__arrow" aria-hidden="true">→</span>') !== false, 'View all links name the totals and point to the sections');
+$check(strpos($spot, 'fides-uc-spot__names') === false && strpos($spot, 'View all') === false && strpos($spot, '<li><a class="fides-uc-spot__relation"') !== false, 'compact relation links instead of name lists and View all');
+$links = Fides_Use_Case_Spotlight::relation_links($item, '/u/');
+$totals = array();
+foreach ($links as $l) { $totals[$l['key']] = $l['total']; }
+$check($totals === array('organizations' => 7, 'businessWallets' => 4, 'personalWallets' => 5, 'credentials' => 15, 'issuers' => 13, 'rps' => 17), 'one link per explicitly linked type with the totals the use case page lists');
+$check(strpos($spot, '>Organizations <data class="fides-uc-spot__count" value="7">7</data>') !== false && strpos($spot, '>Business wallets <data class="fides-uc-spot__count" value="4">4</data>') !== false && strpos($spot, '>Relying parties <data class="fides-uc-spot__count" value="17">17</data>') !== false, 'labels carry the counts');
+$check(strpos($spot, esc_url($base . '#organisations')) !== false && strpos($spot, esc_url($base . '#ecosystem-businesswallets')) !== false && strpos($spot, esc_url($base . '#ecosystem-personalwallets')) !== false && strpos($spot, esc_url($base . '#ecosystem-credentials')) !== false && strpos($spot, esc_url($base . '#ecosystem-issuers')) !== false && strpos($spot, esc_url($base . '#ecosystem-rps')) !== false, 'each link points to its section');
 $detail = do_shortcode('[fides_use_case_detail id="' . $bosch . '"]');
-$check(strpos($detail, 'id="organisations"') !== false && strpos($detail, 'id="ecosystem-businesswallets"') !== false, 'the use case page has both target sections');
-$check(strpos($detail, 'organisations-title">Organisations involved <span class="fides-uc-detail__count">7<') !== false && strpos($detail, 'ecosystem-businesswallets-title" data-fides-ds-collapsible-title>Business wallets <span class="fides-uc-ecosystem__count">4<') !== false, 'the page sections list the same totals');
+$ok = true;
+foreach (array('organisations' => 7, 'ecosystem-businesswallets' => 4, 'ecosystem-personalwallets' => 5, 'ecosystem-credentials' => 15, 'ecosystem-issuers' => 13, 'ecosystem-rps' => 17) as $anchor => $n) {
+    $ok = $ok && strpos($detail, 'id="' . $anchor . '"') !== false;
+    $ok = $ok && (preg_match('#id="' . $anchor . '-title"[^>]*>[^<]*<span class="[^"]*count">' . $n . '<#', $detail) === 1 || preg_match('#id="' . $anchor . '-title"[^>]*>[^<]*<span class="[^"]*count">' . $n . '<#', str_replace("\n", '', $detail)) === 1);
+}
+$check($ok, 'the use case page has every target section with the same count');
 $check(strpos(do_shortcode('[fides_use_case_spotlight id="does-not-exist"]'), 'fides-uc-spot__title') === false, 'unknown use case renders no block');
-$none = array('id' => 'x', 'links' => array('organizations' => array(array('refId' => 'org:does-not-exist')), 'businessWallets' => array(array('refId' => 'no-such-wallet'), array('refId' => null, 'labelRaw' => 'Manual only'))));
-$check(Fides_Use_Case_Spotlight::relation_groups($none, '/u/') === array(), 'unlinked or missing catalog records are not counted');
-$check(array_column(Fides_Use_Case_Spotlight::relation_groups($item, '/u/'), 'key') === array('organizations', 'businessWallets', 'personalWallets', 'credentials') && strpos($spot, 'Issuers') === false && strpos($spot, 'Relying parties') === false, 'issuers and relying parties are left out: this record lists them by name only, none is a catalog record');
-$check(mb_substr($pv, -1) === '…' && strpos($spot, 'fides-uc-spot__link--head') === false && substr_count($spot, 'Explore the catalog') === 0, 'the cut description ends with an ellipsis and the block has no second catalog link');
-$short = array('summary' => 'One short line.');
-$check(Fides_Use_Case_Spotlight::preview($short) === 'One short line.' && Fides_Use_Case_Spotlight::preview(array('summary' => "Use Case: First.\nMore.")) === 'First…', 'no ellipsis for a complete description, one for a continued one');
-$noorg = $item; $noorg['links']['organizations'] = array();
-$g = Fides_Use_Case_Spotlight::relation_groups($noorg, '/u/');
-$check(! in_array('organizations', array_column($g, 'key'), true) && $g[0]['key'] === 'businessWallets', 'an empty group is omitted');
-$two = $item; $two['links']['organizations'] = array_slice($item['links']['organizations'], 0, 2);
-$g2 = Fides_Use_Case_Spotlight::relation_groups($two, '/u/');
-$check($g2[0]['total'] === 2 && count($g2[0]['names']) === 2, 'two organizations are shown without a View all link');
-$dup = $item; $dup['links']['organizations'][] = $item['links']['organizations'][0];
-$check(Fides_Use_Case_Spotlight::relation_groups($dup, '/u/')[0]['total'] === 7, 'duplicate refs are counted once');
+$noorg = $item; $noorg['links']['organizations'] = array(); $noorg['links']['rps'] = array();
+$k = array_column(Fides_Use_Case_Spotlight::relation_links($noorg, '/u/'), 'key');
+$check(! in_array('organizations', $k, true) && ! in_array('rps', $k, true) && $k[0] === 'businessWallets', 'empty types are left out');
+$check(Fides_Use_Case_Spotlight::relation_links(array('id' => 'x', 'links' => array()), '/u/') === array(), 'no links, no relation row');
 $check(strpos((string) file_get_contents(dirname(dirname(dirname(__DIR__))) . '/wordpress-plugin/fides-use-case-catalog/includes/class-fides-use-case-spotlight.php'), 'localhost') === false, 'no hard-coded local host in the spotlight');
+
 
 echo 'home behaviour: ' . $results['pass'] . ' passed, ' . count($results['fail']) . " failed\n";
 foreach ($results['fail'] as $message) {

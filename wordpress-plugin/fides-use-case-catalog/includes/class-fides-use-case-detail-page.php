@@ -569,21 +569,22 @@ final class Fides_Use_Case_Detail_Page {
     }
 
     /**
-     * Relations of one group that point to a FIDES catalog record with an
-     * internal destination (used by the homepage spotlight).
+     * Section label, anchor and number of listed rows per relation type, as
+     * the page shows them (used by the homepage spotlight).
      *
      * @param array<string, mixed> $item
-     * @return list<array{label:string, href:string}>
+     * @return array<string, array{label:string, anchor:string, total:int}>
      */
-    public static function catalog_relations(array $item, string $key): array {
-        $groups = self::relation_groups($item);
-        $rows   = array();
-        foreach ($groups[ $key ]['items'] ?? array() as $relation) {
-            if ($relation['href'] !== '' && ! $relation['external'] && $relation['source'] === 'FIDES catalog record') {
-                $rows[ $relation['href'] ] = array('label' => $relation['label'], 'href' => $relation['href']);
-            }
+    public static function relation_counts(array $item): array {
+        $counts = array();
+        foreach (self::relation_groups($item) as $key => $group) {
+            $counts[ $key ] = array(
+                'label'  => $group['label'],
+                'anchor' => $key === 'organizations' ? 'organisations' : $group['anchor'],
+                'total'  => count($group['items']),
+            );
         }
-        return array_values($rows);
+        return $counts;
     }
 
     /**

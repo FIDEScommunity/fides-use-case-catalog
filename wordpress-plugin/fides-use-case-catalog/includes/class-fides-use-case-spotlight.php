@@ -3,14 +3,11 @@
  * [fides_use_case_spotlight] — homepage block "One use case. A connected ecosystem." (design pilot).
  *
  * Shows one published use case straight from its catalog record: title,
- * short preview of the description, image and status. Connected records come
- * from the explicit links of the record only, grouped as Organizations and
- * Business wallets, Personal wallets, Credential types, Issuers and Relying
- * parties. Each group shows the number of unique linked records that exist in
- * the catalog, at most two names, and a "View all N" link to the matching
- * section of the use case page when there are more. Groups without catalog
- * records (for example submitter-listed issuers) are left out. Only the id is
- * stored in the page.
+ * short preview of the description, image and status. Under it sits one
+ * compact link per explicitly linked relation type (Organizations 7 →,
+ * Business wallets 4 →, …), each pointing to the matching section of the use
+ * case page. The counts are the ones that page lists; types without links
+ * are left out. Only the id is stored in the page.
  *
  * Attributes:
  *  - id         Catalog id of the use case (required).
@@ -43,25 +40,6 @@ final class Fides_Use_Case_Spotlight {
     private const PREVIEW_LENGTH = 200;
 
     /**
-     * Unique reference ids of one relation list in the record (record order).
-     *
-     * @param array<string, mixed> $item
-     * @return list<string>
-     */
-    private static function linked_refs(array $item, string $key): array {
-        $links = isset($item['links']) && is_array($item['links']) ? $item['links'] : array();
-        $rows  = isset($links[ $key ]) && is_array($links[ $key ]) ? $links[ $key ] : array();
-        $refs  = array();
-        foreach ($rows as $row) {
-            $ref = is_array($row) ? trim((string) ($row['refId'] ?? '')) : '';
-            if ($ref !== '' && ! in_array($ref, $refs, true)) {
-                $refs[] = $ref;
-            }
-        }
-        return $refs;
-    }
-
-    /**
      * Short plain-text preview of the catalog description: the first line,
      * without a leading "Use Case:" label, cut at a word boundary.
      *
@@ -85,186 +63,31 @@ final class Fides_Use_Case_Spotlight {
     }
 
     /**
-     * Organizations the record links explicitly, resolved in the catalog. The
-     * owner of the use case comes first.
+     * One entry per relation type the record links explicitly, in a fixed
+     * order; types without links are omitted. "total" is the number of unique
+     * rows the use case page lists in that section.
      *
      * @param array<string, mixed> $item
-     * @return list<array{name:string,href:string}>
+     * @return list<array{key:string,label:string,total:int,url:string}>
      */
-    private static function organizations(array $item): array {
-        if (! class_exists('Fides_Organization_Design')) {
+    public static function relation_links(array $item, string $detail_url): array {
+        if (! class_exists('Fides_Use_Case_Detail_Page') || ! method_exists('Fides_Use_Case_Detail_Page', 'relation_counts')) {
             return array();
         }
-        $owner = strtolower(trim((string) ($item['organizationName'] ?? '')));
-        $first = array();
-        $rest  = array();
-        foreach (self::linked_refs($item, 'organizations') as $ref) {
-            $org = Fides_Organization_Design::find($ref);
-            if ($org === null) {
+        $counts = Fides_Use_Case_Detail_Page::relation_counts($item);
+        $links  = array();
+        foreach (array('organizations', 'businessWallets', 'personalWallets', 'credentials', 'issuers', 'rps') as $key) {
+            if (empty($counts[ $key ]['total'])) {
                 continue;
             }
-            $href = Fides_Use_Case_Design::organization_profile_href((string) $org['id'], 'usecase:' . (string) $item['id']);
-            if ($href === '') {
-                continue;
-            }
-            $row = array('name' => (string) $org['name'], 'href' => $href);
-            if ($owner !== '' && strtolower(trim($row['name'])) === $owner) {
-                $first[] = $row;
-            } else {
-                $rest[] = $row;
-            }
-        }
-        return array_merge($first, $rest);
-    }
-
-    /**
-     * Business wallets the record links explicitly, resolved in the catalog.
-     * A wallet provided by one of the linked organizations comes first.
-     *
-     * @param array<string, mixed> $item
-     * @return list<array{name:string,href:string}>
-     */
-    private static function wallets(array $item): array {
-        if (! class_exists('Fides_Wallet_Design')) {
-            return array();
-        }
-        $org_refs = self::linked_refs($item, 'organizations');
-        $first    = array();
-        $rest     = array();
-        foreach (self::linked_refs($item, 'businessWallets') as $ref) {
-            $wallet = Fides_Wallet_Design::find($ref);
-            if ($wallet === null) {
-                continue;
-            }
-            $href = Fides_Wallet_Design::detail_url((string) $wallet['id'], Fides_Wallet_Design::pilot_detail_base());
-            if ($href === '') {
-                continue;
-            }
-            $row = array('name' => (string) $wallet['name'], 'href' => $href);
-            if (! empty($wallet['orgId']) && in_array((string) $wallet['orgId'], $org_refs, true)) {
-                $first[] = $row;
-            } else {
-                $rest[] = $row;
-            }
-        }
-        return array_merge($first, $rest);
-    }
-
-    /**
-     * Personal wallets the record links explicitly, resolved in the catalog.
-     *
-     * @param array<string, mixed> $item
-     * @return list<array{name:string,href:string}>
-     */
-    private static function personal_wallets(array $item): array {
-        if (! class_exists('Fides_Wallet_Design')) {
-            return array();
-        }
-        $rows = array();
-        foreach (self::linked_refs($item, 'personalWallets') as $ref) {
-            $wallet = Fides_Wallet_Design::find($ref);
-            $href   = $wallet === null ? '' : Fides_Wallet_Design::detail_url((string) $wallet['id'], Fides_Wallet_Design::pilot_detail_base());
-            if ($href !== '') {
-                $rows[] = array('name' => (string) $wallet['name'], 'href' => $href);
-            }
-        }
-        return $rows;
-    }
-
-    /**
-     * Credential types the record links explicitly, resolved in the catalog.
-     *
-     * @param array<string, mixed> $item
-     * @return list<array{name:string,href:string}>
-     */
-    private static function credential_types(array $item): array {
-        if (! class_exists('Fides_Credential_Design')) {
-            return array();
-        }
-        $rows = array();
-        $seen = array();
-        foreach (self::linked_refs($item, 'credentials') as $ref) {
-            $credential = Fides_Credential_Design::find(Fides_Use_Case_Design::credential_canonical_id($ref));
-            if ($credential === null || isset($seen[ (string) $credential['id'] ])) {
-                continue;
-            }
-            $seen[ (string) $credential['id'] ] = true;
-            $href = Fides_Credential_Design::detail_url((string) $credential['id'], Fides_Credential_Design::pilot_detail_base());
-            $name = trim((string) ($credential['displayName'] ?? ''));
-            if ($href !== '' && $name !== '') {
-                $rows[] = array('name' => $name, 'href' => $href);
-            }
-        }
-        return $rows;
-    }
-
-    /**
-     * Issuers and relying parties: only rows that point to a FIDES catalog
-     * record count. Entries the submitter listed by name are not records.
-     *
-     * @param array<string, mixed> $item
-     * @return list<array{name:string,href:string}>
-     */
-    private static function listed_catalog_records(array $item, string $key): array {
-        if (! class_exists('Fides_Use_Case_Detail_Page') || ! method_exists('Fides_Use_Case_Detail_Page', 'catalog_relations')) {
-            return array();
-        }
-        $rows = array();
-        foreach (Fides_Use_Case_Detail_Page::catalog_relations($item, $key) as $relation) {
-            $rows[] = array('name' => $relation['label'], 'href' => $relation['href']);
-        }
-        return $rows;
-    }
-
-    /**
-     * Connected groups for the block; groups without catalog records are
-     * omitted. "total" counts every unique linked catalog record, "names"
-     * holds at most two.
-     *
-     * @param array<string, mixed> $item
-     * @return list<array{key:string,label:string,noun:string,total:int,names:list<array{name:string,href:string}>,all_url:string}>
-     */
-    public static function relation_groups(array $item, string $detail_url): array {
-        $defs = array(
-            array('organizations', 'Organizations', 'organizations', self::organizations($item), '#organisations'),
-            array('businessWallets', 'Business wallets', 'business wallets', self::wallets($item), '#ecosystem-businesswallets'),
-            array('personalWallets', 'Personal wallets', 'personal wallets', self::personal_wallets($item), '#ecosystem-personalwallets'),
-            array('credentials', 'Credential types', 'credential types', self::credential_types($item), '#ecosystem-credentials'),
-            array('issuers', 'Issuers', 'issuers', self::listed_catalog_records($item, 'issuers'), '#ecosystem-issuers'),
-            array('rps', 'Relying parties', 'relying parties', self::listed_catalog_records($item, 'rps'), '#ecosystem-rps'),
-        );
-        $groups = array();
-        foreach ($defs as [$key, $label, $noun, $rows, $anchor]) {
-            if (! $rows) {
-                continue;
-            }
-            $groups[] = array(
-                'key'     => $key,
-                'label'   => $label,
-                'noun'    => $noun,
-                'total'   => count($rows),
-                'names'   => array_slice($rows, 0, 2),
-                'all_url' => $detail_url . $anchor,
+            $links[] = array(
+                'key'   => $key,
+                'label' => (string) $counts[ $key ]['label'],
+                'total' => (int) $counts[ $key ]['total'],
+                'url'   => $detail_url . '#' . $counts[ $key ]['anchor'],
             );
         }
-        return $groups;
-    }
-
-    /** @param array{key:string,label:string,noun:string,total:int,names:list<array{name:string,href:string}>,all_url:string} $group */
-    private static function group_html(array $group, string $title): string {
-        $id   = 'fides-uc-spot-' . strtolower($group['key']);
-        $html = '<section class="fides-uc-spot__group" data-group="' . esc_attr($group['key']) . '" aria-labelledby="' . esc_attr($id) . '">'
-            . '<h3 class="fides-uc-spot__group-title" id="' . esc_attr($id) . '">' . esc_html($group['label'])
-            . ' <span class="fides-uc-spot__group-count">' . esc_html((string) $group['total']) . '</span></h3><ul class="fides-uc-spot__names">';
-        foreach ($group['names'] as $row) {
-            $html .= '<li><a href="' . esc_url($row['href']) . '">' . esc_html($row['name']) . '</a></li>';
-        }
-        $html .= '</ul>';
-        if ($group['total'] > count($group['names'])) {
-            $html .= '<a class="fides-uc-spot__all" href="' . esc_url($group['all_url']) . '" aria-label="' . esc_attr('View all ' . $group['total'] . ' ' . $group['noun'] . ': ' . $title) . '">'
-                . esc_html('View all ' . $group['total'] . ' ' . $group['noun']) . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a>';
-        }
-        return $html . '</section>';
+        return $links;
     }
 
     /**
@@ -297,7 +120,7 @@ final class Fides_Use_Case_Spotlight {
         $preview  = self::preview($item);
         // Demo label plus the catalog's own status; the status is never rewritten.
         $kicker   = implode(' · ', array_filter(array('Demo use case', Fides_Use_Case_Design::kicker($item), Fides_Use_Case_Design::status_label($item))));
-        $groups   = self::relation_groups($item, $detail);
+        $links    = self::relation_links($item, $detail);
 
         $html  = '<section class="fides-ds fides-uc-spot" aria-labelledby="fides-uc-spot-title"><div class="fides-uc-spot__inner">';
         $html .= '<div class="fides-uc-spot__head"><div><p class="fides-uc-spot__eyebrow">' . esc_html__('Explore in practice', 'fides-use-case-catalog') . '</p>'
@@ -312,12 +135,14 @@ final class Fides_Use_Case_Spotlight {
             $html .= '<p class="fides-uc-spot__preview">' . esc_html($preview) . '</p>';
         }
         $html .= '<a class="fides-uc-spot__link" href="' . esc_url($detail) . '" aria-label="' . esc_attr('Read the use case: ' . $title) . '">' . esc_html__('Read the use case', 'fides-use-case-catalog') . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a></div>';
-        if ($groups) {
-            $html .= '<div class="fides-uc-spot__related">';
-            foreach ($groups as $group) {
-                $html .= self::group_html($group, $title);
+        if ($links) {
+            $html .= '<nav class="fides-uc-spot__relations" aria-label="' . esc_attr__('Connected to this use case', 'fides-use-case-catalog') . '"><ul class="fides-uc-spot__relation-list">';
+            foreach ($links as $link) {
+                $html .= '<li><a class="fides-uc-spot__relation" data-relation="' . esc_attr($link['key']) . '" href="' . esc_url($link['url']) . '">'
+                    . esc_html($link['label']) . ' <data class="fides-uc-spot__count" value="' . esc_attr((string) $link['total']) . '">' . esc_html((string) $link['total']) . '</data>'
+                    . '<span class="fides-uc-spot__arrow" aria-hidden="true">→</span></a></li>';
             }
-            $html .= '</div>';
+            $html .= '</ul></nav>';
         }
         return $html . '</article></div></section>';
     }

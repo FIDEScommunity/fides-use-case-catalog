@@ -160,60 +160,42 @@
   outline-offset: 3px;
 }
 
-/* ---------- Connected records: compact groups ---------- */
+/* ---------- Connected types: one compact link per relation type ---------- */
 
-.fides-ds .fides-uc-spot__related {
-  display: grid;
-  gap: var(--fides-ds-space-3, 12px) var(--fides-ds-space-6, 32px);
+.fides-ds .fides-uc-spot__relations {
   min-width: 0;
   padding-top: var(--fides-ds-space-3, 12px);
   border-top: 1px solid rgba(255, 255, 255, 0.55);
 }
 
-@media (min-width: 640px) {
-  .fides-ds .fides-uc-spot__related {
-    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+@media (min-width: 900px) {
+  .fides-ds .fides-uc-spot__relations {
+    grid-column: 1 / -1;
   }
 }
 
-.fides-ds .fides-uc-spot__group {
-  display: grid;
-  gap: 0;
-  align-content: start;
-  min-width: 0;
-}
-
-.fides-ds .fides-uc-spot__group-title {
+.fides-ds .fides-uc-spot__relation-list {
   display: flex;
-  align-items: baseline;
-  gap: var(--fides-ds-space-2, 8px);
-  margin: 0;
-  font-size: 12px;
-  font-weight: 400;
-  line-height: 16px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.fides-ds .fides-uc-spot__group-count {
-  font-variant-numeric: tabular-nums;
-}
-
-.fides-ds .fides-uc-spot__names {
-  display: grid;
+  flex-direction: column;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.fides-ds .fides-uc-spot__names li {
+@media (min-width: 640px) {
+  .fides-ds .fides-uc-spot__relation-list {
+    flex-flow: row wrap;
+    gap: 0 var(--fides-ds-space-6, 32px);
+  }
+}
+
+.fides-ds .fides-uc-spot__relation-list li {
   margin: 0;
   min-width: 0;
 }
 
-.fides-ds .fides-uc-spot__names a,
-.fides-ds .fides-uc-spot__all {
-  display: flex;
+.fides-ds .fides-uc-spot__relation {
+  display: inline-flex;
   align-items: center;
   min-height: 44px;
   color: #ffffff;
@@ -221,13 +203,12 @@
   font-weight: 500;
   line-height: 22px;
   text-decoration: none;
-  overflow-wrap: anywhere;
 }
 
-/* "View all" is a follow-up step: own line, space above, arrow, no underline until hover/focus. */
-.fides-ds .fides-uc-spot__all {
-  margin-top: var(--fides-ds-space-3, 12px);
-  font-weight: 500;
+.fides-ds .fides-uc-spot__count {
+  margin-left: var(--fides-ds-space-2, 8px);
+  font-variant-numeric: tabular-nums;
+  font-weight: 400;
 }
 
 /* ---------- Link states on the blue band ----------
@@ -241,13 +222,13 @@
   color: #ffffff;
 }
 
-.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__all, .fides-uc-spot__names a) {
+.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__relation) {
   text-decoration: none;
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
 }
 
-.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__all, .fides-uc-spot__names a):is(:hover, :focus-visible) {
+.fides-ds .fides-uc-spot :is(.fides-uc-spot__link, .fides-uc-spot__relation):is(:hover, :focus-visible) {
   text-decoration: underline;
   text-decoration-thickness: 2px;
 }
