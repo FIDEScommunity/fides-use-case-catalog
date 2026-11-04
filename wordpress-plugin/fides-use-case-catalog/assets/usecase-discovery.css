@@ -835,3 +835,22 @@
   outline: 3px solid var(--fides-ds-link, #0848a3);
   outline-offset: 2px;
 }
+
+/* Below two columns the count sits in a fixed position next to the arrow, so long names can wrap. */
+@media (max-width: 899px) {
+  .fides-ds .fides-uc-index__text {
+    display: contents;
+  }
+
+  .fides-ds .fides-uc-index__name {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .fides-ds .fides-uc-index__count {
+    flex: none;
+    min-width: 2.5ch;
+    margin-left: 0;
+    text-align: right;
+  }
+}
