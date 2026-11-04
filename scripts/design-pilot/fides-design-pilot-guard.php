@@ -54,6 +54,7 @@ add_filter(
             '/'                                             => '/fides-design-pilot/homepage-fragment/',
             '/ecosystem-explorer/'                          => '/explorer/',
             '/ecosystem-explorer/start/'                    => '/fides-design-pilot/start/',
+            '/about-fides/news/'                            => '/fides-design-pilot/updates/',
             '/learn/'                                       => '/fides-design-pilot/learn/',
             '/learn/topics/'                                => '/fides-design-pilot/learn/topics/',
             '/ecosystem-explorer/use-cases/'                => '/fides-design-pilot/overview/',

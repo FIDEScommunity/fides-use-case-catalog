@@ -216,3 +216,12 @@ bash run-tests.sh                     # PHP behaviour (includes tests/learn-beha
 - `[fides_learn_record heading="2"]` renders the title as `h2`; the Receive page uses it for the VOG practice card with the existing image (above the text below 600px).
 - Tests: `tests/run-ux-round-checks.sh` (one browser per width).
 - The short homepage title is stored with the record it belongs to (`short_title_for`). Changing the primary use case with the old title left in place clears it (with a notice); a title entered together with the new primary is bound to that record; legacy values without a record link are never shown.
+
+## Updates (Paper 26.1 to 26.3)
+
+- Page `/fides-design-pilot/updates/` (shortcode `[fides_updates]` in the shell template); the shell link `/about-fides/news/` maps to it in the pilot guard. Own article layout for posts is switched on by the setting `article_template` (pilot seed on; off by default).
+- Sources: published WordPress posts (FIDES updates; intro = manual excerpt only) and the organization feed `pro-news.json` (remote raw URL, filterable and settable, with the bundled copy of the organization catalog plugin as fallback; transient cache). The retention of the feed is not touched here; the page shows what the feed contains.
+- Programme updates: only an organization linked to a programme under Settings > FIDES Updates (`org:id | Label`). The pilot seed (`create-pages.php`) takes WE BUILD, EDI-Stelsel NL, German EUDI Wallet and TradeTrust from `listing-news-sources.json`; an existing setting is never overwritten. Nothing is derived from post text.
+- Search matches title, organization and programme label (accents and case ignored, all words must match). Filter: FIDES / organization / programme. Sort: newest, oldest, title. 10 per page. Query: `q`, `type`, `sort`, `pg`. No topic filter yet.
+- Homepage (mobile) fixes for Paper 25.13 live in `usecase-design.css` under the class `fides-uc-hero` (set on the hero column in the seed).
+- Tests: `tests/updates-behaviour.php` (in `run-tests.sh`) and `tests/run-updates-checks.sh` (one browser per width; remote hosts are stubbed).

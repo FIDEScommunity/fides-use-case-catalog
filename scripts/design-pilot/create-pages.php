@@ -193,7 +193,7 @@ pilot_upsert_page(
     "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"48px\",\"bottom\":\"96px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
     . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:48px;padding-bottom:96px\">"
     . "<!-- wp:columns {\"verticalAlignment\":\"center\",\"style\":{\"spacing\":{\"blockGap\":{\"left\":\"64px\"}}}} -->\n<div class=\"wp-block-columns are-vertically-aligned-center\">"
-    . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"55%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:55%\">"
+    . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"55%\",\"className\":\"fides-uc-hero\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center fides-uc-hero\" style=\"flex-basis:55%\">"
     . "<!-- wp:paragraph {\"className\":\"fides-ds-kicker\"} -->\n<p class=\"fides-ds-kicker\">The global digital trust ecosystem</p>\n<!-- /wp:paragraph -->\n"
     . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-hero\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-hero\">Accelerating Digital Trust</h1>\n<!-- /wp:heading -->\n"
     . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\",\"style\":{\"spacing\":{\"margin\":{\"top\":\"24px\"}}}} -->\n<p class=\"fides-ds-lead\" style=\"margin-top:24px\">Explore digital trust through use cases, practical guidance and expertise.</p>\n<!-- /wp:paragraph -->\n<!-- wp:paragraph -->\n<p>Wallets, credentials and trusted data flows, indexed in one place.</p>\n<!-- /wp:paragraph -->"
@@ -223,3 +223,37 @@ if (is_array($featured_option) && ($featured_option['primary'] ?? '') === PILOT_
     update_option(Fides_Use_Case_Featured::OPTION, $featured_option);
 }
 WP_CLI::log('Homepage feature: ' . wp_json_encode(get_option(Fides_Use_Case_Featured::OPTION)));
+
+// Updates overview (Paper 26.1/26.3) and own-article layout (26.2).
+// The programme links below are a pilot SEED taken from the dedicated programme sources in
+// organization-catalog/data/listing-news-sources.json. On a real site an editor maintains them
+// under Settings > FIDES Updates; an existing setting is never overwritten here.
+pilot_upsert_page(
+    'fides-design-pilot/updates',
+    'Updates',
+    "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"48px\",\"bottom\":\"0px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
+    . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:48px;padding-bottom:0px\">"
+    . "<!-- wp:paragraph {\"className\":\"fides-ds-kicker\"} -->\n<p class=\"fides-ds-kicker\">FIDES · Knowledge &amp; ecosystem</p>\n<!-- /wp:paragraph -->\n"
+    . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-1 fides-ds-heading-1--catalog\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-1 fides-ds-heading-1--catalog\">Updates</h1>\n<!-- /wp:heading -->\n"
+    . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\"} -->\n<p class=\"fides-ds-lead\">Follow developments in digital identity, wallets and trusted data.</p>\n<!-- /wp:paragraph -->"
+    . "</div>\n<!-- /wp:group -->\n"
+    . "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"32px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
+    . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:32px\"><!-- wp:shortcode -->[fides_updates]<!-- /wp:shortcode --></div>\n<!-- /wp:group -->",
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+if (class_exists('Fides_DS_Updates') && ! get_option(Fides_DS_Updates::OPTION)) {
+    update_option(Fides_DS_Updates::OPTION, array(
+        'programmes'       => array(
+            'org:webuild'     => 'WE BUILD',
+            'org:netherlands' => 'EDI-Stelsel NL',
+            'org:germany'     => 'German EUDI Wallet',
+            'org:imda'        => 'TradeTrust',
+        ),
+        'hidden_urls'      => array(),
+        'news_url'         => '',
+        'listing_path'     => '/fides-design-pilot/updates/',
+        'article_template' => true,
+    ));
+}

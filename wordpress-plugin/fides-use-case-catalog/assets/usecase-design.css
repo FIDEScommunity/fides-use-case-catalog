@@ -1473,6 +1473,56 @@ html.fides-uc-pilot-panel-open {
   }
 }
 
+/* ---------- Homepage hero on narrow screens (Paper 25.13) ----------
+   The hero column carries the class fides-uc-hero. Blue kicker with air above the
+   title, two 20px ink paragraphs, a full-width primary button and an ink secondary
+   link; the featured card shows its status line above the title. */
+@media (max-width: 599px) {
+  .fides-ds .fides-uc-hero .fides-ds-kicker {
+    margin-bottom: var(--fides-ds-space-4);
+    color: var(--fides-ds-link);
+  }
+
+  .fides-ds .fides-uc-hero p:not(.fides-ds-kicker) {
+    margin-top: var(--fides-ds-space-5);
+    color: var(--fides-ds-ink);
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  .fides-ds .fides-uc-hero .fides-uc-fragment__actions {
+    flex-direction: column;
+    align-items: stretch !important;
+    gap: var(--fides-ds-space-3) !important;
+  }
+
+  .fides-ds .fides-uc-hero .fides-uc-fragment__actions .fides-ds-button {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .fides-ds .fides-uc-hero .fides-uc-fragment__actions .fides-ds-action-link {
+    align-self: flex-start;
+    color: var(--fides-ds-ink);
+  }
+
+  .fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__topline {
+    order: 0;
+  }
+
+  .fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__meta {
+    order: 1;
+  }
+
+  .fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__title {
+    order: 2;
+  }
+
+  .fides-ds.fides-uc-featured .fides-ds-card--feature .fides-ds-card__cta {
+    order: 3;
+  }
+}
+
 /* ---------- Overview contribute band ---------- */
 
 .fides-ds.fides-uc-contribute {
