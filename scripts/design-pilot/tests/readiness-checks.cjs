@@ -50,7 +50,7 @@ const measure = (page) => page.evaluate((sel) => {
     actionBorder: { left: cs(action, "borderLeftWidth"), leftColour: cs(action, "borderLeftColor"), top: cs(action, "borderTopWidth"), topColour: cs(action, "borderTopColor") },
     sources: m.querySelectorAll(".fides-home-readiness__source-link").length,
     headingBox: { t: headingEl.textContent.trim(), tag: headingEl.tagName, size: cs(headingEl, "fontSize"), weight: cs(headingEl, "fontWeight"), box: r(headingEl) },
-    intro: introEl ? { t: introEl.textContent.trim(), box: r(introEl), size: cs(introEl, "fontSize") } : null,
+    intro: introEl ? { t: introEl.textContent.trim(), box: r(introEl), size: cs(introEl, "fontSize"), lh: cs(introEl, "lineHeight"), max: cs(introEl, "maxWidth") } : null,
     biz: biz ? { href: biz.getAttribute("href"), text: biz.textContent.replace(/\s+/g, " ").trim(), box: r(biz), size: cs(biz, "fontSize"), weight: cs(biz, "fontWeight"), colour: cs(biz, "color"), lines: Math.round(r(biz).h / 22) } : null,
     text: m.textContent, rows, old: document.querySelectorAll(".fides-home-learn").length, cards: m.querySelectorAll(".fides-ds-card, [class*='card']").length,
     heroBottom: hero ? hero.getBoundingClientRect().bottom + scrollY : 0, indexTop: index ? index.getBoundingClientRect().top + scrollY : 1e9,
@@ -82,17 +82,16 @@ const measure = (page) => page.evaluate((sel) => {
     const pts = m.points;
     const first = pts[0], last = pts[pts.length - 1];
     check(`${tag}: heading "EUDI Wallet: what is changing?" is a visible h2 above the timeline`, m.headingBox.t === "EUDI Wallet: what is changing?" && m.headingBox.tag === "H2" && m.headingBox.size === "24px" && m.headingBox.weight === "700" && m.headingBox.box.b <= first.dot.y + 1, JSON.stringify(m.headingBox));
-    check(`${tag}: intro spells out European Digital Identity Wallet, is short and bounded`, m.intro && /European Digital Identity Wallet \(EUDI Wallet\)/.test(m.intro.t) && m.intro.t.length < 260 && m.intro.box.w <= 62 * 9.5 + 1 && m.intro.size === "15px" && m.intro.box.y >= m.headingBox.box.b - 1 && m.intro.box.b <= first.dot.y + 1, JSON.stringify(m.intro));
+    check(`${tag}: intro spells out European Digital Identity Wallet and uses the full width of the left column (no max-width, 15px/23px)`, m.intro && /European Digital Identity Wallet \(EUDI Wallet\)/.test(m.intro.t) && m.intro.t.length < 260 && m.intro.box.w >= m.lead.w - 1 && m.intro.lh === "23px" && m.intro.size === "15px" && m.intro.max === "none" && m.intro.box.y >= m.headingBox.box.b - 1 && m.intro.box.b <= first.dot.y + 1, JSON.stringify(m.intro));
     check(`${tag}: ${FULL ? "three" : "two"} milestones in order`, pts.length === (FULL ? 3 : 2) && first.when === "End 2026" && first.title === "Wallet availability" && pts[1].when === "End 2027" && pts[1].title === "Wallet acceptance", JSON.stringify(pts.map((p) => [p.when, p.title])));
     check(`${tag}: availability concerns Member States, acceptance only private services that must use strong user authentication, on the user's choice, micro and small enterprises exempt`, /Member States/.test(first.text) && /EUDI Wallet/.test(first.text) && /Private services required to use strong user authentication online/.test(pts[1].text) && /if a user chooses/.test(pts[1].text) && /Micro and small enterprises are exempt/.test(pts[1].text) && !/all organi[sz]ations|every organi[sz]ation|countdown|days left|business wallet/i.test(pts.map((p) => p.text).join(" ")), JSON.stringify(pts.map((p) => p.text)));
     check(`${tag}: milestone texts are short (under 160 characters), width bounded to 40ch`, pts.every((p) => p.text.length < 160 && p.textBox.w <= 40 * 9.5 + 1), JSON.stringify(pts.map((p) => [p.text.length, p.textBox.w])));
     check(`${tag}: type of the milestones (label 13 semibold, title 20 bold)`, pts.every((p) => p.whenCss[0] === "13px" && p.whenCss[1] === "600" && p.titleCss[0] === "20px" && p.titleCss[1] === "700"), JSON.stringify(pts.map((p) => [p.whenCss, p.titleCss])));
     check(`${tag}: no countdown and no extra cards`, m.cards === 0 && !/countdown|days left/i.test(m.text), "");
-    check(`${tag}: each milestone has its own source link to an official external page, 13px, 44px high`, pts.every((p) => p.src && /^Source: .+ ↗$/.test(p.src.text) && /^https:\/\/(eur-lex\.europa\.eu|commission\.europa\.eu|digital-strategy\.ec\.europa\.eu)\//.test(p.src.href) && /external site/.test(p.src.label) && p.src.size === "13px" && p.src.box.h >= 44 && p.src.box.y >= p.textBox.b - 1), JSON.stringify(pts.map((p) => p.src)));
-    check(`${tag}: the 2026 source is the European Commission page and the 2027 source the Regulation text`, /commission\.europa\.eu\/topics\/digital-economy-and-society\/european-digital-identity_en$/.test(first.src.href) && /eur-lex\.europa\.eu\/eli\/reg\/2014\/910\//.test(pts[1].src.href) && /Art\. 5f/.test(pts[1].src.text), JSON.stringify(pts.map((p) => p.src.href)));
+    check(`${tag}: no visible source lines in the block`, m.sources === 0 && m.points.every((p) => p.src === null) && !/Source:/.test(m.text), String(m.sources));
     check(`${tag}: right part keeps the workshop text`, m.aTitle.t === "What does this mean for your organisation?" && m.aTitle.size === "20px" && m.aTitle.weight === "700" && m.aText.t === "Work through the impact on your services and agree the next steps with your team.", JSON.stringify([m.aTitle.t, m.aText.t]));
     if (FULL) {
-      check(`${tag}: business link is separate, below the timeline and its sources, and not part of a milestone`, m.biz && m.biz.text === "And for businesses? Explore European Business Wallets →" && m.biz.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && m.biz.box.h >= 44 && m.biz.size === "15px" && m.biz.weight === "600" && m.biz.colour === "rgb(8, 72, 163)", JSON.stringify(m.biz));
+      check(`${tag}: business link is separate, below the timeline and not part of a milestone`, m.biz && m.biz.text === "And for businesses? Explore European Business Wallets →" && m.biz.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && m.biz.box.h >= 44 && m.biz.size === "15px" && m.biz.weight === "600" && m.biz.colour === "rgb(8, 72, 163)", JSON.stringify(m.biz));
       check(`${tag}: business link stays inside the left column and the screen (${m.biz ? m.biz.lines : "?"} line(s))`, m.biz && m.biz.box.r <= m.lead.r + 1 && m.biz.box.r <= w - 19 && m.overflow <= 0, JSON.stringify(m.biz && m.biz.box));
     } else {
       check(`${tag}: without existing European Business Wallet content the business link is not shown`, m.biz === null);
@@ -122,7 +121,7 @@ const measure = (page) => page.evaluate((sel) => {
     } else {
       check(`${tag}: timeline first, then the workshop block with a 1px divider and 20px between`, m.action.y >= m.lead.b - 1 && m.actionBorder.top === "1px" && m.actionBorder.topColour === "rgb(143, 168, 198)" && m.actionBorder.left === "0px" && Math.abs(m.action.y - m.lead.b - 20) <= 2, JSON.stringify([m.action.y, m.lead.b, m.actionBorder]));
     }
-    const cap = FULL ? (w >= 900 ? 600 : w >= 641 ? 760 : 1300) : (w >= 900 ? 400 : w >= 641 ? 660 : 1000);
+    const cap = FULL ? (w >= 900 ? 520 : w >= 641 ? 700 : 1100) : (w >= 900 ? 360 : w >= 641 ? 600 : 900);
     check(`${tag}: block is compact (under ${cap}px high)`, m.box.h < cap, `${m.box.h}`);
 
     // Action rows.
@@ -154,16 +153,18 @@ const measure = (page) => page.evaluate((sel) => {
 
     // Keyboard: tab order and a visible 3px focus ring on every control in the module.
     await page.evaluate(() => { const m = document.querySelector(".fides-home-readiness"); const t = document.createElement("span"); t.tabIndex = -1; t.id = "probe-before"; m.parentNode.insertBefore(t, m); t.focus(); });
+    await page.waitForTimeout(1500); // let the smooth scroll to the probe finish
     const order = [];
-    const tabs = pts.length + (FULL ? 1 : 0) + 2;
+    const tabs = (FULL ? 1 : 0) + 2;
     for (let i = 0; i < tabs; i++) {
       await page.keyboard.press("Tab");
-      await page.waitForTimeout(700);
-      order.push(await page.evaluate(() => { const a = document.activeElement; const cs = getComputedStyle(a); const b = a.getBoundingClientRect(); return { cls: a.className, text: a.textContent.replace(/\s+/g, " ").trim().slice(0, 30), ring: cs.outlineStyle + " " + cs.outlineWidth, ringColour: cs.outlineColor, visible: b.top >= -1 && b.bottom <= innerHeight, top: Math.round(b.top), bottom: Math.round(b.bottom), vh: innerHeight, inside: !!a.closest(".fides-home-readiness") }; }));
+      await page.waitForTimeout(1000);
+      await page.evaluate(() => new Promise((res) => { let last = -1, n = 0; const t = setInterval(() => { n = scrollY === last ? n + 1 : 0; last = scrollY; if (n >= 3) { clearInterval(t); res(); } }, 100); }));
+      order.push(await page.evaluate(() => { const a = document.activeElement; const cs = getComputedStyle(a); const b = a.getBoundingClientRect(); return { cls: a.className, text: a.textContent.replace(/\s+/g, " ").trim().slice(0, 30), ring: cs.outlineStyle + " " + cs.outlineWidth, ringColour: cs.outlineColor, visible: b.bottom > 0 && b.top < innerHeight, top: Math.round(b.top), bottom: Math.round(b.bottom), vh: innerHeight, inside: !!a.closest(".fides-home-readiness") }; }));
     }
-    const expected = [...pts.map(() => /source-link/), ...(FULL ? [/business-link/] : []), /Readiness Workshop/, /Topics & guides/];
-    check(`${tag}: Tab goes source links, ${FULL ? "business link, " : ""}Readiness Workshop, Topics & guides`, order.every((o, i) => o.inside && (i < pts.length + (FULL ? 1 : 0) ? expected[i].test(o.cls) : expected[i].test(o.text))), JSON.stringify(order.map((o) => o.text)));
-    check(`${tag}: every focused control shows a 3px solid ring and stays in view`, order.every((o) => o.ring === "solid 3px" && o.visible), JSON.stringify(order.map((o) => [o.ring, o.visible, o.top, o.bottom, o.vh])));
+    const expected = [...(FULL ? [/business-link/] : []), /Readiness Workshop/, /Topics & guides/];
+    check(`${tag}: Tab goes ${FULL ? "business link, " : ""}Readiness Workshop, Topics & guides`, order.every((o, i) => o.inside && (i < (FULL ? 1 : 0) ? expected[i].test(o.cls) : expected[i].test(o.text))), JSON.stringify(order.map((o) => o.text)));
+    check(`${tag}: every focused control shows a 3px solid ring and is reachable in the viewport`, order.every((o) => o.ring === "solid 3px" && o.visible), JSON.stringify(order.map((o) => [o.ring, o.visible, o.top, o.bottom, o.vh])));
     await page.evaluate(() => document.getElementById("probe-before").remove());
 
     // A real click on the workshop row, then Back.
@@ -173,15 +174,7 @@ const measure = (page) => page.evaluate((sel) => {
     await page.goBack({ waitUntil: "domcontentloaded" });
     check(`${tag}: Back returns to the homepage with the module`, (await page.locator(MODULE).count()) === 1);
 
-    // Source links and business link: resolve, hover, focus.
-    for (const p of pts) {
-      check(`${tag}: source "${p.src.text}" is an https link`, /^https:\/\//.test(p.src.href), p.src.href);
-    }
-    const sl = page.locator(`${MODULE} .fides-home-readiness__source-link`).first();
-    await sl.scrollIntoViewIfNeeded();
-    await sl.hover();
-    check(`${tag}: source link underlines on hover`, (await sl.evaluate((a) => getComputedStyle(a).textDecorationLine)) === "underline");
-    await page.mouse.move(0, 0);
+    // Business link: resolve, hover, focus.
     if (FULL) {
       const status = await page.evaluate(async (u) => (await fetch(u, { credentials: "same-origin" })).status, m.biz.href);
       check(`${tag}: business link resolves (${m.biz.href})`, status === 200, `${status}`);

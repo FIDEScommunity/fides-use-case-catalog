@@ -176,7 +176,9 @@ $check(strpos($ready, 'EUDI Wallet: what is changing?') !== false && strpos($rea
 $check(substr_count($ready, 'fides-home-readiness__point') === 2 && strpos($ready, 'End 2026') !== false && strpos($ready, 'Wallet availability') !== false && strpos($ready, 'End 2027') !== false && strpos($ready, 'Wallet acceptance') !== false, 'default timeline has the two EUDI milestones');
 $check(strpos($ready, 'Micro and small enterprises are exempt') !== false && strpos($ready, 'if a user chooses it') !== false, 'acceptance wording keeps the exemption and the voluntary use');
 $check(stripos($ready, 'countdown') === false && stripos($ready, 'days left') === false, 'readiness block has no countdown');
-$check(substr_count($ready, 'fides-home-readiness__source-link') === 2 && strpos($ready, 'https://commission.europa.eu/') !== false && strpos($ready, 'https://eur-lex.europa.eu/') !== false, 'each milestone has its own official source link');
+$check(strpos($ready, 'fides-home-readiness__source-link') === false && strpos($ready, 'Source:') === false, 'the block shows no source lines');
+$srcs = do_shortcode('[fides_home_readiness_sources]');
+$check(strpos($srcs, 'https://commission.europa.eu/') !== false && strpos($srcs, 'https://eur-lex.europa.eu/') !== false && strpos($srcs, 'End 2026') !== false && strpos($srcs, 'Regulation 910/2014, Art. 5f') !== false, 'sources stay in the editorial data and the Learn shortcode lists them');
 $check(strpos($ready, 'fides-home-readiness__business') === false && strpos($ready, 'European Business Wallets') === false, 'business link is hidden without a target (no European Business Wallet content exists yet)');
 $check(stripos(wp_strip_all_tags($ready), 'business wallet') === false, 'EUDI milestones are not presented as business wallet deadlines');
 $ready_links = Fides_DS_Home::readiness_links();
@@ -199,7 +201,7 @@ $check($saved['points'][1]['source_url'] === '' && $saved['points'][0]['source_u
 $check(strpos($saved['intro'], '<script') === false && strpos($saved['heading'], '<b>') === false, 'sanitizer strips markup from heading and intro');
 update_option('fides_ds_home_readiness', $saved);
 $custom = Fides_DS_Home::readiness();
-$check(strpos($custom, 'Custom heading') !== false && strpos($custom, 'Status: draft') !== false && substr_count($custom, 'fides-home-readiness__point') === 3 && strpos($custom, 'Source: Source one') !== false && substr_count($custom, 'fides-home-readiness__source-link') === 1, 'saved content replaces the defaults; a milestone without a source shows no source link');
+$check(strpos($custom, 'Custom heading') !== false && strpos($custom, 'Status: draft') !== false && substr_count($custom, 'fides-home-readiness__point') === 3 && strpos($custom, 'Source one') === false && substr_count(do_shortcode('[fides_home_readiness_sources]'), '<li>') === 1, 'saved content replaces the defaults; the sources list only has milestones with a valid source');
 $check(strpos($custom, 'fides-home-readiness__business-link') !== false && strpos($custom, 'href="' . home_url('/fides-design-pilot/learn/topics/for-businesses/') . '"') !== false && strpos(wp_strip_all_tags($custom), 'Explore European Business Wallets') !== false, 'business link shows for an existing published page');
 update_option('fides_ds_home_readiness', array_merge($saved, array('business_target' => '/no-such-page-here/')));
 $check(strpos(Fides_DS_Home::readiness(), 'fides-home-readiness__business') === false, 'business link stays hidden when the target page does not exist');
