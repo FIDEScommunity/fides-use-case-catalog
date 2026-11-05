@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "Seed content for the FIDES Learn pilot. Paths are relative to the Learn base path (default /fides-design-pilot/learn). Pages with \"tree\":\"start\" are relative to the starting point base (default /fides-design-pilot/start). Tokens in content files: {{learn}}, {{start}}, {{pilot}}, {{glossary}}; {{pilotrel}} for shortcode attributes that WordPress resolves against home_url().",
+ "note": "Seed content for the FIDES Learn pilot. Paths are relative to the Learn base path (default /fides-design-pilot/learn). Pages with \"tree\":\"start\" are relative to the starting point base (default /fides-design-pilot/start). Tokens in content files: {{learn}}, {{start}}, {{pilot}}, {{glossary}}. Below a path (standalone) the links are absolute, built from home_url() at seed time.",
  "pages": [
   {
    "path": "",

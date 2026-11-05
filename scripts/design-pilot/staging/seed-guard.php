@@ -43,7 +43,34 @@ function fides_pilot_mount(): string {
 }
 
 /**
- * @return array{base:string,host:string,local:bool,standalone:bool,mount:string}
+ * Scheme, host and port of home_url() when the site lives below a path ('' for a site at the domain root).
+ * Some plugin settings pass an attribute such as detail_url through home_url() and others print it raw, so a site below a path
+ * cannot use site-relative links in seeded content; it gets absolute links built from home_url() at seed time.
+ */
+function fides_pilot_origin(): string {
+    if (fides_pilot_mount() === '') {
+        return '';
+    }
+    $p = wp_parse_url(home_url('/'));
+    return (string) ($p['scheme'] ?? 'https') . '://' . (string) ($p['host'] ?? '') . (isset($p['port']) ? ':' . $p['port'] : '');
+}
+
+/** origin + path of home_url() ('' at the domain root): the part of an absolute seeded link that depends on the host. */
+function fides_pilot_home_prefix(): string {
+    return fides_pilot_origin() === '' ? '' : fides_pilot_origin() . fides_pilot_mount();
+}
+
+/**
+ * Hash input without the host: absolute links of a site below a path are compared as {{home}}/..., so moving the site to
+ * another domain (wp search-replace) does not make every seeded page look edited. A no-op at the domain root.
+ */
+function fides_pilot_normalize(string $text): string {
+    $home = fides_pilot_home_prefix();
+    return $home === '' ? $text : str_replace(array($home, str_replace('/', '\\/', $home)), '{{home}}', $text);
+}
+
+/**
+ * @return array{base:string,host:string,local:bool,standalone:bool,mount:string,origin:string}
  */
 function fides_pilot_seed_context(): array {
     $host = fides_pilot_host();
@@ -72,5 +99,5 @@ function fides_pilot_seed_context(): array {
             exit(1);
         }
     }
-    return array('base' => $base, 'host' => $host, 'local' => $local, 'standalone' => $standalone, 'mount' => $mount);
+    return array('base' => $base, 'host' => $host, 'local' => $local, 'standalone' => $standalone, 'mount' => $mount, 'origin' => fides_pilot_origin());
 }

@@ -76,16 +76,16 @@ $mount   = $pctx['mount']; // path of home_url(): '' at the domain root, '/desig
 $base    = trim((string) (getenv('LEARN_BASE') ?: ($sa ? 'learn' : 'fides-design-pilot/learn')), '/');
 $start   = trim((string) (getenv('LEARN_START_BASE') ?: ($sa ? 'start' : 'fides-design-pilot/start')), '/');
 $pilot   = $sa ? '' : trim((string) (getenv('LEARN_PILOT_BASE') ?: 'fides-design-pilot'), '/');
-$gloss   = $mount . '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/';
+$gloss   = $pctx['origin'] . $mount . '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/';
 $force   = array_filter(array_map('trim', explode(',', (string) getenv('LEARN_FORCE'))), 'strlen');
 $dry     = getenv('LEARN_DRY_RUN') === '1';
 $backup  = (string) (getenv('LEARN_BACKUP_DIR') ?: sys_get_temp_dir() . '/fides-learn-replaced');
 // Links and attributes carry the home path; settings that WordPress resolves against home_url() (editorial link targets) do not.
-$prefix  = static function (string $p) use ($mount): string {
-    return $mount . ($p === '' ? '' : '/' . $p);
+$origin  = $pctx['origin']; // '' at the domain root; below a path, links are absolute (see fides_pilot_origin)
+$prefix  = static function (string $p) use ($mount, $origin): string {
+    return $origin . $mount . ($p === '' ? '' : '/' . $p);
 };
-// {{pilotrel}}: shortcode attributes (url=) are resolved against home_url() by the plugins, so they stay site-relative.
-$tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{pilotrel}}' => $pilot === '' ? '' : '/' . $pilot, '{{glossary}}' => $gloss);
+$tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{glossary}}' => $gloss);
 $tokens_site = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => $pilot === '' ? '' : '/' . $pilot, '{{glossary}}' => '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/');
 
 $manifest = json_decode((string) file_get_contents($here . '/manifest.json'), true);
@@ -118,7 +118,7 @@ function learn_state_of(int $id): array {
 /** Empty fields do not count, so adding a new (empty) field never makes a page look edited. */
 function learn_hash(array $state): string {
     $state['meta'] = array_filter($state['meta'], 'strlen');
-    return sha1((string) wp_json_encode($state));
+    return sha1(fides_pilot_normalize((string) wp_json_encode($state)));
 }
 
 /** Hash as computed by the first seed round (all legacy fields, empty ones included). */
@@ -128,7 +128,7 @@ function learn_hash_legacy(array $state): string {
         $meta[ $field ] = $state['meta'][ $field ] ?? '';
     }
     $state['meta'] = $meta;
-    return sha1((string) wp_json_encode($state));
+    return sha1(fides_pilot_normalize((string) wp_json_encode($state)));
 }
 
 /** @return string[] names of top-level state keys (and meta fields) that differ. */
