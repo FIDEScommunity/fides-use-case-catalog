@@ -96,10 +96,14 @@ const measure = (page) => page.evaluate((sel) => {
     check(`${tag}: no countdown and no extra cards`, m.cards === 0 && !/countdown|days left/i.test(m.text), "");
     check(`${tag}: no visible source lines in the block`, m.sources === 0 && m.points.every((p) => p.src === null) && !/Source:/.test(m.text), String(m.sources));
     check(`${tag}: right part keeps the workshop text`, m.aTitle.t === "What does this mean for your organisation?" && m.aTitle.size === "20px" && m.aTitle.weight === "700" && m.aText.t === "Work through the impact on your services and agree the next steps with your team.", JSON.stringify([m.aTitle.t, m.aText.t]));
+    {
+      const pair = FULL ? [m.expl, m.biz] : m.pend.slice().sort((a, b) => a.key === "explain" ? -1 : 1);
+      check(`${tag}: the two links stand ${w >= 641 ? "side by side in one row" : "under each other"}`, w >= 641 ? Math.abs(pair[0].box.y - pair[1].box.y) < 2 && pair[0].box.r <= pair[1].box.x : pair[1].box.y >= pair[0].box.b - 1 && Math.abs(pair[0].box.x - pair[1].box.x) < 2, JSON.stringify(pair.map((x) => x.box)));
+    }
     if (FULL) {
       check(`${tag}: business link is separate, below the timeline and not part of a milestone`, m.biz && m.biz.text === "For organisations: explore European Business Wallets →" && m.biz.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && m.biz.box.h >= 44 && m.biz.size === "15px" && m.biz.weight === "600" && m.biz.colour === "rgb(8, 72, 163)", JSON.stringify(m.biz));
       check(`${tag}: business link stays inside the left column and the screen (${m.biz ? m.biz.lines : "?"} line(s))`, m.biz && m.biz.box.r <= m.lead.r + 1 && m.biz.box.r <= w - 19 && m.overflow <= 0, JSON.stringify(m.biz && m.biz.box));
-      check(`${tag}: the EUDI explanation link comes first, before the separate business link (beside or above it), 44px tall`, m.expl && m.expl.text === "Understand the EUDI obligations and exceptions →" && m.expl.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && (m.expl.box.b <= m.biz.box.y + 1 || (Math.abs(m.expl.box.y - m.biz.box.y) < 2 && m.expl.box.r <= m.biz.box.x)) && m.expl.box.h >= 44 && m.expl.size === "15px" && m.expl.weight === "600", JSON.stringify(m.expl));
+      check(`${tag}: the EUDI explanation link comes first, before the separate business link (beside or above it), 44px tall`, m.expl && m.expl.text === "Understand the EUDI obligations and exceptions →" && m.expl.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && (m.expl.box.b <= m.biz.box.y + 1 || (Math.abs(m.expl.box.y - m.biz.box.y) < 2 && m.expl.box.r <= m.biz.box.x + 1)) && m.expl.box.h >= 44 && m.expl.size === "15px" && m.expl.weight === "600", JSON.stringify(m.expl));
     } else {
       const pe = m.pend.find((x) => x.key === "explain"), pb = m.pend.find((x) => x.key === "business");
       check(`${tag}: temporary placeholders for both links, in this order, below the timeline`, m.expl === null && m.biz === null && m.pend.length === 2 && pe && pb && (pe.box.y < pb.box.y || (pe.box.y === pb.box.y && pe.box.x < pb.box.x)) && pe.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1, JSON.stringify(m.pend.map((x) => [x.key, x.box.y])));
