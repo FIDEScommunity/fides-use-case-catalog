@@ -5,8 +5,8 @@
  *
  * Pages live under /<PILOT_BASE>/ (default fides-design-pilot) or, with PILOT_STANDALONE=1, at the root of a site whose
  * home_url() already ends in /design-review: /design-review/overview/ is then the page "overview" (no second segment).
- * Standalone also seeds the pages that normally exist on fides.community and are linked from the pilot: the five
- * submission forms and the glossary (shortcode pages), and makes the homepage the front page while none is set.
+ * Standalone also seeds the pages that normally exist on fides.community and are linked from the pilot: the
+ * submission and update forms and the glossary (shortcode pages), and makes the homepage the front page while none is set.
  * Existing pages, menus and the active homepage are not touched.
  *
  * Safety rules (same as create-learn-pages.php):
@@ -375,6 +375,8 @@ if ($pilot_ctx['standalone']) {
         'organizations-update' => array('Update an organization', '[fides_organization_update_form]'),
         'wallet-submit'        => array('Submit a wallet', '[fides_wallet_submit_form]'),
         'credential-submit'    => array('Submit a credential type', '[fides_credential_submit_form]'),
+        'wallets-update'       => array('Update a wallet', '[fides_wallet_update_form]'),            // default update path of the wallet catalog
+        'credentials-update'   => array('Update a credential type', '[fides_credential_update_form]'), // default update path of the credential catalog
         'glossary'             => array('Glossary', '[fides_vocabulary_glossary]'),
     );
     foreach ($companions as $slug => $def) {

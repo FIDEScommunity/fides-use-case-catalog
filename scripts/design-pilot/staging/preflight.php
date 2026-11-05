@@ -77,6 +77,8 @@ $deps = array(
     'organizations-update' => array('WARN', 'Update an organization'),
     'wallet-submit'       => array('FAIL', 'Submit a wallet'),
     'credential-submit'   => array('FAIL', 'Submit a credential type'),
+    'wallets-update'      => array('WARN', 'Update a wallet (default update path of the wallet catalog)'),
+    'credentials-update'  => array('WARN', 'Update a credential type (default update path of the credential catalog)'),
     'glossary'            => array('FAIL', 'Glossary page used by Learn articles'),
     'manifesto'           => array('WARN', 'Existing Manifesto page with the sign form (#ratify-the-fides-manifesto-today); the pilot page works without it, only the sign button needs it'),
     'explorer'            => array('WARN', 'Ecosystem explorer'),
@@ -87,7 +89,7 @@ $deps = array(
 );
 // Standalone: the form pages and the glossary are seeded by the package; the other destinations are not on this site
 // and the shell links to the live site for them (read-only links, FIDES_DESIGN_REVIEW_LIVE_FALLBACK).
-$seeded_here = array('use-case-form', 'organizations-submit', 'organizations-update', 'wallet-submit', 'credential-submit', 'glossary');
+$seeded_here = array('use-case-form', 'organizations-submit', 'organizations-update', 'wallet-submit', 'credential-submit', 'wallets-update', 'credentials-update', 'glossary');
 foreach ($deps as $path => $info) {
     $page = get_page_by_path($path, OBJECT, 'page');
     if ($sa) {
@@ -125,7 +127,7 @@ if ($sa) {
     $add('PASS', "page /{$base}/ is free", 'the seed creates it');
 }
 $conflicts = array();
-foreach (array('overview', 'use-case', 'organizations', 'organization', 'personal-wallets', 'business-wallets', 'wallet', 'credentials', 'credential', 'about-fides', 'manifesto', 'updates', 'learn', 'start', 'homepage-fragment', 'use-case-form', 'organizations-submit', 'organizations-update', 'wallet-submit', 'credential-submit', 'glossary') as $slug) {
+foreach (array('overview', 'use-case', 'organizations', 'organization', 'personal-wallets', 'business-wallets', 'wallet', 'credentials', 'credential', 'about-fides', 'manifesto', 'updates', 'learn', 'start', 'homepage-fragment', 'use-case-form', 'organizations-submit', 'organizations-update', 'wallet-submit', 'credential-submit', 'wallets-update', 'credentials-update', 'glossary') as $slug) {
     $p = get_page_by_path($sa ? $slug : $base . '/' . $slug, OBJECT, 'page');
     if ($p && get_post_meta($p->ID, '_fides_pilot_seed', true) === '' && get_post_meta($p->ID, '_fides_learn_seed', true) === '') {
         $conflicts[] = $slug;

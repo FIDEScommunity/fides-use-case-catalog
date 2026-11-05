@@ -41,9 +41,9 @@ const PAGES = [
   ["start/", ""],
   ["learn/sessions/", ""],
   ["learn/sessions/request/", ""],
-  ...(STANDALONE ? [["use-case-form/", ""], ["organizations-submit/", ""], ["organizations-update/", ""], ["wallet-submit/", ""], ["credential-submit/", ""], ["glossary/", ""]] : []),
+  ...(STANDALONE ? [["use-case-form/", ""], ["organizations-submit/", ""], ["organizations-update/", ""], ["wallet-submit/", ""], ["credential-submit/", ""], ["wallets-update/", ""], ["credentials-update/", ""], ["glossary/", ""]] : []),
 ];
-const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-update/", "wallet-submit/", "credential-submit/"];
+const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-update/", "wallet-submit/", "credential-submit/", "wallets-update/", "credentials-update/"];
 
 (async () => {
   const browser = await chromium.launch();
