@@ -175,6 +175,11 @@ if [[ "$LAYOUT" == "standalone" ]]; then
   done
 fi
 
+if [[ "$LAYOUT" == "standalone" ]]; then
+  r="$(PILOT_STANDALONE=1 re_wp eval 'require "'$PKG'/seed/staging/seed-guard.php"; $h = array(); foreach (array("http://a.test", "https://b.example") as $o) { add_filter("home_url", static function () use ($o) { return $o . "/design-review/"; }); $h[] = fides_pilot_normalize(wp_json_encode(array("c" => $o . "/design-review/overview/"))); remove_all_filters("home_url"); } echo $h[0] === $h[1] ? "same" : "different";' 2>&1 || true)"
+  [[ "$r" == "same" ]] && ok "edit detection ignores the host: a moved site (new domain) does not make seeded pages look edited" || bad "host-dependent hash ($r)"
+fi
+
 echo "== 7. External actions stay off"
 re_wp option update home "$RE_HOME" >/dev/null; re_wp option update siteurl "$RE_HOME" >/dev/null
 r="$(re_wp eval 'echo is_wp_error(wp_remote_post("https://api.github.com/repos/x/y/pulls", array("body" => "{}"))) ? "blocked" : "sent";')"
