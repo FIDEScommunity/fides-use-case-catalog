@@ -279,9 +279,14 @@ def address_scan(out):
     def scan_text(origin, rel, text):
         if rel.endswith((".md", ".txt")) or "/data/" in rel or rel.startswith("data/") or "/tests/" in rel or rel.endswith("aggregated.json") or rel.endswith(".min.js"):
             return
+        if rel.startswith("checks/"):  # browser rehearsal checks: test fixtures, never run by WordPress
+            return
         for no, line in enumerate(text.splitlines(), 1):
+            commentish = line.strip().startswith(("/*", "*", "//", "#"))
             for key, pat in PATTERNS.items():
                 if re.search(pat, line):
+                    if commentish and key in ("port-10088", "utrecht-demo"):
+                        continue  # a comment never runs
                     hits[key].append({"file": f"{origin}:{rel}", "line": no, "text": line.strip()[:160]})
     for dp, _, fns in os.walk(out):
         for fn in fns:
