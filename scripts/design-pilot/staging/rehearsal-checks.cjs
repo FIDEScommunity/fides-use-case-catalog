@@ -61,6 +61,8 @@ const PAGES = [
     const status = res ? res.status() : 0;
     check(`${ROOT}${rel}: HTTP 200`, status === 200, String(status));
     if (status !== 200) continue;
+    // Catalog pages render after their data arrives (GitHub on a non-local host), so wait for the heading.
+    await page.waitForSelector("h1", { timeout: 20000 }).catch(() => {});
     await page.waitForTimeout(400);
     const info = await page.evaluate((LOCAL) => {
       const hrefs = [...document.querySelectorAll("a[href]")].map((a) => a.getAttribute("href"));
