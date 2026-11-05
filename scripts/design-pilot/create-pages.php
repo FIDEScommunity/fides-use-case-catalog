@@ -243,6 +243,14 @@ pilot_upsert_page(
     PILOT_SHELL_TEMPLATE
 );
 pilot_upsert_page(
+    'fides-design-pilot/manifesto',
+    'FIDES Manifesto',
+    '<!-- wp:shortcode -->[fides_manifesto detail_url="/fides-design-pilot/organization/"]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+pilot_upsert_page(
     'fides-design-pilot/updates',
     'Updates',
     "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"48px\",\"bottom\":\"0px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"

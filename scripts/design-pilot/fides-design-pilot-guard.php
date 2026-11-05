@@ -55,6 +55,7 @@ add_filter(
             '/ecosystem-explorer/'                          => '/explorer/',
             '/ecosystem-explorer/start/'                    => '/fides-design-pilot/start/',
             '/about-fides/'                                 => '/fides-design-pilot/about-fides/',
+            '/manifesto/'                                   => '/fides-design-pilot/manifesto/',
             '/about-fides/news/'                            => '/fides-design-pilot/updates/',
             '/learn/'                                       => '/fides-design-pilot/learn/',
             '/learn/topics/'                                => '/fides-design-pilot/learn/topics/',
@@ -86,6 +87,17 @@ add_filter(
     },
     10,
     2
+);
+
+/*
+ * Signing is an existing WPForms form on the live Manifesto page (the pilot has no copy of it,
+ * and the pilot must not collect signatures). The pilot page links to that form.
+ */
+add_filter(
+    'fides_manifesto_sign_url',
+    static function () {
+        return 'https://fides.community/manifesto/#ratify-the-fides-manifesto-today';
+    }
 );
 
 /*

@@ -246,3 +246,12 @@ Order under the hero: Learn strip, theme index, latest updates.
 - Page `/fides-design-pilot/about-fides/` with the shortcode `[fides_about]` (tiles `Fides_DS_About`, `assets/about.css`); the shell path `/about-fides/` (menu and footer) maps to it in the pilot guard.
 - Destinations go through the shell resolver: Topics & guides and Sessions & workshops and the use case overview are pilot pages; Submit a use case and Manage your organization's listing go to the pilot forms. Contact, Manifesto and Plans have no pilot page and resolve to the live fides.community paths. A destination that resolves to nothing is omitted, not linked.
 - Tests: `tests/run-about-checks.sh` (1440, 390 and 320 px; screenshots in `screens/about-*.png`).
+
+## FIDES Manifesto (Paper 27.2 / 27.3)
+
+- Page `/fides-design-pilot/manifesto/` with `[fides_manifesto detail_url="/fides-design-pilot/organization/"]` (tiles `Fides_DS_Manifesto`, `assets/manifesto.css`, `assets/manifesto.js`); the shell path `/manifesto/` (footer, About) maps to it in the pilot guard.
+- The seven principles keep their original titles and full texts (from fides.community/manifesto); the short texts in Paper are layout placeholders only.
+- Supporters: every organization with `fidesManifestoSupporter === true` from the organization catalog source, alphabetical, no paging. A tile shows the logo (as the organization listing resolves it), or a readable name tile when the logo is missing, fails to load, or is smaller than 32 px. Each tile links to the organization profile (`detail_url` page with `?org=`; without it the canonical organization route).
+- Signing is the existing WPForms form on the live Manifesto page (`#ratify-the-fides-manifesto-today`). The pilot has no copy and collects nothing; the support actions use the `fides_manifesto_sign_url` filter (pilot guard: the live URL; default: the form anchor on the site's own Manifesto page).
+- Comparison of the gallery with the catalog: `organization-catalog/docs/manifesto-gallery-vs-catalog.md`.
+- Tests: `tests/manifesto-behaviour.php` (in `run-tests.sh`) and `tests/run-manifesto-checks.sh` (1440, 1024, 768, 390, 320; `REAL_LOGOS=1` only for screenshots with real logos).
