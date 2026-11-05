@@ -113,6 +113,9 @@ echo "$out" | grep -q 'error' && bad "apply reported an error" || ok "apply fini
 out2="$(run_seed apply 2>&1)"; echo "$out2" | grep '^SUMMARY'
 echo "$out2" | grep -E '^SUMMARY' | grep -vq '"created"' && ok "second apply creates nothing (idempotent)" || bad "second apply created pages"
 
+r="$(re_wp eval 'echo Fides_Wallet_Design::pilot_detail_base(), " ", Fides_Organization_Design::pilot_detail_base(), " ", Fides_Credential_Design::pilot_detail_base();')"
+[[ "$r" == "$RE_URL/$BASE_SEG/wallet/ $RE_URL/$BASE_SEG/organization/ $RE_URL/$BASE_SEG/credential/" ]] && ok "detail routes of wallet, organization and credential sit below /$BASE_SEG/" || bad "detail routes wrong ($r)"
+
 echo "== 5. Editorial changes survive a re-seed"
 EDIT_ID="$(re_wp eval 'echo get_page_by_path("'$BASE_SEG'/about-fides")->ID;')"
 LEARN_ID="$(re_wp eval 'echo get_page_by_path("'$BASE_SEG'/learn/topics")->ID;')"
