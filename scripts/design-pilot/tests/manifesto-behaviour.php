@@ -89,12 +89,12 @@ add_filter('fides_manifesto_supporter_source', static function () {
 });
 $html = Fides_DS_Manifesto::render(array('detail_url' => '/fides-design-pilot/organization/'));
 $check(substr_count($html, 'class="fides-manifesto__tile"') === 5, 'fixture tiles');
-$check(substr_count($html, '<img ') === 1 && strpos($html, 'https://example.org/logo.png') !== false, 'only a valid http logo becomes an image');
+$check(substr_count($html, 'fides-manifesto__logo"') === 1 && strpos($html, 'https://example.org/logo.png') !== false, 'only a valid http logo becomes an image');
 $check(strpos($html, 'javascript:') === false, 'unsafe logo URL is dropped');
-$check(preg_match('~<span class="fides-ds-card__fallback fides-manifesto__name" aria-hidden="true">No Logo BV</span>~', $html) === 1, 'missing logo shows a visible name tile');
-$check(preg_match('~<img[^>]*fides-manifesto__logo[^>]*alt=""[^>]*>\s*<span class="fides-ds-card__fallback fides-manifesto__name" aria-hidden="true" hidden>With Logo</span>~', $html) === 1, 'a logo comes with a hidden name tile for when it fails');
+$check(preg_match('~<span class="fides-ds-card__fallback fides-manifesto__name">No Logo BV</span></a>~', $html) === 1, 'missing logo shows one visible name tile and no caption');
+$check(preg_match('~<img[^>]*fides-manifesto__logo[^>]*alt=""[^>]*>\s*<span class="fides-ds-card__fallback fides-manifesto__name" hidden>With Logo</span><span class="fides-manifesto__caption">With Logo</span>~', $html) === 1, 'a logo comes with a caption and a hidden name tile for when it fails');
+$check(strpos($html, 'aria-hidden="true">No Logo') === false && strpos($html, 'fides-ds-visually-hidden') === false, 'the visible name is the accessible name, never duplicated');
 $check(strpos($html, 'Fish &amp; &lt;b&gt;Chips&lt;/b&gt;') !== false && strpos($html, '<b>Chips</b>') === false, 'names are escaped');
-$check(substr_count($html, 'fides-ds-visually-hidden') >= 5, 'every tile has an accessible name');
 $check(substr_count($html, 'data-org-id="') === 5, 'every tile links to a profile');
 $check(strpos($html, home_url('/fides-design-pilot/organization/?org=org%3Acredenco')) === false && strpos($html, '/fides-design-pilot/organization/?org=org%3Awith-logo') !== false, 'tiles link to the given detail page with the organization id');
 $profile = Fides_DS_Manifesto::profile_url(array('id' => 'org:credenco', 'name' => 'Credenco'), '/fides-design-pilot/organization/');
@@ -103,6 +103,23 @@ $check($plain !== '' && strpos($plain, 'credenco') !== false, 'without a detail 
 $check($profile !== '' && strpos($profile, 'credenco') !== false, 'profile link carries the organization id: ' . $profile);
 $check(strpos($profile, '/fides-design-pilot/organization/') !== false, 'profile link goes to the pilot organization detail');
 remove_all_filters('fides_manifesto_supporter_source');
+
+// ---- Our vision and the original photo.
+$html = Fides_DS_Manifesto::render();
+$vision = strpos($html, 'Our vision');
+$check($vision !== false && strpos($html, 'id="principles"') > $vision && strpos($html, 'fides-manifesto__hero') < $vision, 'Our vision sits between hero and principles');
+foreach (array('AI is changing how information is created and used.', 'Trust also depends on people’s rights, freedom of choice and clear responsibilities.', 'The FIDES Manifesto sets out seven principles for that work') as $line) {
+    $check(strpos($html, $line) !== false, 'vision copy: ' . substr($line, 0, 40));
+}
+$check(strpos($html, 'Harmen van der Kooij and Victor van der Hulst handing over the FIDES Manifesto to Barbara Kathman, Chair of the Digital Affairs committee of the Dutch Parliament</figcaption>') !== false, 'the verified original caption is used verbatim');
+$check(preg_match('~<img src="https://fides\.community/app/uploads/2025/06/manifesto-768x1024\.jpg"[^>]*width="768" height="1024"~', $html) === 1, 'the original WordPress media file with its proportions');
+$check(stripos($html, 'endorse') === false || stripos(substr($html, $vision, 2500), 'endorse') === false, 'no suggestion of formal parliamentary support near the photo');
+$check(strpos($html, 'Seven principles for designing and implementing digital solutions people can trust.') !== false, 'principles intro from Paper');
+$check(strpos($html, 'The existing form') === false, 'no visitor line about the existing form');
+add_filter('fides_manifesto_photo', '__return_empty_array');
+$html = Fides_DS_Manifesto::render();
+$check(strpos($html, 'fides-manifesto__photo"') === false && strpos($html, 'fides-manifesto__vision-grid--text') !== false && strpos($html, 'Our vision') !== false, 'without a photo the vision text stays');
+remove_all_filters('fides_manifesto_photo');
 
 // ---- Empty data: the heading stays, no tiles, a quiet notice.
 add_filter('fides_manifesto_supporter_source', '__return_empty_array');
@@ -120,7 +137,7 @@ $check(substr_count($html, esc_url($sign)) === 2, 'support actions in hero and c
 $check(stripos($html, '<form') === false && stripos($html, '<input') === false && stripos($html, '<textarea') === false, 'no pretend form');
 add_filter('fides_manifesto_sign_url', static function () { return ''; }, 99);
 $html = Fides_DS_Manifesto::render();
-$check(strpos($html, 'Support the Manifesto') === false && strpos($html, 'The existing form') === false, 'no sign URL: no dead action');
+$check(strpos($html, 'Support the Manifesto') === false, 'no sign URL: no dead action');
 remove_all_filters('fides_manifesto_sign_url');
 $default = Fides_DS_Manifesto::sign_url();
 $check($default === home_url('/manifesto/#ratify-the-fides-manifesto-today'), 'default sign URL is the form anchor on the site Manifesto page');

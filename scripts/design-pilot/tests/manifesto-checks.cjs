@@ -10,7 +10,7 @@ const zlib = require("zlib");
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const PAGE = `${BASE}/fides-design-pilot/manifesto/`;
-const WIDTHS = (process.env.WIDTHS || "1440,1024,768,390,320").split(",").map(Number);
+const WIDTHS = (process.env.WIDTHS || "1440,1100,768,390,320").split(",").map(Number);
 const REAL = process.env.REAL_LOGOS === "1";
 const SHOTS = path.join(__dirname, "..", "screens");
 fs.mkdirSync(SHOTS, { recursive: true });
@@ -34,6 +34,8 @@ const png = (w, h, [r, g, b]) => {
 const WIDE = png(400, 100, [120, 170, 230]);
 const SQUARE = png(128, 128, [240, 170, 90]);
 const TINY = png(16, 16, [200, 60, 60]);
+const SMALL = png(34, 34, [90, 160, 120]); // above the 32px floor: must stay at 34px, never scaled up
+const PORTRAIT = png(300, 400, [150, 150, 170]); // stands in for the 3:4 handover photo
 
 (async () => {
   const browser = await chromium.launch();
@@ -47,6 +49,8 @@ const TINY = png(16, 16, [200, 60, 60]);
       if (req.resourceType() === "document") return route.fulfill({ status: 200, contentType: "text/html", body: "<title>External page</title><p>external</p>" });
       if (req.resourceType() !== "image") return route.abort();
       if (REAL) return route.continue();
+      if (/app\/uploads\/2025\/06\/manifesto/.test(u)) return route.fulfill({ status: 200, contentType: "image/png", body: PORTRAIT });
+      if (/domain=digidentity/.test(u)) return route.fulfill({ status: 200, contentType: "image/png", body: SMALL });
       if (/domain=idcontrol\.com/.test(u)) return route.fulfill({ status: 200, contentType: "image/png", body: TINY }); // too small to look sharp
       if (/vancouver\.ca/.test(u)) return route.abort(); // broken logo
       if (/google\.com\/s2\/favicons/.test(u)) return route.fulfill({ status: 200, contentType: "image/png", body: SQUARE });
@@ -74,17 +78,48 @@ const TINY = png(16, 16, [200, 60, 60]);
     check(`${tag}: ${w >= 1024 ? "commitment panel sits beside the hero" : "commitment panel follows the hero text"}`, w >= 1024 ? hero.comLeft >= hero.posRight : hero.comTop >= hero.posBottom - 1, JSON.stringify(hero));
     if (w <= 390) check(`${tag}: title stays within three lines`, hero.lines <= 3, String(hero.lines));
 
-    // Principles: seven, full original texts.
-    const pr = await page.evaluate(() => [...document.querySelectorAll(".fides-manifesto__principle")].map((li) => { const n = li.querySelector(".fides-manifesto__number").getBoundingClientRect(); const b = li.querySelector(".fides-manifesto__principle-body").getBoundingClientRect(); return { num: li.querySelector(".fides-manifesto__number").textContent.trim(), title: li.querySelector("h3").textContent.trim(), len: li.querySelector("p").textContent.trim().length, end: li.querySelector("p").textContent.trim().slice(-30), nx: Math.round(n.left), ny: Math.round(n.top), bx: Math.round(b.left), by: Math.round(b.top), right: Math.round(b.right) }; }));
+    // Our vision: between hero and principles, photo beside (>= 900px) or below the text.
+    const vis = await page.evaluate(() => {
+      const sec = document.querySelector(".fides-manifesto__vision");
+      const copy = sec.querySelector(".fides-manifesto__vision-copy").getBoundingClientRect();
+      const fig = sec.querySelector(".fides-manifesto__photo").getBoundingClientRect();
+      const img = sec.querySelector(".fides-manifesto__photo img");
+      const cap = sec.querySelector("figcaption");
+      const h = sec.querySelector("h2");
+      const ps = [...sec.querySelectorAll(".fides-manifesto__vision-copy p")];
+      const cs = (e) => getComputedStyle(e);
+      return {
+        order: [".fides-manifesto__hero", ".fides-manifesto__vision", "#principles"].map((q) => Math.round(document.querySelector(q).getBoundingClientRect().top + scrollY)),
+        h2: h.textContent.trim(), h2s: [cs(h).fontSize, cs(h).lineHeight, cs(h).fontWeight, cs(h).fontFamily],
+        ps: ps.map((p) => [cs(p).fontSize, cs(p).lineHeight]), n: ps.length,
+        copyRight: Math.round(copy.right), copyBottom: Math.round(copy.bottom), figLeft: Math.round(fig.left), figTop: Math.round(fig.top), figW: Math.round(img.getBoundingClientRect().width), figH: Math.round(img.getBoundingClientRect().height), figRight: Math.round(fig.right),
+        natW: img.naturalWidth, natH: img.naturalHeight, ok: img.complete && img.naturalWidth > 0, fit: cs(img).objectFit,
+        cap: cap.textContent.trim(), capSize: [cs(cap).fontSize, cs(cap).lineHeight], capBelow: cap.getBoundingClientRect().top >= img.getBoundingClientRect().bottom - 1,
+      };
+    });
+    check(`${tag}: Our vision sits between hero and principles`, vis.order[0] < vis.order[1] && vis.order[1] < vis.order[2] && vis.h2 === "Our vision" && vis.n === 3, JSON.stringify(vis.order));
+    check(`${tag}: vision heading is 26/32 bold Inter and text 17/27`, vis.h2s[0] === "26px" && vis.h2s[1] === "32px" && vis.h2s[2] === "700" && /Inter/.test(vis.h2s[3]) && vis.ps.every((p) => p[0] === "17px" && p[1] === "27px"), JSON.stringify([vis.h2s, vis.ps]));
+    check(`${tag}: photo ${w >= 900 ? "sits right of the vision text" : "sits below the vision text"}`, w >= 900 ? vis.figLeft >= vis.copyRight && vis.figRight <= w : vis.figTop >= vis.copyBottom - 1 && vis.figRight <= w, JSON.stringify(vis));
+    check(`${tag}: photo is whole (3:4, not cropped or stretched) and loaded`, vis.ok && Math.abs(vis.figW / vis.figH - vis.natW / vis.natH) < 0.02 && vis.figW <= (w >= 900 ? 360 : 420), JSON.stringify(vis));
+    check(`${tag}: verified original caption under the photo, 14/21`, vis.cap === "Harmen van der Kooij and Victor van der Hulst handing over the FIDES Manifesto to Barbara Kathman, Chair of the Digital Affairs committee of the Dutch Parliament" && vis.capBelow && vis.capSize[0] === "14px" && vis.capSize[1] === "21px", JSON.stringify(vis.cap));
+    check(`${tag}: the removed visitor line is gone`, !(await page.locator("text=The existing form").count()));
+
+    // Principles: seven, full original texts, 28/34 numbers beside 22/28 titles and 17/27 text.
+    const pr = await page.evaluate(() => [...document.querySelectorAll(".fides-manifesto__principle")].map((li) => { const nEl = li.querySelector(".fides-manifesto__number"); const n = nEl.getBoundingClientRect(); const b = li.querySelector(".fides-manifesto__principle-body").getBoundingClientRect(); const t = li.querySelector("h3"); const p = li.querySelector("p"); const cs = (e) => getComputedStyle(e); return { num: nEl.textContent.trim(), title: t.textContent.trim(), len: p.textContent.trim().length, end: p.textContent.trim().slice(-30), nx: Math.round(n.left), ny: Math.round(n.top), nw: Math.round(n.width), nScroll: nEl.scrollWidth, bx: Math.round(b.left), by: Math.round(b.top), right: Math.round(b.right), numS: [cs(nEl).fontSize, cs(nEl).lineHeight, cs(nEl).fontWeight], tS: [cs(t).fontSize, cs(t).lineHeight, cs(t).fontFamily], pS: [cs(p).fontSize, cs(p).lineHeight], gap: Math.round(b.left - n.right) }; }));
+    const head = await page.evaluate(() => { const h = document.querySelector("#principles h2"); const cs = getComputedStyle(h); return { t: h.textContent.trim(), s: [cs.fontSize, cs.lineHeight, cs.fontWeight], intro: document.querySelector(".fides-manifesto__principles-intro").textContent.trim(), introS: [getComputedStyle(document.querySelector(".fides-manifesto__principles-intro")).fontSize, getComputedStyle(document.querySelector(".fides-manifesto__principles-intro")).lineHeight] }; });
+    check(`${tag}: principles heading 26/32 and the Paper intro`, head.t === "We believe that digital trust…" && head.s[0] === "26px" && head.s[1] === "32px" && head.intro === "Seven principles for designing and implementing digital solutions people can trust." && head.introS[0] === "17px", JSON.stringify(head));
     check(`${tag}: seven numbered principles with the original titles`, pr.length === 7 && pr.map((p) => p.num).join() === "01,02,03,04,05,06,07" && pr[0].title === "must protect people’s rights" && pr[3].title === "requires open standards & interoperability" && pr[6].title === "is ever evolving", JSON.stringify(pr.map((p) => p.title)));
     check(`${tag}: principles carry their full original text, not summaries`, pr.every((p) => p.len > 200) && pr[0].end.endsWith("foster trust.") && pr[5].end.endsWith("including individuals.") && pr[6].end.endsWith("moment in time."), JSON.stringify(pr.map((p) => p.len)));
-    check(`${tag}: ${w >= 768 ? "number sits left of its principle" : "number sits above its principle"}`, w >= 768 ? pr.every((p) => p.nx < p.bx) : pr.every((p) => p.by >= p.ny), JSON.stringify(pr[0]));
+    const numW = w >= 768 ? 52 : 36;
+    check(`${tag}: numbers are 28/34 semibold in a ${numW}px column, close to the title (${w >= 768 ? 24 : 16}px gap)`, pr.every((p) => p.numS.join() === "28px,34px,600" && p.nw === numW && p.nScroll <= numW && p.gap === (w >= 768 ? 24 : 16) && p.nx < p.bx), JSON.stringify(pr[0]));
+    check(`${tag}: number and title share a row`, pr.every((p) => Math.abs(p.ny - p.by) < 30), JSON.stringify(pr[0]));
+    check(`${tag}: principle titles 22/28 Inter, text 17/27`, pr.every((p) => p.tS[0] === "22px" && p.tS[1] === "28px" && /Inter/.test(p.tS[2]) && p.pS.join() === "17px,27px"), JSON.stringify([pr[0].tS, pr[0].pS]));
     check(`${tag}: principles stay inside the screen`, pr.every((p) => p.right <= w));
 
     // Supporters.
     const sup = await page.evaluate(() => {
       const tiles = [...document.querySelectorAll(".fides-manifesto__tile")];
-      return { declared: +document.querySelector(".fides-manifesto__tiles").dataset.fidesManifestoCount, names: tiles.map((t) => t.querySelector(".fides-ds-visually-hidden").textContent.trim()), hrefs: tiles.map((t) => (t.querySelector("a") || {}).href || ""), tiles: tiles.map((t) => { const a = t.querySelector(".fides-manifesto__tile-body"); const b = a.getBoundingClientRect(); const img = a.querySelector("img"); const name = a.querySelector(".fides-manifesto__name"); const vis = (e) => !!e && !e.hidden && getComputedStyle(e).display !== "none"; return { x: Math.round(b.left), y: Math.round(b.top + scrollY), w: Math.round(b.width), h: Math.round(b.height), right: Math.round(b.right), img: !!img, imgFit: img ? getComputedStyle(img).objectFit : "", imgW: img ? Math.round(img.getBoundingClientRect().width) : 0, imgH: img ? Math.round(img.getBoundingClientRect().height) : 0, nameShown: vis(name), nameText: name ? name.textContent.trim() : "", id: a.dataset.orgId || "" }; }) };
+      return { declared: +document.querySelector(".fides-manifesto__tiles").dataset.fidesManifestoCount, names: tiles.map((t) => t.querySelector(".fides-manifesto__name").textContent.trim()), hrefs: tiles.map((t) => (t.querySelector("a") || {}).href || ""), tiles: tiles.map((t) => { const a = t.querySelector(".fides-manifesto__tile-body"); const b = a.getBoundingClientRect(); const img = a.querySelector("img"); const name = a.querySelector(".fides-manifesto__name"); const vis = (e) => !!e && !e.hidden && getComputedStyle(e).display !== "none"; return { x: Math.round(b.left), y: Math.round(b.top + scrollY), w: Math.round(b.width), h: Math.round(b.height), right: Math.round(b.right), img: !!img, imgFit: img ? getComputedStyle(img).objectFit : "", imgW: img ? Math.round(img.getBoundingClientRect().width) : 0, imgH: img ? Math.round(img.getBoundingClientRect().height) : 0, nameShown: vis(name), nameText: name ? name.textContent.trim() : "", id: a.dataset.orgId || "", natW: img ? img.naturalWidth : 0, natH: img ? img.naturalHeight : 0, capShown: vis(a.querySelector(".fides-manifesto__caption")), capText: (a.querySelector(".fides-manifesto__caption") || {}).textContent || "", capSize: a.querySelector(".fides-manifesto__caption") ? getComputedStyle(a.querySelector(".fides-manifesto__caption")).fontSize : "", capBelow: img && a.querySelector(".fides-manifesto__caption") ? a.querySelector(".fides-manifesto__caption").getBoundingClientRect().top >= img.getBoundingClientRect().bottom - 1 : false, imgBox: img ? [img.getBoundingClientRect().width, img.getBoundingClientRect().height] : [0, 0], visibleNames: [...a.querySelectorAll(".fides-manifesto__name, .fides-manifesto__caption")].filter(vis).length }; }) };
     });
     check(`${tag}: all supporters are in one gallery without paging`, sup.declared > 0 && sup.names.length === sup.declared && (await page.locator("text=/show all|load more|next page/i").count()) === 0, `${sup.names.length}/${sup.declared}`);
     const coll = new Intl.Collator("en");
@@ -100,6 +135,14 @@ const TINY = png(16, 16, [200, 60, 60]);
       check(`${tag}: organizations without a logo get a name tile`, ["org:adpriva", "org:hypermine"].every((id) => byId[id] && !byId[id].img && byId[id].nameShown), JSON.stringify([byId["org:adpriva"], byId["org:hypermine"]]));
       check(`${tag}: a broken logo is replaced by the name tile`, byId["org:city-of-vancouver"] && !byId["org:city-of-vancouver"].img && byId["org:city-of-vancouver"].nameText === "City of Vancouver", JSON.stringify(byId["org:city-of-vancouver"]));
       check(`${tag}: a logo too small to look sharp is replaced by the name tile`, byId["org:idcontrol"] && !byId["org:idcontrol"].img && byId["org:idcontrol"].nameText === "ID Control", JSON.stringify(byId["org:idcontrol"]));
+      const capW = w >= 768 ? 160 : 110, capH = w >= 768 ? 40 : 36;
+      const logos = sup.tiles.filter((t) => t.img);
+      check(`${tag}: every logo stays within ${capW} x ${capH}px, keeps its proportions and is never scaled up`, logos.length > 20 && logos.every((t) => t.imgBox[0] <= capW + 0.5 && t.imgBox[1] <= capH + 0.5 && Math.abs(t.imgBox[0] / t.imgBox[1] - t.natW / t.natH) < 0.03 && t.imgBox[0] <= t.natW + 0.5 && t.imgBox[1] <= t.natH + 0.5), JSON.stringify(logos.filter((t) => !(t.imgBox[0] <= capW + 0.5 && t.imgBox[1] <= capH + 0.5 && t.imgBox[0] <= t.natW + 0.5)).slice(0, 2)));
+      const wide = byId["org:banqup"], square = byId["org:2060"];
+      check(`${tag}: a wide logo fills the cap width (or its tile) and a square one the cap height`, Math.abs(wide.imgBox[0] - Math.min(capW, wide.w - 26)) < 1 && Math.abs(square.imgBox[1] - capH) < 1, JSON.stringify([wide.imgBox, square.imgBox]));
+      const small = sup.tiles.find((t) => t.nameText === "Digidentity" || t.capText === "Digidentity");
+      check(`${tag}: a small favicon keeps its natural 34px size`, !small || (small.img && Math.round(small.imgBox[0]) === 34 && Math.round(small.imgBox[1]) === 34), JSON.stringify(small));
+      check(`${tag}: a logo tile shows a modest 13px name below the logo; a name tile shows its name once`, logos.every((t) => t.capShown && t.capSize === "13px" && t.capBelow && t.capText.trim().length > 0 && t.visibleNames === 1) && sup.tiles.filter((t) => !t.img).every((t) => t.nameShown && !t.capShown && t.visibleNames === 1), JSON.stringify(sup.tiles.filter((t) => t.visibleNames !== 1).slice(0, 2)));
       check(`${tag}: wide and square logos keep their proportions inside the tile (contain, within the tile)`, ["org:banqup", "org:2060"].every((id) => byId[id] && byId[id].img && byId[id].imgFit === "contain" && byId[id].imgW <= byId[id].w && byId[id].imgH <= byId[id].h), JSON.stringify([byId["org:banqup"], byId["org:2060"]]));
     }
 
@@ -122,6 +165,14 @@ const TINY = png(16, 16, [200, 60, 60]);
       return { right: Math.round(b.right), w: Math.round(b.width), h: Math.round(b.height), sw: document.documentElement.scrollWidth - document.documentElement.clientWidth, over: name.scrollWidth - name.clientWidth };
     });
     check(`${tag}: a very long name wraps inside its tile without overflow`, long.right <= w && long.sw <= 0 && long.over <= 1, JSON.stringify(long));
+    const longCap = await page.evaluate(() => {
+      const cap = [...document.querySelectorAll(".fides-manifesto__caption")].find((c) => getComputedStyle(c).display !== "none");
+      const tile = cap.closest(".fides-manifesto__tile-body");
+      cap.textContent = "International Association for Digital Identity and Trusted Credential Interoperability Supercalifragilisticexpialidocious-Foundation";
+      const b = tile.getBoundingClientRect();
+      return { right: Math.round(b.right), sw: document.documentElement.scrollWidth - document.documentElement.clientWidth, over: cap.scrollWidth - cap.clientWidth };
+    });
+    check(`${tag}: a very long name under a logo wraps inside its tile without overflow`, longCap.right <= w && longCap.sw <= 0 && longCap.over <= 1, JSON.stringify(longCap));
     await page.reload({ waitUntil: "load" });
     await page.locator(".fides-manifesto__tile").first().waitFor();
 
@@ -167,8 +218,8 @@ const TINY = png(16, 16, [200, 60, 60]);
     for (let n = 0; n < 90; n += 1) {
       await page.keyboard.press("Tab");
       await page.waitForTimeout(60);
-      const f = await page.evaluate(() => { const e = document.activeElement; if (!e || !e.closest(".fides-manifesto")) return null; const cs = getComputedStyle(e); const b = e.getBoundingClientRect(); const kind = e.classList.contains("fides-manifesto__tile-body") ? "tile" : e.classList.contains("fides-manifesto__link") ? "link" : "button"; return { kind, label: (e.querySelector(".fides-ds-visually-hidden") || e).textContent.trim().slice(0, 24), ow: cs.outlineWidth, os: cs.outlineStyle, oc: cs.outlineColor, cta: !!e.closest(".fides-manifesto__cta"), inView: b.top >= -1 && b.bottom <= innerHeight + 1 }; });
-      if (f && !f.inView) { await page.waitForTimeout(700); f.inView = await page.evaluate(() => { const b = document.activeElement.getBoundingClientRect(); return b.top >= -1 && b.bottom <= innerHeight + 1; }); }
+      const f = await page.evaluate(() => { const e = document.activeElement; if (!e || !e.closest(".fides-manifesto")) return null; const cs = getComputedStyle(e); const b = e.getBoundingClientRect(); const kind = e.classList.contains("fides-manifesto__tile-body") ? "tile" : e.classList.contains("fides-manifesto__link") ? "link" : "button"; return { kind, label: (e.querySelector(".fides-manifesto__name") || e).textContent.trim().slice(0, 24), ow: cs.outlineWidth, os: cs.outlineStyle, oc: cs.outlineColor, cta: !!e.closest(".fides-manifesto__cta"), inView: b.top >= -1 && b.bottom <= innerHeight + 1 }; });
+      if (f && !f.inView) { for (let k = 0; k < 10 && !f.inView; k += 1) { await page.waitForTimeout(300); f.inView = await page.evaluate(() => { const b = document.activeElement.getBoundingClientRect(); return b.top >= -1 && b.bottom <= innerHeight + 1; }); } }
       if (f) { order.push(f); if (order.length === 4 && w === WIDTHS[0]) await page.screenshot({ path: path.join(SHOTS, `manifesto-focus-tile-${w}.png`) }); if (f.kind === "button" && f.cta) break; }
     }
     const kinds = order.map((o) => o.kind).join(",");
@@ -180,7 +231,7 @@ const TINY = png(16, 16, [200, 60, 60]);
     for (const id of ["org:credenco", "org:hypermine"]) {
       await page.goto(PAGE, { waitUntil: "load" });
       const link = page.locator(`a.fides-manifesto__tile-body[data-org-id='${id}']`);
-      const name = ((await link.locator(".fides-ds-visually-hidden").textContent()) || "").trim();
+      const name = ((await link.locator(".fides-manifesto__name").textContent()) || "").trim();
       await link.scrollIntoViewIfNeeded();
       await link.click();
       await page.waitForURL(/organization\/\?org=/, { timeout: 30000 });
