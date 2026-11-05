@@ -31,7 +31,8 @@ export LEARN_BACKUP_DIR="${LEARN_BACKUP_DIR:-$PILOT_BACKUP_DIR}"
 export PILOT_PACKAGE_MANIFEST="${PILOT_PACKAGE_MANIFEST:-$SEED/../manifest.json}"
 
 # create-learn-pages.php reads ./learn next to itself.
-run() { $WP eval-file "$1"; }
+# WP is a command string and may contain quoted paths with spaces.
+run() { eval "$WP eval-file \"\$1\""; }
 
 echo "== preflight (base /$PILOT_BASE/)"
 run "$SEED/staging/preflight.php"
@@ -43,7 +44,7 @@ echo; echo "== pages"
 run "$SEED/create-pages.php"
 
 echo; echo "== Learn pages"
-if [[ "$MODE" == "dry-run" ]] && [[ "$($WP eval "echo get_page_by_path('$PILOT_BASE') ? 1 : 0;")" != "1" ]]; then
+if [[ "$MODE" == "dry-run" ]] && [[ "$(eval "$WP eval \"echo get_page_by_path('$PILOT_BASE') ? 1 : 0;\"")" != "1" ]]; then
   echo "dry-run: /$PILOT_BASE/ does not exist yet, so the Learn pages cannot be previewed (apply creates the parent first)."
 else
   run "$SEED/create-learn-pages.php"

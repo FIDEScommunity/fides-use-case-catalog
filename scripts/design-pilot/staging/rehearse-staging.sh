@@ -50,11 +50,11 @@ PILOT_SLUGS="fides-community-tools-tiles fides-use-case-catalog fides-organizati
 for item in "$PILOT_SITE/wp-content/plugins/"*; do                                          # third-party plugins: links to the existing copies (read only)
   name="$(basename "$item")"
   case " $PILOT_SLUGS " in *" $name "*) continue;; esac
-  [[ -e "$item" ]] && ln -s "$(cd "$item" && pwd -P)" "$RE_SITE/wp-content/plugins/$name" 2>/dev/null || true
+  [[ -e "$item" ]] && ln -s "$(python3 -c 'import os,sys;print(os.path.realpath(sys.argv[1]))' "$item")" "$RE_SITE/wp-content/plugins/$name" 2>/dev/null || true
 done
 for item in "$PILOT_SITE/wp-content/themes/"*; do
   name="$(basename "$item")"; [[ "$name" == "blocksy-child" ]] && continue
-  [[ -e "$item" ]] && ln -s "$(cd "$item" && pwd -P)" "$RE_SITE/wp-content/themes/$name" 2>/dev/null || true
+  [[ -e "$item" ]] && ln -s "$(python3 -c 'import os,sys;print(os.path.realpath(sys.argv[1]))' "$item")" "$RE_SITE/wp-content/themes/$name" 2>/dev/null || true
 done
 for dir in uploads languages; do [[ -e "$PILOT_SITE/wp-content/$dir" ]] && ln -s "$(cd "$PILOT_SITE/wp-content/$dir" && pwd -P)" "$RE_SITE/wp-content/$dir"; done
 cp "$PILOT_SITE/wp-content/index.php" "$RE_SITE/wp-content/index.php" 2>/dev/null || true
@@ -99,7 +99,8 @@ echo $! >> "$RE_PID"
 for _ in $(seq 1 30); do curl -s -o /dev/null "$RE_URL/" && break; sleep 1; done
 curl -s -o /dev/null -w "front page HTTP %{http_code}\n" "$RE_URL/"
 
-SEED="WP=\"$PHP_BIN -c $PHP_INI -d xdebug.mode=off -d memory_limit=1024M $WP_CLI_PHAR --path=$RE_SITE\" PILOT_BACKUP_DIR=$RE_ROOT/backups bash $PKG/seed/seed.sh"
+RE_WP="$(printf "%q " "$PHP_BIN" -c "$PHP_INI" -d xdebug.mode=off -d memory_limit=1024M "$WP_CLI_PHAR" --path="$RE_SITE")"
+SEED="env WP=$(printf %q "$RE_WP") PILOT_BACKUP_DIR=$(printf %q "$RE_ROOT/backups") bash $(printf %q "$PKG/seed/seed.sh")"
 run_seed() { eval "$SEED $1"; }
 
 echo "== 4. Preflight, dry-run, apply, repeat"
