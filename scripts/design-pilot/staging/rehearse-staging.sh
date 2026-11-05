@@ -5,6 +5,9 @@
 # It never contacts staging and never touches the pilot site or its database.
 #
 #   rehearse-staging.sh [package dir]      default: staging-package/latest
+#   LAYOUT=standalone (default)            the site is its own WordPress install: files in <docroot>/design-review/, home_url()
+#                                          = http://localhost:10089/design-review, pilot pages at the root of that site
+#   LAYOUT=subpath                         the earlier layout: site at the domain root, pilot pages below /design-review/
 #   KEEP=1 rehearse-staging.sh ...         leave the rehearsal site and server running afterwards
 #   rehearse-staging.sh --teardown         stop the server, drop the scratch database, delete the rehearsal files
 set -euo pipefail
@@ -12,12 +15,19 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$HERE/../env.sh"
 
 RE_ROOT="$PILOT_ROOT/rehearsal"
-RE_SITE="$RE_ROOT/wordpress"
+LAYOUT="${LAYOUT:-standalone}"
 RE_DB="${RE_DB:-fides_design_review_rehearsal}"
 RE_PORT="${RE_PORT:-10089}"
 RE_URL="http://localhost:$RE_PORT"
 RE_PID="$RE_ROOT/server.pids"
-BASE_SEG="design-review"
+if [[ "$LAYOUT" == "standalone" ]]; then
+  RE_DOCROOT="$RE_ROOT/docroot"; RE_SITE="$RE_DOCROOT/design-review"; RE_HOME="$RE_URL/design-review"
+  RE_ROUTER="$HERE/router-standalone.php"; BASE_SEG=""; PP=""          # PP: path prefix of the seeded pages inside WordPress
+else
+  RE_DOCROOT="$RE_ROOT/wordpress"; RE_SITE="$RE_DOCROOT"; RE_HOME="$RE_URL"
+  RE_ROUTER="$HERE/../router.php"; BASE_SEG="design-review"; PP="design-review/"
+fi
+ROOT_URL="$RE_URL/design-review"                                        # where the pilot answers in both layouts
 re_wp() { "$PHP_BIN" -c "$PHP_INI" -d xdebug.mode=off -d memory_limit=1024M "$WP_CLI_PHAR" --path="$RE_SITE" "$@"; }
 
 stop_server() {
@@ -44,6 +54,7 @@ FAIL=0; ok() { echo "ok - $1"; }; bad() { echo "not ok - $1"; FAIL=$((FAIL+1)); 
 echo "== 1. Build the rehearsal site from the package ($PKG)"
 stop_server
 rm -rf "$RE_ROOT"; mkdir -p "$RE_SITE"
+echo "layout: $LAYOUT, home_url() will be $RE_HOME"
 rsync -a --exclude='wp-content' --exclude='wp-config.php' "$PILOT_SITE/" "$RE_SITE/"       # real copies: symlinked core files would resolve back to the pilot
 mkdir -p "$RE_SITE/wp-content/plugins" "$RE_SITE/wp-content/themes" "$RE_SITE/wp-content/mu-plugins"
 PILOT_SLUGS="fides-community-tools-tiles fides-use-case-catalog fides-organization-catalog fides-wallet-catalog fides-credential-catalog fides-vocabulary-glossary fides-template-pilot"
@@ -76,31 +87,41 @@ pilot_mysql -e "DROP DATABASE IF EXISTS \`$RE_DB\`; CREATE DATABASE \`$RE_DB\` C
   $c = preg_replace("/define\(\s*.FIDES_DESIGN_PILOT.\s*,[^;]*;\n?/", "", $c);
   $c = preg_replace("/define\(\s*.WP_ENVIRONMENT_TYPE.\s*,[^;]*;/", "define( \x27WP_ENVIRONMENT_TYPE\x27, \x27staging\x27 );", $c);
   file_put_contents($dst, $c);
-' "$PILOT_SITE/wp-config.php" "$RE_SITE/wp-config.php" "$RE_DB" "$RE_URL"
+' "$PILOT_SITE/wp-config.php" "$RE_SITE/wp-config.php" "$RE_DB" "$RE_HOME"
 [[ "$(re_wp config get DB_NAME)" == "$RE_DB" ]] && ok "rehearsal uses database $RE_DB (not the pilot database)" || { bad "rehearsal config"; exit 1; }
 [[ "$(re_wp eval 'echo ABSPATH;')" == "$RE_SITE/" ]] && ok "ABSPATH is the rehearsal copy" || { bad "ABSPATH points elsewhere"; exit 1; }
-re_wp search-replace "http://localhost:10088" "$RE_URL" --all-tables --skip-columns=guid --quiet
-# A staging site before the pilot: no pilot pages, no pilot options.
+re_wp search-replace "http://localhost:10088" "$RE_HOME" --all-tables --skip-columns=guid --quiet
+# A site before the pilot: no pilot pages, no pilot options. Standalone starts as an empty site: no page at all (no form pages,
+# no glossary, no front page), so everything the pilot needs on it has to come from the package.
+if [[ "$LAYOUT" == "standalone" ]]; then
+  re_wp eval '
+    $ids = get_posts(array("post_type" => "page", "post_status" => "any", "numberposts" => -1, "fields" => "ids"));
+    foreach ($ids as $id) { wp_delete_post($id, true); }
+    foreach (array("fides_use_case_featured", "fides_ds_updates", "fides_ds_editorial_links", "fides_ds_editorial_links_seed") as $o) { delete_option($o); }
+    update_option("show_on_front", "posts"); update_option("page_on_front", 0); update_option("page_for_posts", 0);
+    echo count($ids) . " pages and the pilot options removed (empty standalone site)\n";'
+else
 re_wp eval '
   $ids = get_posts(array("post_type" => "page", "post_status" => "any", "numberposts" => -1, "fields" => "ids", "meta_key" => "_fides_design_pilot"));
   foreach ($ids as $id) { wp_delete_post($id, true); }
   foreach (array("fides_use_case_featured", "fides_ds_updates", "fides_ds_editorial_links", "fides_ds_editorial_links_seed") as $o) { delete_option($o); }
   echo count($ids) . " pilot pages and the pilot options removed\n";'
+fi
 re_wp plugin activate fides-community-tools-tiles fides-use-case-catalog fides-organization-catalog fides-wallet-catalog fides-credential-catalog fides-vocabulary-glossary >/dev/null 2>&1 || true
 re_wp rewrite flush >/dev/null 2>&1 || true
 
 echo "== 3. Start the rehearsal server on $RE_URL"
 export PHP_CLI_SERVER_WORKERS=6
-"$PHP_BIN" -c "$PHP_INI" -d xdebug.mode=off -S "127.0.0.1:$RE_PORT" -t "$RE_SITE" "$HERE/../router.php" >"$RE_ROOT/server.log" 2>&1 &
+"$PHP_BIN" -c "$PHP_INI" -d xdebug.mode=off -S "127.0.0.1:$RE_PORT" -t "$RE_DOCROOT" "$RE_ROUTER" >"$RE_ROOT/server.log" 2>&1 &
 echo $! > "$RE_PID"
-"$PHP_BIN" -c "$PHP_INI" -d xdebug.mode=off -S "[::1]:$RE_PORT" -t "$RE_SITE" "$HERE/../router.php" >>"$RE_ROOT/server.log" 2>&1 &
+"$PHP_BIN" -c "$PHP_INI" -d xdebug.mode=off -S "[::1]:$RE_PORT" -t "$RE_DOCROOT" "$RE_ROUTER" >>"$RE_ROOT/server.log" 2>&1 &
 echo $! >> "$RE_PID"
 [[ "${KEEP:-0}" == "1" ]] || trap 'stop_server' EXIT
-for _ in $(seq 1 30); do curl -s -o /dev/null "$RE_URL/" && break; sleep 1; done
-curl -s -o /dev/null -w "front page HTTP %{http_code}\n" "$RE_URL/"
+for _ in $(seq 1 30); do curl -s -o /dev/null "$RE_HOME/" && break; sleep 1; done
+curl -s -o /dev/null -w "front page HTTP %{http_code}\n" "$RE_HOME/"
 
 RE_WP="$(printf "%q " "$PHP_BIN" -c "$PHP_INI" -d xdebug.mode=off -d memory_limit=1024M "$WP_CLI_PHAR" --path="$RE_SITE")"
-SEED="env WP=$(printf %q "$RE_WP") PILOT_BACKUP_DIR=$(printf %q "$RE_ROOT/backups") bash $(printf %q "$PKG/seed/seed.sh")"
+SEED="env PILOT_LAYOUT=$LAYOUT WP=$(printf %q "$RE_WP") PILOT_BACKUP_DIR=$(printf %q "$RE_ROOT/backups") bash $(printf %q "$PKG/seed/seed.sh")"
 run_seed() { eval "$SEED $1"; }
 
 echo "== 4. Preflight, dry-run, apply, repeat"
@@ -114,27 +135,28 @@ out2="$(run_seed apply 2>&1)"; echo "$out2" | grep '^SUMMARY'
 echo "$out2" | grep -E '^SUMMARY' | grep -vq '"created"' && ok "second apply creates nothing (idempotent)" || bad "second apply created pages"
 
 r="$(re_wp eval 'echo Fides_Wallet_Design::pilot_detail_base(), " ", Fides_Organization_Design::pilot_detail_base(), " ", Fides_Credential_Design::pilot_detail_base();')"
-[[ "$r" == "$RE_URL/$BASE_SEG/wallet/ $RE_URL/$BASE_SEG/organization/ $RE_URL/$BASE_SEG/credential/" ]] && ok "detail routes of wallet, organization and credential sit below /$BASE_SEG/" || bad "detail routes wrong ($r)"
+[[ "$r" == "$ROOT_URL/wallet/ $ROOT_URL/organization/ $ROOT_URL/credential/" ]] && ok "detail routes of wallet, organization and credential are $ROOT_URL/<type>/ (no doubled path)" || bad "detail routes wrong ($r)"
 
 echo "== 5. Editorial changes survive a re-seed"
-EDIT_ID="$(re_wp eval 'echo get_page_by_path("'$BASE_SEG'/about-fides")->ID;')"
-LEARN_ID="$(re_wp eval 'echo get_page_by_path("'$BASE_SEG'/learn/topics")->ID;')"
+EDIT_ID="$(re_wp eval 'echo get_page_by_path("'$PP'about-fides")->ID;')"
+LEARN_ID="$(re_wp eval 'echo get_page_by_path("'$PP'learn/topics")->ID;')"
 re_wp eval "wp_update_post(array('ID' => $EDIT_ID, 'post_content' => get_post_field('post_content', $EDIT_ID) . \"\n<!-- editor change -->\"));
             wp_update_post(array('ID' => $LEARN_ID, 'post_title' => 'Topics (edited on staging)'));"
 out3="$(run_seed apply 2>&1)"; echo "$out3" | grep -E 'skipped-edited'
-echo "$out3" | grep -q "skipped-edited.*$BASE_SEG/about-fides" && ok "edited pilot page is skipped and reported" || bad "edited pilot page not reported"
+echo "$out3" | grep -q "skipped-edited.*${PP}about-fides" && ok "edited pilot page is skipped and reported" || bad "edited pilot page not reported"
 echo "$out3" | grep -qi "skipped-edited.*topics" && ok "edited Learn page is skipped and reported" || bad "edited Learn page not reported"
 [[ "$(re_wp eval "echo strpos(get_post_field('post_content', $EDIT_ID), 'editor change') !== false ? 'kept' : 'lost';")" == "kept" ]] && ok "editor change is still in the page" || bad "editor change was overwritten"
 [[ "$(re_wp eval "echo get_the_title($LEARN_ID);")" == "Topics (edited on staging)" ]] && ok "edited Learn title is kept" || bad "Learn title overwritten"
 re_wp eval 'update_option("fides_use_case_featured", array("primary" => "editor-choice", "fallback" => ""));' >/dev/null
 run_seed apply >/dev/null 2>&1
 [[ "$(re_wp eval 'echo get_option("fides_use_case_featured")["primary"];')" == "editor-choice" ]] && ok "an editor's featured use case is kept" || bad "featured option overwritten"
+PARENT_ID=0; [[ "$LAYOUT" == "subpath" ]] && PARENT_ID="$(re_wp eval "echo get_page_by_path('design-review')->ID;")"
 # A page at a pilot path without a marker is never replaced on a non-local site.
-re_wp eval "wp_delete_post(get_page_by_path('$BASE_SEG/manifesto')->ID, true); wp_insert_post(array('post_type'=>'page','post_status'=>'publish','post_title'=>'Manifesto placeholder (not seeded)','post_name'=>'manifesto','post_parent'=>get_page_by_path('$BASE_SEG')->ID,'post_content'=>'placeholder'));" >/dev/null
+re_wp eval "wp_delete_post(get_page_by_path('${PP}manifesto')->ID, true); wp_insert_post(array('post_type'=>'page','post_status'=>'publish','post_title'=>'Manifesto placeholder (not seeded)','post_name'=>'manifesto','post_parent'=>$PARENT_ID,'post_content'=>'placeholder'));" >/dev/null
 out4="$(run_seed apply 2>&1)"; echo "$out4" | grep -E 'skipped-unmarked'
-echo "$out4" | grep -q "skipped-unmarked.*$BASE_SEG/manifesto" && ok "an unmarked page at a pilot path is kept and reported" || bad "unmarked page not reported"
-[[ "$(re_wp eval "echo get_page_by_path('$BASE_SEG/manifesto')->post_content;")" == "placeholder" ]] && ok "the placeholder content is untouched" || bad "unmarked page was overwritten"
-re_wp eval "wp_delete_post(get_page_by_path('$BASE_SEG/manifesto')->ID, true);" >/dev/null
+echo "$out4" | grep -q "skipped-unmarked.*${PP}manifesto" && ok "an unmarked page at a pilot path is kept and reported" || bad "unmarked page not reported"
+[[ "$(re_wp eval "echo get_page_by_path('${PP}manifesto')->post_content;")" == "placeholder" ]] && ok "the placeholder content is untouched" || bad "unmarked page was overwritten"
+re_wp eval "wp_delete_post(get_page_by_path('${PP}manifesto')->ID, true);" >/dev/null
 run_seed apply 2>&1 | grep -E "created .*manifesto" >/dev/null && ok "after removing the placeholder the page is seeded again" || bad "manifesto page not recreated"
 echo "== 6. Production hosts and unlisted hosts are refused"
 r="$(PILOT_ALLOWED_HOSTS=fides.community,www.fides.community re_wp eval 'add_filter("home_url", static function () { return "https://fides.community"; }); require "'$PKG'/seed/staging/seed-guard.php"; fides_pilot_seed_context(); echo "allowed";' 2>&1 || true)"
@@ -142,8 +164,15 @@ echo "$r" | grep -q "Refusing to seed the production host" && ok "fides.communit
 r="$(PILOT_ALLOWED_HOSTS=example.org run_seed dry-run 2>&1 || true)"
 echo "$r" | grep -q "not in PILOT_ALLOWED_HOSTS" && ok "a host outside PILOT_ALLOWED_HOSTS is refused" || bad "unlisted host not refused"
 
+if [[ "$LAYOUT" == "standalone" ]]; then
+  for wrong in "$RE_URL/design-review/design-review/" "$RE_URL/"; do
+    r="$(PILOT_STANDALONE=1 re_wp eval 'add_filter("home_url", static function () { return "'$wrong'"; }); require "'$PKG'/seed/staging/seed-guard.php"; fides_pilot_seed_context(); echo "allowed";' 2>&1 || true)"
+    echo "$r" | grep -q "expected '/design-review'" && ok "standalone seed refuses home_url() $wrong" || bad "wrong home path not refused ($wrong: $r)"
+  done
+fi
+
 echo "== 7. External actions stay off"
-re_wp option update home "$RE_URL" >/dev/null; re_wp option update siteurl "$RE_URL" >/dev/null
+re_wp option update home "$RE_HOME" >/dev/null; re_wp option update siteurl "$RE_HOME" >/dev/null
 r="$(re_wp eval 'echo is_wp_error(wp_remote_post("https://api.github.com/repos/x/y/pulls", array("body" => "{}"))) ? "blocked" : "sent";')"
 [[ "$r" == "blocked" ]] && ok "write request to GitHub is blocked" || bad "GitHub write not blocked ($r)"
 r="$(re_wp eval 'echo is_wp_error(wp_remote_post("https://fides.community/wp-json/x", array("body" => "{}"))) ? "blocked" : "sent";')"
@@ -151,10 +180,10 @@ r="$(re_wp eval 'echo is_wp_error(wp_remote_post("https://fides.community/wp-jso
 r="$(re_wp eval 'echo wp_mail("someone@example.org", "x", "y") ? "sent" : "not sent";')"
 [[ "$r" == "not sent" ]] && ok "wp_mail sends nothing" || bad "mail was sent"
 
-echo "== 8. Browser checks on $RE_URL/$BASE_SEG/"
+echo "== 8. Browser checks on $ROOT_URL/"
 export PLAYWRIGHT_MODULE="${PLAYWRIGHT_MODULE:-/Users/victorvanderhulst/Projects/untp-demo/node_modules/playwright}"
 export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-$HOME/Library/Caches/ms-playwright}"
-if PILOT_URL="$RE_URL" PILOT_BASE="$BASE_SEG" node "$PKG/checks/rehearsal-checks.cjs" 2>&1 | tee "$RE_ROOT/browser.txt" | grep -E "^not ok|rehearsal checks"; then :; fi
+if PILOT_URL="$RE_URL" PILOT_LAYOUT="$LAYOUT" PILOT_BASE="${BASE_SEG:-design-review}" node "$PKG/checks/rehearsal-checks.cjs" 2>&1 | tee "$RE_ROOT/browser.txt" | grep -E "^not ok|rehearsal checks"; then :; fi
 grep -q "all rehearsal checks passed" "$RE_ROOT/browser.txt" && ok "browser checks passed ($(grep -c '^ok' "$RE_ROOT/browser.txt") checks)" || bad "browser checks failed"
 
 echo

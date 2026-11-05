@@ -14,6 +14,7 @@
  *    the current state is written to LEARN_BACKUP_DIR first.
  *
  * Environment (all optional):
+ *  PILOT_STANDALONE=1    standalone site (home_url() ends in /design-review): defaults become learn, start and no pilot base
  *  LEARN_BASE            route base without slashes at the ends   (fides-design-pilot/learn)
  *  LEARN_START_BASE      route base of the Explorer starting point (fides-design-pilot/start)
  *  LEARN_PILOT_BASE      base for links to the other pilot pages   (fides-design-pilot)
@@ -69,14 +70,22 @@ const LEARN_LAYOUT_META = array(
 );
 
 $here    = getenv('LEARN_SEED_DIR') ?: __DIR__ . '/learn';
-$base    = trim((string) (getenv('LEARN_BASE') ?: 'fides-design-pilot/learn'), '/');
-$start   = trim((string) (getenv('LEARN_START_BASE') ?: 'fides-design-pilot/start'), '/');
-$pilot   = trim((string) (getenv('LEARN_PILOT_BASE') ?: 'fides-design-pilot'), '/');
-$gloss   = '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/';
+$pctx    = fides_pilot_seed_context(); // also checks that a standalone site has the expected home path
+$sa      = $pctx['standalone'];
+$mount   = $pctx['mount']; // path of home_url(): '' at the domain root, '/design-review' for the standalone site
+$base    = trim((string) (getenv('LEARN_BASE') ?: ($sa ? 'learn' : 'fides-design-pilot/learn')), '/');
+$start   = trim((string) (getenv('LEARN_START_BASE') ?: ($sa ? 'start' : 'fides-design-pilot/start')), '/');
+$pilot   = $sa ? '' : trim((string) (getenv('LEARN_PILOT_BASE') ?: 'fides-design-pilot'), '/');
+$gloss   = $mount . '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/';
 $force   = array_filter(array_map('trim', explode(',', (string) getenv('LEARN_FORCE'))), 'strlen');
 $dry     = getenv('LEARN_DRY_RUN') === '1';
 $backup  = (string) (getenv('LEARN_BACKUP_DIR') ?: sys_get_temp_dir() . '/fides-learn-replaced');
-$tokens  = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => '/' . $pilot, '{{glossary}}' => $gloss);
+// Links and attributes carry the home path; settings that WordPress resolves against home_url() (editorial link targets) do not.
+$prefix  = static function (string $p) use ($mount): string {
+    return $mount . ($p === '' ? '' : '/' . $p);
+};
+$tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{glossary}}' => $gloss);
+$tokens_site = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => $pilot === '' ? '' : '/' . $pilot, '{{glossary}}' => '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/');
 
 $manifest = json_decode((string) file_get_contents($here . '/manifest.json'), true);
 if (! is_array($manifest) || empty($manifest['pages'])) {
@@ -292,7 +301,7 @@ foreach ($manifest['pages'] as $page) {
 // protection as pages: an option changed by an editor is skipped unless LEARN_FORCE contains "editorial-links".
 $el_file = $here . '/editorial-links.json';
 if (is_readable($el_file) && class_exists('Fides_DS_Editorial_Links')) {
-    $el_json    = json_decode(strtr((string) file_get_contents($el_file), $tokens), true);
+    $el_json    = json_decode(strtr((string) file_get_contents($el_file), $tokens_site), true);
     $el_desired = array('entries' => is_array($el_json['entries'] ?? null) ? $el_json['entries'] : array());
     $el_current = get_option(Fides_DS_Editorial_Links::OPTION, null);
     $el_hash    = (string) get_option('fides_ds_editorial_links_seed', '');

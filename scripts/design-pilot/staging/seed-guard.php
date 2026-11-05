@@ -4,7 +4,10 @@
  * (create-pages.php, create-learn-pages.php, preflight.php).
  *
  * Environment (all optional):
- *  PILOT_BASE           single path segment of the pilot routes   (fides-design-pilot; staging: design-review)
+ *  PILOT_BASE           single path segment of the pilot routes   (fides-design-pilot; subpath staging: design-review)
+ *  PILOT_STANDALONE=1   the pilot is its own WordPress site: home_url() already ends in PILOT_HOME_PATH, the pilot pages sit at
+ *                       the root of that site (no base segment), so /design-review/overview/ is page "overview".
+ *  PILOT_HOME_PATH      path home_url() must have in standalone mode      (/design-review)
  *  PILOT_ALLOWED_HOSTS  comma separated hosts that may be seeded  (localhost,127.0.0.1,staging.fides.community)
  *
  * The production hosts below are refused whatever PILOT_ALLOWED_HOSTS says.
@@ -30,15 +33,19 @@ function fides_pilot_host_allowed(): bool {
     return ! in_array($host, array('fides.community', 'www.fides.community'), true) && in_array($host, fides_pilot_allowed_hosts(), true);
 }
 
+function fides_pilot_standalone(): bool {
+    return getenv('PILOT_STANDALONE') === '1';
+}
+
+/** Path of home_url() without a trailing slash: '' for a site at the domain root, '/design-review' for the standalone site. */
+function fides_pilot_mount(): string {
+    return rtrim((string) wp_parse_url(home_url('/'), PHP_URL_PATH), '/');
+}
+
 /**
- * @return array{base:string,host:string,local:bool}
+ * @return array{base:string,host:string,local:bool,standalone:bool,mount:string}
  */
 function fides_pilot_seed_context(): array {
-    $base = trim((string) (getenv('PILOT_BASE') ?: 'fides-design-pilot'), '/');
-    if (preg_match('/^[a-z0-9][a-z0-9-]*$/', $base) !== 1) {
-        fwrite(STDERR, "PILOT_BASE must be a single lowercase path segment (got '{$base}').\n");
-        exit(1);
-    }
     $host = fides_pilot_host();
     if (in_array($host, array('fides.community', 'www.fides.community'), true)) {
         fwrite(STDERR, "Refusing to seed the production host {$host}.\n");
@@ -49,5 +56,21 @@ function fides_pilot_seed_context(): array {
         fwrite(STDERR, "Refusing to seed host {$host}: not in PILOT_ALLOWED_HOSTS (" . implode(',', fides_pilot_allowed_hosts()) . ").\n");
         exit(1);
     }
-    return array('base' => $base, 'host' => $host, 'local' => $local);
+    $standalone = fides_pilot_standalone();
+    $mount      = fides_pilot_mount();
+    if ($standalone) {
+        $expect = '/' . trim((string) (getenv('PILOT_HOME_PATH') ?: '/design-review'), '/');
+        if ($mount !== $expect) {
+            fwrite(STDERR, "Standalone mode: home_url() path is '{$mount}', expected '{$expect}' (no double path, no site at the domain root).\n");
+            exit(1);
+        }
+        $base = '';
+    } else {
+        $base = trim((string) (getenv('PILOT_BASE') ?: 'fides-design-pilot'), '/');
+        if (preg_match('/^[a-z0-9][a-z0-9-]*$/', $base) !== 1) {
+            fwrite(STDERR, "PILOT_BASE must be a single lowercase path segment (got '{$base}').\n");
+            exit(1);
+        }
+    }
+    return array('base' => $base, 'host' => $host, 'local' => $local, 'standalone' => $standalone, 'mount' => $mount);
 }

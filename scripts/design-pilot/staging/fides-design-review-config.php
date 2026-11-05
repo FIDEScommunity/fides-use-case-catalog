@@ -1,16 +1,20 @@
 <?php
 /**
  * Plugin Name: FIDES design review config (staging)
- * Description: Settings for the FIDES design pilot pages on a staging site under /design-review/: shell route mapping, noindex, and the disabled external actions. Does nothing outside the pilot routes except the outgoing-request and mail policy below.
+ * Description: Settings for the FIDES design pilot on a staging site: shell route mapping, noindex, and the disabled external actions. Works for a standalone WordPress site whose home_url() ends in /design-review (pilot pages at the site root) and, as before, for a pilot below another site's root.
  *
  * Install as a must-use plugin (wp-content/mu-plugins/). Optional constants (wp-config.php):
- *  FIDES_DESIGN_REVIEW_BASE            path segment of the pilot routes (default design-review)
+ *  FIDES_DESIGN_REVIEW_STANDALONE      true: the site IS the pilot (home_url() ends in /design-review, pilot pages at the root,
+ *                                      every request is a pilot request). Default: automatic, true when no BASE is set and the
+ *                                      path of home_url() is /design-review.
+ *  FIDES_DESIGN_REVIEW_BASE            subpath layout only: path segment of the pilot routes (default design-review)
  *  FIDES_DESIGN_REVIEW_OUTGOING        'blocklist' (default): no outgoing POST/PUT/PATCH/DELETE to GitHub or to the production
  *                                      site; 'strict': no outgoing write requests at all; 'off': no filter
  *  FIDES_DESIGN_REVIEW_ALLOW_MAIL      true allows wp_mail(); default: mail is not sent
  *  FIDES_DESIGN_REVIEW_LIVE_FALLBACK   origin for shell destinations that have no page on this site (default
  *                                      https://fides.community, '' hides those links)
- *  FIDES_DESIGN_REVIEW_SIGN_URL        Manifesto sign form URL (default: the form on this site's own /manifesto/ page)
+ *  FIDES_DESIGN_REVIEW_SIGN_URL        Manifesto sign form URL (default: standalone: the live site's form; subpath: the form on this
+ *                                      site's own /manifesto/ page)
  *  FIDES_DESIGN_REVIEW_BADGE           false hides the "Design review" badge
  */
 
@@ -19,15 +23,45 @@ if (! defined('ABSPATH')) {
 }
 
 if (! function_exists('fides_design_review_base')) {
-    /** Route base without slashes. */
+    /** True when this site is the pilot itself: home_url() ends in /design-review and the pilot pages sit at its root. */
+    function fides_design_review_standalone(): bool {
+        if (defined('FIDES_DESIGN_REVIEW_STANDALONE')) {
+            return (bool) FIDES_DESIGN_REVIEW_STANDALONE;
+        }
+        return ! defined('FIDES_DESIGN_REVIEW_BASE') && rtrim((string) wp_parse_url(home_url('/'), PHP_URL_PATH), '/') === '/design-review';
+    }
+
+    /** Route base without slashes ('' when standalone: the site root is the pilot). */
     function fides_design_review_base(): string {
+        if (fides_design_review_standalone()) {
+            return '';
+        }
         $base = defined('FIDES_DESIGN_REVIEW_BASE') ? (string) FIDES_DESIGN_REVIEW_BASE : 'design-review';
         $base = trim($base, '/');
         return preg_match('/^[a-z0-9][a-z0-9-]*$/', $base) === 1 ? $base : 'design-review';
     }
 
-    /** True while serving a page below the pilot base. */
+    /** Pilot route as a path below home_url(): '' or '/design-review' (subpath layout). */
+    function fides_design_review_prefix(): string {
+        $base = fides_design_review_base();
+        return $base === '' ? '' : '/' . $base;
+    }
+
+    /** Full URL of a pilot page, e.g. fides_design_review_url('overview/'). Never doubles the home path. */
+    function fides_design_review_url(string $rest = ''): string {
+        return home_url(fides_design_review_prefix() . '/' . ltrim($rest, '/'));
+    }
+
+    /** Origin for destinations that have no page on this site. */
+    function fides_design_review_live_origin(): string {
+        return rtrim(defined('FIDES_DESIGN_REVIEW_LIVE_FALLBACK') ? (string) FIDES_DESIGN_REVIEW_LIVE_FALLBACK : 'https://fides.community', '/');
+    }
+
+    /** True while serving a page of the pilot (every page when standalone). */
     function fides_design_review_is_pilot_request(): bool {
+        if (fides_design_review_standalone()) {
+            return true;
+        }
         $path = (string) wp_parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
         $home = (string) wp_parse_url(home_url('/'), PHP_URL_PATH);
         $rel  = '/' . ltrim(substr($path, strlen(rtrim($home, '/'))), '/');
@@ -76,7 +110,20 @@ add_filter(
         }
         $map = fides_design_review_route_map();
         if (isset($map[ $path ])) {
-            return home_url(str_replace('{pilot}', '/' . fides_design_review_base(), $map[ $path ]));
+            $target = $map[ $path ];
+            if ($path === '/' && fides_design_review_standalone()) {
+                return home_url('/'); // the pilot homepage is the front page of the standalone site
+            }
+            if (strpos($target, '{pilot}') === 0) {
+                return home_url(str_replace('{pilot}', fides_design_review_prefix(), $target));
+            }
+            $local = get_page_by_path(trim($target, '/'), OBJECT, 'page');
+            if ($local instanceof WP_Post && $local->post_status === 'publish') {
+                return home_url($target);
+            }
+            // A page this site does not have (standalone): the live page at the original path, read-only link.
+            $live = fides_design_review_live_origin();
+            return $live === '' ? '' : $live . $path;
         }
         // A proposed destination without a page on this site stays hidden.
         if ($url === '') {
@@ -85,8 +132,8 @@ add_filter(
         if (get_page_by_path(trim((string) $path, '/')) instanceof WP_Post) {
             return $url;
         }
-        $live = defined('FIDES_DESIGN_REVIEW_LIVE_FALLBACK') ? (string) FIDES_DESIGN_REVIEW_LIVE_FALLBACK : 'https://fides.community';
-        return $live === '' ? '' : rtrim($live, '/') . $path;
+        $live = fides_design_review_live_origin();
+        return $live === '' ? '' : $live . $path;
     },
     10,
     2
@@ -98,7 +145,17 @@ foreach (array('wallet' => 'wallet', 'organization' => 'organization', 'credenti
     add_filter(
         'fides_' . $fides_pilot_type . '_pilot_detail_base',
         static function () use ($fides_pilot_slug) {
-            return home_url('/' . fides_design_review_base() . '/' . $fides_pilot_slug . '/');
+            return fides_design_review_url($fides_pilot_slug . '/');
+        }
+    );
+}
+
+// Standalone: this site has no sign form (a WPForms form is site content), so the sign button opens the live form.
+if (fides_design_review_standalone() && ! (defined('FIDES_DESIGN_REVIEW_SIGN_URL') && (string) FIDES_DESIGN_REVIEW_SIGN_URL !== '') && fides_design_review_live_origin() !== '') {
+    add_filter(
+        'fides_manifesto_sign_url',
+        static function () {
+            return fides_design_review_live_origin() . '/manifesto/#ratify-the-fides-manifesto-today';
         }
     );
 }
@@ -165,10 +222,21 @@ add_filter(
     }
 );
 
+// The same instruction as a header, for responses without a <head> (feeds, REST, files served through WordPress).
+add_action(
+    'send_headers',
+    static function () {
+        if (fides_design_review_is_pilot_request()) {
+            header('X-Robots-Tag: noindex, nofollow', true);
+        }
+    }
+);
+
 add_filter(
     'robots_txt',
     static function ($output) {
-        $line = 'Disallow: ' . wp_parse_url(home_url('/' . fides_design_review_base() . '/'), PHP_URL_PATH);
+        // Crawlers read robots.txt at the domain root; this line only matters when that root is served by this site.
+        $line = 'Disallow: ' . wp_parse_url(fides_design_review_url(), PHP_URL_PATH);
         return rtrim((string) $output) . "\n\nUser-agent: *\n" . $line . "\n";
     }
 );

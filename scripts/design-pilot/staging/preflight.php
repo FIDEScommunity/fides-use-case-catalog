@@ -11,9 +11,12 @@ if (! defined('ABSPATH')) {
     exit(1);
 }
 require __DIR__ . '/seed-guard.php';
-putenv('PILOT_BASE=' . (getenv('PILOT_BASE') ?: 'design-review'));
+if (! fides_pilot_standalone()) {
+    putenv('PILOT_BASE=' . (getenv('PILOT_BASE') ?: 'design-review'));
+}
 $ctx  = fides_pilot_seed_context(); // refuses production and hosts outside the allow-list
 $base = $ctx['base'];
+$sa   = $ctx['standalone'];
 $rows = array();
 $add  = static function (string $level, string $check, string $detail = '') use (&$rows) {
     $rows[] = array($level, $check, $detail);
@@ -21,6 +24,10 @@ $add  = static function (string $level, string $check, string $detail = '') use 
 
 // Site basics.
 $add('PASS', 'host allowed for seeding', $ctx['host']);
+$add($sa ? 'PASS' : 'INFO', 'layout', $sa ? 'standalone: home_url() ' . home_url() . ' (pilot pages at the site root)' : 'subpath /' . $base . '/');
+if ($sa) {
+    $add(rtrim(site_url(), '/') === rtrim(home_url(), '/') ? 'PASS' : 'WARN', 'site_url equals home_url', site_url() . ' / ' . home_url());
+}
 $add(get_option('permalink_structure') !== '' ? 'PASS' : 'FAIL', 'pretty permalinks', (string) get_option('permalink_structure'));
 $add('INFO', 'environment type', function_exists('wp_get_environment_type') ? wp_get_environment_type() : 'unknown');
 $add(get_option('blog_public') ? 'INFO' : 'PASS', 'site search visibility', get_option('blog_public') ? 'site is indexable; pilot pages still get noindex from the config mu-plugin' : 'discouraged');
@@ -56,7 +63,7 @@ foreach (array('Fides_Catalog_SSR_Renderer', 'Fides_DS_Site_Shell', 'Fides_DS_Le
 
 // Config mu-plugin.
 if (function_exists('fides_design_review_base')) {
-    $add(fides_design_review_base() === $base ? 'PASS' : 'FAIL', 'config mu-plugin base matches PILOT_BASE', fides_design_review_base() . ' / ' . $base);
+    $add(fides_design_review_base() === $base && fides_design_review_standalone() === $sa ? 'PASS' : 'FAIL', 'config mu-plugin layout matches the seed', (fides_design_review_standalone() ? 'standalone' : 'subpath ' . fides_design_review_base()) . ' / ' . ($sa ? 'standalone' : 'subpath ' . $base));
     $add('INFO', 'outgoing writes', defined('FIDES_DESIGN_REVIEW_OUTGOING') ? (string) FIDES_DESIGN_REVIEW_OUTGOING : 'blocklist (default)');
     $add('INFO', 'mail', defined('FIDES_DESIGN_REVIEW_ALLOW_MAIL') && FIDES_DESIGN_REVIEW_ALLOW_MAIL ? 'allowed' : 'not sent');
 } else {
@@ -78,27 +85,48 @@ $deps = array(
     'issuer-catalog'      => array('WARN', 'Issuer catalog'),
     'relying-party-websites' => array('WARN', 'Relying party catalog'),
 );
+// Standalone: the form pages and the glossary are seeded by the package; the other destinations are not on this site
+// and the shell links to the live site for them (read-only links, FIDES_DESIGN_REVIEW_LIVE_FALLBACK).
+$seeded_here = array('use-case-form', 'organizations-submit', 'organizations-update', 'wallet-submit', 'credential-submit', 'glossary');
 foreach ($deps as $path => $info) {
     $page = get_page_by_path($path, OBJECT, 'page');
+    if ($sa) {
+        $own = $page && get_post_meta($page->ID, '_fides_pilot_seed', true) !== '';
+        if (in_array($path, $seeded_here, true)) {
+            $add($page && ! $own ? 'WARN' : 'INFO', 'page /' . $path . '/', $page ? ($own ? 'seeded earlier; later edits are kept' : 'exists and is not made by the seed; it is kept') : 'seeded by this package: ' . $info[1]);
+        } else {
+            $add('INFO', 'page /' . $path . '/', 'not seeded; links to it go to the live site: ' . $info[1]);
+        }
+        continue;
+    }
     $add($page && $page->post_status === 'publish' ? 'PASS' : $info[0], 'existing page /' . $path . '/', $info[1]);
 }
-$manifesto = get_page_by_path('manifesto', OBJECT, 'page');
+$manifesto = $sa ? null : get_page_by_path('manifesto', OBJECT, 'page');
 if ($manifesto) {
     $has_form = (bool) preg_match('/\[wpforms|wp:wpforms|ratify-the-fides-manifesto-today/', (string) $manifesto->post_content);
     $add($has_form ? 'PASS' : 'WARN', 'sign form on /manifesto/', $has_form ? 'form or anchor found in the page content' : 'no WPForms block or anchor found; the sign button links to /manifesto/#ratify-the-fides-manifesto-today');
 }
 
 // The base path.
-$base_page = get_page_by_path($base, OBJECT, 'page');
-if ($base_page) {
+if ($sa) {
+    $index = get_page_by_path('pilot-pages', OBJECT, 'page');
+    $add($index ? 'INFO' : 'PASS', 'page /pilot-pages/', $index ? 'exists (seeded earlier or made by an editor)' : 'free, the seed creates it');
+    $add((int) get_option('page_on_front') > 0 ? 'INFO' : 'PASS', 'front page', (int) get_option('page_on_front') > 0 ? 'already set (page ' . (int) get_option('page_on_front') . '), the seed keeps it' : 'not set: the seed makes the pilot homepage the front page');
+    $base_page = null;
+} else {
+    $base_page = get_page_by_path($base, OBJECT, 'page');
+}
+if ($sa) {
+    // nothing else to check for the base
+} elseif ($base_page) {
     $seeded = get_post_meta($base_page->ID, '_fides_pilot_seed', true) !== '';
     $add($seeded ? 'PASS' : 'WARN', "page /{$base}/ exists", $seeded ? 'seeded earlier; later edits are kept' : 'not made by the seed; it is kept and the pilot pages become its children');
 } else {
     $add('PASS', "page /{$base}/ is free", 'the seed creates it');
 }
 $conflicts = array();
-foreach (array('overview', 'use-case', 'organizations', 'organization', 'personal-wallets', 'business-wallets', 'wallet', 'credentials', 'credential', 'about-fides', 'manifesto', 'updates', 'learn', 'start') as $slug) {
-    $p = get_page_by_path($base . '/' . $slug, OBJECT, 'page');
+foreach (array('overview', 'use-case', 'organizations', 'organization', 'personal-wallets', 'business-wallets', 'wallet', 'credentials', 'credential', 'about-fides', 'manifesto', 'updates', 'learn', 'start', 'homepage-fragment', 'use-case-form', 'organizations-submit', 'organizations-update', 'wallet-submit', 'credential-submit', 'glossary') as $slug) {
+    $p = get_page_by_path($sa ? $slug : $base . '/' . $slug, OBJECT, 'page');
     if ($p && get_post_meta($p->ID, '_fides_pilot_seed', true) === '' && get_post_meta($p->ID, '_fides_learn_seed', true) === '') {
         $conflicts[] = $slug;
     }

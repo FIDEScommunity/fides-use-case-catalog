@@ -3,7 +3,10 @@
  * Create the design pilot pages (idempotent, edit-protected).
  * Local: create-pages.sh. Staging: staging/seed.sh (wp eval-file).
  *
- * Pages live under /<PILOT_BASE>/ (default fides-design-pilot, staging design-review).
+ * Pages live under /<PILOT_BASE>/ (default fides-design-pilot) or, with PILOT_STANDALONE=1, at the root of a site whose
+ * home_url() already ends in /design-review: /design-review/overview/ is then the page "overview" (no second segment).
+ * Standalone also seeds the pages that normally exist on fides.community and are linked from the pilot: the five
+ * submission forms and the glossary (shortcode pages), and makes the homepage the front page while none is set.
  * Existing pages, menus and the active homepage are not touched.
  *
  * Safety rules (same as create-learn-pages.php):
@@ -36,7 +39,7 @@ const PILOT_FEATURED_ID = 'digital-certificate-of-good-conduct-vog-as-a-verifiab
 const PILOT_ORG_ID      = 'org:credenco';
 const PILOT_WALLET_ID   = 'credenco-business-wallet';
 const PILOT_CREDENTIAL_ID      = 'cred:eu:ehic';
-const PILOT_CREDENTIAL_ADD_URL = '/credential-submit/';
+const PILOT_CREDENTIAL_ADD_URL = '{{site}}/credential-submit/';
 /** Shared header/footer page template from fides-community-tools-tiles. */
 const PILOT_SHELL_TEMPLATE = 'fides-site-shell';
 
@@ -51,10 +54,17 @@ $layout_meta = array(
     'disable_share_box'       => 'yes',
 );
 
-/** Replace the route tokens: {{base}} (no slashes) and {{pilot}} (/base). */
+/**
+ * Replace the route tokens.
+ *  {{base}}      page path segment of the pilot ('' when standalone)
+ *  {{pilot}}     URL path of the pilot pages for links and shortcode attributes: the path of home_url() + /base
+ *  {{pilotpath}} the same relative to home_url(), for settings that are passed through home_url() (updates listing path)
+ *  {{site}}      URL path of the site itself (path of home_url())
+ */
 function pilot_tokens(string $text): string {
-    global $pilot_base;
-    return strtr($text, array('{{base}}' => $pilot_base, '{{pilot}}' => '/' . $pilot_base));
+    global $pilot_ctx, $pilot_base;
+    $rel = $pilot_base === '' ? '' : '/' . $pilot_base;
+    return strtr($text, array('{{base}}' => $pilot_base, '{{pilotpath}}' => $rel, '{{pilot}}' => $pilot_ctx['mount'] . $rel, '{{site}}' => $pilot_ctx['mount']));
 }
 
 /** Canonical, comparable state of a page as stored in the database. */
@@ -78,7 +88,7 @@ function pilot_hash(array $state): string {
 
 function pilot_upsert_page(string $path, string $title, string $content, int $parent, array $layout_meta, string $template = ''): int {
     global $pilot_ctx, $pilot_dry, $pilot_force, $pilot_backup, $pilot_report;
-    $path    = pilot_tokens($path);
+    $path    = trim(pilot_tokens($path), '/');
     $content = pilot_tokens($content);
     $title   = pilot_tokens($title);
 
@@ -170,7 +180,7 @@ function pilot_upsert_page(string $path, string $title, string $content, int $pa
 }
 
 $parent = pilot_upsert_page(
-    '{{base}}',
+    $pilot_ctx['standalone'] ? 'pilot-pages' : '{{base}}',
     'FIDES design pilot',
     "<!-- wp:paragraph -->\n<p>Design pilot pages:</p>\n<!-- /wp:paragraph -->\n\n"
     . "<!-- wp:list -->\n<ul class=\"wp-block-list\">"
@@ -188,13 +198,16 @@ $parent = pilot_upsert_page(
     0,
     array('has_hero_section' => 'enabled')
 );
+if ($pilot_ctx['standalone']) {
+    $parent = 0; // standalone: the pilot pages are not children of the index page
+}
 
 // Intro text is the existing paragraph on fides.community/ecosystem-explorer/use-cases/
 // (not in the local copy); split in two sentences as in Paper 16.1.
 pilot_upsert_page(
     '{{base}}/overview',
     'Use cases (design pilot)',
-    '<!-- wp:shortcode -->[fides_use_case_catalog design="pilot" title="Use cases" detail_url="{{pilot}}/use-case/" add_url="/use-case-form/"]'
+    '<!-- wp:shortcode -->[fides_use_case_catalog design="pilot" title="Use cases" detail_url="{{pilot}}/use-case/" add_url="{{site}}/use-case-form/"]'
     . '<p>Discover real-world examples of <a href="https://fides.community/topics/personal-wallets/">digital wallets</a> and <a href="https://fides.community/topics/credentials/">verifiable credentials</a> in action — passwordless login, age verification, digital travel, cross-border and public services, and more.</p>'
     . '<p>Learn from proven patterns, compare approaches, and reuse what works instead of starting from scratch.</p>'
     . '[/fides_use_case_catalog]<!-- /wp:shortcode -->',
@@ -216,7 +229,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/organizations',
     'Organizations (design pilot)',
-    '<!-- wp:shortcode -->[fides_organization_catalog design="pilot" title="Organizations" detail_url="{{pilot}}/organization/" add_url="/organizations-submit/"'
+    '<!-- wp:shortcode -->[fides_organization_catalog design="pilot" title="Organizations" detail_url="{{pilot}}/organization/" add_url="{{site}}/organizations-submit/"'
     . ' intro="Discover organizations shaping the global ecosystem of digital wallets and verifiable credentials and explore their roles."]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
@@ -236,7 +249,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/personal-wallets',
     'Personal wallets (design pilot)',
-    '<!-- wp:shortcode -->[fides_wallet_catalog type="personal" design="pilot" title="Personal wallets" detail_url="{{pilot}}/wallet/" add_url="/wallet-submit/"'
+    '<!-- wp:shortcode -->[fides_wallet_catalog type="personal" design="pilot" title="Personal wallets" detail_url="{{pilot}}/wallet/" add_url="{{site}}/wallet-submit/"'
     . ' cross_url="{{pilot}}/business-wallets/" intro="Explore digital wallets for individuals."]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
@@ -246,7 +259,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/business-wallets',
     'Business wallets (design pilot)',
-    '<!-- wp:shortcode -->[fides_wallet_catalog type="organizational" design="pilot" title="Business wallets" detail_url="{{pilot}}/wallet/" add_url="/wallet-submit/"'
+    '<!-- wp:shortcode -->[fides_wallet_catalog type="organizational" design="pilot" title="Business wallets" detail_url="{{pilot}}/wallet/" add_url="{{site}}/wallet-submit/"'
     . ' cross_url="{{pilot}}/personal-wallets/" intro="Explore digital wallets and related tooling that allow organizations to receive, store, present, issue or verify verifiable credentials."]<!-- /wp:shortcode -->'
     // The editor-chosen Learn link (context wallet-overview:organizational) is rendered by the wallet plugin in the intro.
     ,
@@ -295,7 +308,7 @@ pilot_upsert_page(
 
 // Hero text is the existing homepage hero (page 771); the card comes from the catalog.
 // "Explore use cases" is the secondary hero action from Paper 11.1, pointing at the pilot overview.
-pilot_upsert_page(
+$pilot_home_id = pilot_upsert_page(
     '{{base}}/homepage-fragment',
     'Homepage fragment (design pilot)',
     "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"48px\",\"bottom\":\"48px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
@@ -324,6 +337,17 @@ pilot_upsert_page(
     PILOT_SHELL_TEMPLATE
 );
 
+// Standalone: the pilot homepage is the front page of the site, unless a front page is already set.
+if ($pilot_ctx['standalone'] && $pilot_home_id > 0) {
+    if ((int) get_option('page_on_front') === 0 && ! $pilot_dry) {
+        update_option('show_on_front', 'page');
+        update_option('page_on_front', $pilot_home_id);
+        $pilot_report[] = array('front page', 'set', 'page ' . $pilot_home_id . ' (homepage-fragment)');
+    } else {
+        $pilot_report[] = array('front page', $pilot_dry ? 'would-keep-or-set' : 'kept', 'page_on_front ' . (int) get_option('page_on_front'));
+    }
+}
+
 if (! $pilot_dry && ! get_option(Fides_Use_Case_Featured::OPTION)) {
     update_option(Fides_Use_Case_Featured::OPTION, array('primary' => PILOT_FEATURED_ID, 'fallback' => PILOT_DETAIL_ID));
 }
@@ -337,6 +361,22 @@ if (! $pilot_dry && is_array($featured_option) && ($featured_option['primary'] ?
     update_option(Fides_Use_Case_Featured::OPTION, $featured_option);
 }
 $pilot_report[] = array('option fides_use_case_featured', 'info', (string) wp_json_encode(get_option(Fides_Use_Case_Featured::OPTION)));
+
+// Standalone only: the pages the pilot links to that exist on fides.community and are shortcode pages in the plugins.
+// They are ordinary seeded pages (same edit protection). Forms keep their plugin behaviour; this script submits nothing.
+if ($pilot_ctx['standalone']) {
+    $companions = array(
+        'use-case-form'        => array('Submit a use case', '[fides_use_case_form]'),
+        'organizations-submit' => array('Submit an organization', '[fides_organization_submit_form]'),
+        'organizations-update' => array('Update an organization', '[fides_organization_update_form]'),
+        'wallet-submit'        => array('Submit a wallet', '[fides_wallet_submit_form]'),
+        'credential-submit'    => array('Submit a credential type', '[fides_credential_submit_form]'),
+        'glossary'             => array('Glossary', '[fides_vocabulary_glossary]'),
+    );
+    foreach ($companions as $slug => $def) {
+        pilot_upsert_page($slug, $def[0], '<!-- wp:shortcode -->' . $def[1] . '<!-- /wp:shortcode -->', 0, $layout_meta, PILOT_SHELL_TEMPLATE);
+    }
+}
 
 // Updates overview (Paper 26.1/26.3) and own-article layout (26.2).
 // The programme links below are a pilot SEED taken from the dedicated programme sources in
@@ -389,7 +429,7 @@ if (class_exists('Fides_DS_Updates') && ! $pilot_dry) {
             'programmes'       => $seed_programmes,
             'hidden_urls'      => array(),
             'news_url'         => '',
-            'listing_path'     => pilot_tokens('{{pilot}}/updates/'),
+            'listing_path'     => pilot_tokens('{{pilotpath}}/updates/'),
             'article_template' => true,
         ));
     } elseif (is_array($updates_option)) {
