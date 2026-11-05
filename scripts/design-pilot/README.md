@@ -576,6 +576,16 @@ restore check, staging dependencies and maintenance are described in
 passed the restore check). Tests: `tests/run-learn-checks.sh`,
 `tests/run-learn-seed-checks.sh`, `tests/learn-behaviour.php` (in `run-tests.sh`).
 
+## Staging preparation (`/design-review/`)
+
+Everything for a later roll-out lives in `staging/` (see `staging/HANDOVER.md`). Nothing here connects to staging.
+
+- `create-pages.php` now uses route tokens (`{{pilot}}`, `{{base}}`) and `PILOT_BASE` (default `fides-design-pilot`, staging `design-review`).
+- Seeded pages carry a marker, a content hash and the seeded state. A re-seed skips pages edited since the seed (`skipped-edited`) and pages without a marker (`skipped-unmarked`). `PILOT_FORCE=<path,...>` replaces them after a backup. `PILOT_DRY_RUN=1` only reports. Options are only set when absent.
+- Local pages created by older versions are adopted once (markers only, content unchanged).
+- Hosts: `PILOT_ALLOWED_HOSTS` (default `localhost,127.0.0.1,staging.fides.community`). Production hosts are always refused.
+- `staging/build-package.py` builds the package from committed HEAD, `staging/verify-package.sh` checks it, `staging/rehearse-staging.sh` installs it into a throw-away site on port 10089.
+
 ## Not restored yet (no content parity claimed)
 
 - Liking: the pilot rows and detail page show like counts but have no like toggle.

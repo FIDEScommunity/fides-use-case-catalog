@@ -22,17 +22,24 @@
  *  LEARN_DRY_RUN=1       report only, write nothing
  *  LEARN_BACKUP_DIR      where forced replacements are saved first
  *  LEARN_ALLOW_NON_PILOT=1  allow a non-pilot site (never on production)
+ *  PILOT_ALLOWED_HOSTS   hosts treated as pilot sites (default localhost,127.0.0.1,staging.fides.community)
  */
 
 if (! defined('ABSPATH')) {
     fwrite(STDERR, "Run through WP-CLI (create-learn-pages.sh).\n");
     exit(1);
 }
-if (! defined('FIDES_DESIGN_PILOT') && getenv('LEARN_ALLOW_NON_PILOT') !== '1') {
+require __DIR__ . '/staging/seed-guard.php';
+if (in_array(fides_pilot_host(), array('fides.community', 'www.fides.community'), true)) {
+    fwrite(STDERR, "Refusing to seed the production host.\n");
+    exit(1);
+}
+// An allow-listed host (staging) counts as a pilot site; the same list protects create-pages.php.
+if (! defined('FIDES_DESIGN_PILOT') && ! fides_pilot_host_allowed() && getenv('LEARN_ALLOW_NON_PILOT') !== '1') {
     fwrite(STDERR, "Refusing to run outside the design pilot site (set LEARN_ALLOW_NON_PILOT=1 for a test environment).\n");
     exit(1);
 }
-if (function_exists('wp_get_environment_type') && wp_get_environment_type() === 'production') {
+if (function_exists('wp_get_environment_type') && wp_get_environment_type() === 'production' && ! fides_pilot_host_allowed()) {
     fwrite(STDERR, "Refusing to seed on a production environment type.\n");
     exit(1);
 }
