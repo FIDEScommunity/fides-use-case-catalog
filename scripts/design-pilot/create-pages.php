@@ -330,13 +330,13 @@ $pilot_home_id = pilot_upsert_page(
     . "</div>\n<!-- /wp:column -->"
     . "</div>\n<!-- /wp:columns -->"
     . "</div>\n<!-- /wp:group -->"
-    // Paper 25.16: readiness module (replaces the 25.15 Learn strip), then theme index and latest updates under the hero (blocks read their data themselves).
+    // Paper 25.16: readiness module (replaces the 25.15 Learn strip), then theme index and latest updates under the hero (blocks read their data themselves). Order: readiness, themes, spotlight, latest updates.
     // No explain_url on purpose: the pilot has no Learn page about EUDI wallet acceptance yet, so that action stays out.
     . "\n<!-- wp:shortcode -->[fides_home_readiness]<!-- /wp:shortcode -->"
     . "\n<!-- wp:shortcode -->[fides_use_case_discovery layout=\"index\"]<!-- /wp:shortcode -->"
-    . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->"
     // Paper 25.12: blue spotlight on one demo use case with its explicit catalog relations.
-    . "\n<!-- wp:shortcode -->[fides_use_case_spotlight id=\"end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh\" detail_url=\"{{pilot}}/use-case/\"]<!-- /wp:shortcode -->",
+    . "\n<!-- wp:shortcode -->[fides_use_case_spotlight id=\"end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh\" detail_url=\"{{pilot}}/use-case/\"]<!-- /wp:shortcode -->"
+    . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->",
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

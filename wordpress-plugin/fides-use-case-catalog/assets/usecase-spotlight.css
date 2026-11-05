@@ -8,7 +8,7 @@
 
 .fides-ds .fides-uc-spot__inner {
   display: grid;
-  gap: var(--fides-ds-space-4, 16px);
+  gap: var(--fides-ds-space-3, 12px);
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
@@ -88,10 +88,13 @@
   object-fit: contain;
 }
 
+/* Desktop: a smaller diagram left, text and relation links stacked right, so the block stays calm and low. */
 @media (min-width: 900px) {
   .fides-ds .fides-uc-spot__case {
-    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-columns: 280px minmax(0, 1fr);
     align-items: start;
+    column-gap: var(--fides-ds-space-6, 32px);
+    row-gap: var(--fides-ds-space-3, 12px);
   }
 
   .fides-ds .fides-uc-spot__case--no-media {
@@ -100,7 +103,7 @@
 
   .fides-ds .fides-uc-spot__media {
     grid-column: 1;
-    grid-row: 1;
+    grid-row: 1 / span 2;
     max-width: none;
   }
 
@@ -109,7 +112,8 @@
     grid-row: 1;
   }
 
-  .fides-ds .fides-uc-spot__case--no-media .fides-uc-spot__text {
+  .fides-ds .fides-uc-spot__case--no-media .fides-uc-spot__text,
+  .fides-ds .fides-uc-spot__case--no-media .fides-uc-spot__relations {
     grid-column: 1;
   }
 }
@@ -171,19 +175,21 @@
 
 .fides-ds .fides-uc-spot__relations {
   min-width: 0;
-  padding-top: var(--fides-ds-space-3, 12px);
-  border-top: 1px solid rgba(255, 255, 255, 0.55);
+  padding-top: var(--fides-ds-space-2, 8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 @media (min-width: 900px) {
   .fides-ds .fides-uc-spot__relations {
-    grid-column: 1 / -1;
+    grid-column: 2;
+    grid-row: 2;
   }
 }
 
 .fides-ds .fides-uc-spot__relation-list {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--fides-ds-space-3, 12px);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -191,6 +197,7 @@
 
 @media (min-width: 640px) {
   .fides-ds .fides-uc-spot__relation-list {
+    display: flex;
     flex-flow: row wrap;
     gap: 0 var(--fides-ds-space-6, 32px);
   }

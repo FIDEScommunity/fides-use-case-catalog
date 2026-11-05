@@ -174,7 +174,7 @@ $ready = Fides_DS_Home::readiness();
 $check(substr_count($ready, 'data-readiness=') === 2, 'readiness block has two action rows');
 $check(strpos($ready, 'EUDI Wallet: what is changing?') !== false && strpos($ready, 'European Digital Identity Wallet (EUDI Wallet)') !== false, 'readiness block shows the heading and an introduction that spells out the wallet');
 $check(substr_count($ready, 'fides-home-readiness__point') === 2 && strpos($ready, 'End 2026') !== false && strpos($ready, 'Wallet availability') !== false && strpos($ready, 'End 2027') !== false && strpos($ready, 'Wallet acceptance') !== false, 'default timeline has the two EUDI milestones');
-$check(strpos($ready, 'Micro and small enterprises are exempt') !== false && strpos($ready, 'if a user chooses it') !== false, 'acceptance wording keeps the exemption and the voluntary use');
+$check(strpos($ready, 'Certain private services requiring strong online authentication accept wallets on user request.') !== false && preg_match('/<p class="fides-home-readiness__intro">[^<.]*(\([^)]*\))?[^<.]*\.<\/p>/', $ready) === 1, 'acceptance wording keeps the nuance (certain services, voluntary use) and the intro is one sentence');
 $check(stripos($ready, 'countdown') === false && stripos($ready, 'days left') === false, 'readiness block has no countdown');
 $check(strpos($ready, 'fides-home-readiness__source-link') === false && strpos($ready, 'Source:') === false, 'the block shows no source lines');
 $srcs = do_shortcode('[fides_home_readiness_sources]');

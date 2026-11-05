@@ -684,7 +684,14 @@
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
-  padding: 36px var(--fides-ds-gutter, 20px) 28px;
+  padding: 32px var(--fides-ds-gutter, 20px) 28px;
+}
+
+/* More air after the readiness block and before the blue band on desktop (48-64px). */
+@media (min-width: 900px) {
+  .fides-ds .fides-uc-index__inner {
+    padding-block: 56px 48px;
+  }
 }
 
 .fides-ds .fides-uc-index__title {
