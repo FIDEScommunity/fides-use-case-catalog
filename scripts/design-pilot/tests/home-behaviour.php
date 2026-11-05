@@ -167,6 +167,23 @@ $check(! in_array('organizations', $k, true) && ! in_array('rps', $k, true) && $
 $check(Fides_Use_Case_Spotlight::relation_links(array('id' => 'x', 'links' => array()), '/u/') === array(), 'no links, no relation row');
 $check(strpos((string) file_get_contents(dirname(dirname(dirname(__DIR__))) . '/wordpress-plugin/fides-use-case-catalog/includes/class-fides-use-case-spotlight.php'), 'localhost') === false, 'no hard-coded local host in the spotlight');
 
+// ---- Readiness module (Paper 25.16)
+$ready = Fides_DS_Home::readiness();
+$check(substr_count($ready, 'fides-home-readiness__list') >= 1 && substr_count($ready, 'data-readiness=') === 2, 'readiness module has two action rows');
+$check(strpos($ready, 'END') !== false && strpos($ready, '2027') !== false && strpos($ready, 'EUDI Wallet acceptance') !== false, 'readiness module names the date and topic');
+$check(stripos($ready, 'countdown') === false && stripos($ready, 'days left') === false, 'readiness module has no countdown');
+$check(strpos($ready, 'fides-home-readiness__explain') === false, 'explain action is left out without a fitting Learn page');
+$check(strpos($ready, 'Source: European Commission') !== false && strpos($ready, 'https://digital-strategy.ec.europa.eu/') !== false, 'source line links to the European Commission');
+$ready_links = Fides_DS_Home::readiness_links();
+$check(count($ready_links) === 2 && $ready_links[0]['key'] === 'sessions' && strpos($ready_links[0]['url'], 'wallet-readiness-workshop') !== false && $ready_links[1]['key'] === 'topics', 'actions go to the existing workshop offering and the topics overview');
+$with = do_shortcode('[fides_home_readiness explain_url="/fides-design-pilot/learn/topics/"]');
+$check(strpos($with, 'fides-home-readiness__explain') !== false && strpos($with, 'href="' . home_url('/fides-design-pilot/learn/topics/') . '"') !== false && strpos($with, 'Understand what is changing') !== false, 'explain action appears when a Learn page is given and resolves against the site');
+$bad = do_shortcode('[fides_home_readiness explain_url="javascript:alert(1)"]');
+$check(strpos($bad, 'fides-home-readiness__explain') === false && stripos($bad, 'javascript:') === false, 'explain action refuses a non-http destination');
+add_filter('fides_home_readiness_links', '__return_empty_array');
+$none = Fides_DS_Home::readiness();
+$check(strpos($none, 'fides-home-readiness__list') === false && strpos($none, 'What does this mean for your organisation?') !== false, 'rows without a destination are left out, the text stays');
+remove_filter('fides_home_readiness_links', '__return_empty_array');
 
 echo 'home behaviour: ' . $results['pass'] . ' passed, ' . count($results['fail']) . " failed\n";
 foreach ($results['fail'] as $message) {

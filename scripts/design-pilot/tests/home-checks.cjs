@@ -33,21 +33,13 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     check(`${tag}: both hero actions and the featured image stay`, hero.actions.length === 2 && /\/start\/$/.test(hero.actions[0]) && /\/overview\/$/.test(hero.actions[1]) && hero.img, JSON.stringify(hero));
     check(`${tag}: the old routes block is gone`, (await page.locator(".fides-home-routes").count()) === 0);
 
-    // Learn strip.
-    const learn = await page.evaluate(() => { const s = document.querySelector(".fides-home-learn"); return s ? { title: s.querySelector("h2").textContent.trim(), bg: getComputedStyle(s).backgroundColor, y: s.getBoundingClientRect().top + scrollY, heroBottom: document.querySelector(".fides-uc-featured").getBoundingClientRect().bottom + scrollY, links: [...s.querySelectorAll("a")].map((a) => { const r = a.getBoundingClientRect(); return { t: a.textContent.trim(), href: a.getAttribute("href"), key: a.dataset.learn, h: Math.round(r.height), x: Math.round(r.x), y: Math.round(r.y), right: Math.round(r.right), svg: a.querySelectorAll("svg").length }; }) } : null; });
-    check(`${tag}: Learn strip with title and two links`, learn && learn.title === "New to digital trust?" && learn.links.length === 2 && learn.links[0].t.startsWith("Topics & guides") && learn.links[1].t.startsWith("Sessions & workshops"), JSON.stringify(learn));
-    check(`${tag}: strip is light blue, below the hero and above the themes`, learn && learn.bg === "rgb(242, 247, 255)" && learn.y >= learn.heroBottom - 1);
-    check(`${tag}: book icon at Topics, calendar icon at Sessions`, learn && learn.links[0].key === "topics" && learn.links[1].key === "sessions" && learn.links.every((l) => l.svg === 1));
-    check(`${tag}: Learn links go to existing pilot pages`, learn && /\/fides-design-pilot\/learn\/topics\/?$/.test(learn.links[0].href) && /\/fides-design-pilot\/learn\//.test(learn.links[1].href), JSON.stringify(learn.links));
-    check(`${tag}: Learn links are at least 44px tall, inside the viewport, side by side on desktop and stacked on mobile`, learn && learn.links.every((l) => l.h >= 44 && l.right <= w) && (w > 640 ? learn.links[0].y === learn.links[1].y : learn.links[1].y > learn.links[0].y), JSON.stringify(learn.links));
-    for (const l of learn.links) {
-      const status = await page.evaluate(async (u) => (await fetch(u, { credentials: "same-origin" })).status, l.href);
-      check(`${tag}: Learn link "${l.t}" resolves`, status === 200, `${status} ${l.href}`);
-    }
+    // Readiness module (Paper 25.16): the full layout, copy and link checks live in readiness-checks.cjs; here only its place on the page.
+    const learn = await page.evaluate(() => { const s = document.querySelector(".fides-home-readiness"); return s ? { rows: s.querySelectorAll(".fides-home-readiness__list a").length, old: document.querySelectorAll(".fides-home-learn").length } : null; });
+    check(`${tag}: readiness module with two action rows replaces the Learn strip`, learn && learn.rows === 2 && learn.old === 0, JSON.stringify(learn));
 
     // Digital trust in practice: themes and counts come from the use case plugin.
-    const idx = await page.evaluate(() => ({ total: +(document.querySelector("[data-fides-uc-index-total]") || {}).dataset?.fidesUcIndexTotal || 0, y: document.querySelector(".fides-uc-index").getBoundingClientRect().top + scrollY, learnY: document.querySelector(".fides-home-learn").getBoundingClientRect().top + scrollY, newsY: document.querySelector(".fides-home-news").getBoundingClientRect().top + scrollY, rows: [...document.querySelectorAll(".fides-uc-index__link")].map((a) => { const r = a.getBoundingClientRect(); return { code: a.dataset.theme, href: a.getAttribute("href"), name: a.querySelector(".fides-uc-index__name").textContent.trim(), count: +a.querySelector(".fides-uc-index__count").dataset.count, h: Math.round(r.height), right: Math.round(r.right), label: a.getAttribute("aria-label") }; }), links: [...document.querySelectorAll(".fides-uc-index__catalogs a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(a.getBoundingClientRect().height) })) }));
-    check(`${tag}: index sits between the Learn strip and the latest updates`, idx.learnY < idx.y && idx.y < idx.newsY);
+    const idx = await page.evaluate(() => ({ total: +(document.querySelector("[data-fides-uc-index-total]") || {}).dataset?.fidesUcIndexTotal || 0, y: document.querySelector(".fides-uc-index").getBoundingClientRect().top + scrollY, learnY: document.querySelector(".fides-home-readiness").getBoundingClientRect().top + scrollY, newsY: document.querySelector(".fides-home-news").getBoundingClientRect().top + scrollY, rows: [...document.querySelectorAll(".fides-uc-index__link")].map((a) => { const r = a.getBoundingClientRect(); return { code: a.dataset.theme, href: a.getAttribute("href"), name: a.querySelector(".fides-uc-index__name").textContent.trim(), count: +a.querySelector(".fides-uc-index__count").dataset.count, h: Math.round(r.height), right: Math.round(r.right), label: a.getAttribute("aria-label") }; }), links: [...document.querySelectorAll(".fides-uc-index__catalogs a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(a.getBoundingClientRect().height) })) }));
+    check(`${tag}: index sits between the readiness module and the latest updates`, idx.learnY < idx.y && idx.y < idx.newsY);
     check(`${tag}: one row per theme, each with a theme filter link and a count`, idx.rows.length >= 1 && idx.rows.every((r) => r.code && /\/fides-design-pilot\/overview\/\?theme=/.test(r.href) && r.href.includes("theme=" + r.code) && r.count >= 0 && r.label.includes(r.name)), JSON.stringify(idx.rows));
     {
       const sub = await page.evaluate(() => { const l = document.querySelector(".fides-uc-index__lead"); const t = document.querySelector(".fides-uc-index__total"); const lr = l.getBoundingClientRect(); const tr = t.getBoundingClientRect(); const lh = parseFloat(getComputedStyle(l).lineHeight); return { text: l.textContent.trim(), lines: Math.round(lr.height / lh), lr: Math.round(lr.right), ll: Math.round(lr.left), lt: Math.round(lr.top), tl: Math.round(tr.left), tr: Math.round(tr.right), tt: Math.round(tr.top), tlines: Math.round(tr.height / parseFloat(getComputedStyle(t).lineHeight)), hero: (document.querySelector(".fides-uc-hero .fides-ds-lead") || {}).textContent }; });
@@ -123,10 +115,6 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
       check(`${tag}: no separator starts a line`, meta.every((m) => m.parts.every((p, i) => i === 0 || p.top >= m.parts[i - 1].top) && m.parts.every((p, i) => !/^·/.test(p.text))), JSON.stringify(meta));
       const tails = await page.evaluate(() => [...document.querySelectorAll(".fides-home-news__tail")].map((t) => { const b = t.getBoundingClientRect(); const ar = t.querySelector(".fides-home-news__external").getBoundingClientRect(); const lh = parseFloat(getComputedStyle(t).lineHeight); return { oneLine: b.height <= lh * 1.3, sameLine: ar.top >= b.top - 2 && ar.bottom <= b.bottom + 2, word: t.firstChild.textContent }; }));
       check(`${tag}: the external arrow stays with the last word of the title`, tails.length >= 1 && tails.every((t) => t.oneLine && t.sameLine), JSON.stringify(tails));
-      if (w >= 900) {
-        const learnGap = await page.evaluate(() => { const t = document.querySelector(".fides-home-learn__title").getBoundingClientRect(); const l = document.querySelector(".fides-home-learn__list").getBoundingClientRect(); return { gap: Math.round(l.left - t.right), same: Math.abs(l.top + l.height / 2 - (t.top + t.height / 2)) < 12 }; });
-        check(`${tag}: the Learn links sit close to "New to digital trust?" in the same row`, learnGap.gap <= 56 && learnGap.same, JSON.stringify(learnGap));
-      }
     }
 
     // Keyboard: Tab reaches the first news link with a visible ring.
@@ -280,13 +268,13 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
     await page.locator(".fides-home-news__item").first().waitFor({ timeout: 30000 });
 
     // Learn links and hero actions navigate.
-    await page.locator('.fides-home-learn [data-learn="topics"]').click();
+    await page.locator('.fides-home-readiness [data-readiness="topics"]').click();
     await page.waitForURL(/\/fides-design-pilot\/learn\/topics/, { timeout: 30000 });
     check(`${tag}: Topics & guides opens the Learn topics page`, true);
     await page.goto(HOME, { waitUntil: "domcontentloaded" });
-    await page.locator('.fides-home-learn [data-learn="sessions"]').click();
-    await page.waitForURL(/\/fides-design-pilot\/learn\//, { timeout: 30000 });
-    check(`${tag}: Sessions & workshops opens a Learn page`, true);
+    await page.locator('.fides-home-readiness [data-readiness="sessions"]').click();
+    await page.waitForURL(/\/fides-design-pilot\/learn\/sessions\/wallet-readiness-workshop/, { timeout: 30000 });
+    check(`${tag}: Readiness Workshop opens the workshop page`, true);
     await page.goto(HOME, { waitUntil: "domcontentloaded" });
     await page.locator(".fides-uc-index__all").click();
     await page.waitForURL(/\/fides-design-pilot\/overview\/$/, { timeout: 30000 });

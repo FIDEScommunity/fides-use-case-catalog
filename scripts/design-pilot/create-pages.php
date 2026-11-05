@@ -330,8 +330,9 @@ $pilot_home_id = pilot_upsert_page(
     . "</div>\n<!-- /wp:column -->"
     . "</div>\n<!-- /wp:columns -->"
     . "</div>\n<!-- /wp:group -->"
-    // Paper 25.15: Learn strip, theme index and latest updates under the hero (blocks read their data themselves).
-    . "\n<!-- wp:shortcode -->[fides_home_learn]<!-- /wp:shortcode -->"
+    // Paper 25.16: readiness module (replaces the 25.15 Learn strip), then theme index and latest updates under the hero (blocks read their data themselves).
+    // No explain_url on purpose: the pilot has no Learn page about EUDI wallet acceptance yet, so that action stays out.
+    . "\n<!-- wp:shortcode -->[fides_home_readiness]<!-- /wp:shortcode -->"
     . "\n<!-- wp:shortcode -->[fides_use_case_discovery layout=\"index\"]<!-- /wp:shortcode -->"
     . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->"
     // Paper 25.12: blue spotlight on one demo use case with its explicit catalog relations.
