@@ -192,7 +192,6 @@ const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-up
   // this site and every form page must then show its fields. Nothing is submitted.
   if (STANDALONE && process.env.REHEARSAL_USER) {
     const ctx2 = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-    await ctx2.addCookies(Object.entries({ "banner-status": "dismissed", policy_id: "35", functional: "allow", preferences: "deny", statistics: "deny", marketing: "deny" }).map(([n, v]) => ({ name: `cmplz_${n}`, value: v, url: BASE })));
     const p2 = await ctx2.newPage();
     const w2 = [];
     p2.on("request", (r) => { if (r.method() !== "GET" && r.method() !== "HEAD" && !/\/wp-login\.php/.test(r.url())) w2.push(`${r.method()} ${r.url()}`); });
@@ -204,9 +203,13 @@ const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-up
     await p2.fill("#user_login", process.env.REHEARSAL_USER);
     await p2.fill("#user_pass", process.env.REHEARSAL_PASS || "");
     await Promise.all([p2.waitForNavigation({ waitUntil: "domcontentloaded" }).catch(() => {}), p2.click("#wp-submit")]);
+    await p2.waitForURL((u) => !/wp-login\.php/.test(u.pathname), { timeout: 15000 }).catch(() => {});
     const cookies = await ctx2.cookies();
-    check(`the reviewer signs in on ${ROOT}wp-login.php`, cookies.some((c) => /^wordpress_logged_in_/.test(c.name)), new URL(p2.url()).pathname);
+    const loginErr = (await p2.locator("#login_error").allTextContents()).join(" ").replace(/\s+/g, " ").slice(0, 120);
+    check(`the reviewer signs in on ${ROOT}wp-login.php`, cookies.some((c) => /^wordpress_logged_in_/.test(c.name)), `${new URL(p2.url()).pathname} ${loginErr}`);
     check("after sign-in the visitor stays below the base", new URL(p2.url()).pathname.startsWith(ROOT), new URL(p2.url()).pathname);
+    // The consent cookies go in after sign-in: with them present the stock login form does not submit.
+    await ctx2.addCookies(Object.entries({ "banner-status": "dismissed", policy_id: "35", functional: "allow", preferences: "deny", statistics: "deny", marketing: "deny" }).map(([n, v]) => ({ name: `cmplz_${n}`, value: v, url: BASE })));
     for (const rel of FORM_PAGES) {
       const res = await p2.goto(`${BASE}${ROOT}${rel}`, { waitUntil: "domcontentloaded" });
       await p2.waitForSelector("form input, form select, form textarea", { timeout: 15000 }).catch(() => {});
@@ -236,7 +239,8 @@ const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-up
     await page.waitForSelector("h1", { timeout: 30000 }).catch(() => {});
     const d = await page.evaluate(() => ({ h1: ((document.querySelector("h1") || {}).textContent || "").trim(), back: [...document.querySelectorAll("a[href]")].map((a) => a.getAttribute("href")) }));
     check(`${ROOT}${listing}: detail ${pathOf(href)} opens with a heading`, res && res.status() === 200 && d.h1.length > 0, `${res && res.status()} ${d.h1}`);
-    check(`${ROOT}${listing}: detail page links stay below the base`, d.back.filter((h) => { try { const u = new URL(h, BASE); return u.origin === BASE && !u.pathname.startsWith(ROOT); } catch (e) { return false; } }).length === 0, "");
+    const offenders = d.back.filter((h) => { if (!h || h.startsWith("#")) return false; try { const u = new URL(h, BASE); return u.origin === BASE && !u.pathname.startsWith(ROOT); } catch (e) { return false; } });
+    check(`${ROOT}${listing}: detail page links stay below the base`, offenders.length === 0, offenders.slice(0, 3).join(" , "));
   }
 
   check("no write request (POST/PUT/DELETE) during the whole browser run", writes.length === 0, writes.slice(0, 3).join(" | "));
