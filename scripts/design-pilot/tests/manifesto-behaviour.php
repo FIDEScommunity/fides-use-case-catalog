@@ -107,6 +107,8 @@ remove_all_filters('fides_manifesto_supporter_source');
 // ---- Our vision and the original photo.
 $html = Fides_DS_Manifesto::render();
 $vision = strpos($html, 'Our vision');
+$photoPos = strpos($html, 'fides-manifesto__photo"');
+$check($photoPos !== false && $photoPos > $vision && $photoPos < strpos($html, 'id="principles"') && $photoPos < strpos($html, 'fides-manifesto__list'), 'source order: vision, photo, principles heading, list');
 $check($vision !== false && strpos($html, 'id="principles"') > $vision && strpos($html, 'fides-manifesto__hero') < $vision, 'Our vision sits between hero and principles');
 foreach (array('AI is changing how information is created and used.', 'Trust also depends on people’s rights, freedom of choice and clear responsibilities.', 'The FIDES Manifesto sets out seven principles for that work') as $line) {
     $check(strpos($html, $line) !== false, 'vision copy: ' . substr($line, 0, 40));
@@ -118,7 +120,7 @@ $check(strpos($html, 'Seven principles for designing and implementing digital so
 $check(strpos($html, 'The existing form') === false, 'no visitor line about the existing form');
 add_filter('fides_manifesto_photo', '__return_empty_array');
 $html = Fides_DS_Manifesto::render();
-$check(strpos($html, 'fides-manifesto__photo"') === false && strpos($html, 'fides-manifesto__vision-grid--text') !== false && strpos($html, 'Our vision') !== false, 'without a photo the vision text stays');
+$check(strpos($html, 'fides-manifesto__photo"') === false && strpos($html, 'fides-manifesto__principles-grid--no-photo') !== false && strpos($html, 'Our vision') !== false, 'without a photo the vision text stays');
 remove_all_filters('fides_manifesto_photo');
 
 // ---- Empty data: the heading stays, no tiles, a quiet notice.

@@ -78,29 +78,40 @@ const PORTRAIT = png(300, 400, [150, 150, 170]); // stands in for the 3:4 handov
     check(`${tag}: ${w >= 1024 ? "commitment panel sits beside the hero" : "commitment panel follows the hero text"}`, w >= 1024 ? hero.comLeft >= hero.posRight : hero.comTop >= hero.posBottom - 1, JSON.stringify(hero));
     if (w <= 390) check(`${tag}: title stays within three lines`, hero.lines <= 3, String(hero.lines));
 
-    // Our vision: between hero and principles, photo beside (>= 900px) or below the text.
+    // Our vision: compact reading column. The photo sits beside the principle list (>= 1100px) or between vision and principles.
     const vis = await page.evaluate(() => {
       const sec = document.querySelector(".fides-manifesto__vision");
       const copy = sec.querySelector(".fides-manifesto__vision-copy").getBoundingClientRect();
-      const fig = sec.querySelector(".fides-manifesto__photo").getBoundingClientRect();
-      const img = sec.querySelector(".fides-manifesto__photo img");
-      const cap = sec.querySelector("figcaption");
+      const fig = document.querySelector(".fides-manifesto__photo").getBoundingClientRect();
+      const img = document.querySelector(".fides-manifesto__photo img");
+      const cap = document.querySelector(".fides-manifesto__photo figcaption");
       const h = sec.querySelector("h2");
       const ps = [...sec.querySelectorAll(".fides-manifesto__vision-copy p")];
+      const list = document.querySelector(".fides-manifesto__list").getBoundingClientRect();
+      const first = document.querySelector(".fides-manifesto__principle").getBoundingClientRect();
+      const head = document.querySelector(".fides-manifesto__principles-head").getBoundingClientRect();
       const cs = (e) => getComputedStyle(e);
+      const bodies = [...document.querySelectorAll(".fides-manifesto__principle-body")].map((b) => b.getBoundingClientRect().right);
       return {
-        order: [".fides-manifesto__hero", ".fides-manifesto__vision", "#principles"].map((q) => Math.round(document.querySelector(q).getBoundingClientRect().top + scrollY)),
+        order: [".fides-manifesto__hero", ".fides-manifesto__vision", ".fides-manifesto__photo", ".fides-manifesto__principles-head", ".fides-manifesto__list"].map((q) => Math.round(document.querySelector(q).getBoundingClientRect().top + scrollY)),
         h2: h.textContent.trim(), h2s: [cs(h).fontSize, cs(h).lineHeight, cs(h).fontWeight, cs(h).fontFamily],
-        ps: ps.map((p) => [cs(p).fontSize, cs(p).lineHeight]), n: ps.length,
-        copyRight: Math.round(copy.right), copyBottom: Math.round(copy.bottom), figLeft: Math.round(fig.left), figTop: Math.round(fig.top), figW: Math.round(img.getBoundingClientRect().width), figH: Math.round(img.getBoundingClientRect().height), figRight: Math.round(fig.right),
-        natW: img.naturalWidth, natH: img.naturalHeight, ok: img.complete && img.naturalWidth > 0, fit: cs(img).objectFit,
+        ps: ps.map((p) => [cs(p).fontSize, cs(p).lineHeight]), n: ps.length, copyW: Math.round(copy.width), copyBottom: Math.round(copy.bottom + scrollY),
+        figLeft: Math.round(fig.left), figTop: Math.round(fig.top + scrollY), figBottom: Math.round(fig.bottom + scrollY), figRight: Math.round(fig.right), figW: Math.round(img.getBoundingClientRect().width), figH: Math.round(img.getBoundingClientRect().height),
+        listRight: Math.round(list.right), listTop: Math.round(list.top + scrollY), listBottom: Math.round(list.bottom + scrollY), firstTop: Math.round(first.top + scrollY), headBottom: Math.round(head.bottom + scrollY), maxBodyRight: Math.round(Math.max(...bodies)),
+        natW: img.naturalWidth, natH: img.naturalHeight, ok: img.complete && img.naturalWidth > 0,
         cap: cap.textContent.trim(), capSize: [cs(cap).fontSize, cs(cap).lineHeight], capBelow: cap.getBoundingClientRect().top >= img.getBoundingClientRect().bottom - 1,
       };
     });
-    check(`${tag}: Our vision sits between hero and principles`, vis.order[0] < vis.order[1] && vis.order[1] < vis.order[2] && vis.h2 === "Our vision" && vis.n === 3, JSON.stringify(vis.order));
+    const side = w >= 1100;
+    check(`${tag}: Our vision sits between hero and principles, in a reading column of at most 720px`, vis.order[0] < vis.order[1] && vis.order[1] < vis.order[3] && vis.h2 === "Our vision" && vis.n === 3 && vis.copyW <= 720, JSON.stringify(vis.order.concat(vis.copyW)));
     check(`${tag}: vision heading is 26/32 bold Inter and text 17/27`, vis.h2s[0] === "26px" && vis.h2s[1] === "32px" && vis.h2s[2] === "700" && /Inter/.test(vis.h2s[3]) && vis.ps.every((p) => p[0] === "17px" && p[1] === "27px"), JSON.stringify([vis.h2s, vis.ps]));
-    check(`${tag}: photo ${w >= 900 ? "sits right of the vision text" : "sits below the vision text"}`, w >= 900 ? vis.figLeft >= vis.copyRight && vis.figRight <= w : vis.figTop >= vis.copyBottom - 1 && vis.figRight <= w, JSON.stringify(vis));
-    check(`${tag}: photo is whole (3:4, not cropped or stretched) and loaded`, vis.ok && Math.abs(vis.figW / vis.figH - vis.natW / vis.natH) < 0.02 && vis.figW <= (w >= 900 ? 360 : 420), JSON.stringify(vis));
+    if (side) {
+      check(`${tag}: photo column (300-360px) sits right of the principle list, top aligned with principle 1`, vis.figW >= 300 && vis.figW <= 360 && vis.figLeft >= vis.listRight + 40 && vis.figRight <= w && Math.abs(vis.figTop - vis.firstTop) <= 1 && vis.figTop >= vis.headBottom, JSON.stringify(vis));
+      check(`${tag}: photo does not overlap the principles and ends within the list`, vis.figLeft > vis.maxBodyRight && vis.figBottom <= vis.listBottom, JSON.stringify(vis));
+    } else {
+      check(`${tag}: photo stacks after the vision and before the principles`, vis.figTop >= vis.copyBottom && vis.figBottom <= vis.order[3] && vis.order[3] < vis.order[4] && vis.figRight <= w && vis.figW <= 360, JSON.stringify(vis));
+    }
+    check(`${tag}: photo is whole (3:4, not cropped or stretched) and loaded`, vis.ok && Math.abs(vis.figW / vis.figH - vis.natW / vis.natH) < 0.02, JSON.stringify(vis));
     check(`${tag}: verified original caption under the photo, 14/21`, vis.cap === "Harmen van der Kooij and Victor van der Hulst handing over the FIDES Manifesto to Barbara Kathman, Chair of the Digital Affairs committee of the Dutch Parliament" && vis.capBelow && vis.capSize[0] === "14px" && vis.capSize[1] === "21px", JSON.stringify(vis.cap));
     check(`${tag}: the removed visitor line is gone`, !(await page.locator("text=The existing form").count()));
 
