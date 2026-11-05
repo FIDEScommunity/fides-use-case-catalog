@@ -99,6 +99,10 @@ if [[ "$LAYOUT" == "standalone" ]]; then
     foreach ($ids as $id) { wp_delete_post($id, true); }
     foreach (array("fides_use_case_featured", "fides_ds_updates", "fides_ds_editorial_links", "fides_ds_editorial_links_seed") as $o) { delete_option($o); }
     update_option("show_on_front", "posts"); update_option("page_on_front", 0); update_option("page_for_posts", 0);
+    // A fresh install has no FIDES settings, menus or sign-in configuration: remove what the cloned database carries.
+    global $wpdb;
+    $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE \x27fides\\_%\x27 OR option_name LIKE \x27universal\\_openid4vp%\x27 OR option_name LIKE \x27\\_transient\\_fides%\x27 OR option_name LIKE \x27\\_transient\\_timeout\\_fides%\x27");
+    foreach (wp_get_nav_menus() as $m) { wp_delete_nav_menu($m->term_id); }
     echo count($ids) . " pages and the pilot options removed (empty standalone site)\n";'
 else
 re_wp eval '
@@ -181,6 +185,11 @@ r="$(re_wp eval 'echo wp_mail("someone@example.org", "x", "y") ? "sent" : "not s
 [[ "$r" == "not sent" ]] && ok "wp_mail sends nothing" || bad "mail was sent"
 
 echo "== 8. Browser checks on $ROOT_URL/"
+if [[ "$LAYOUT" == "standalone" ]]; then
+  # A reviewer account on the scratch site (the forms need a signed-in visitor); the password stays in this shell.
+  export REHEARSAL_USER="rehearsal-reviewer" REHEARSAL_PASS="$(python3 -c 'import secrets;print(secrets.token_urlsafe(18))')"
+  re_wp user create "$REHEARSAL_USER" reviewer@example.invalid --role=subscriber --user_pass="$REHEARSAL_PASS" >/dev/null 2>&1 && ok "reviewer account made on the scratch site" || bad "reviewer account"
+fi
 export PLAYWRIGHT_MODULE="${PLAYWRIGHT_MODULE:-/Users/victorvanderhulst/Projects/untp-demo/node_modules/playwright}"
 export PLAYWRIGHT_BROWSERS_PATH="${PLAYWRIGHT_BROWSERS_PATH:-$HOME/Library/Caches/ms-playwright}"
 if PILOT_URL="$RE_URL" PILOT_LAYOUT="$LAYOUT" PILOT_BASE="${BASE_SEG:-design-review}" node "$PKG/checks/rehearsal-checks.cjs" 2>&1 | tee "$RE_ROOT/browser.txt" | grep -E "^not ok|rehearsal checks"; then :; fi

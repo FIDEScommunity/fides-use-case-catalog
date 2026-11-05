@@ -84,7 +84,8 @@ $backup  = (string) (getenv('LEARN_BACKUP_DIR') ?: sys_get_temp_dir() . '/fides-
 $prefix  = static function (string $p) use ($mount): string {
     return $mount . ($p === '' ? '' : '/' . $p);
 };
-$tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{glossary}}' => $gloss);
+// {{pilotrel}}: shortcode attributes (url=) are resolved against home_url() by the plugins, so they stay site-relative.
+$tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{pilotrel}}' => $pilot === '' ? '' : '/' . $pilot, '{{glossary}}' => $gloss);
 $tokens_site = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => $pilot === '' ? '' : '/' . $pilot, '{{glossary}}' => '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/');
 
 $manifest = json_decode((string) file_get_contents($here . '/manifest.json'), true);

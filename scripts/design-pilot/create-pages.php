@@ -39,7 +39,7 @@ const PILOT_FEATURED_ID = 'digital-certificate-of-good-conduct-vog-as-a-verifiab
 const PILOT_ORG_ID      = 'org:credenco';
 const PILOT_WALLET_ID   = 'credenco-business-wallet';
 const PILOT_CREDENTIAL_ID      = 'cred:eu:ehic';
-const PILOT_CREDENTIAL_ADD_URL = '{{site}}/credential-submit/';
+const PILOT_CREDENTIAL_ADD_URL = '/credential-submit/';
 /** Shared header/footer page template from fides-community-tools-tiles. */
 const PILOT_SHELL_TEMPLATE = 'fides-site-shell';
 
@@ -196,7 +196,8 @@ $parent = pilot_upsert_page(
     . "<!-- wp:list-item --><li><a href=\"{{pilot}}/credential/\">Credential type detail</a></li><!-- /wp:list-item -->"
     . "</ul>\n<!-- /wp:list -->",
     0,
-    array('has_hero_section' => 'enabled')
+    array('has_hero_section' => 'enabled'),
+    $pilot_ctx['standalone'] ? PILOT_SHELL_TEMPLATE : '' // standalone: the index page gets the same header and footer as the pilot pages
 );
 if ($pilot_ctx['standalone']) {
     $parent = 0; // standalone: the pilot pages are not children of the index page
@@ -207,7 +208,7 @@ if ($pilot_ctx['standalone']) {
 pilot_upsert_page(
     '{{base}}/overview',
     'Use cases (design pilot)',
-    '<!-- wp:shortcode -->[fides_use_case_catalog design="pilot" title="Use cases" detail_url="{{pilot}}/use-case/" add_url="{{site}}/use-case-form/"]'
+    '<!-- wp:shortcode -->[fides_use_case_catalog design="pilot" title="Use cases" detail_url="{{pilotpath}}/use-case/" add_url="/use-case-form/"]'
     . '<p>Discover real-world examples of <a href="https://fides.community/topics/personal-wallets/">digital wallets</a> and <a href="https://fides.community/topics/credentials/">verifiable credentials</a> in action — passwordless login, age verification, digital travel, cross-border and public services, and more.</p>'
     . '<p>Learn from proven patterns, compare approaches, and reuse what works instead of starting from scratch.</p>'
     . '[/fides_use_case_catalog]<!-- /wp:shortcode -->',
@@ -219,7 +220,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/use-case',
     'Use case detail (design pilot)',
-    '<!-- wp:shortcode -->[fides_use_case_detail id="' . PILOT_DETAIL_ID . '" listing_url="{{pilot}}/overview/"]<!-- /wp:shortcode -->',
+    '<!-- wp:shortcode -->[fides_use_case_detail id="' . PILOT_DETAIL_ID . '" listing_url="{{pilotpath}}/overview/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
@@ -229,7 +230,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/organizations',
     'Organizations (design pilot)',
-    '<!-- wp:shortcode -->[fides_organization_catalog design="pilot" title="Organizations" detail_url="{{pilot}}/organization/" add_url="{{site}}/organizations-submit/"'
+    '<!-- wp:shortcode -->[fides_organization_catalog design="pilot" title="Organizations" detail_url="{{pilotpath}}/organization/" add_url="/organizations-submit/"'
     . ' intro="Discover organizations shaping the global ecosystem of digital wallets and verifiable credentials and explore their roles."]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
@@ -239,7 +240,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/organization',
     'Organization detail (design pilot)',
-    '<!-- wp:shortcode -->[fides_organization_detail id="' . PILOT_ORG_ID . '" listing_url="{{pilot}}/organizations/" use_case_detail_url="{{pilot}}/use-case/"]<!-- /wp:shortcode -->',
+    '<!-- wp:shortcode -->[fides_organization_detail id="' . PILOT_ORG_ID . '" listing_url="{{pilotpath}}/organizations/" use_case_detail_url="{{pilotpath}}/use-case/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
@@ -249,8 +250,8 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/personal-wallets',
     'Personal wallets (design pilot)',
-    '<!-- wp:shortcode -->[fides_wallet_catalog type="personal" design="pilot" title="Personal wallets" detail_url="{{pilot}}/wallet/" add_url="{{site}}/wallet-submit/"'
-    . ' cross_url="{{pilot}}/business-wallets/" intro="Explore digital wallets for individuals."]<!-- /wp:shortcode -->',
+    '<!-- wp:shortcode -->[fides_wallet_catalog type="personal" design="pilot" title="Personal wallets" detail_url="{{pilotpath}}/wallet/" add_url="/wallet-submit/"'
+    . ' cross_url="{{pilotpath}}/business-wallets/" intro="Explore digital wallets for individuals."]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
@@ -259,8 +260,8 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/business-wallets',
     'Business wallets (design pilot)',
-    '<!-- wp:shortcode -->[fides_wallet_catalog type="organizational" design="pilot" title="Business wallets" detail_url="{{pilot}}/wallet/" add_url="{{site}}/wallet-submit/"'
-    . ' cross_url="{{pilot}}/personal-wallets/" intro="Explore digital wallets and related tooling that allow organizations to receive, store, present, issue or verify verifiable credentials."]<!-- /wp:shortcode -->'
+    '<!-- wp:shortcode -->[fides_wallet_catalog type="organizational" design="pilot" title="Business wallets" detail_url="{{pilotpath}}/wallet/" add_url="/wallet-submit/"'
+    . ' cross_url="{{pilotpath}}/personal-wallets/" intro="Explore digital wallets and related tooling that allow organizations to receive, store, present, issue or verify verifiable credentials."]<!-- /wp:shortcode -->'
     // The editor-chosen Learn link (context wallet-overview:organizational) is rendered by the wallet plugin in the intro.
     ,
     $parent,
@@ -271,7 +272,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/wallet',
     'Wallet detail (design pilot)',
-    '<!-- wp:shortcode -->[fides_wallet_detail id="' . PILOT_WALLET_ID . '" personal_listing_url="{{pilot}}/personal-wallets/" business_listing_url="{{pilot}}/business-wallets/" use_case_detail_url="{{pilot}}/use-case/"]<!-- /wp:shortcode -->',
+    '<!-- wp:shortcode -->[fides_wallet_detail id="' . PILOT_WALLET_ID . '" personal_listing_url="{{pilotpath}}/personal-wallets/" business_listing_url="{{pilotpath}}/business-wallets/" use_case_detail_url="{{pilotpath}}/use-case/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
@@ -281,7 +282,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/credentials',
     'Credential types (design pilot)',
-    '<!-- wp:shortcode -->[fides_credential_catalog design="pilot" title="Credential Types" detail_url="{{pilot}}/credential/" add_url="' . PILOT_CREDENTIAL_ADD_URL . '"'
+    '<!-- wp:shortcode -->[fides_credential_catalog design="pilot" title="Credential Types" detail_url="{{pilotpath}}/credential/" add_url="' . PILOT_CREDENTIAL_ADD_URL . '"'
     . ' intro="Find credential types, inspect their attributes and reuse the published schemas."]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
@@ -291,7 +292,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/credential',
     'Credential type detail (design pilot)',
-    '<!-- wp:shortcode -->[fides_credential_detail id="' . PILOT_CREDENTIAL_ID . '" listing_url="{{pilot}}/credentials/" use_case_detail_url="{{pilot}}/use-case/"]<!-- /wp:shortcode -->',
+    '<!-- wp:shortcode -->[fides_credential_detail id="' . PILOT_CREDENTIAL_ID . '" listing_url="{{pilotpath}}/credentials/" use_case_detail_url="{{pilotpath}}/use-case/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
@@ -322,7 +323,7 @@ $pilot_home_id = pilot_upsert_page(
     . "\n<!-- wp:html -->\n<div class=\"fides-uc-fragment__actions\" style=\"margin-top:32px;display:flex;flex-wrap:wrap;align-items:center;gap:16px 32px\"><a class=\"fides-ds-button\" href=\"{{pilot}}/start/\">Find your starting point <span aria-hidden=\"true\">→</span></a><a class=\"fides-ds-action-link\" href=\"{{pilot}}/overview/\"><span>Explore use cases</span> <span aria-hidden=\"true\">→</span></a></div>\n<!-- /wp:html -->"
     . "</div>\n<!-- /wp:column -->\n"
     . "<!-- wp:column {\"verticalAlignment\":\"center\",\"width\":\"45%\"} -->\n<div class=\"wp-block-column is-vertically-aligned-center\" style=\"flex-basis:45%\">"
-    . "<!-- wp:shortcode -->[fides_use_case_featured detail_url=\"{{pilot}}/use-case/\"]<!-- /wp:shortcode -->"
+    . "<!-- wp:shortcode -->[fides_use_case_featured detail_url=\"{{pilotpath}}/use-case/\"]<!-- /wp:shortcode -->"
     . "</div>\n<!-- /wp:column -->"
     . "</div>\n<!-- /wp:columns -->"
     . "</div>\n<!-- /wp:group -->"
@@ -331,7 +332,7 @@ $pilot_home_id = pilot_upsert_page(
     . "\n<!-- wp:shortcode -->[fides_use_case_discovery layout=\"index\"]<!-- /wp:shortcode -->"
     . "\n<!-- wp:shortcode -->[fides_home_updates]<!-- /wp:shortcode -->"
     // Paper 25.12: blue spotlight on one demo use case with its explicit catalog relations.
-    . "\n<!-- wp:shortcode -->[fides_use_case_spotlight id=\"end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh\" detail_url=\"{{pilot}}/use-case/\"]<!-- /wp:shortcode -->",
+    . "\n<!-- wp:shortcode -->[fides_use_case_spotlight id=\"end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh\" detail_url=\"{{pilotpath}}/use-case/\"]<!-- /wp:shortcode -->",
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
@@ -393,7 +394,7 @@ pilot_upsert_page(
 pilot_upsert_page(
     '{{base}}/manifesto',
     'FIDES Manifesto',
-    '<!-- wp:shortcode -->[fides_manifesto detail_url="{{pilot}}/organization/"]<!-- /wp:shortcode -->',
+    '<!-- wp:shortcode -->[fides_manifesto detail_url="{{pilotpath}}/organization/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

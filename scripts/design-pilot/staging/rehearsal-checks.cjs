@@ -58,8 +58,12 @@ const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-up
   page.on("request", (r) => { if (r.method() !== "GET" && r.method() !== "HEAD") writes.push(`${r.method()} ${r.url()}`); });
 
   // robots.txt keeps search engines out of the base.
-  const robots = await (await ctx.request.get(`${BASE}${STANDALONE ? ROOT : "/"}robots.txt`)).text();
-  check(`robots.txt disallows ${ROOT}`, new RegExp(`Disallow:\\s*${ROOT.replace(/\//g, "\\/")}`).test(robots), robots.slice(0, 200));
+  // WordPress does not serve robots.txt for a site below a path (the file belongs to the domain root), so a standalone
+  // site relies on the noindex meta tag and the X-Robots-Tag header checked per page below.
+  if (!STANDALONE) {
+    const robots = await (await ctx.request.get(`${BASE}/robots.txt`)).text();
+    check(`robots.txt disallows ${ROOT}`, new RegExp(`Disallow:\\s*${ROOT.replace(/\//g, "\\/")}`).test(robots), robots.slice(0, 200));
+  }
 
   const seen = [];
   for (const [rel, text] of PAGES) {
@@ -89,7 +93,8 @@ const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-up
       };
     }, LOCAL_PILOT);
     seen.push({ rel, info });
-    check(`${ROOT}${rel}: has a heading`, info.h1.length > 0, info.title);
+    // Form pages show a sign-in notice (no heading) until the visitor is signed in; they are checked signed in below.
+    if (!(STANDALONE && FORM_PAGES.includes(rel))) check(`${ROOT}${rel}: has a heading`, info.h1.length > 0 || rel === "glossary/", info.title);
     if (text) check(`${ROOT}${rel}: shows "${text}"`, info.text.includes(text) || info.h1.includes(text), info.h1);
     check(`${ROOT}${rel}: noindex, nofollow`, /noindex/.test(info.robots) && /nofollow/.test(info.robots), info.robots);
     check(`${ROOT}${rel}: no link to the local pilot route or port`, info.badLocal.length === 0, info.badLocal.slice(0, 3).join(" "));
@@ -168,24 +173,55 @@ const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-up
   check(`every internal link answers 200 (${internal.size} requests)`, dead.length === 0, dead.slice(0, 6).join(" | "));
 
   // No address outside the base in the HTML or its inline configuration (root-relative paths, absolute URLs on this origin).
+  const strayIn = (html0) => {
+    const html = html0.replace(/\\\//g, "/");
+    const outside = (p) => !p.startsWith(ROOT) && p !== ROOT.slice(0, -1);
+    const rootRel = [...html.matchAll(/(?:href|src|action)=["']\/(?!\/)([^"']*)/g)].map((m) => `/${m[1]}`).filter(outside);
+    const origin = [...html.matchAll(new RegExp(`${BASE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\/[^"'\\s<>)\\\\]*)?`, "g"))].map((m) => m[1] || "/").filter(outside);
+    const doubled = /design-review\/design-review/.test(html) || /fides-design-pilot/.test(html) || /:10088/.test(html);
+    return { list: [...rootRel, ...origin], doubled };
+  };
   const strays = [];
   for (const [rel] of PAGES) {
-    const html = (await (await ctx.request.get(`${BASE}${ROOT}${rel}`)).text()).replace(/\\\//g, "/");
-    const rootRel = [...html.matchAll(/(?:href|src|action)=["']\/(?!\/)([^"']*)/g)].map((m) => `/${m[1]}`).filter((p) => !p.startsWith(ROOT) && p !== ROOT.slice(0, -1));
-    const origin = [...html.matchAll(new RegExp(`${BASE.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(\\/[^"'\\s<>)\\\\]*)?`, "g"))].map((m) => m[1] || "/").filter((p) => !p.startsWith(ROOT) && p !== ROOT.slice(0, -1));
-    const doubled = /design-review\/design-review/.test(html) || /fides-design-pilot/.test(html) || /:10088/.test(html);
-    if (rootRel.length || origin.length || doubled) strays.push(`${rel || "/"}: ${[...rootRel, ...origin].slice(0, 2).join(",")}${doubled ? " doubled/local" : ""}`);
+    const r = strayIn(await (await ctx.request.get(`${BASE}${ROOT}${rel}`)).text());
+    if (r.list.length || r.doubled) strays.push(`${rel || "/"}: ${r.list.slice(0, 2).join(",")}${r.doubled ? " doubled/local" : ""}`);
   }
   check("no root-relative or absolute address outside the base in any page's HTML", strays.length === 0, strays.slice(0, 5).join(" | "));
 
-  // Forms are the plugin forms on this site (rendered, not sent); their REST endpoints are below the base.
-  if (STANDALONE) {
+  // Forms are login-gated plugin forms on this site. A reviewer account (made by the rehearsal, never printed) signs in on
+  // this site and every form page must then show its fields. Nothing is submitted.
+  if (STANDALONE && process.env.REHEARSAL_USER) {
+    const ctx2 = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    await ctx2.addCookies(Object.entries({ "banner-status": "dismissed", policy_id: "35", functional: "allow", preferences: "deny", statistics: "deny", marketing: "deny" }).map(([n, v]) => ({ name: `cmplz_${n}`, value: v, url: BASE })));
+    const p2 = await ctx2.newPage();
+    const w2 = [];
+    p2.on("request", (r) => { if (r.method() !== "GET" && r.method() !== "HEAD" && !/\/wp-login\.php/.test(r.url())) w2.push(`${r.method()} ${r.url()}`); });
+    // Signed out, the form page offers a sign-in link that stays on this site.
+    await p2.goto(`${BASE}${ROOT}use-case-form/`, { waitUntil: "domcontentloaded" });
+    const signin = await p2.evaluate(() => [...document.querySelectorAll("main a, .fides-form a, a")].filter((a) => /sign in/i.test(a.textContent)).map((a) => a.getAttribute("href")));
+    check("signed out, the form page offers a sign-in link on this site", signin.length > 0 && signin.every((h) => pathOf(h).startsWith(ROOT)), JSON.stringify(signin.slice(0, 2)));
+    await p2.goto(`${BASE}${ROOT}wp-login.php`, { waitUntil: "domcontentloaded" });
+    await p2.fill("#user_login", process.env.REHEARSAL_USER);
+    await p2.fill("#user_pass", process.env.REHEARSAL_PASS || "");
+    await Promise.all([p2.waitForNavigation({ waitUntil: "domcontentloaded" }).catch(() => {}), p2.click("#wp-submit")]);
+    const cookies = await ctx2.cookies();
+    check(`the reviewer signs in on ${ROOT}wp-login.php`, cookies.some((c) => /^wordpress_logged_in_/.test(c.name)), new URL(p2.url()).pathname);
+    check("after sign-in the visitor stays below the base", new URL(p2.url()).pathname.startsWith(ROOT), new URL(p2.url()).pathname);
     for (const rel of FORM_PAGES) {
-      await page.goto(`${BASE}${ROOT}${rel}`, { waitUntil: "domcontentloaded" });
-      await page.waitForTimeout(800);
-      const f = await page.evaluate(() => ({ fields: document.querySelectorAll("main form input, main form select, main form textarea, form[class*=fides] input, form[class*=fides] textarea, .fides-form input, .fides-form textarea").length, text: document.body.innerText.slice(0, 600) }));
-      check(`${ROOT}${rel}: shows its form`, f.fields > 0, `${f.fields} fields; ${f.text.replace(/\s+/g, " ").slice(0, 120)}`);
+      const res = await p2.goto(`${BASE}${ROOT}${rel}`, { waitUntil: "domcontentloaded" });
+      await p2.waitForSelector("form input, form select, form textarea", { timeout: 15000 }).catch(() => {});
+      const f = await p2.evaluate(() => ({
+        fields: document.querySelectorAll("form input:not([type=hidden]), form select, form textarea").length,
+        text: document.body.innerText.slice(0, 300).replace(/\s+/g, " "),
+        actions: [...document.querySelectorAll("form[action]")].map((x) => x.getAttribute("action")),
+        html: document.documentElement.outerHTML,
+      }));
+      check(`${ROOT}${rel}: signed in, the form shows its fields`, res && res.status() === 200 && f.fields > 0, `${f.fields} fields; ${f.text.slice(0, 120)}`);
+      const r = strayIn(f.html);
+      check(`${ROOT}${rel}: form page and its endpoints stay below the base`, r.list.length === 0 && !r.doubled && f.actions.every((a) => !a || a === "" || a.startsWith("#") || new URL(a, BASE).pathname.startsWith(ROOT)), `${r.list.slice(0, 3).join(",")} ${f.actions.join(",")}`);
     }
+    check("no write request other than the sign-in during the form checks", w2.length === 0, w2.slice(0, 3).join(" | "));
+    await ctx2.close();
   }
 
   // Detail pages: the first detail link of each listing opens a populated detail view below the base.
