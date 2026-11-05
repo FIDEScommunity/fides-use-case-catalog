@@ -52,8 +52,9 @@ foreach ($required as $slug => $version) {
     $same   = version_compare($installed[ $slug ]['version'], (string) $version, '>=');
     $add(! $active ? 'FAIL' : ($same ? 'PASS' : 'FAIL'), 'plugin ' . $slug, ($active ? 'active ' : 'INACTIVE ') . $installed[ $slug ]['version'] . ' (package ' . $version . ')');
 }
-foreach (array('wpforms-lite' => 'Manifesto sign form', 'complianz-gdpr' => 'consent banner', 'fides-assistant' => 'Ask FIDES item in the Learn bar (optional)') as $slug => $why) {
-    $add(isset($installed[ $slug ]) && is_plugin_active($installed[ $slug ]['file']) ? 'PASS' : 'WARN', 'plugin ' . $slug, $why);
+foreach (array('wpforms-lite' => 'Manifesto sign form (standalone: not needed, the sign button opens the live form)', 'complianz-gdpr' => 'consent banner (optional)', 'fides-assistant' => 'Ask FIDES item in the Learn bar (optional)') as $slug => $why) {
+    $on = isset($installed[ $slug ]) && is_plugin_active($installed[ $slug ]['file']);
+    $add($on ? 'PASS' : ($sa ? 'INFO' : 'WARN'), 'plugin ' . $slug, $why);
 }
 
 // Classes the pilot needs.

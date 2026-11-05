@@ -58,16 +58,20 @@ echo "layout: $LAYOUT, home_url() will be $RE_HOME"
 rsync -a --exclude='wp-content' --exclude='wp-config.php' "$PILOT_SITE/" "$RE_SITE/"       # real copies: symlinked core files would resolve back to the pilot
 mkdir -p "$RE_SITE/wp-content/plugins" "$RE_SITE/wp-content/themes" "$RE_SITE/wp-content/mu-plugins"
 PILOT_SLUGS="fides-community-tools-tiles fides-use-case-catalog fides-organization-catalog fides-wallet-catalog fides-credential-catalog fides-vocabulary-glossary fides-template-pilot"
+# Standalone is a bare install: only the Blocksy parent theme and the package. Third-party plugins (Stackable, WPForms,
+# Complianz, sign-in plugins, ...) are linked only with WITH_THIRD_PARTY=1, so the rehearsal shows what the package needs.
 for item in "$PILOT_SITE/wp-content/plugins/"*; do                                          # third-party plugins: links to the existing copies (read only)
   name="$(basename "$item")"
+  [[ "$LAYOUT" == "standalone" && "${WITH_THIRD_PARTY:-0}" != "1" ]] && continue
   case " $PILOT_SLUGS " in *" $name "*) continue;; esac
   [[ -e "$item" ]] && ln -s "$(python3 -c 'import os,sys;print(os.path.realpath(sys.argv[1]))' "$item")" "$RE_SITE/wp-content/plugins/$name" 2>/dev/null || true
 done
 for item in "$PILOT_SITE/wp-content/themes/"*; do
   name="$(basename "$item")"; [[ "$name" == "blocksy-child" ]] && continue
+  [[ "$LAYOUT" == "standalone" && "${WITH_THIRD_PARTY:-0}" != "1" && "$name" != "blocksy" ]] && continue
   [[ -e "$item" ]] && ln -s "$(python3 -c 'import os,sys;print(os.path.realpath(sys.argv[1]))' "$item")" "$RE_SITE/wp-content/themes/$name" 2>/dev/null || true
 done
-for dir in uploads languages; do [[ -e "$PILOT_SITE/wp-content/$dir" ]] && ln -s "$(cd "$PILOT_SITE/wp-content/$dir" && pwd -P)" "$RE_SITE/wp-content/$dir"; done
+for dir in uploads languages; do [[ "$LAYOUT" == "standalone" && "$dir" == "uploads" && "${WITH_THIRD_PARTY:-0}" != "1" ]] && continue; [[ -e "$PILOT_SITE/wp-content/$dir" ]] && ln -s "$(cd "$PILOT_SITE/wp-content/$dir" && pwd -P)" "$RE_SITE/wp-content/$dir"; done
 cp "$PILOT_SITE/wp-content/index.php" "$RE_SITE/wp-content/index.php" 2>/dev/null || true
 PKG_PLUGINS=0
 for z in "$PKG"/plugins/*.zip "$PKG"/non-git/plugins/*.zip; do unzip -q -o "$z" -d "$RE_SITE/wp-content/plugins"; PKG_PLUGINS=$((PKG_PLUGINS+1)); done
