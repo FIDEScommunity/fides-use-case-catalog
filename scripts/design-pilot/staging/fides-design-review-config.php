@@ -92,6 +92,17 @@ add_filter(
     2
 );
 
+// The catalog design views look up their pilot detail page by scanning the first 20 pages with the pilot marker.
+// With the Learn pages that scan misses the detail pages, so name the detail pages explicitly.
+foreach (array('wallet' => 'wallet', 'organization' => 'organization', 'credential' => 'credential') as $fides_pilot_type => $fides_pilot_slug) {
+    add_filter(
+        'fides_' . $fides_pilot_type . '_pilot_detail_base',
+        static function () use ($fides_pilot_slug) {
+            return home_url('/' . fides_design_review_base() . '/' . $fides_pilot_slug . '/');
+        }
+    );
+}
+
 if (defined('FIDES_DESIGN_REVIEW_SIGN_URL') && (string) FIDES_DESIGN_REVIEW_SIGN_URL !== '') {
     add_filter(
         'fides_manifesto_sign_url',

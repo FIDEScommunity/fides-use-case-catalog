@@ -105,6 +105,17 @@ add_filter(
  * GitHub first, as in production. A stale-data notice then means GitHub really
  * failed; the same-origin cache and the plugin data are only fallbacks.
  */
+// The catalog design views look up their pilot detail page by scanning the first 20 pages with the pilot marker.
+// With the Learn pages that scan misses the detail pages, so name the detail pages explicitly.
+foreach (array('wallet' => 'wallet', 'organization' => 'organization', 'credential' => 'credential') as $fides_pilot_type => $fides_pilot_slug) {
+    add_filter(
+        'fides_' . $fides_pilot_type . '_pilot_detail_base',
+        static function () use ($fides_pilot_slug) {
+            return home_url('/fides-design-pilot/' . $fides_pilot_slug . '/');
+        }
+    );
+}
+
 add_filter('fides_use_case_catalog_prefer_local_source', '__return_false');
 
 /*
