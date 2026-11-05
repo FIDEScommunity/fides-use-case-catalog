@@ -39,6 +39,7 @@ const measure = (page) => page.evaluate((sel) => {
     paths: a.querySelector("svg") ? a.querySelector("svg").innerHTML.replace(/\s+/g, " ").slice(0, 40) : "", colour: cs(a, "color"), weight: cs(a, "fontWeight"), size: cs(a, "fontSize"),
   }));
     const biz = m.querySelector(".fides-home-readiness__business-link");
+    const expl = m.querySelector(".fides-home-readiness__explain-link");
   const headingEl = m.querySelector(".fides-home-readiness__heading");
   const introEl = m.querySelector(".fides-home-readiness__intro");
   const aTitle = action.querySelector("h2");
@@ -51,6 +52,7 @@ const measure = (page) => page.evaluate((sel) => {
     sources: m.querySelectorAll(".fides-home-readiness__source-link").length,
     headingBox: { t: headingEl.textContent.trim(), tag: headingEl.tagName, size: cs(headingEl, "fontSize"), weight: cs(headingEl, "fontWeight"), box: r(headingEl) },
     intro: introEl ? { t: introEl.textContent.trim(), box: r(introEl), size: cs(introEl, "fontSize"), lh: cs(introEl, "lineHeight"), max: cs(introEl, "maxWidth") } : null,
+    expl: expl ? { href: expl.getAttribute("href"), text: expl.textContent.replace(/\s+/g, " ").trim(), box: r(expl), size: cs(expl, "fontSize"), weight: cs(expl, "fontWeight") } : null,
     biz: biz ? { href: biz.getAttribute("href"), text: biz.textContent.replace(/\s+/g, " ").trim(), box: r(biz), size: cs(biz, "fontSize"), weight: cs(biz, "fontWeight"), colour: cs(biz, "color"), lines: Math.round(r(biz).h / 22) } : null,
     text: m.textContent, rows, old: document.querySelectorAll(".fides-home-learn").length, cards: m.querySelectorAll(".fides-ds-card, [class*='card']").length,
     heroBottom: hero ? hero.getBoundingClientRect().bottom + scrollY : 0, indexTop: index ? index.getBoundingClientRect().top + scrollY : 1e9,
@@ -84,19 +86,21 @@ const measure = (page) => page.evaluate((sel) => {
     check(`${tag}: heading "EUDI Wallet: what is changing?" is a visible h2 above the timeline`, m.headingBox.t === "EUDI Wallet: what is changing?" && m.headingBox.tag === "H2" && m.headingBox.size === "24px" && m.headingBox.weight === "700" && m.headingBox.box.b <= first.dot.y + 1, JSON.stringify(m.headingBox));
     check(`${tag}: intro is one sentence, spells out European Digital Identity Wallet and uses the full width of the left column (no max-width, 15px/23px)`, m.intro && /European Digital Identity Wallet \(EUDI Wallet\)/.test(m.intro.t) && (m.intro.t.match(/[.!?](\s|$)/g) || []).length === 1 && m.intro.t.length < 220 && m.intro.box.w >= m.lead.w - 1 && m.intro.lh === "23px" && m.intro.size === "15px" && m.intro.max === "none" && m.intro.box.y >= m.headingBox.box.b - 1 && m.intro.box.b <= first.dot.y + 1, JSON.stringify(m.intro));
     check(`${tag}: ${FULL ? "three" : "two"} milestones in order`, pts.length === (FULL ? 3 : 2) && first.when === "End 2026" && first.title === "Wallet availability" && pts[1].when === "End 2027" && pts[1].title === "Wallet acceptance", JSON.stringify(pts.map((p) => [p.when, p.title])));
-    check(`${tag}: availability concerns Member States, acceptance only certain private services that must use strong online authentication, on user request`, /Member States/.test(first.text) && /EUDI Wallet/.test(first.text) && /^Certain private services requiring strong online authentication/.test(pts[1].text) && /on user request/.test(pts[1].text) && !/all organi[sz]ations|every organi[sz]ation|countdown|days left|business wallet/i.test(pts.map((p) => p.text).join(" ")), JSON.stringify(pts.map((p) => p.text)));
+    check(`${tag}: availability concerns Member States, acceptance only certain private services that must use strong online authentication, on user request`, first.text === "EU Member States are required to provide at least one EUDI Wallet." && /^Certain private service providers must accept EUDI Wallets for online identification when requested by users\.$/.test(pts[1].text) && !/all organi[sz]ations|every organi[sz]ation|countdown|days left|business wallet/i.test(pts.map((p) => p.text).join(" ")), JSON.stringify(pts.map((p) => p.text)));
     check(`${tag}: milestone texts are short (under 120 characters), width bounded to 46ch`, pts.every((p) => p.text.length < 120 && p.textBox.w <= 46 * 9.5 + 1), JSON.stringify(pts.map((p) => [p.text.length, p.textBox.w])));
     const lines = pts.map((p) => Math.round(p.textBox.h / 23));
-    if (!FULL && (w >= 1440 || (w >= 641 && w < 900))) check(`${tag}: milestone explanations take at most two lines`, lines.every((n) => n <= 2), JSON.stringify(lines));
+    if (!FULL && (w >= 1440 || (w >= 641 && w < 900))) check(`${tag}: milestone explanations take at most three lines (the first at most two)`, lines.every((n) => n <= 3) && lines[0] <= 2, JSON.stringify(lines));
     else console.log(`info - ${tag}: milestone explanation lines ${JSON.stringify(lines)}`);
     check(`${tag}: type of the milestones (label 13 semibold, title 20 bold)`, pts.every((p) => p.whenCss[0] === "13px" && p.whenCss[1] === "600" && p.titleCss[0] === "20px" && p.titleCss[1] === "700"), JSON.stringify(pts.map((p) => [p.whenCss, p.titleCss])));
     check(`${tag}: no countdown and no extra cards`, m.cards === 0 && !/countdown|days left/i.test(m.text), "");
     check(`${tag}: no visible source lines in the block`, m.sources === 0 && m.points.every((p) => p.src === null) && !/Source:/.test(m.text), String(m.sources));
     check(`${tag}: right part keeps the workshop text`, m.aTitle.t === "What does this mean for your organisation?" && m.aTitle.size === "20px" && m.aTitle.weight === "700" && m.aText.t === "Work through the impact on your services and agree the next steps with your team.", JSON.stringify([m.aTitle.t, m.aText.t]));
     if (FULL) {
-      check(`${tag}: business link is separate, below the timeline and not part of a milestone`, m.biz && m.biz.text === "And for businesses? Explore European Business Wallets →" && m.biz.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && m.biz.box.h >= 44 && m.biz.size === "15px" && m.biz.weight === "600" && m.biz.colour === "rgb(8, 72, 163)", JSON.stringify(m.biz));
+      check(`${tag}: business link is separate, below the timeline and not part of a milestone`, m.biz && m.biz.text === "For organisations: explore European Business Wallets →" && m.biz.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && m.biz.box.h >= 44 && m.biz.size === "15px" && m.biz.weight === "600" && m.biz.colour === "rgb(8, 72, 163)", JSON.stringify(m.biz));
       check(`${tag}: business link stays inside the left column and the screen (${m.biz ? m.biz.lines : "?"} line(s))`, m.biz && m.biz.box.r <= m.lead.r + 1 && m.biz.box.r <= w - 19 && m.overflow <= 0, JSON.stringify(m.biz && m.biz.box));
+      check(`${tag}: the EUDI explanation link comes first, above the separate business link, 44px tall`, m.expl && m.expl.text === "Understand the EUDI obligations and exceptions →" && m.expl.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && m.expl.box.b <= m.biz.box.y + 1 && m.expl.box.h >= 44 && m.expl.size === "15px" && m.expl.weight === "600", JSON.stringify(m.expl));
     } else {
+      check(`${tag}: without fitting Learn content (EUDI obligations, European Business Wallets) neither link is shown`, m.expl === null);
       check(`${tag}: without existing European Business Wallet content the business link is not shown`, m.biz === null);
     }
 
@@ -158,15 +162,15 @@ const measure = (page) => page.evaluate((sel) => {
     await page.evaluate(() => { const m = document.querySelector(".fides-home-readiness"); const t = document.createElement("span"); t.tabIndex = -1; t.id = "probe-before"; m.parentNode.insertBefore(t, m); t.focus(); });
     await page.waitForTimeout(1500); // let the smooth scroll to the probe finish
     const order = [];
-    const tabs = (FULL ? 1 : 0) + 2;
+    const tabs = (FULL ? 2 : 0) + 2;
     for (let i = 0; i < tabs; i++) {
       await page.keyboard.press("Tab");
       await page.waitForTimeout(1000);
       await page.evaluate(() => new Promise((res) => { let last = -1, n = 0; const t = setInterval(() => { n = scrollY === last ? n + 1 : 0; last = scrollY; if (n >= 3) { clearInterval(t); res(); } }, 100); }));
       order.push(await page.evaluate(() => { const a = document.activeElement; const cs = getComputedStyle(a); const b = a.getBoundingClientRect(); return { cls: a.className, text: a.textContent.replace(/\s+/g, " ").trim().slice(0, 30), ring: cs.outlineStyle + " " + cs.outlineWidth, ringColour: cs.outlineColor, visible: b.bottom > 0 && b.top < innerHeight, top: Math.round(b.top), bottom: Math.round(b.bottom), vh: innerHeight, inside: !!a.closest(".fides-home-readiness") }; }));
     }
-    const expected = [...(FULL ? [/business-link/] : []), /Readiness Workshop/, /Topics & guides/];
-    check(`${tag}: Tab goes ${FULL ? "business link, " : ""}Readiness Workshop, Topics & guides`, order.every((o, i) => o.inside && (i < (FULL ? 1 : 0) ? expected[i].test(o.cls) : expected[i].test(o.text))), JSON.stringify(order.map((o) => o.text)));
+    const expected = [...(FULL ? [/explain-link/, /business-link/] : []), /Readiness Workshop/, /Topics & guides/];
+    check(`${tag}: Tab goes ${FULL ? "explanation link, business link, " : ""}Readiness Workshop, Topics & guides`, order.every((o, i) => o.inside && (i < (FULL ? 2 : 0) ? expected[i].test(o.cls) : expected[i].test(o.text))), JSON.stringify(order.map((o) => o.text)));
     check(`${tag}: every focused control shows a 3px solid ring and is reachable in the viewport`, order.every((o) => o.ring === "solid 3px" && o.visible), JSON.stringify(order.map((o) => [o.ring, o.visible, o.top, o.bottom, o.vh])));
     await page.evaluate(() => document.getElementById("probe-before").remove());
 
