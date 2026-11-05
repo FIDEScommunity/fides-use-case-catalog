@@ -53,6 +53,7 @@ const measure = (page) => page.evaluate((sel) => {
     headingBox: { t: headingEl.textContent.trim(), tag: headingEl.tagName, size: cs(headingEl, "fontSize"), weight: cs(headingEl, "fontWeight"), box: r(headingEl) },
     intro: introEl ? { t: introEl.textContent.trim(), box: r(introEl), size: cs(introEl, "fontSize"), lh: cs(introEl, "lineHeight"), max: cs(introEl, "maxWidth") } : null,
     expl: expl ? { href: expl.getAttribute("href"), text: expl.textContent.replace(/\s+/g, " ").trim(), box: r(expl), size: cs(expl, "fontSize"), weight: cs(expl, "fontWeight") } : null,
+    pend: [...m.querySelectorAll("[data-link-pending]")].map((e) => ({ key: e.dataset.linkPending, tag: e.tagName, href: e.getAttribute("href"), tabindex: e.getAttribute("tabindex"), text: e.textContent.replace(/\s+/g, " ").trim(), visible: e.querySelector(".fides-home-readiness__label").textContent.replace(/\s+/g, " ").trim(), box: r(e), cursor: cs(e, "cursor"), colour: cs(e, "color"), size: cs(e, "fontSize"), weight: cs(e, "fontWeight"), anchors: e.querySelectorAll("a").length })),
     biz: biz ? { href: biz.getAttribute("href"), text: biz.textContent.replace(/\s+/g, " ").trim(), box: r(biz), size: cs(biz, "fontSize"), weight: cs(biz, "fontWeight"), colour: cs(biz, "color"), lines: Math.round(r(biz).h / 22) } : null,
     text: m.textContent, rows, old: document.querySelectorAll(".fides-home-learn").length, cards: m.querySelectorAll(".fides-ds-card, [class*='card']").length,
     heroBottom: hero ? hero.getBoundingClientRect().bottom + scrollY : 0, indexTop: index ? index.getBoundingClientRect().top + scrollY : 1e9,
@@ -98,10 +99,17 @@ const measure = (page) => page.evaluate((sel) => {
     if (FULL) {
       check(`${tag}: business link is separate, below the timeline and not part of a milestone`, m.biz && m.biz.text === "For organisations: explore European Business Wallets →" && m.biz.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && m.biz.box.h >= 44 && m.biz.size === "15px" && m.biz.weight === "600" && m.biz.colour === "rgb(8, 72, 163)", JSON.stringify(m.biz));
       check(`${tag}: business link stays inside the left column and the screen (${m.biz ? m.biz.lines : "?"} line(s))`, m.biz && m.biz.box.r <= m.lead.r + 1 && m.biz.box.r <= w - 19 && m.overflow <= 0, JSON.stringify(m.biz && m.biz.box));
-      check(`${tag}: the EUDI explanation link comes first, above the separate business link, 44px tall`, m.expl && m.expl.text === "Understand the EUDI obligations and exceptions →" && m.expl.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && m.expl.box.b <= m.biz.box.y + 1 && m.expl.box.h >= 44 && m.expl.size === "15px" && m.expl.weight === "600", JSON.stringify(m.expl));
+      check(`${tag}: the EUDI explanation link comes first, before the separate business link (beside or above it), 44px tall`, m.expl && m.expl.text === "Understand the EUDI obligations and exceptions →" && m.expl.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1 && (m.expl.box.b <= m.biz.box.y + 1 || (Math.abs(m.expl.box.y - m.biz.box.y) < 2 && m.expl.box.r <= m.biz.box.x)) && m.expl.box.h >= 44 && m.expl.size === "15px" && m.expl.weight === "600", JSON.stringify(m.expl));
     } else {
-      check(`${tag}: without fitting Learn content (EUDI obligations, European Business Wallets) neither link is shown`, m.expl === null);
-      check(`${tag}: without existing European Business Wallet content the business link is not shown`, m.biz === null);
+      const pe = m.pend.find((x) => x.key === "explain"), pb = m.pend.find((x) => x.key === "business");
+      check(`${tag}: temporary placeholders for both links, in this order, below the timeline`, m.expl === null && m.biz === null && m.pend.length === 2 && pe && pb && (pe.box.y < pb.box.y || (pe.box.y === pb.box.y && pe.box.x < pb.box.x)) && pe.box.y >= Math.max(...pts.map((p) => p.box.b)) - 1, JSON.stringify(m.pend.map((x) => [x.key, x.box.y])));
+      check(`${tag}: placeholder texts are the agreed link texts with the arrow`, pe.visible === "Understand the EUDI obligations and exceptions →" && pb.visible === "For organisations: explore European Business Wallets →", JSON.stringify(m.pend.map((x) => x.visible)));
+      check(`${tag}: placeholders do not click through: no href, no anchor, not focusable, default cursor, announced as coming soon`, m.pend.every((x) => x.tag === "SPAN" && x.href === null && x.tabindex === null && x.anchors === 0 && x.cursor === "default" && /\(link coming soon\)$/.test(x.text)), JSON.stringify(m.pend));
+      check(`${tag}: placeholders look like the other links (15px semibold blue), 44px tall, inside the screen`, m.pend.every((x) => x.size === "15px" && x.weight === "600" && x.colour === "rgb(8, 72, 163)" && x.box.h >= 44 && x.box.r <= w - 19), JSON.stringify(m.pend.map((x) => [x.size, x.weight, x.colour, x.box.h, x.box.r])));
+      await page.locator("[data-link-pending=explain]").scrollIntoViewIfNeeded();
+      await page.locator("[data-link-pending=explain]").hover();
+      check(`${tag}: placeholder shows no hover underline and no navigation`, (await page.locator("[data-link-pending=explain] .fides-home-readiness__label").evaluate((e) => getComputedStyle(e).textDecorationLine)) === "none" && page.url() === HOME);
+      await page.mouse.move(0, 0);
     }
 
     // Timeline geometry: a thin line joins the dots, horizontal from 641px and vertical below.
@@ -128,7 +136,7 @@ const measure = (page) => page.evaluate((sel) => {
     } else {
       check(`${tag}: timeline first, then the workshop block with a 1px divider and 20px between`, m.action.y >= m.lead.b - 1 && m.actionBorder.top === "1px" && m.actionBorder.topColour === "rgb(143, 168, 198)" && m.actionBorder.left === "0px" && Math.abs(m.action.y - m.lead.b - 20) <= 2, JSON.stringify([m.action.y, m.lead.b, m.actionBorder]));
     }
-    const cap = FULL ? (w >= 900 ? 520 : w >= 641 ? 700 : 1100) : (w >= 900 ? 360 : w >= 641 ? 600 : 900);
+    const cap = FULL ? (w >= 900 ? 520 : w >= 641 ? 700 : 1100) : (w >= 900 ? 460 : w >= 641 ? 680 : 960);
     check(`${tag}: block is compact (under ${cap}px high)`, m.box.h < cap, `${m.box.h}`);
 
     // Action rows.
