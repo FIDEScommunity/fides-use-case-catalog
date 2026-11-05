@@ -170,10 +170,10 @@ $check(strpos((string) file_get_contents(dirname(dirname(dirname(__DIR__))) . '/
 // ---- Readiness module (Paper 25.16)
 $ready = Fides_DS_Home::readiness();
 $check(substr_count($ready, 'fides-home-readiness__list') >= 1 && substr_count($ready, 'data-readiness=') === 2, 'readiness module has two action rows');
-$check(strpos($ready, 'END') !== false && strpos($ready, '2027') !== false && strpos($ready, 'EUDI Wallet acceptance') !== false, 'readiness module names the date and topic');
+$check(substr_count($ready, 'fides-home-readiness__point') === 2 && strpos($ready, 'End 2026') !== false && strpos($ready, 'Wallet availability') !== false && strpos($ready, 'End 2027') !== false && strpos($ready, 'Wallet acceptance') !== false, 'readiness module shows a two-point timeline');
 $check(stripos($ready, 'countdown') === false && stripos($ready, 'days left') === false, 'readiness module has no countdown');
 $check(strpos($ready, 'fides-home-readiness__explain') === false, 'explain action is left out without a fitting Learn page');
-$check(strpos($ready, 'Source: European Commission') !== false && strpos($ready, 'https://digital-strategy.ec.europa.eu/') !== false, 'source line links to the European Commission');
+$check(strpos($ready, 'Source: EU Regulation 910/2014') !== false && strpos($ready, 'https://eur-lex.europa.eu/') !== false && substr_count($ready, 'fides-home-readiness__source-link') === 1, 'one source link to the official EU regulation text');
 $ready_links = Fides_DS_Home::readiness_links();
 $check(count($ready_links) === 2 && $ready_links[0]['key'] === 'sessions' && strpos($ready_links[0]['url'], 'wallet-readiness-workshop') !== false && $ready_links[1]['key'] === 'topics', 'actions go to the existing workshop offering and the topics overview');
 $with = do_shortcode('[fides_home_readiness explain_url="/fides-design-pilot/learn/topics/"]');

@@ -1,5 +1,5 @@
 /**
- * Homepage readiness module (Paper 25.16 desktop, 25.17 mobile): layout, wrapping,
+ * Homepage readiness module (timeline variant of Paper 25.16 / 25.17): layout, wrapping,
  * click targets, hover, keyboard focus and links at one width per run.
  * Run: node readiness-checks.cjs (PLAYWRIGHT_MODULE, PILOT_URL, WIDTHS, SHOTS=dir).
  * PREVIEW=<path> additionally checks the "Understand what is changing" action on a
@@ -20,33 +20,37 @@ const MODULE = ".fides-home-readiness";
 const measure = (page) => page.evaluate((sel) => {
   const m = document.querySelector(sel);
   if (!m) return null;
-  const r = (el) => { const b = el.getBoundingClientRect(); return { x: b.left, y: b.top + scrollY, w: b.width, h: b.height, r: b.right, b: b.bottom + scrollY }; };
+  const r = (el) => { const b = el.getBoundingClientRect(); return { x: b.left, y: b.top + scrollY, w: b.width, h: b.height, r: b.right, b: b.bottom + scrollY, cx: b.left + b.width / 2, cy: b.top + scrollY + b.height / 2 }; };
   const cs = (el, p) => getComputedStyle(el)[p];
   const lead = m.querySelector(".fides-home-readiness__lead");
   const action = m.querySelector(".fides-home-readiness__action");
-  const num = m.querySelector(".fides-home-readiness__number");
   const hero = document.querySelector("h1");
   const index = document.querySelector(".fides-uc-index");
-  const lines = (el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight));
+  const points = [...m.querySelectorAll(".fides-home-readiness__point")].map((li) => {
+    const after = getComputedStyle(li, "::after");
+    return { box: r(li), dot: r(li.querySelector(".fides-home-readiness__dot")), dotBg: cs(li.querySelector(".fides-home-readiness__dot"), "backgroundColor"), when: li.querySelector(".fides-home-readiness__when").textContent.trim(), title: li.querySelector("h3").textContent.trim(), text: li.querySelector(".fides-home-readiness__text").textContent.trim(), textBox: r(li.querySelector(".fides-home-readiness__text")), textMax: cs(li.querySelector(".fides-home-readiness__text"), "maxWidth"), whenCss: [cs(li.querySelector(".fides-home-readiness__when"), "fontSize"), cs(li.querySelector(".fides-home-readiness__when"), "fontWeight")], titleCss: [cs(li.querySelector("h3"), "fontSize"), cs(li.querySelector("h3"), "fontWeight")],
+      line: after.content === "none" ? null : { bg: after.backgroundColor, w: parseFloat(after.width), h: parseFloat(after.height), left: parseFloat(after.left), top: parseFloat(after.top) } };
+  });
   const rows = [...m.querySelectorAll(".fides-home-readiness__list a")].map((a) => ({
     key: a.dataset.readiness, href: a.getAttribute("href"), text: a.textContent.replace(/\s+/g, " ").trim(), box: r(a), icon: r(a.querySelector(".fides-home-readiness__icon")),
     paths: a.querySelector("svg") ? a.querySelector("svg").innerHTML.replace(/\s+/g, " ").slice(0, 40) : "", colour: cs(a, "color"), weight: cs(a, "fontWeight"), size: cs(a, "fontSize"),
   }));
   const source = m.querySelector(".fides-home-readiness__source-link");
   const explain = m.querySelector(".fides-home-readiness__explain");
+  const aTitle = action.querySelector("h2");
+  const aText = action.querySelector(".fides-home-readiness__text");
   return {
-    bg: cs(m, "backgroundColor"), box: r(m), lead: r(lead), action: r(action), year: r(m.querySelector(".fides-home-readiness__year")),
-    num: { ...r(num), lines: lines(num), size: cs(num, "fontSize"), weight: cs(num, "fontWeight"), wrap: cs(m.querySelector(".fides-home-readiness__year"), "whiteSpace") },
-    end: m.querySelector(".fides-home-readiness__end").textContent.trim(), numText: num.textContent.trim(),
-    titles: [...m.querySelectorAll("h2")].map((h) => ({ t: h.textContent.trim(), size: cs(h, "fontSize"), weight: cs(h, "fontWeight"), lh: cs(h, "lineHeight"), box: r(h) })),
-    texts: [...m.querySelectorAll(".fides-home-readiness__text")].map((p) => p.textContent.trim()),
+    bg: cs(m, "backgroundColor"), box: r(m), lead: r(lead), action: r(action), points, heading: (m.querySelector("#fides-home-readiness-title") || {}).textContent,
+    ol: r(m.querySelector("ol")), olDir: cs(m.querySelector("ol"), "flexDirection"),
+    aTitle: { t: aTitle.textContent.trim(), size: cs(aTitle, "fontSize"), weight: cs(aTitle, "fontWeight"), box: r(aTitle) }, aText: { t: aText.textContent.trim(), box: r(aText), max: cs(aText, "maxWidth") },
     actionBorder: { left: cs(action, "borderLeftWidth"), leftColour: cs(action, "borderLeftColor"), top: cs(action, "borderTopWidth"), topColour: cs(action, "borderTopColor") },
     source: source ? { href: source.getAttribute("href"), text: source.textContent.replace(/\s+/g, " ").trim(), label: source.getAttribute("aria-label"), box: r(source), size: cs(source, "fontSize") } : null,
+    sources: m.querySelectorAll(".fides-home-readiness__source-link").length,
     explain: explain ? { href: explain.getAttribute("href"), text: explain.textContent.replace(/\s+/g, " ").trim(), box: r(explain), size: cs(explain, "fontSize"), weight: cs(explain, "fontWeight") } : null,
-    rows, old: document.querySelectorAll(".fides-home-learn").length,
+    rows, old: document.querySelectorAll(".fides-home-learn").length, cards: m.querySelectorAll(".fides-ds-card, [class*='card']").length,
     heroBottom: hero ? hero.getBoundingClientRect().bottom + scrollY : 0, indexTop: index ? index.getBoundingClientRect().top + scrollY : 1e9,
     overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    leadTexts: [...lead.querySelectorAll(".fides-home-readiness__title,.fides-home-readiness__text,.fides-home-readiness__source")].map((el) => r(el).r),
+    rights: [...m.querySelectorAll(".fides-home-readiness__point, .fides-home-readiness__text, h2, h3")].map((el) => r(el).r),
   };
 }, MODULE);
 
@@ -69,22 +73,39 @@ const measure = (page) => page.evaluate((sel) => {
     check(`${tag}: light blue, below the hero and above the theme index`, m.bg === "rgb(242, 247, 255)" && m.box.y >= m.heroBottom - 1 && m.box.b <= m.indexTop + 1, `${m.bg} ${m.box.y} ${m.heroBottom} ${m.box.b} ${m.indexTop}`);
     check(`${tag}: full width, no horizontal overflow`, Math.abs(m.box.w - w) <= 1 && m.overflow <= 0, `${m.box.w} ${m.overflow}`);
 
-    // Copy, typography and the limited scope.
-    check(`${tag}: left copy is the Paper text, no countdown and no general duty`, m.end === "END" && m.numText === "2027" && m.titles[0].t === "EUDI Wallet acceptance"
-      && m.texts[0] === "Acceptance requirements will apply to certain private service providers. Does this include your organisation?"
-      && !/countdown|days left|must|everyone|all organi[sz]ations/i.test(m.texts.join(" ")), JSON.stringify([m.end, m.numText, m.titles[0].t, m.texts[0]]));
-    check(`${tag}: right copy is the Paper text`, m.titles[1].t === "What does this mean for your organisation?" && m.texts[1] === "Work through the impact on your services and agree the next steps with your team.", JSON.stringify([m.titles[1].t, m.texts[1]]));
-    check(`${tag}: titles 20/26 bold, year 32px bold on one line`, m.titles.every((t) => t.size === "20px" && t.weight === "700" && t.lh === "26px") && m.num.size === "32px" && m.num.weight === "700" && m.num.lines === 1 && m.num.wrap === "nowrap", JSON.stringify([m.titles.map((t) => [t.size, t.weight, t.lh]), m.num]));
-    check(`${tag}: year column is ${w >= 641 ? 104 : 80}px wide and the year fits in it`, Math.abs(m.year.w - (w >= 641 ? 104 : 80)) <= 1 && m.num.r <= m.year.r + 0.5, JSON.stringify([m.year.w, m.num.r, m.year.r]));
-    check(`${tag}: source line names the European Commission and opens an external page`, m.source && m.source.text === "Source: European Commission ↗" && /^https:\/\/(digital-strategy|commission)\.ec\.europa\.eu\//.test(m.source.href) && /external site/.test(m.source.label) && m.source.size === "13px", JSON.stringify(m.source));
+    // Timeline copy, wording and the limited scope.
+    const [p1, p2] = m.points;
+    check(`${tag}: timeline has two points, End 2026 wallet availability and End 2027 wallet acceptance`, m.points.length === 2 && p1.when === "End 2026" && p1.title === "Wallet availability" && p2.when === "End 2027" && p2.title === "Wallet acceptance", JSON.stringify(m.points.map((p) => [p.when, p.title])));
+    check(`${tag}: availability is a duty of EU Member States, acceptance concerns certain private service providers only`, /Member States/.test(p1.text) && /certain private service providers/.test(p2.text) && /strong user authentication/.test(p2.text) && !/all organi[sz]ations|every organi[sz]ation|must accept|countdown|days left/i.test(m.points.map((p) => p.text).join(" ")), JSON.stringify(m.points.map((p) => p.text)));
+    check(`${tag}: points are short (under 160 characters) and text width is bounded`, m.points.every((p) => p.text.length < 160 && p.textBox.w <= 40 * 9.5 + 1), JSON.stringify(m.points.map((p) => [p.text.length, p.textBox.w])));
+    check(`${tag}: type of the points (label 13 semibold, title 20 bold)`, m.points.every((p) => p.whenCss[0] === "13px" && p.whenCss[1] === "600" && p.titleCss[0] === "20px" && p.titleCss[1] === "700"), JSON.stringify(m.points.map((p) => [p.whenCss, p.titleCss])));
+    check(`${tag}: no countdown, no extra cards, one visible source link`, m.cards === 0 && m.sources === 1 && !/countdown|days/i.test(m.heading || ""), JSON.stringify([m.cards, m.sources]));
+    check(`${tag}: source line names the regulation and opens an official external page`, m.source && /^Source: EU Regulation 910\/2014, Art\. 5a & 5f ↗$/.test(m.source.text) && /^https:\/\/eur-lex\.europa\.eu\//.test(m.source.href) && /external site/.test(m.source.label) && m.source.size === "13px", JSON.stringify(m.source));
+    check(`${tag}: right part keeps the workshop text`, m.aTitle.t === "What does this mean for your organisation?" && m.aTitle.size === "20px" && m.aTitle.weight === "700" && m.aText.t === "Work through the impact on your services and agree the next steps with your team.", JSON.stringify([m.aTitle.t, m.aText.t]));
 
-    // Layout: two columns from 900px, stacked with a divider below.
-    if (w >= 900) {
-      check(`${tag}: two columns, right column 420px with a 1px divider on its left`, Math.abs(m.action.w - 420) <= 1 && m.action.x > m.lead.r - 1 && Math.abs(m.action.y - m.lead.y) <= 1 && m.actionBorder.left === "1px" && m.actionBorder.leftColour === "rgb(143, 168, 198)" && m.actionBorder.top === "0px", JSON.stringify([m.action, m.lead, m.actionBorder]));
+    // Timeline geometry: a thin line joins the dots, horizontal from 641px and vertical below.
+    const line = p1.line;
+    check(`${tag}: a 1px line in the section divider colour joins the two dots`, line && line.bg === "rgb(143, 168, 198)" && !p2.line && (w >= 641 ? Math.abs(line.h - 1) < 0.01 && line.w > 100 : Math.abs(line.w - 1) < 0.01 && line.h > 20), JSON.stringify(line));
+    if (w >= 641) {
+      check(`${tag}: horizontal timeline, dots on one line, points side by side`, m.olDir === "row" && Math.abs(p1.dot.cy - p2.dot.cy) < 0.5 && p2.box.x > p1.box.r - 1 && p1.dotBg === "rgb(8, 72, 163)", JSON.stringify([m.olDir, p1.dot.cy, p2.dot.cy]));
+      const reach = p1.box.x + line.left + line.w; // line end in page coordinates
+      check(`${tag}: line runs from the first dot to just before the second dot, centred on the dots`, Math.abs(reach - (p2.dot.x - 8)) <= 1.5 && Math.abs(p1.box.y + line.top + 0.5 - p1.dot.cy) <= 1, JSON.stringify([reach, p2.dot.x, p1.box.y + line.top, p1.dot.cy]));
     } else {
-      check(`${tag}: stacked, 1px divider above the right part and 20px between the parts`, m.action.y >= m.lead.b - 1 && m.actionBorder.top === "1px" && m.actionBorder.topColour === "rgb(143, 168, 198)" && m.actionBorder.left === "0px" && Math.abs(m.action.y - m.lead.b - 20) <= 2, JSON.stringify([m.action.y, m.lead.b, m.actionBorder]));
+      check(`${tag}: vertical timeline, dots on one vertical lane, points stacked`, m.olDir === "column" && Math.abs(p1.dot.cx - p2.dot.cx) < 0.5 && p2.box.y >= p1.box.b - 1, JSON.stringify([m.olDir, p1.dot.cx, p2.dot.cx]));
+      const lineX = p1.box.x + line.left + 0.5;
+      check(`${tag}: line runs through the centre of the dots from the first to the second`, Math.abs(lineX - p1.dot.cx) <= 1 && p1.box.y + line.top >= p1.dot.b - 1 && p1.box.y + line.top + line.h <= p2.dot.cy + 8, JSON.stringify([lineX, p1.dot.cx, p1.box.y + line.top, p2.dot.cy]));
     }
-    check(`${tag}: nothing leaves the screen and text keeps a gutter`, m.leadTexts.every((x) => x <= w - 19) && m.rows.every((r) => r.box.r <= w - 19) && m.titles.every((t) => t.box.r <= w - 19), JSON.stringify([m.leadTexts, m.rows.map((r) => r.box.r)]));
+    check(`${tag}: no word is cut off and nothing leaves the screen`, m.rights.every((x) => x <= w - 19) && m.rows.every((r) => r.box.r <= w - 19), JSON.stringify(m.rights));
+
+    // Layout: about 60/40 from 900px, stacked with a divider below.
+    if (w >= 900) {
+      const share = m.lead.w / (m.lead.w + m.action.w);
+      check(`${tag}: about 60/40, timeline left and workshop part right with a 1px divider`, share > 0.57 && share < 0.63 && m.action.x >= m.lead.r - 1 && Math.abs(m.action.y - m.lead.y) <= 1 && m.actionBorder.left === "1px" && m.actionBorder.leftColour === "rgb(143, 168, 198)" && m.actionBorder.top === "0px", JSON.stringify([share, m.action, m.lead, m.actionBorder]));
+      check(`${tag}: right text is bounded`, m.aText.box.w <= 44 * 9.5 + 1, `${m.aText.box.w}`);
+    } else {
+      check(`${tag}: timeline first, then the workshop block with a 1px divider and 20px between`, m.action.y >= m.lead.b - 1 && m.actionBorder.top === "1px" && m.actionBorder.topColour === "rgb(143, 168, 198)" && m.actionBorder.left === "0px" && Math.abs(m.action.y - m.lead.b - 20) <= 2, JSON.stringify([m.action.y, m.lead.b, m.actionBorder]));
+    }
+    check(`${tag}: module is compact (under ${w >= 900 ? 280 : w >= 641 ? 520 : 700}px high)`, m.box.h < (w >= 900 ? 280 : w >= 641 ? 520 : 700), `${m.box.h}`);
 
     // Action rows.
     check(`${tag}: two rows, Readiness Workshop then Topics & guides, with the arrow`, m.rows.length === 2 && m.rows[0].text === "Readiness Workshop →" && m.rows[1].text === "Topics & guides →" && m.rows[0].key === "sessions" && m.rows[1].key === "topics", JSON.stringify(m.rows.map((r) => r.text)));
@@ -140,7 +161,7 @@ const measure = (page) => page.evaluate((sel) => {
       await pv.goto(PREVIEW, { waitUntil: "domcontentloaded" });
       await pv.locator(MODULE).waitFor({ timeout: 30000 });
       const p = await measure(pv);
-      check(`${tag}: explanation action sits under the source, 44px tall, 15px semibold, link blue`, p.explain && p.explain.text === "Understand what is changing →" && p.explain.box.h >= 44 && p.explain.size === "15px" && p.explain.weight === "600" && p.explain.box.y >= p.source.box.b - 1, JSON.stringify(p.explain));
+      check(`${tag}: explanation action sits below the timeline beside the source, 44px tall, 15px semibold, link blue`, p.explain && p.explain.text === "Understand what is changing →" && p.explain.box.h >= 44 && p.explain.size === "15px" && p.explain.weight === "600" && p.explain.box.y >= p.points[1].box.b - 1 && p.source.box.y >= p.points[1].box.b - 1, JSON.stringify(p.explain));
       check(`${tag}: explanation action stays inside the screen`, p.explain && p.explain.box.r <= w - 19 && p.overflow <= 0, JSON.stringify(p.explain && p.explain.box));
       const l = pv.locator(`${MODULE} .fides-home-readiness__explain`);
       await l.hover();
