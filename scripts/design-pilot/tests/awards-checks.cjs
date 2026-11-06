@@ -254,7 +254,7 @@ const COOKIES = Object.entries({ "banner-status": "dismissed", policy_id: "35", 
     const external = links.filter((l) => !l.href.startsWith(BASE) && !l.href.includes("#"));
     const ext = external.map((l) => l.href);
     check(`${tag}: report and partner links are the original external destinations, opened safely`, ext.includes("https://fides.community/signin/?return_to=https%3A%2F%2Ffides.community%2Fawards%2Fglobal-digital-trust-awards%2F") && ext.includes("https://globaldigitalcollaboration.org/") && ["https://www.didas.swiss/", "https://diacc.ca/", "https://www.teletrust.de/en/startseite/", "https://www.apdiconsortium.org/", "https://www.asiapki.org/", "https://fides.community/"].every((u) => ext.includes(u)) && external.every((l) => l.target === "_blank" && /noopener/.test(l.rel)), JSON.stringify(ext));
-    check(`${tag}: report links appear in the navigation and under the accordions`, links.filter((l) => /Download (the full )?report/.test(l.t)).length === 2);
+    check(`${tag}: report links appear as the hero button, in the menu and under the accordions`, links.filter((l) => /Download (the full )?report/.test(l.t)).length === 3);
     const small = links.filter((l) => !l.inLogos && (l.h < 40 && !/^Download|^Global Digital|^international jury|^FIDES use case catalog/.test(l.t)));
     check(`${tag}: stand-alone links and buttons are at least 40px tall`, small.length === 0, JSON.stringify(small.slice(0, 3)));
 
