@@ -83,6 +83,7 @@ if (! function_exists('fides_design_review_base')) {
             '/about-fides/'                                  => '{pilot}/about-fides/',
             '/manifesto/'                                    => '{pilot}/manifesto/',
             '/awards/global-digital-trust-awards/'           => '{pilot}/global-digital-trust-awards/',
+            '/awards/fides-community-awards/'                => '{pilot}/fides-community-awards/',
             '/about-fides/news/'                             => '{pilot}/updates/',
             '/learn/'                                        => '{pilot}/learn/',
             '/learn/topics/'                                 => '{pilot}/learn/topics/',

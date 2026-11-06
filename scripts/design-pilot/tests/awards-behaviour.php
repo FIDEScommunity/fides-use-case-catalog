@@ -133,6 +133,62 @@ if ($page instanceof WP_Post) {
     }
 }
 
+// ---- FIDES Community Awards page: same template and blocks, original content, every link resolves.
+$cpage = get_page_by_path('fides-design-pilot/fides-community-awards', OBJECT, 'page');
+$check($cpage instanceof WP_Post && $cpage->post_status === 'publish', 'the community awards page exists below the pilot base and is published');
+if ($cpage instanceof WP_Post) {
+    $check(get_post_meta($cpage->ID, '_wp_page_template', true) === 'fides-site-shell', 'the community page uses the existing site shell template');
+    $c_allowed = array('core/group', 'core/heading', 'core/paragraph', 'core/image', 'core/gallery', 'core/details', 'core/list', 'core/list-item', 'core/buttons', 'core/button');
+    $c_names   = array();
+    $c_walk    = static function (array $blocks) use (&$c_walk, &$c_names): void {
+        foreach ($blocks as $b) {
+            if ($b['blockName']) {
+                $c_names[] = $b['blockName'];
+            }
+            if (! empty($b['innerBlocks'])) {
+                $c_walk($b['innerBlocks']);
+            }
+        }
+    };
+    $c_walk(parse_blocks($cpage->post_content));
+    $check(! array_diff(array_unique($c_names), $c_allowed), 'community page: only normal core blocks');
+    $c_counts = array_count_values($c_names);
+    $c_html   = $cpage->post_content;
+    $check(($c_counts['core/details'] ?? 0) === 6 && ! preg_match('/<details[^>]* open/', $c_html), 'community page: six accordions (three categories plus highlights, categories, jury), all closed');
+    $check(($c_counts['core/gallery'] ?? 0) === 1 && substr_count($c_html, 'wp-block-gallery') >= 1, 'community page: one photo gallery');
+    $check(strpos($c_html, '[fides_') === false && strpos($c_html, 'wp:html') === false, 'community page: no shortcode or custom HTML block');
+    foreach (array('FIDES Community Awards', 'Meet the winners', 'About the awards', '2026 finalists &amp; rankings', 'Highlights from Utrecht', 'Expert jury', 'Download the full report', 'Digital Certificate of Conduct (VOG)', 'Credenco Business Wallet', 'We thank the jury members') as $text) {
+        $check(strpos($c_html, $text) !== false, 'community page has "' . $text . '"');
+    }
+    $check(preg_match_all('/class="wp-block-group fides-awards-finalist[ "]/', $c_html) === 15, 'community page: exactly 15 finalists');
+    $check(preg_match_all('/fides-awards-rank/', $c_html) >= 15 && substr_count($c_html, 'Winner 2026') === 3, 'community page: three winners marked');
+    preg_match_all('/href="[^"]*\/use-case\/\?usecase=([^"]+)"/', $c_html, $c_uc);
+    preg_match_all('/href="[^"]*\/wallet\/\?wallet=([^"]+)"/', $c_html, $c_wl);
+    $check(count($c_uc[1]) + count($c_wl[1]) === 18, 'community page: 18 catalog links (3 winner cards, 15 finalists): ' . (count($c_uc[1]) + count($c_wl[1])));
+    $c_bad = array();
+    if (class_exists('Fides_Catalog_Source')) {
+        foreach (array_unique($c_uc[1]) as $id) {
+            $src = Fides_Catalog_Source::for('usecase');
+            if (! $src || ! is_array($src->find_by_id(urldecode($id)))) {
+                $c_bad[] = 'usecase:' . $id;
+            }
+        }
+        foreach (array_unique($c_wl[1]) as $id) {
+            $src = Fides_Catalog_Source::for('wallet');
+            if (! $src || ! is_array($src->find_by_id(urldecode($id)))) {
+                $c_bad[] = 'wallet:' . $id;
+            }
+        }
+    }
+    $check(! $c_bad, 'community page: every catalog link resolves to a record: ' . implode(', ', $c_bad));
+    $check(strpos($c_html, 'return_to=https%3A%2F%2Ffides.community%2Fawards%2Ffides-community-awards%2F') !== false, 'community page: report link keeps the original return_to');
+    $c_render = class_exists('Fides_DS_Awards') ? do_blocks($c_html) : '';
+    $check(substr_count($c_render, 'data-fides-ds-section-nav') === 1, 'community page: renders the shared section menu');
+}
+if (class_exists('Fides_DS_Site_Shell')) {
+    $check(strpos(Fides_DS_Site_Shell::url('/awards/fides-community-awards/'), '/fides-design-pilot/fides-community-awards/') !== false, 'Ecosystem > Community Awards points to the pilot page');
+}
+
 // ---- Render-time upgrades: shared section menu and catalog images (no invented images).
 $check(class_exists('Fides_DS_Awards'), 'the awards renderer class is loaded');
 if ($page instanceof WP_Post && class_exists('Fides_DS_Awards')) {

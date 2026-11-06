@@ -57,6 +57,7 @@ add_filter(
             '/about-fides/'                                 => '/fides-design-pilot/about-fides/',
             '/manifesto/'                                   => '/fides-design-pilot/manifesto/',
             '/awards/global-digital-trust-awards/'          => '/fides-design-pilot/global-digital-trust-awards/',
+            '/awards/fides-community-awards/'               => '/fides-design-pilot/fides-community-awards/',
             '/about-fides/news/'                            => '/fides-design-pilot/updates/',
             '/learn/'                                       => '/fides-design-pilot/learn/',
             '/learn/topics/'                                => '/fides-design-pilot/learn/topics/',

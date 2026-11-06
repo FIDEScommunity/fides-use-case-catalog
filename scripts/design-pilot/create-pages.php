@@ -445,30 +445,38 @@ function pilot_awards_media(array $manifest, bool $dry): ?array {
     return $out;
 }
 
-$awards_dir = __DIR__ . '/awards';
-if (is_readable($awards_dir . '/content/awards.html') && is_readable($awards_dir . '/manifest.json')) {
-    $awards_manifest = json_decode((string) file_get_contents($awards_dir . '/manifest.json'), true);
+// Awards pages: one block-content file and one image manifest per page.
+$awards_dir   = __DIR__ . '/awards';
+$awards_pages = array(
+    array('slug' => 'global-digital-trust-awards', 'title' => 'Global Digital Trust Awards', 'content' => 'content/awards.html', 'manifest' => 'manifest.json'),
+    array('slug' => 'fides-community-awards', 'title' => 'FIDES Community Awards', 'content' => 'content/community-awards.html', 'manifest' => 'community-manifest.json'),
+);
+foreach ($awards_pages as $awards_page) {
+    if (! is_readable($awards_dir . '/' . $awards_page['content']) || ! is_readable($awards_dir . '/' . $awards_page['manifest'])) {
+        continue;
+    }
+    $awards_manifest = json_decode((string) file_get_contents($awards_dir . '/' . $awards_page['manifest']), true);
     $awards_media    = is_array($awards_manifest) ? pilot_awards_media($awards_manifest, $pilot_dry) : null;
     if ($awards_media === null) {
-        $pilot_report[] = array(trim(pilot_tokens('{{base}}/global-digital-trust-awards'), '/'), 'skipped-images', 'original images not imported yet (offline, dry run or download error); run again with network access');
-    } else {
-        $awards_html = (string) file_get_contents($awards_dir . '/content/awards.html');
-        $awards_html = preg_replace_callback('/\{\{aw:(id|url):([a-z0-9-]+)(?::([a-z_]+))?\}\}/', static function ($m) use ($awards_media) {
-            $item = $awards_media[ $m[2] ] ?? null;
-            if (! $item) {
-                return $m[0];
-            }
-            if ($m[1] === 'id') {
-                return (string) $item['id'];
-            }
-            if (! empty($m[3])) {
-                $sized = wp_get_attachment_image_src($item['id'], $m[3]);
-                return $sized ? (string) $sized[0] : $item['url'];
-            }
-            return $item['url'];
-        }, $awards_html);
-        pilot_upsert_page('{{base}}/global-digital-trust-awards', 'Global Digital Trust Awards', $awards_html, $parent, $layout_meta, PILOT_SHELL_TEMPLATE);
+        $pilot_report[] = array(trim(pilot_tokens('{{base}}/' . $awards_page['slug']), '/'), 'skipped-images', 'original images not imported yet (offline, dry run or download error); run again with network access');
+        continue;
     }
+    $awards_html = (string) file_get_contents($awards_dir . '/' . $awards_page['content']);
+    $awards_html = preg_replace_callback('/\{\{aw:(id|url):([a-z0-9-]+)(?::([a-z_]+))?\}\}/', static function ($m) use ($awards_media) {
+        $item = $awards_media[ $m[2] ] ?? null;
+        if (! $item) {
+            return $m[0];
+        }
+        if ($m[1] === 'id') {
+            return (string) $item['id'];
+        }
+        if (! empty($m[3])) {
+            $sized = wp_get_attachment_image_src($item['id'], $m[3]);
+            return $sized ? (string) $sized[0] : $item['url'];
+        }
+        return $item['url'];
+    }, $awards_html);
+    pilot_upsert_page('{{base}}/' . $awards_page['slug'], $awards_page['title'], $awards_html, $parent, $layout_meta, PILOT_SHELL_TEMPLATE);
 }
 
 pilot_upsert_page(

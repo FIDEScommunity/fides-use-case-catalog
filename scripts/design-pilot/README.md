@@ -601,6 +601,18 @@ gallery and the accordions in the block editor; nothing editorial is stored in P
   page in the guard and in `staging/fides-design-review-config.php`.
 - Tests: `tests/awards-behaviour.php` (in `run-tests.sh`) and `tests/run-awards-checks.sh` (1440, 1024, 768, 390, 320).
 
+### FIDES Community Awards (same template, 2026-11-06)
+
+`/fides-design-pilot/fides-community-awards/` uses exactly the same page structure, classes, shared section menu and
+styles as the Global Digital Trust Awards page (hero with report button, sticky section menu, winner cards, about band,
+finalist accordions with catalog images, highlights / categories / jury accordions). Differences are content only: three
+winners and three categories, 15 finalists, 20 Utrecht photos, no partner logos, the jury as a member list.
+
+- Content: `awards/content/community-awards.html`, images in `awards/community-manifest.json` (24 originals). `create-pages.php`
+  seeds both awards pages from one list.
+- Menu: Ecosystem > Community Awards maps to the pilot page in the guard and in `staging/fides-design-review-config.php`.
+- Tests: `tests/run-community-awards-checks.sh` (1440, 1024, 768, 390, 320) and the community block in `tests/awards-behaviour.php`.
+
 ## Staging preparation (`/design-review/`)
 
 Everything for a later roll-out lives in `staging/` (see `staging/HANDOVER.md`). Nothing here connects to staging.
