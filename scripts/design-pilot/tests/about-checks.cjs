@@ -43,6 +43,21 @@ const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA
       if (w <= 390) check(`${tag}: title is compact (at most four lines) and the intro starts above the fold`, h.lines <= 4 && h.introTop < 450, JSON.stringify(h));
     }
 
+    // Typography: shared FIDES Inter and the shared content-page scale (same as Manifesto).
+    {
+      const ty = await page.evaluate(() => {
+        const s = (sel) => { const e = document.querySelector(sel); const c = getComputedStyle(e); return { f: c.fontFamily, size: c.fontSize, lh: c.lineHeight, wt: c.fontWeight }; };
+        const all = [...document.querySelectorAll(".fides-about *")].filter((e) => e.textContent.trim() && !e.children.length).map((e) => getComputedStyle(e).fontFamily);
+        return { h1: s(".fides-about__title"), intro: s(".fides-about__intro"), h2: s("#fides-about-platform-title"), h3: s(".fides-about__item-title"), labs: s(".fides-about__labs-title"), text: s(".fides-about__text"), lead: s(".fides-about__band-lead"), link: s(".fides-about__link"), fonts: [...new Set(all)] };
+      });
+      const wide = w >= 1024;
+      const sz = (o, size, lh, wt) => o.size === size && o.lh === lh && (!wt || o.wt === wt);
+      check(`${tag}: FIDES Inter everywhere`, ty.fonts.length === 1 && ty.fonts[0].startsWith('"FIDES Inter"'), JSON.stringify(ty.fonts));
+      if (wide) check(`${tag}: H1 is the compact catalog size (48/52), smaller than the 64/68 hero`, sz(ty.h1, "48px", "52px", "700"), JSON.stringify(ty.h1));
+      check(`${tag}: section 26/32, item and labs titles 22/28, body 17/27, band lead 17/27, links 16/24 weight 500`, sz(ty.h2, "26px", "32px", "700") && sz(ty.h3, "22px", "28px", "700") && sz(ty.labs, "22px", "28px", "700") && sz(ty.text, "17px", "27px") && sz(ty.lead, "17px", "27px") && sz(ty.link, "16px", "24px", "500"), JSON.stringify(ty));
+      check(`${tag}: intro ${wide ? "20/30" : "18/27 or 20/30"}`, wide ? sz(ty.intro, "20px", "30px") : sz(ty.intro, "18px", "27px") || sz(ty.intro, "20px", "30px"), JSON.stringify(ty.intro));
+    }
+
     // Order and stacking.
     const g = await page.evaluate(() => {
       const r = (s) => { const e = document.querySelector(s); const b = e.getBoundingClientRect(); return { x: Math.round(b.left), y: Math.round(b.top + scrollY), w: Math.round(b.width), b: Math.round(b.bottom + scrollY) }; };
