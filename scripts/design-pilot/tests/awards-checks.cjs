@@ -42,8 +42,9 @@ const COOKIES = Object.entries({ "banner-status": "dismissed", policy_id: "35", 
         winners: [...document.querySelectorAll(".fides-awards-winner")].map((e) => e.querySelector("h3").textContent.trim()),
         finalists: document.querySelectorAll(".fides-awards-finalist").length,
         stat: document.querySelector(".fides-awards-stat").innerText.replace(/\s+/g, " "),
-        nav: [...document.querySelectorAll(".fides-awards-nav a")].map((a) => [a.textContent.trim(), a.getAttribute("href")]),
-        navLabel: document.querySelector("nav.fides-awards-nav").getAttribute("aria-label"),
+        nav: [...document.querySelectorAll(".fides-awards-sections a")].map((a) => [a.textContent.trim(), a.getAttribute("href")]),
+        navLabel: document.querySelector(".fides-awards-sections nav").getAttribute("aria-label"),
+        finalistTitle: cs(".fides-awards-finalist__title"), finalistText: cs(".fides-awards-finalist__text"),
       };
     });
     check(`${tag}: one H1 "Global Digital Trust Awards" with kicker`, s.h1s === 1 && s.h1 === "Global Digital Trust Awards" && s.kicker === "ECOSYSTEM · AWARDS", JSON.stringify([s.h1s, s.h1, s.kicker]));
@@ -54,7 +55,44 @@ const COOKIES = Object.entries({ "banner-status": "dismissed", policy_id: "35", 
     check(`${tag}: 24 finalists, five winners in category order`, s.finalists === 24 && JSON.stringify(s.winners) === JSON.stringify(["Mobile Driving Licence", "SSItizens", "Urban Company", "Aadhaar App", "Real Estate Purchasing"]), JSON.stringify(s.winners));
     check(`${tag}: panel says 24 finalists across five award categories`, /24 finalists across five award categories/.test(s.stat), s.stat);
     check(`${tag}: anchor navigation lists winners, finalists, highlights, categories, jury and the report`, JSON.stringify(s.nav.slice(0, 5)) === JSON.stringify([["2026 winners", "#winners"], ["Finalists", "#finalists"], ["Highlights", "#highlights"], ["Categories", "#categories"], ["Jury", "#jury"]]) && /^Download report/.test(s.nav[5][0]) && s.navLabel === "On this page", JSON.stringify(s.nav));
-    check(`${tag}: section order follows Paper (hero, nav, winners, about, finalists, accordions)`, await page.evaluate(() => { const y = (sel) => document.querySelector(sel).getBoundingClientRect().top + scrollY; const o = [".fides-awards-hero", ".fides-awards-navbar", "#winners", "#about", "#finalists", "#highlights", "#categories", "#jury"].map(y); return o.every((v, i) => i === 0 || v > o[i - 1]); }));
+    check(`${tag}: section order follows Paper (hero, nav, winners, about, finalists, accordions)`, await page.evaluate(() => { const y = (sel) => document.querySelector(sel).getBoundingClientRect().top + scrollY; const o = [".fides-awards-hero", ".fides-awards-sections", "#winners", "#about", "#finalists", "#highlights", "#categories", "#jury"].map(y); return o.every((v, i) => i === 0 || v > o[i - 1]); }));
+
+    check(`${tag}: ranking titles 20/26 and descriptions 17/27`, s.finalistTitle.size === "20px" && s.finalistTitle.lh === "26px" && s.finalistText.size === "17px" && s.finalistText.lh === "27px", JSON.stringify([s.finalistTitle, s.finalistText]));
+
+    // ---- Section menu: the shared design-system pattern, as on the use-case detail page.
+    const sm0 = await page.evaluate(() => { const n = document.querySelector(".fides-awards-sections"); const c = getComputedStyle(n); return { shared: n.matches(".fides-ds-section-nav[data-fides-ds-section-nav]"), tag: n.tagName, pos: c.position, bg: c.backgroundColor, z: c.zIndex, top: c.top, margins: [...document.querySelectorAll(".fides-awards [id]")].every((e) => getComputedStyle(e).scrollMarginTop === "80px"), custom: !!document.querySelector(".fides-awards-nav, .fides-awards-navbar") }; });
+    check(`${tag}: section menu uses the shared design-system markup (no custom bar) and anchors clear it by 80px`, sm0.shared && sm0.tag === "DETAILS" && !sm0.custom && sm0.margins, JSON.stringify(sm0));
+    if (w >= 1100) {
+      check(`${tag}: section menu is a white sticky bar`, sm0.pos === "sticky" && sm0.bg === "rgb(255, 255, 255)" && sm0.z === "5", JSON.stringify(sm0));
+      await page.evaluate(() => window.scrollTo(0, 3200)); await settle(page);
+      const pinned = await page.evaluate(() => { const b = document.querySelector(".fides-awards-sections").getBoundingClientRect(); return { top: Math.round(b.top), h: Math.round(b.height), cur: [...document.querySelectorAll('.fides-awards-sections a[aria-current="location"]')].map((a) => a.textContent.trim()), line: (() => { const a = document.querySelector('.fides-awards-sections a[aria-current="location"]'); if (!a) return null; const c = getComputedStyle(a); return [c.borderBottomWidth, c.borderBottomColor]; })() }; });
+      check(`${tag}: after scrolling the bar stays at the top and marks one current section with a 2px blue underline`, pinned.top === 0 && pinned.cur.length === 1 && pinned.line && pinned.line[0] === "2px" && pinned.line[1] === "rgb(8, 72, 163)" || (pinned.top === 0 && pinned.cur.length === 1 && pinned.line && pinned.line[0] === "2px"), JSON.stringify(pinned));
+      const hov = page.locator('.fides-awards-sections a[href="#jury"]');
+      await hov.hover(); await page.waitForTimeout(100);
+      check(`${tag}: hover on a menu link draws the blue underline like the use-case page`, await hov.evaluate((e) => { const c = getComputedStyle(e); return c.borderBottomWidth === "2px" && c.borderBottomColor !== "rgba(0, 0, 0, 0)"; }));
+      await page.mouse.move(2, 2);
+      await page.evaluate(() => window.scrollTo(0, 0)); await settle(page);
+    } else {
+      check(`${tag}: narrow screens get the "On this page" disclosure of the shared pattern`, await page.evaluate(() => { const d = document.querySelector(".fides-awards-sections"); return !d.open && /On this page/.test(d.querySelector("summary").textContent); }));
+    }
+
+    if (w === WIDTHS[0]) {
+      const menu = await page.evaluate(() => [...document.querySelectorAll(".fides-ds-menu__link")].filter((a) => a.textContent.trim() === "Global Digital Trust Awards").map((a) => a.href));
+      check(`${tag}: main menu Ecosystem > Global Digital Trust Awards opens the pilot page`, menu.length >= 1 && menu.every((h) => h === PAGE), JSON.stringify(menu));
+    }
+
+    // ---- Whitespace: closed category rows are the click row, dividers touch.
+    const rows = await page.evaluate(() => [...document.querySelectorAll(".fides-awards-category")].map((d) => { const b = d.getBoundingClientRect(); return [Math.round(b.top + scrollY), Math.round(b.height), Math.round(d.querySelector("summary").getBoundingClientRect().height)]; }));
+    check(`${tag}: closed category rows are 62-64px with no extra space, dividers bound adjacent rows`, rows.every((r) => r[1] >= 62 && r[1] <= 64 && r[2] === 62) && rows.every((r, i) => i === 0 || Math.abs(r[0] - (rows[i - 1][0] + rows[i - 1][1])) <= 1), JSON.stringify(rows));
+    const gap = await page.evaluate(() => { const h = document.querySelector("#winners .fides-awards-head").getBoundingClientRect(); const i = document.querySelector("#winners .fides-awards-intro").getBoundingClientRect(); return Math.round(i.top - h.bottom); });
+    check(`${tag}: heading to introduction gap is the design-system 16px`, gap === 16, String(gap));
+
+    // ---- Winner cards: shared rows and bottom-aligned actions.
+    const wc = await page.evaluate(() => [...document.querySelectorAll(".fides-awards-winner")].map((c) => { const k = [...c.children].map((e) => Math.round(e.getBoundingClientRect().top + scrollY)); const l = c.querySelector(".fides-awards-winner__link a").getBoundingClientRect(); const b = c.getBoundingClientRect(); const t = c.querySelector(".fides-awards-winner__text"); return { card: Math.round(b.top + scrollY), rows: k, linkBottom: Math.round(l.bottom + scrollY), cardBottom: Math.round(b.bottom + scrollY), textGapTitle: Math.round(t.getBoundingClientRect().top - c.querySelector("h3").getBoundingClientRect().bottom) }; }));
+    const byRow = {};
+    for (const c of wc) (byRow[c.card] = byRow[c.card] || []).push(c);
+    check(`${tag}: cards in a row share title, description and action positions; actions end at the same height`, Object.values(byRow).every((g) => g.every((c) => c.rows.every((v, i) => v === g[0].rows[i]) && c.linkBottom === g[0].linkBottom && c.cardBottom === g[0].cardBottom)), JSON.stringify(wc.slice(0, 3)));
+    check(`${tag}: description and action keep the same fixed distances in every card`, new Set(wc.map((c) => c.textGapTitle)).size === 1 && wc.every((c) => c.cardBottom - c.linkBottom >= 20 && c.cardBottom - c.linkBottom <= 36), JSON.stringify(wc.map((c) => [c.textGapTitle, c.cardBottom - c.linkBottom])));
 
     // ---- Hero against the right panel.
     const hero = await page.evaluate(() => { const m = document.querySelector(".fides-awards-hero__main").getBoundingClientRect(); const p = document.querySelector(".fides-awards-panel").getBoundingClientRect(); return { mx: m.left, mw: m.width, mb: m.bottom, px: p.left, pw: p.width, pt: p.top, mt: m.top }; });
@@ -78,7 +116,7 @@ const COOKIES = Object.entries({ "banner-status": "dismissed", policy_id: "35", 
     check(`${tag}: winner cards ${perRow} per row, inside the screen, banner and link inside the card`, cards.every((c) => c.r <= w && c.ix && c.lb && c.border === "3px") && new Set(cards.map((c) => c.y)).size === Math.ceil(5 / perRow), JSON.stringify(cards));
 
     // ---- Accordions closed by default; Paper 28.3 is the open state.
-    const closed = await page.evaluate(() => [...document.querySelectorAll(".fides-awards details")].map((d) => d.open));
+    const closed = await page.evaluate(() => [...document.querySelectorAll(".fides-awards details:not(.fides-ds-section-nav)")].map((d) => d.open));
     check(`${tag}: eight accordions, all closed by default`, closed.length === 8 && closed.every((o) => !o), JSON.stringify(closed));
     const sum = page.locator("#highlights > summary");
     await sum.scrollIntoViewIfNeeded(); await settle(page);
@@ -138,7 +176,7 @@ const COOKIES = Object.entries({ "banner-status": "dismissed", policy_id: "35", 
       return { nw: im.naturalWidth, nh: im.naturalHeight, w: b.width, h: b.height, alt: im.alt, text: j.querySelector(".fides-awards-jury__text").textContent.trim(), logos, box: j.getBoundingClientRect().right };
     });
     check(`${tag}: jury image shown whole at its own ratio, with the 50/50 text and six partner logos`, jury.nw >= 300 && Math.abs(jury.w / jury.h - jury.nw / jury.nh) < 0.01 && jury.w <= 901 && jury.alt.length > 10 && /each contributing 50%/.test(jury.text) && jury.logos.length === 6 && jury.logos.every((l) => l[2] >= 44), JSON.stringify(jury).slice(0, 400));
-    await page.evaluate(() => { document.querySelectorAll(".fides-awards details").forEach((d) => { d.open = false; }); });
+    await page.evaluate(() => { document.querySelectorAll(".fides-awards details:not(.fides-ds-section-nav)").forEach((d) => { d.open = false; }); });
 
     // ---- Category rows: open all, long titles and ranking content.
     await page.evaluate(() => document.querySelectorAll(".fides-awards-category").forEach((d) => { d.open = true; }));
@@ -156,13 +194,27 @@ const COOKIES = Object.entries({ "banner-status": "dismissed", policy_id: "35", 
       ["Best Wallet Award", ["Rank 1 · Winner 2026", "Rank 2", "Rank 3", "Rank 3"]],
       ["Business Value Award", ["Rank 1 · Winner 2026", "Rank 2", "Rank 3", "Rank 4", "Rank 5"]],
     ]), JSON.stringify(rank.rows));
+    const fimg = await page.evaluate(async () => {
+      const rows = [...document.querySelectorAll(".fides-awards-finalist")];
+      const imgs = [...document.querySelectorAll(".fides-awards-finalist__image img")];
+      for (const im of imgs) { im.loading = "eager"; }
+      await Promise.all(imgs.map((im) => im.complete ? 0 : new Promise((r) => { im.onload = im.onerror = r; setTimeout(r, 8000); })));
+      const textless = rows.filter((r) => !r.classList.contains("fides-awards-finalist--image")).map((r) => r.querySelector("h4").textContent.trim());
+      const geo = rows.filter((r) => r.classList.contains("fides-awards-finalist--image")).map((r) => { const f = r.querySelector(".fides-awards-finalist__image").getBoundingClientRect(); const body = r.querySelector(".fides-awards-finalist__body").getBoundingClientRect(); const i = r.querySelector("img"); const c = getComputedStyle(i); return { besideText: f.right <= body.left + 1 && Math.abs(f.top - body.top) < 8, fit: c.objectFit, alt: i.getAttribute("alt"), src: i.getAttribute("src"), loaded: i.naturalWidth > 0, w: Math.round(f.width) }; });
+      const icons = [...document.querySelectorAll(".fides-awards-rank")].map((r) => [r.classList.contains("fides-awards-rank--winner"), getComputedStyle(r, "::before").content !== "none" && getComputedStyle(r, "::before").content !== "normal"]);
+      return { total: rows.length, withImage: geo.length, textless, geo, icons };
+    });
+    check(`${tag}: 23 of 24 finalists show their catalog image next to the text; the one without catalog data stays text-only`, fimg.total === 24 && fimg.withImage === 23 && fimg.textless.length === 1 && /Real Estate Purchasing Journey/.test(fimg.textless[0]) && fimg.geo.every((g) => g.besideText && g.fit === "contain" && g.alt === "" && g.src.startsWith("https://") && g.w === (w >= 768 ? 168 : 88)), JSON.stringify([fimg.withImage, fimg.textless, fimg.geo.filter((g) => !g.besideText).slice(0, 2)]));
+    check(`${tag}: only rank-1 entries carry the award icon`, fimg.icons.length === 24 && fimg.icons.every(([win, icon]) => win === icon) && fimg.icons.filter(([w2]) => w2).length === 5, JSON.stringify(fimg.icons));
+    check(`${tag}: the winner tint does not move the text or image off the shared left edge`, await page.evaluate(() => { const edge = (r) => r.querySelector(".fides-awards-finalist__image, .fides-awards-rank").getBoundingClientRect().left; const c = document.querySelector(".fides-awards-category"); const rows = [...c.querySelectorAll(".fides-awards-finalist")]; return rows.every((r) => Math.abs(edge(r) - edge(rows[1])) <= 1); }));
     check(`${tag}: finalist rows hold the vertical rhythm (title, text, link inside the row)`, await page.evaluate(() => [...document.querySelectorAll(".fides-awards-finalist")].every((f) => { const b = f.getBoundingClientRect(); return [...f.children].every((c) => c.getBoundingClientRect().bottom <= b.bottom + 1 && c.getBoundingClientRect().right <= b.right + 1); })));
     await page.evaluate(() => document.querySelectorAll(".fides-awards-category").forEach((d) => { d.open = false; }));
 
     // ---- Anchors by mouse: target visible, accordion opens.
     for (const [label, href] of s.nav.slice(0, 5)) {
       await page.evaluate(() => window.scrollTo(0, 0)); await settle(page);
-      await page.locator(`.fides-awards-nav a[href="${href}"]`).click();
+      if (w < 1100) await page.locator(".fides-awards-sections > summary").click();
+      await page.locator(`.fides-awards-sections a[href="${href}"]`).click();
       await page.waitForTimeout(900);
       const r = await page.evaluate((h) => { const t = document.querySelector(h); const b = t.getBoundingClientRect(); return { hash: location.hash, top: Math.round(b.top), open: t.tagName === "DETAILS" ? t.open : null, focus: document.activeElement && document.activeElement.tagName }; }, href);
       check(`${tag}: nav "${label}" scrolls to ${href}${r.open !== null ? " and opens it" : ""}`, r.hash === href && r.top >= -4 && r.top < 700 && (r.open === null || r.open === true), JSON.stringify(r));
@@ -171,7 +223,8 @@ const COOKIES = Object.entries({ "banner-status": "dismissed", policy_id: "35", 
     // Anchors by keyboard: Tab to the Jury link, Enter.
     await page.evaluate(() => { window.scrollTo(0, 0); document.activeElement && document.activeElement.blur(); });
     await page.keyboard.press("Tab");
-    await page.evaluate(() => document.querySelector('.fides-awards-nav a[href="#jury"]').focus());
+    if (w < 1100) { await page.locator(".fides-awards-sections > summary").click(); await page.keyboard.press("Tab"); }
+    await page.evaluate(() => document.querySelector('.fides-awards-sections a[href="#jury"]').focus());
     const navRing = await page.evaluate(() => { const c = getComputedStyle(document.activeElement); return { st: c.outlineStyle, w: parseFloat(c.outlineWidth) }; });
     await page.keyboard.press("Enter"); await page.waitForTimeout(900);
     const kb = await page.evaluate(() => ({ open: document.querySelector("#jury").open, focus: document.activeElement.tagName + ":" + (document.activeElement.parentElement && document.activeElement.parentElement.id) }));

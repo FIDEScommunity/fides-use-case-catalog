@@ -56,6 +56,7 @@ add_filter(
             '/ecosystem-explorer/start/'                    => '/fides-design-pilot/start/',
             '/about-fides/'                                 => '/fides-design-pilot/about-fides/',
             '/manifesto/'                                   => '/fides-design-pilot/manifesto/',
+            '/awards/global-digital-trust-awards/'          => '/fides-design-pilot/global-digital-trust-awards/',
             '/about-fides/news/'                            => '/fides-design-pilot/updates/',
             '/learn/'                                       => '/fides-design-pilot/learn/',
             '/learn/topics/'                                => '/fides-design-pilot/learn/topics/',

@@ -82,6 +82,7 @@ if (! function_exists('fides_design_review_base')) {
             '/ecosystem-explorer/start/'                     => '{pilot}/start/',
             '/about-fides/'                                  => '{pilot}/about-fides/',
             '/manifesto/'                                    => '{pilot}/manifesto/',
+            '/awards/global-digital-trust-awards/'           => '{pilot}/global-digital-trust-awards/',
             '/about-fides/news/'                             => '{pilot}/updates/',
             '/learn/'                                        => '{pilot}/learn/',
             '/learn/topics/'                                 => '{pilot}/learn/topics/',

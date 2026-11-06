@@ -133,6 +133,23 @@ if ($page instanceof WP_Post) {
     }
 }
 
+// ---- Render-time upgrades: shared section menu and catalog images (no invented images).
+$check(class_exists('Fides_DS_Awards'), 'the awards renderer class is loaded');
+if ($page instanceof WP_Post && class_exists('Fides_DS_Awards')) {
+    $html = do_blocks($page->post_content);
+    $check(substr_count($html, 'data-fides-ds-section-nav') === 1 && strpos($html, 'fides-awards-sections') !== false, 'the page renders one shared section menu');
+    $check(strpos($html, 'fides-awards-navbar') === false, 'the editor-side navbar group is replaced by the shared menu on render');
+    $check(preg_match_all('~<li><a href="#(winners|finalists|highlights|categories|jury)"~', $html) === 5, 'the menu keeps the five editor-maintained anchors');
+    $check(substr_count($html, 'fides-awards-finalist__image') === 23, '23 finalists get a catalog image, only where the record has one');
+    $check(preg_match('~fides-awards-finalist__image"><img[^>]+alt=""~', $html) === 1, 'catalog images are decorative (empty alt, the title is next to them)');
+    $check(preg_match_all('~fides-awards-finalist__image"><img[^>]+src="https?://~', $html) === 23, 'catalog image URLs are the records\' own http(s) URLs');
+}
+// The main menu entry resolves to the pilot page, not to production.
+if (class_exists('Fides_DS_Site_Shell')) {
+    $awards_url = Fides_DS_Site_Shell::url('/awards/global-digital-trust-awards/');
+    $check(strpos($awards_url, '/fides-design-pilot/global-digital-trust-awards/') !== false, 'Ecosystem > Global Digital Trust Awards points to the pilot page: ' . $awards_url);
+}
+
 // ---- No awards copy in plugin PHP or CSS/JS: editorial content stays in WordPress.
 $root = dirname((new ReflectionClass('Fides_DS_Site_Shell'))->getFileName(), 2) . '/';
 foreach (array('assets/awards.css', 'assets/awards.js', 'includes/class-fides-ds-site-shell.php') as $file) {

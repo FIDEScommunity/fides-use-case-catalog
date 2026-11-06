@@ -592,6 +592,13 @@ gallery and the accordions in the block editor; nothing editorial is stored in P
   anchor points to.
 - Accordions are `core/details` blocks, closed by default. Anchors: `#winners`, `#finalists`, `#highlights`,
   `#categories`, `#jury` (and `#about`, `#finalists-<category>`); a link or deep link opens the row it targets.
+- Repair round (2026-11-06): the section menu is the shared `fides-ds-section-nav` of the use-case detail page
+  (sticky white bar from 1100px, 2px blue current-section underline, "On this page" disclosure below, anchors clear
+  it by 80px). The editor keeps a plain anchor list; `Fides_DS_Awards` (tiles) turns it into the shared markup on
+  render and adds the catalog image (use case `imageUrl`, wallet `logo`) next to a finalist only when the record has
+  one. Ranking titles 20/26, descriptions 17/27; closed rows are the 62px click row; winner cards share rows by
+  subgrid so descriptions and actions align. Route map: `/awards/global-digital-trust-awards/` points to the pilot
+  page in the guard and in `staging/fides-design-review-config.php`.
 - Tests: `tests/awards-behaviour.php` (in `run-tests.sh`) and `tests/run-awards-checks.sh` (1440, 1024, 768, 390, 320).
 
 ## Staging preparation (`/design-review/`)
