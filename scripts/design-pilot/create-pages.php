@@ -405,6 +405,72 @@ pilot_upsert_page(
     $layout_meta,
     PILOT_SHELL_TEMPLATE
 );
+/**
+ * Global Digital Trust Awards (Paper 28.2 / 28.3): one ordinary page with normal blocks.
+ * Texts and image references live in awards/content/awards.html; the original images
+ * (awards/manifest.json) are imported once into the media library so editors can swap them.
+ * Without network access (or with PILOT_AWARDS_OFFLINE=1) the page is skipped and reported.
+ *
+ * @return array<string,array{id:int,url:string}>|null key => attachment, null when an image is unavailable
+ */
+function pilot_awards_media(array $manifest, bool $dry): ?array {
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+    require_once ABSPATH . 'wp-admin/includes/media.php';
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    $out = array();
+    foreach ($manifest['images'] as $image) {
+        $found = get_posts(array('post_type' => 'attachment', 'post_status' => 'inherit', 'numberposts' => 1, 'fields' => 'ids', 'meta_key' => '_fides_awards_source', 'meta_value' => $image['source']));
+        if ($found) {
+            $out[ $image['key'] ] = array('id' => (int) $found[0], 'url' => (string) wp_get_attachment_url((int) $found[0]));
+            continue;
+        }
+        if ($dry || getenv('PILOT_AWARDS_OFFLINE') === '1') {
+            return null;
+        }
+        $tmp = download_url($image['source'], 60);
+        if (is_wp_error($tmp)) {
+            fwrite(STDERR, 'awards image ' . $image['key'] . ': ' . $tmp->get_error_message() . "\n");
+            return null;
+        }
+        $id = media_handle_sideload(array('name' => basename((string) wp_parse_url($image['source'], PHP_URL_PATH)), 'tmp_name' => $tmp), 0, null, array('post_title' => 'Awards ' . $image['key']));
+        if (is_wp_error($id)) {
+            @unlink($tmp); // phpcs:ignore WordPress.WP.AlternativeFunctions
+            fwrite(STDERR, 'awards image ' . $image['key'] . ': ' . $id->get_error_message() . "\n");
+            return null;
+        }
+        update_post_meta($id, '_fides_awards_source', $image['source']);
+        update_post_meta($id, '_wp_attachment_image_alt', $image['alt']);
+        $out[ $image['key'] ] = array('id' => (int) $id, 'url' => (string) wp_get_attachment_url((int) $id));
+    }
+    return $out;
+}
+
+$awards_dir = __DIR__ . '/awards';
+if (is_readable($awards_dir . '/content/awards.html') && is_readable($awards_dir . '/manifest.json')) {
+    $awards_manifest = json_decode((string) file_get_contents($awards_dir . '/manifest.json'), true);
+    $awards_media    = is_array($awards_manifest) ? pilot_awards_media($awards_manifest, $pilot_dry) : null;
+    if ($awards_media === null) {
+        $pilot_report[] = array(trim(pilot_tokens('{{base}}/global-digital-trust-awards'), '/'), 'skipped-images', 'original images not imported yet (offline, dry run or download error); run again with network access');
+    } else {
+        $awards_html = (string) file_get_contents($awards_dir . '/content/awards.html');
+        $awards_html = preg_replace_callback('/\{\{aw:(id|url):([a-z0-9-]+)(?::([a-z_]+))?\}\}/', static function ($m) use ($awards_media) {
+            $item = $awards_media[ $m[2] ] ?? null;
+            if (! $item) {
+                return $m[0];
+            }
+            if ($m[1] === 'id') {
+                return (string) $item['id'];
+            }
+            if (! empty($m[3])) {
+                $sized = wp_get_attachment_image_src($item['id'], $m[3]);
+                return $sized ? (string) $sized[0] : $item['url'];
+            }
+            return $item['url'];
+        }, $awards_html);
+        pilot_upsert_page('{{base}}/global-digital-trust-awards', 'Global Digital Trust Awards', $awards_html, $parent, $layout_meta, PILOT_SHELL_TEMPLATE);
+    }
+}
+
 pilot_upsert_page(
     '{{base}}/updates',
     'Updates',

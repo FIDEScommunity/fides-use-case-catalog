@@ -1,0 +1,421 @@
+{
+ "version": 1,
+ "note": "Original images of https://fides.community/awards/global-digital-trust-awards/. The seed downloads each source once into the media library and replaces {{aw:id:KEY}} / {{aw:url:KEY[:size]}} in content/awards.html.",
+ "images": [
+  {
+   "key": "banner-collaboration",
+   "source": "https://fides.community/app/uploads/2026/09/Winner_collaboration.png",
+   "alt": "Collaboration Award winner banner: Mobile Driving Licence (mDL) based on ISO/IEC 18013-5"
+  },
+  {
+   "key": "banner-social-impact",
+   "source": "https://fides.community/app/uploads/2026/09/winner_social_impact.png",
+   "alt": "Social Impact Award winner banner: SSITIZENS, verifiable social aid"
+  },
+  {
+   "key": "banner-adoption",
+   "source": "https://fides.community/app/uploads/2026/09/winner_adoption_award.png",
+   "alt": "Adoption Award winner banner: Urban Company, service professional and customer identity verification"
+  },
+  {
+   "key": "banner-best-wallet",
+   "source": "https://fides.community/app/uploads/2026/09/Winner_best_wallet.png",
+   "alt": "Best Wallet Award winner banner: Aadhaar App"
+  },
+  {
+   "key": "banner-business-value",
+   "source": "https://fides.community/app/uploads/2026/09/winner_business_value.png",
+   "alt": "Business Value Award winner banner: From repeated verification to reusable trust, the real estate purchasing journey"
+  },
+  {
+   "key": "photo-01",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-458-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 1 of 71"
+  },
+  {
+   "key": "photo-02",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-461-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 2 of 71"
+  },
+  {
+   "key": "photo-03",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_4481.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 3 of 71"
+  },
+  {
+   "key": "photo-04",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2941.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 4 of 71"
+  },
+  {
+   "key": "photo-05",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2935-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 5 of 71"
+  },
+  {
+   "key": "photo-06",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2934-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 6 of 71"
+  },
+  {
+   "key": "photo-07",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2932-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 7 of 71"
+  },
+  {
+   "key": "photo-08",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2926-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 8 of 71"
+  },
+  {
+   "key": "photo-09",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2927-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 9 of 71"
+  },
+  {
+   "key": "photo-10",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2928-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 10 of 71"
+  },
+  {
+   "key": "photo-11",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2930-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 11 of 71"
+  },
+  {
+   "key": "photo-12",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2929-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 12 of 71"
+  },
+  {
+   "key": "photo-13",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2931-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 13 of 71"
+  },
+  {
+   "key": "photo-14",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2933-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 14 of 71"
+  },
+  {
+   "key": "photo-15",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2925-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 15 of 71"
+  },
+  {
+   "key": "photo-16",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2924-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 16 of 71"
+  },
+  {
+   "key": "photo-17",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2923-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 17 of 71"
+  },
+  {
+   "key": "photo-18",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2922-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 18 of 71"
+  },
+  {
+   "key": "photo-19",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2921-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 19 of 71"
+  },
+  {
+   "key": "photo-20",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2920-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 20 of 71"
+  },
+  {
+   "key": "photo-21",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2919-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 21 of 71"
+  },
+  {
+   "key": "photo-22",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2906-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 22 of 71"
+  },
+  {
+   "key": "photo-23",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2912-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 23 of 71"
+  },
+  {
+   "key": "photo-24",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2913-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 24 of 71"
+  },
+  {
+   "key": "photo-25",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2914-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 25 of 71"
+  },
+  {
+   "key": "photo-26",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2915-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 26 of 71"
+  },
+  {
+   "key": "photo-27",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2916-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 27 of 71"
+  },
+  {
+   "key": "photo-28",
+   "source": "https://fides.community/app/uploads/2026/09/IMG_2917.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 28 of 71"
+  },
+  {
+   "key": "photo-29",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-387-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 29 of 71"
+  },
+  {
+   "key": "photo-30",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-378-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 30 of 71"
+  },
+  {
+   "key": "photo-31",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-379-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 31 of 71"
+  },
+  {
+   "key": "photo-32",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-380-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 32 of 71"
+  },
+  {
+   "key": "photo-33",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-381-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 33 of 71"
+  },
+  {
+   "key": "photo-34",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-382-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 34 of 71"
+  },
+  {
+   "key": "photo-35",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-383-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 35 of 71"
+  },
+  {
+   "key": "photo-36",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-384-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 36 of 71"
+  },
+  {
+   "key": "photo-37",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-385-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 37 of 71"
+  },
+  {
+   "key": "photo-38",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-386-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 38 of 71"
+  },
+  {
+   "key": "photo-39",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-388-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 39 of 71"
+  },
+  {
+   "key": "photo-40",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-389-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 40 of 71"
+  },
+  {
+   "key": "photo-41",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-390-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 41 of 71"
+  },
+  {
+   "key": "photo-42",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-391-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 42 of 71"
+  },
+  {
+   "key": "photo-43",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-392-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 43 of 71"
+  },
+  {
+   "key": "photo-44",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-393-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 44 of 71"
+  },
+  {
+   "key": "photo-45",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-394-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 45 of 71"
+  },
+  {
+   "key": "photo-46",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-395-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 46 of 71"
+  },
+  {
+   "key": "photo-47",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-396-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 47 of 71"
+  },
+  {
+   "key": "photo-48",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-436-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 48 of 71"
+  },
+  {
+   "key": "photo-49",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-437-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 49 of 71"
+  },
+  {
+   "key": "photo-50",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-451-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 50 of 71"
+  },
+  {
+   "key": "photo-51",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-455-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 51 of 71"
+  },
+  {
+   "key": "photo-52",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-456-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 52 of 71"
+  },
+  {
+   "key": "photo-53",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-459-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 53 of 71"
+  },
+  {
+   "key": "photo-54",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-462-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 54 of 71"
+  },
+  {
+   "key": "photo-55",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-463-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 55 of 71"
+  },
+  {
+   "key": "photo-56",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-464-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 56 of 71"
+  },
+  {
+   "key": "photo-57",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-465-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 57 of 71"
+  },
+  {
+   "key": "photo-58",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-466-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 58 of 71"
+  },
+  {
+   "key": "photo-59",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-467-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 59 of 71"
+  },
+  {
+   "key": "photo-60",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-468-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 60 of 71"
+  },
+  {
+   "key": "photo-61",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-469-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 61 of 71"
+  },
+  {
+   "key": "photo-62",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-470-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 62 of 71"
+  },
+  {
+   "key": "photo-63",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-471-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 63 of 71"
+  },
+  {
+   "key": "photo-64",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-472-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 64 of 71"
+  },
+  {
+   "key": "photo-65",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-473-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 65 of 71"
+  },
+  {
+   "key": "photo-66",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-474-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 66 of 71"
+  },
+  {
+   "key": "photo-67",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-475-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 67 of 71"
+  },
+  {
+   "key": "photo-68",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-476-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 68 of 71"
+  },
+  {
+   "key": "photo-69",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-477-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 69 of 71"
+  },
+  {
+   "key": "photo-70",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-478-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 70 of 71"
+  },
+  {
+   "key": "photo-71",
+   "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-479-scaled.jpg",
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 71 of 71"
+  },
+  {
+   "key": "jury",
+   "source": "https://fides.community/app/uploads/2026/07/gdt_awards_jury.png",
+   "alt": "The 2026 international jury of the Global Digital Trust Awards"
+  },
+  {
+   "key": "logo-didas",
+   "source": "https://fides.community/app/uploads/2026/06/didas_3x2.png",
+   "alt": "didas"
+  },
+  {
+   "key": "logo-diacc",
+   "source": "https://fides.community/app/uploads/2026/06/diacc_3x2.png",
+   "alt": "DIACC"
+  },
+  {
+   "key": "logo-teletrust",
+   "source": "https://fides.community/app/uploads/2026/06/teletrust_3x2.png",
+   "alt": "TeleTrusT"
+  },
+  {
+   "key": "logo-apdi",
+   "source": "https://fides.community/app/uploads/2026/06/apdi_3x2.png",
+   "alt": "APDI Consortium"
+  },
+  {
+   "key": "logo-asiapki",
+   "source": "https://fides.community/app/uploads/2026/06/Asia_PKI_logo_3x2_padded.png",
+   "alt": "Asia PKI Consortium"
+  },
+  {
+   "key": "logo-fides",
+   "source": "https://fides.community/app/uploads/2026/06/fides_3x2.png",
+   "alt": "FIDES"
+  }
+ ]
+}

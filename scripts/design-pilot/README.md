@@ -576,6 +576,24 @@ restore check, staging dependencies and maintenance are described in
 passed the restore check). Tests: `tests/run-learn-checks.sh`,
 `tests/run-learn-seed-checks.sh`, `tests/learn-behaviour.php` (in `run-tests.sh`).
 
+## Global Digital Trust Awards (Paper 28.2 / 28.3, 2026-11-06)
+
+One ordinary page, `/fides-design-pilot/global-digital-trust-awards/`, with the site shell template and normal core
+blocks (group, heading, paragraph, image, gallery, details, list, buttons). Editors change texts, images, the
+gallery and the accordions in the block editor; nothing editorial is stored in PHP.
+
+- Content: `awards/content/awards.html` (block markup, seeded by `create-pages.sh`). Image references are tokens
+  (`{{aw:id:KEY}}`, `{{aw:url:KEY[:size]}}`); `awards/manifest.json` lists the 83 original images of the live page
+  (5 winner banners, 71 ceremony photos, jury image, 6 partner logos). The seed downloads each one once into the
+  media library (needs network; without it the page is skipped and reported as `skipped-images`).
+- Same edit protection as the other pilot pages: a page an editor changed is skipped, `PILOT_FORCE=<path>` replaces it.
+- Styles and the small anchor script: `fides-community-tools-tiles/assets/awards.css` / `awards.js`, enqueued by the
+  site shell for pages whose content carries the `fides-awards` wrapper class. The script only opens the accordion an
+  anchor points to.
+- Accordions are `core/details` blocks, closed by default. Anchors: `#winners`, `#finalists`, `#highlights`,
+  `#categories`, `#jury` (and `#about`, `#finalists-<category>`); a link or deep link opens the row it targets.
+- Tests: `tests/awards-behaviour.php` (in `run-tests.sh`) and `tests/run-awards-checks.sh` (1440, 1024, 768, 390, 320).
+
 ## Staging preparation (`/design-review/`)
 
 Everything for a later roll-out lives in `staging/` (see `staging/HANDOVER.md`). Nothing here connects to staging.
