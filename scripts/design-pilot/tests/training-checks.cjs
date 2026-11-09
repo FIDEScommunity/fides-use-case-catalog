@@ -33,13 +33,13 @@ async function go(page, url) {
     const hub = await page.locator(".fides-learn").innerText();
     check(`${L("hub")}: partnerships, next steps, no €1,999 or €3,950, no design notes, no jargon`, /Training partnerships/.test(hub) && !/1[.,]999|3[.,]950|Design preview|not built yet|scoped proposal|roadmap/i.test(hub));
     const cards = await page.locator(".fides-learn-offer").evaluateAll((els) => els.map((e) => ({
-      title: e.querySelector("h2").textContent.trim(),
-      kicker: e.querySelector(".fides-learn-offer__kicker").textContent.trim(),
-      line: e.querySelector(".fides-learn-offer__facts").textContent.trim(),
-      action: e.querySelector("a.fides-ds-button").textContent.replace(/\s*→\s*$/, "").trim(),
-      href: e.querySelector("a.fides-ds-button").getAttribute("href"),
-      box: ["h2", ".fides-learn-offer__facts", "a.fides-ds-button"].map((s) => { const r = e.querySelector(s).getBoundingClientRect(); return [Math.round(r.left - e.getBoundingClientRect().left), Math.round(r.width)]; }),
-      font: getComputedStyle(e.querySelector("a.fides-ds-button")).fontSize,
+      title: [...e.querySelector("h2 a").childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join("").trim(),
+      kicker: e.querySelector(".fides-ds-card__fact--format").textContent.trim(),
+      line: [".fides-ds-card__fact--for", ".fides-ds-card__fact--price"].map((q) => e.querySelector(q).textContent.trim()).join(" · "),
+      action: e.querySelector(".fides-ds-card__link .fides-ds-visually-hidden").textContent.replace(/[()]/g, "").trim(),
+      href: e.querySelector(".fides-ds-card__link").getAttribute("href"),
+      box: ["h2", ".fides-ds-card__facts", ".fides-ds-card__arrow"].map((s) => { const r = e.querySelector(s).getBoundingClientRect(); return [Math.round(r.left - e.getBoundingClientRect().left), Math.round(r.width)]; }),
+      font: getComputedStyle(e.querySelector(".fides-ds-card__link")).fontSize,
     })));
     check(`${L("hub")}: three offer cards in order`, cards.map((c) => c.title).join("|") === "EUDI & Business Wallets in Practice|Wallet Introduction|Wallet Readiness Workshop", cards.map((c) => c.title).join("|"));
     check(`${L("hub")}: card facts show audience, format and price basis`, cards.length === 3 && /one-day/i.test(cards[0].kicker) && cards[0].line === "Individual participants · €999 per participant, excluding VAT" && cards[1].line === "Your own team · From €1,495 per session, excluding VAT" && cards[2].line === "Your own team · From €3,750 per workshop, excluding VAT", JSON.stringify(cards.map((c) => [c.kicker, c.line])));

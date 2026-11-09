@@ -28,7 +28,7 @@ async function layout(page, label) {
     small: [...document.querySelectorAll(".fides-learn a, .fides-learn button, .fides-learn select, .fides-learn input")].filter((e) => {
       const r = e.getBoundingClientRect();
       const st = getComputedStyle(e);
-      return r.width > 0 && r.height > 0 && st.visibility !== "hidden" && !e.closest(".fides-learn__content p, .fides-learn__content li, .fides-learn-form__privacy, .fides-learn__crumbs, .fides-learn-rows, .fides-learn-note") && r.height < 40 && !e.classList.contains("fides-learn__back");
+      return r.width > 0 && r.height > 0 && st.visibility !== "hidden" && !e.closest(".fides-learn__content p, .fides-learn__content li, .fides-learn-form__privacy, .fides-learn__crumbs, .fides-learn-rows, .fides-learn-note, .fides-ds-card--row") && r.height < 40 && !e.classList.contains("fides-learn__back");
     }).map((e) => e.textContent.trim().slice(0, 30)),
     text: document.body.innerText,
   }));
