@@ -67,7 +67,8 @@ $check(array_map('html_entity_decode', $main_labels[1]) === array('Learn', 'Expl
 $check(strpos($header, '>Community<') === false && strpos($header, '>Services<') === false, 'no Community item and no Services link without a Services page');
 $check(strpos($header, '>Plans<') !== false && preg_match('#class="fides-ds-site-nav__link"[^>]*>Plans#', $header) === 0, 'Plans lives under Ecosystem > Contribute, not in the main items');
 $check(strpos($header, 'Intermediaries') === false && strpos($header, 'Trust schemes') === false && strpos($header, 'Get help choosing') === false && strpos($header, 'Ask FIDES') === false && strpos($header, 'Interop Testbed') === false, 'links to pages that do not exist yet are not shown');
-preg_match('#fides-ds-site-header__actions">(.*?)</div>#s', $header, $actions);
+// The language switcher is a div inside the actions, so the block ends at the search panel, not at the first </div>.
+preg_match('#fides-ds-site-header__actions">(.*?)</div></div><div class="fides-ds-site-search-panel"#s', $header, $actions);
 preg_match_all('#>(Contact|Search|Sign in|Menu)<#', $actions[1] ?? '', $action_labels);
 $check($action_labels[1] === array('Contact', 'Search', 'Sign in', 'Menu'), 'header actions: Contact, Search, Sign in: ' . implode(' | ', $action_labels[1]));
 preg_match('#id="fides-ds-panel-ecosystem".*?</div></div></div>#s', $header, $eco_panel);
