@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Route check for Learn Sessions & workshops and the enquiry preview (desktop, tablet, mobile).
+# Route check for Learn Training & workshops and the enquiry preview (desktop, tablet, mobile).
 # Needs the pilot server running and an existing Playwright install; override
 # PLAYWRIGHT_MODULE when it lives elsewhere.
 set -euo pipefail

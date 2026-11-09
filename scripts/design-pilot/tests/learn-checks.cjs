@@ -101,7 +101,7 @@ async function targets(page, key, width) {
 
 async function desktopBar(page, width) {
   const labels = await page.locator(".fides-learn-bar__nav a").allInnerTexts();
-  check(`bar @${width}: Overview, Topics, Sessions & workshops, Glossary`, labels.join("|") === "Overview|Topics|Sessions & workshops|Glossary", labels.join("|"));
+  check(`bar @${width}: Overview, Topics, Training & workshops, Glossary`, labels.join("|") === "Overview|Topics|Training & workshops|Glossary", labels.join("|"));
   const visibleToggle = await page.locator(".fides-learn-bar__toggle").isVisible();
   check(`bar @${width}: horizontal tabs, no compact toggle`, !visibleToggle);
   const ask = page.locator("[data-fides-learn-ask]");
@@ -118,7 +118,7 @@ async function mobileMenu(page, width) {
   check(`menu @${width}: Escape closes the menu and returns focus`, !(await nav.isVisible()) && (await toggle.evaluate((el) => el === document.activeElement)));
   await toggle.click();
   const items = await nav.locator("a").allInnerTexts();
-  check(`menu @${width}: all four destinations present`, items.join("|") === "Overview|Topics|Sessions & workshops|Glossary", items.join("|"));
+  check(`menu @${width}: all four destinations present`, items.join("|") === "Overview|Topics|Training & workshops|Glossary", items.join("|"));
   await page.mouse.click(width - 5, 700);
   check(`menu @${width}: click outside closes the menu`, !(await nav.isVisible()));
 }

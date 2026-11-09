@@ -1,5 +1,5 @@
 /**
- * Route checks for Learn > Sessions & workshops > offering > enquiry preview.
+ * Route checks for Learn > Training & workshops > offering > enquiry preview.
  * Covers context, back navigation, validation, the local result and the
  * guarantee that nothing is posted. Run through run-sessions-checks.sh.
  */
@@ -33,12 +33,12 @@ async function layout(page, label) {
     text: document.body.innerText,
   }));
   check(`${label}: single H1 and shared header, no overflow`, s.h1s === 1 && s.headers === 1 && !s.overflow, JSON.stringify(s));
-  check(`${label}: no price information or design notes`, !/€|\bEUR\b|\bprice\b|\bpricing\b|VOORSTEL|Cursor-implementatie/i.test(s.text));
+  check(`${label}: no design notes and no unapproved price`, !/VOORSTEL|Cursor-implementatie|1[.,]999/i.test(s.text));
   check(`${label}: controls are at least 40px high`, s.small.length === 0, s.small.join("|"));
 }
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" });
   for (const width of WIDTHS) {
     const ctx = await browser.newContext({ viewport: { width, height: 900 }, hasTouch: width < 700 });
     const page = await ctx.newPage();
@@ -46,29 +46,29 @@ async function layout(page, label) {
     page.on("request", (r) => { if (r.method() !== "GET") posts.push(`${r.method()} ${r.url()}`); });
     const L = (w) => `${w}@${width}`;
 
-    // Learn -> Sessions & workshops via the Learn bar or mobile menu.
+    // Learn -> Training & workshops via the Learn bar or mobile menu.
     await go(page, `${LEARN}/`);
     await layout(page, L("overview"));
     const offerLinks = await page.locator('.fides-learn-rows a[href*="/sessions/"]').evaluateAll((a) => a.map((x) => x.getAttribute("href")));
     check(`${L("overview")}: both offerings link to their pages`, offerLinks.some((h) => h.includes("wallet-introduction")) && offerLinks.some((h) => h.includes("wallet-readiness-workshop")), offerLinks.join("|"));
-    await page.locator('.fides-learn__actions a:has-text("Sessions"), .fides-learn a:has-text("Sessions & workshops")').first().click();
+    await page.locator('.fides-learn a:has-text("Training & workshops")').first().click();
     await page.waitForURL(/\/sessions\/$/);
     check(`${L("sessions")}: reached from the overview`, true);
     await layout(page, L("sessions"));
     const body = await page.locator("main, .fides-learn").first().innerText();
     check(`${L("sessions")}: webinars are in preparation without dates or booking`, /Webinars & roundtables/i.test(body) && !/\b(20\d\d)\b/.test(body.replace(/FIDES Labs.*/s, "")) && /expression of interest, not a booking/i.test(body));
     check(`${L("sessions")}: follow-up steps are labelled previews, not links`, (await page.locator('.fides-learn a[href*="assessment"], .fides-learn a[href*="business-case"]').count()) === 0 && /Architecture Assessment/.test(body) && /Use Case & Business Case Development/.test(body));
-    check(`${L("sessions")}: Sessions tab is active`, (await page.locator(".fides-learn-bar [aria-current]").first().innerText()).match(/Sessions/) !== null);
+    check(`${L("sessions")}: Training tab is active`, (await page.locator(".fides-learn-bar [aria-current]").first().innerText()).match(/Training/) !== null);
 
     // Offering detail.
-    for (const [slug, label, ask] of [["wallet-introduction", "Wallet Introduction", /Request a Wallet Introduction/], ["wallet-readiness-workshop", "Wallet Readiness Workshop", /Request a Readiness Workshop/]]) {
+    for (const [slug, label, ask] of [["wallet-introduction", "Wallet Introduction", /Discuss an introduction session/], ["wallet-readiness-workshop", "Wallet Readiness Workshop", /Discuss a workshop/]]) {
       await go(page, `${LEARN}/sessions/`);
       await page.locator(`.fides-learn a[href$="/sessions/${slug}/"]`).first().click();
       await page.waitForURL(new RegExp(`${slug}/$`));
       await layout(page, L(slug));
       const t = await page.locator(".fides-learn").innerText();
-      check(`${L(slug)}: shows audience/format, practical details and request action`, /For\b/.test(t) && /Format/.test(t) && /Scope & fee/.test(t) && (await page.locator(".fides-learn-details").count()) === 1 && ask.test(t));
-      await page.locator(`.fides-learn__actions a:has-text("Request")`).first().click();
+      check(`${L(slug)}: shows audience/format, practical details and request action`, /For\b/.test(t) && /Format/.test(t) && /Indicative price/.test(t) && (await page.locator(".fides-learn-details").count()) === 1 && ask.test(t));
+      await page.locator(`.fides-learn__actions a:has-text("Discuss")`).first().click();
       await page.waitForURL(/\/sessions\/request\/\?offering=/);
       const sel = await page.locator("#fides-learn-offering").inputValue();
       check(`${L(slug)}: enquiry keeps the chosen offering`, sel === slug && (await page.locator("[data-fides-learn-context-label]").innerText()).includes(label));
@@ -121,7 +121,7 @@ async function layout(page, label) {
     check(`${L("for-businesses")}: workshop button leads to the offering`, (await page.locator('.fides-learn a[href$="/sessions/wallet-readiness-workshop/"]').count()) > 0);
     await go(page, `${LEARN}/topics/`);
     check(`${L("topics")}: sessions button leads to the sessions page`, (await page.locator('.fides-learn-band a[href$="/sessions/"]').count()) > 0);
-    check(`${L("no unlabelled preview left for built pages")}`, !/Sessions & workshops\s*Design preview/.test(await page.locator(".fides-learn").innerText()));
+    check(`${L("no unlabelled preview left for built pages")}`, !/Training & workshops\s*Design preview/.test(await page.locator(".fides-learn").innerText()));
     await ctx.close();
   }
   await browser.close();

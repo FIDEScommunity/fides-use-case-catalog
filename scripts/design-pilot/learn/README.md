@@ -13,7 +13,7 @@ pushed, deployed or synced to utrecht-demo.
 | For businesses | `topics/for-businesses/` | 24.12 | section |
 | How credentials connect issuers, wallets and services | `topics/the-big-picture/how-credentials-connect/` | 24.18, mobile 24.20 | article |
 | Business wallets: where to start | `topics/for-businesses/business-wallets-where-to-start/` | 24.19 | article |
-| Sessions & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |
+| Training & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |
 | Wallet Introduction | `sessions/wallet-introduction/` | 24.4 | offering |
 | Wallet Readiness Workshop | `sessions/wallet-readiness-workshop/` | 24.5 (same pattern) | offering |
 | Session enquiry (local preview) | `sessions/request/?offering=<slug>` | 24.6 | request |
@@ -48,9 +48,9 @@ not-yet-existing destinations are `proposed` in `Fides_DS_Site_Shell::navigation
 maps them through `fides_site_shell_url` (the pilot guard returns '' for unmapped proposed paths).
 Open questions: a credential-types explanation (no existing article fits).
 
-### Sessions & workshops route
+### Training & workshops route
 
-Learn > Sessions & workshops > offering > enquiry. The page kinds `sessions`,
+Learn > Training & workshops > offering > enquiry. The page kinds `sessions`,
 `offering` and `request` are set in the page's Learn metabox. Offerings are the
 children (kind `offering`) of the page that is the parent of the request page, so
 a new offering appears in the enquiry select without a code change.
@@ -203,7 +203,7 @@ out of scope.
 
 ```bash
 bash tests/run-learn-checks.sh        # browser: desktop 1440/1100, tablet 768, mobile 390/320
-bash tests/run-sessions-checks.sh     # Sessions & workshops route, enquiry preview, nothing posted
+bash tests/run-sessions-checks.sh     # Training & workshops route, enquiry preview, nothing posted
 bash tests/run-learn-seed-checks.sh   # overwrite protection
 bash tests/run-connect-checks.sh      # home > start > receive > VOG > Learn, both ways
 bash run-tests.sh                     # PHP behaviour (includes tests/learn-behaviour.php)
@@ -234,7 +234,7 @@ bash run-tests.sh                     # PHP behaviour (includes tests/learn-beha
 Order under the hero: readiness block (Paper 25.16 / 25.17, replaces the 25.15 Learn strip), themes (Digital trust in practice), blue spotlight, latest updates, footer. Desktop spacing after the readiness block is 56px (48px before the blue band); mobile 32px.
 
 - `[fides_home_readiness]` (editorial timeline variant of Paper 25.16 / 25.17): light-blue block. Left about 60%: heading (default "EUDI Wallet: what is changing?"), short introduction, an introduction over the full width of the column, up to three milestones (date or status, title, explanation; the source stays in the data and is not shown in the block) joined by a 1px line (horizontal from 641px, vertical below) an explanation link ("Understand the EUDI obligations and exceptions →") and a separate link "For organisations: explore European Business Wallets →". Right about 40% (stacked below 900px): "What does this mean for your organisation?" with Readiness Workshop (calendar icon) and Topics & guides (book icon) rows of at least 44px. Editors maintain the left side in WordPress under Settings > FIDES Home (option `fides_ds_home_readiness`, same pattern as FIDES Updates); nothing is computed, no countdown. Defaults hold a one-sentence introduction and the two EUDI milestones (End 2026 availability, source European Commission; End 2027 acceptance, source Regulation 910/2014 Art. 5f) with the agreed short texts ("EU Member States are required to provide at least one EUDI Wallet." / "Certain private service providers must accept EUDI Wallets for online identification when requested by users."); exceptions (micro and small enterprises) and the voluntary-use nuance in detail belong on the explanatory Learn page. Both links need a published Learn page as target (Settings > FIDES Home). While the target is empty (temporary) each link is shown as a placeholder without destination: same look, no href, not focusable, announced as "(link coming soon)"; an empty link text hides it; no Learn page about the EUDI obligations and exceptions exists yet, and no page about the European Business Wallet exists yet (the proposal COM(2025) 838 is still being negotiated), so it is not seeded. The sources are listed on a Learn page with the shortcode `[fides_home_readiness_sources]` (add it to the page that explains the milestones; none exists yet). Never present the EUDI dates as European Business Wallet deadlines. Tests: `tests/run-readiness.sh` (seeded homepage, then a temporary option with three milestones and a business link).
-- `[fides_home_learn]` (no longer on the homepage): "New to digital trust?" with Topics & guides (book icon) and Sessions & workshops (calendar icon). The destinations come from the Learn section the site shell points at (`Fides_DS_Learn::bar_model()`); a missing page is left out. Filter `fides_home_learn_links`. `[fides_home_routes]` still exists (hides routes without a destination) but the homepage no longer uses it.
+- `[fides_home_learn]` (no longer on the homepage): "New to digital trust?" with Topics & guides (book icon) and Training & workshops (calendar icon). The destinations come from the Learn section the site shell points at (`Fides_DS_Learn::bar_model()`); a missing page is left out. Filter `fides_home_learn_links`. `[fides_home_routes]` still exists (hides routes without a destination) but the homepage no longer uses it.
 - `[fides_use_case_discovery layout="index"]` (use-case plugin): six themes in two columns of three rows from 900px, one column below. Names, counts and links (`overview/?theme=<bundle>`) come from the plugin's theme bundles and published use cases, the same data as the overview; the total is shown on its own. "Browse all use cases" goes to the overview. No data: heading, a notice and the link.
 - `[fides_home_updates]`: newest updates (default 3, filter `fides_home_updates_limit`) from `Fides_DS_Updates::collect()`. Source (organization, programme, real publisher when it differs) and date sit above the title; the title is the only link; external items end with an arrow and an accessible name that says the link leaves the site. "All updates" and an empty state.
 - Tests: `tests/home-behaviour.php` (in `run-tests.sh`) and `tests/run-home-checks.sh` (five widths, follows every theme at 1440 and compares counts with the overview).
@@ -245,7 +245,7 @@ Order under the hero: readiness block (Paper 25.16 / 25.17, replaces the 25.15 L
 ## About FIDES (Paper 27.1)
 
 - Page `/fides-design-pilot/about-fides/` with the shortcode `[fides_about]` (tiles `Fides_DS_About`, `assets/about.css`); the shell path `/about-fides/` (menu and footer) maps to it in the pilot guard.
-- Destinations go through the shell resolver: Topics & guides and Sessions & workshops and the use case overview are pilot pages; Submit a use case and Manage your organization's listing go to the pilot forms. Contact, Manifesto and Plans have no pilot page and resolve to the live fides.community paths. A destination that resolves to nothing is omitted, not linked.
+- Destinations go through the shell resolver: Topics & guides and Training & workshops and the use case overview are pilot pages; Submit a use case and Manage your organization's listing go to the pilot forms. Contact, Manifesto and Plans have no pilot page and resolve to the live fides.community paths. A destination that resolves to nothing is omitted, not linked.
 - Tests: `tests/run-about-checks.sh` (1440, 390 and 320 px; screenshots in `screens/about-*.png`).
 
 ## FIDES Manifesto (Paper 27.2 / 27.3 / 27.4)
@@ -258,3 +258,15 @@ Order under the hero: readiness block (Paper 25.16 / 25.17, replaces the 25.15 L
 - Content-page type scale (shared classes in `design-system.css`, used by the Manifesto): section heading `.fides-ds-heading-section` 26/32 bold, item heading `.fides-ds-heading-item` 22/28 bold, running text `.fides-ds-text-body` 17/27, all in Inter. Principle numbers are 28/34 semibold in a 52px column (36px below 768 px), 24px (16px mobile) from the title. About FIDES still uses `.fides-ds-heading-2` (30/36) for its section headings; align it when the design owner decides to.
 - Comparison of the gallery with the catalog: `organization-catalog/docs/manifesto-gallery-vs-catalog.md`.
 - Tests: `tests/manifesto-behaviour.php` (in `run-tests.sh`) and `tests/run-manifesto-checks.sh` (1440, 1100, 768, 390, 320; `REAL_LOGOS=1` only for screenshots with real logos).
+
+## Training & workshops: who changes what
+
+A content manager can change everything below in the WordPress page editor, without code.
+
+- **Facts box** (duration, location, time, price, group size): metabox "FIDES Learn page", field `details`, one `Label | Value` per line.
+- **Training dates**: field `dates`, one `Date | Location | Time` per line. Each row gets a "Register interest" link that preselects the date in the enquiry form. Add a line for a new date, delete a line when it has passed. `dates_title` and `dates_note` change the heading and the note under the table.
+- **Subtitle, intro, buttons**: fields `subtitle`, `excerpt`, `actions`. Body text is normal block content.
+- **Extra training or workshop**: add a child page of Training & workshops, set kind `offering`. It appears in the enquiry form's offering list automatically. Pages with `dates` get a date selector; pages without get the timing field.
+- **Optional question**: end `request_question` with "(optional)".
+- The enquiry page is still a local preview (no mail, no storage). A real form, mail or CRM hookup is a separate step.
+- Prices on the pages are indicative; the open training price is €999 excluding VAT.

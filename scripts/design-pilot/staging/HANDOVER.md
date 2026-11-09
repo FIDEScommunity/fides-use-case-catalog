@@ -115,7 +115,7 @@ Other settings that matter:
 
 Demo / preview parts (in the package, not production features):
 
-- The **Sessions & workshops enquiry** (`learn/sessions/request/`) is a local preview: it never submits, stores or mails anything.
+- The **Training & workshops enquiry** (`learn/sessions/request/`) is a local preview: it never submits, stores or mails anything.
 - The **submission and update forms** are the real plugin forms. They need a signed-in visitor. On a bare standalone site that means a WordPress account (the plugins fall back to `wp-login.php` when no sign-in option exists). Create a reviewer account if the forms must be demonstrated. With the defaults they can store a submission in this site's database; GitHub writes and mail are blocked (below).
 - Learn example articles have no author or date by design and need editorial review.
 - The homepage, spotlight and featured use case are pilot compositions of catalog records.

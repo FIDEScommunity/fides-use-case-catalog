@@ -21,7 +21,7 @@ ID_TOPICS="$(page_id $BASE/topics)"
 ID_ART="$(page_id $BASE/topics/the-big-picture/how-credentials-connect)"
 [[ -n "$ID_BIG" && -n "$ID_TOPICS" && -n "$ID_ART" ]] || { echo "Seed the pilot first (create-learn-pages.sh)."; exit 1; }
 
-out="$("$SEED" 2>&1)"; expect "baseline: every page unchanged" "$out" '"unchanged":13'
+out="$("$SEED" 2>&1)"; expect "baseline: every page unchanged" "$out" '"unchanged":15'
 
 # Editor changes: body text, a title and a Learn field.
 pilot_wp post update "$ID_BIG" --post_content="$(pilot_wp post get "$ID_BIG" --field=post_content)<!-- editor note -->" >/dev/null
@@ -70,8 +70,8 @@ ls "$LEARN_BACKUP_DIR"/*editorial-links.json >/dev/null 2>&1 && ok "editorial li
 # Cleanup: restore the remaining edited pages explicitly, remove the test tree.
 LEARN_FORCE="topics,topics/the-big-picture/how-credentials-connect" "$SEED" >/dev/null 2>&1
 pilot_wp eval "foreach (get_posts(array('post_type'=>'page','post_status'=>'any','numberposts'=>-1,'meta_key'=>'_fides_learn_seed')) as \$p) { if (strpos((string) get_post_meta(\$p->ID, '_fides_learn_seed', true), '$TEST_BASE') === 0) wp_delete_post(\$p->ID, true); } wp_delete_post($UNMARKED, true);" >/dev/null
-out="$("$SEED" 2>&1)"; expect "pilot restored: every page unchanged" "$out" '"unchanged":13'
-[[ "$(pilot_wp eval "echo count(get_posts(array('post_type'=>'page','post_status'=>'any','numberposts'=>-1,'meta_key'=>'_fides_learn_seed')));")" == "12" ]] && ok "test tree removed (twelve seeded pages remain)" || bad "test tree removed"
+out="$("$SEED" 2>&1)"; expect "pilot restored: every page unchanged" "$out" '"unchanged":15'
+[[ "$(pilot_wp eval "echo count(get_posts(array('post_type'=>'page','post_status'=>'any','numberposts'=>-1,'meta_key'=>'_fides_learn_seed')));")" == "14" ]] && ok "test tree removed (fourteen seeded pages remain)" || bad "test tree removed"
 
 echo "# fail $FAIL"
 exit $((FAIL>0 ? 1 : 0))
