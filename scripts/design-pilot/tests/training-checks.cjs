@@ -61,7 +61,7 @@ async function go(page, url) {
     const t = await page.locator(".fides-learn").innerText();
     check(`${L("training")}: facts box with price, duration, group size`, /€999/.test(t) && /One day/.test(t) && /6.16 participants/.test(t) && (await page.locator(".fides-learn-details").count()) === 1);
     check(`${L("training")}: no venue address, no €1,999`, !/1[.,]999/.test(t) && !/straat|\d{4}\s?[A-Z]{2}\b/.test(t) && /exact venue will be shared/i.test(t));
-    const rows = await page.locator("#dates tbody tr").count();
+    const rows = await page.locator("#dates .fides-ds-card--row").count();
     check(`${L("training")}: four date rows`, rows === 4, String(rows));
     const hrefs = await page.locator("#dates a").evaluateAll((a) => a.map((x) => x.getAttribute("href")));
     check(`${L("training")}: date links carry offering and date`, hrefs.length === 4 && hrefs.every((h) => /offering=eudi-business-wallets-in-practice&date=/.test(h)), hrefs.join("|"));
