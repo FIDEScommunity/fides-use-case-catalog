@@ -174,3 +174,10 @@ Because the pilot is its own site, the rollback is mostly "remove the site"; not
 - Mail and enquiry destination for the sessions request page; access restriction for the site.
 - Whether reviewers need sign-in on the standalone site (WordPress accounts) to try the forms, or whether the form pages should link to the live forms instead.
 - Whether reviewers should stay on the site for the live-site links in sections 5 and 6 (options listed there).
+
+## Language switcher (TranslatePress)
+
+- The EN / NL switcher sits in the site header (`Fides_DS_Site_Shell::language_switcher_html()`). It uses only TranslatePress data: `trp_custom_language_switcher()` for languages and destinations, `TRP_Language_Switcher_V2::get_flag_html()` for flags. There is no own router or translation storage. The header renders nothing when TranslatePress is missing or fewer than two languages are published.
+- On staging, switch the floating switcher off in TranslatePress → Languages → Language Switcher (option `trp_language_switcher_settings`, `floater.enabled = false`). This is a database setting, not code, so repeat it per site.
+- Keep TranslatePress → Advanced → Debug → "Disable post container tags for post title" on. It changes how translated post titles are indexed, so revisit it when search gets Dutch support.
+- Run `tests/run-language-switcher-checks.sh` after changes.
