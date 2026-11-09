@@ -602,7 +602,7 @@ async function walletActionChecks(browser) {
 
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" });
   try {
     await glossaryChecks(browser);
     await filterDialogChecks(browser);
