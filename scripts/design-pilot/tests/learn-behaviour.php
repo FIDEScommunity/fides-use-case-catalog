@@ -43,7 +43,10 @@ $check(count($seeded) >= 12, 'twelve Learn seed pages exist (run create-learn-pa
 foreach ($seeded as $id) {
     $check(get_page_template_slug($id) === Fides_DS_Learn::TEMPLATE, "seed page {$id} uses the Learn template");
     $check((string) get_post_meta($id, '_fides_learn_seed_hash', true) !== '', "seed page {$id} stores a seed hash");
-    $check(! preg_match('/€|\bprice\b|pricing/i', (string) get_post_field('post_content', $id) . get_post_field('post_excerpt', $id)), "seed page {$id} has no price text");
+    // Training & workshops pages (sessions, offerings, enquiry) state approved prices; every other seed page stays price-free.
+    if (! in_array((string) get_post_meta($id, '_fides_learn_kind', true), array('sessions', 'offering', 'request'), true)) {
+        $check(! preg_match('/€|\bprice\b|pricing/i', (string) get_post_field('post_content', $id) . get_post_field('post_excerpt', $id)), "seed page {$id} has no price text");
+    }
 }
 
 // Series: previous/next only for two or more pages with the same series slug.
