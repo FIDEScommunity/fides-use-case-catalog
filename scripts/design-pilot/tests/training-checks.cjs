@@ -31,7 +31,30 @@ async function go(page, url) {
 
     await go(page, `${LEARN}/sessions/`);
     const hub = await page.locator(".fides-learn").innerText();
-    check(`${L("hub")}: three offers, partnerships, no €1,999`, /EUDI & Business Wallets in Practice/.test(hub) && /Wallet Introduction/.test(hub) && /Wallet Readiness Workshop/.test(hub) && /Training partnerships/.test(hub) && !/1[.,]999/.test(hub));
+    check(`${L("hub")}: partnerships, next steps, no €1,999 or €3,950, no design notes, no jargon`, /Training partnerships/.test(hub) && !/1[.,]999|3[.,]950|Design preview|not built yet|scoped proposal|roadmap/i.test(hub));
+    const cards = await page.locator(".fides-learn-offer").evaluateAll((els) => els.map((e) => ({
+      title: e.querySelector("h2").textContent.trim(),
+      facts: Object.fromEntries([...e.querySelectorAll(".fides-learn-offer__facts > div")].map((d) => [d.querySelector("dt").textContent.trim(), d.querySelector("dd").textContent.trim()])),
+      action: e.querySelector(".fides-learn-offer__action a").textContent.replace(/\s*→\s*$/, "").trim(),
+      href: e.querySelector(".fides-learn-offer__action a").getAttribute("href"),
+      box: ["h2", ".fides-learn-offer__facts", ".fides-learn-offer__action a"].map((s) => { const r = e.querySelector(s).getBoundingClientRect(); return [Math.round(r.left - e.getBoundingClientRect().left), Math.round(r.width)]; }),
+      font: getComputedStyle(e.querySelector(".fides-learn-offer__action a")).fontSize,
+    })));
+    check(`${L("hub")}: three offer cards in order`, cards.map((c) => c.title).join("|") === "EUDI & Business Wallets in Practice|Wallet Introduction|Wallet Readiness Workshop", cards.map((c) => c.title).join("|"));
+    check(`${L("hub")}: card facts show audience, format and price basis`, cards.length === 3 && cards[0].facts.For === "Individual participants" && cards[0].facts.Price === "€999 per participant, excluding VAT" && /one-day/i.test(cards[0].facts.Format) && cards[1].facts.For === "Your own team" && cards[1].facts.Price === "From €1,495 per session, excluding VAT" && cards[2].facts.For === "Your own team" && cards[2].facts.Price === "From €3,750 per workshop, excluding VAT", JSON.stringify(cards.map((c) => c.facts)));
+    check(`${L("hub")}: card actions are labelled and consistent`, cards.map((c) => c.action).join("|") === "View training|View introduction session|View workshop" && new Set(cards.map((c) => c.font)).size === 1, cards.map((c) => c.action).join("|"));
+    if (width >= 900) check(`${L("hub")}: title, facts and action sit in the same columns`, new Set(cards.map((c) => c.box.map((b) => b.join(":")).join("/"))).size === 1, JSON.stringify(cards.map((c) => c.box)));
+    // Prices are written once: each card repeats the price row of its own offering page.
+    for (const c of cards) {
+      await go(page, c.href.replace(BASE, ""));
+      const detail = await page.locator(".fides-learn-details dl > div").evaluateAll((d) => Object.fromEntries(d.map((x) => [x.querySelector("dt").textContent.trim(), x.querySelector("dd").textContent.trim()])));
+      check(`${L(c.title)}: detail page shows the same For, Format and Price as the card`, detail.For === c.facts.For && detail.Format === c.facts.Format && detail.Price === c.facts.Price, JSON.stringify(detail));
+      const body = await page.locator(".fides-learn").innerText();
+      check(`${L(c.title)}: no invented duration, group size or inclusions for inhouse offers, no €3,950`, !/3[.,]950/.test(body) && (c.title.startsWith("EUDI") || (!/Duration|Group size|included|includes/i.test(await page.locator(".fides-learn-details").innerText()))));
+      if (!c.title.startsWith("EUDI")) check(`${L(c.title)}: final price sentence`, (await page.locator(".fides-learn-details__note").innerText()) === "The final price is agreed in a proposal before booking.");
+      if (c.title.includes("Workshop")) check(`${L(c.title)}: no promise of a full assessment, roadmap or written report`, !/roadmap|written report|full assessment|final report/i.test(body) && !/Design preview|not built yet/i.test(body));
+    }
+    await go(page, `${LEARN}/sessions/`);
 
     await go(page, `${LEARN}/sessions/eudi-business-wallets-in-practice/`);
     const t = await page.locator(".fides-learn").innerText();

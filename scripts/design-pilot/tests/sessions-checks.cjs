@@ -57,7 +57,8 @@ async function layout(page, label) {
     await layout(page, L("sessions"));
     const body = await page.locator("main, .fides-learn").first().innerText();
     check(`${L("sessions")}: webinars are in preparation without dates or booking`, /Webinars & roundtables/i.test(body) && !/\b(20\d\d)\b/.test(body.replace(/FIDES Labs.*/s, "")) && /expression of interest, not a booking/i.test(body));
-    check(`${L("sessions")}: follow-up steps are labelled previews, not links`, (await page.locator('.fides-learn a[href*="assessment"], .fides-learn a[href*="business-case"]').count()) === 0 && /Architecture Assessment/.test(body) && /Use Case & Business Case Development/.test(body));
+    check(`${L("sessions")}: follow-up steps are plain text without links or preview labels`, (await page.locator('.fides-learn a[href*="assessment"], .fides-learn a[href*="business-case"]').count()) === 0 && /Architecture assessment/.test(body) && /Use case and business case/.test(body) && !/Design preview|not built yet/i.test(body) && /There is nothing to book yet/.test(body));
+    // follow-up steps are possible next steps
     check(`${L("sessions")}: Training tab is active`, (await page.locator(".fides-learn-bar [aria-current]").first().innerText()).match(/Training/) !== null);
 
     // Offering detail.
@@ -67,7 +68,7 @@ async function layout(page, label) {
       await page.waitForURL(new RegExp(`${slug}/$`));
       await layout(page, L(slug));
       const t = await page.locator(".fides-learn").innerText();
-      check(`${L(slug)}: shows audience/format, practical details and request action`, /For\b/.test(t) && /Format/.test(t) && /Indicative price/.test(t) && (await page.locator(".fides-learn-details").count()) === 1 && ask.test(t));
+      check(`${L(slug)}: shows audience/format, practical details and request action`, /For\b/.test(t) && /Format/.test(t) && /Price/.test(t) && /From €/.test(t) && /The final price is agreed in a proposal before booking/.test(t) && (await page.locator(".fides-learn-details").count()) === 1 && ask.test(t));
       await page.locator(`.fides-learn__actions a:has-text("Discuss")`).first().click();
       await page.waitForURL(/\/sessions\/request\/\?offering=/);
       const sel = await page.locator("#fides-learn-offering").inputValue();

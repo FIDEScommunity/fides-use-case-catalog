@@ -20,8 +20,7 @@ pushed, deployed or synced to utrecht-demo.
 
 Local URLs: `http://localhost:10088/fides-design-pilot/learn/` and the paths above.
 
-Not built (shown as rows without a link and with a "Design preview" label, or as
-a dashed "Design preview, not built yet" label): For you, For governments, the
+Not built (shown as rows without a link and with a "Design preview" label): For you, For governments, the
 four concept topics, the two further topics per section, Architecture Assessment
 and Use Case & Business Case Development (shown only as possible follow-up steps).
 Webinars and roundtables are topics in preparation: no dates, no booking.
@@ -263,10 +262,13 @@ Order under the hero: readiness block (Paper 25.16 / 25.17, replaces the 25.15 L
 
 A content manager can change everything below in the WordPress page editor, without code.
 
-- **Facts box** (duration, location, time, price, group size): metabox "FIDES Learn page", field `details`, one `Label | Value` per line.
+- **Facts box** (For, Format, Price, plus duration, location and so on): field `details`, one `Label | Value` per line. This is the single source: the overview cards (`[fides_learn_offers]`) read the For, Format and Price rows from here, so a price is edited in one place only.
+- **Overview card**: fields `card_summary` (short text) and `card_label` (button label). `details_note` is the small note under the facts box (for example the final-price sentence).
+- **Band without button**: leave `cta_url` empty and the closing band shows text only.
 - **Training dates**: field `dates`, one `Date | Location | Time` per line. Each row gets a "Register interest" link that preselects the date in the enquiry form. Add a line for a new date, delete a line when it has passed. `dates_title` and `dates_note` change the heading and the note under the table.
 - **Subtitle, intro, buttons**: fields `subtitle`, `excerpt`, `actions`. Body text is normal block content.
 - **Extra training or workshop**: add a child page of Training & workshops, set kind `offering`. It appears in the enquiry form's offering list automatically. Pages with `dates` get a date selector; pages without get the timing field.
 - **Optional question**: end `request_question` with "(optional)".
 - The enquiry page is still a local preview (no mail, no storage). A real form, mail or CRM hookup is a separate step.
-- Prices on the pages are indicative; the open training price is €999 excluding VAT.
+- Open training: €999 per participant excluding VAT. Inhouse sessions: from-prices only (€1,495 session, €3,750 workshop); duration, group size and inclusions are not decided yet and must not be added until they are.
+- After changing English text, Dutch needs a new translation in TranslatePress for each changed string (no silent fallback is configured; untranslated strings show in English).
