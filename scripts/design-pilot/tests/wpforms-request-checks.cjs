@@ -55,6 +55,19 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
 const fid = (page) => page.getAttribute("form.wpforms-form", "data-formid");
 const sel = (id, n) => `#wpforms-${id}-field_${n}`;
 
+/** A real mouse click (move, down, up with a pause) as a visitor does it; page.click() would hide a layout shift between down and up. */
+async function mouseClick(page, selector) {
+  const target = page.locator(selector);
+  await target.scrollIntoViewIfNeeded();
+  const box = await target.boundingBox();
+  await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+  await page.mouse.down();
+  await sleep(150);
+  const after = await target.boundingBox();
+  await page.mouse.up();
+  return after ? Math.round(after.y - box.y) : null; // how far the button moved while the button was held down
+}
+
 async function fillAndSend(page, id, data, wait = 3400) {
   if (data.name !== undefined) await page.fill(sel(id, 4), data.name);
   if (data.email !== undefined) await page.fill(sel(id, 5), data.email);
@@ -62,10 +75,7 @@ async function fillAndSend(page, id, data, wait = 3400) {
   if (data.msg !== undefined) await page.fill(sel(id, 7), data.msg);
   await sleep(wait); // minimum fill time of the anti-spam measure
   const posted = page.waitForResponse((r) => /admin-ajax\.php/.test(r.url()) && r.request().method() === "POST", { timeout: 20000 }).catch(() => null);
-  // Keyboard instead of a mouse click: when earlier errors are still shown, WPForms removes them on blur and the
-  // button moves between mouse down and up, so the click is lost (core WPForms behaviour, not specific to this form).
-  await page.locator("button.wpforms-submit").focus();
-  await page.keyboard.press("Enter");
+  await mouseClick(page, "button.wpforms-submit");
   await posted;
   await sleep(600);
 }
@@ -138,6 +148,28 @@ const plain = (html) => String(html).replace(/<style[\s\S]*?<\/style>/gi, " ").r
     await openForm(page, `?offering=bogus&session=nope`);
     check(L("unknown link values are ignored"), (await page.locator(sel(await fid(page), 2)).inputValue()) === "none");
     check(L("no page errors"), page.pageErrors.length === 0, page.pageErrors.join("|"));
+  }
+
+  // ---- Submit by mouse after a validation error: the form must not shift between mouse down and up
+  for (const w of want("click") ? WIDTHS : []) {
+    const page = await newPage(w);
+    clearMail();
+    setMode("capture");
+    await openForm(page, `?offering=${TRAINING}&session=${DATE_KEY}`);
+    const id = await fid(page);
+    await mouseClick(page, "button.wpforms-submit"); // empty: errors for name, email and message
+    await sleep(500);
+    const before = (await page.$$eval(ERR, (ls) => ls.filter((l) => l.offsetParent).length));
+    await page.fill(sel(id, 4), "Click Test");
+    await page.fill(sel(id, 5), `click-${w}-${Date.now()}@example.com`);
+    await page.fill(sel(id, 7), "Mouse request-capture-marker"); // the message field keeps focus, its error is still shown
+    await sleep(3400);
+    const posted = page.waitForResponse((r) => /admin-ajax\.php/.test(r.url()) && r.request().method() === "POST", { timeout: 8000 }).then(() => true, () => false);
+    const moved = await mouseClick(page, "button.wpforms-submit");
+    info(`${w}px: the Send button moved ${moved}px between mouse down and up`);
+    check(`${w}px: a real mouse click on Send right after a validation error submits the form (${before} errors were shown)`, await posted);
+    await sleep(800);
+    check(`${w}px: the click led to a confirmation`, /received your request/.test(await confText(page)), await whyNot(page));
   }
 
   // ---- One training request, English, desktop and mobile. Name with an apostrophe, hyphen and diacritic.

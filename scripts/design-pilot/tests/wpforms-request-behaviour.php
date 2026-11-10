@@ -121,6 +121,69 @@ $long = Fides_DS_Request_Form::filter_process_form_data($base, array_replace_rec
 wr_ok('a very long name is cut to 80 characters', strpos($long, str_repeat('A', 81)) === false && strpos($long, str_repeat('A', 80)) !== false);
 unset($_POST['wpforms']);
 
+// ---- Outcome matrix: confirmation text and error per (entry stored, FIDES mail, visitor mail)
+// The entry id is simulated by calling the hook with a number (Lite never stores one; Plus passes the id of the stored entry).
+// Nothing in the production code reads a test flag. Mail results are fed through the same public tracking methods WordPress calls.
+$ref_log = new ReflectionProperty('Fides_DS_Request_Form', 'mail_log');
+$ref_log->setAccessible(true);
+$ref_out = new ReflectionProperty('Fides_DS_Request_Form', 'outcome');
+$ref_out->setAccessible(true);
+$sim = static function (int $entry_id, bool $fides_ok, bool $visitor_ok, string $lang = 'en') use ($form_id, $ref_log, $ref_out): array {
+    $ref_log->setValue(null, array());
+    $ref_out->setValue(null, array());
+    $_POST['wpforms']['fields'][9] = $lang;
+    $process         = wpforms()->obj('process');
+    $process->errors = array();
+    foreach (array('request@example.invalid' => $fides_ok, 'visitor@example.test' => $visitor_ok) as $to => $ok) {
+        if ($ok) {
+            Fides_DS_Request_Form::track_mail_ok(array('to' => array($to)));
+        } else {
+            Fides_DS_Request_Form::track_mail_failed(new WP_Error('wp_mail_failed', 'x', array('to' => array($to))));
+        }
+    }
+    $form_data = array('id' => $form_id);
+    Fides_DS_Request_Form::after_send(array(5 => array('value' => 'visitor@example.test')), array(), $form_data, $entry_id);
+    $text = wp_strip_all_tags(Fides_DS_Request_Form::confirmation_message('<p>neutral</p>', $form_data));
+    return array($text, (string) ($process->errors[ $form_id ]['header'] ?? ''));
+};
+list($t, $e) = $sim(0, true, true);
+wr_ok('no entry, both mails sent: confirmation says received and confirmation sent', strpos($t, 'sent a confirmation to your email address') !== false && $e === '', $t . '|' . $e);
+list($t, $e) = $sim(0, true, false);
+wr_ok('no entry, visitor mail failed: says received, no confirmation mail could be sent', strpos($t, 'could not send a confirmation') !== false && strpos($t, 'sent a confirmation to') === false && $e === '', $t);
+list($t, $e) = $sim(0, false, true);
+wr_ok('no entry, FIDES mail failed: error with alternative contact, nothing is promised', strpos($e, 'could not be sent right now') !== false && strpos($e, 'request@example.invalid') !== false && stripos($e, 'we will reply') === false, $e);
+list($t, $e) = $sim(0, false, false);
+wr_ok('no entry, both mails failed: error', strpos($e, 'could not be sent right now') !== false);
+list($t, $e) = $sim(123, false, true);
+wr_ok('entry stored, FIDES mail failed: "saved" text, no error, no promise of a reply time', strpos($t, 'is saved') !== false && strpos($t, 'cannot say when') !== false && strpos($t, 'sent a confirmation') === false && $e === '', $t . '|' . $e);
+list($t, $e) = $sim(123, false, false);
+wr_ok('entry stored, both mails failed: still the "saved" text', strpos($t, 'is saved') !== false && $e === '', $t);
+list($t, $e) = $sim(123, true, false);
+wr_ok('entry stored, visitor mail failed: received, no confirmation mail', strpos($t, 'could not send a confirmation') !== false && $e === '', $t);
+list($t, $e) = $sim(123, true, true);
+wr_ok('entry stored, both mails sent: normal confirmation', strpos($t, 'sent a confirmation to your email address') !== false && $e === '', $t);
+list($t, $e) = $sim(123, false, true, 'nl');
+wr_ok('Dutch: entry stored, FIDES mail failed gives the Dutch "saved" text', strpos($t, 'is opgeslagen') !== false, $t);
+list($t, $e) = $sim(0, false, true, 'nl');
+wr_ok('Dutch: no entry, FIDES mail failed gives the Dutch error', strpos($e, 'kon nu niet worden verstuurd') !== false, $e);
+$ref_log->setValue(null, array());
+$ref_out->setValue(null, array());
+wr_ok('without an outcome (spam, unfinished) the neutral form text stays and claims nothing', Fides_DS_Request_Form::confirmation_message('<p>neutral</p>', array('id' => $form_id)) === '<p>neutral</p>');
+$stored = wpforms_decode((string) get_post_field('post_content', $form_id));
+wr_ok('form JSON: entry storing stays on (no disable_entries key, because Plus treats the key as "off" even when empty), user details off', ! array_key_exists('disable_entries', $stored['settings']) && ($stored['settings']['disable_ip'] ?? '') === '1');
+wr_ok('form JSON: neutral base confirmation claims no mail', stripos($stored['settings']['confirmations'][1]['message'], 'confirmation to your email') === false);
+unset($_POST['wpforms']);
+
+// ---- Separate test page: marked, never a routing target, its own noindex
+$test_pages = get_posts(array('post_type' => 'page', 'post_status' => 'any', 'numberposts' => 1, 'fields' => 'ids', 'meta_key' => Fides_DS_Request_Form::TEST_META, 'meta_value' => '1'));
+if ($test_pages) {
+    wr_ok('test page exists with slug request-wpforms-test and is a form page', get_post_field('post_name', $test_pages[0]) === 'request-wpforms-test' && Fides_DS_Request_Form::is_form_page((int) $test_pages[0]));
+    wr_ok('the routing target is not the test page', Fides_DS_Request_Form::page_id() !== (int) $test_pages[0] && Fides_DS_Request_Form::page_id() > 0);
+    wr_ok('the test page keeps the kind article (no clash with the request page lookups)', get_post_meta($test_pages[0], '_fides_learn_kind', true) === 'article');
+} else {
+    wr_info('no test page seeded here (REQUEST_FORM_PAGE=test seed-request-form.sh)');
+}
+
 // ---- Routing switch: off by default, rewrites only the request links, keeps the query
 $old = array();
 foreach (get_posts(array('post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 5, 'fields' => 'ids', 'meta_key' => '_fides_learn_kind', 'meta_value' => 'request')) as $pid) {

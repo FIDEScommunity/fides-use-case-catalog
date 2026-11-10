@@ -144,12 +144,13 @@
         "1": {
           "name": "Default confirmation",
           "type": "message",
-          "message": "<p>Thank you. We received your request and sent a confirmation to your email address. This is a request for contact, not a booking or a payment. We will reply by email.</p>",
+          "message": "<p>Thank you. We received your request. This is a request for contact, not a booking or a payment.</p>",
           "message_scroll": "1",
           "page": "",
           "redirect": ""
         }
-      }
+      },
+      "disable_ip": "1"
     },
     "meta": {
       "template": "blank"
