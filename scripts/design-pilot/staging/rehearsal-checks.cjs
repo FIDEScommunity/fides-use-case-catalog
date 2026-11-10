@@ -11,7 +11,11 @@
  * every remote request (the server-rendered content must still show).
  */
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
-const BASE = (process.env.PILOT_URL || "http://localhost:10089").replace(/\/$/, "");
+if (!process.env.PILOT_URL) {
+  console.error("Set PILOT_URL to the site origin to check (no default: the package carries no fixed addresses).");
+  process.exit(2);
+}
+const BASE = process.env.PILOT_URL.replace(/\/$/, "");
 const SEG = (process.env.PILOT_BASE || "design-review").replace(/^\/|\/$/g, "");
 const ROOT = `/${SEG}/`;
 const STANDALONE = (process.env.PILOT_LAYOUT || "standalone") === "standalone";

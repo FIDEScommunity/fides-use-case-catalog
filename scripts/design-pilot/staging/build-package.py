@@ -185,7 +185,8 @@ def main():
     names = run(["git", "ls-tree", "-r", "--name-only", "HEAD"], cwd=uc_repo).splitlines()
     for prefix, dst in SEED_TREES.items():
         for n in names:
-            if n.startswith(prefix):
+            # learn/README.md is a developer document with local URLs and paths; it stays in the repository.
+            if n.startswith(prefix) and not n.endswith("/README.md"):
                 put(dst + n[len(prefix):], run(["git", "show", f"HEAD:{n}"], cwd=uc_repo, binary=True))
 
     # Reference catalog data (committed crawler output).

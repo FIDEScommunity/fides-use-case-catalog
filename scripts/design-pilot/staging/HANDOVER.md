@@ -22,7 +22,7 @@ The earlier layout (pilot below another site's root, `/design-review/` as a page
 | `non-git/plugins/fides-vocabulary-glossary-*.zip` | glossary plugin (Learn articles and the glossary page use it) | **Local WordPress copy**: no Git repository exists |
 | `non-git/themes/blocksy-child-*.zip` | 16-line child theme of Blocksy | **Local WordPress copy**: no Git repository exists |
 | `mu-plugins/fides-design-review-config.php` | route mapping, noindex, disabled external actions, standalone detection | **Git** (`use-case-catalog/scripts/design-pilot/staging/`) |
-| `seed/` | `seed.sh`, `create-pages.php`, `create-learn-pages.php`, `staging/preflight.php`, `staging/seed-guard.php`, `learn/` (manifest, 12 article/page HTML files, editorial links) | **Git** |
+| `seed/` | `seed.sh`, `create-pages.php`, `create-learn-pages.php`, `staging/preflight.php`, `staging/seed-guard.php`, `learn/` (manifest, 17 article/page HTML files, editorial links, `nl-translations.php`) | **Git** |
 | `catalog-data/*.json` | reference copy of the four committed crawler outputs | **Git** (not installed; see section 7) |
 | `checks/rehearsal-checks.cjs` | browser checks that also run against the real staging URL (GET only; the signed-in form check needs a reviewer account) | **Git** |
 | `reference/fides-design-pilot-guard.php` | the local-only guard. **Do not install** | **Git** |
@@ -32,7 +32,7 @@ Not in the package, on purpose:
 - **The local database.** It is a copy of the utrecht-demo database. Pages and options are created by the seed scripts.
 - **Uploads / images.** The pilot pages contain no `wp-content/uploads` references. Logos and use case images come from the catalog data (remote). The Manifesto photo is the live media file (section 6).
 - **`wp-config.php`, secrets, `local-data/credential-aggregated.json`** and the `fides_local_catalog` option.
-- Third-party plugins. The standalone site needs **none** of them (section 3); the parent theme **Blocksy** is required.
+- Third-party plugins. The standalone site needs **none** of them for the English pilot (section 3); the parent theme **Blocksy** is required. **TranslatePress** is also not in the package: it is only needed for the Dutch (`/nl/`) version, see "Dutch version" below.
 - `fides-template-pilot`: an earlier experiment, not used.
 
 ## 2. Server and WordPress settings for the subpath `/design-review`
@@ -185,3 +185,16 @@ Because the pilot is its own site, the rollback is mostly "remove the site"; not
 ## Glossary page switch
 
 The new glossary page is off by default in the tiles plugin. On the design-review site `staging/fides-design-review-config.php` switches it on for the page with the slug `glossary` only (filter `fides_ds_glossary_page_enabled`). To activate it later on production or another site, use the filter, `define('FIDES_DS_GLOSSARY_PAGE', true)`, or the custom field `_fides_ds_glossary_page` = `1` on the page; remove it to return to the classic glossary. Dutch strings: see "Glossary page" in the pilot README (strings render as hidden text nodes so TranslatePress can translate them; the glossary data stays English).
+
+## Dutch version (`/nl/`, optional, needs TranslatePress)
+
+The English pilot works without any translation plugin; the header then shows no language switcher. Dutch needs
+TranslatePress (free plugin, installed from wordpress.org, **not** part of this package) with English (US) as the default and
+Dutch (`nl_NL`) as the second language, in this site's own database (its own table prefix gives its own dictionary table).
+
+1. Install and activate TranslatePress, add Dutch, switch the floating switcher off and keep the debug option on (section "Language switcher").
+2. Open each seeded page once under `/design-review/nl/...` (at least `/nl/`, `/nl/services/`, `/nl/services/enquiry/`, `/nl/learn/`, `/nl/learn/sessions/`, `/nl/glossary/`). TranslatePress only creates dictionary rows after the first visit.
+3. `wp eval-file seed/learn/nl-translations.php status` lists strings without a row and rows still untranslated; then `wp eval-file seed/learn/nl-translations.php apply`. It fills empty rows only and never overwrites a translation an editor made.
+4. Glossary interface strings (25) are translated in the TranslatePress editor on `/nl/glossary/`; see the pilot README, "Glossary page".
+
+Known limits of the Dutch version: header and footer texts that are not part of the seeded pages can stay English until translated in the editor; Contact, Privacy, Terms and the other links without a pilot page open the live site (English); catalog data (descriptions, names) is English.
