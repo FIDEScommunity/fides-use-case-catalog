@@ -7,6 +7,7 @@
  *  - apply:  fills rows that have no translation yet. A row an editor already translated (status 2) is never
  *            touched. Rows only exist after the English page was opened once under /nl/.
  *  - status: lists strings without a dictionary row (open the page under /nl/ first) and rows still untranslated.
+ * Matching is case-sensitive (BINARY): "WORK WITH FIDES" and "Work with FIDES" are separate rows.
  * Ampersands: TranslatePress stores some originals as "&amp;" or "&#038;"; the matching form is used for the translation.
  */
 $mode  = isset($args[0]) ? $args[0] : 'status';
@@ -214,7 +215,7 @@ foreach ($nl as $en => $dutch) {
             continue; // the three forms are the same text when the string has no ampersand
         }
         $seen[ $form($en) ] = true;
-        $row = $wpdb->get_row($wpdb->prepare("SELECT id, translated, status FROM $table WHERE original = %s LIMIT 1", $form($en))); // phpcs:ignore
+        $row = $wpdb->get_row($wpdb->prepare("SELECT id, translated, status FROM $table WHERE BINARY original = %s LIMIT 1", $form($en))); // phpcs:ignore
         if (! $row) {
             continue;
         }

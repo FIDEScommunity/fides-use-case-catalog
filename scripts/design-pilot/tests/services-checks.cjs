@@ -199,6 +199,7 @@ async function checkNavigation(page, L, width, where) {
       await go(page, `/nl${SERVICES}/`);
       const nlText = await page.locator("main").innerText();
       check(`${L("nl")}: overview is Dutch`, /Praktische ondersteuning bij digitale wallets en credentials\./.test(nlText) && /Waarmee kunnen wij u helpen\?/.test(nlText) && !/Practical support for/.test(nlText));
+      check(`${L("nl")}: overview eyebrow is Dutch (case-sensitive dictionary row)`, (await page.locator(".fides-learn__eyebrow").first().innerText()).toUpperCase() === "WERKEN MET FIDES");
       const nlLinks = await page.locator("main a[href]").evaluateAll((a) => a.map((x) => x.getAttribute("href")).filter((h) => h && !/^(https?:)?\/\/(?!localhost)/.test(h) && !h.startsWith("#")));
       check(`${L("nl")}: internal links stay in the Dutch route`, nlLinks.length >= 3 && nlLinks.every((h) => /^(https?:\/\/localhost:\d+)?\/nl\//.test(h)), nlLinks.join("|"));
       const nlHeader = await page.evaluate(() => ({ about: [...document.querySelectorAll("#fides-ds-panel-about a")].map((a) => a.textContent.trim().replace(/ →$/, "")), cur: document.querySelector('[aria-controls="fides-ds-panel-about"]').getAttribute("aria-current") }));
