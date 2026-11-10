@@ -1,421 +1,670 @@
 {
  "version": 1,
- "note": "Original images of https://fides.community/awards/global-digital-trust-awards/. The seed downloads each source once into the media library and replaces {{aw:id:KEY}} / {{aw:url:KEY[:size]}} in content/awards.html.",
+ "note": "Images of https://fides.community/awards/global-digital-trust-awards/. The package ships each file in seed/awards/images/ (file, bytes, sha256 below); the seed imports it from there into the media library (no network) and replaces {{aw:id:KEY}} / {{aw:url:KEY[:size]}} in the page content. \"source\" is the original URL, kept as provenance and as the idempotency marker of an imported attachment.",
  "images": [
   {
    "key": "banner-collaboration",
    "source": "https://fides.community/app/uploads/2026/09/Winner_collaboration.png",
-   "alt": "Collaboration Award winner banner: Mobile Driving Licence (mDL) based on ISO/IEC 18013-5"
+   "alt": "Collaboration Award winner banner: Mobile Driving Licence (mDL) based on ISO/IEC 18013-5",
+   "file": "banner-collaboration.png",
+   "bytes": 1096745,
+   "sha256": "13b805d74dbf3660bd7c825b31fe2d26e80f45598b9da6771b1a2172abb2b8e7"
   },
   {
    "key": "banner-social-impact",
    "source": "https://fides.community/app/uploads/2026/09/winner_social_impact.png",
-   "alt": "Social Impact Award winner banner: SSITIZENS, verifiable social aid"
+   "alt": "Social Impact Award winner banner: SSITIZENS, verifiable social aid",
+   "file": "banner-social-impact.png",
+   "bytes": 1064869,
+   "sha256": "33bdb3527b32075f1d3b9921713dbe584c3ced4fa1caf73f770e4311493f12a5"
   },
   {
    "key": "banner-adoption",
    "source": "https://fides.community/app/uploads/2026/09/winner_adoption_award.png",
-   "alt": "Adoption Award winner banner: Urban Company, service professional and customer identity verification"
+   "alt": "Adoption Award winner banner: Urban Company, service professional and customer identity verification",
+   "file": "banner-adoption.png",
+   "bytes": 994558,
+   "sha256": "642b4f8084f22f8b05210a2e6411ef3873e797cc00eb9d87231c93e3854e1d7b"
   },
   {
    "key": "banner-best-wallet",
    "source": "https://fides.community/app/uploads/2026/09/Winner_best_wallet.png",
-   "alt": "Best Wallet Award winner banner: Aadhaar App"
+   "alt": "Best Wallet Award winner banner: Aadhaar App",
+   "file": "banner-best-wallet.png",
+   "bytes": 1055261,
+   "sha256": "d4660e5f223900cdc58365c82903c9057646d47cb9871f8db5570af0a6d1fb09"
   },
   {
    "key": "banner-business-value",
    "source": "https://fides.community/app/uploads/2026/09/winner_business_value.png",
-   "alt": "Business Value Award winner banner: From repeated verification to reusable trust, the real estate purchasing journey"
+   "alt": "Business Value Award winner banner: From repeated verification to reusable trust, the real estate purchasing journey",
+   "file": "banner-business-value.png",
+   "bytes": 1137559,
+   "sha256": "acd3334043160303791145b70092df74ce4c91e7b2569acef31cb34676fb7c1b"
   },
   {
    "key": "photo-01",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-458-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 1 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 1 of 71",
+   "file": "photo-01.jpg",
+   "bytes": 539139,
+   "sha256": "0090707fb12f234f40cd24eb951238838389162dadbcf5292f43d1849c08f3a8"
   },
   {
    "key": "photo-02",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-461-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 2 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 2 of 71",
+   "file": "photo-02.jpg",
+   "bytes": 414835,
+   "sha256": "dc606a47e3b8dfb34787bcb0ed62479920c59d314fd069caed4e0fdd9e47fe36"
   },
   {
    "key": "photo-03",
    "source": "https://fides.community/app/uploads/2026/09/IMG_4481.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 3 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 3 of 71",
+   "file": "photo-03.jpg",
+   "bytes": 217411,
+   "sha256": "02170aa034430cbf8466bc3f05f2a28c5c354af7e2d3ebdbe6fd227e6bfa5119"
   },
   {
    "key": "photo-04",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2941.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 4 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 4 of 71",
+   "file": "photo-04.jpg",
+   "bytes": 153733,
+   "sha256": "13880814243ec14941d17e7c2e08df51a9ce1ecaf51d58dace5e4ed21ad66db1"
   },
   {
    "key": "photo-05",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2935-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 5 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 5 of 71",
+   "file": "photo-05.jpg",
+   "bytes": 726809,
+   "sha256": "820a50e58c529055c2bfdd513e305d0b654a24bd5d08c956aa9403fd1aa7ce02"
   },
   {
    "key": "photo-06",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2934-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 6 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 6 of 71",
+   "file": "photo-06.jpg",
+   "bytes": 737126,
+   "sha256": "398bd639b4e007fdc6ca0f76ed3de1716bcf3cba121535e2a07265a8b6cc3684"
   },
   {
    "key": "photo-07",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2932-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 7 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 7 of 71",
+   "file": "photo-07.jpg",
+   "bytes": 658973,
+   "sha256": "ac545d482e77043023d181198dec1b3af0aecd58c3b654e5933af7c1ac3ae683"
   },
   {
    "key": "photo-08",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2926-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 8 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 8 of 71",
+   "file": "photo-08.jpg",
+   "bytes": 537453,
+   "sha256": "370fab0cce1f083a28b7baaac0f94a7a269de3b41d4861d77f1ff765a2efe788"
   },
   {
    "key": "photo-09",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2927-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 9 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 9 of 71",
+   "file": "photo-09.jpg",
+   "bytes": 582237,
+   "sha256": "dc18531d081a6ff572a344d80ffcffb4a72a835e277a26fc366f626bbdee7c93"
   },
   {
    "key": "photo-10",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2928-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 10 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 10 of 71",
+   "file": "photo-10.jpg",
+   "bytes": 478753,
+   "sha256": "a38e5fd6682899d52fe8a8a9cf2f96e3b92520a69a08c173536f0a91022552da"
   },
   {
    "key": "photo-11",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2930-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 11 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 11 of 71",
+   "file": "photo-11.jpg",
+   "bytes": 564652,
+   "sha256": "13ec5e569d2040d53c0f6bc71ebc7aa93881174b867767a4ae7712dd25d35a88"
   },
   {
    "key": "photo-12",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2929-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 12 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 12 of 71",
+   "file": "photo-12.jpg",
+   "bytes": 510814,
+   "sha256": "2f51ec5a0d9bb330b63af24c73968d3ea322eb4b66763d6463a500c1fb4cf392"
   },
   {
    "key": "photo-13",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2931-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 13 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 13 of 71",
+   "file": "photo-13.jpg",
+   "bytes": 626673,
+   "sha256": "035a016bc094b4743c87e324618b4fe2a59f985923468035dd06c6ab37671dac"
   },
   {
    "key": "photo-14",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2933-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 14 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 14 of 71",
+   "file": "photo-14.jpg",
+   "bytes": 626576,
+   "sha256": "759c0ea99556f6a86ab49734ebc5562f6a2ae533786190bce6aa7b7b8cd062fc"
   },
   {
    "key": "photo-15",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2925-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 15 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 15 of 71",
+   "file": "photo-15.jpg",
+   "bytes": 522654,
+   "sha256": "008f8b59b56667ebcff320bd2ae2a2d9e373535edd373158ea6ed8848528400d"
   },
   {
    "key": "photo-16",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2924-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 16 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 16 of 71",
+   "file": "photo-16.jpg",
+   "bytes": 563693,
+   "sha256": "d87ee89a2a33cb9d534165a0716b686623d21f25b04b60ea2be8d7ccc9671e4f"
   },
   {
    "key": "photo-17",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2923-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 17 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 17 of 71",
+   "file": "photo-17.jpg",
+   "bytes": 510547,
+   "sha256": "85ab9200df92364aae56d3a2d68258b9d7508f3d37f12486b1dd9611d298b11d"
   },
   {
    "key": "photo-18",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2922-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 18 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 18 of 71",
+   "file": "photo-18.jpg",
+   "bytes": 444483,
+   "sha256": "cd32d2f38fba8fb9223f077a543f7a25d380857c233b893297b1a80dad37ad87"
   },
   {
    "key": "photo-19",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2921-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 19 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 19 of 71",
+   "file": "photo-19.jpg",
+   "bytes": 578880,
+   "sha256": "3a6fb3d5f25ee4bcdef4cea38b3b070695a95d11fe58b5780fb046d7a30c3e0c"
   },
   {
    "key": "photo-20",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2920-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 20 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 20 of 71",
+   "file": "photo-20.jpg",
+   "bytes": 489805,
+   "sha256": "684743977780308779f3f6ee3d56ca572e55f17ae4ac4c8bdff4527a1b7938bf"
   },
   {
    "key": "photo-21",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2919-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 21 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 21 of 71",
+   "file": "photo-21.jpg",
+   "bytes": 601558,
+   "sha256": "19bda133e384dbceef4393e3ea75adc96750895eab13071586e86649cfe1f405"
   },
   {
    "key": "photo-22",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2906-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 22 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 22 of 71",
+   "file": "photo-22.jpg",
+   "bytes": 773799,
+   "sha256": "10c1d2aaef3479c509a9d98f2647cd05b00df23859c38488379826e214070bbb"
   },
   {
    "key": "photo-23",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2912-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 23 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 23 of 71",
+   "file": "photo-23.jpg",
+   "bytes": 420481,
+   "sha256": "2c7686e581cc33d5dc611c0ce43f599b70358148e5bfb5767c1c987a703e3733"
   },
   {
    "key": "photo-24",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2913-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 24 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 24 of 71",
+   "file": "photo-24.jpg",
+   "bytes": 595545,
+   "sha256": "59ea61c8bcebf090783aeae91fd31466c19bf101a9dca8e58b2cf82c6b23d785"
   },
   {
    "key": "photo-25",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2914-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 25 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 25 of 71",
+   "file": "photo-25.jpg",
+   "bytes": 540940,
+   "sha256": "e3b841fc3dd1e894b59979699c3389de6407f3550f4b420f455e013dc8d5111d"
   },
   {
    "key": "photo-26",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2915-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 26 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 26 of 71",
+   "file": "photo-26.jpg",
+   "bytes": 497132,
+   "sha256": "2070a62f7a69536750905e2bee492faecc0ed7d97099bf4489a6c29783475f3f"
   },
   {
    "key": "photo-27",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2916-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 27 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 27 of 71",
+   "file": "photo-27.jpg",
+   "bytes": 509623,
+   "sha256": "ae515f32ed559f23616d2e6ad89fdd7b1eb9213a080494552d19216ba1af03be"
   },
   {
    "key": "photo-28",
    "source": "https://fides.community/app/uploads/2026/09/IMG_2917.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 28 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 28 of 71",
+   "file": "photo-28.jpg",
+   "bytes": 308921,
+   "sha256": "9b83347d54dc35e5dfb26775d9d2d4c92c93be2e94a5523fb5d1cdcf8696ef91"
   },
   {
    "key": "photo-29",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-387-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 29 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 29 of 71",
+   "file": "photo-29.jpg",
+   "bytes": 502493,
+   "sha256": "88f1a1d1fd5f232eaf05da8210abffa3882d5820cd0b48c641f8ae27a06239f3"
   },
   {
    "key": "photo-30",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-378-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 30 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 30 of 71",
+   "file": "photo-30.jpg",
+   "bytes": 657661,
+   "sha256": "fdfd99a14477352d2f69e5a95011e2c5fd74b5a3b3ab83c8b7da7e9ec0553dc6"
   },
   {
    "key": "photo-31",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-379-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 31 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 31 of 71",
+   "file": "photo-31.jpg",
+   "bytes": 667226,
+   "sha256": "76e4307bb51803bdff64eba8b8c1a7534d672f41a25598b3200a438cf1298f62"
   },
   {
    "key": "photo-32",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-380-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 32 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 32 of 71",
+   "file": "photo-32.jpg",
+   "bytes": 605232,
+   "sha256": "5e3724482c59a95a1b00226b231d2473c9735ae91a1e14793b7945d49618cc04"
   },
   {
    "key": "photo-33",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-381-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 33 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 33 of 71",
+   "file": "photo-33.jpg",
+   "bytes": 571964,
+   "sha256": "64db539b30762a176c2c7030230e4e30629b2ce672d6aa0ae631522d45a42cb8"
   },
   {
    "key": "photo-34",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-382-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 34 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 34 of 71",
+   "file": "photo-34.jpg",
+   "bytes": 677774,
+   "sha256": "d22047872e96a2647e663b4e38042fbe74acf4afe2034c3bf1ae56e263eee43e"
   },
   {
    "key": "photo-35",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-383-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 35 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 35 of 71",
+   "file": "photo-35.jpg",
+   "bytes": 552369,
+   "sha256": "a521f67e095f1d8a0aed32a874c2a8b26e4d03b556e4acfa06d2e102d8dadc8f"
   },
   {
    "key": "photo-36",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-384-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 36 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 36 of 71",
+   "file": "photo-36.jpg",
+   "bytes": 626657,
+   "sha256": "bf7a4561a0cabf16a069dd183357e9bde70eea0270654e73e5b3b64229a7702e"
   },
   {
    "key": "photo-37",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-385-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 37 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 37 of 71",
+   "file": "photo-37.jpg",
+   "bytes": 582098,
+   "sha256": "5d6381180c769f7479829e5785be2f07bae23582544d0c6db1f8fd6b46364444"
   },
   {
    "key": "photo-38",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-386-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 38 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 38 of 71",
+   "file": "photo-38.jpg",
+   "bytes": 740582,
+   "sha256": "85a75e142113b562ccb4708c8277a12a08fbd6bfd1ed330a7e3767cb35eabe5d"
   },
   {
    "key": "photo-39",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-388-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 39 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 39 of 71",
+   "file": "photo-39.jpg",
+   "bytes": 515375,
+   "sha256": "ae9e781ad1c5c275d1514235f57728c821f28450bb93be637a61e4139cddaa48"
   },
   {
    "key": "photo-40",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-389-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 40 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 40 of 71",
+   "file": "photo-40.jpg",
+   "bytes": 699661,
+   "sha256": "10f09653aa864905fdec1612c119a2929a3b31db8d553c983972e30cd91eedd2"
   },
   {
    "key": "photo-41",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-390-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 41 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 41 of 71",
+   "file": "photo-41.jpg",
+   "bytes": 579777,
+   "sha256": "738ee07050461bbfe5a229dcd2966600eecd5e7ce9dade9d419f9e068d3b5ab3"
   },
   {
    "key": "photo-42",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-391-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 42 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 42 of 71",
+   "file": "photo-42.jpg",
+   "bytes": 319518,
+   "sha256": "c8c24e498379bd0075d307d10f3348557e886775cb7c788bc19c53821f5271d2"
   },
   {
    "key": "photo-43",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-392-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 43 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 43 of 71",
+   "file": "photo-43.jpg",
+   "bytes": 403158,
+   "sha256": "3eedac9222f0a73eb80bfb29fd1696b1757df01bc757de711ecdd4be24d398e3"
   },
   {
    "key": "photo-44",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-393-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 44 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 44 of 71",
+   "file": "photo-44.jpg",
+   "bytes": 382885,
+   "sha256": "71dd562acf3f780c43aeacc8d4cc2d324ef3ed821a35ee68361ab7b2ea2cebd5"
   },
   {
    "key": "photo-45",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-394-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 45 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 45 of 71",
+   "file": "photo-45.jpg",
+   "bytes": 414731,
+   "sha256": "7695a4e18d8af3c5ba345dcd294dbe70aea3743f7e5c9e5f0a4def29d8a80bf7"
   },
   {
    "key": "photo-46",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-395-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 46 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 46 of 71",
+   "file": "photo-46.jpg",
+   "bytes": 460174,
+   "sha256": "3acf12ed552041d8c88d8322d78f6c4a79f0eec1e9449f743adbcbb4a45d4b9c"
   },
   {
    "key": "photo-47",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-396-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 47 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 47 of 71",
+   "file": "photo-47.jpg",
+   "bytes": 566059,
+   "sha256": "a0f5635542d30f86e6a2c4a22b1e689bf2a113aee74e703aef09881615b8b604"
   },
   {
    "key": "photo-48",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-436-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 48 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 48 of 71",
+   "file": "photo-48.jpg",
+   "bytes": 449707,
+   "sha256": "aa660632a89d5f144074d869e9cd12146e2536dc5f1628039616dc644e352c48"
   },
   {
    "key": "photo-49",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-437-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 49 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 49 of 71",
+   "file": "photo-49.jpg",
+   "bytes": 409471,
+   "sha256": "2952e87773b2a90bf237a363ef79eeb0a8c30b81970f148e24b12ba0e7291e9b"
   },
   {
    "key": "photo-50",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-451-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 50 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 50 of 71",
+   "file": "photo-50.jpg",
+   "bytes": 375605,
+   "sha256": "50d2ef063ae1c4287f05bafc577504f3012bde7ae9fd2e61ad41fa5c160aae91"
   },
   {
    "key": "photo-51",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-455-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 51 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 51 of 71",
+   "file": "photo-51.jpg",
+   "bytes": 504794,
+   "sha256": "caa85b70ec8d2c946ddcc30d99577a70d95556c36ab6a588cae4f48032870eef"
   },
   {
    "key": "photo-52",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-456-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 52 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 52 of 71",
+   "file": "photo-52.jpg",
+   "bytes": 421991,
+   "sha256": "a44340cdb5fb60c7bc7eda20f98a6105a229d7e08f6ff5fc698e189a29ed35df"
   },
   {
    "key": "photo-53",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-459-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 53 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 53 of 71",
+   "file": "photo-53.jpg",
+   "bytes": 542020,
+   "sha256": "52e8ffa731292cd89b9a51037a0a11196c9aec06578b3652ebaaecf1a5b203f4"
   },
   {
    "key": "photo-54",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-462-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 54 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 54 of 71",
+   "file": "photo-54.jpg",
+   "bytes": 474216,
+   "sha256": "e4ebe776a007f2a85963579a4b40d64806950cace3822396f8a358e716bf7fce"
   },
   {
    "key": "photo-55",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-463-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 55 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 55 of 71",
+   "file": "photo-55.jpg",
+   "bytes": 360108,
+   "sha256": "9687cb467dd812f97c9b35c4ba566dfaa5d61408fdf82decf73acc67856e62d8"
   },
   {
    "key": "photo-56",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-464-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 56 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 56 of 71",
+   "file": "photo-56.jpg",
+   "bytes": 448223,
+   "sha256": "207d42d24f4083f1641db29736de187130453885d1bfa0526a690451279c054f"
   },
   {
    "key": "photo-57",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-465-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 57 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 57 of 71",
+   "file": "photo-57.jpg",
+   "bytes": 349901,
+   "sha256": "aace6d586f5bb77489405e7eadd004c6ca9c85d12caa0f91b0b3cc8c45dc128b"
   },
   {
    "key": "photo-58",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-466-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 58 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 58 of 71",
+   "file": "photo-58.jpg",
+   "bytes": 329729,
+   "sha256": "597495e9697544e064acba51c7b15f3d3f55307215376e8749087fb944e94e9e"
   },
   {
    "key": "photo-59",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-467-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 59 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 59 of 71",
+   "file": "photo-59.jpg",
+   "bytes": 411920,
+   "sha256": "e03d0b655c35a76beaeef324d61f2e81602b77b3bd6911ead71eb67aa092f04c"
   },
   {
    "key": "photo-60",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-468-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 60 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 60 of 71",
+   "file": "photo-60.jpg",
+   "bytes": 211135,
+   "sha256": "ac1e694de4fb40b2a94f09217ac3f0e5911bfcc19a04139c0c9f2c694210f529"
   },
   {
    "key": "photo-61",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-469-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 61 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 61 of 71",
+   "file": "photo-61.jpg",
+   "bytes": 317004,
+   "sha256": "82e1b978ca2eca6748d3bee2882b67d801dd944f434ccae6af414d8e31509f8a"
   },
   {
    "key": "photo-62",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-470-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 62 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 62 of 71",
+   "file": "photo-62.jpg",
+   "bytes": 363011,
+   "sha256": "a6ce8810b3f460594afbeafe76ce8e98aaa11795431b5eb210080ea6babc9dbc"
   },
   {
    "key": "photo-63",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-471-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 63 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 63 of 71",
+   "file": "photo-63.jpg",
+   "bytes": 436916,
+   "sha256": "578b5f6e298df557c8590a1256259bb772940780df724fa22892f6854148f68b"
   },
   {
    "key": "photo-64",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-472-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 64 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 64 of 71",
+   "file": "photo-64.jpg",
+   "bytes": 379307,
+   "sha256": "3d1f0dab7f10eecfe19570a0f3de8652557905f9071d43aa59f85baf9fea2093"
   },
   {
    "key": "photo-65",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-473-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 65 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 65 of 71",
+   "file": "photo-65.jpg",
+   "bytes": 333484,
+   "sha256": "74c3698df553ce575169d9efc4dbfe7819a4a2e754f2df2cea860135b23e7450"
   },
   {
    "key": "photo-66",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-474-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 66 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 66 of 71",
+   "file": "photo-66.jpg",
+   "bytes": 342544,
+   "sha256": "4bf2fea77d17bfea27bad88c3b40a36573e0e035a293b588f2459e6c6f22e811"
   },
   {
    "key": "photo-67",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-475-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 67 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 67 of 71",
+   "file": "photo-67.jpg",
+   "bytes": 470606,
+   "sha256": "fa4f626c0bdbeb49320468aeb782ab497f9e6661a751a5872e3c74bc30ad2671"
   },
   {
    "key": "photo-68",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-476-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 68 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 68 of 71",
+   "file": "photo-68.jpg",
+   "bytes": 541879,
+   "sha256": "e412bbf1ae109140ec47b2f99ba97e3286cb7a94957831695a0ac7d2f3735deb"
   },
   {
    "key": "photo-69",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-477-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 69 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 69 of 71",
+   "file": "photo-69.jpg",
+   "bytes": 256599,
+   "sha256": "a78f077bccdc73baf0c683c1d8bd1ca0ed001d5514c208c8f54bc70cad78a5b9"
   },
   {
    "key": "photo-70",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-478-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 70 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 70 of 71",
+   "file": "photo-70.jpg",
+   "bytes": 333741,
+   "sha256": "acebaf0b2db256df547e56b1d0a3cadfbddfad2ecefffca11cc974d3dd9e42b9"
   },
   {
    "key": "photo-71",
    "source": "https://fides.community/app/uploads/2026/09/GDC-Genf-479-scaled.jpg",
-   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 71 of 71"
+   "alt": "Global Digital Collaboration, Geneva, 2026: ceremony photo 71 of 71",
+   "file": "photo-71.jpg",
+   "bytes": 436777,
+   "sha256": "3fae8daf9d2e3caad098ff5f7457b17cbff57b56d7eff71a1adb323b8586a407"
   },
   {
    "key": "jury",
    "source": "https://fides.community/app/uploads/2026/07/gdt_awards_jury.png",
-   "alt": "The 2026 international jury of the Global Digital Trust Awards"
+   "alt": "The 2026 international jury of the Global Digital Trust Awards",
+   "file": "jury.png",
+   "bytes": 608171,
+   "sha256": "ff1da52f7fc68fdb03d1fcbcc7d365067e776167f92cf4be8d48ab88c23d9eac"
   },
   {
    "key": "logo-didas",
    "source": "https://fides.community/app/uploads/2026/06/didas_3x2.png",
-   "alt": "didas"
+   "alt": "didas",
+   "file": "logo-didas.png",
+   "bytes": 85121,
+   "sha256": "24f5dd418fe7a617bb63f67e3a073fcc6a007cf1333460c64227bdcdec7d9532"
   },
   {
    "key": "logo-diacc",
    "source": "https://fides.community/app/uploads/2026/06/diacc_3x2.png",
-   "alt": "DIACC"
+   "alt": "DIACC",
+   "file": "logo-diacc.png",
+   "bytes": 47949,
+   "sha256": "922aaf11a4eb0be10512b9c79670e6b2e88d78ac7962bdfbd5dfae84d8f885e4"
   },
   {
    "key": "logo-teletrust",
    "source": "https://fides.community/app/uploads/2026/06/teletrust_3x2.png",
-   "alt": "TeleTrusT"
+   "alt": "TeleTrusT",
+   "file": "logo-teletrust.png",
+   "bytes": 212465,
+   "sha256": "0bee3f7db9850d0554f11ceddd4a29172462ab1a263c0d0d076d625575969807"
   },
   {
    "key": "logo-apdi",
    "source": "https://fides.community/app/uploads/2026/06/apdi_3x2.png",
-   "alt": "APDI Consortium"
+   "alt": "APDI Consortium",
+   "file": "logo-apdi.png",
+   "bytes": 132830,
+   "sha256": "d44b71c2ae84cfe566a3f96fb26110497c4781c26456d17e928611fd9d972c6c"
   },
   {
    "key": "logo-asiapki",
    "source": "https://fides.community/app/uploads/2026/06/Asia_PKI_logo_3x2_padded.png",
-   "alt": "Asia PKI Consortium"
+   "alt": "Asia PKI Consortium",
+   "file": "logo-asiapki.png",
+   "bytes": 776829,
+   "sha256": "dcd5dbf163982880a67c456037be221b1163d848e3a747cefe0d937b6118313e"
   },
   {
    "key": "logo-fides",
    "source": "https://fides.community/app/uploads/2026/06/fides_3x2.png",
-   "alt": "FIDES"
+   "alt": "FIDES",
+   "file": "logo-fides.png",
+   "bytes": 47721,
+   "sha256": "15581c930b6cb25166a63fbac6f48d3df7408faaecccf7a4b4b6a85fe29272fa"
   }
  ]
 }

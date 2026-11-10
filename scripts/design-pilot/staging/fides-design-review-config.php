@@ -28,7 +28,18 @@ if (! function_exists('fides_design_review_base')) {
         if (defined('FIDES_DESIGN_REVIEW_STANDALONE')) {
             return (bool) FIDES_DESIGN_REVIEW_STANDALONE;
         }
-        return ! defined('FIDES_DESIGN_REVIEW_BASE') && rtrim((string) wp_parse_url(home_url('/'), PHP_URL_PATH), '/') === '/design-review';
+        return ! defined('FIDES_DESIGN_REVIEW_BASE') && fides_design_review_home_path() === '/design-review';
+    }
+
+    /**
+     * Path of the site's own home URL ('' for a root site), without a language segment.
+     * home_url() cannot be used for layout detection: TranslatePress filters it per language, so on /nl/ pages it
+     * ends in /design-review/nl and the site would no longer look standalone (links then became
+     * /design-review/nl/design-review/learn/). The stored 'home' option and WP_HOME are not language-filtered.
+     */
+    function fides_design_review_home_path(): string {
+        $raw = defined('WP_HOME') && (string) WP_HOME !== '' ? (string) WP_HOME : (string) get_option('home');
+        return rtrim((string) wp_parse_url($raw, PHP_URL_PATH), '/');
     }
 
     /** Route base without slashes ('' when standalone: the site root is the pilot). */
@@ -63,8 +74,17 @@ if (! function_exists('fides_design_review_base')) {
             return true;
         }
         $path = (string) wp_parse_url((string) ($_SERVER['REQUEST_URI'] ?? ''), PHP_URL_PATH); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
-        $home = (string) wp_parse_url(home_url('/'), PHP_URL_PATH);
-        $rel  = '/' . ltrim(substr($path, strlen(rtrim($home, '/'))), '/');
+        $home = fides_design_review_home_path();
+        $rel  = '/' . ltrim(substr($path, strlen($home)), '/');
+        // A leading TranslatePress language segment (/nl/design-review/...) is not part of the route.
+        $trp = get_option('trp_settings');
+        foreach (is_array($trp) && ! empty($trp['url-slugs']) && is_array($trp['url-slugs']) ? $trp['url-slugs'] : array() as $slug) {
+            $slug = trim((string) $slug, '/');
+            if ($slug !== '' && strpos($rel, '/' . $slug . '/') === 0) {
+                $rel = substr($rel, strlen($slug) + 1);
+                break;
+            }
+        }
         $base = '/' . fides_design_review_base();
         return $rel === $base || strpos($rel, $base . '/') === 0;
     }
@@ -140,6 +160,29 @@ add_filter(
     },
     10,
     2
+);
+
+// The shell logo is looked up as a media-library attachment (FIDES_LOGO_WHITE_01.png). A site that has the record but not the
+// file (a restored database without uploads) would show a broken image; fall back to the text wordmark instead.
+add_filter(
+    'fides_site_shell_logo_url',
+    static function ($logo) {
+        if (is_string($logo) || ! class_exists('Fides_DS_Site_Shell')) {
+            return $logo;
+        }
+        $ids = get_posts(
+            array(
+                'post_type'      => 'attachment',
+                'post_status'    => 'inherit',
+                'fields'         => 'ids',
+                'posts_per_page' => 1,
+                'no_found_rows'  => true,
+                'meta_query'     => array(array('key' => '_wp_attached_file', 'value' => '/' . Fides_DS_Site_Shell::LOGO_FILE, 'compare' => 'LIKE')),
+            )
+        );
+        $file = $ids ? get_attached_file((int) $ids[0]) : '';
+        return $ids && (! $file || ! is_file($file)) ? '' : $logo;
+    }
 );
 
 // The catalog design views look up their pilot detail page by scanning the first 20 pages with the pilot marker.

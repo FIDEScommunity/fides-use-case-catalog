@@ -29,5 +29,10 @@ if (is_file($target) || (is_dir($target) && is_file(rtrim($target, '/') . '/inde
 }
 $_SERVER['SCRIPT_NAME']     = $mount . '/index.php';
 $_SERVER['SCRIPT_FILENAME'] = $root . $mount . '/index.php';
+// php -S derives PATH_INFO from the URL below the script. Apache and nginx do not for pretty permalinks, and WordPress
+// would then use it instead of the request path: it does not strip the TranslatePress language segment (/design-review/nl/...)
+// from PATH_INFO, so every /nl/ page was a 404 in the rehearsal only.
+unset($_SERVER['PATH_INFO']);
+$_SERVER['PHP_SELF'] = $mount . '/index.php';
 chdir($root . $mount);
 require $root . $mount . '/index.php';

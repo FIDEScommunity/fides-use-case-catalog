@@ -407,9 +407,17 @@ pilot_upsert_page(
 );
 /**
  * Global Digital Trust Awards (Paper 28.2 / 28.3): one ordinary page with normal blocks.
- * Texts and image references live in awards/content/awards.html; the original images
- * (awards/manifest.json) are imported once into the media library so editors can swap them.
- * Without network access (or with PILOT_AWARDS_OFFLINE=1) the page is skipped and reported.
+ * Texts and image references live in awards/content/awards.html; the images (awards/manifest.json) are imported once
+ * into the media library so editors can swap them.
+ *
+ * Source of the files, in this order, never the network by default:
+ *  1. an attachment that already carries the marker meta _fides_awards_source (= manifest "source") and whose file exists;
+ *  2. the bundled file awards/images/<file> (staging package: seed/awards/images/, or PILOT_AWARDS_IMAGES_DIR) after its
+ *     SHA-256 and size matched the manifest; it is copied and imported with media_handle_sideload() (no HTTP);
+ *  3. only with PILOT_AWARDS_ALLOW_DOWNLOAD=1 (local development, never on staging): GET of the manifest "source".
+ * A page whose images are not all available is skipped and reported ("skipped-images" with the reason per image).
+ * Re-running changes nothing: imported images are found through the marker meta. An attachment whose file is gone from disk
+ * (a restored database without uploads) is re-imported from the bundle and takes over the marker.
  *
  * @return array<string,array{id:int,url:string}>|null key => attachment, null when an image is unavailable
  */
@@ -417,30 +425,81 @@ function pilot_awards_media(array $manifest, bool $dry): ?array {
     require_once ABSPATH . 'wp-admin/includes/file.php';
     require_once ABSPATH . 'wp-admin/includes/media.php';
     require_once ABSPATH . 'wp-admin/includes/image.php';
-    $out = array();
+
+    $images_dir     = rtrim((string) (getenv('PILOT_AWARDS_IMAGES_DIR') ?: __DIR__ . '/awards/images'), '/');
+    $allow_download = getenv('PILOT_AWARDS_ALLOW_DOWNLOAD') === '1' && getenv('PILOT_AWARDS_OFFLINE') !== '1';
+    $out            = array();
+    $problems       = array();
+    unset($GLOBALS['pilot_awards_problems']);
     foreach ($manifest['images'] as $image) {
-        $found = get_posts(array('post_type' => 'attachment', 'post_status' => 'inherit', 'numberposts' => 1, 'fields' => 'ids', 'meta_key' => '_fides_awards_source', 'meta_value' => $image['source']));
-        if ($found) {
-            $out[ $image['key'] ] = array('id' => (int) $found[0], 'url' => (string) wp_get_attachment_url((int) $found[0]));
+        $found = get_posts(array('post_type' => 'attachment', 'post_status' => 'inherit', 'numberposts' => -1, 'fields' => 'ids', 'meta_key' => '_fides_awards_source', 'meta_value' => $image['source']));
+        $live  = 0;
+        foreach ($found as $candidate) {
+            $file = get_attached_file((int) $candidate);
+            if ($file && is_file($file)) {
+                $live = (int) $candidate;
+                break;
+            }
+        }
+        if ($live) {
+            $out[ $image['key'] ] = array('id' => $live, 'url' => (string) wp_get_attachment_url($live));
             continue;
         }
-        if ($dry || getenv('PILOT_AWARDS_OFFLINE') === '1') {
-            return null;
+
+        $local = isset($image['file']) && preg_match('/^[a-z0-9][a-z0-9._-]*$/i', (string) $image['file']) === 1 ? $images_dir . '/' . $image['file'] : '';
+        if ($local !== '' && is_readable($local)) {
+            if (isset($image['sha256']) && ! hash_equals((string) $image['sha256'], (string) hash_file('sha256', $local))) {
+                $problems[] = $image['key'] . ': checksum of ' . $image['file'] . ' does not match the manifest';
+                continue;
+            }
+            if (isset($image['bytes']) && (int) $image['bytes'] !== (int) filesize($local)) {
+                $problems[] = $image['key'] . ': size of ' . $image['file'] . ' does not match the manifest';
+                continue;
+            }
+            if ($dry) {
+                $out[ $image['key'] ] = array('id' => 0, 'url' => 'about:blank#dry-run');
+                continue;
+            }
+            $tmp = wp_tempnam($image['file']);
+            if (! $tmp || ! copy($local, $tmp)) {
+                $problems[] = $image['key'] . ': cannot copy ' . $image['file'] . ' to a temporary file';
+                continue;
+            }
+            $name = (string) $image['file'];
+        } elseif ($allow_download && ! $dry) {
+            $tmp = download_url($image['source'], 60);
+            if (is_wp_error($tmp)) {
+                $problems[] = $image['key'] . ': ' . $tmp->get_error_message();
+                continue;
+            }
+            $name = basename((string) wp_parse_url($image['source'], PHP_URL_PATH));
+        } else {
+            $problems[] = $image['key'] . ': no bundled file ' . ($local !== '' ? $images_dir . '/' . $image['file'] : '(manifest has no "file")');
+            continue;
         }
-        $tmp = download_url($image['source'], 60);
-        if (is_wp_error($tmp)) {
-            fwrite(STDERR, 'awards image ' . $image['key'] . ': ' . $tmp->get_error_message() . "\n");
-            return null;
-        }
-        $id = media_handle_sideload(array('name' => basename((string) wp_parse_url($image['source'], PHP_URL_PATH)), 'tmp_name' => $tmp), 0, null, array('post_title' => 'Awards ' . $image['key']));
+
+        $id = media_handle_sideload(array('name' => $name, 'tmp_name' => $tmp), 0, null, array('post_title' => 'Awards ' . $image['key']));
         if (is_wp_error($id)) {
             @unlink($tmp); // phpcs:ignore WordPress.WP.AlternativeFunctions
-            fwrite(STDERR, 'awards image ' . $image['key'] . ': ' . $id->get_error_message() . "\n");
-            return null;
+            $problems[] = $image['key'] . ': ' . $id->get_error_message();
+            continue;
+        }
+        foreach ($found as $stale) { // a record without its file: hand the marker over to the new attachment
+            delete_post_meta((int) $stale, '_fides_awards_source');
         }
         update_post_meta($id, '_fides_awards_source', $image['source']);
         update_post_meta($id, '_wp_attachment_image_alt', $image['alt']);
         $out[ $image['key'] ] = array('id' => (int) $id, 'url' => (string) wp_get_attachment_url((int) $id));
+    }
+    if ($problems) {
+        $GLOBALS['pilot_awards_problems'] = $problems;
+        foreach (array_slice($problems, 0, 3) as $problem) {
+            fwrite(STDERR, 'awards image ' . $problem . "\n");
+        }
+        if (count($problems) > 3) {
+            fwrite(STDERR, 'awards images: ' . (count($problems) - 3) . " more unavailable\n");
+        }
+        return null;
     }
     return $out;
 }
@@ -458,7 +517,7 @@ foreach ($awards_pages as $awards_page) {
     $awards_manifest = json_decode((string) file_get_contents($awards_dir . '/' . $awards_page['manifest']), true);
     $awards_media    = is_array($awards_manifest) ? pilot_awards_media($awards_manifest, $pilot_dry) : null;
     if ($awards_media === null) {
-        $pilot_report[] = array(trim(pilot_tokens('{{base}}/' . $awards_page['slug']), '/'), 'skipped-images', 'original images not imported yet (offline, dry run or download error); run again with network access');
+        $pilot_report[] = array(trim(pilot_tokens('{{base}}/' . $awards_page['slug']), '/'), 'skipped-images', 'awards images not available: ' . implode('; ', array_slice((array) ($GLOBALS['pilot_awards_problems'] ?? array()), 0, 3)) . ' (the package must contain seed/awards/images/; see HANDOVER.md)');
         continue;
     }
     $awards_html = (string) file_get_contents($awards_dir . '/' . $awards_page['content']);

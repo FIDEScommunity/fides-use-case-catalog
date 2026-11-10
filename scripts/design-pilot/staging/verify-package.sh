@@ -21,6 +21,27 @@ while IFS= read -r -d '' f; do js_n=$((js_n+1)); node --check "$f" >/dev/null 2>
 [[ $js_bad -eq 0 ]] && ok "node --check passes for $js_n shipped JS files" || bad "node --check ($js_bad failed)"
 bash -n "$PKG/seed/seed.sh" && ok "seed.sh parses" || bad "seed.sh"
 
+# Awards images: bundled, complete, checksummed, and the seed has no network dependency for them.
+python3 - "$PKG" <<'PY' && ok "awards images: every manifest image is in seed/awards/images/ with matching size and SHA-256 ($(python3 -c "import json; m=json.load(open('$PKG/manifest.json')).get('awards_images',{}); print(m.get('count',0), 'files', round(m.get('bytes',0)/1e6,1), 'MB')"))" || bad "awards images missing or changed"
+import hashlib, json, os, sys
+pkg = sys.argv[1]
+n = 0
+for name in ("manifest.json", "community-manifest.json"):
+    for image in json.load(open(f"{pkg}/seed/awards/{name}"))["images"]:
+        path = f"{pkg}/seed/awards/images/{image['file']}"
+        assert os.path.isfile(path), "missing " + path
+        data = open(path, "rb").read()
+        assert len(data) == image["bytes"] and hashlib.sha256(data).hexdigest() == image["sha256"], "mismatch " + path
+        n += 1
+assert n > 0 and os.path.isfile(f"{pkg}/seed/awards/images/PROVENANCE.txt")
+assert json.load(open(f"{pkg}/manifest.json"))["awards_images"]["count"] == n
+PY
+if grep -q "PILOT_AWARDS_ALLOW_DOWNLOAD" "$PKG/seed/create-pages.php" && ! grep -q "PILOT_AWARDS_ALLOW_DOWNLOAD" "$PKG/seed/seed.sh" "$PKG"/seed/staging/*.php; then
+  ok "awards seed has no network dependency: download is opt-in (PILOT_AWARDS_ALLOW_DOWNLOAD=1) and nothing in the package sets it"
+else
+  bad "awards seed may download images by default"
+fi
+
 # Address scan result recorded at build time, and recomputed from the package contents.
 blockers="$(python3 -c "import json,sys; print(len(json.load(open('$PKG/manifest.json'))['address_scan_blockers']))")"
 [[ "$blockers" == "0" ]] && ok "address scan: no fixed localhost, port 10088, utrecht-demo or pilot route in shipped code" || bad "address scan has $blockers blockers"

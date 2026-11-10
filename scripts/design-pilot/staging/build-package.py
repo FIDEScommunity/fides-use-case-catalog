@@ -49,6 +49,10 @@ SEED_FILES = {
     f"{SEED_DIR}/staging/HANDOVER.md": "HANDOVER.md",
     f"{SEED_DIR}/fides-design-pilot-guard.php": "reference/fides-design-pilot-guard.php",
 }
+# Awards images are not in Git (73 MB of binaries). They are collected once from the local media library by
+# staging/collect-awards-images.php into this cache; the committed manifests carry file name, size and SHA-256 per image.
+AWARDS_IMAGES_CACHE = os.environ.get("AWARDS_IMAGES_DIR", os.path.join(ROOT, "local-data", "awards-images"))
+AWARDS_MANIFESTS = ("scripts/design-pilot/awards/manifest.json", "scripts/design-pilot/awards/community-manifest.json")
 SEED_TREES = {f"{SEED_DIR}/learn/": "seed/learn/", f"{SEED_DIR}/awards/": "seed/awards/"}
 # Reference copies of the catalog data the pages read at runtime (GitHub first on staging)
 CATALOG_DATA = {
@@ -189,6 +193,31 @@ def main():
             if n.startswith(prefix) and not n.endswith("/README.md"):
                 put(dst + n[len(prefix):], run(["git", "show", f"HEAD:{n}"], cwd=uc_repo, binary=True))
 
+    # Awards images: bundled so the seed never needs outgoing HTTP. Every file is checked against the committed manifest.
+    awards_images = {"count": 0, "bytes": 0}
+    provenance = []
+    for mpath in AWARDS_MANIFESTS:
+        amanifest = json.loads(run(["git", "show", f"HEAD:{mpath}"], cwd=uc_repo, binary=True))
+        for image in amanifest["images"]:
+            leaf = image.get("file")
+            if not leaf or not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", leaf) or not image.get("sha256"):
+                raise SystemExit(f"awards manifest entry without file/sha256: {image.get('key')} (run staging/collect-awards-images.php)")
+            cached = os.path.join(AWARDS_IMAGES_CACHE, leaf)
+            if not os.path.isfile(cached):
+                raise SystemExit(f"awards image missing from the cache: {cached} (run staging/collect-awards-images.php, no network needed)")
+            with open(cached, "rb") as fh:
+                data = fh.read()
+            if sha256(data) != image["sha256"] or len(data) != image.get("bytes", len(data)):
+                raise SystemExit(f"awards image does not match the committed manifest: {leaf}")
+            put(f"seed/awards/images/{leaf}", data)
+            awards_images["count"] += 1
+            awards_images["bytes"] += len(data)
+            provenance.append(f"{leaf}\t{image['sha256']}\t{image['source']}")
+    put("seed/awards/images/PROVENANCE.txt", (
+        "Images of the FIDES awards pages, taken from the FIDES community website (original URL per file below).\n"
+        "Used only for the non-public design review site; the pages are noindex. Do not republish; check usage rights of the\n"
+        "ceremony photos with FIDES communications before any public use.\n\nfile\tsha256\tsource\n" + "\n".join(provenance) + "\n").encode())
+
     # Reference catalog data (committed crawler output).
     catalog = {}
     for name, (path, label) in CATALOG_DATA.items():
@@ -232,6 +261,7 @@ def main():
         "plugins": {slug: p["version"] for slug, p in plugins.items()},
         "plugin_files": {slug: {k: v for k, v in p.items() if k != "version"} for slug, p in plugins.items()},
         "non_git": non_git,
+        "awards_images": awards_images,
         "catalog_data_reference": catalog,
         "address_scan_blockers": scan["blockers"],
     }

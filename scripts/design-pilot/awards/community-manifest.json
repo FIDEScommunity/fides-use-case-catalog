@@ -1,126 +1,198 @@
 {
  "version": 1,
- "note": "Original images of https://fides.community/awards/fides-community-awards/. The seed downloads each source once into the media library and replaces {{aw:id:KEY}} / {{aw:url:KEY[:size]}} in content/community-awards.html.",
+ "note": "Images of https://fides.community/awards/fides-community-awards/. The package ships each file in seed/awards/images/ (file, bytes, sha256 below); the seed imports it from there into the media library (no network) and replaces {{aw:id:KEY}} / {{aw:url:KEY[:size]}} in the page content. \"source\" is the original URL, kept as provenance and as the idempotency marker of an imported attachment.",
  "images": [
   {
    "key": "banner-impact",
    "source": "https://fides.community/app/uploads/2026/06/impact_award.png",
-   "alt": "Impact Award winner banner: FIDES Community Awards 2026, Digital Certificate of Conduct (VOG)"
+   "alt": "Impact Award winner banner: FIDES Community Awards 2026, Digital Certificate of Conduct (VOG)",
+   "file": "banner-impact.png",
+   "bytes": 1166329,
+   "sha256": "fb68397ff1336534c6be62425128a4820b42c4744b1fdfc35521ce1b1bf80863"
   },
   {
    "key": "banner-innovation",
    "source": "https://fides.community/app/uploads/2026/06/innovation_award.png",
-   "alt": "Innovation Award winner banner: FIDES Community Awards 2026, Preventing SIM Swap Fraud with EUDI Wallets"
+   "alt": "Innovation Award winner banner: FIDES Community Awards 2026, Preventing SIM Swap Fraud with EUDI Wallets",
+   "file": "banner-innovation.png",
+   "bytes": 1176020,
+   "sha256": "9ce22f92475dfeb048c9de33afe7be1de89e98841ed23924b1eeba08a57a82b1"
   },
   {
    "key": "banner-best-business-wallet",
    "source": "https://fides.community/app/uploads/2026/06/best_business_wallet.png",
-   "alt": "Best Business Wallet winner banner: FIDES Community Awards 2026, Credenco Business Wallet"
+   "alt": "Best Business Wallet winner banner: FIDES Community Awards 2026, Credenco Business Wallet",
+   "file": "banner-best-business-wallet.png",
+   "bytes": 1155987,
+   "sha256": "7c80a8bbd53f0f3a4f9fedabf73baa2ab4b2f1425a53b954f22ba55bbcd500b1"
   },
   {
    "key": "cphoto-01",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-43.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 1 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 1 of 20",
+   "file": "cphoto-01.jpg",
+   "bytes": 1267426,
+   "sha256": "cf1f9e4f467f4cec8031223fb20103dc86dbf283669b28ab6a032bd7fba88434"
   },
   {
    "key": "cphoto-02",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-44.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 2 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 2 of 20",
+   "file": "cphoto-02.jpg",
+   "bytes": 1160334,
+   "sha256": "2b3ad9ce631c868430518028cab5f61a3127effbcf7664afa86b1811c3366c3e"
   },
   {
    "key": "cphoto-03",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-45.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 3 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 3 of 20",
+   "file": "cphoto-03.jpg",
+   "bytes": 1092526,
+   "sha256": "778977960c5103513535322edde1519220dc64cd1be803c442d97d715d2c15de"
   },
   {
    "key": "cphoto-04",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-46.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 4 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 4 of 20",
+   "file": "cphoto-04.jpg",
+   "bytes": 1080867,
+   "sha256": "fc947e16448e1b23c958085e0c1745cb58351a16381ae61f0f612b6b18f20503"
   },
   {
    "key": "cphoto-05",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-47.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 5 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 5 of 20",
+   "file": "cphoto-05.jpg",
+   "bytes": 2143587,
+   "sha256": "72188257bba74428ab25fe7459a8b8c02e4236607b1b860b74309a2cb3e840ef"
   },
   {
    "key": "cphoto-06",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-48.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 6 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 6 of 20",
+   "file": "cphoto-06.jpg",
+   "bytes": 2237196,
+   "sha256": "64db394640faf8f794c4203e137ba436f390d16a2013a72d066b7706cf607f1c"
   },
   {
    "key": "cphoto-07",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-49.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 7 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 7 of 20",
+   "file": "cphoto-07.jpg",
+   "bytes": 1812262,
+   "sha256": "c2b983e58d7a3bb58f24487b0badf4dad3d15722b19f92304e314a6afd337180"
   },
   {
    "key": "cphoto-08",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-50.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 8 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 8 of 20",
+   "file": "cphoto-08.jpg",
+   "bytes": 1583088,
+   "sha256": "f2c8698f85773b9b90124838d233b1be028422fc5bf1988a42d3cec284c4d269"
   },
   {
    "key": "cphoto-09",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-51.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 9 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 9 of 20",
+   "file": "cphoto-09.jpg",
+   "bytes": 1786905,
+   "sha256": "010a7b1a3ceac51186c4ad94d9bfb9a833f400be5bc75ef4d5332b97f0b87e2e"
   },
   {
    "key": "cphoto-10",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-52.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 10 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 10 of 20",
+   "file": "cphoto-10.jpg",
+   "bytes": 1681152,
+   "sha256": "3cdfc5d36cdab11333552624093fd4af6c099e644a62a9a7ed9069d1413b2389"
   },
   {
    "key": "cphoto-11",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-53.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 11 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 11 of 20",
+   "file": "cphoto-11.jpg",
+   "bytes": 1627782,
+   "sha256": "4e89b6c08f8921c20ea68667da2c0ae0d45ff53eaae861f69d962ce6fbfcc711"
   },
   {
    "key": "cphoto-12",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-54.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 12 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 12 of 20",
+   "file": "cphoto-12.jpg",
+   "bytes": 1433997,
+   "sha256": "30981c7c65b0b527fc7b2d638a11b5227b9b8bcdffbf5195909b71e9bcb06f99"
   },
   {
    "key": "cphoto-13",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-55.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 13 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 13 of 20",
+   "file": "cphoto-13.jpg",
+   "bytes": 1065637,
+   "sha256": "d5dcedd3e22ef61f1508241d8b62b56d4b357f60db2cf217e1bf60100b476b88"
   },
   {
    "key": "cphoto-14",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-56.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 14 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 14 of 20",
+   "file": "cphoto-14.jpg",
+   "bytes": 994120,
+   "sha256": "e70f88eedcb2fabc4db41034c9fa5edffd7e033c57973104f7f75890a15df802"
   },
   {
    "key": "cphoto-15",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-57.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 15 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 15 of 20",
+   "file": "cphoto-15.jpg",
+   "bytes": 1448170,
+   "sha256": "7a0f1eb46887d60113b2c841ff9082f02b94b4826555da105e5d79406160a750"
   },
   {
    "key": "cphoto-16",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-58.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 16 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 16 of 20",
+   "file": "cphoto-16.jpg",
+   "bytes": 1490258,
+   "sha256": "0fa98471cd8b5418c22019237749dfd89a2c061c9e736549e17e1efb2e983d2a"
   },
   {
    "key": "cphoto-17",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-59.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 17 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 17 of 20",
+   "file": "cphoto-17.jpg",
+   "bytes": 1646542,
+   "sha256": "7215f70619ed14a96d2ea72867b6a5d162ba206187d1856dec267a7152e90289"
   },
   {
    "key": "cphoto-18",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-60.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 18 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 18 of 20",
+   "file": "cphoto-18.jpg",
+   "bytes": 1729659,
+   "sha256": "1e824ecd5a1dc4db61cc510ea94011c27f8c6c6e68922ea52f62fdaa80fe3955"
   },
   {
    "key": "cphoto-19",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-61.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 19 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 19 of 20",
+   "file": "cphoto-19.jpg",
+   "bytes": 1574314,
+   "sha256": "baec69b0895864c08564e9083f08ef5c9838be0e85031f0cf5f6798b15c3d2d3"
   },
   {
    "key": "cphoto-20",
    "source": "https://fides.community/app/uploads/2026/09/2026-09-15-Business-Wallets-in-Action-2026-62.jpg",
-   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 20 of 20"
+   "alt": "Business Wallets in Action, Utrecht, 15 September 2026: ceremony photo 20 of 20",
+   "file": "cphoto-20.jpg",
+   "bytes": 2294407,
+   "sha256": "1f16722070ae34bcc795c388403dfaeae1445bda31643e0dac3b782c892c1bed"
   },
   {
    "key": "jury",
    "source": "https://fides.community/app/uploads/2026/07/fides_community_awards_jury.jpeg",
-   "alt": "The FIDES Community Awards 2026 jury panel: Annet Steenbergen, Rob Brand, Joran Frik and Jacob Boersma"
+   "alt": "The FIDES Community Awards 2026 jury panel: Annet Steenbergen, Rob Brand, Joran Frik and Jacob Boersma",
+   "file": "jury.jpeg",
+   "bytes": 50819,
+   "sha256": "2f8299191ded94d978b0b72e5133956064833e5ecbd06d9d78ee9fefb5add917"
   }
  ]
 }
