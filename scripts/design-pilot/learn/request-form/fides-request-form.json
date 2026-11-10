@@ -94,28 +94,6 @@
         "limit_mode": "characters",
         "default_value": ""
       },
-      "8": {
-        "id": "8",
-        "type": "checkbox",
-        "label": "Contact about this request",
-        "description": "",
-        "size": "large",
-        "css": "",
-        "required": "1",
-        "choices": {
-          "1": {
-            "label": "I agree that FIDES contacts me by email about this request.",
-            "value": "",
-            "image": "",
-            "icon": "",
-            "icon_style": ""
-          }
-        },
-        "choice_limit": "",
-        "input_columns": "",
-        "dynamic_choices": "",
-        "show_values": ""
-      },
       "9": {
         "id": "9",
         "type": "hidden",

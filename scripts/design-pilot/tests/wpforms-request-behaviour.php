@@ -37,7 +37,7 @@ if ($mode === 'stored-data') {
     $meta = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM {$wpdb->postmeta} WHERE meta_value LIKE %s", '%request-capture-marker%')); // phpcs:ignore
     wr_ok('no post meta holds submitted test text', $meta === 0);
     $trans = (int) $wpdb->get_var("SELECT COUNT(*) FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_fides\\_req\\_%'"); // phpcs:ignore
-    wr_info("throttle counters (hashed email/IP, expire after an hour): $trans");
+    wr_info("throttle counters (hashed email, expire after an hour): $trans");
     $settings = (array) get_option('wpforms_settings', array());
     wr_info('WPForms settings relevant to privacy: gdpr=' . var_export($settings['gdpr'] ?? null, true) . ', gdpr-disable-uuid=' . var_export($settings['gdpr-disable-uuid'] ?? null, true) . ', gdpr-disable-details=' . var_export($settings['gdpr-disable-details'] ?? null, true) . ', captcha provider=' . var_export($settings['captcha-provider'] ?? 'none', true));
     exit($failures ? 1 : 0);
@@ -47,10 +47,10 @@ if ($mode === 'stored-data') {
 $form_id = Fides_DS_Request_Form::form_id();
 wr_ok('form fides-request-form exists and is published', $form_id > 0 && get_post_status($form_id) === 'publish');
 $data = wpforms_decode((string) get_post_field('post_content', $form_id));
-wr_ok('form has the eight fields of the definition', count($data['fields']) === 8 && isset($data['fields'][2], $data['fields'][9]), (string) count($data['fields']));
+wr_ok('form has the seven fields of the definition', count($data['fields']) === 7 && isset($data['fields'][2], $data['fields'][9]), (string) count($data['fields']));
 wr_ok('AJAX submit and modern anti-spam (local honeypot and token) are on, no external captcha', ($data['settings']['ajax_submit'] ?? '') === '1' && ($data['settings']['antispam_v3'] ?? '') === '1' && empty($data['settings']['recaptcha']));
 wr_ok('form carries the shared button class', ($data['settings']['submit_class'] ?? '') === 'fides-ds-button');
-wr_ok('only name, email, organisation, message, consent, offering and date are asked', array_values(array_map(static function ($f) { return $f['type']; }, $data['fields'])) === array('select', 'select', 'name', 'email', 'text', 'textarea', 'checkbox', 'hidden'));
+wr_ok('only name, email, organisation, message, offering and date are asked, no consent box', array_values(array_map(static function ($f) { return $f['type']; }, $data['fields'])) === array('select', 'select', 'name', 'email', 'text', 'textarea', 'hidden'));
 wr_ok('no phone field', ! in_array('phone', array_column($data['fields'], 'type'), true));
 wr_ok('the form file has no real address, only the example.invalid placeholder', (bool) preg_match('~request@example\.invalid~', (string) get_post_field('post_content', $form_id)) && ! preg_match('~[A-Za-z0-9._%+-]+@(?!example\.invalid)[A-Za-z0-9.-]+\.[a-z]{2,}~', stripslashes((string) get_post_field('post_content', $form_id))));
 $src = (string) file_get_contents(WP_PLUGIN_DIR . '/fides-community-tools-tiles/includes/class-fides-ds-request-form.php');
@@ -93,12 +93,32 @@ wr_ok('visitor body says it is no booking or payment', stripos($n2['message'], '
 $_POST['wpforms']['fields'][9] = 'nl';
 $entry['fields'][9] = 'nl';
 $nl = Fides_DS_Request_Form::filter_process_form_data($base, $entry);
-wr_ok('Dutch visitor mail and confirmation are Dutch', strpos($nl['settings']['notifications'][2]['subject'], 'Uw aanvraag bij FIDES') === 0 && strpos($nl['settings']['notifications'][2]['message'], 'geen boeking en geen betaling') !== false && strpos($nl['settings']['confirmations'][1]['message'], 'Bedankt') !== false);
+wr_ok('Dutch visitor mail is Dutch', strpos($nl['settings']['notifications'][2]['subject'], 'Uw aanvraag bij FIDES') === 0 && strpos($nl['settings']['notifications'][2]['message'], 'geen boeking en geen betaling') !== false);
 wr_ok('FIDES mail subject stays English for the team', strpos($nl['settings']['notifications'][1]['subject'], 'New FIDES request') === 0);
 $entry['fields'][2] = 'bogus';
 $entry['fields'][3] = 'bogus:thursday-14-january-2027';
 $unknown = Fides_DS_Request_Form::filter_process_form_data($base, $entry);
 wr_ok('an unknown offering never reaches a subject', strpos($unknown['settings']['notifications'][1]['subject'], 'bogus') === false && stripos($unknown['settings']['notifications'][2]['subject'], 'bogus') === false);
+unset($_POST['wpforms']);
+
+// ---- Names: normal names stay as typed, a link or address is never repeated in the visitor mail
+$_POST['wpforms']['fields'][9] = 'en';
+foreach (array("Zoë O'Neil-Smith", 'María José de la Cruz', '李雷', 'Al', 'Ng', 'Dr. J.R.R. Tolkien') as $good) {
+    $e = $entry;
+    $e['fields'][2] = 'wallet-introduction';
+    $e['fields'][3] = '';
+    $e['fields'][4] = $good;
+    $m = Fides_DS_Request_Form::filter_process_form_data($base, $e)['settings']['notifications'][2]['message'];
+    wr_ok("name '$good' is kept in the visitor mail", strpos($m, 'Dear ' . $good . ',') === 0, substr($m, 0, 40));
+}
+foreach (array('visit www.spam.example now', 'https://spam.example/x', 'mail me@spam.example') as $bad) {
+    $e = $entry;
+    $e['fields'][4] = $bad;
+    $m = Fides_DS_Request_Form::filter_process_form_data($base, $e)['settings']['notifications'][2]['message'];
+    wr_ok("name '$bad' is not repeated, the greeting is generic", strpos($m, 'spam.example') === false && strpos($m, 'Hello,') === 0, substr($m, 0, 40));
+}
+$long = Fides_DS_Request_Form::filter_process_form_data($base, array_replace_recursive($entry, array('fields' => array(4 => str_repeat('A', 300)))))['settings']['notifications'][2]['message'];
+wr_ok('a very long name is cut to 80 characters', strpos($long, str_repeat('A', 81)) === false && strpos($long, str_repeat('A', 80)) !== false);
 unset($_POST['wpforms']);
 
 // ---- Routing switch: off by default, rewrites only the request links, keeps the query
