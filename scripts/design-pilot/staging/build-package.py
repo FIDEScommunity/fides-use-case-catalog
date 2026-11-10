@@ -49,7 +49,7 @@ SEED_FILES = {
     f"{SEED_DIR}/staging/HANDOVER.md": "HANDOVER.md",
     f"{SEED_DIR}/fides-design-pilot-guard.php": "reference/fides-design-pilot-guard.php",
 }
-SEED_TREES = {f"{SEED_DIR}/learn/": "seed/learn/"}
+SEED_TREES = {f"{SEED_DIR}/learn/": "seed/learn/", f"{SEED_DIR}/awards/": "seed/awards/"}
 # Reference copies of the catalog data the pages read at runtime (GitHub first on staging)
 CATALOG_DATA = {
     "use-case-catalog": ("data/aggregated.json", "use-case"),

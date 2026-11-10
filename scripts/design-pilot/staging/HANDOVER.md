@@ -22,7 +22,7 @@ The earlier layout (pilot below another site's root, `/design-review/` as a page
 | `non-git/plugins/fides-vocabulary-glossary-*.zip` | glossary plugin (Learn articles and the glossary page use it) | **Local WordPress copy**: no Git repository exists |
 | `non-git/themes/blocksy-child-*.zip` | 16-line child theme of Blocksy | **Local WordPress copy**: no Git repository exists |
 | `mu-plugins/fides-design-review-config.php` | route mapping, noindex, disabled external actions, standalone detection | **Git** (`use-case-catalog/scripts/design-pilot/staging/`) |
-| `seed/` | `seed.sh`, `create-pages.php`, `create-learn-pages.php`, `staging/preflight.php`, `staging/seed-guard.php`, `learn/` (manifest, 17 article/page HTML files, editorial links, `nl-translations.php`) | **Git** |
+| `seed/` | `seed.sh`, `create-pages.php`, `create-learn-pages.php`, `staging/preflight.php`, `staging/seed-guard.php`, `learn/` (manifest, 17 article/page HTML files, editorial links, `nl-translations.php`), `awards/` (content and image manifests of the two awards pages) | **Git** |
 | `catalog-data/*.json` | reference copy of the four committed crawler outputs | **Git** (not installed; see section 7) |
 | `checks/rehearsal-checks.cjs` | browser checks that also run against the real staging URL (GET only; the signed-in form check needs a reviewer account) | **Git** |
 | `reference/fides-design-pilot-guard.php` | the local-only guard. **Do not install** | **Git** |
@@ -73,7 +73,7 @@ The seed refuses any host outside `PILOT_ALLOWED_HOSTS` (default `localhost,127.
 - Replace a page on purpose with `PILOT_FORCE="overview"` (pilot pages; the full path) or `LEARN_FORCE="topics"` (Learn pages). The old state is saved as JSON under `PILOT_BACKUP_DIR` (default `./seed-backups/<time>`) first.
 - `dry-run` writes nothing. Re-running `apply` on an unchanged site reports every page as `unchanged`.
 
-Pages seeded (all with the FIDES site shell template): `pilot-pages` (index), `homepage-fragment` (also made the **front page**, so `/design-review/` is the pilot homepage), `overview`, `use-case`, `organizations`, `organization`, `personal-wallets`, `business-wallets`, `wallet`, `credentials`, `credential`, `existing-listing` (existing modal listing, for parity checks), `about-fides`, `manifesto`, `updates`, the Learn tree (`learn`, `learn/topics`, two topic pages, two example articles, `learn/sessions` with two offerings and `request`, `start`, `start/receive`, and the Services tree `services`, `services/wallet-readiness-assessment`, `services/enquiry`), and the **companion pages** that live on fides.community and that the pilot links to: `use-case-form`, `organizations-submit`, `organizations-update`, `wallet-submit`, `credential-submit`, `wallets-update`, `credentials-update` (plugin form shortcodes) and `glossary`.
+Pages seeded (all with the FIDES site shell template): `pilot-pages` (index), `homepage-fragment` (also made the **front page**, so `/design-review/` is the pilot homepage), `overview`, `use-case`, `organizations`, `organization`, `personal-wallets`, `business-wallets`, `wallet`, `credentials`, `credential`, `existing-listing` (existing modal listing, for parity checks), `about-fides`, `manifesto`, `updates`, the Learn tree (`learn`, `learn/topics`, two topic pages, two example articles, `learn/sessions` with two offerings and `request`, `start`, `start/receive`, and the Services tree `services`, `services/wallet-readiness-assessment`, `services/enquiry`), the two **awards pages** (`global-digital-trust-awards`, `fides-community-awards`), and the **companion pages** that live on fides.community and that the pilot links to: `use-case-form`, `organizations-submit`, `organizations-update`, `wallet-submit`, `credential-submit`, `wallets-update`, `credentials-update` (plugin form shortcodes) and `glossary`.
 
 ## 5. Settings and URL mappings
 
@@ -110,6 +110,8 @@ Other settings that matter:
 - Option defaults that point at the live site (read-only links in details and cross references): `fides_org_catalog_issuer_catalog_url`, `..._credential_catalog_url`, `..._wallet_catalog_url`, `..._rp_catalog_url`, `..._use_case_catalog_url`, `fides_credential_catalog_trust_scheme_catalog_url`, plus the credential plugin constants `FIDES_CREDENTIAL_CATALOG_DEFAULT_*_URL`. Set the options to `/design-review/` paths if reviewers should stay on the site.
 - Do not set `fides_use_case_catalog_prefer_local_source`; the local guard sets it to false only because `localhost` is not `*.local`.
 - Address scan of the shipped code: no `localhost`, port 10088, `utrecht-demo` or `/fides-design-pilot` in code that runs on staging, and no hard-coded `/design-review` in the plugins. The only place that knows the path is the mu-plugin (detection from `home_url()`) and the seed scripts (`PILOT_HOME_PATH`, default `/design-review`).
+
+Awards pages: `create-pages.php` imports the original award images by GET from the live site (URLs in `seed/awards/*manifest.json`, read only) into this site's own media library. Without outbound network access the seed reports `skipped-images` for both pages; run `apply` again once the server may fetch them. The glossary and the About FIDES menu link to these pages, so the link audit fails (404) until they exist.
 
 ## 6. Demo parts and dependencies
 
