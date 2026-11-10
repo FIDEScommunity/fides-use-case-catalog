@@ -194,6 +194,27 @@ $nl = array(
     'Back to Wallet readiness assessment'     => 'Terug naar Wallet readiness assessment',
     'Back to Wallet Introduction'             => 'Terug naar Wallet Introduction',
     'For example: we are preparing a service that could use digital wallets.' => 'Bijvoorbeeld: wij bereiden een dienst voor die digitale wallets kan gebruiken.',
+    // WPForms request form (page /learn/sessions/request-wpforms/). TranslatePress reaches the form HTML; the mail texts,
+    // the confirmation and the script validation messages are Dutch in Fides_DS_Request_Form because TranslatePress does not.
+    'Learn / Request'                         => 'Leren / Aanvraag',
+    'Tell us what you need.'                  => 'Vertel ons wat u nodig hebt.',
+    'This is a request, not a booking or a payment.' => 'Dit is een aanvraag, geen boeking en geen betaling.',
+    'Tell us what you are interested in. We reply by email and agree the content, dates and fee with you before anything is booked.' => 'Vertel ons waar u interesse in hebt. Wij reageren per e-mail en spreken de inhoud, data en kosten met u af voordat er iets wordt geboekt.',
+    'Offering'                                => 'Aanbod',
+    'Choose what your request is about, or leave it open.' => 'Kies waar uw aanvraag over gaat, of laat dit open.',
+    'Preferred date'                          => 'Voorkeursdatum',
+    'Choose a date'                           => 'Kies een datum',
+    'Name'                                    => 'Naam',
+    'Email'                                   => 'E-mail',
+    'We use this address to reply and to send a confirmation.' => 'Wij gebruiken dit adres om te antwoorden en een bevestiging te sturen.',
+    'Organisation (optional)'                 => 'Organisatie (optioneel)',
+    'Your question or message'                => 'Uw vraag of bericht',
+    'Please leave out sensitive personal data and confidential documents.' => 'Laat gevoelige persoonsgegevens en vertrouwelijke documenten weg.',
+    'Contact about this request'              => 'Contact over deze aanvraag',
+    'I agree that FIDES contacts me by email about this request.' => 'Ik ga ermee akkoord dat FIDES per e-mail contact met mij opneemt over deze aanvraag.',
+    'A request is not a booking, and nothing is paid through this form.' => 'Een aanvraag is geen boeking en er wordt via dit formulier niets betaald.',
+    'Send request'                            => 'Aanvraag versturen',
+    'We read your request and reply by email.' => 'Wij lezen uw aanvraag en reageren per e-mail.',
 );
 
 /** The forms TranslatePress may have stored an original in. */
