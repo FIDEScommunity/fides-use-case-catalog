@@ -50,7 +50,7 @@ const PAGES = [
 const FORM_PAGES = ["use-case-form/", "organizations-submit/", "organizations-update/", "wallet-submit/", "credential-submit/", "wallets-update/", "credentials-update/"];
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
   const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
   const host = new URL(BASE).hostname;
   await ctx.addCookies(Object.entries({ "banner-status": "dismissed", policy_id: "35", functional: "allow", preferences: "deny", statistics: "deny", marketing: "deny" }).map(([n, v]) => ({ name: `cmplz_${n}`, value: v, url: BASE })));
