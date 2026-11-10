@@ -88,7 +88,7 @@ PY
 # Reproducibility: same commits, same files.
 STAMP="$(python3 -c "import json; print(json.load(open('$PKG/manifest.json'))['package'].rsplit('-',1)[0])")"
 python3 "$HERE/build-package.py" --out "$TMP/rebuild" --stamp "$STAMP" >/dev/null 2>&1 || true
-REB="$(ls -d "$TMP"/rebuild/*/ 2>/dev/null | head -1)"
+REB="$(ls -d "$TMP"/rebuild/*/ 2>/dev/null | head -1 || true)"
 if [[ -n "$REB" ]]; then
   diff <(grep -v -e ' manifest.json$' -e ' SHA256SUMS$' "$PKG/SHA256SUMS") <(grep -v -e ' manifest.json$' -e ' SHA256SUMS$' "${REB}SHA256SUMS") >/dev/null && ok "rebuild from the same commits gives identical files (reproducible)" || bad "rebuild differs"
 else
