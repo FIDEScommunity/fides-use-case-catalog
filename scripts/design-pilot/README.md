@@ -613,6 +613,17 @@ winners and three categories, 15 finalists, 20 Utrecht photos, no partner logos,
 - Menu: Ecosystem > Community Awards maps to the pilot page in the guard and in `staging/fides-design-review-config.php`.
 - Tests: `tests/run-community-awards-checks.sh` (1440, 1024, 768, 390, 320) and the community block in `tests/awards-behaviour.php`.
 
+## Glossary page (Paper 29.1, 29.3)
+
+The new glossary (`Fides_DS_Glossary_Page`, tiles) is opt-in. A page with `[fides_vocabulary_glossary]` keeps the classic plugin listing and pop-up unless the page is switched on, and `?term=` links work both ways.
+
+- Pilot: `fides-design-pilot-guard.php` (local) and `staging/fides-design-review-config.php` (design-review) switch on only the seeded page with the slug `glossary`, through the filter `fides_ds_glossary_page_enabled`. Any other page with the shortcode stays classic.
+- Later on staging or production, one of these (no code change in the tiles plugin): the filter above returns true for the page, `define('FIDES_DS_GLOSSARY_PAGE', true)` in `wp-config.php` (every page with the shortcode), or the custom field `_fides_ds_glossary_page` = `1` on one page. Remove it again to go back to the classic page.
+- Terms and definitions stay English data from the existing glossary plugin; nothing is copied or translated.
+- Dutch (TranslatePress): glossary.js composes its interface in the browser, which TranslatePress cannot see. The page therefore renders every string once as a hidden text node (`ul[data-glossary-strings]`, built from `Fides_DS_Glossary_Page::strings()`). TranslatePress finds and translates those nodes on the server and glossary.js reads the result. The English text in the page config is the fallback. The JS-built shell has `data-no-dynamic-translation`: without it the TranslatePress dynamic translator blanked the result count after a few searches. Placeholders in braces must stay in the translation. Plurals are two strings (`{n} term`, `{n} terms`); a language with more plural forms needs more keys.
+- Translator list: open `/nl/glossary/` once, then TranslatePress → Translate Site, filter on this page. The 25 strings (source texts in `strings()`) are: Search glossary terms; Search by term or abbreviation; Search; Clear search; Browse by letter; Glossary terms; Select a term to view its definition; All; terms ({n}); Terms starting with; {n} term; {n} terms; {count} match “{query}”; {count} starting with {letter}; {count} match “{query}”, starting with {letter}; Terms beginning with a number or symbol; Terms beginning with {letter}; No terms match “{query}”.; Check the spelling, try an abbreviation or use fewer words.; Also known as {alias}; Also known as:; Link to this term; Link copied; Source:; (opens in a new tab).
+- Tests: `tests/run-glossary-checks.sh` (English, 1440 to 320) and `tests/run-glossary-i18n-checks.sh`. The second one stores a temporary nl_NL test translation in the local database and restores the previous values afterwards, also on failure.
+
 ## Staging preparation (`/design-review/`)
 
 Everything for a later roll-out lives in `staging/` (see `staging/HANDOVER.md`). Nothing here connects to staging.

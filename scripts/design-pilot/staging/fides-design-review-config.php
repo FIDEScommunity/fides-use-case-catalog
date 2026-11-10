@@ -252,3 +252,15 @@ add_action(
         echo '<div style="position:fixed;bottom:0;right:0;z-index:99999;background:#0E0E0E;color:#fff;font:12px/18px Inter,system-ui,sans-serif;padding:4px 10px">Design review · not published</div>';
     }
 );
+
+// Opt-in for the new glossary page (Fides_DS_Glossary_Page) on the design-review site only.
+// It is off by default in the plugin, so production keeps the classic glossary listing.
+add_filter(
+    'fides_ds_glossary_page_enabled',
+    static function ($on, $id) {
+        // Only the seeded glossary page; any other page with the shortcode keeps the classic listing.
+        return $on || get_post_field('post_name', (int) $id) === 'glossary';
+    },
+    10,
+    2
+);

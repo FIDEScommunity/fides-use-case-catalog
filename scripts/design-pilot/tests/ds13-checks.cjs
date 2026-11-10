@@ -132,6 +132,7 @@ async function glossaryChecks(browser) {
       await page.evaluate(() => {
         const body = document.querySelector(".fides-ds-dialog__body");
         body.insertAdjacentHTML("beforeend", `<p data-ds13-long>${"A long definition keeps going so the dialog has to scroll within the window. ".repeat(80)}</p><p data-ds13-end>End of definition.</p>`);
+        window.dispatchEvent(new Event("resize")); // content changed after opening: let the dialog re-evaluate overflow
       });
       const frame = await page.evaluate(() => {
         const dialog = document.querySelector(".fides-ds-dialog").getBoundingClientRect();
@@ -145,7 +146,10 @@ async function glossaryChecks(browser) {
       check(`${tag}: wheel over the backdrop leaves the page`, (await scrollY(page)) === start, `${start} -> ${await scrollY(page)}`);
       const body = await page.evaluate(() => {
         const box = document.querySelector(".fides-ds-dialog__body").getBoundingClientRect();
-        return { x: box.left + box.width / 2, y: box.top + Math.min(box.height / 2, 40) };
+        // Headless Chrome ignores wheel input in the lower part of a small emulated window (reproduced with a plain
+        // overflow:auto div at 320x225), so the wheel point stays in the upper half of the viewport.
+        const room = Math.max(2, innerHeight * 0.5 - box.top);
+        return { x: box.left + box.width / 2, y: box.top + Math.min(box.height / 2, 40, room) };
       });
       await wheel(page, body.x, body.y, 600, 40);
       const end = await page.evaluate(() => {
@@ -161,6 +165,22 @@ async function glossaryChecks(browser) {
       await wheel(page, body.x, body.y, -600, 40);
       const top = await page.evaluate(() => ({ top: document.querySelector(".fides-ds-dialog__body").scrollTop, y: Math.round(window.scrollY) }));
       check(`${tag}: content scrolls back to its start, page unchanged`, top.top === 0 && top.y === start, JSON.stringify(top));
+      // Keyboard: the overflowing body is a labelled, focusable region (Tab from Close), and End reaches the end.
+      await page.focus(".fides-ds-dialog__close");
+      await page.keyboard.press("Tab");
+      const kb = await page.evaluate(() => {
+        const b = document.querySelector(".fides-ds-dialog__body");
+        return { focused: document.activeElement === b, role: b.getAttribute("role"), label: b.getAttribute("aria-labelledby"), tab: b.getAttribute("tabindex") };
+      });
+      check(`${tag}: overflowing body is a focusable labelled region`, kb.focused && kb.role === "region" && kb.label === "fides-ds-dialog-title" && kb.tab === "0", JSON.stringify(kb));
+      await page.keyboard.press("End");
+      await page.waitForTimeout(200);
+      const kbEnd = await page.evaluate(() => {
+        const b = document.querySelector(".fides-ds-dialog__body");
+        return { rest: Math.round(b.scrollHeight - b.clientHeight - b.scrollTop), y: Math.round(window.scrollY) };
+      });
+      check(`${tag}: End key scrolls the dialog to its end, page unchanged`, kbEnd.rest <= 1 && kbEnd.y === start, JSON.stringify({ start, ...kbEnd }));
+      await page.keyboard.press("Home");
       await page.keyboard.press("Escape");
       await page.waitForTimeout(200);
       const after = await page.evaluate(() => ({ open: !!document.querySelector(".fides-ds-dialog[open]"), y: Math.round(window.scrollY), focus: !!(document.activeElement && document.activeElement.hasAttribute("data-fides-ds-term")) }));

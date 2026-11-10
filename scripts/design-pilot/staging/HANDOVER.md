@@ -181,3 +181,7 @@ Because the pilot is its own site, the rollback is mostly "remove the site"; not
 - On staging, switch the floating switcher off in TranslatePress → Languages → Language Switcher (option `trp_language_switcher_settings`, `floater.enabled = false`). This is a database setting, not code, so repeat it per site.
 - Keep TranslatePress → Advanced → Debug → "Disable post container tags for post title" on. It changes how translated post titles are indexed, so revisit it when search gets Dutch support.
 - Run `tests/run-language-switcher-checks.sh` after changes.
+
+## Glossary page switch
+
+The new glossary page is off by default in the tiles plugin. On the design-review site `staging/fides-design-review-config.php` switches it on for the page with the slug `glossary` only (filter `fides_ds_glossary_page_enabled`). To activate it later on production or another site, use the filter, `define('FIDES_DS_GLOSSARY_PAGE', true)`, or the custom field `_fides_ds_glossary_page` = `1` on the page; remove it to return to the classic glossary. Dutch strings: see "Glossary page" in the pilot README (strings render as hidden text nodes so TranslatePress can translate them; the glossary data stays English).

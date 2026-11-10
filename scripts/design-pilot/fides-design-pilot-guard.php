@@ -176,3 +176,14 @@ add_filter(
         return (object) array('last_checked' => time(), 'checked' => array(), 'response' => array(), 'translations' => array(), 'no_update' => array());
     }
 );
+
+// Pilot opt-in for the new glossary page (Fides_DS_Glossary_Page). Off by default in the plugin.
+add_filter(
+    'fides_ds_glossary_page_enabled',
+    static function ($on, $id) {
+        // Only the seeded glossary page; any other page with the shortcode keeps the classic listing.
+        return $on || get_post_field('post_name', (int) $id) === 'glossary';
+    },
+    10,
+    2
+);
