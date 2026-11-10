@@ -73,7 +73,7 @@ $check(Fides_DS_Learn::render_page($root->ID) === $html, 'restoring the fields g
 $a = Fides_DS_Learn::render_page($assessment->ID);
 $check(substr_count($a, '<h1>') === 1 && strpos($a, 'Prepare your service for digital wallets.') !== false, 'assessment has one H1 from the headline field');
 $check(strpos($a, 'FIDES SERVICES · READINESS') !== false, 'assessment shows its eyebrow');
-$check(preg_match_all('~<div><dt>[^<]+</dt><dd>~', $a) === 5, 'assessment details box has five rows');
+$check(preg_match_all('~<div><dt>[^<]+</dt><dd>~', $a) === 4, 'assessment details box has four rows');
 $check(strpos($a, 'fides-learn-offering__lower') !== false && strpos($a, 'How it works') > strpos($a, 'fides-learn-details'), 'content after the More block runs below the details box');
 $check(! preg_match('/€|\bprice\b|\bfee\b|\bweeks?\b|\bdays?\b|written report|final report|roadmap/i', wp_strip_all_tags($a)), 'no price, fixed duration or specific deliverable promise on the assessment page');
 $check(strpos($a, '/services/enquiry/?offering=wallet-readiness-assessment') !== false, 'primary action opens the enquiry with the assessment context');
