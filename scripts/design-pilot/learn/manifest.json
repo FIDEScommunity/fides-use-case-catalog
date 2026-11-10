@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "Seed content for the FIDES Learn pilot. Paths are relative to the Learn base path (default /fides-design-pilot/learn). Pages with \"tree\":\"start\" are relative to the starting point base (default /fides-design-pilot/start). Tokens in content files: {{learn}}, {{start}}, {{pilot}}, {{glossary}}. Below a path (standalone) the links are absolute, built from home_url() at seed time.",
+ "note": "Seed content for the FIDES Learn pilot. Paths are relative to the Learn base path (default /fides-design-pilot/learn). Pages with \"tree\":\"start\" are relative to the starting point base (default /fides-design-pilot/start). Pages with \"tree\":\"services\" are relative to the Services base (default /fides-design-pilot/services). Tokens in content files: {{learn}}, {{start}}, {{services}}, {{pilot}}, {{glossary}}. Below a path (standalone) the links are absolute, built from home_url() at seed time.",
  "pages": [
   {
    "path": "",
@@ -119,8 +119,8 @@
    "details_title": "Workshop details",
    "details": "For | Your own team\nFormat | Inhouse workshop\nPrice | From €3,750 per workshop, excluding VAT",
    "cta_title": "Need more than a first view?",
-   "cta_text": "An architecture assessment, or help with a use case and business case, can follow as a separate step. Mention it in your enquiry and we will discuss it.",
-   "cta_label": "",
+   "cta_text": "A closer look at one service or process can follow as a separate step, for example a readiness assessment.",
+   "cta_label": "View readiness assessment",
    "closing_title": "Start with the service you want to look at.",
    "closing_text": "Tell us the service, the decisions ahead and who should take part. We discuss the content and send a proposal before you decide.",
    "request_question": "Which service or decision do you want to look at?",
@@ -131,7 +131,8 @@
    "subtitle": "See what digital wallets could mean for your organisation",
    "card_summary": "Work through relevant use cases with your team. You leave with a view of the possible impact, first priorities and next steps.",
    "card_label": "View workshop",
-   "details_note": "The final price is agreed in a proposal before booking."
+   "details_note": "The final price is agreed in a proposal before booking.",
+   "cta_url": "{{services}}/wallet-readiness-assessment/"
   },
   {
    "path": "sessions/training-partnerships",
@@ -194,6 +195,55 @@
    "cta_url": "{{pilot}}/business-wallets/",
    "content": "business-wallets-where-to-start.html",
    "menu_order": 0
+  },
+  {
+   "tree": "services",
+   "path": "",
+   "title": "Services",
+   "kind": "services",
+   "headline": "Practical support for digital wallets and credentials.",
+   "eyebrow": "WORK WITH FIDES",
+   "excerpt": "Work out what digital wallets and credentials mean for your organisation. We combine independent advice with practical examples, market knowledge and experience from across the ecosystem.",
+   "actions": "Discuss your question | contact | primary",
+   "services": "Wallet readiness assessment | Understand the potential impact on a service or process and identify the decisions and gaps to address. | Explore the assessment | {{services}}/wallet-readiness-assessment/\nUse case and business case | Develop an idea into a practical proposal, with the organisations, evidence and decisions it needs. | Discuss your use case | contact\nIndependent advice and selection | Compare credentials, wallets and providers against your requirements. | Discuss your options | contact\nProject and ecosystem coordination | Bring the right parties together and coordinate the work needed to move a use case forward. | Discuss your project | contact",
+   "cta_title": "Want to learn with your team?",
+   "cta_text": "Start with an open training, an introduction session or a readiness workshop.",
+   "cta_label": "Explore training & workshops",
+   "cta_url": "{{learn}}/sessions/",
+   "content": "services.html",
+   "menu_order": 0
+  },
+  {
+   "tree": "services",
+   "path": "wallet-readiness-assessment",
+   "title": "Wallet readiness assessment",
+   "kind": "offering",
+   "headline": "Prepare your service for digital wallets.",
+   "eyebrow": "FIDES SERVICES · READINESS",
+   "excerpt": "Together, we examine what wallet adoption could mean for one of your services or processes, and what your team needs to decide.",
+   "actions": "Discuss an assessment | {{services}}/enquiry/?offering=wallet-readiness-assessment | primary\nExplore the workshop | {{learn}}/sessions/wallet-readiness-workshop/ | secondary",
+   "details_title": "Assessment details",
+   "details": "For | Organisations preparing a wallet-based service or process\nStarting point | A service, process or decision\nGetting started | Contact us to discuss your requirements.\nIndependent advice | We start with your requirements and work with specialists where appropriate.",
+   "closing_title": "Tell us what you want to assess.",
+   "closing_text": "Share your question and we can discuss a suitable next step.",
+   "request_question": "Which service, process or decision do you want to assess?",
+   "request_placeholder": "For example: we are preparing a credential-based onboarding service and want to know which decisions are open.",
+   "request_submit": "Send assessment enquiry",
+   "content": "wallet-readiness-assessment.html",
+   "menu_order": 0
+  },
+  {
+   "tree": "services",
+   "path": "enquiry",
+   "title": "Enquiry",
+   "kind": "request",
+   "headline": "Tell us what you want to discuss.",
+   "eyebrow": "Services / Enquiry",
+   "excerpt": "Share your question. No account is needed, and nothing is booked or paid through this form.",
+   "cta_label": "Browse use cases",
+   "cta_url": "{{pilot}}/overview/",
+   "content": "services-request.html",
+   "menu_order": 9
   }
  ]
 }

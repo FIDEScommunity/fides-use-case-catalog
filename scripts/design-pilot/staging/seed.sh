@@ -34,12 +34,13 @@ PILOT_LAYOUT="${PILOT_LAYOUT:-standalone}"
 case "$PILOT_LAYOUT" in
   standalone)
     export PILOT_STANDALONE=1 PILOT_BASE="" PILOT_HOME_PATH="${PILOT_HOME_PATH:-/design-review}"
-    export LEARN_BASE="${LEARN_BASE:-learn}" LEARN_START_BASE="${LEARN_START_BASE:-start}" LEARN_PILOT_BASE="" ;;
+    export LEARN_BASE="${LEARN_BASE:-learn}" LEARN_START_BASE="${LEARN_START_BASE:-start}" LEARN_SERVICES_BASE="${LEARN_SERVICES_BASE:-services}" LEARN_PILOT_BASE="" ;;
   subpath)
     unset PILOT_STANDALONE
     export PILOT_BASE="${PILOT_BASE:-design-review}"
     export LEARN_BASE="${LEARN_BASE:-$PILOT_BASE/learn}"
     export LEARN_START_BASE="${LEARN_START_BASE:-$PILOT_BASE/start}"
+    export LEARN_SERVICES_BASE="${LEARN_SERVICES_BASE:-$PILOT_BASE/services}"
     export LEARN_PILOT_BASE="${LEARN_PILOT_BASE:-$PILOT_BASE}" ;;
   *) echo "PILOT_LAYOUT must be standalone or subpath" >&2; exit 2 ;;
 esac

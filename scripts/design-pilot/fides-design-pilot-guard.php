@@ -54,6 +54,7 @@ add_filter(
             '/'                                             => '/fides-design-pilot/homepage-fragment/',
             '/ecosystem-explorer/'                          => '/explorer/',
             '/ecosystem-explorer/start/'                    => '/fides-design-pilot/start/',
+            '/services/'                                    => '/fides-design-pilot/services/',
             '/about-fides/'                                 => '/fides-design-pilot/about-fides/',
             '/manifesto/'                                   => '/fides-design-pilot/manifesto/',
             '/awards/global-digital-trust-awards/'          => '/fides-design-pilot/global-digital-trust-awards/',

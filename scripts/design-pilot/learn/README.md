@@ -42,7 +42,7 @@ a site that does not map them shows no Learn item and no dead links.
 The homepage fragment has a primary "Find your starting point" button to `/fides-design-pilot/start/`.
 The business wallet overview shows its editorial link as one compact line in the intro
 (`data-learn-*` attributes from `Fides_DS_Editorial_Links::resolved()`, rendered by the wallet script).
-Header menu: Learn, Explore, Updates, Ecosystem, Tools & API, About FIDES; Services and the other
+Header menu: Learn, Explore, Services, Updates, Ecosystem, Tools & API, About FIDES (the pilot guard maps Services to `/fides-design-pilot/services/`); the other
 not-yet-existing destinations are `proposed` in `Fides_DS_Site_Shell::navigation()` and appear as soon as a site
 maps them through `fides_site_shell_url` (the pilot guard returns '' for unmapped proposed paths).
 Open questions: a credential-types explanation (no existing article fits).
@@ -272,3 +272,22 @@ A content manager can change everything below in the WordPress page editor, with
 - The enquiry page is still a local preview (no mail, no storage). A real form, mail or CRM hookup is a separate step.
 - Open training: €999 per participant excluding VAT. Inhouse sessions: from-prices only (€1,495 session, €3,750 workshop); duration, group size and inclusions are not decided yet and must not be added until they are.
 - After changing English text, Dutch needs a new translation in TranslatePress for each changed string (no silent fallback is configured; untranslated strings show in English).
+
+## Services: who changes what
+
+The Services section is separate from Learn. Its own page tree sits under `/fides-design-pilot/services/` and is seeded from the same manifest (`"tree": "services"`; token `{{services}}`; route base `LEARN_SERVICES_BASE`).
+
+| Page | Path | Kind |
+| --- | --- | --- |
+| Services (overview) | `services/` | services |
+| Wallet readiness assessment | `services/wallet-readiness-assessment/` | offering |
+| Enquiry (local preview) | `services/enquiry/?offering=wallet-readiness-assessment` | request |
+
+- **Navigation.** The shell already proposes a main item "Services" (`/services/`, between Explore and Updates). The pilot guard and `staging/fides-design-review-config.php` map it to the pilot Services page, so the item appears and shows as current below `/services/`. A site that does not map `/services/` shows no Services item. The Learn bar does not appear on Services pages. The breadcrumb is Home / Services / page.
+- **Services overview.** Intro, hero button, "How can we help?" text and the closing band are normal fields and block content. The four services are one field, `services`, one line each: `Title | Description | Action label | URL`. Each row is the shared catalog row card. The URL can be a path, an https address, or the word `contact`. `contact` resolves to the site Contact page from the shell (`/about-fides/contact/`), so it follows the site mapping; the pilot has no local Contact page, so it links to the live page. If a site drops the Contact page, the rows keep their text and show no link. The same keyword works in `actions` and `cta_url`.
+- **Readiness assessment.** Same editor fields as an offering: headline, eyebrow, `excerpt`, `actions`, `details_title` and `details` (the details box), closing block and the enquiry fields. The page body is block content. Put a **More** block in the body: content before it sits beside the details box, content after it runs full width below (How it works, Workshop or assessment?, See wallets in practice).
+- **Enquiry.** One enquiry page per section. The offerings in its select are the `offering` pages below its parent, so a new service page under `services/` appears there automatically. The webinar interest option and the date field only exist in Training & workshops.
+- **No prices.** The Services pages carry no price, fee, duration or fixed deliverable. Keep it that way until FIDES has decided them.
+- **Other services** have no page of their own. Their actions go to Contact. When a page exists, change the URL in the `services` line.
+- **Translation.** All visible text is server-rendered and translatable in TranslatePress. The enquiry labels that the form script rewrites ("Back to ...", "Return to ...", the context label) are JavaScript strings; the section name and prefix come from data attributes, so only the fixed words need a dynamic translation.
+

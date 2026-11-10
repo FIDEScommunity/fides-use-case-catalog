@@ -73,7 +73,7 @@ The seed refuses any host outside `PILOT_ALLOWED_HOSTS` (default `localhost,127.
 - Replace a page on purpose with `PILOT_FORCE="overview"` (pilot pages; the full path) or `LEARN_FORCE="topics"` (Learn pages). The old state is saved as JSON under `PILOT_BACKUP_DIR` (default `./seed-backups/<time>`) first.
 - `dry-run` writes nothing. Re-running `apply` on an unchanged site reports every page as `unchanged`.
 
-Pages seeded (all with the FIDES site shell template): `pilot-pages` (index), `homepage-fragment` (also made the **front page**, so `/design-review/` is the pilot homepage), `overview`, `use-case`, `organizations`, `organization`, `personal-wallets`, `business-wallets`, `wallet`, `credentials`, `credential`, `existing-listing` (existing modal listing, for parity checks), `about-fides`, `manifesto`, `updates`, the Learn tree (`learn`, `learn/topics`, two topic pages, two example articles, `learn/sessions` with two offerings and `request`, `start`, `start/receive`), and the **companion pages** that live on fides.community and that the pilot links to: `use-case-form`, `organizations-submit`, `organizations-update`, `wallet-submit`, `credential-submit`, `wallets-update`, `credentials-update` (plugin form shortcodes) and `glossary`.
+Pages seeded (all with the FIDES site shell template): `pilot-pages` (index), `homepage-fragment` (also made the **front page**, so `/design-review/` is the pilot homepage), `overview`, `use-case`, `organizations`, `organization`, `personal-wallets`, `business-wallets`, `wallet`, `credentials`, `credential`, `existing-listing` (existing modal listing, for parity checks), `about-fides`, `manifesto`, `updates`, the Learn tree (`learn`, `learn/topics`, two topic pages, two example articles, `learn/sessions` with two offerings and `request`, `start`, `start/receive`, and the Services tree `services`, `services/wallet-readiness-assessment`, `services/enquiry`), and the **companion pages** that live on fides.community and that the pilot links to: `use-case-form`, `organizations-submit`, `organizations-update`, `wallet-submit`, `credential-submit`, `wallets-update`, `credentials-update` (plugin form shortcodes) and `glossary`.
 
 ## 5. Settings and URL mappings
 
@@ -83,7 +83,7 @@ Pages seeded (all with the FIDES site shell template): `pilot-pages` (index), `h
 | --- | --- |
 | `/` (logo) | `/design-review/` (the pilot homepage) |
 | `/about-fides/`, `/manifesto/`, `/about-fides/news/` | `/about-fides/`, `/manifesto/`, `/updates/` |
-| `/learn/`, `/learn/topics/`, `/ecosystem-explorer/start/` | `/learn/`, `/learn/topics/`, `/start/` |
+| `/learn/`, `/learn/topics/`, `/ecosystem-explorer/start/`, `/services/` | `/learn/`, `/learn/topics/`, `/start/`, `/services/` |
 | `/ecosystem-explorer/use-cases/` | `/overview/` |
 | `/ecosystem-explorer/personal-wallets/`, `/organizational-wallets/`, `/credential-catalog/` | `/personal-wallets/`, `/business-wallets/`, `/credentials/` |
 | `/organizations/` | `/organizations/` |
@@ -115,7 +115,7 @@ Other settings that matter:
 
 Demo / preview parts (in the package, not production features):
 
-- The **Training & workshops enquiry** (`learn/sessions/request/`) is a local preview: it never submits, stores or mails anything.
+- The **Training & workshops enquiry** (`learn/sessions/request/`) and the **Services enquiry** (`services/enquiry/`) are local previews: they never submit, store or mail anything. Services actions for services without a page go to the site Contact page (`/about-fides/contact/`, the live page in the pilot).
 - The **submission and update forms** are the real plugin forms. They need a signed-in visitor. On a bare standalone site that means a WordPress account (the plugins fall back to `wp-login.php` when no sign-in option exists). Create a reviewer account if the forms must be demonstrated. With the defaults they can store a submission in this site's database; GitHub writes and mail are blocked (below).
 - Learn example articles have no author or date by design and need editorial review.
 - The homepage, spotlight and featured use case are pilot compositions of catalog records.

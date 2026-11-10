@@ -17,6 +17,7 @@
  *  PILOT_STANDALONE=1    standalone site (home_url() ends in /design-review): defaults become learn, start and no pilot base
  *  LEARN_BASE            route base without slashes at the ends   (fides-design-pilot/learn)
  *  LEARN_START_BASE      route base of the Explorer starting point (fides-design-pilot/start)
+ *  LEARN_SERVICES_BASE   route base of the Services section        (fides-design-pilot/services)
  *  LEARN_PILOT_BASE      base for links to the other pilot pages   (fides-design-pilot)
  *  LEARN_GLOSSARY_PATH   existing glossary page                    (/glossary/)
  *  LEARN_FORCE           comma separated seed ids to replace
@@ -75,6 +76,7 @@ $sa      = $pctx['standalone'];
 $mount   = $pctx['mount']; // path of home_url(): '' at the domain root, '/design-review' for the standalone site
 $base    = trim((string) (getenv('LEARN_BASE') ?: ($sa ? 'learn' : 'fides-design-pilot/learn')), '/');
 $start   = trim((string) (getenv('LEARN_START_BASE') ?: ($sa ? 'start' : 'fides-design-pilot/start')), '/');
+$services = trim((string) (getenv('LEARN_SERVICES_BASE') ?: ($sa ? 'services' : 'fides-design-pilot/services')), '/');
 $pilot   = $sa ? '' : trim((string) (getenv('LEARN_PILOT_BASE') ?: 'fides-design-pilot'), '/');
 $gloss   = $pctx['origin'] . $mount . '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/';
 $force   = array_filter(array_map('trim', explode(',', (string) getenv('LEARN_FORCE'))), 'strlen');
@@ -85,8 +87,8 @@ $origin  = $pctx['origin']; // '' at the domain root; below a path, links are ab
 $prefix  = static function (string $p) use ($mount, $origin): string {
     return $origin . $mount . ($p === '' ? '' : '/' . $p);
 };
-$tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{glossary}}' => $gloss);
-$tokens_site = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => $pilot === '' ? '' : '/' . $pilot, '{{glossary}}' => '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/');
+$tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{services}}' => $prefix($services), '{{glossary}}' => $gloss);
+$tokens_site = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => $pilot === '' ? '' : '/' . $pilot, '{{services}}' => '/' . $services, '{{glossary}}' => '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/');
 
 $manifest = json_decode((string) file_get_contents($here . '/manifest.json'), true);
 if (! is_array($manifest) || empty($manifest['pages'])) {
@@ -149,7 +151,7 @@ function learn_diff(array $a, array $b): array {
 }
 
 /** Route base and parent page of every tree in the manifest. */
-$trees = array('learn' => array('base' => $base, 'parent' => 0), 'start' => array('base' => $start, 'parent' => 0));
+$trees = array('learn' => array('base' => $base, 'parent' => 0), 'start' => array('base' => $start, 'parent' => 0), 'services' => array('base' => $services, 'parent' => 0));
 foreach ($trees as $name => $tree) {
     $parent_path = dirname($tree['base']) === '.' ? '' : dirname($tree['base']);
     if ($parent_path !== '') {

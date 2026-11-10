@@ -63,8 +63,8 @@ foreach (array('Learn', 'Explore', 'Updates', 'Ecosystem', 'Tools &amp; API', 'A
 // Paper page 02: Learn, Explore, Services, Updates, Ecosystem, Tools & API, About FIDES; Contact, Search and Sign in on the right.
 preg_match('#<nav[^>]*aria-label="Main">(.*?)</nav>#s', $header, $main_nav);
 preg_match_all('#fides-ds-site-nav__(?:link|toggle)"[^>]*>([^<]+)#', $main_nav[1] ?? '', $main_labels);
-$check(array_map('html_entity_decode', $main_labels[1]) === array('Learn', 'Explore', 'Updates', 'Ecosystem', 'Tools & API', 'About FIDES'), 'main items follow Paper (Services stays out until it exists): ' . implode(' | ', $main_labels[1]));
-$check(strpos($header, '>Community<') === false && strpos($header, '>Services<') === false, 'no Community item and no Services link without a Services page');
+$check(array_map('html_entity_decode', $main_labels[1]) === array('Learn', 'Explore', 'Services', 'Updates', 'Ecosystem', 'Tools & API', 'About FIDES'), 'main items follow Paper (the pilot maps Services to its Services page): ' . implode(' | ', $main_labels[1]));
+$check(strpos($header, '>Community<') === false && strpos($header, '/fides-design-pilot/services/') !== false, 'no Community item; Services links to the pilot Services page');
 $check(strpos($header, '>Plans<') !== false && preg_match('#class="fides-ds-site-nav__link"[^>]*>Plans#', $header) === 0, 'Plans lives under Ecosystem > Contribute, not in the main items');
 $check(strpos($header, 'Intermediaries') === false && strpos($header, 'Trust schemes') === false && strpos($header, 'Get help choosing') === false && strpos($header, 'Ask FIDES') === false && strpos($header, 'Interop Testbed') === false, 'links to pages that do not exist yet are not shown');
 // The language switcher is a div inside the actions, so the block ends at the search panel, not at the first </div>.

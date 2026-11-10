@@ -80,6 +80,7 @@ if (! function_exists('fides_design_review_base')) {
             '/'                                              => '{pilot}/homepage-fragment/',
             '/ecosystem-explorer/'                           => '/explorer/',
             '/ecosystem-explorer/start/'                     => '{pilot}/start/',
+            '/services/'                                     => '{pilot}/services/',
             '/about-fides/'                                  => '{pilot}/about-fides/',
             '/manifesto/'                                    => '{pilot}/manifesto/',
             '/awards/global-digital-trust-awards/'           => '{pilot}/global-digital-trust-awards/',
