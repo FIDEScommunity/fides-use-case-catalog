@@ -67,7 +67,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     const a = await page.locator("main").innerText();
     check(`${L("assessment")}: covers, how it works, comparison, no price, no fixed duration, no promised report`, /The assessment can cover/.test(a) && /How it works/.test(a) && /Workshop or assessment\?/.test(a) && /agreed with you before the assessment starts/.test(a) && !/€|\bprice\b|\bfee\b|\bweeks?\b|\bdays?\b|written report|final report|roadmap/i.test(a));
     const details = await page.locator(".fides-learn-details dl > div").count();
-    check(`${L("assessment")}: details box with four rows`, details === 4, String(details));
+    check(`${L("assessment")}: details box with five rows, ending in the availability line`, details === 5 && (await page.locator(".fides-learn-details dl > div").last().innerText()).replace(/\s+/g, " ") === "Availability Primarily available in the Netherlands. Contact us to discuss your requirements and location.", String(details));
     if (width >= 900) {
       const g = await page.evaluate(() => { const b = document.querySelector(".fides-learn-offering__body").getBoundingClientRect(); const d = document.querySelector(".fides-learn-details").getBoundingClientRect(); const m = document.querySelector(".fides-learn-offering__body").getBoundingClientRect(); return { sideBySide: d.left >= b.right - 1 && Math.abs(d.top - b.top) < 40, bodyWidth: Math.round(m.width) }; });
       check(`${L("assessment")}: details box sits beside the text, line length limited`, g.sideBySide && g.bodyWidth <= 760, JSON.stringify(g));

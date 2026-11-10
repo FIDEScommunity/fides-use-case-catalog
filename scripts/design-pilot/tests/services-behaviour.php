@@ -73,7 +73,7 @@ $check(Fides_DS_Learn::render_page($root->ID) === $html, 'restoring the fields g
 $a = Fides_DS_Learn::render_page($assessment->ID);
 $check(substr_count($a, '<h1>') === 1 && strpos($a, 'Prepare your service for digital wallets.') !== false, 'assessment has one H1 from the headline field');
 $check(strpos($a, 'FIDES SERVICES · READINESS') !== false, 'assessment shows its eyebrow');
-$check(preg_match_all('~<div><dt>[^<]+</dt><dd>~', $a) === 4, 'assessment details box has four rows');
+$check(preg_match_all('~<div><dt>[^<]+</dt><dd>~', $a) === 5, 'assessment details box has five rows');
 $check(strpos($a, 'fides-learn-offering__lower') !== false && strpos($a, 'How it works') > strpos($a, 'fides-learn-details'), 'content after the More block runs below the details box');
 $check(! preg_match('/€|\bprice\b|\bfee\b|\bweeks?\b|\bdays?\b|written report|final report|roadmap/i', wp_strip_all_tags($a)), 'no price, fixed duration or specific deliverable promise on the assessment page');
 $check(strpos($a, '/services/enquiry/?offering=wallet-readiness-assessment') !== false, 'primary action opens the enquiry with the assessment context');
@@ -83,11 +83,13 @@ $trail = Fides_DS_Learn::breadcrumb($assessment->ID);
 $check(array_column($trail, 'label') === array('Home', 'Services', 'Wallet readiness assessment'), 'breadcrumb is Home / Services / assessment: ' . implode(' / ', array_column($trail, 'label')));
 
 $orig_details = $meta($assessment->ID, 'details');
+$check(strpos($a, '<dt>Availability</dt><dd>Primarily available in the Netherlands. Contact us to discuss your requirements and location.</dd>') !== false, 'assessment shows the availability line from the details field');
+$check(strpos($a, '€') === false, 'assessment shows no price');
 $orig_content = (string) $assessment->post_content;
-$set($assessment->ID, 'details', $orig_details . "\nExtra row | Temporary value");
+$set($assessment->ID, 'details', preg_replace('~^Availability \\|.*$~m', 'Availability | Temporary availability text', $orig_details) . "\nExtra row | Temporary value");
 wp_update_post(array('ID' => $assessment->ID, 'post_content' => wp_slash(str_replace('What we look at', 'What we look at today', $orig_content))));
 $a2 = Fides_DS_Learn::render_page($assessment->ID);
-$check(strpos($a2, 'Temporary value') !== false && strpos($a2, 'What we look at today') !== false, 'edited details and body show up after re-render');
+$check(strpos($a2, 'Temporary value') !== false && strpos($a2, 'Temporary availability text') !== false && strpos($a2, 'Primarily available') === false && strpos($a2, 'What we look at today') !== false, 'edited details and body show up after re-render');
 $set($assessment->ID, 'details', $orig_details);
 wp_update_post(array('ID' => $assessment->ID, 'post_content' => wp_slash($orig_content)));
 $check(Fides_DS_Learn::render_page($assessment->ID) === $a, 'restoring details and content gives the original assessment page back');

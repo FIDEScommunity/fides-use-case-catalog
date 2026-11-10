@@ -39,6 +39,7 @@ async function go(page, url) {
       action: e.querySelector(".fides-ds-card__link .fides-ds-visually-hidden").textContent.replace(/[()]/g, "").trim(),
       href: e.querySelector(".fides-ds-card__link").getAttribute("href"),
       box: ["h2", ".fides-ds-card__facts", ".fides-ds-card__arrow"].map((s) => { const r = e.querySelector(s).getBoundingClientRect(); return [Math.round(r.left - e.getBoundingClientRect().left), Math.round(r.width)]; }),
+      location: (e.querySelector(".fides-ds-card__fact--location") || { textContent: "" }).textContent.trim(),
       font: getComputedStyle(e.querySelector(".fides-ds-card__link")).fontSize,
     })));
     check(`${L("hub")}: three offer cards in order`, cards.map((c) => c.title).join("|") === "EUDI & Business Wallets in Practice|Wallet Introduction|Wallet Readiness Workshop", cards.map((c) => c.title).join("|"));
@@ -53,10 +54,30 @@ async function go(page, url) {
       const body = await page.locator(".fides-learn").innerText();
       check(`${L(c.title)}: no invented duration, group size or inclusions for inhouse offers, no €3,950`, !/3[.,]950/.test(body) && (c.title.startsWith("EUDI") || (!/Duration|Group size|included|includes/i.test(await page.locator(".fides-learn-details").innerText()))));
       if (!c.title.startsWith("EUDI")) check(`${L(c.title)}: final price sentence`, (await page.locator(".fides-learn-details__note").innerText()) === "The final price is agreed in a proposal before booking.");
+      // Availability: one editable details row for team sessions; the open training shows Utrecht instead.
+      const AVAIL = "Primarily available in the Netherlands. Contact us to discuss your requirements and location.";
+      check(`${L(c.title)}: availability row (team sessions) or Utrecht location (open training)`, c.title.startsWith("EUDI") ? detail.Location === "Utrecht, the Netherlands" && !detail.Availability && c.location === "Utrecht, the Netherlands" : detail.Availability === AVAIL && !detail.Location && c.location === "", JSON.stringify([detail, c.location]));
+      check(`${L(c.title)}: no language, online or other-country claim`, !/\b(Dutch|English|Nederlands|online|remote|webinar|abroad|worldwide|international|Belgium|Germany)\b/i.test(await page.locator(".fides-learn-details").innerText()));
       if (c.title.includes("Workshop")) check(`${L(c.title)}: no promise of a full assessment, roadmap or written report`, !/roadmap|written report|full assessment|final report/i.test(body) && !/Design preview|not built yet/i.test(body));
     }
+    // Training partnerships: open to providers outside the Netherlands, no claim of an existing network.
+    await go(page, `${LEARN}/sessions/`);
+    const soft = await page.locator(".fides-learn-soft", { hasText: "Training partnerships" }).innerText();
+    check(`${L("partners")}: hub block invites providers outside the Netherlands, no network claim`, /outside the Netherlands/.test(soft) && /no partner network/.test(soft) && !/our partners|partner network of|existing partners|commission|listing fee|book/i.test(soft.replace(/no partner network or programme/, "")), soft);
+    await go(page, `${LEARN}/sessions/training-partnerships/`);
+    const pt = await page.locator(".fides-learn").innerText();
+    check(`${L("partners")}: detail page wording and action`, /outside the Netherlands/.test(pt) && /no partner network/.test(pt) && /Discuss a partnership/.test(pt) && !/€|commission|catalogue|booking form/i.test(pt.replace(/booking process/, "")), pt.slice(0, 300));
+    check(`${L("partners")}: no horizontal overflow`, !(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)));
     await go(page, `${LEARN}/sessions/`);
 
+    // Dutch pages: new English strings fall back to English, existing Dutch location text stays.
+    await go(page, `/nl${LEARN}/sessions/wallet-introduction/`);
+    const nlIntro = await page.locator(".fides-learn-details").innerText();
+    check(`${L("nl")}: availability line falls back to English, layout intact`, /Primarily available in the Netherlands\. Contact us to discuss your requirements and location\./.test(nlIntro) && !(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)));
+    await go(page, `/nl${LEARN}/sessions/training-partnerships/`);
+    check(`${L("nl")}: partnership page readable on a Dutch URL`, /outside the Netherlands|buiten Nederland/.test(await page.locator(".fides-learn").innerText()) && !(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)));
+
+    posts.length = 0; // TranslatePress posts on Dutch URLs; the form check below only counts its own page.
     await go(page, `${LEARN}/sessions/eudi-business-wallets-in-practice/`);
     const t = await page.locator(".fides-learn").innerText();
     check(`${L("training")}: facts box with price, duration, group size`, /€999/.test(t) && /One day/.test(t) && /6.16 participants/.test(t) && (await page.locator(".fides-learn-details").count()) === 1);

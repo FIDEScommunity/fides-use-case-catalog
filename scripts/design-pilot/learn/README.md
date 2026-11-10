@@ -291,3 +291,13 @@ The Services section is separate from Learn. Its own page tree sits under `/fide
 - **Other services** have no page of their own. Their actions go to Contact. When a page exists, change the URL in the `services` line.
 - **Translation.** All visible text is server-rendered and translatable in TranslatePress. The enquiry labels that the form script rewrites ("Back to ...", "Return to ...", the context label) are JavaScript strings; the section name and prefix come from data attributes, so only the fixed words need a dynamic translation.
 
+
+## Availability and training partnerships
+
+FIDES serves an international audience, while its own services and physical trainings currently take place mostly in the Netherlands. Every page stays visible to everyone: there is no IP filtering or blocking.
+
+- **One source.** Location, language and format are separate facts in the `details` field of an offering page (`Label | Value` per line). There is no extra field. Do not mix them in one row.
+- **Open training.** `Location | Utrecht, the Netherlands` is confirmed and also shows on its overview card. Language and online participation are deliberately not stated until they are decided. Add `Language | …` or `Online | …` rows when they are.
+- **Team sessions and the readiness assessment.** The last details row is `Availability | Primarily available in the Netherlands. Contact us to discuss your requirements and location.` Editors change that row on the Wallet Introduction, Wallet Readiness Workshop and Wallet readiness assessment pages. The overview cards show a row only when it exists in the details field (format, location, audience, price), so the availability line stays on the detail pages and the overview stays compact.
+- **Training partnerships.** The text sits in two places: the block on the Training & workshops page (body content) and the Training partnerships page (excerpt and body). It says FIDES wants to talk with training providers, including outside the Netherlands, that no partner network or programme exists yet and that nothing is agreed. "Discuss a partnership" opens the existing enquiry. There is no partner catalogue, paid placement, commission handling or booking.
+- **Translation.** The availability line and the partnership text are server-rendered, so TranslatePress can translate them. Until a Dutch translation exists, a Dutch URL shows the English text. Changed English strings lose their Dutch translation: the partnership excerpt ("Are you a training provider looking to offer …"), the hub block ("Do you run training courses …") and the partnership page body ("FIDES works with training partners …"). Translate the new availability and partnership strings in TranslatePress.
