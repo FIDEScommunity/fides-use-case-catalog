@@ -21,6 +21,60 @@ async function go(page, url) {
 }
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
 
+/** Services lives under About FIDES: current state, keyboard and touch targets on desktop and in the mobile menu. */
+async function checkNavigation(page, L, width, where) {
+  const header = await page.evaluate(() => ({
+    mainServices: [...document.querySelectorAll(".fides-ds-site-nav__link")].some((a) => a.textContent.trim() === "Services"),
+    toggle: (document.querySelector('[aria-controls="fides-ds-panel-about"]') || {}).getAttribute ? document.querySelector('[aria-controls="fides-ds-panel-about"]').getAttribute("aria-current") : null,
+  }));
+  check(`${L(where)}: Services is not a main item, About FIDES is the current dropdown`, !header.mainServices && header.toggle === "true", JSON.stringify(header));
+  if (width >= 1100) {
+    const toggle = page.locator('[aria-controls="fides-ds-panel-about"]');
+    await toggle.focus();
+    await page.keyboard.press("Enter");
+    const opened = (await toggle.getAttribute("aria-expanded")) === "true";
+    const link = page.locator("#fides-ds-panel-about a", { hasText: /^Services/ });
+    const cur = await link.getAttribute("aria-current");
+    check(`${L(where)}: About FIDES opens with Enter and lists Services as current`, opened && (cur === "page" || cur === "true"), String(cur));
+    await page.keyboard.press("Escape");
+    check(`${L(where)}: Escape closes About FIDES and returns focus to its button`, (await toggle.getAttribute("aria-expanded")) === "false" && (await page.evaluate(() => document.activeElement && document.activeElement.getAttribute("aria-controls") === "fides-ds-panel-about")));
+    await page.keyboard.press("Space");
+    check(`${L(where)}: Space opens About FIDES`, (await toggle.getAttribute("aria-expanded")) === "true");
+    await page.keyboard.press("Tab");
+    const first = await page.evaluate(() => document.activeElement.textContent.trim());
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Tab");
+    const order = await page.evaluate(() => document.activeElement.textContent.trim());
+    check(`${L(where)}: Tab walks About, Manifesto and Services inside the panel`, /^About FIDES/.test(first) && /^Services/.test(order), `${first}|${order}`);
+    await page.keyboard.press("Escape");
+    await toggle.focus();
+    await page.keyboard.press("ArrowDown");
+    check(`${L(where)}: ArrowDown on the closed button opens the panel`, (await toggle.getAttribute("aria-expanded")) === "true");
+    await page.keyboard.press("Escape");
+    const targets = await page.evaluate(() => [document.querySelector('[aria-controls="fides-ds-panel-about"]')].map((e) => Math.round(e.getBoundingClientRect().height)));
+    check(`${L(where)}: About FIDES button is tall enough`, targets[0] >= 36, String(targets));
+  } else {
+    const burger = page.locator("[data-fides-ds-menu-open]");
+    await burger.focus();
+    await page.keyboard.press("Enter");
+    await page.locator("#fides-ds-menu").waitFor({ state: "visible" });
+    const summary = page.locator("#fides-ds-menu summary", { hasText: "About FIDES" });
+    const open = await page.evaluate(() => { const d = [...document.querySelectorAll("#fides-ds-menu details")].find((x) => /About FIDES/.test(x.querySelector("summary").textContent)); return d ? d.open : null; });
+    const link = page.locator("#fides-ds-menu details a", { hasText: /^Services$/ });
+    const cur = await link.getAttribute("aria-current");
+    const sizes = await page.evaluate(() => ["#fides-ds-menu details summary", "#fides-ds-menu details a"].map((s) => { const el = [...document.querySelectorAll(s)].find((x) => x.offsetParent && /About FIDES|^Services$/.test(x.textContent.trim())); return el ? Math.round(el.getBoundingClientRect().height) : 0; }));
+    check(`${L(where)}: mobile menu has About FIDES open with Services as current, targets at least 44px`, open === true && (cur === "page" || cur === "true") && sizes.every((h) => h >= 43), JSON.stringify({ open, cur, sizes }));
+    await summary.focus();
+    await page.keyboard.press("Enter");
+    const closed = await page.evaluate(() => { const d = [...document.querySelectorAll("#fides-ds-menu details")].find((x) => /About FIDES/.test(x.querySelector("summary").textContent)); return d.open; });
+    await page.keyboard.press("Enter");
+    check(`${L(where)}: Enter on the About FIDES summary toggles it`, closed === false);
+    check(`${L(where)}: no overflow with the menu open`, !(await overflow(page)));
+    await page.keyboard.press("Escape");
+    await page.waitForFunction(() => document.querySelector("#fides-ds-menu").hidden, null, { timeout: 3000 }).catch(() => {});
+  }
+}
+
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" });
   for (const width of WIDTHS) {
@@ -36,7 +90,12 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     await go(page, `${SERVICES}/`);
     const text = await page.locator("main").innerText();
     check(`${L("overview")}: one H1, shell header, no Learn bar, no overflow`, (await page.locator("h1").count()) === 1 && (await page.locator(".fides-ds-site-header").count()) === 1 && (await page.locator("[data-fides-learn-bar]").count()) === 0 && !(await overflow(page)));
-    check(`${L("overview")}: Services is the current main navigation item`, await page.evaluate(() => [...document.querySelectorAll(".fides-ds-site-nav__link")].some((a) => a.textContent.trim() === "Services" && a.hasAttribute("aria-current"))) || width < 1000);
+    await checkNavigation(page, L, width, "overview");
+    const h1 = await page.locator("h1").evaluate((e) => { const s = getComputedStyle(e); return `${s.fontSize}/${s.lineHeight}`; });
+    const want = width >= 1100 ? "36px/42px" : width >= 600 ? "34px/40px" : "30px/34px";
+    check(`${L("overview")}: H1 uses the shared detail-title size (${want})`, h1 === want, h1);
+    const hero = await page.evaluate(() => ({ firstRow: Math.round(document.querySelector(".fides-learn-service").getBoundingClientRect().top), vh: innerHeight }));
+    check(`${L("overview")}: the first service starts early on the page`, width >= 1100 ? hero.firstRow <= 600 : hero.firstRow <= hero.vh * 0.75, JSON.stringify(hero));
     const titles = await page.locator(".fides-learn-service .fides-ds-card__title").evaluateAll((els) => els.map((e) => [...e.querySelector("a").childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent).join("").trim()));
     check(`${L("overview")}: four services in order`, titles.join("|") === "Wallet readiness assessment|Use case and business case|Independent advice and selection|Project and ecosystem coordination", titles.join("|"));
     check(`${L("overview")}: no prices or price indications`, !/€|\bprice\b|\bfee\b|excluding VAT/i.test(text));
@@ -62,6 +121,9 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     await page.locator(".fides-learn-service a.fides-ds-card__link").first().click();
     await page.waitForURL(/wallet-readiness-assessment/);
     check(`${L("assessment")}: one H1, no overflow, no JavaScript errors`, (await page.locator("h1").count()) === 1 && (await page.locator("h1").innerText()) === "Prepare your service for digital wallets." && !(await overflow(page)) && errors.length === 0, errors.join("|"));
+    const ah1 = await page.locator("h1").evaluate((e) => { const s = getComputedStyle(e); return `${s.fontSize}/${s.lineHeight}`; });
+    check(`${L("assessment")}: H1 is ${want} like Paper 30.3 (not 48/52)`, ah1 === want, ah1);
+    if (width >= 1100) await checkNavigation(page, L, width, "assessment");
     const crumbs = await page.locator(".fides-learn__crumbs li").allInnerTexts();
     check(`${L("assessment")}: breadcrumb Home / Services / assessment`, crumbs.join("/") === "Home/Services/Wallet readiness assessment", crumbs.join("/"));
     const a = await page.locator("main").innerText();
@@ -113,6 +175,9 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     check(`${L("enquiry")}: assessment preselected, context and back link`, selected === "wallet-readiness-assessment" && ctx1 === "Services · Wallet readiness assessment" && /wallet-readiness-assessment\/$/.test(back), `${selected}|${ctx1}|${back}`);
     const options = await page.locator("#fides-learn-offering option").allInnerTexts();
     check(`${L("enquiry")}: only service contexts, no webinar interest, no dates`, options.join("|") === "No specific offering|Wallet readiness assessment" && (await page.locator("[data-fides-learn-date-field]").count()) === 0, options.join("|"));
+    const next = await page.locator(".fides-learn-request__aside .fides-learn__content").innerText();
+    check(`${L("enquiry")}: "What happens next" says it describes the live process`, /What happens next/.test(next) && /preview\. Once it is live/.test(next) && /We will read your enquiry/.test(next), next.slice(0, 200));
+    check(`${L("enquiry")}: JavaScript texts are also in the page as translatable strings`, (await page.locator("[data-fides-learn-strings] li").count()) >= 14 && (await page.locator('[data-fides-learn-strings] li[data-key="back"]').textContent()) === "Back to %s");
     check(`${L("enquiry")}: no price or fee in the next steps`, !/€|\bprice\b|\bfee\b/i.test(await page.locator("main").innerText()));
     check(`${L("enquiry")}: local notice present, no overflow`, /Nothing you enter here is sent or stored/.test(await page.locator(".fides-learn-pilot-note").first().innerText()) && !(await overflow(page)));
     await page.locator("[data-fides-learn-remove-context]").click();
@@ -129,6 +194,45 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     await page.locator("[data-fides-learn-back]").click();
     await page.waitForURL(/wallet-readiness-assessment\/$/);
     check(`${L("enquiry")}: back returns to the assessment`, true);
+    // ---- Dutch route: texts, links stay under /nl/, JavaScript texts translate, English fallback is gone for these pages
+    if (width === 1440 || width <= 390) {
+      await go(page, `/nl${SERVICES}/`);
+      const nlText = await page.locator("main").innerText();
+      check(`${L("nl")}: overview is Dutch`, /Praktische ondersteuning bij digitale wallets en credentials\./.test(nlText) && /Waarmee kunnen wij u helpen\?/.test(nlText) && !/Practical support for/.test(nlText));
+      const nlLinks = await page.locator("main a[href]").evaluateAll((a) => a.map((x) => x.getAttribute("href")).filter((h) => h && !/^(https?:)?\/\/(?!localhost)/.test(h) && !h.startsWith("#")));
+      check(`${L("nl")}: internal links stay in the Dutch route`, nlLinks.length >= 3 && nlLinks.every((h) => /^(https?:\/\/localhost:\d+)?\/nl\//.test(h)), nlLinks.join("|"));
+      const nlHeader = await page.evaluate(() => ({ about: [...document.querySelectorAll("#fides-ds-panel-about a")].map((a) => a.textContent.trim().replace(/ →$/, "")), cur: document.querySelector('[aria-controls="fides-ds-panel-about"]').getAttribute("aria-current") }));
+      check(`${L("nl")}: About FIDES panel keeps Services current and links stay in /nl/`, nlHeader.cur === "true" && nlHeader.about.includes("Diensten"), JSON.stringify(nlHeader));
+      check(`${L("nl")}: no overflow`, !(await overflow(page)));
+      await go(page, `/nl${SERVICES}/wallet-readiness-assessment/`);
+      const nlAssess = await page.locator("main").innerText();
+      check(`${L("nl")}: assessment is Dutch, with the availability line`, /Bereid uw dienst voor op digitale wallets\./.test(nlAssess) && /Vooral beschikbaar in Nederland\./.test(nlAssess) && !(await overflow(page)));
+      await go(page, `/nl${SERVICES}/enquiry/?offering=wallet-readiness-assessment`);
+      const nlCtx = await page.locator("[data-fides-learn-context-label]").innerText();
+      const nlBack = await page.locator("[data-fides-learn-back-label]").innerText();
+      check(`${L("nl")}: enquiry context and back link are Dutch`, nlCtx === "Diensten · Wallet readiness assessment" && nlBack === "Terug naar Wallet readiness assessment", `${nlCtx}|${nlBack}`);
+      await page.locator("[data-fides-learn-remove-context]").click();
+      await page.waitForFunction(() => /geen specifiek aanbod/.test(document.querySelector("[data-fides-learn-context-label]").textContent), null, { timeout: 5000 }).catch(() => {});
+      check(`${L("nl")}: removing the context gives Dutch texts`, (await page.locator("[data-fides-learn-context-label]").innerText()) === "Diensten · geen specifiek aanbod" && (await page.locator("[data-fides-learn-back-label]").innerText()) === "Terug naar Diensten" && (await page.locator("[data-fides-learn-return-label]").innerText()) === "Terug naar Diensten");
+      await page.selectOption("#fides-learn-offering", "wallet-readiness-assessment");
+      await page.locator("[data-fides-learn-submit]").click();
+      await page.waitForFunction(() => /Welke dienst/.test(document.querySelector("[data-fides-learn-question-label]").textContent), null, { timeout: 5000 }).catch(() => {});
+      await page.locator("[data-fides-learn-submit]").click();
+      await page.waitForTimeout(300);
+      const nlErrors = await page.locator("[data-fides-learn-summary]").innerText();
+      check(`${L("nl")}: validation messages are Dutch`, /Controleer uw invoer/.test(nlErrors) && /Vul een waarde in voor Naam\./.test(nlErrors) && /Vul uw e-mailadres in\./.test(nlErrors), nlErrors);
+      await page.fill("#fides-learn-name", "Test Persoon");
+      await page.fill("#fides-learn-email", "test@example.org");
+      await page.fill("#fides-learn-org", "Test Org");
+      await page.fill("#fides-learn-question", "Een testvraag");
+      await page.locator("[data-fides-learn-submit]").click();
+      await page.waitForFunction(() => document.querySelector("[data-fides-learn-result]") && /Aanbod:/.test(document.querySelector("[data-fides-learn-result]").innerText), null, { timeout: 5000 }).catch(() => {});
+      const nlRes = await page.locator("[data-fides-learn-result]").innerText();
+      check(`${L("nl")}: preview result is Dutch and says nothing was sent`, /Alleen een voorbeeld: er is niets verstuurd/.test(nlRes) && /Aanbod: Wallet readiness assessment/.test(nlRes));
+      const nlNext = await page.locator(".fides-learn-request__aside .fides-learn__content").innerText();
+      check(`${L("nl")}: "What happens next" is Dutch and refers to after launch`, /Zodra het live staat/.test(nlNext));
+      posts.length = 0;
+    }
     await ctx.close();
   }
   await browser.close();

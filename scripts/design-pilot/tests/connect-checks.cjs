@@ -185,7 +185,7 @@ async function nav(browser, width) {
     const rows = await page.locator(".fides-ds-site-nav__item").evaluateAll((l) => new Set(l.map((x) => Math.round(x.getBoundingClientRect().top))).size);
     check(`${tag}: main items stay on one line`, rows === 1, String(rows));
     // Keyboard: toggle opens with Enter, Tab reaches the first link, Escape closes and returns focus.
-    for (const key of ["explore", "ecosystem", "tools"]) {
+    for (const key of ["explore", "ecosystem", "tools", "about"]) {
       const toggle = page.locator(`[aria-controls="fides-ds-panel-${key}"]`);
       await toggle.focus();
       await page.keyboard.press("Enter");
@@ -246,7 +246,7 @@ async function hidden(browser) {
 }
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
   for (const w of WIDTHS) {
     await home(browser, w);
     await nav(browser, w);

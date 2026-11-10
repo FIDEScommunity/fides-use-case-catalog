@@ -17,7 +17,7 @@ const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - 
 const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
   for (const w of WIDTHS) {
     const tag = `${w}px`;
     const ctx = await browser.newContext({ viewport: { width: w, height: 900 } });
@@ -127,7 +127,7 @@ const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA
       const burger = page.locator(".fides-ds-menu-toggle, [data-fides-ds-menu-toggle], button[aria-controls*='menu']").first();
       if (await burger.count()) { await burger.click().catch(() => {}); }
     }
-    const nav = await page.evaluate(() => [...document.querySelectorAll(".fides-ds-site-nav__link, .fides-ds-menu__link, .fides-ds-site-footer__link")].filter((a) => a.textContent.trim() === "About FIDES").map((a) => ({ cls: a.className, href: a.getAttribute("href"), cur: a.getAttribute("aria-current") })));
+    const nav = await page.evaluate(() => [...document.querySelectorAll(".fides-ds-site-nav__panel-link, .fides-ds-menu__link, .fides-ds-site-footer__link")].filter((a) => a.hasAttribute("href") && /^About FIDES( →)?$/.test(a.textContent.trim())).map((a) => ({ cls: a.className, href: a.getAttribute("href"), cur: a.getAttribute("aria-current") })));
     const here = new URL(ABOUT).pathname;
     check(`${tag}: header, mobile menu and footer About links point at the pilot page`, nav.length === 3 && nav.every((n) => new URL(n.href, BASE).pathname === here && n.cur === "page"), JSON.stringify(nav));
 
@@ -138,12 +138,13 @@ const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA
     check(`${tag}: footer About FIDES opens the page`, new URL(page.url()).pathname === here && (await page.locator("h1").first().textContent()).includes("independent platform"));
     if (w >= 1024) {
       await page.goto(`${BASE}/fides-design-pilot/updates/`, { waitUntil: "domcontentloaded" });
-      await page.locator(".fides-ds-site-nav__link", { hasText: "About FIDES" }).first().click();
+      await page.locator('[aria-controls="fides-ds-panel-about"]').click();
+      await page.locator("#fides-ds-panel-about a", { hasText: "About FIDES" }).first().click();
       await page.waitForURL("**/about-fides/**");
       check(`${tag}: header About FIDES opens the page`, new URL(page.url()).pathname === here);
     } else {
       await page.goto(`${BASE}/fides-design-pilot/updates/`, { waitUntil: "domcontentloaded" });
-      const href = await page.evaluate(() => [...document.querySelectorAll(".fides-ds-menu__link")].find((a) => a.textContent.trim() === "About FIDES")?.getAttribute("href"));
+      const href = await page.evaluate(() => [...document.querySelectorAll("a.fides-ds-menu__link")].find((a) => a.textContent.trim() === "About FIDES")?.getAttribute("href"));
       check(`${tag}: mobile menu About FIDES targets the page`, href && new URL(href, BASE).pathname === here, String(href));
     }
 

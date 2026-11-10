@@ -60,11 +60,15 @@ $header = Fides_DS_Site_Shell::render_header();
 foreach (array('Learn', 'Explore', 'Updates', 'Ecosystem', 'Tools &amp; API', 'About FIDES', 'Contact', 'Search', 'Sign in', 'Menu') as $label) {
     $check(strpos($header, '>' . $label) !== false, "header shows {$label}");
 }
-// Paper page 02: Learn, Explore, Services, Updates, Ecosystem, Tools & API, About FIDES; Contact, Search and Sign in on the right.
+// Main items: Learn, Explore, Updates, Ecosystem, Tools & API, About FIDES (a dropdown that also holds Services); Contact, Search and Sign in on the right.
 preg_match('#<nav[^>]*aria-label="Main">(.*?)</nav>#s', $header, $main_nav);
 preg_match_all('#fides-ds-site-nav__(?:link|toggle)"[^>]*>([^<]+)#', $main_nav[1] ?? '', $main_labels);
-$check(array_map('html_entity_decode', $main_labels[1]) === array('Learn', 'Explore', 'Services', 'Updates', 'Ecosystem', 'Tools & API', 'About FIDES'), 'main items follow Paper (the pilot maps Services to its Services page): ' . implode(' | ', $main_labels[1]));
+$check(array_map('html_entity_decode', $main_labels[1]) === array('Learn', 'Explore', 'Updates', 'Ecosystem', 'Tools & API', 'About FIDES'), 'main items: Services is not a main item, About FIDES is a dropdown: ' . implode(' | ', $main_labels[1]));
 $check(strpos($header, '>Community<') === false && strpos($header, '/fides-design-pilot/services/') !== false, 'no Community item; Services links to the pilot Services page');
+preg_match('#id="fides-ds-panel-about".*?</div></div></div>#s', $header, $about_panel);
+$check(isset($about_panel[0]) && strpos($about_panel[0], '>About FIDES') !== false && strpos($about_panel[0], '>Manifesto') !== false && strpos($about_panel[0], '/fides-design-pilot/services/') !== false && strpos($about_panel[0], 'Services') !== false, 'About FIDES panel holds About FIDES, Manifesto and Services');
+$check(preg_match('#fides-ds-site-nav__link"[^>]*>Services#', $header) === 0, 'Services is not a main navigation link');
+$check(strpos($header, 'aria-controls="fides-ds-panel-about"') !== false && preg_match('#aria-current="true" aria-controls="fides-ds-panel-about"#', $header) === 0, 'About FIDES toggle is not marked current outside its pages');
 $check(strpos($header, '>Plans<') !== false && preg_match('#class="fides-ds-site-nav__link"[^>]*>Plans#', $header) === 0, 'Plans lives under Ecosystem > Contribute, not in the main items');
 $check(strpos($header, 'Intermediaries') === false && strpos($header, 'Trust schemes') === false && strpos($header, 'Get help choosing') === false && strpos($header, 'Ask FIDES') === false && strpos($header, 'Interop Testbed') === false, 'links to pages that do not exist yet are not shown');
 // The language switcher is a div inside the actions, so the block ends at the search panel, not at the first </div>.
@@ -113,13 +117,19 @@ $check(strpos($header_dropped, '>Updates<') === false, 'link with an empty URL i
 $check(strpos($header, '>Awards</p>') !== false && strpos($header_dropped, '>Awards</p>') === false, 'group without links is left out');
 $check(strpos($footer_dropped, '>News<') === false, 'link with an empty URL is left out of the footer');
 $check(strpos($header_dropped, '>Plans') !== false, 'other links stay when one is dropped');
-// A site that maps a proposed page gets the link (Services).
+// A site that maps the proposed Services page gets it inside the About FIDES panel, never as a main item; an unmapped site has no Services link.
 $map_services = static function ($url, $path) { return $path === '/services/' ? home_url('/fides-design-pilot/learn/sessions/') : $url; };
 add_filter('fides_site_shell_url', $map_services, PHP_INT_MAX, 2);
 $header_services = Fides_DS_Site_Shell::render_header();
 remove_filter('fides_site_shell_url', $map_services, PHP_INT_MAX);
 preg_match_all('#fides-ds-site-nav__(?:link|toggle)"[^>]*>([^<]+)#', $header_services, $svc_labels);
-$check(array_slice($svc_labels[1], 0, 3) === array('Learn', 'Explore', 'Services'), 'a mapped Services page appears after Explore: ' . implode(' | ', $svc_labels[1]));
+$check(array_slice($svc_labels[1], 0, 3) === array('Learn', 'Explore', 'Updates'), 'a mapped Services page is not a main item: ' . implode(' | ', $svc_labels[1]));
+$check(preg_match('#id="fides-ds-panel-about".*?>Services#s', $header_services) === 1, 'a mapped Services page appears in the About FIDES panel');
+$unmap_services = static function ($url, $path) { return $path === '/services/' ? '' : $url; };
+add_filter('fides_site_shell_url', $unmap_services, PHP_INT_MAX, 2);
+$header_no_services = Fides_DS_Site_Shell::render_header();
+remove_filter('fides_site_shell_url', $unmap_services, PHP_INT_MAX);
+$check(strpos($header_no_services, '>Services') === false && strpos($header_no_services, 'id="fides-ds-panel-about"') !== false && strpos($header_no_services, '>Manifesto') !== false, 'an unmapped Services page leaves About FIDES with About and Manifesto');
 
 // A site that does not map the proposed routes shows no Learn item and keeps the Explorer entry.
 $unmapped = static function ($url, $path) {

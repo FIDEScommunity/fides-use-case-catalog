@@ -73,7 +73,7 @@ async function go(page, url) {
     // Dutch pages: new English strings fall back to English, existing Dutch location text stays.
     await go(page, `/nl${LEARN}/sessions/wallet-introduction/`);
     const nlIntro = await page.locator(".fides-learn-details").innerText();
-    check(`${L("nl")}: availability line falls back to English, layout intact`, /Primarily available in the Netherlands\. Contact us to discuss your requirements and location\./.test(nlIntro) && !(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)));
+    check(`${L("nl")}: availability line is Dutch (learn/nl-translations.php), layout intact`, /Vooral beschikbaar in Nederland\. Neem contact met ons op/.test(nlIntro) && !(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)));
     await go(page, `/nl${LEARN}/sessions/training-partnerships/`);
     check(`${L("nl")}: partnership page readable on a Dutch URL`, /outside the Netherlands|buiten Nederland/.test(await page.locator(".fides-learn").innerText()) && !(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)));
 
