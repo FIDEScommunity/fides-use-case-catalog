@@ -108,6 +108,20 @@
    "menu_order": 4
   },
   {
+   "path": "topics/the-big-picture/formats-and-protocols",
+   "title": "Formats and protocols: what do they do?",
+   "kind": "article",
+   "eyebrow": "Explainer · The big picture",
+   "excerpt": "A credential format describes how information is represented. A protocol sets out how systems exchange it. Both matter when wallets and services need to work together.",
+   "sources": "OpenID Foundation · OpenID for Verifiable Credential Issuance 1.0 | https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-final.html\nOpenID Foundation · OpenID for Verifiable Presentations 1.0 | https://openid.net/specs/openid-4-verifiable-presentations-1_0-final.html\nIETF · SD-JWT-based Verifiable Credentials (Internet-Draft) | https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/\nW3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/",
+   "cta_title": "See how this looks in practice",
+   "cta_text": "Browse use cases, then follow the connections to the credentials and wallets involved.",
+   "cta_label": "Explore use cases",
+   "cta_url": "{{pilot}}/overview/",
+   "content": "formats-and-protocols.html",
+   "menu_order": 5
+  },
+  {
    "path": "topics/for-businesses/issuing-credentials-for-wallets",
    "title": "Issuing credentials for wallets",
    "kind": "article",
