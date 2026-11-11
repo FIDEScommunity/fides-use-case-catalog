@@ -111,6 +111,7 @@ statements (availability by end 2026, acceptance rules) before each publication.
 The **European Business Wallet** article (`topics/for-businesses/european-business-wallet/`) works the
 same way: text, "Continue learning", sources field and the "Content last checked" line. It describes a
 legislative proposal; recheck the status paragraph before each publication.
+Source URLs keep percent-encoding (`%3A` and similar): the Learn fields use `Fides_DS_Learn::sanitize_field_value()`, not `sanitize_text_field()`, which deletes `%xx`. "Continue learning" lists are grouped under "Learn more" and "Explore in the catalogs"; the closing band (manifest `cta_*`) is the single place for the workshop or catalog button. Glossary wording proposals that the pilot cannot change live in `learn/glossary-proposals.md`. "Terms in this article" shows whole sentences and a "Full definition" button.
 Only links to existing pages are present; "Issue credentials for wallets" is added when that page exists.
 
 **Agent (layout):** change `learn.css`/`learn.js`/`class-fides-ds-learn.php` in the
