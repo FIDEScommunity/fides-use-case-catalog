@@ -25,7 +25,7 @@ const OTHER_DATE_KEY = "thursday-18-march-2027";
 const ERR = "em.wpforms-error, label.wpforms-error";
 const CONF = ".wpforms-confirmation-container, .wpforms-confirmation-container-full";
 const TEAM = "request@example.invalid";
-// ONLY=nl (comma list of routes,contacts,service,a11y,ctx,click,en,nl,outcomes) runs a subset while debugging; default is everything.
+// ONLY=nl (comma list of routes,contacts,service,switch,a11y,ctx,click,en,nl,outcomes) runs a subset while debugging; default is everything.
 const ONLY = process.env.ONLY ? process.env.ONLY.split(",") : null;
 const want = (n) => !ONLY || ONLY.includes(n);
 
@@ -196,7 +196,7 @@ const plain = (html) => String(html).replace(/<style[\s\S]*?<\/style>/gi, " ").r
     const SVC = "use-case-and-business-case";
     // [page, link selector, expected query, offering select value, date select value or null, context, back-link path]
     const cta = [
-      ["/services/", 'a[href*="context=service"]', "context=service", "none", null, "service", "/services/"],
+      ["/services/", 'a[href*="context=service"]', "context=service", "general-service-question", null, "service", "/services/"],
       ["/services/", `a[href*="offering=${SVC}"]`, `offering=${SVC}`, SVC, null, "service", "/services/"],
       ["/services/", 'a[href*="offering=independent-advice-and-selection"]', "offering=independent-advice-and-selection", "independent-advice-and-selection", null, "service", "/services/"],
       ["/services/", 'a[href*="offering=project-and-ecosystem-coordination"]', "offering=project-and-ecosystem-coordination", "project-and-ecosystem-coordination", null, "service", "/services/"],
@@ -208,7 +208,7 @@ const plain = (html) => String(html).replace(/<style[\s\S]*?<\/style>/gi, " ").r
       ["/learn/sessions/wallet-readiness-workshop/", 'main a[href*="offering=wallet-readiness-workshop"]', "offering=wallet-readiness-workshop", "wallet-readiness-workshop", null, "training", "/learn/sessions/wallet-readiness-workshop/"],
       ["/learn/sessions/wallet-introduction/", 'main a[href*="offering=wallet-introduction"]', "offering=wallet-introduction", "wallet-introduction", null, "training", "/learn/sessions/wallet-introduction/"],
       ["/learn/sessions/training-partnerships/", 'main a[href*="offering=training-partnerships"]', "offering=training-partnerships", "training-partnerships", null, "training", "/learn/sessions/training-partnerships/"],
-      ["/about-fides/", 'a[href*="context=service"]', "context=service", "none", null, "service", "/services/"],
+      ["/about-fides/", 'a[href*="context=service"]', "context=service", "general-service-question", null, "service", "/services/"],
     ];
     for (const nl of [false, true]) {
       const p = nl ? "/nl" : "";
@@ -279,10 +279,10 @@ const plain = (html) => String(html).replace(/<style[\s\S]*?<\/style>/gi, " ").r
     ];
     if (w === WIDTHS[0]) {
       runs.push(
-        { nl: false, q: "?context=service", subject: /^New FIDES service enquiry: No specific service/, visitor: /^Your enquiry to FIDES: No specific service/, body: /We received your enquiry: No specific service/, conf: /received your enquiry/ },
+        { nl: false, q: "?context=service", subject: /^New FIDES service enquiry: General service question/, visitor: /^Your enquiry to FIDES: General service question/, body: /We received your enquiry: General service question/, conf: /received your enquiry/ },
         { nl: false, q: "?offering=wallet-readiness-assessment", subject: /^New FIDES service enquiry: Wallet readiness assessment/, visitor: /^Your enquiry to FIDES: Wallet readiness assessment/, body: /We received your enquiry: Wallet readiness assessment/, conf: /received your enquiry/ },
         { nl: false, q: "", subject: /^New FIDES request: General question/, visitor: /^Your request to FIDES: General question/, body: /We received your request: General question/, conf: /received your request and sent a confirmation/ },
-        { nl: true, q: "?context=service", subject: /^New FIDES service enquiry: Geen specifieke dienst/, visitor: /^Uw vraag aan FIDES: Geen specifieke dienst/, body: /Wij hebben uw vraag ontvangen: Geen specifieke dienst/, conf: /uw vraag ontvangen/ },
+        { nl: true, q: "?context=service", subject: /^New FIDES service enquiry: Algemene vraag over diensten/, visitor: /^Uw vraag aan FIDES: Algemene vraag over diensten/, body: /Wij hebben uw vraag ontvangen: Algemene vraag over diensten/, conf: /uw vraag ontvangen/ },
       );
     }
     for (const r of runs) {
@@ -308,6 +308,93 @@ const plain = (html) => String(html).replace(/<style[\s\S]*?<\/style>/gi, " ").r
       check(`${tag}: visitor mail subject and text fit the context`, visitor && r.visitor.test(visitor.subject) && r.body.test(plain(visitor.message)), visitor && `${visitor.subject} | ${plain(visitor.message).slice(0, 90)}`);
       check(`${tag}: no horizontal overflow and no script errors`, !(await overflow(page)) && page.pageErrors.length === 0, page.pageErrors.join("|"));
       await page.context().close();
+    }
+  }
+
+  // ---- Context follows the live choice: wording, date field and back link while switching, and the submission agrees with it
+  for (const w of want("switch") ? WIDTHS : []) {
+    for (const nl of w === WIDTHS[0] ? [false, true] : [false]) {
+      const tag = `${w}px ${nl ? "NL" : "EN"}`;
+      const T = nl
+        ? { service: /Vertel ons over uw vraag of project/, training: /Vertel ons wat u nodig hebt/, svcEyebrow: /Diensten/, trEyebrow: /Leren/, svcLabel: /Uw vraag of project/, trLabel: /Uw vraag of bericht/, svcLead: /Dit is een vraag/, trLead: /Dit is een aanvraag/, backSvc: /Terug naar Diensten/, backTr: /Terug naar Training/, confSvc: /uw vraag ontvangen/, confTr: /uw aanvraag ontvangen/, subjSvc: /^Nieuwe FIDES-dienstvraag|^New FIDES service enquiry/, visSvc: /^Uw vraag aan FIDES/, visTr: /^Uw aanvraag bij FIDES/ }
+        : { service: /Tell us about your question or project/, training: /Tell us what you need/, svcEyebrow: /Services \/ Enquiry/, trEyebrow: /Learn \/ Request/, svcLabel: /Your question or project/, trLabel: /Your question or message/, svcLead: /This is an enquiry/, trLead: /This is a request/, backSvc: /Back to Services/, backTr: /Back to Training/, confSvc: /received your enquiry/, confTr: /received your request/, subjSvc: /^New FIDES service enquiry/, visSvc: /^Your enquiry to FIDES/, visTr: /^Your request to FIDES/ };
+      // TranslatePress finishes its own pass over changed links and text a moment later in Dutch; wait for that before reading.
+      const state = async (page, id) => { if (nl) await sleep(300); return stateNow(page, id); };
+      const stateNow = (page, id) => page.evaluate((fid_) => {
+        const t = (sel) => { const e = document.querySelector(sel); return e ? e.textContent.replace(/\s+/g, " ").trim() : ""; };
+        const back = document.querySelector(".fides-learn__back");
+        const date = document.getElementById(`wpforms-${fid_}-field_3`);
+        return {
+          eyebrow: t('[data-fides-ctx="eyebrow"]'), h1: t('[data-fides-ctx="headline"]'), intro: t('[data-fides-ctx="intro"]'), lead: t('[data-fides-ctx="notice_lead"]'),
+          label: t(`#wpforms-${fid_}-field_7-container .wpforms-field-label`), desc: t(`#wpforms-${fid_}-field_2-container .wpforms-field-description`),
+          backText: back ? back.textContent.replace(/\s+/g, " ").trim() : "", backHref: back ? back.getAttribute("href") : "",
+          dateHidden: document.getElementById(`wpforms-${fid_}-field_3-container`).hidden, dateValue: date.value, active: document.activeElement && document.activeElement.id, ctx: document.getElementById(`wpforms-form-${fid_}`).getAttribute("data-fides-context"),
+          summary: t("[data-fides-request-summary]"),
+        };
+      }, id);
+      const page = await newPage(w);
+      await openForm(page, "?offering=wallet-introduction", nl);
+      const id = await fid(page);
+      let st = await state(page, id);
+      check(`${tag}: start as training: training wording, label and back link`, T.training.test(st.h1) && T.trEyebrow.test(st.eyebrow) && T.trLabel.test(st.label) && T.trLead.test(st.lead) && T.backTr.test(st.backText) === false && /Wallet Introduction|Training/.test(st.backText), JSON.stringify(st));
+      await page.focus(sel(id, 2));
+      await page.selectOption(sel(id, 2), "use-case-and-business-case");
+      st = await state(page, id);
+      check(`${tag}: switching to a service updates heading, eyebrow, intro, notice, labels and back link`, T.service.test(st.h1) && T.svcEyebrow.test(st.eyebrow) && T.svcLabel.test(st.label) && T.svcLead.test(st.lead) && T.backSvc.test(st.backText) && /\/services\/$/.test(st.backHref) && st.ctx === "service" && st.intro.length > 20, JSON.stringify(st));
+      check(`${tag}: focus stays on the offering field and the summary names the choice`, st.active === `wpforms-${id}-field_2` && /Use case|Usecase/.test(st.summary), `${st.active} | ${st.summary}`);
+      check(`${tag}: a service has no date field`, st.dateHidden && st.dateValue === "");
+      await page.selectOption(sel(id, 2), TRAINING);
+      st = await state(page, id);
+      check(`${tag}: switching to a dated training brings back the training wording and the date field`, T.training.test(st.h1) && T.trLabel.test(st.label) && !st.dateHidden && st.ctx === "training" && /\/learn\/sessions\//.test(st.backHref), JSON.stringify(st));
+      await page.selectOption(sel(id, 3), `${TRAINING}:${DATE_KEY}`);
+      await page.selectOption(sel(id, 2), "independent-advice-and-selection");
+      st = await state(page, id);
+      check(`${tag}: a date of the previous training is cleared when a service is chosen`, st.dateHidden && st.dateValue === "" && T.service.test(st.h1), JSON.stringify(st));
+      await page.selectOption(sel(id, 2), "wallet-readiness-workshop");
+      check(`${tag}: the workshop date list only holds its own dates`, await page.$$eval(`${sel(id, 3)} option:not([disabled])`, (os) => os.every((o) => o.value === "" || o.value === "not-sure" || o.value.startsWith("wallet-readiness-workshop:"))));
+      await page.selectOption(sel(id, 2), "general-service-question");
+      st = await state(page, id);
+      check(`${tag}: the general service question is a service context`, T.service.test(st.h1) && st.ctx === "service");
+      await page.selectOption(sel(id, 2), "none");
+      st = await state(page, id);
+      check(`${tag}: no specific offering is a general question with the general wording`, T.training.test(st.h1) && T.trLabel.test(st.label) && st.ctx === "general" && st.dateHidden, JSON.stringify(st));
+      // Keyboard: arrow keys on the focused select change the context without moving focus.
+      await page.focus(sel(id, 2));
+      await page.keyboard.type(nl ? "Algemene vraag" : "General service"); // type-ahead on the focused select, as a keyboard user would
+      await sleep(300);
+      st = await state(page, id);
+      check(`${tag}: arrow keys on the offering select reach a service, the wording follows and focus stays`, st.ctx === "service" && T.service.test(st.h1) && st.active === `wpforms-${id}-field_2`, JSON.stringify(st));
+      // Remove the choice with the button in the summary.
+      await page.click("[data-fides-request-summary] button");
+      st = await state(page, id);
+      check(`${tag}: "remove this choice" returns to the general wording`, st.ctx === "general" && T.training.test(st.h1) && (await page.locator(sel(id, 2)).inputValue()) === "none" && st.active === `wpforms-${id}-field_2`, JSON.stringify(st));
+      check(`${tag}: no script errors and no overflow while switching`, page.pageErrors.length === 0 && !(await overflow(page)), page.pageErrors.join("|"));
+      await page.context().close();
+
+      // Submission agrees with the live choice, not with the entry link.
+      const sends = [
+        { name: "service entry, switched to a dated training", q: "?offering=use-case-and-business-case", pick: [TRAINING, `${TRAINING}:${DATE_KEY}`], conf: T.confTr, subj: /^New FIDES request: EUDI/, vis: T.visTr },
+        { name: "training entry, switched to a service", q: `?offering=${TRAINING}&session=${DATE_KEY}`, pick: ["independent-advice-and-selection"], conf: T.confSvc, subj: /^New FIDES service enquiry: /, vis: T.visSvc },
+        { name: "service entry, choice removed", q: "?offering=use-case-and-business-case", pick: ["none"], conf: T.confTr, subj: /^New FIDES request: General question/, vis: T.visTr },
+        { name: "training entry, switched to the general service question", q: "?offering=wallet-introduction", pick: ["general-service-question"], conf: T.confSvc, subj: /^New FIDES service enquiry: General service question/, vis: T.visSvc },
+      ];
+      for (const r of nl ? sends.slice(0, 2) : sends) {
+        const p2 = await newPage(w);
+        clearMail();
+        setMode("capture");
+        await openForm(p2, r.q, nl);
+        const id2 = await fid(p2);
+        await p2.selectOption(sel(id2, 2), r.pick[0]);
+        if (r.pick[1]) await p2.selectOption(sel(id2, 3), r.pick[1]);
+        const email = `sw-${w}-${Date.now()}-${Math.floor(Math.random() * 1e4)}@example.com`;
+        await fillAndSend(p2, id2, { name: "Switch Tester", email, msg: "Switch request-capture-marker" });
+        const conf = await confText(p2);
+        const sent = mails();
+        const team = sent.find((m) => m.to === TEAM);
+        const vis = sent.find((m) => m.to === email);
+        check(`${tag} ${r.name}: confirmation, FIDES subject and visitor mail all follow the submitted choice`, r.conf.test(conf) && team && r.subj.test(team.subject) && vis && r.vis.test(vis.subject), `${conf || (await whyNot(p2))} | ${team && team.subject} | ${vis && vis.subject}`);
+        await p2.context().close();
+      }
     }
   }
 

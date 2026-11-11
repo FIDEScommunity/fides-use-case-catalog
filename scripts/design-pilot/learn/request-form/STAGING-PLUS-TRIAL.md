@@ -15,13 +15,13 @@ All paths are relative to the plugin or the package. Check the "base" hash of th
 | --- | --- | --- | --- |
 | `wp-content/plugins/fides-community-tools-tiles/fides-community-tools-tiles.php` | tiles `fides-community-tools-tiles.php` | `1dce26b42ec77fbf152f41893d38fc2a94dc0e5e445f36d0e5ee29bb58484cec` | `1a2a8bd4b09bf1bb70d332ad76f35806e4ce3d67c1d038b2937082eec1404565` |
 | `.../includes/class-fides-ds-learn.php` | tiles `includes/class-fides-ds-learn.php` | `c2033a52635a4826c7eb5cf20bffc9031df2115e95c924da41b6a5a41e8980cf` | `b39d5ac9ed282ed2bffa4901e1b8452f63bf12d3dc0066145464a66ea33bea42` |
-| `.../includes/class-fides-ds-request-form.php` (new) | tiles `includes/class-fides-ds-request-form.php` | `a03f5472e82e4e7b1050a2d10b5525abb893a3b31da141e8deb2cd159a4348a4` | not present |
+| `.../includes/class-fides-ds-request-form.php` (new) | tiles `includes/class-fides-ds-request-form.php` | `550a002b4c69ea30427d2591ac92956cf9afce68a32f7b78749a057a8a720dce` | not present |
 | `.../includes/class-fides-ds-about.php` | tiles `includes/class-fides-ds-about.php` | `ff7f5932ed75d9ba5c9c6f949fc04128e366132ea961c18f32f9a5cb9a863ec5` | not compared (not changed by the trial before this version) |
 | `.../assets/request-form.css` (new) | tiles `assets/request-form.css` | `9a002c3ede28001f4c173a732d7f15892f7caa8c5946c2ab864691a1b841a72f` | not present |
-| `.../assets/request-form.js` (new) | tiles `assets/request-form.js` | `360d9e21300e730a39ecfe318715ef59f7cfea646fa9eef4915dc496b3966b6d` | not present |
+| `.../assets/request-form.js` (new) | tiles `assets/request-form.js` | `ee60c1560c83f23222006c267585aca6c5b3a23ae90cc564d76023dee6084066` | not present |
 | `seed/seed-request-form.php` (new, next to `create-pages.php`) | use-case-catalog `scripts/design-pilot/seed-request-form.php` | `3a2d2b8b60a8ed0a3976d94fa5861947de55297b65fd459f23097501cc2259ad` | not present |
 | `seed/learn/request-form/fides-request-form.json` (new) | `.../learn/request-form/fides-request-form.json` | `8376d0eac330f14c2106f41b0d7ebb326a9872366ab4cfb34e0b540df11b0805` | not present |
-| `seed/learn/nl-translations.php` | `.../learn/nl-translations.php` | `5cdde1ff94260a36d585fd5e48054feff5bc77345447d6f614dd0a360baa95f2` | `534a091b5132be49d456e8ab60d218ccbf1957da30704b2006a606db2be56519` |
+| `seed/learn/nl-translations.php` | `.../learn/nl-translations.php` | `21346e8f9be2f21ef4950246188c480c6cf68c5ec3b7bc1af8f9a8c15c854199` | `534a091b5132be49d456e8ab60d218ccbf1957da30704b2006a606db2be56519` |
 | not deployed; run from your machine | `.../tests/staging-plus-checks.cjs` | `3b2ba12901067dd257e03ab72e17d75c01ed3aaa298c93681b88651e4cd8b160` | not present |
 
 The tiles files differ from package 1.13.44 only by the request form changes (a `require_once`, a wrapper and a branch in `class-fides-ds-learn.php`).

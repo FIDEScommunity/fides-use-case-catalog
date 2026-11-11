@@ -217,6 +217,30 @@ wr_ok('follow-up sentence is empty by default and filterable', $ref->invoke(null
 remove_all_filters('fides_ds_request_form_followup');
 wr_ok('follow-up sentence is empty without a filter', $ref->invoke(null, 'en') === '');
 
+// ---- Context comes from the chosen offering only
+$ctx = new ReflectionMethod('Fides_DS_Request_Form', 'context_for');
+$ctx->setAccessible(true);
+wr_ok('context: a service, a training and no offering', $ctx->invoke(null, 'use-case-and-business-case') === 'service' && $ctx->invoke(null, 'general-service-question') === 'service' && $ctx->invoke(null, 'wallet-introduction') === 'training' && $ctx->invoke(null, '') === 'general' && $ctx->invoke(null, 'bogus') === 'general');
+$_GET['context'] = 'service';
+$link = new ReflectionMethod('Fides_DS_Request_Form', 'link_choice');
+$link->setAccessible(true);
+wr_ok('?context=service without an offering selects the general service question', $link->invoke(null)[0] === 'general-service-question');
+$_GET['offering'] = 'wallet-introduction';
+wr_ok('an offering in the link wins over ?context=service', $link->invoke(null)[0] === 'wallet-introduction');
+$_GET['context'] = 'evil';
+unset($_GET['offering']);
+wr_ok('unknown context values are ignored', $link->invoke(null)[0] === '');
+unset($_GET['context']);
+$posted = new ReflectionMethod('Fides_DS_Request_Form', 'posted_context');
+$posted->setAccessible(true);
+wr_ok('submission context follows the submitted offering and ignores any hint field', $posted->invoke(null, array('fields' => array(2 => 'use-case-and-business-case'))) === 'service' && $posted->invoke(null, array('fields' => array(2 => 'none'))) === 'general' && $posted->invoke(null, array('fields' => array(2 => 'wallet-introduction'))) === 'training');
+$_POST['fides_context'] = 'service';
+wr_ok('a posted fides_context field changes nothing', $posted->invoke(null, array('fields' => array(2 => 'none'))) === 'general');
+unset($_POST['fides_context']);
+$ss = new ReflectionMethod('Fides_DS_Request_Form', 'posted_choice');
+$ss->setAccessible(true);
+wr_ok('a date that belongs to another offering is dropped', $ss->invoke(null, array('fields' => array(2 => 'use-case-and-business-case', 3 => 'eudi-business-wallets-in-practice:thursday-14-january-2027')))[1] === '');
+
 // ---- Facts for the report
 wr_info('WPForms version ' . WPFORMS_VERSION . ', edition ' . (wpforms()->is_pro() ? 'Pro/Plus build' : 'Lite'));
 exit($failures ? 1 : 0);

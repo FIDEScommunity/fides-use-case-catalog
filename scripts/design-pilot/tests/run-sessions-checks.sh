@@ -16,4 +16,12 @@ if [ ! -d "$PLAYWRIGHT_MODULE" ]; then
   exit 1
 fi
 
-node "$HERE/sessions-checks.cjs"
+# Default: the pilot standard (WPForms route ON). LEGACY=1 checks the fallback form: the routing option is set to 0 for the run and removed again.
+if [ "${LEGACY:-0}" = "1" ]; then
+  source "$HERE/../env.sh"
+  trap 'pilot_wp option delete fides_ds_request_form_route >/dev/null 2>&1 || true' EXIT
+  pilot_wp option update fides_ds_request_form_route 0 >/dev/null
+  ROUTE=legacy node "$HERE/sessions-checks.cjs"
+else
+  ROUTE=wpforms node "$HERE/sessions-checks.cjs"
+fi

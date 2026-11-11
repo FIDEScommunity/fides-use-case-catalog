@@ -9,6 +9,9 @@ const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const LEARN = process.env.LEARN_PATH || "/fides-design-pilot/learn";
 const WIDTHS = (process.env.WIDTHS || "1440,1100,768,390,320").split(",").map(Number);
 const DOM_READY = { waitUntil: "domcontentloaded" };
+// ROUTE=wpforms (default, the pilot standard) checks the WPForms request route. ROUTE=legacy checks the old form and needs the switch
+// off (option fides_ds_request_form_route = 0); run-sessions-checks.sh sets and restores it.
+const LEGACY = process.env.ROUTE === "legacy";
 let failures = 0;
 function check(name, ok, detail) {
   if (!ok) failures += 1;
@@ -28,7 +31,7 @@ async function layout(page, label) {
     small: [...document.querySelectorAll(".fides-learn a, .fides-learn button, .fides-learn select, .fides-learn input")].filter((e) => {
       const r = e.getBoundingClientRect();
       const st = getComputedStyle(e);
-      return r.width > 0 && r.height > 0 && st.visibility !== "hidden" && !e.closest(".fides-learn__content p, .fides-learn__content li, .fides-learn-form__privacy, .fides-learn__crumbs, .fides-learn-rows, .fides-learn-note, .fides-ds-card--row") && r.height < 40 && !e.classList.contains("fides-learn__back");
+      return r.width > 0 && r.height > 0 && st.visibility !== "hidden" && !e.closest(".fides-learn__content p, .fides-learn__content li, .fides-learn-form__privacy, .fides-request-privacy, .fides-learn__crumbs, .fides-learn-rows, .fides-learn-note, .fides-ds-card--row") && r.height < 40 && !e.classList.contains("fides-learn__back");
     }).map((e) => e.textContent.trim().slice(0, 30)),
     text: document.body.innerText,
   }));
@@ -70,48 +73,85 @@ async function layout(page, label) {
       const t = await page.locator(".fides-learn").innerText();
       check(`${L(slug)}: shows audience/format, practical details and request action`, /For\b/.test(t) && /Format/.test(t) && /Price/.test(t) && /From €/.test(t) && /The final price is agreed in a proposal before booking/.test(t) && (await page.locator(".fides-learn-details").count()) === 1 && ask.test(t));
       await page.locator(`.fides-learn__actions a:has-text("Discuss")`).first().click();
+      if (!LEGACY) {
+        await page.waitForURL(/request-wpforms\/\?offering=/);
+        await page.waitForSelector("form.wpforms-form", { timeout: 15000 });
+        const fid = await page.getAttribute("form.wpforms-form", "data-formid");
+        check(`${L(slug)}: request form keeps the chosen offering`, (await page.locator(`#wpforms-${fid}-field_2`).inputValue()) === slug && (await page.locator("[data-fides-request-summary]").innerText()).includes(label));
+        await layout(page, L(`${slug} request form`));
+        check(`${L(slug)}: back link returns to the offering`, new URL(await page.locator(".fides-learn__back").first().evaluate((a) => a.href)).pathname.endsWith(`/sessions/${slug}/`));
+        await page.locator(".fides-learn__back").first().click();
+        await page.waitForURL(new RegExp(`${slug}/$`));
+        check(`${L(slug)}: back to offering works`, true);
+        await page.goBack();
+        await page.waitForURL(/request-wpforms\//);
+        check(`${L(slug)}: browser back returns to the request form with context`, new URL(page.url()).searchParams.get("offering") === slug);
+      } else {
       await page.waitForURL(/\/sessions\/request\/\?offering=/);
-      const sel = await page.locator("#fides-learn-offering").inputValue();
-      check(`${L(slug)}: enquiry keeps the chosen offering`, sel === slug && (await page.locator("[data-fides-learn-context-label]").innerText()).includes(label));
-      await layout(page, L(`${slug} enquiry`));
-      check(`${L(slug)}: back link returns to the offering`, new URL(await page.locator("[data-fides-learn-back]").evaluate((a) => a.href)).pathname.endsWith(`/sessions/${slug}/`));
-      await page.locator("[data-fides-learn-back]").click();
-      await page.waitForURL(new RegExp(`${slug}/$`));
-      check(`${L(slug)}: back to offering works`, true);
-      await page.goBack();
-      await page.waitForURL(/\/request\//);
-      check(`${L(slug)}: browser back returns to the enquiry with context`, new URL(page.url()).searchParams.get("offering") === slug);
+        const sel = await page.locator("#fides-learn-offering").inputValue();
+        check(`${L(slug)}: enquiry keeps the chosen offering`, sel === slug && (await page.locator("[data-fides-learn-context-label]").innerText()).includes(label));
+        await layout(page, L(`${slug} enquiry`));
+        check(`${L(slug)}: back link returns to the offering`, new URL(await page.locator("[data-fides-learn-back]").evaluate((a) => a.href)).pathname.endsWith(`/sessions/${slug}/`));
+        await page.locator("[data-fides-learn-back]").click();
+        await page.waitForURL(new RegExp(`${slug}/$`));
+        check(`${L(slug)}: back to offering works`, true);
+        await page.goBack();
+        await page.waitForURL(/\/request\//);
+        check(`${L(slug)}: browser back returns to the enquiry with context`, new URL(page.url()).searchParams.get("offering") === slug);
+      }
     }
 
+    if (!LEGACY) {
+      // Request form behaviour (the full form flow is covered by wpforms-request-checks.cjs).
+      await go(page, `${LEARN}/sessions/request-wpforms/?offering=wallet-readiness-workshop`);
+      await page.waitForSelector("form.wpforms-form", { timeout: 15000 });
+      const fid = await page.getAttribute("form.wpforms-form", "data-formid");
+      check(`${L("request form")}: noindex and no Learn bar`, /noindex/.test(await page.locator('meta[name="robots"]').getAttribute("content")) && (await page.locator(".fides-learn-bar").count()) === 0);
+      await page.selectOption(`#wpforms-${fid}-field_2`, "wallet-introduction");
+      check(`${L("request form")}: switching the offering updates the summary and the back link`, /Wallet Introduction/.test(await page.locator("[data-fides-request-summary]").innerText()) && /Wallet Introduction/.test(await page.locator(".fides-learn__back").first().innerText()));
+      await page.click("button.wpforms-submit");
+      await page.waitForTimeout(500);
+      const errs = await page.$$eval("em.wpforms-error, label.wpforms-error", (ls) => ls.filter((l) => l.offsetParent).length);
+      check(`${L("request form")}: empty submit flags the three required fields`, errs === 3, String(errs));
+      await page.locator("[data-fides-request-summary] button").click();
+      check(`${L("request form")}: removing the choice clears the offering`, (await page.locator(`#wpforms-${fid}-field_2`).inputValue()) === "none");
+      await go(page, `${LEARN}/sessions/request-wpforms/?offering=bogus`);
+      await page.waitForSelector("form.wpforms-form");
+      check(`${L("request form")}: unknown offering falls back to no context`, (await page.locator("form.wpforms-form select").first().inputValue()) === "none");
+      await go(page, `${LEARN}/sessions/request/?offering=interest`);
+      check(`${L("request form")}: the old request URL redirects and keeps the webinar interest`, /request-wpforms\/\?offering=interest$/.test(page.url()) && (await page.locator("form.wpforms-form select").first().inputValue()) === "interest");
+      check(`${L("request form")}: nothing was posted by the page itself`, posts.length === 0, posts.join("|"));
+    } else {
     // Enquiry behaviour.
-    await go(page, `${LEARN}/sessions/request/?offering=wallet-readiness-workshop`);
-    check(`${L("enquiry")}: noindex and no Learn bar`, /noindex/.test(await page.locator('meta[name="robots"]').getAttribute("content")) && (await page.locator(".fides-learn-bar").count()) === 0);
-    check(`${L("enquiry")}: pilot notice says nothing is sent`, /Nothing you enter here is sent or stored/.test(await page.locator(".fides-learn-pilot-note").innerText()));
-    const q1 = await page.locator("[data-fides-learn-question-label]").innerText();
-    await page.selectOption("#fides-learn-offering", "wallet-introduction");
-    const q2 = await page.locator("[data-fides-learn-question-label]").innerText();
-    check(`${L("enquiry")}: switching the offering changes question and URL`, q1 !== q2 && new URL(page.url()).searchParams.get("offering") === "wallet-introduction" && /Wallet Introduction/.test(await page.locator("[data-fides-learn-back-label]").innerText()));
-    await page.locator("[data-fides-learn-submit]").click();
-    check(`${L("enquiry")}: empty submit shows summary and inline errors`, (await page.locator("[data-fides-learn-summary]").isVisible()) && (await page.locator(".fides-learn-form__error").count()) === 4 && (await page.locator('#fides-learn-name[aria-invalid="true"]').count()) === 1);
-    await page.fill("#fides-learn-name", "Test Person");
-    await page.fill("#fides-learn-email", "not-an-email");
-    await page.fill("#fides-learn-org", "Test Org");
-    await page.fill("#fides-learn-question", "A question");
-    await page.locator("[data-fides-learn-submit]").click();
-    check(`${L("enquiry")}: invalid email is reported`, /email address like/.test(await page.locator("#fides-learn-email-error").innerText()));
-    await page.fill("#fides-learn-email", "test@example.org");
-    await page.locator("[data-fides-learn-submit]").click();
-    const res = page.locator("[data-fides-learn-result]");
-    check(`${L("enquiry")}: valid submit shows a local result that echoes no personal data`, (await res.isVisible()) && /nothing was sent/i.test(await res.innerText()) && !/test@example\.org|Test Person/.test(await res.innerText()) && /Wallet Introduction/.test(await res.innerText()));
-    await page.locator("[data-fides-learn-edit]").click();
-    check(`${L("enquiry")}: edit returns to the form with entries kept`, (await page.locator("#fides-learn-request-form").isVisible()) && (await page.inputValue("#fides-learn-name")) === "Test Person");
-    await page.locator("[data-fides-learn-remove-context]").click();
-    check(`${L("enquiry")}: removing context clears the offering`, (await page.locator("#fides-learn-offering").inputValue()) === "" && !new URL(page.url()).searchParams.has("offering"));
-    check(`${L("enquiry")}: nothing was posted`, posts.length === 0, posts.join("|"));
-    await go(page, `${LEARN}/sessions/request/?offering=bogus`);
-    check(`${L("enquiry")}: unknown offering falls back to no context`, (await page.locator("#fides-learn-offering").inputValue()) === "");
-    await go(page, `${LEARN}/sessions/request/?offering=interest`);
-    check(`${L("enquiry")}: interest context for webinars`, /Register interest/.test(await page.locator("[data-fides-learn-submit]").innerText()));
+      await go(page, `${LEARN}/sessions/request/?offering=wallet-readiness-workshop`);
+      check(`${L("enquiry")}: noindex and no Learn bar`, /noindex/.test(await page.locator('meta[name="robots"]').getAttribute("content")) && (await page.locator(".fides-learn-bar").count()) === 0);
+      check(`${L("enquiry")}: pilot notice says nothing is sent`, /Nothing you enter here is sent or stored/.test(await page.locator(".fides-learn-pilot-note").innerText()));
+      const q1 = await page.locator("[data-fides-learn-question-label]").innerText();
+      await page.selectOption("#fides-learn-offering", "wallet-introduction");
+      const q2 = await page.locator("[data-fides-learn-question-label]").innerText();
+      check(`${L("enquiry")}: switching the offering changes question and URL`, q1 !== q2 && new URL(page.url()).searchParams.get("offering") === "wallet-introduction" && /Wallet Introduction/.test(await page.locator("[data-fides-learn-back-label]").innerText()));
+      await page.locator("[data-fides-learn-submit]").click();
+      check(`${L("enquiry")}: empty submit shows summary and inline errors`, (await page.locator("[data-fides-learn-summary]").isVisible()) && (await page.locator(".fides-learn-form__error").count()) === 4 && (await page.locator('#fides-learn-name[aria-invalid="true"]').count()) === 1);
+      await page.fill("#fides-learn-name", "Test Person");
+      await page.fill("#fides-learn-email", "not-an-email");
+      await page.fill("#fides-learn-org", "Test Org");
+      await page.fill("#fides-learn-question", "A question");
+      await page.locator("[data-fides-learn-submit]").click();
+      check(`${L("enquiry")}: invalid email is reported`, /email address like/.test(await page.locator("#fides-learn-email-error").innerText()));
+      await page.fill("#fides-learn-email", "test@example.org");
+      await page.locator("[data-fides-learn-submit]").click();
+      const res = page.locator("[data-fides-learn-result]");
+      check(`${L("enquiry")}: valid submit shows a local result that echoes no personal data`, (await res.isVisible()) && /nothing was sent/i.test(await res.innerText()) && !/test@example\.org|Test Person/.test(await res.innerText()) && /Wallet Introduction/.test(await res.innerText()));
+      await page.locator("[data-fides-learn-edit]").click();
+      check(`${L("enquiry")}: edit returns to the form with entries kept`, (await page.locator("#fides-learn-request-form").isVisible()) && (await page.inputValue("#fides-learn-name")) === "Test Person");
+      await page.locator("[data-fides-learn-remove-context]").click();
+      check(`${L("enquiry")}: removing context clears the offering`, (await page.locator("#fides-learn-offering").inputValue()) === "" && !new URL(page.url()).searchParams.has("offering"));
+      check(`${L("enquiry")}: nothing was posted`, posts.length === 0, posts.join("|"));
+      await go(page, `${LEARN}/sessions/request/?offering=bogus`);
+      check(`${L("enquiry")}: unknown offering falls back to no context`, (await page.locator("#fides-learn-offering").inputValue()) === "");
+      await go(page, `${LEARN}/sessions/request/?offering=interest`);
+      check(`${L("enquiry")}: interest context for webinars`, /Register interest/.test(await page.locator("[data-fides-learn-submit]").innerText()));
+    }
 
     // Existing pages keep working.
     for (const u of ["/", "/topics/", "/topics/for-businesses/", "/topics/the-big-picture/how-credentials-connect/"]) {

@@ -196,6 +196,7 @@ $nl = array(
     'Tell us what you want to discuss. We reply by email and agree the scope and fee with you before any work starts.' => 'Vertel ons wat u wilt bespreken. Wij reageren per e-mail en spreken de reikwijdte en kosten met u af voordat er werk begint.',
     'Choose the service your enquiry is about, or leave it open.' => 'Kies de dienst waar uw vraag over gaat, of laat dit open.',
     'Your question or project'                => 'Uw vraag of project',
+    'General service question'                => 'Algemene vraag over diensten',
     'Describe what you want to discuss. Please leave out sensitive personal data and confidential documents.' => 'Beschrijf wat u wilt bespreken. Laat gevoelige persoonsgegevens en vertrouwelijke documenten weg.',
     'Back to Training & workshops'            => 'Terug naar Training & workshops',
     'Back to EUDI & Business Wallets in Practice' => 'Terug naar EUDI & Business Wallets in Practice',

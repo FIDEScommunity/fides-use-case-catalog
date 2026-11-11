@@ -18,7 +18,7 @@ Tested locally on WPForms **Lite 1.9.5.2**. The shielded staging review site run
 | `../../seed-request-form.sh` / `.php` | Idempotent seed of the form and the page `request-wpforms`. A form edited in the builder is skipped unless `REQUEST_FORM_FORCE=1`. |
 | tiles `includes/class-fides-ds-request-form.php` | The custom code (list below). |
 | tiles `assets/request-form.css`, `request-form.js` | Page-only styling with shared tokens; date filter per offering, "Your request" summary with remove button. |
-| `../../tests/run-wpforms-request-checks.sh` | Local server and browser checks (1440 and 390) with the mail capture. `ONLY=routes,contacts,service,a11y,click,en,nl,outcomes,ctx` and `WIDTHS=1440` narrow a run. |
+| `../../tests/run-wpforms-request-checks.sh` | Local server and browser checks (1440 and 390) with the mail capture. `ONLY=routes,contacts,service,switch,a11y,click,en,nl,outcomes,ctx` and `WIDTHS=1440` narrow a run. |
 | `../../tests/staging-plus-checks.cjs` | Checks against a review site: GET only by default, sending behind two env switches. |
 | `STAGING-PLUS-TRIAL.md` | Steps, files with sha256, safety checks, clean-up and roll-back for the staging trial. |
 
@@ -121,20 +121,27 @@ The back link on the form page goes to the chosen offering (like the old form) a
 
 ## Contact routes and contexts
 
-CTAs that ask for a service, training or workshop open the form. The form has three contexts, taken from the chosen offering (a service
-row of the Services page counts as a service) or from `?context=service` when no offering is chosen. Only the value `service` is accepted;
-unknown offerings, dates and contexts are ignored and never printed.
+CTAs that ask for a service, training or workshop open the form. The form has three contexts, and the context is the **kind of the chosen offering**
+(training or workshop, service, or none = general). The entry link only preselects: `?context=service` without an offering preselects the choice
+"General service question" (a real offering of kind service), so the server never needs a separate hint. Unknown offerings, dates and contexts are ignored
+and never printed.
+
+Live switching: when a visitor changes or removes the choice, `request-form.js` updates heading, eyebrow, intro, notice, offering description, message
+label and description, the date field and the back links from `FidesRequestForm.copy`, `.kinds` and `.back` (all already in the page language). Only text
+changes, so focus stays on the offering select; the summary above the fields (`role=status`, `aria-live=polite`) announces the new choice. The new text goes
+into spans with `data-no-translation`, because TranslatePress otherwise blanks changed text for a moment in Dutch. A date that belongs to another offering is
+cleared in the page and dropped again on the server.
 
 | Context | Page | Mail subject (team / visitor) | Confirmation |
 | --- | --- | --- | --- |
 | training or workshop | "Tell us what you need." | `New FIDES request: <offering (date)>` / `Your request to FIDES: …` | "…received your request…" |
-| service | "Tell us about your question or project." Eyebrow "Services / Enquiry", label "Your question or project", no date field | `New FIDES service enquiry: <service or No specific service>` / `Your enquiry to FIDES: …` | "…received your enquiry…" |
-| general (no offering, no hint) | as training | `New FIDES request: General question` / `Your request to FIDES: General question` | as training |
+| service | "Tell us about your question or project." Eyebrow "Services / Enquiry", label "Your question or project", no date field | `New FIDES service enquiry: <service or General service question>` / `Your enquiry to FIDES: …` | "…received your enquiry…" |
+| general (no offering) | as training | `New FIDES request: General question` / `Your request to FIDES: General question` | as training |
 
-Services without a page of their own are rows of the Services page whose link ends in `/services/enquiry/?offering=<slug>` (slug = title in
+Services without a page of their own, and the general service question, are rows of the Services page whose link ends in `/services/enquiry/?offering=<slug>` (slug = title in
 lower case with hyphens, for example `use-case-and-business-case`). The form reads those rows, so a new row needs no code change. Hero action
 "Discuss your question" uses `?context=service`. About FIDES "Discuss your project" uses `Fides_DS_Request_Form::service_url()`, which is
-empty (and falls back to the Contact page) while the routing switch is off. The submission carries the hint as hidden field `fides_context`.
+empty (and falls back to the Contact page) while the routing switch is off.
 
 Not changed: the general Contact links (header, footer, other pages) and organisation contact actions. They all point to the site Contact page.
 
@@ -144,5 +151,5 @@ On Plus, when the entry is stored but the FIDES mail failed, `note_entry()` adds
 
 ## Local tests (1440 and 390 only)
 
-`tests/run-wpforms-request-checks.sh` (about 3 minutes; the OFF phase sets the option to 0, the ON phase uses the default; sections `routes` and `a11y` cover redirects, links per route in EN and NL, the legacy bypass, focus on the first invalid field, aria, Enter-submit and tab order after a validation error): all checks passed in the last run. With `WITH_EXISTING=1` the services and sessions checks run against the fallback form (option 0); they test the old form and time out with the switch ON, which is expected. The sections `contacts` (every CTA, EN and NL, destination without redirect hop, preselection, heading, back link, invalid context, general Contact links as info) and `service` (wording, subjects, confirmation, EN/NL, 1440 and 390) cover the contact routes. `ONLY=click` runs the click test alone. The staging script ran locally in read-only mode against the Lite pilot: everything passed except the expected "paid plugin folder at 1.10.2.1" check.
+`tests/run-wpforms-request-checks.sh` (about 3 minutes; the OFF phase sets the option to 0, the ON phase uses the default; sections `routes` and `a11y` cover redirects, links per route in EN and NL, the legacy bypass, focus on the first invalid field, aria, Enter-submit and tab order after a validation error): all checks passed in the last run. The services and sessions checks (`run-services-checks.sh`, `run-sessions-checks.sh`) check the WPForms route by default; `LEGACY=1` sets option 0 for the run, checks the old form and removes the option again. `WITH_EXISTING=1` runs all four. The sections `switch` (live context while switching, removing, keyboard type-ahead, and four submissions that must agree with the live choice, EN and NL), `contacts` (every CTA, EN and NL, destination without redirect hop, preselection, heading, back link, invalid context, general Contact links as info) and `service` (wording, subjects, confirmation, EN/NL, 1440 and 390) cover the contact routes. `ONLY=click` runs the click test alone. The staging script ran locally in read-only mode against the Lite pilot: everything passed except the expected "paid plugin folder at 1.10.2.1" check.
 

@@ -60,10 +60,10 @@ echo "== Stored data after the checks"
 pilot_wp eval-file "$HERE/wpforms-request-behaviour.php" stored-data || status=1
 
 if [ "${WITH_EXISTING:-0}" = "1" ]; then
-  echo "== Existing enquiry flow with the fallback form (option 0): services and sessions checks"
-  pilot_wp option update fides_ds_request_form_route 0 >/dev/null
-  node "$HERE/services-checks.cjs" || status=1
-  node "$HERE/sessions-checks.cjs" || status=1
-  pilot_wp option delete fides_ds_request_form_route >/dev/null 2>&1 || true
+  echo "== Existing Services and Sessions checks: WPForms route (pilot default), then the fallback form (option 0, restored by the script)"
+  WIDTHS=1440,390 bash "$HERE/run-services-checks.sh" || status=1
+  WIDTHS=1440,390 bash "$HERE/run-sessions-checks.sh" || status=1
+  LEGACY=1 WIDTHS=1440,390 bash "$HERE/run-services-checks.sh" || status=1
+  LEGACY=1 WIDTHS=1440,390 bash "$HERE/run-sessions-checks.sh" || status=1
 fi
 exit "$status"

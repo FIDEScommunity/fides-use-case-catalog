@@ -8,6 +8,10 @@ const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const PILOT = process.env.PILOT_PATH || "/fides-design-pilot";
 const SERVICES = `${PILOT}/services`;
 const WIDTHS = (process.env.WIDTHS || "1440,1024,768,390,320").split(",").map(Number);
+// ROUTE=wpforms (default, the pilot standard) checks the WPForms request route. ROUTE=legacy checks the old form and needs the switch
+// off (option fides_ds_request_form_route = 0); run-services-checks.sh sets and restores it.
+const LEGACY = process.env.ROUTE === "legacy";
+const FORM_PATH = "/learn/sessions/request-wpforms/";
 let failures = 0;
 function check(name, ok, detail) {
   if (!ok) failures += 1;
@@ -137,7 +141,7 @@ async function checkNavigation(page, L, width, where) {
     const markers = await page.locator(".fides-learn-offering__body ul li").first().evaluate((li) => getComputedStyle(li).display + "/" + getComputedStyle(li.parentElement).listStyleType + "/" + getComputedStyle(li, "::marker").content);
     check(`${L("assessment")}: bullets stay visible`, !/none/.test(markers.split("/")[1]), markers);
     const hrefs = await page.locator("main a").evaluateAll((a) => a.map((x) => x.getAttribute("href")));
-    check(`${L("assessment")}: links to enquiry with context, workshop and use cases`, hrefs.some((h) => /services\/enquiry\/\?offering=wallet-readiness-assessment$/.test(h)) && hrefs.some((h) => /learn\/sessions\/wallet-readiness-workshop\/$/.test(h)) && hrefs.some((h) => /\/overview\/$/.test(h)), hrefs.join("|"));
+    check(`${L("assessment")}: links to enquiry with context, workshop and use cases`, hrefs.some((h) => /(services\/enquiry|request-wpforms)\/\?offering=wallet-readiness-assessment$/.test(h)) && hrefs.some((h) => /learn\/sessions\/wallet-readiness-workshop\/$/.test(h)) && hrefs.some((h) => /\/overview\/$/.test(h)), hrefs.join("|"));
     // Links resolve (local ones).
     const local = [...new Set(hrefs.filter((h) => h && h.startsWith(BASE)))];
     let dead = [];
@@ -165,35 +169,55 @@ async function checkNavigation(page, L, width, where) {
     await page.waitForLoadState("load");
     check(`${L("usecases")}: use case overview opens`, (await page.locator("h1").count()) >= 1 && !(await overflow(page)));
 
+    if (!LEGACY) {
+      // ---- Assessment → WPForms request page (context) and back
+      await go(page, `${SERVICES}/wallet-readiness-assessment/`);
+      await page.locator(".fides-learn__actions a").first().click();
+      await page.waitForURL(/request-wpforms\//);
+      await page.waitForSelector("form.wpforms-form", { timeout: 15000 });
+      const fid = await page.getAttribute("form.wpforms-form", "data-formid");
+      check(`${L("request form")}: assessment preselected, service wording and back link`, (await page.locator(`#wpforms-${fid}-field_2`).inputValue()) === "wallet-readiness-assessment" && /Tell us about your question or project/.test(await page.locator("h1").innerText()) && /wallet-readiness-assessment\/$/.test(await page.locator(".fides-learn__back").first().getAttribute("href")));
+      const options = await page.locator(`#wpforms-${fid}-field_2 option`).evaluateAll((os) => os.map((o) => o.value));
+      check(`${L("request form")}: services and trainings are both offered, with a general service question`, options.includes("general-service-question") && options.includes("use-case-and-business-case") && options.includes("wallet-introduction"), options.join("|"));
+      check(`${L("request form")}: noindex, no overflow, no Learn bar`, /noindex/.test(await page.locator('meta[name="robots"]').getAttribute("content")) && !(await overflow(page)) && (await page.locator(".fides-learn-bar").count()) === 0);
+      await page.locator("[data-fides-request-summary] button").click();
+      check(`${L("request form")}: removing the choice gives the general wording and a back link to the section`, (await page.locator(`#wpforms-${fid}-field_2`).inputValue()) === "none" && /Tell us what you need/.test(await page.locator("h1").innerText()) && /Back to/.test(await page.locator(".fides-learn__back").first().innerText()));
+      await page.locator(".fides-learn__back").first().click();
+      await page.waitForURL(/learn\/sessions\/$|services\/$/);
+      check(`${L("request form")}: back leaves the form page`, !/request-wpforms/.test(page.url()));
+      await go(page, `${SERVICES}/enquiry/?offering=wallet-readiness-assessment`);
+      check(`${L("request form")}: the old enquiry URL redirects to the form with the assessment`, /request-wpforms\/\?offering=wallet-readiness-assessment$/.test(page.url()));
+    } else {
     // ---- Assessment → enquiry (context) and back
-    await go(page, `${SERVICES}/wallet-readiness-assessment/`);
-    await page.locator(".fides-learn__actions a").first().click();
-    await page.waitForURL(/services\/enquiry\//);
-    const selected = await page.locator("#fides-learn-offering").inputValue();
-    const ctx1 = await page.locator("[data-fides-learn-context-label]").innerText();
-    const back = await page.locator("[data-fides-learn-back]").getAttribute("href");
-    check(`${L("enquiry")}: assessment preselected, context and back link`, selected === "wallet-readiness-assessment" && ctx1 === "Services · Wallet readiness assessment" && /wallet-readiness-assessment\/$/.test(back), `${selected}|${ctx1}|${back}`);
-    const options = await page.locator("#fides-learn-offering option").allInnerTexts();
-    check(`${L("enquiry")}: only service contexts, no webinar interest, no dates`, options.join("|") === "No specific offering|Wallet readiness assessment" && (await page.locator("[data-fides-learn-date-field]").count()) === 0, options.join("|"));
-    const next = await page.locator(".fides-learn-request__aside .fides-learn__content").innerText();
-    check(`${L("enquiry")}: "What happens next" says it describes the live process`, /What happens next/.test(next) && /preview\. Once it is live/.test(next) && /We will read your enquiry/.test(next), next.slice(0, 200));
-    check(`${L("enquiry")}: JavaScript texts are also in the page as translatable strings`, (await page.locator("[data-fides-learn-strings] li").count()) >= 14 && (await page.locator('[data-fides-learn-strings] li[data-key="back"]').textContent()) === "Back to %s");
-    check(`${L("enquiry")}: no price or fee in the next steps`, !/€|\bprice\b|\bfee\b/i.test(await page.locator("main").innerText()));
-    check(`${L("enquiry")}: local notice present, no overflow`, /Nothing you enter here is sent or stored/.test(await page.locator(".fides-learn-pilot-note").first().innerText()) && !(await overflow(page)));
-    await page.locator("[data-fides-learn-remove-context]").click();
-    check(`${L("enquiry")}: removing context resets label, back link and URL`, (await page.locator("[data-fides-learn-context-label]").innerText()) === "Services · no specific offering" && (await page.locator("[data-fides-learn-back-label]").innerText()) === "Back to Services" && !new URL(page.url()).searchParams.has("offering"));
-    await page.selectOption("#fides-learn-offering", "wallet-readiness-assessment");
-    await page.fill("#fides-learn-name", "Test Person");
-    await page.fill("#fides-learn-email", "test@example.org");
-    await page.fill("#fides-learn-org", "Test Org");
-    await page.fill("#fides-learn-question", "A test question");
-    await page.locator("[data-fides-learn-submit]").click();
-    const res = page.locator("[data-fides-learn-result]");
-    check(`${L("enquiry")}: submits locally, nothing posted`, (await res.isVisible()) && /Wallet readiness assessment/.test(await res.innerText()) && posts.length === 0, await res.innerText().catch(() => ""));
-    await page.locator("[data-fides-learn-edit]").click();
-    await page.locator("[data-fides-learn-back]").click();
-    await page.waitForURL(/wallet-readiness-assessment\/$/);
-    check(`${L("enquiry")}: back returns to the assessment`, true);
+      await go(page, `${SERVICES}/wallet-readiness-assessment/`);
+      await page.locator(".fides-learn__actions a").first().click();
+      await page.waitForURL(/services\/enquiry\//);
+      const selected = await page.locator("#fides-learn-offering").inputValue();
+      const ctx1 = await page.locator("[data-fides-learn-context-label]").innerText();
+      const back = await page.locator("[data-fides-learn-back]").getAttribute("href");
+      check(`${L("enquiry")}: assessment preselected, context and back link`, selected === "wallet-readiness-assessment" && ctx1 === "Services · Wallet readiness assessment" && /wallet-readiness-assessment\/$/.test(back), `${selected}|${ctx1}|${back}`);
+      const options = await page.locator("#fides-learn-offering option").allInnerTexts();
+      check(`${L("enquiry")}: only service contexts, no webinar interest, no dates`, options.join("|") === "No specific offering|Wallet readiness assessment" && (await page.locator("[data-fides-learn-date-field]").count()) === 0, options.join("|"));
+      const next = await page.locator(".fides-learn-request__aside .fides-learn__content").innerText();
+      check(`${L("enquiry")}: "What happens next" says it describes the live process`, /What happens next/.test(next) && /preview\. Once it is live/.test(next) && /We will read your enquiry/.test(next), next.slice(0, 200));
+      check(`${L("enquiry")}: JavaScript texts are also in the page as translatable strings`, (await page.locator("[data-fides-learn-strings] li").count()) >= 14 && (await page.locator('[data-fides-learn-strings] li[data-key="back"]').textContent()) === "Back to %s");
+      check(`${L("enquiry")}: no price or fee in the next steps`, !/€|\bprice\b|\bfee\b/i.test(await page.locator("main").innerText()));
+      check(`${L("enquiry")}: local notice present, no overflow`, /Nothing you enter here is sent or stored/.test(await page.locator(".fides-learn-pilot-note").first().innerText()) && !(await overflow(page)));
+      await page.locator("[data-fides-learn-remove-context]").click();
+      check(`${L("enquiry")}: removing context resets label, back link and URL`, (await page.locator("[data-fides-learn-context-label]").innerText()) === "Services · no specific offering" && (await page.locator("[data-fides-learn-back-label]").innerText()) === "Back to Services" && !new URL(page.url()).searchParams.has("offering"));
+      await page.selectOption("#fides-learn-offering", "wallet-readiness-assessment");
+      await page.fill("#fides-learn-name", "Test Person");
+      await page.fill("#fides-learn-email", "test@example.org");
+      await page.fill("#fides-learn-org", "Test Org");
+      await page.fill("#fides-learn-question", "A test question");
+      await page.locator("[data-fides-learn-submit]").click();
+      const res = page.locator("[data-fides-learn-result]");
+      check(`${L("enquiry")}: submits locally, nothing posted`, (await res.isVisible()) && /Wallet readiness assessment/.test(await res.innerText()) && posts.length === 0, await res.innerText().catch(() => ""));
+      await page.locator("[data-fides-learn-edit]").click();
+      await page.locator("[data-fides-learn-back]").click();
+      await page.waitForURL(/wallet-readiness-assessment\/$/);
+      check(`${L("enquiry")}: back returns to the assessment`, true);
+    }
     // ---- Dutch route: texts, links stay under /nl/, JavaScript texts translate, English fallback is gone for these pages
     if (width === 1440 || width <= 390) {
       await go(page, `/nl${SERVICES}/`);
@@ -208,30 +232,46 @@ async function checkNavigation(page, L, width, where) {
       await go(page, `/nl${SERVICES}/wallet-readiness-assessment/`);
       const nlAssess = await page.locator("main").innerText();
       check(`${L("nl")}: assessment is Dutch, with the availability line`, /Bereid uw dienst voor op digitale wallets\./.test(nlAssess) && /Vooral beschikbaar in Nederland\./.test(nlAssess) && !(await overflow(page)));
+      if (!LEGACY) {
+        await go(page, `/nl${SERVICES}/enquiry/?offering=wallet-readiness-assessment`);
+        check(`${L("nl")}: the old enquiry URL redirects to the Dutch form`, /\/nl\/.*request-wpforms\/\?offering=wallet-readiness-assessment$/.test(page.url()), page.url());
+        await page.waitForSelector("form.wpforms-form", { timeout: 15000 });
+        const nid = await page.getAttribute("form.wpforms-form", "data-formid");
+        check(`${L("nl")}: heading, back link and labels are Dutch and fit a service`, /Vertel ons over uw vraag of project/.test(await page.locator("h1").innerText()) && /Terug naar Wallet readiness assessment/.test(await page.locator(".fides-learn__back").first().innerText()) && /Uw vraag of project/.test(await page.locator(`#wpforms-${nid}-field_7-container label`).first().innerText()));
+        await page.locator("[data-fides-request-summary] button").click();
+        await page.waitForTimeout(300);
+        check(`${L("nl")}: removing the choice gives Dutch general wording`, /Vertel ons wat u nodig hebt/.test(await page.locator("h1").innerText()) && /Terug naar/.test(await page.locator(".fides-learn__back").first().innerText()));
+        await page.click("button.wpforms-submit");
+        await page.waitForTimeout(500);
+        const nlErr = await page.$$eval("em.wpforms-error, label.wpforms-error", (ls) => ls.filter((l) => l.offsetParent).map((l) => l.textContent.trim()));
+        check(`${L("nl")}: validation messages are Dutch`, nlErr.length === 3 && nlErr.every((t) => /Dit veld is verplicht/.test(t)), nlErr.join("|"));
+        check(`${L("nl")}: no overflow on the form`, !(await overflow(page)));
+      } else {
       await go(page, `/nl${SERVICES}/enquiry/?offering=wallet-readiness-assessment`);
-      const nlCtx = await page.locator("[data-fides-learn-context-label]").innerText();
-      const nlBack = await page.locator("[data-fides-learn-back-label]").innerText();
-      check(`${L("nl")}: enquiry context and back link are Dutch`, nlCtx === "Diensten · Wallet readiness assessment" && nlBack === "Terug naar Wallet readiness assessment", `${nlCtx}|${nlBack}`);
-      await page.locator("[data-fides-learn-remove-context]").click();
-      await page.waitForFunction(() => /geen specifiek aanbod/.test(document.querySelector("[data-fides-learn-context-label]").textContent), null, { timeout: 5000 }).catch(() => {});
-      check(`${L("nl")}: removing the context gives Dutch texts`, (await page.locator("[data-fides-learn-context-label]").innerText()) === "Diensten · geen specifiek aanbod" && (await page.locator("[data-fides-learn-back-label]").innerText()) === "Terug naar Diensten" && (await page.locator("[data-fides-learn-return-label]").innerText()) === "Terug naar Diensten");
-      await page.selectOption("#fides-learn-offering", "wallet-readiness-assessment");
-      await page.locator("[data-fides-learn-submit]").click();
-      await page.waitForFunction(() => /Welke dienst/.test(document.querySelector("[data-fides-learn-question-label]").textContent), null, { timeout: 5000 }).catch(() => {});
-      await page.locator("[data-fides-learn-submit]").click();
-      await page.waitForTimeout(300);
-      const nlErrors = await page.locator("[data-fides-learn-summary]").innerText();
-      check(`${L("nl")}: validation messages are Dutch`, /Controleer uw invoer/.test(nlErrors) && /Vul een waarde in voor Naam\./.test(nlErrors) && /Vul uw e-mailadres in\./.test(nlErrors), nlErrors);
-      await page.fill("#fides-learn-name", "Test Persoon");
-      await page.fill("#fides-learn-email", "test@example.org");
-      await page.fill("#fides-learn-org", "Test Org");
-      await page.fill("#fides-learn-question", "Een testvraag");
-      await page.locator("[data-fides-learn-submit]").click();
-      await page.waitForFunction(() => document.querySelector("[data-fides-learn-result]") && /Aanbod:/.test(document.querySelector("[data-fides-learn-result]").innerText), null, { timeout: 5000 }).catch(() => {});
-      const nlRes = await page.locator("[data-fides-learn-result]").innerText();
-      check(`${L("nl")}: preview result is Dutch and says nothing was sent`, /Alleen een voorbeeld: er is niets verstuurd/.test(nlRes) && /Aanbod: Wallet readiness assessment/.test(nlRes));
-      const nlNext = await page.locator(".fides-learn-request__aside .fides-learn__content").innerText();
-      check(`${L("nl")}: "What happens next" is Dutch and refers to after launch`, /Zodra het live staat/.test(nlNext));
+        const nlCtx = await page.locator("[data-fides-learn-context-label]").innerText();
+        const nlBack = await page.locator("[data-fides-learn-back-label]").innerText();
+        check(`${L("nl")}: enquiry context and back link are Dutch`, nlCtx === "Diensten · Wallet readiness assessment" && nlBack === "Terug naar Wallet readiness assessment", `${nlCtx}|${nlBack}`);
+        await page.locator("[data-fides-learn-remove-context]").click();
+        await page.waitForFunction(() => /geen specifiek aanbod/.test(document.querySelector("[data-fides-learn-context-label]").textContent), null, { timeout: 5000 }).catch(() => {});
+        check(`${L("nl")}: removing the context gives Dutch texts`, (await page.locator("[data-fides-learn-context-label]").innerText()) === "Diensten · geen specifiek aanbod" && (await page.locator("[data-fides-learn-back-label]").innerText()) === "Terug naar Diensten" && (await page.locator("[data-fides-learn-return-label]").innerText()) === "Terug naar Diensten");
+        await page.selectOption("#fides-learn-offering", "wallet-readiness-assessment");
+        await page.locator("[data-fides-learn-submit]").click();
+        await page.waitForFunction(() => /Welke dienst/.test(document.querySelector("[data-fides-learn-question-label]").textContent), null, { timeout: 5000 }).catch(() => {});
+        await page.locator("[data-fides-learn-submit]").click();
+        await page.waitForTimeout(300);
+        const nlErrors = await page.locator("[data-fides-learn-summary]").innerText();
+        check(`${L("nl")}: validation messages are Dutch`, /Controleer uw invoer/.test(nlErrors) && /Vul een waarde in voor Naam\./.test(nlErrors) && /Vul uw e-mailadres in\./.test(nlErrors), nlErrors);
+        await page.fill("#fides-learn-name", "Test Persoon");
+        await page.fill("#fides-learn-email", "test@example.org");
+        await page.fill("#fides-learn-org", "Test Org");
+        await page.fill("#fides-learn-question", "Een testvraag");
+        await page.locator("[data-fides-learn-submit]").click();
+        await page.waitForFunction(() => document.querySelector("[data-fides-learn-result]") && /Aanbod:/.test(document.querySelector("[data-fides-learn-result]").innerText), null, { timeout: 5000 }).catch(() => {});
+        const nlRes = await page.locator("[data-fides-learn-result]").innerText();
+        check(`${L("nl")}: preview result is Dutch and says nothing was sent`, /Alleen een voorbeeld: er is niets verstuurd/.test(nlRes) && /Aanbod: Wallet readiness assessment/.test(nlRes));
+        const nlNext = await page.locator(".fides-learn-request__aside .fides-learn__content").innerText();
+        check(`${L("nl")}: "What happens next" is Dutch and refers to after launch`, /Zodra het live staat/.test(nlNext));
+      }
       posts.length = 0;
     }
     await ctx.close();
