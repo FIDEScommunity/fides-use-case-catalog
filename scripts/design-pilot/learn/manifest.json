@@ -66,6 +66,20 @@
    "menu_order": 1
   },
   {
+   "path": "topics/the-big-picture/eudi-wallet-and-european-business-wallet",
+   "title": "EUDI Wallet and European Business Wallet: how do they relate?",
+   "kind": "article",
+   "eyebrow": "Explainer · The big picture",
+   "excerpt": "People and organisations both need to identify themselves and share information. Sometimes they need to do both in the same process.",
+   "sources": "European Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets\nEuropean Commission · EUDI Regulation | https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation\nCouncil of the EU · Negotiating position, 9 June 2026 | https://www.consilium.europa.eu/en/press/press-releases/2026/06/09/european-business-wallets-council-adopts-negotiating-position/",
+   "cta_title": "Look at your own interaction",
+   "cta_text": "Work through one process with your team in the Wallet Readiness Workshop.",
+   "cta_label": "View the workshop",
+   "cta_url": "{{learn}}/sessions/wallet-readiness-workshop/",
+   "content": "eudi-wallet-and-european-business-wallet.html",
+   "menu_order": 2
+  },
+  {
    "path": "topics/for-businesses/european-business-wallet",
    "title": "European Business Wallet",
    "kind": "article",
