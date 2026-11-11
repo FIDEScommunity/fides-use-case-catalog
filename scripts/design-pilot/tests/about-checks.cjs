@@ -76,7 +76,7 @@ const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA
       ["Browse topics and guides→", /\/fides-design-pilot\/learn\/topics\/$/],
       ["Explore use cases→", /\/fides-design-pilot\/overview\/$/],
       ["Explore sessions and workshops→", /\/fides-design-pilot\/learn\/sessions\/$/],
-      ["Discuss your project→", /\/about-fides\/contact\/$/],
+      ["Discuss your project→", /request-wpforms\/\?context=service$/],
       ["Read the FIDES Manifesto→", /\/manifesto\/$/],
       ["Submit a use case→", /\/use-case-form\/$/],
       ["Manage your organization's listing→", /\/organizations-update\/$/],

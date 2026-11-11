@@ -25,7 +25,7 @@ const OTHER_DATE_KEY = "thursday-18-march-2027";
 const ERR = "em.wpforms-error, label.wpforms-error";
 const CONF = ".wpforms-confirmation-container, .wpforms-confirmation-container-full";
 const TEAM = "request@example.invalid";
-// ONLY=nl (comma list of routes,a11y,ctx,click,en,nl,outcomes) runs a subset while debugging; default is everything.
+// ONLY=nl (comma list of routes,contacts,service,a11y,ctx,click,en,nl,outcomes) runs a subset while debugging; default is everything.
 const ONLY = process.env.ONLY ? process.env.ONLY.split(",") : null;
 const want = (n) => !ONLY || ONLY.includes(n);
 
@@ -186,6 +186,129 @@ const plain = (html) => String(html).replace(/<style[\s\S]*?<\/style>/gi, " ").r
     const oldLinks = await page.$$eval('a[href*="offering="]', (as) => as.map((a) => a.getAttribute("href")));
     check("legacy bypass: links on an offering page keep pointing to the old request page", oldLinks.length >= 1 && oldLinks.every((h) => /sessions\/request\/\?offering=/.test(h)), oldLinks.join("|"));
     check("routes: no page errors", page.pageErrors.length === 0, page.pageErrors.join("|"));
+  }
+
+  // ---- Contact routes: every CTA that asks for a service, training or workshop, its real destination (EN and NL), context kept
+  if (want("contacts")) {
+    const page = await newPage(1440);
+    const SERVICE_H1 = /Tell us about your question or project|Vertel ons over uw vraag of project/;
+    const TRAINING_H1 = /Tell us what you need|Vertel ons wat u nodig hebt/;
+    const SVC = "use-case-and-business-case";
+    // [page, link selector, expected query, offering select value, date select value or null, context, back-link path]
+    const cta = [
+      ["/services/", 'a[href*="context=service"]', "context=service", "none", null, "service", "/services/"],
+      ["/services/", `a[href*="offering=${SVC}"]`, `offering=${SVC}`, SVC, null, "service", "/services/"],
+      ["/services/", 'a[href*="offering=independent-advice-and-selection"]', "offering=independent-advice-and-selection", "independent-advice-and-selection", null, "service", "/services/"],
+      ["/services/", 'a[href*="offering=project-and-ecosystem-coordination"]', "offering=project-and-ecosystem-coordination", "project-and-ecosystem-coordination", null, "service", "/services/"],
+      ["/services/wallet-readiness-assessment/", 'a[href*="offering=wallet-readiness-assessment"]', "offering=wallet-readiness-assessment", "wallet-readiness-assessment", null, "service", "/services/wallet-readiness-assessment/"],
+      ["/learn/sessions/", 'a[href*="offering=training-partnerships"]', "offering=training-partnerships", "training-partnerships", null, "training", "/learn/sessions/training-partnerships/"],
+      ["/learn/sessions/", 'a[href*="offering=interest"]', "offering=interest", "interest", null, "training", "/learn/sessions/"],
+      [`/learn/sessions/${TRAINING}/`, `a[href*="date=${DATE_KEY}"]`, `date=${DATE_KEY}`, TRAINING, `${TRAINING}:${DATE_KEY}`, "training", `/learn/sessions/${TRAINING}/`],
+      [`/learn/sessions/${TRAINING}/`, `main a[href*="offering=${TRAINING}"]:not([href*="date="])`, `offering=${TRAINING}`, TRAINING, null, "training", `/learn/sessions/${TRAINING}/`],
+      ["/learn/sessions/wallet-readiness-workshop/", 'main a[href*="offering=wallet-readiness-workshop"]', "offering=wallet-readiness-workshop", "wallet-readiness-workshop", null, "training", "/learn/sessions/wallet-readiness-workshop/"],
+      ["/learn/sessions/wallet-introduction/", 'main a[href*="offering=wallet-introduction"]', "offering=wallet-introduction", "wallet-introduction", null, "training", "/learn/sessions/wallet-introduction/"],
+      ["/learn/sessions/training-partnerships/", 'main a[href*="offering=training-partnerships"]', "offering=training-partnerships", "training-partnerships", null, "training", "/learn/sessions/training-partnerships/"],
+      ["/about-fides/", 'a[href*="context=service"]', "context=service", "none", null, "service", "/services/"],
+    ];
+    for (const nl of [false, true]) {
+      const p = nl ? "/nl" : "";
+      const tag = nl ? "NL" : "EN";
+      for (const [from, selector, query, offering, date, context, backPath] of cta) {
+        await go(page, `${p}${PILOT}${from}`);
+        const link = page.locator(selector).first();
+        const text = ((await link.innerText().catch(() => "")) || "").replace(/\s+/g, " ").trim();
+        const href = await link.getAttribute("href").catch(() => null);
+        if (!href) { check(`${tag} ${from}: CTA ${selector} exists`, false); continue; }
+        const abs = new URL(href, BASE);
+        const direct = await page.request.get(abs.toString(), { maxRedirects: 0 });
+        info(`${tag} ${from} | "${text}" -> ${abs.pathname}${abs.search} (HTTP ${direct.status()})`);
+        check(`${tag} ${from}: "${text}" goes straight to the WPForms page with ${query} (no redirect hop)`, direct.status() === 200 && abs.pathname === `${p}${PAGE}` && abs.search.includes(query) && (nl ? abs.pathname.startsWith("/nl/") : !abs.pathname.startsWith("/nl/")), `${direct.status()} ${abs.pathname}${abs.search}`);
+        await link.click();
+        await page.waitForSelector("form.wpforms-form", { timeout: 15000 });
+        const id = await fid(page);
+        check(`${tag} ${from}: the offering is preselected as ${offering}${date ? " with the date" : ""}`, (await page.locator(sel(id, 2)).inputValue()) === offering && (!date || (await page.locator(sel(id, 3)).inputValue()) === date), await page.locator(sel(id, 2)).inputValue());
+        const h1 = await page.locator("h1").first().innerText();
+        check(`${tag} ${from}: heading fits the ${context} context`, (context === "service" ? SERVICE_H1 : TRAINING_H1).test(h1), h1);
+        const back = page.locator(".fides-learn__back").first();
+        const backHref = new URL(await back.getAttribute("href"), BASE).pathname;
+        check(`${tag} ${from}: back link returns to ${backPath} in the same language`, backHref === `${p}${PILOT}${backPath}`, `${backHref} | ${await back.innerText()}`);
+        if (nl) check(`NL ${from}: the page stays Dutch`, /Naam/.test(await page.locator("form.wpforms-form").innerText()));
+      }
+    }
+
+    // Unknown or hostile context: the form works without preselection and never echoes the raw input.
+    for (const nl of [false, true]) {
+      const p = nl ? "/nl" : "";
+      for (const q of [`?offering=%3Cscript%3Ealert(1)%3C/script%3E`, `?offering=nope&session=bogus&context=evil`, `?context=%22%3E%3Cimg%20src%3Dx%3E`, `?offering=${SVC}&session=%3Cb%3Ebold`, `?offering=${TRAINING}&session=nope`]) {
+        const res = await page.request.get(`${BASE}${p}${PAGE}${q}`);
+        const body = await res.text();
+        // The URL itself may appear escaped in link attributes (language switcher, sign-in return); markup from it must never be live.
+        check(`${nl ? "NL" : "EN"} invalid ${q}: HTTP 200 and no live markup from the input`, res.status() === 200 && !/<script>alert\(1\)|<img src=x|<b>bold/.test(body), `${res.status()}`);
+        await go(page, `${p}${PAGE}${q}`);
+        await page.waitForSelector("form.wpforms-form");
+        const id = await fid(page);
+        const visible = await page.locator("main").innerText();
+        check(`${nl ? "NL" : "EN"} invalid ${q}: the visible page does not repeat the input`, !/alert\(1\)|nope|bogus|evil|bold/.test(visible), visible.match(/alert\(1\)|nope|bogus|evil|bold/) + "");
+        const want_value = q.includes(SVC) ? SVC : q.includes(TRAINING) ? TRAINING : "none";
+        check(`${nl ? "NL" : "EN"} invalid ${q}: form works, selection is ${want_value}, no script errors`, (await page.locator(sel(id, 2)).inputValue()) === want_value && page.pageErrors.length === 0, page.pageErrors.join("|"));
+      }
+    }
+
+    // General Contact links (header, footer, other): reported, not changed. Organisation profile contact actions are not part of these pages.
+    const generic = new Map();
+    for (const nl of [false, true]) {
+      for (const from of ["/", "/about-fides/", "/services/", "/learn/", "/learn/sessions/", "/manifesto/", "/start/", "/updates/"]) {
+        await go(page, `${nl ? "/nl" : ""}${PILOT}${from}`);
+        const links = await page.$$eval("header a, footer a, nav a", (as) => as.filter((a) => /contact/i.test(a.getAttribute("href") || "") || /^contact$/i.test(a.textContent.trim())).map((a) => a.href));
+        for (const h of links) generic.set(`${nl ? "NL" : "EN"} ${h}`, (generic.get(`${nl ? "NL" : "EN"} ${h}`) || []).concat(from));
+      }
+    }
+    for (const [k, pages] of generic) info(`general Contact link ${k} on ${pages.length} pages (${[...new Set(pages)].slice(0, 3).join(", ")}...)`);
+    await go(page, `${PILOT}/`);
+    const home = await page.$$eval("main a", (as) => as.map((a) => a.textContent.trim().replace(/\s+/g, " ") + " -> " + a.getAttribute("href")).filter((t) => /contact|enquir|request|discuss|talk|project|workshop|training|service/i.test(t)));
+    info(`homepage CTAs about contact, training or services: ${home.length ? home.join(" ; ") : "none"}`);
+    check("contact routes: no page errors", page.pageErrors.length === 0, page.pageErrors.join("|"));
+  }
+
+  // ---- Service enquiry: wording per context, mail subjects, confirmation (EN, NL; desktop and mobile)
+  for (const w of want("service") ? WIDTHS : []) {
+    const L = (s) => `${w}px: ${s}`;
+    const runs = [
+      { nl: false, q: "?offering=use-case-and-business-case", subject: /^New FIDES service enquiry: Use case and business case/, visitor: /^Your enquiry to FIDES: Use case and business case/, body: /We received your enquiry: Use case and business case/, conf: /received your enquiry and sent a confirmation/ },
+      { nl: true, q: "?offering=use-case-and-business-case", subject: /^New FIDES service enquiry: /, visitor: /^Uw vraag aan FIDES: /, body: /Wij hebben uw vraag ontvangen: /, conf: /uw vraag ontvangen en een bevestiging/ },
+    ];
+    if (w === WIDTHS[0]) {
+      runs.push(
+        { nl: false, q: "?context=service", subject: /^New FIDES service enquiry: No specific service/, visitor: /^Your enquiry to FIDES: No specific service/, body: /We received your enquiry: No specific service/, conf: /received your enquiry/ },
+        { nl: false, q: "?offering=wallet-readiness-assessment", subject: /^New FIDES service enquiry: Wallet readiness assessment/, visitor: /^Your enquiry to FIDES: Wallet readiness assessment/, body: /We received your enquiry: Wallet readiness assessment/, conf: /received your enquiry/ },
+        { nl: false, q: "", subject: /^New FIDES request: General question/, visitor: /^Your request to FIDES: General question/, body: /We received your request: General question/, conf: /received your request and sent a confirmation/ },
+        { nl: true, q: "?context=service", subject: /^New FIDES service enquiry: Geen specifieke dienst/, visitor: /^Uw vraag aan FIDES: Geen specifieke dienst/, body: /Wij hebben uw vraag ontvangen: Geen specifieke dienst/, conf: /uw vraag ontvangen/ },
+      );
+    }
+    for (const r of runs) {
+      const tag = `${L(r.nl ? "NL" : "EN")} ${r.q || "(no context)"}`;
+      const page = await newPage(w);
+      clearMail();
+      setMode("capture");
+      await openForm(page, r.q, r.nl);
+      const id = await fid(page);
+      if (r.q.includes("offering=")) check(`${tag}: no date field for a service, offering visible`, await page.locator(`${sel(id, 3)}-container`).isHidden() && (await page.locator(sel(id, 2)).inputValue()) !== "none");
+      await page.click("button.wpforms-submit");
+      await sleep(500);
+      const errs = await page.$$eval(ERR, (ls) => ls.filter((l) => l.offsetParent).map((l) => l.textContent.trim()));
+      check(`${tag}: empty submit flags name, email and message${r.nl ? " in Dutch" : ""}`, errs.length === 3 && (!r.nl || errs.every((t) => /Dit veld is verplicht/.test(t))), errs.join("|"));
+      const email = `svc-${w}-${Date.now()}-${Math.floor(Math.random() * 1e4)}@example.com`;
+      await fillAndSend(page, id, { name: "Service Tester", email, msg: "Service request-capture-marker" });
+      const conf = await confText(page);
+      check(`${tag}: confirmation fits the context`, r.conf.test(conf) && (r.nl ? /geen boeking en geen betaling/.test(conf) : /not a booking or a payment/.test(conf)), conf || (await whyNot(page)));
+      const sent = mails();
+      const team = sent.find((m) => m.to === TEAM);
+      const visitor = sent.find((m) => m.to === email);
+      check(`${tag}: FIDES notification subject names the context`, team && r.subject.test(team.subject), team && team.subject);
+      check(`${tag}: visitor mail subject and text fit the context`, visitor && r.visitor.test(visitor.subject) && r.body.test(plain(visitor.message)), visitor && `${visitor.subject} | ${plain(visitor.message).slice(0, 90)}`);
+      check(`${tag}: no horizontal overflow and no script errors`, !(await overflow(page)) && page.pageErrors.length === 0, page.pageErrors.join("|"));
+      await page.context().close();
+    }
   }
 
   // ---- Keyboard and aria after a validation error (desktop and mobile)

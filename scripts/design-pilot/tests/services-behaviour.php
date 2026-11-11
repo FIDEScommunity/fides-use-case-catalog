@@ -43,7 +43,7 @@ $check(! preg_match('/€|\bprice\b|\bfee\b|per day|excluding VAT/i', wp_strip_a
 $check(strpos($html, '/learn/sessions/') !== false, 'the training and workshops overview stays linked');
 $check(strpos($html, 'wallet-readiness-assessment/') !== false, 'the assessment is linked');
 $contact = Fides_DS_Site_Shell::url('/about-fides/contact/');
-$check($contact !== '' && substr_count($html, 'href="' . esc_url($contact) . '"') >= 4, 'other services and the hero action use the site Contact page');
+$check(preg_match_all('~href="[^"]*(?:request-wpforms|services/enquiry)/\?(?:offering|context)=~', $html) >= 4 && strpos($html, 'about-fides/contact') === false, 'the other services and the hero action open the request form (WPForms route or old enquiry), not the general Contact page');
 $check(strpos($html, 'Design preview') === false && strpos($html, 'not built yet') === false, 'no design notes');
 
 // A site that drops Contact: no dead link, rows stay readable as text.
@@ -54,7 +54,7 @@ add_filter('fides_site_shell_url', $drop, PHP_INT_MAX, 2);
 $dropped = Fides_DS_Learn::render_page($root->ID);
 remove_filter('fides_site_shell_url', $drop, PHP_INT_MAX);
 $check(strpos($dropped, 'Use case and business case') !== false && strpos($dropped, 'href="">') === false && strpos($dropped, 'about-fides/contact') === false, 'without a Contact page the rows keep their text and no empty link is rendered');
-$check(substr_count($dropped, 'fides-ds-card__arrow') === 1, 'only the assessment row keeps an arrow without Contact');
+$check(substr_count($dropped, 'fides-ds-card__arrow') === 4, 'all four rows keep their arrow without Contact, their links do not depend on it');
 
 // Edit and re-render: add a service, change the intro action, then restore exactly.
 $original = array('services' => $meta($root->ID, 'services'), 'actions' => $meta($root->ID, 'actions'), 'cta_title' => $meta($root->ID, 'cta_title'));
@@ -76,7 +76,7 @@ $check(strpos($a, 'FIDES SERVICES · READINESS') !== false, 'assessment shows it
 $check(preg_match_all('~<div><dt>[^<]+</dt><dd>~', $a) === 4, 'assessment details box has four rows');
 $check(strpos($a, 'fides-learn-offering__lower') !== false && strpos($a, 'How it works') > strpos($a, 'fides-learn-details'), 'content after the More block runs below the details box');
 $check(! preg_match('/€|\bprice\b|\bfee\b|\bweeks?\b|\bdays?\b|written report|final report|roadmap/i', wp_strip_all_tags($a)), 'no price, fixed duration or specific deliverable promise on the assessment page');
-$check(strpos($a, '/services/enquiry/?offering=wallet-readiness-assessment') !== false, 'primary action opens the enquiry with the assessment context');
+$check(preg_match('~(services/enquiry|request-wpforms)/\?offering=wallet-readiness-assessment~', $a) === 1, 'primary action opens the enquiry with the assessment context');
 $check(strpos($a, '/learn/sessions/wallet-readiness-workshop/') !== false && strpos($a, '/overview/') !== false, 'assessment links to the workshop page and the use case overview');
 $check(strpos($a, 'class="fides-learn__back"') === false, 'no duplicate back link beside the breadcrumb');
 $trail = Fides_DS_Learn::breadcrumb($assessment->ID);
@@ -147,7 +147,7 @@ foreach ($rows_before as $r) {
 $edit[1]['title'] = 'Use case and business case (edited)';
 $save($edit);
 $check(strpos($meta($root->ID, 'services'), 'Use case and business case (edited)') !== false && Fides_DS_Learn::render_page($root->ID) !== $html, 'a valid edit through the metabox handler is stored and rendered');
-$check(strpos(Fides_DS_Learn::render_page($root->ID), 'contact') !== false && count(Fides_DS_Learn::services($root->ID)) === 4, 'the other services and their contact destinations stay intact');
+$check(strpos(Fides_DS_Learn::render_page($root->ID), 'offering=') !== false && count(Fides_DS_Learn::services($root->ID)) === 4, 'the other services and their enquiry destinations stay intact');
 $good_value = $meta($root->ID, 'services');
 $edit[2]['url'] = 'conact';
 $edit[3]['title'] = '';

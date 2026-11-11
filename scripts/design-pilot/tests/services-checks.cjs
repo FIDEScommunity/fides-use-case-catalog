@@ -100,8 +100,8 @@ async function checkNavigation(page, L, width, where) {
     check(`${L("overview")}: four services in order`, titles.join("|") === "Wallet readiness assessment|Use case and business case|Independent advice and selection|Project and ecosystem coordination", titles.join("|"));
     check(`${L("overview")}: no prices or price indications`, !/€|\bprice\b|\bfee\b|excluding VAT/i.test(text));
     const links = await page.locator(".fides-learn-service a.fides-ds-card__link").evaluateAll((a) => a.map((x) => x.href));
-    check(`${L("overview")}: assessment goes to its page, the others to Contact`, /\/services\/wallet-readiness-assessment\/$/.test(links[0]) && links.slice(1).every((h) => /\/about-fides\/contact\/$/.test(h)), links.join("|"));
-    check(`${L("overview")}: hero action and training link`, /\/about-fides\/contact\/$/.test(await page.locator(".fides-learn__actions a").first().evaluate((a) => a.href)) && (await page.locator('a[href$="/learn/sessions/"]').count()) >= 1);
+    check(`${L("overview")}: assessment goes to its page, the others to the request form`, /\/services\/wallet-readiness-assessment\/$/.test(links[0]) && links.slice(1).every((h) => /(request-wpforms|services\/enquiry)\/\?offering=/.test(h)), links.join("|"));
+    check(`${L("overview")}: hero action and training link`, /(request-wpforms|services\/enquiry)\/\?context=service$/.test(await page.locator(".fides-learn__actions a").first().evaluate((a) => a.href)) && (await page.locator('a[href$="/learn/sessions/"]').count()) >= 1);
     // Row pattern: hover fill, arrow and focus match the shared catalog row card.
     const row = page.locator(".fides-learn-service").first();
     const before = await row.evaluate((e) => getComputedStyle(e).backgroundColor);

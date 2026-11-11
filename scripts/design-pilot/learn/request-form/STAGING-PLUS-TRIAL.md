@@ -5,7 +5,7 @@ site, which runs WPForms 1.10.2.1 with the paid plugin code (licence said to be 
 separate test page, with test data only.
 
 Rules: no real email addresses, no production URLs, no licence keys (not in commands, logs, screenshots or this repo).
-Do not change the existing request routes. The routing switch stays OFF: staging has no guard default, the built-in default is OFF, and the redirect for old request URLs does nothing while it is OFF (only the local pilot guard turns it on). Do not send mail: `wp_mail` must be blocked first (step 2).
+Do not change the existing request routes. The routing switch stays OFF: staging has no guard default, the built-in default is OFF, and the redirect for old request URLs does nothing while it is OFF (only the local pilot guard turns it on). The about page then keeps linking to the Contact page. If the Services page is re-seeded from the new `learn/manifest.json`, its service links end in `/services/enquiry/?offering=…` or `?context=service`; the old enquiry page ignores values it does not know. Do not send mail: `wp_mail` must be blocked first (step 2).
 
 ## 1. Files
 
@@ -14,13 +14,14 @@ All paths are relative to the plugin or the package. Check the "base" hash of th
 | Target on staging | Source in repo | sha256 of the new file | sha256 of the file now on staging (package 1.13.44) |
 | --- | --- | --- | --- |
 | `wp-content/plugins/fides-community-tools-tiles/fides-community-tools-tiles.php` | tiles `fides-community-tools-tiles.php` | `1dce26b42ec77fbf152f41893d38fc2a94dc0e5e445f36d0e5ee29bb58484cec` | `1a2a8bd4b09bf1bb70d332ad76f35806e4ce3d67c1d038b2937082eec1404565` |
-| `.../includes/class-fides-ds-learn.php` | tiles `includes/class-fides-ds-learn.php` | `f338585067d542bafc9ca4cb040ecba169211ef57a410aa014ea048d6d5cdb9b` | `b39d5ac9ed282ed2bffa4901e1b8452f63bf12d3dc0066145464a66ea33bea42` |
-| `.../includes/class-fides-ds-request-form.php` (new) | tiles `includes/class-fides-ds-request-form.php` | `99ce4516b2e08c7d5d487d04bda98546ac0f3cae0b3d7b8b727235174232987a` | not present |
+| `.../includes/class-fides-ds-learn.php` | tiles `includes/class-fides-ds-learn.php` | `c2033a52635a4826c7eb5cf20bffc9031df2115e95c924da41b6a5a41e8980cf` | `b39d5ac9ed282ed2bffa4901e1b8452f63bf12d3dc0066145464a66ea33bea42` |
+| `.../includes/class-fides-ds-request-form.php` (new) | tiles `includes/class-fides-ds-request-form.php` | `a03f5472e82e4e7b1050a2d10b5525abb893a3b31da141e8deb2cd159a4348a4` | not present |
+| `.../includes/class-fides-ds-about.php` | tiles `includes/class-fides-ds-about.php` | `ff7f5932ed75d9ba5c9c6f949fc04128e366132ea961c18f32f9a5cb9a863ec5` | not compared (not changed by the trial before this version) |
 | `.../assets/request-form.css` (new) | tiles `assets/request-form.css` | `9a002c3ede28001f4c173a732d7f15892f7caa8c5946c2ab864691a1b841a72f` | not present |
 | `.../assets/request-form.js` (new) | tiles `assets/request-form.js` | `360d9e21300e730a39ecfe318715ef59f7cfea646fa9eef4915dc496b3966b6d` | not present |
 | `seed/seed-request-form.php` (new, next to `create-pages.php`) | use-case-catalog `scripts/design-pilot/seed-request-form.php` | `3a2d2b8b60a8ed0a3976d94fa5861947de55297b65fd459f23097501cc2259ad` | not present |
 | `seed/learn/request-form/fides-request-form.json` (new) | `.../learn/request-form/fides-request-form.json` | `8376d0eac330f14c2106f41b0d7ebb326a9872366ab4cfb34e0b540df11b0805` | not present |
-| `seed/learn/nl-translations.php` | `.../learn/nl-translations.php` | `5dadda531fd1ef41f44b4fec85efa0ad3446ae4527711b58ded608071d6acbda` | `534a091b5132be49d456e8ab60d218ccbf1957da30704b2006a606db2be56519` |
+| `seed/learn/nl-translations.php` | `.../learn/nl-translations.php` | `5cdde1ff94260a36d585fd5e48054feff5bc77345447d6f614dd0a360baa95f2` | `534a091b5132be49d456e8ab60d218ccbf1957da30704b2006a606db2be56519` |
 | not deployed; run from your machine | `.../tests/staging-plus-checks.cjs` | `3b2ba12901067dd257e03ab72e17d75c01ed3aaa298c93681b88651e4cd8b160` | not present |
 
 The tiles files differ from package 1.13.44 only by the request form changes (a `require_once`, a wrapper and a branch in `class-fides-ds-learn.php`).
