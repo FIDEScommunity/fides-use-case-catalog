@@ -18,8 +18,8 @@ pushed, deployed or synced to utrecht-demo.
 | Issuing credentials for wallets | `topics/for-businesses/issuing-credentials-for-wallets/` | no Paper frame (same article template) | article |
 | Accepting information from a wallet | `topics/for-businesses/accepting-information-from-a-wallet/` | no Paper frame (same article template) | article |
 | EUDI Wallet and European Business Wallet: how do they relate? | `topics/the-big-picture/eudi-wallet-and-european-business-wallet/` | no Paper frame (same article template) | article |
-| What is a credential? And what is an attestation? | `topics/the-big-picture/what-is-a-credential/` | no Paper frame (same article template) | article |
-| What is a digital wallet? | `topics/the-big-picture/what-is-a-digital-wallet/` (menu order 4, last under The big picture) | no Paper frame (same article template); back links from the hub, the credential, EUDI, EBW, comparison, roles and business-wallet articles; check: `tests/learn-wallet-page-checks.cjs` | article |
+| What is a credential? And what is an attestation? | `topics/the-big-picture/what-is-a-credential/` (menu order 1) | no Paper frame (same article template) | article |
+| What is a digital wallet? | `topics/the-big-picture/what-is-a-digital-wallet/` (menu order 0, first under The big picture) | no Paper frame (same article template); back links from the hub, the credential, EUDI, EBW, comparison, roles and business-wallet articles; check: `tests/learn-wallet-page-checks.cjs` | article |
 | Formats and protocols: what do they do? | `topics/the-big-picture/formats-and-protocols/` (menu order 5) | no Paper frame (same article template); back links from the hub, credential, how-credentials-connect, digital wallet, issuing and accepting articles; check: `tests/learn-formats-page-checks.cjs` | article |
 | Trust and interoperability | `topics/the-big-picture/trust-and-interoperability/` (menu order 6) | no Paper frame (same article template); back links from the hub, credential, how-credentials-connect and formats articles; check: `tests/learn-trust-page-checks.cjs` | article |
 | Training & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |
@@ -91,7 +91,7 @@ Routes to existing pilot parts: closing bands and article links go to
 | Page template "FIDES Learn (inside site shell)" | `fides-community-tools-tiles/includes/class-fides-ds-learn.php`, `templates/learn.php` | Uses `Fides_DS_Site_Shell::render_header()/render_footer()`. One header, one footer. No new plugin. |
 | Styles / script | tiles `assets/learn.css`, `assets/learn.js` | Loaded only on Learn pages, on top of `design-system.css`. |
 | Editorial fields | metabox "FIDES Learn page" on every page | page kind, headline, article label, sources, closing band, series. Excerpt = intro. |
-| Glossary | shortcodes `[fides_learn_term]`, `[fides_learn_terms]` | Look up the existing vocabulary (`fides-vocabulary-glossary` data) and render the shared `Fides_DS_Glossary` dialog. Definitions are never typed. A term without entry (today: "Credential") is plain text and reported by the seed script. |
+| Glossary | shortcodes `[fides_learn_term]`, `[fides_learn_terms]` | Look up the existing vocabulary (`fides-vocabulary-glossary` data) and render the shared `Fides_DS_Glossary` dialog. Definitions are never typed. A term without entry is plain text and reported by the seed script. |
 | Example content | `learn/manifest.json`, `learn/content/*.html` | Block markup with tokens `{{learn}}`, `{{pilot}}`, `{{glossary}}`. |
 | Seed script | `create-learn-pages.sh/.php` | See "Seeding and overwrite protection". |
 | Backup / restore | `backup-pilot.sh`, `restore-check.sh` | See "Backup and rebuild". |
@@ -128,6 +128,10 @@ re-seed. Block classes the seed uses: `fides-learn-rows` (`--plain`, `--from-zer
 `fides-learn-panel` (+ `__aside`), `fides-learn-card--brand`, `fides-learn-band`
 (`--plain`), `fides-learn-flow`, `fides-learn-split`, `fides-learn-glossary`,
 `fides-learn-note`.
+
+## Package status and counts
+
+Glossary: pinned in `staging/glossary-source.json` (1.12.1, local branch, not published; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.46. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (26 and 26 on 11 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
 
 ## Seeding and overwrite protection
 
@@ -175,8 +179,8 @@ come from the source site).
 
 1. WordPress 7.1.x, PHP 8.2, theme `blocksy` 2.1.59 + child theme `blocksy-child` 1.0.0.
 2. `blocksy-companion-pro` 2.0.99, `complianz-gdpr` 7.4.6 (consent banner), as on the source site.
-3. `fides-community-tools-tiles` 1.13.45 or later (shell, design system, **Learn template**, percent-encoding fix `0c89d3f`, `[fides_learn_usecase]`) first. Older versions strip `%3A` from source URLs and do not know the use case shortcode.
-4. `fides-vocabulary-glossary` 1.1.15 (glossary page and `data/glossary-aggregated.json`).
+3. `fides-community-tools-tiles` 1.13.45 or later (pilot: 1.13.46) (shell, design system, **Learn template**, percent-encoding fix `0c89d3f`, `[fides_learn_usecase]`) first. Older versions strip `%3A` from source URLs and do not know the use case shortcode.
+4. `fides-vocabulary-glossary` 1.1.16 (glossary page, `legacyIds` handling and `data/glossary-aggregated.json`; the data file must match `staging/glossary-source.json`).
 5. Catalog plugins for the linked pilot pages: `fides-use-case-catalog` 0.21.11, `fides-organization-catalog` 1.18.6, `fides-credential-catalog` 1.7.0, `fides-wallet-catalog` 2.16.4.
 6. Optional: `fides-assistant` 0.6.1 (adds Ask FIDES to the Learn bar; the bar item is absent without it).
 7. Pilot guard mu-plugin (`fides-design-pilot-guard.php`), pages `fides-design-pilot` and the glossary page, then `create-learn-pages.sh`.
@@ -217,7 +221,7 @@ needs those bases to include the sub-directory.
 ### Still needed before staging
 
 Own repo or release for the glossary plugin and the child theme; a decision on the
-four protection points above; merge of the glossary changes `bd923fe`, `0b63c68` and `aa84e8b` in `fides-interop-profiles` (Credential, Credential Type, vct, Mandate, eIDAS duplicates, aggregate check; see `glossary-proposals.md`) and a manual update of the glossary plugin copy on staging, which is outside git and outside the staging package; clarification by the record owner of the VOG use case (`productionDeployment: yes` next to a summary that describes a pilot with sports associations while Justis investigates digital issuance); destinations for "Browse issuers" and "Browse relying parties" inside the pilot or staging (none today, so no Learn page links to them); a decision on /nl/ routes (they show the English text with Dutch interface labels; there is no Dutch translation); content review of the two example articles by an
+four protection points above; merge of the local glossary branch `fix/glossary-ebw-definition` (1.12.1, European Business Wallet wording; the earlier changes `bd923fe`, `0b63c68` and `aa84e8b` are historic and merged in 1.12.0), after which `staging/glossary-source.json` is updated (the glossary data is part of the package, not a manual step); clarification by the record owner of the VOG use case (`productionDeployment: yes` next to a summary that describes a pilot with sports associations while Justis investigates digital issuance); destinations for "Browse issuers" and "Browse relying parties" inside the pilot or staging (none today, so no Learn page links to them); a decision on /nl/ routes (they show the English text with Dutch interface labels; there is no Dutch translation); content review of the two example articles by an
 assessed author (no author or date is shown, by design); build of the sessions and
 request pages (24.3-24.6) or removal of their previews; Matomo and request flow stay
 out of scope.

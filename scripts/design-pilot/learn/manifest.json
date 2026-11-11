@@ -37,6 +37,34 @@
    "menu_order": 2
   },
   {
+   "path": "topics/the-big-picture/what-is-a-digital-wallet",
+   "title": "What is a digital wallet?",
+   "kind": "article",
+   "eyebrow": "Explainer · The big picture",
+   "excerpt": "A digital wallet can help a person or organisation receive, manage and share information. What it can do depends on the wallet and the services connected to it.",
+   "sources": "FIDES · Personal wallets | https://fides.community/topics/personal-wallets/\nFIDES · Business wallets | https://fides.community/topics/business-wallets/\nEuropean Commission · EUDI Regulation | https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets",
+   "cta_title": "See wallets in use",
+   "cta_text": "Browse use cases, then follow the connections to the wallets involved.",
+   "cta_label": "Explore use cases",
+   "cta_url": "{{pilot}}/overview/",
+   "content": "what-is-a-digital-wallet.html",
+   "menu_order": 0
+  },
+  {
+   "path": "topics/the-big-picture/what-is-a-credential",
+   "title": "What is a credential? And what is an attestation?",
+   "kind": "article",
+   "eyebrow": "Explainer · The big picture",
+   "excerpt": "A credential can help someone provide information that another party can check. In Europe, some digital credentials are described as attestations of attributes.",
+   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nRegulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nEuropean Commission · Questions and answers on trust services under the European digital identity regulation | https://digital-strategy.ec.europa.eu/en/faqs/questions-answers-trust-services-under-european-digital-identity-regulation\nFIDES · Credential Types | https://fides.community/topics/credentials/\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets",
+   "cta_title": "See credential types in practice",
+   "cta_text": "Browse the credential types listed in the FIDES Explorer.",
+   "cta_label": "Browse credential types",
+   "cta_url": "{{pilot}}/credentials/",
+   "content": "what-is-a-credential.html",
+   "menu_order": 1
+  },
+  {
    "path": "topics/the-big-picture/how-credentials-connect",
    "title": "How credentials connect issuers, wallets and services",
    "kind": "article",
@@ -48,7 +76,7 @@
    "cta_label": "Explore use cases",
    "cta_url": "{{pilot}}/overview/",
    "content": "how-credentials-connect.html",
-   "menu_order": 0
+   "menu_order": 2
   },
   {
    "path": "topics/the-big-picture/european-digital-identity-wallet",
@@ -63,7 +91,7 @@
    "cta_label": "View the workshop",
    "cta_url": "{{learn}}/sessions/wallet-readiness-workshop/",
    "content": "european-digital-identity-wallet.html",
-   "menu_order": 1
+   "menu_order": 3
   },
   {
    "path": "topics/the-big-picture/eudi-wallet-and-european-business-wallet",
@@ -77,34 +105,6 @@
    "cta_label": "View the workshop",
    "cta_url": "{{learn}}/sessions/wallet-readiness-workshop/",
    "content": "eudi-wallet-and-european-business-wallet.html",
-   "menu_order": 2
-  },
-  {
-   "path": "topics/the-big-picture/what-is-a-credential",
-   "title": "What is a credential? And what is an attestation?",
-   "kind": "article",
-   "eyebrow": "Explainer · The big picture",
-   "excerpt": "A credential can help someone provide information that another party can check. In Europe, some digital credentials are described as attestations of attributes.",
-   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nRegulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nEuropean Commission · Questions and answers on trust services under the European digital identity regulation | https://digital-strategy.ec.europa.eu/en/faqs/questions-answers-trust-services-under-european-digital-identity-regulation\nFIDES · Credential Types | https://fides.community/topics/credentials/\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets",
-   "cta_title": "See credential types in practice",
-   "cta_text": "Browse the credential types listed in the FIDES Explorer.",
-   "cta_label": "Browse credential types",
-   "cta_url": "{{pilot}}/credentials/",
-   "content": "what-is-a-credential.html",
-   "menu_order": 3
-  },
-  {
-   "path": "topics/the-big-picture/what-is-a-digital-wallet",
-   "title": "What is a digital wallet?",
-   "kind": "article",
-   "eyebrow": "Explainer · The big picture",
-   "excerpt": "A digital wallet can help a person or organisation receive, manage and share information. What it can do depends on the wallet and the services connected to it.",
-   "sources": "FIDES · Personal wallets | https://fides.community/topics/personal-wallets/\nFIDES · Business wallets | https://fides.community/topics/business-wallets/\nEuropean Commission · EUDI Regulation | https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets",
-   "cta_title": "See wallets in use",
-   "cta_text": "Browse use cases, then follow the connections to the wallets involved.",
-   "cta_label": "Explore use cases",
-   "cta_url": "{{pilot}}/overview/",
-   "content": "what-is-a-digital-wallet.html",
    "menu_order": 4
   },
   {
