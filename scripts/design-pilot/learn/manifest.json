@@ -94,6 +94,20 @@
    "menu_order": 3
   },
   {
+   "path": "topics/for-businesses/issuing-credentials-for-wallets",
+   "title": "Issuing credentials for wallets",
+   "kind": "article",
+   "eyebrow": "Explainer · For businesses",
+   "excerpt": "How can your organisation provide information that others can check and use? Start with a purpose, the source of the information and the parties that rely on it.",
+   "sources": "FIDES · Verifiable Credentials | https://fides.community/topics/verifiable-credentials/\nEuropean Commission · EUDI Regulation | https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation\nRegulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nGermany · EAA provider onboarding (developer guide) | https://bmi.usercontent.opencode.de/eudi-wallet/developer-guide/eaa/onboarding/overview/",
+   "cta_title": "See credential types in practice",
+   "cta_text": "Browse the credential types listed in the FIDES Explorer to see what existing types describe.",
+   "cta_label": "Browse credential types",
+   "cta_url": "{{pilot}}/credentials/",
+   "content": "issuing-credentials-for-wallets.html",
+   "menu_order": 2
+  },
+  {
    "path": "topics/for-businesses/european-business-wallet",
    "title": "European Business Wallet",
    "kind": "article",

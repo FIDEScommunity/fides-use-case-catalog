@@ -15,6 +15,7 @@ pushed, deployed or synced to utrecht-demo.
 | Business wallets: where to start | `topics/for-businesses/business-wallets-where-to-start/` | 24.19 | article |
 | European Digital Identity Wallet | `topics/the-big-picture/european-digital-identity-wallet/` | no Paper frame (same article template) | article |
 | European Business Wallet | `topics/for-businesses/european-business-wallet/` | no Paper frame (same article template) | article |
+| Issuing credentials for wallets | `topics/for-businesses/issuing-credentials-for-wallets/` | no Paper frame (same article template) | article |
 | EUDI Wallet and European Business Wallet: how do they relate? | `topics/the-big-picture/eudi-wallet-and-european-business-wallet/` | no Paper frame (same article template) | article |
 | What is a credential? And what is an attestation? | `topics/the-big-picture/what-is-a-credential/` | no Paper frame (same article template) | article |
 | Training & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |
@@ -112,7 +113,7 @@ The **European Business Wallet** article (`topics/for-businesses/european-busine
 same way: text, "Continue learning", sources field and the "Content last checked" line. It describes a
 legislative proposal; recheck the status paragraph before each publication.
 Source URLs keep percent-encoding (`%3A` and similar): the Learn fields use `Fides_DS_Learn::sanitize_field_value()`, not `sanitize_text_field()`, which deletes `%xx`. "Continue learning" lists are grouped under "Learn more" and "Explore in the catalogs"; the closing band (manifest `cta_*`) is the single place for the workshop or catalog button. Glossary wording proposals that the pilot cannot change live in `learn/glossary-proposals.md`. "Terms in this article" shows whole sentences and a "Full definition" button.
-Only links to existing pages are present; "Issue credentials for wallets" is added when that page exists.
+Only links to existing pages are present. The issuer catalog has no pilot page yet (the `issuers/` route redirects to a form), so the article links to credential types, use cases and wallets only.
 
 **Agent (layout):** change `learn.css`/`learn.js`/`class-fides-ds-learn.php` in the
 tiles worktree; change example content in `learn/content` and `manifest.json`, then
