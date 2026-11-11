@@ -16,6 +16,7 @@ pushed, deployed or synced to utrecht-demo.
 | European Digital Identity Wallet | `topics/the-big-picture/european-digital-identity-wallet/` | no Paper frame (same article template) | article |
 | European Business Wallet | `topics/for-businesses/european-business-wallet/` | no Paper frame (same article template) | article |
 | EUDI Wallet and European Business Wallet: how do they relate? | `topics/the-big-picture/eudi-wallet-and-european-business-wallet/` | no Paper frame (same article template) | article |
+| What is a credential? And what is an attestation? | `topics/the-big-picture/what-is-a-credential/` | no Paper frame (same article template) | article |
 | Training & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |
 | Wallet Introduction | `sessions/wallet-introduction/` | 24.4 | offering |
 | Wallet Readiness Workshop | `sessions/wallet-readiness-workshop/` | 24.5 (same pattern) | offering |
@@ -110,7 +111,7 @@ statements (availability by end 2026, acceptance rules) before each publication.
 The **European Business Wallet** article (`topics/for-businesses/european-business-wallet/`) works the
 same way: text, "Continue learning", sources field and the "Content last checked" line. It describes a
 legislative proposal; recheck the status paragraph before each publication.
-Only links to existing pages are present; "Issue credentials for wallets" and the credential explainer are added when those pages exist.
+Only links to existing pages are present; "Issue credentials for wallets" is added when that page exists.
 
 **Agent (layout):** change `learn.css`/`learn.js`/`class-fides-ds-learn.php` in the
 tiles worktree; change example content in `learn/content` and `manifest.json`, then
