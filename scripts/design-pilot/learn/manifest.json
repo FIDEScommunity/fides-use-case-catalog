@@ -66,6 +66,21 @@
    "menu_order": 1
   },
   {
+   "path": "topics/for-businesses/european-business-wallet",
+   "title": "European Business Wallet",
+   "kind": "article",
+   "headline": "European Business Wallet",
+   "eyebrow": "Explainer · For businesses",
+   "excerpt": "A European proposal for exchanging business information and acting on behalf of an organisation. What it aims to do, where it stands and how it relates to business wallets in use today.",
+   "sources": "FIDES · European Business Wallet | https://fides.community/topics/european-business-wallet/\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets\nCouncil of the EU · Negotiating position, 9 June 2026 | https://www.consilium.europa.eu/en/press/press-releases/2026/06/09/european-business-wallets-council-adopts-negotiating-position/\nEuropean Parliament · Legislative procedure file 2025/0358(COD) | https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0358(COD)",
+   "cta_title": "Explore business wallets",
+   "cta_text": "Compare business wallets independently, or look at a process with your team.",
+   "cta_label": "Browse business wallets",
+   "cta_url": "{{pilot}}/business-wallets/",
+   "content": "european-business-wallet.html",
+   "menu_order": 1
+  },
+  {
    "path": "sessions",
    "title": "Training & workshops",
    "kind": "sessions",

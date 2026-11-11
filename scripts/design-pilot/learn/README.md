@@ -14,6 +14,7 @@ pushed, deployed or synced to utrecht-demo.
 | How credentials connect issuers, wallets and services | `topics/the-big-picture/how-credentials-connect/` | 24.18, mobile 24.20 | article |
 | Business wallets: where to start | `topics/for-businesses/business-wallets-where-to-start/` | 24.19 | article |
 | European Digital Identity Wallet | `topics/the-big-picture/european-digital-identity-wallet/` | no Paper frame (same article template) | article |
+| European Business Wallet | `topics/for-businesses/european-business-wallet/` | no Paper frame (same article template) | article |
 | Training & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |
 | Wallet Introduction | `sessions/wallet-introduction/` | 24.4 | offering |
 | Wallet Readiness Workshop | `sessions/wallet-readiness-workshop/` | 24.5 (same pattern) | offering |
@@ -105,7 +106,10 @@ normal block) are edited in the page editor. Sources are the "Sources" field in 
 "FIDES Learn page" box (`Label | URL` per line). There is no separate date field:
 update the date line whenever the page is rechecked, and recheck the regulatory
 statements (availability by end 2026, acceptance rules) before each publication.
-Only links to existing pages are present; "Compare with the European Business Wallet",
+The **European Business Wallet** article (`topics/for-businesses/european-business-wallet/`) works the
+same way: text, "Continue learning", sources field and the "Content last checked" line. It describes a
+legislative proposal; recheck the status paragraph before each publication.
+Only links to existing pages are present; "Compare the EUDI Wallet and the European Business Wallet",
 "Issue credentials for wallets" and the credential explainer are added when those pages exist.
 
 **Agent (layout):** change `learn.css`/`learn.js`/`class-fides-ds-learn.php` in the
