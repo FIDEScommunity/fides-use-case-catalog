@@ -2,7 +2,7 @@
 
 # Proposed pull request: glossary terms for FIDES Learn
 
-Target: `FIDEScommunity/fides-interop-profiles`, branch `main`. Local commit: `bd923fe` (not pushed). This text is a proposal for the description; the commit message is shorter.
+Target: `FIDEScommunity/fides-interop-profiles`, branch `main`. Historic: local commit `bd923fe` (merged as part of 1.12.0, PR #4; 1.12.1 followed in PR #5). This text is a proposal for the description; the commit message is shorter.
 
 ## What changes
 

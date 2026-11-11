@@ -2,8 +2,8 @@
   "note": "The glossary data the design review site must show. build-package.py refuses to build, verify-package.sh and staging/preflight.php fail when the bundled glossary-aggregated.json differs. Update with: change data/vocabulary.json in fides-interop-profiles, npm run build:glossary, copy data/glossary-aggregated.json into the pilot glossary plugin copy, then update this file (commit, sha256, terms, vocabulary_sha256, required_ids, legacy_ids, absent_ids) and run verify.",
   "source_repo": "FIDEScommunity/fides-interop-profiles",
   "source_file": "data/glossary-aggregated.json",
-  "source_commit": "54953791feab26911d29e31b526b1e958b030318",
-  "source_commit_published": false,
+  "source_commit": "9bf77c9620e011943da3bbabb744a354dbff5199",
+  "source_commit_published": true,
   "vocabulary_sha256": "f4d5685dd9f0528006d46e1b53fea7239cf9289d7750d7e056386c9ed0d7f651",
   "sha256": "917bbf163b6028ebe8e3b0bb55a28956cf6ceec4bae49542fa139e11f6cfc442",
   "terms": 344,
@@ -37,5 +37,5 @@
     "qeaa",
     "qerds"
   ],
-  "note_ebw": "1.12.1 is a LOCAL branch (fix/glossary-ebw-definition): European Business Wallet and four related terms (Legal equivalence, Core minimum functionalities, European Digital Directory, Power of Attorney) described as the Commission proposal. Set source_commit_published=true and the merge commit after it is merged; until then the review site shows it from the bundled file."
+  "note_ebw": "Published: PR #5 squash commit 9bf77c9 on main (glossary 1.12.1: European Business Wallet and four related terms described as the Commission proposal). Hashes of the bundled files equal the published files."
 }
