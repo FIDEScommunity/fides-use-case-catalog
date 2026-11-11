@@ -7,9 +7,12 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const WIDTHS = (process.env.WIDTHS || "1440,390").split(",").map(Number);
 const T = "/fides-design-pilot/learn/topics/for-businesses";
+const VOG = "digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC";
 const PAGES = [
   { key: "ebw", url: `${T}/european-business-wallet/`, id: "business-wallet-based-kyb-financial-onboarding-Rzqouv", org: "Hovi", title: "Business Wallet-Based KYB & Financial Onboarding" },
   { key: "start", url: `${T}/business-wallets-where-to-start/`, id: "end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh", org: "Robert Bosch GmbH", title: "End-to-End Digital Business Workflows: Transforming KYB-KYC-KYS via EU Business Wallet" },
+  { key: "how", url: "/fides-design-pilot/learn/topics/the-big-picture/how-credentials-connect/", id: VOG, org: "Credenco", title: "Digital Certificate of Good Conduct (VOG) as a Verifiable Credential", status: "marks this use case as in production", kicker: "See it in practice", editorial: true },
+  { key: "receive", url: "/fides-design-pilot/start/receive/", id: VOG, org: "Credenco", title: "Digital Certificate of Good Conduct (VOG) as a Verifiable Credential", status: "marks this use case as in production", kicker: "", heading: "H2" },
 ];
 let failures = 0;
 function check(name, ok, detail) {
@@ -33,8 +36,15 @@ function check(name, ok, detail) {
       check(`${tag}: exactly one card for the chosen record`, (await card.count()) === 1);
       const text = await card.innerText();
       check(`${tag}: title from the record`, text.includes(p.title), text.slice(0, 120));
-      check(`${tag}: organisation and careful status from the record`, text.includes(`The catalog lists ${p.org} as the organisation.`) && text.includes("does not mark this use case as in production"), text);
+      check(`${tag}: organisation and careful status from the record`, text.includes(`The catalog lists ${p.org} as the organisation.`) && text.includes(p.status || "does not mark this use case as in production"), text);
       check(`${tag}: card has an image from the record`, (await card.locator("img.fides-learn-record__image").count()) === 1);
+      check(`${tag}: no manual-text leftovers`, !/A Certificate of Good Conduct in a wallet/.test(text));
+      if (p.kicker !== undefined) check(`${tag}: kicker ${p.kicker ? "shown" : "absent"}`, p.kicker ? text.toLowerCase().includes(p.kicker.toLowerCase()) : (await card.locator(".fides-learn-record__kicker").count()) === 0);
+      if (p.heading) check(`${tag}: card heading level`, (await card.locator(p.heading.toLowerCase()).count()) === 1);
+      const link = card.locator("a.fides-ds-action-link");
+      await link.focus();
+      const focus = await link.evaluate((a) => ({ active: document.activeElement === a, outline: getComputedStyle(a).outlineStyle + " " + getComputedStyle(a).outlineWidth, shadow: getComputedStyle(a).boxShadow }));
+      check(`${tag}: card link takes keyboard focus`, focus.active);
       const box = await card.boundingBox();
       check(`${tag}: card fits the viewport`, box && box.x >= 0 && box.x + box.width <= width + 1, JSON.stringify(box));
       const href = await card.locator("a.fides-ds-action-link").getAttribute("href");

@@ -52,6 +52,32 @@ $notice = do_shortcode('[fides_learn_usecase id="does-not-exist" url="' . $url .
 $check(strpos($notice, 'Editor notice') !== false && strpos($notice, 'fides-learn-record"') === false, 'unknown id => notice for editors, no card');
 wp_set_current_user(0);
 
+
+// VOG record (productionDeployment yes), as used on two Learn articles: kicker can be left out, heading level 2.
+$vog = 'digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC';
+$vog_item = $source->find_by_id($vog);
+$check(is_array($vog_item), 'VOG record exists');
+$vog_html = do_shortcode('[fides_learn_usecase id="' . $vog . '" url="' . $url . '" kicker="" heading="2" label="View the VOG use case"]');
+$check(strpos($vog_html, esc_html($vog_item['title'])) !== false && strpos($vog_html, 'The catalog lists Credenco as the organisation.') !== false, 'VOG title and organisation from the record');
+$check(strpos($vog_html, 'marks this use case as in production, as reported by the organisation') !== false, 'VOG productionDeployment yes => reported sentence');
+$check(strpos($vog_html, 'fides-learn-record__kicker') === false && strpos($vog_html, '<h2>') !== false && strpos($vog_html, 'View the VOG use case') !== false, 'empty kicker omitted, heading 2, custom label');
+$check(strpos(do_shortcode('[fides_learn_usecase id="' . $vog . '" url="' . $url . '" kicker="See it in practice"]'), 'See it in practice') !== false, 'custom kicker shown');
+
+// Unpublished record (in-memory only, nothing is written): hidden for visitors, notice for editors.
+$idx = new ReflectionProperty(Fides_Catalog_Source::class, 'id_index_cache');
+$idx->setAccessible(true);
+$source->find_by_id('warm-up');
+$index = (array) $idx->getValue($source);
+$index['tmp-draft-usecase'] = array_merge($vog_item, array('id' => 'tmp-draft-usecase', 'status' => 'draft'));
+$idx->setValue($source, $index);
+wp_set_current_user(0);
+$check(do_shortcode('[fides_learn_usecase id="tmp-draft-usecase" url="' . $url . '"]') === '', 'unpublished record => nothing for visitors');
+wp_set_current_user((int) ($admin[0] ?? 1));
+$check(strpos(do_shortcode('[fides_learn_usecase id="tmp-draft-usecase" url="' . $url . '"]'), 'Editor notice') !== false, 'unpublished record => notice for editors');
+unset($index['tmp-draft-usecase']);
+$idx->setValue($source, $index);
+wp_set_current_user(0);
+
 echo 'learn-usecase-behaviour: ' . $results['pass'] . ' passed, ' . count($results['fail']) . " failed\n";
 foreach ($results['fail'] as $f) {
     echo 'FAIL: ' . $f . "\n";
