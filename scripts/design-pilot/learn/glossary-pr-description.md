@@ -15,7 +15,7 @@ Target: `FIDEScommunity/fides-interop-profiles`, branch `main`. Local commit: `b
 
 1. The two new terms and the revised vct and Mandate texts (exact wording and sources are in `learn/glossary-proposals.md` of the design pilot).
 2. **16 eIDAS terms that appear in the aggregate for the first time.** They have been in `data/vocabulary.json` since commit `1924200` (2026-08-15) but the committed aggregate was last built on 2026-07-01 (the sync workflow only rebuilds it when a WordPress submission changes something). Publishing the aggregate therefore adds them to the glossary page: Eidas Trust Services, QEAA, QEArch, QERDS, QESeal, QESig, QPres, QPresSig, QPresSeal, QRemSeal, QRemSig, QTimestamp, QVal, QValSeal, QValSig, QWAC.
-3. **Three of those collide with existing terms** (same name or alias as an existing long-form term): `qeaa` / `Qualified Electronic Attestation of Attributes` (alias QEAA), `qerds` / `Qualified Electronic Registered Delivery Service` (alias QERDS), `qeseal` / `Qualified Electronic Seal` (alias QESeal). A search for "QEAA" then lists two entries, and anything that resolves a term by alias can match either. The short terms have no source URL. Suggestion for the source owners: turn the short terms into aliases of the long-form entries, or give the short terms a distinguishing name, before or after this merge.
+3. **Three of those collided with existing terms** (`qeaa`, `qerds`, `qeseal`). Resolved in the same PR: `QEAA` and `QERDS` carry `duplicateOf` and are listed once (aliases of the long terms); `QESeal` is a certificate and has its own title; the alias `QESeal` left the seal term. The other short terms got descriptive titles and a source URL. See `learn/glossary-proposals.md`.
 
 ## Not changed
 
@@ -24,3 +24,15 @@ No id, alias or name of an existing term was removed or moved to another term (c
 ## After the merge
 
 The design pilot and a staging package use the bundled copy of the aggregate (see `staging/glossary-source.json`); update that file and the bundled copy from the merged commit so they stay identical to GitHub `main`.
+
+## Rollout route (for the source maintainer; nothing here is done by the pilot)
+
+Live finding (2026-11-11 18:35-18:40 UTC, GET only): the glossary page https://fides.community/community-tools/glossary/ shows 335 terms from GitHub `main` `data/glossary-aggregated.json` (version 1.10.1, built 2026-07-01); the 16 eIDAS terms are missing there (search "QESig" gives nothing), and there is no QEAA card. The catalog popups (e.g. https://fides.community/ecosystem-explorer/organizational-wallets/) read `data/vocabulary.json` from `main` (351 terms) and show the short definitions ("Qualified electronic seal certificate"). Search for "QESeal" on the glossary shows "Qualified Electronic Seal", the popup shows the certificate: same word, different definitions. Eight other duplicate pairs (gaia-x/gaia-x-2, sd-jwt-vc/-2, ISO 18013-5/-7, UN/CEFACT, VCDM 2.0, EUDI Wallet, ISO mDL) are live today.
+
+1. Open a PR in `FIDEScommunity/fides-interop-profiles` from the three local commits (`bd923fe`, `0b63c68`, `aa84e8b`); review the texts; CI runs `npm run check:glossary` (new workflow).
+2. Merge. `data/glossary-aggregated.json` is committed in the PR, so no extra rebuild is needed. Raw GitHub caches for about 5 minutes.
+3. Production: the glossary page reads the GitHub aggregate first (option `fides_vocabulary_glossary_github_data_url`), so no plugin release is needed for the page. Popups read `vocabulary.json` from `main` (immediate after the merge). The plugin's bundled `data/glossary-aggregated.json` and `fides-wallet-catalog/assets/vocabulary.json` (100 terms, v1.0.0) are only fallbacks; refresh them with the next plugin releases. Flush the vocabulary catalog cache (the invalidate hook in `wp-submissions-sync.yml`, or WP transient flush) if the server-side listing is cached.
+4. Dependencies: tiles and catalog plugins need no change (popup keys are unchanged). Do not remove the short keys `QEAA`, `QERDS`, ... from `vocabulary.json`.
+5. Post-rollout GET checks: aggregate `terms` = 351 and contains no id `qeaa`/`qerds`; glossary page search "QEAA", "QERDS", "QESeal", "QESig" gives one card each; popups for QEAA/QERDS show the long definition; `?term=verifiable-credential-type` and `?term=mandate` still open.
+6. Rollback: revert the merge commit on `main` (the old aggregate returns; caches expire in minutes). No data migration is involved.
+7. Caveat: `import-wp-vocabulary-submissions.mjs` writes whole term objects for WordPress-managed terms; `duplicateOf` entries are not WordPress-managed, but a WP submission with key `QEAA` would drop the field and `check:glossary` would flag the duplicate.

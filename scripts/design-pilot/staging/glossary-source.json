@@ -2,10 +2,20 @@
   "note": "The glossary data the design review site must show. build-package.py refuses to build, verify-package.sh and staging/preflight.php fail when the bundled glossary-aggregated.json differs. Update with: change data/vocabulary.json in fides-interop-profiles, npm run build:glossary, copy data/glossary-aggregated.json into the pilot glossary plugin copy, then update this file (commit, sha256, terms, vocabulary_sha256) and run verify.",
   "source_repo": "FIDEScommunity/fides-interop-profiles",
   "source_file": "data/glossary-aggregated.json",
-  "source_commit": "bd923fe0795fd939366238db982f9840f53ead96",
+  "source_commit": "aa84e8bd4115f7812ab6cc0d6e7df9be051756ec",
   "source_commit_published": false,
-  "vocabulary_sha256": "7762775205e414dd8fb35cee09ba1d29cfaee1fc69a995362e81caf53ad793cd",
-  "sha256": "21f5e8304b2e47933e65d54ea0527ab88a7c5219a12aad862e8a08a337ccb778",
-  "terms": 353,
-  "required_ids": ["credential", "credential-type", "verifiable-credential-type", "mandate"]
+  "vocabulary_sha256": "af2ae973a093a06f15cfbb6d02a3b1b5a3266cf718afaaa4c52fb27cf4dcf28f",
+  "sha256": "9ca775e697488920c1f8bb085138eadcf01079962245966e447283f6fb455d0d",
+  "terms": 351,
+  "required_ids": [
+    "credential",
+    "credential-type",
+    "verifiable-credential-type",
+    "mandate",
+    "qualified-electronic-attestation-of-attributes",
+    "qualified-electronic-registered-delivery-service",
+    "qualified-electronic-seal",
+    "qeseal",
+    "qesig"
+  ]
 }
