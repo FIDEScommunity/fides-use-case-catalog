@@ -122,6 +122,20 @@
    "menu_order": 5
   },
   {
+   "path": "topics/the-big-picture/trust-and-interoperability",
+   "title": "Trust and interoperability",
+   "kind": "article",
+   "eyebrow": "Explainer · The big picture",
+   "excerpt": "A wallet interaction depends on more than software exchanging data. The parties also need to understand what the information means and which sources they accept.",
+   "sources": "EU Digital Identity Wallet · TS11: interfaces and formats for catalogue of attributes and catalogue of schemes | https://github.com/eu-digital-identity-wallet/eudi-doc-standards-and-technical-specifications/blob/main/docs/technical-specifications/ts11-interfaces-and-formats-for-catalogue-of-attributes-and-catalogue-of-schemes.md\nEU Digital Identity Wallet · Architecture and Reference Framework | https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework\nEU Digital Identity Wallet · Trust model | https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework/blob/main/docs/main/06-trust-model.md",
+   "cta_title": "See how this looks in practice",
+   "cta_text": "Browse use cases, then follow the connections to the credentials and organisations involved.",
+   "cta_label": "Explore use cases",
+   "cta_url": "{{pilot}}/overview/",
+   "content": "trust-and-interoperability.html",
+   "menu_order": 6
+  },
+  {
    "path": "topics/for-businesses/issuing-credentials-for-wallets",
    "title": "Issuing credentials for wallets",
    "kind": "article",
