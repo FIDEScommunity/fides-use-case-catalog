@@ -94,6 +94,20 @@
    "menu_order": 3
   },
   {
+   "path": "topics/the-big-picture/what-is-a-digital-wallet",
+   "title": "What is a digital wallet?",
+   "kind": "article",
+   "eyebrow": "Explainer · The big picture",
+   "excerpt": "A digital wallet can help a person or organisation receive, manage and share information. What it can do depends on the wallet and the services connected to it.",
+   "sources": "FIDES · Personal wallets | https://fides.community/topics/personal-wallets/\nFIDES · Business wallets | https://fides.community/topics/business-wallets/\nEuropean Commission · EUDI Regulation | https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets",
+   "cta_title": "See wallets in use",
+   "cta_text": "Browse use cases, then follow the connections to the wallets involved.",
+   "cta_label": "Explore use cases",
+   "cta_url": "{{pilot}}/overview/",
+   "content": "what-is-a-digital-wallet.html",
+   "menu_order": 4
+  },
+  {
    "path": "topics/for-businesses/issuing-credentials-for-wallets",
    "title": "Issuing credentials for wallets",
    "kind": "article",

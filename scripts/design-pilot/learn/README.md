@@ -19,6 +19,7 @@ pushed, deployed or synced to utrecht-demo.
 | Accepting information from a wallet | `topics/for-businesses/accepting-information-from-a-wallet/` | no Paper frame (same article template) | article |
 | EUDI Wallet and European Business Wallet: how do they relate? | `topics/the-big-picture/eudi-wallet-and-european-business-wallet/` | no Paper frame (same article template) | article |
 | What is a credential? And what is an attestation? | `topics/the-big-picture/what-is-a-credential/` | no Paper frame (same article template) | article |
+| What is a digital wallet? | `topics/the-big-picture/what-is-a-digital-wallet/` (menu order 4, last under The big picture) | no Paper frame (same article template); back links from the hub, the credential, EUDI, EBW, comparison, roles and business-wallet articles; check: `tests/learn-wallet-page-checks.cjs` | article |
 | Training & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |
 | Wallet Introduction | `sessions/wallet-introduction/` | 24.4 | offering |
 | Wallet Readiness Workshop | `sessions/wallet-readiness-workshop/` | 24.5 (same pattern) | offering |
