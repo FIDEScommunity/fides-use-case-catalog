@@ -2,10 +2,10 @@
   "note": "The glossary data the design review site must show. build-package.py refuses to build, verify-package.sh and staging/preflight.php fail when the bundled glossary-aggregated.json differs. Update with: change data/vocabulary.json in fides-interop-profiles, npm run build:glossary, copy data/glossary-aggregated.json into the pilot glossary plugin copy, then update this file (commit, sha256, terms, vocabulary_sha256, required_ids, legacy_ids, absent_ids) and run verify.",
   "source_repo": "FIDEScommunity/fides-interop-profiles",
   "source_file": "data/glossary-aggregated.json",
-  "source_commit": "9bf77c9620e011943da3bbabb744a354dbff5199",
+  "source_commit": "a52a6849ca96a30b8aa0c9bcb4f8605749296c2d",
   "source_commit_published": true,
-  "vocabulary_sha256": "f4d5685dd9f0528006d46e1b53fea7239cf9289d7750d7e056386c9ed0d7f651",
-  "sha256": "917bbf163b6028ebe8e3b0bb55a28956cf6ceec4bae49542fa139e11f6cfc442",
+  "vocabulary_sha256": "a33c4f78fae30a43b488cd2354ffe4b36e279738402cffc40778e57bb20fe3af",
+  "sha256": "355524646ac41171a31c9759c0f2702e1027c88f8e65ac4dc526d7b9238d18a6",
   "terms": 344,
   "required_ids": [
     "credential",
@@ -23,7 +23,7 @@
     "vcdm-2-0",
     "mdl-mdoc"
   ],
-  "source_version": "1.12.1",
+  "source_version": "1.12.2",
   "legacy_ids": {
     "sd-jwt-vc-2": "sd-jwt-vc",
     "iso18013-5": "iso-18013-5",
@@ -37,5 +37,5 @@
     "qeaa",
     "qerds"
   ],
-  "note_ebw": "Published: PR #5 squash commit 9bf77c9 on main (glossary 1.12.1: European Business Wallet and four related terms described as the Commission proposal). Hashes of the bundled files equal the published files."
+  "note_ebw": "Published: PR #6 squash commit a52a684 on main (glossary 1.12.2: EUID, QERDS, EU Company Certificate and Single Digital Gateway describe their European Business Wallet link as part of the Commission proposal; builds on 1.12.1, PR #5, 9bf77c9). main later moved to 9f0ef2a (matrix PR #7) without changing the glossary files. Hashes of the bundled files equal the published files."
 }

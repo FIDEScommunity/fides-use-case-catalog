@@ -80,7 +80,7 @@ Not in this inventory: the EUDI/EBW articles, Business wallets: where to start, 
 - Glossary terms: inline terms: Wallet, Credential, Holder, Selective Disclosure, Relying Party, European Digital Identity Wallet, European Business Wallet
 - Shortcodes in content: `[fides_learn_term]`
 - Notes: Illustrative examples are marked as such in the text and in the closing note ("Content last checked: 11 November 2026"); translate the date format (11 november 2026) consistently. Source labels and bullet lists are separate strings.
-- Popup note: "European Business Wallet" opens the glossary definition; pilot shows the cautious 1.12.1 wording (local branch), live still shows 1.12.0 until merged. Translating the definition needs the glossary, not Learn.
+- Popup note: "European Business Wallet" opens the glossary definition; pilot shows the cautious wording of glossary 1.12.2 (merged to main; live follows through the aggregate cache of about one hour). Translating the definition needs the glossary, not Learn.
 
 ### What is a credential? And what is an attestation?
 

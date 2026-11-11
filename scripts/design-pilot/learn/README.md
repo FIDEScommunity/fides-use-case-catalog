@@ -131,7 +131,7 @@ re-seed. Block classes the seed uses: `fides-learn-rows` (`--plain`, `--from-zer
 
 ## Package status and counts
 
-Glossary: pinned in `staging/glossary-source.json` (1.12.1, published as `9bf77c9`; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.46. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (26 and 26 on 11 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
+Glossary: pinned in `staging/glossary-source.json` (1.12.2, published as `a52a684`; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.46. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (26 and 26 on 11 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
 
 ## Seeding and overwrite protection
 
@@ -221,7 +221,7 @@ needs those bases to include the sub-directory.
 ### Still needed before staging
 
 Own repo or release for the glossary plugin and the child theme; a decision on the
-four protection points above; the glossary 1.12.1 wording is merged (PR #5) and pinned; the earlier changes `bd923fe`, `0b63c68` and `aa84e8b` are historic and merged in 1.12.0; the interop matrix fallback copy still needs its own release; clarification by the record owner of the VOG use case (`productionDeployment: yes` next to a summary that describes a pilot with sports associations while Justis investigates digital issuance); destinations for "Browse issuers" and "Browse relying parties" inside the pilot or staging (none today, so no Learn page links to them); a decision on /nl/ routes (they show the English text with Dutch interface labels; there is no Dutch translation); content review of the two example articles by an
+four protection points above; the glossary 1.12.2 wording is merged (PR #5 and #6) and pinned; the earlier changes `bd923fe`, `0b63c68` and `aa84e8b` are historic and merged in 1.12.0; the interop matrix fallback copy needs its own release (1.2.11 merged, a 1.2.12 resync is prepared locally); clarification by the record owner of the VOG use case (`productionDeployment: yes` next to a summary that describes a pilot with sports associations while Justis investigates digital issuance); destinations for "Browse issuers" and "Browse relying parties" inside the pilot or staging (none today, so no Learn page links to them); a decision on /nl/ routes (they show the English text with Dutch interface labels; there is no Dutch translation); content review of the two example articles by an
 assessed author (no author or date is shown, by design); build of the sessions and
 request pages (24.3-24.6) or removal of their previews; Matomo and request flow stay
 out of scope.

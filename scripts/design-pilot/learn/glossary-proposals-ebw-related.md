@@ -1,6 +1,6 @@
 # Proposals: related European Business Wallet (EBW) terms (not applied)
 
-Status: review notes of 11 November 2026 after glossary 1.12.1 (PR #5, `9bf77c9`). **No definition was changed.** These proposals are for the source owners; nothing was applied to `vocabulary.json`, and no wording was aligned only to match other terms.
+Status: review notes of 11 November 2026 after glossary 1.12.1 (PR #5, `9bf77c9`). **Historic:** the EUID, QERDS, EU Company Certificate and Single Digital Gateway proposals were applied in glossary 1.12.2 (PR #6, `a52a684`); Economic operator stayed unchanged and its alignment proposal is still open. At the time of writing **no definition was changed.** These proposals are for the source owners; nothing was applied to `vocabulary.json`, and no wording was aligned only to match other terms.
 
 Sources, retrieved with GET on 11 November 2026:
 

@@ -1,6 +1,6 @@
 /**
  * Targeted checks for the Learn recovery round: Topics entry points, The big picture order, trimmed follow-up lists,
- * and the European Business Wallet popup (cautious wording from glossary 1.12.1, local branch).
+ * the European Business Wallet popup (cautious wording from glossary 1.12.2) and the four related terms on the glossary page.
  * Run: PLAYWRIGHT_MODULE=... CHROME_PATH=... node tests/learn-recovery-checks.cjs
  */
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
@@ -77,6 +77,21 @@ async function links(page, tag) {
     check(`${tag}: does not state "full legal effect" as fact`, !/full legal effect/i.test(text));
     await page.keyboard.press("Escape");
     check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
+    // The four related terms (glossary 1.12.2) on the glossary page: the EBW link is presented as part of the proposal.
+    for (const [id, re] of [["european-unique-identifier", /Union-wide unique identifier/], ["qualified-electronic-registered-delivery-service", /qualified trust service/], ["eu-company-certificate", /digital certificate attesting company information/], ["single-digital-gateway", /EU initiative requiring key public services/]]) {
+      tag = `glossary ${id} @${width}`;
+      await open(page, `/glossary/?term=${id}`);
+      await page.locator(`.fides-glossary__item[data-term-id="${id}"]`).first().waitFor({ state: "attached", timeout: 5000 });
+      await page.waitForTimeout(600);
+      // The deep link opens the definition (detail view); read the visible text of the page body.
+      const t = (await page.locator("body").innerText()).replace(/\s+/g, " ");
+      const at = t.search(re);
+      const seg = at >= 0 ? t.slice(at, at + 520) : "";
+      check(`${tag}: keeps the general definition`, at >= 0, t.slice(0, 160));
+      check(`${tag}: presents the EBW link as the Commission proposal`, /proposal for European Business Wallets (would|is intended)/.test(seg), seg);
+      check(`${tag}: no 28th regime wording`, !/28th/i.test(seg));
+      check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
+    }
     check(`@${width}: no console errors`, errors.length === 0, errors.join(" | "));
     await context.close();
   }
