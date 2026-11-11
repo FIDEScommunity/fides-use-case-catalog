@@ -48,21 +48,22 @@ echo "== Dutch strings (TranslatePress rows exist after a first visit under /nl/
 curl -s -o /dev/null "$PILOT_URL/nl/fides-design-pilot/learn/sessions/request-wpforms/"
 pilot_wp eval-file "$HERE/../learn/nl-translations.php" apply | head -3
 
-echo "== Browser checks, routing switch OFF (default)"
-pilot_wp option delete fides_ds_request_form_route >/dev/null 2>&1 || true
+echo "== Browser checks, routing switch OFF (option set to 0 = fallback to the old form)"
+pilot_wp option update fides_ds_request_form_route 0 >/dev/null
 PHASE=off node "$HERE/wpforms-request-checks.cjs" || status=1
 
-echo "== Browser checks, routing switch ON"
-pilot_wp option update fides_ds_request_form_route 1 >/dev/null
+echo "== Browser checks, routing switch ON (the pilot default, no option set)"
+pilot_wp option delete fides_ds_request_form_route >/dev/null 2>&1 || true
 PHASE=on node "$HERE/wpforms-request-checks.cjs" || status=1
-pilot_wp option delete fides_ds_request_form_route >/dev/null
 
 echo "== Stored data after the checks"
 pilot_wp eval-file "$HERE/wpforms-request-behaviour.php" stored-data || status=1
 
 if [ "${WITH_EXISTING:-0}" = "1" ]; then
-  echo "== Existing enquiry flow (services and sessions checks)"
+  echo "== Existing enquiry flow with the fallback form (option 0): services and sessions checks"
+  pilot_wp option update fides_ds_request_form_route 0 >/dev/null
   node "$HERE/services-checks.cjs" || status=1
   node "$HERE/sessions-checks.cjs" || status=1
+  pilot_wp option delete fides_ds_request_form_route >/dev/null 2>&1 || true
 fi
 exit "$status"

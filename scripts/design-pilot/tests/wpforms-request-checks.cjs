@@ -2,8 +2,8 @@
  * Focused browser checks for the WPForms request form prototype (desktop 1440 and mobile 390).
  * Run through run-wpforms-request-checks.sh, which switches the routing option, loads the mail capture
  * and calls this file once per PHASE:
- *   PHASE=off  routing switch off (default): existing links and pages unchanged, the WPForms page opens directly
- *   PHASE=on   routing switch on: one training request from link to confirmation, EN and NL, mail outcomes
+ *   PHASE=off  routing switch set to 0 (fallback): existing links and pages unchanged, the WPForms page opens directly
+ *   PHASE=on   routing switch on (the pilot default): routes, redirects, a11y, one training request from link to confirmation, EN and NL, mail outcomes
  * Mail goes to tests/output/wpforms-mail.jsonl only (never sent); the mode file switches
  * capture / fail / fail-fides / fail-visitor.
  */
@@ -25,7 +25,7 @@ const OTHER_DATE_KEY = "thursday-18-march-2027";
 const ERR = "em.wpforms-error, label.wpforms-error";
 const CONF = ".wpforms-confirmation-container, .wpforms-confirmation-container-full";
 const TEAM = "request@example.invalid";
-// ONLY=nl (comma list of ctx,en,nl,outcomes) runs a subset while debugging; default is everything.
+// ONLY=nl (comma list of routes,a11y,ctx,click,en,nl,outcomes) runs a subset while debugging; default is everything.
 const ONLY = process.env.ONLY ? process.env.ONLY.split(",") : null;
 const want = (n) => !ONLY || ONLY.includes(n);
 
@@ -148,6 +148,87 @@ const plain = (html) => String(html).replace(/<style[\s\S]*?<\/style>/gi, " ").r
     await openForm(page, `?offering=bogus&session=nope`);
     check(L("unknown link values are ignored"), (await page.locator(sel(await fid(page), 2)).inputValue()) === "none");
     check(L("no page errors"), page.pageErrors.length === 0, page.pageErrors.join("|"));
+  }
+
+  // ---- Routes: old URLs and links lead to the WPForms page, EN and NL, query string kept, legacy bypass works
+  if (want("routes")) {
+    const page = await newPage(1440);
+    const hop = async (path) => {
+      await go(page, path);
+      return page.url().replace(BASE, "");
+    };
+    for (const nl of [false, true]) {
+      const p = nl ? "/nl" : "";
+      const tag = nl ? "NL" : "EN";
+      const training = await hop(`${p}${PILOT}/learn/sessions/request/?offering=${TRAINING}&session=${DATE_KEY}`);
+      check(`${tag}: old training request URL redirects to the WPForms page and keeps the query`, training === `${p}${PAGE}?offering=${TRAINING}&session=${DATE_KEY}`, training);
+      const services = await hop(`${p}${PILOT}/services/enquiry/?offering=wallet-readiness-assessment`);
+      check(`${tag}: old services enquiry URL redirects with its query`, services === `${p}${PAGE}?offering=wallet-readiness-assessment`, services);
+      const plainUrl = await hop(`${p}${PILOT}/services/enquiry/`);
+      check(`${tag}: old services enquiry URL without query redirects`, plainUrl === `${p}${PAGE}`, plainUrl);
+      await go(page, `${p}${PILOT}/learn/sessions/`);
+      const sessionsLinks = await page.$$eval('a[href*="offering="]', (as) => as.map((a) => a.getAttribute("href")));
+      check(`${tag}: the sessions overview CTAs point to the WPForms page`, sessionsLinks.length >= 2 && sessionsLinks.every((h) => /request-wpforms\/\?offering=/.test(h)), sessionsLinks.join("|"));
+      for (const [path, what] of [[`/learn/sessions/${TRAINING}/`, "training"], ["/learn/sessions/wallet-readiness-workshop/", "workshop"], ["/learn/sessions/training-partnerships/", "partnerships"], ["/services/wallet-readiness-assessment/", "assessment"]]) {
+        await go(page, `${p}${PILOT}${path}`);
+        const hs = await page.$$eval('main a[href*="request"], main a[href*="enquiry"]', (as) => as.map((a) => a.getAttribute("href")).filter((h) => !h.startsWith("#")));
+        check(`${tag}: ${what} page has request links and all lead to the WPForms page`, hs.length >= 1 && hs.every((h) => /request-wpforms\//.test(h)), hs.join("|"));
+      }
+      for (const [offering, mustSay] of [["wallet-readiness-assessment", nl ? /Terug naar/ : /Back to Wallet readiness assessment/], ["", nl ? /Terug naar Training/ : /Back to Training/]]) {
+        await openForm(page, offering ? `?offering=${offering}` : "", nl);
+        const back = await page.locator(".fides-learn__back").first().innerText();
+        check(`${tag}: back link on the form page${offering ? " follows the offering" : " goes to the section"}`, mustSay.test(back), back);
+      }
+    }
+    await go(page, `${PILOT}/learn/sessions/request/?offering=${TRAINING}&fides_legacy_form=1`);
+    check("legacy bypass: ?fides_legacy_form=1 shows the old form, no WPForms", (await page.locator("form[data-fides-learn-request]").count()) === 1 && (await page.locator("form.wpforms-form").count()) === 0 && page.url().includes("/request/"));
+    await go(page, `${PILOT}/learn/sessions/${TRAINING}/?fides_legacy_form=1`);
+    const oldLinks = await page.$$eval('a[href*="offering="]', (as) => as.map((a) => a.getAttribute("href")));
+    check("legacy bypass: links on an offering page keep pointing to the old request page", oldLinks.length >= 1 && oldLinks.every((h) => /sessions\/request\/\?offering=/.test(h)), oldLinks.join("|"));
+    check("routes: no page errors", page.pageErrors.length === 0, page.pageErrors.join("|"));
+  }
+
+  // ---- Keyboard and aria after a validation error (desktop and mobile)
+  for (const w of want("a11y") ? WIDTHS : []) {
+    const L = (s) => `${w}px: ${s}`;
+    const page = await newPage(w);
+    await openForm(page, `?offering=${TRAINING}&session=${DATE_KEY}`);
+    const id = await fid(page);
+    await page.focus(sel(id, 4));
+    await page.keyboard.press("Enter"); // Enter in a text field submits the form
+    await sleep(700);
+    const state = await page.evaluate((fid_) => {
+      const a = document.activeElement;
+      const invalid = [...document.querySelectorAll("form.wpforms-form [aria-invalid=true]")].map((e) => e.id);
+      const first = document.querySelector("form.wpforms-form [aria-invalid=true]");
+      const describedBy = first ? first.getAttribute("aria-errormessage") || first.getAttribute("aria-describedby") || "" : "";
+      const errEl = describedBy.split(" ").map((i) => document.getElementById(i)).find((e) => e && /error/.test(e.className));
+      return { activeId: a && a.id, firstInvalid: first && first.id, invalid, errText: errEl ? errEl.textContent.trim() : "", errVisible: errEl ? !!errEl.offsetParent : false, role: errEl ? errEl.getAttribute("role") : null };
+    }, id);
+    check(L("Enter in a text field submits and flags the empty fields with aria-invalid"), state.invalid.length === 3, state.invalid.join("|"));
+    check(L("focus is on the first invalid field after submitting"), state.activeId === state.firstInvalid && state.firstInvalid === `wpforms-${id}-field_4`, `${state.activeId} / ${state.firstInvalid}`);
+    check(L("the first invalid field is tied to a visible error message"), state.errVisible && state.errText.length > 0, JSON.stringify(state));
+    await page.keyboard.type("Key Board");
+    await page.keyboard.press("Tab");
+    check(L("Tab from the name field moves on to the email field"), (await page.evaluate(() => document.activeElement.id)) === `wpforms-${id}-field_5`);
+    await page.keyboard.type(`key-${w}-${Date.now()}@example.com`);
+    await page.keyboard.press("Tab");
+    check(L("Tab order continues to the optional organisation, then the message"), (await page.evaluate(() => document.activeElement.id)) === `wpforms-${id}-field_6`);
+    await page.keyboard.press("Tab");
+    check(L("then the message field"), (await page.evaluate(() => document.activeElement.id)) === `wpforms-${id}-field_7`);
+    await page.keyboard.type("Keyboard request-capture-marker");
+    await page.keyboard.press("Tab");
+    check(L("Tab leaves the message field for the privacy link"), (await page.evaluate(() => document.activeElement.tagName + ":" + (document.activeElement.getAttribute("href") || ""))).startsWith("A:"));
+    await page.keyboard.press("Tab");
+    const onSubmit = await page.evaluate(() => document.activeElement.className);
+    check(L("the next Tab reaches the Send button"), /wpforms-submit/.test(onSubmit), onSubmit);
+    clearMail();
+    setMode("capture");
+    await sleep(3400); // the WPForms anti-spam check wants a few seconds on the page
+    await page.keyboard.press("Enter");
+    await sleep(1500);
+    check(L("Enter on the Send button after the error sends the request"), /received your request/.test(await confText(page)), await whyNot(page));
+    check(L("keyboard run has no page errors"), page.pageErrors.length === 0, page.pageErrors.join("|"));
   }
 
   // ---- Submit by mouse after a validation error: the form must not shift between mouse down and up

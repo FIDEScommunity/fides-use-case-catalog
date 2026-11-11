@@ -188,3 +188,10 @@ add_filter(
     10,
     2
 );
+
+/*
+ * WPForms request form is the route for requests in the local pilot: links to the old request pages open it and old request URLs
+ * redirect to it. Fall back to the old form with define('FIDES_DS_REQUEST_FORM_ROUTE', false) in wp-config.php, with
+ * `wp option update fides_ds_request_form_route 0`, or per visit with ?fides_legacy_form=1.
+ */
+add_filter('fides_ds_request_form_route_default', '__return_true');

@@ -184,7 +184,7 @@ if ($test_pages) {
     wr_info('no test page seeded here (REQUEST_FORM_PAGE=test seed-request-form.sh)');
 }
 
-// ---- Routing switch: off by default, rewrites only the request links, keeps the query
+// ---- Routing switch: on by default in the pilot (guard), option 0 falls back, rewrites only the request links, keeps the query
 $old = array();
 foreach (get_posts(array('post_type' => 'page', 'post_status' => 'publish', 'numberposts' => 5, 'fields' => 'ids', 'meta_key' => '_fides_learn_kind', 'meta_value' => 'request')) as $pid) {
     if (! Fides_DS_Request_Form::is_form_page((int) $pid)) {
@@ -192,14 +192,30 @@ foreach (get_posts(array('post_type' => 'page', 'post_status' => 'publish', 'num
     }
 }
 $html = '<a href="' . esc_url($old[0] . '?offering=wallet-introduction&date=x') . '">a</a> <a href="' . esc_url($old[1]) . '">b</a> <a href="https://example.test/other/">c</a> <a href="/fides-design-pilot/learn/sessions/">d</a>';
+update_option('fides_ds_request_form_route', '0');
+wr_ok('option 0 switches the route off and links stay unchanged', ! Fides_DS_Request_Form::route_enabled() && Fides_DS_Request_Form::route_links($html) === $html);
 delete_option('fides_ds_request_form_route');
-wr_ok('switch is OFF by default and links stay unchanged', ! Fides_DS_Request_Form::route_enabled() && Fides_DS_Request_Form::route_links($html) === $html);
+wr_ok('without an option the pilot guard default is ON', Fides_DS_Request_Form::route_enabled());
+remove_all_filters('fides_ds_request_form_route_default');
+wr_ok('without the pilot guard the built-in default is OFF', ! Fides_DS_Request_Form::route_enabled());
+add_filter('fides_ds_request_form_route_default', '__return_true');
 update_option('fides_ds_request_form_route', '1');
 $routed = Fides_DS_Request_Form::route_links($html);
 wr_ok('switch ON sends both existing request links to the WPForms page and keeps the query', substr_count($routed, 'request-wpforms/') === 2 && strpos($routed, 'request-wpforms/?offering=wallet-introduction&#038;date=x') !== false, $routed);
 wr_ok('other links stay unchanged', strpos($routed, 'https://example.test/other/') !== false && strpos($routed, '/learn/sessions/"') !== false);
 delete_option('fides_ds_request_form_route');
-wr_ok('switch is OFF again after the check', ! Fides_DS_Request_Form::route_enabled());
+wr_ok('option removed again: back to the default', Fides_DS_Request_Form::route_enabled());
+wr_ok('legacy bypass is off without the query parameter', ! Fides_DS_Request_Form::legacy_requested());
+$_GET['fides_legacy_form'] = '1';
+wr_ok('?fides_legacy_form=1 is recognised and leaves links unchanged', Fides_DS_Request_Form::legacy_requested() && Fides_DS_Request_Form::route_links($html) === $html);
+unset($_GET['fides_legacy_form']);
+wr_ok("NL-prefixed links are routed and keep their prefix", strpos(Fides_DS_Request_Form::route_links('<a href="/nl' . wp_parse_url($old[0], PHP_URL_PATH) . '?offering=x">a</a>'), 'href="/nl/') !== false && strpos(Fides_DS_Request_Form::route_links('<a href="/nl' . wp_parse_url($old[0], PHP_URL_PATH) . '?offering=x">a</a>'), 'request-wpforms/?offering=x') !== false, Fides_DS_Request_Form::route_links("<a href=\"/nl" . wp_parse_url($old[0], PHP_URL_PATH) . "?offering=x\">a</a>"));
+add_filter('fides_ds_request_form_followup', static function () { return 'Placeholder follow-up.'; });
+$ref = new ReflectionMethod('Fides_DS_Request_Form', 'followup');
+$ref->setAccessible(true);
+wr_ok('follow-up sentence is empty by default and filterable', $ref->invoke(null, 'en') === 'Placeholder follow-up.');
+remove_all_filters('fides_ds_request_form_followup');
+wr_ok('follow-up sentence is empty without a filter', $ref->invoke(null, 'en') === '');
 
 // ---- Facts for the report
 wr_info('WPForms version ' . WPFORMS_VERSION . ', edition ' . (wpforms()->is_pro() ? 'Pro/Plus build' : 'Lite'));

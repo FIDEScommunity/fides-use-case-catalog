@@ -1,8 +1,10 @@
 # WPForms request form (pilot prototype)
 
-One WPForms form, `fides-request-form`, for requests from trainings, workshops and services. The existing
-request pages (`/learn/sessions/request/`, `/services/enquiry/`) stay as they are and remain the reference.
-The switch that routes the existing request links to this form is OFF by default.
+One WPForms form, `fides-request-form`, for requests from trainings, workshops and services. In the **local pilot this is the
+request route**: every existing request link (offering pages, session dates, services, assessment) opens the WPForms page, and the old
+request URLs (`/learn/sessions/request/`, `/services/enquiry/`, also under `/nl/`) redirect to it with the query string kept
+(`?offering=…&session=…`). The old form stays as fallback (see Settings). The built-in default in the plugin is still OFF, so a site
+without the pilot guard (staging, production) keeps the old routes until the switch is set.
 
 Tested locally on WPForms **Lite 1.9.5.2**. The shielded staging review site runs WPForms 1.10.2.1 with the paid plugin code
 (licence said to be Plus); that trial is prepared in `STAGING-PLUS-TRIAL.md` and has **not** been run. Everything marked "Plus" below is
@@ -22,7 +24,9 @@ Tested locally on WPForms **Lite 1.9.5.2**. The shielded staging review site run
 
 ## Settings
 
-- Routing: `define('FIDES_DS_REQUEST_FORM_ROUTE', true)`, option `fides_ds_request_form_route`, or filter `fides_ds_request_form_route`.
+- Routing, in order of precedence: `define('FIDES_DS_REQUEST_FORM_ROUTE', true|false)`; option `fides_ds_request_form_route` (`1` on, `0` off); filter `fides_ds_request_form_route_default` (the local pilot guard `fides-design-pilot-guard.php` returns true; built-in false); filter `fides_ds_request_form_route`.
+- Fall back to the old form: `wp option update fides_ds_request_form_route 0` (or the constant set to false), or per visit `?fides_legacy_form=1` on an old request URL (links on that page then stay old too).
+- Follow-up sentence after "we received your request": filter `fides_ds_request_form_followup` (empty by default, so no promised reply time). It is only added when the team was notified.
 - FIDES recipient: placeholder `request@example.invalid` until `FIDES_DS_REQUEST_FORM_RECIPIENT`, option `fides_ds_request_form_recipient` or the filter is set.
 - Alternative contact in messages: filter `fides_ds_request_form_alternative_contact` (placeholder).
 - Retention sentence in the privacy text: filter `fides_ds_request_form_retention` (placeholder text until decided).
@@ -103,7 +107,23 @@ creates the form (stable slug `fides-request-form`) and a second page `request-w
 
 **Test.** `tests/wpforms-request-checks.cjs` (section `click`) uses a real mouse (move, down, 150 ms, up). Before the fix both widths failed; after it both pass.
 
+## Routes and back link
+
+| Route | Result with the switch ON |
+| --- | --- |
+| Training page, date link | WPForms page with `offering` and `session`/`date`, both visible and changeable |
+| Sessions overview, workshop, partnerships | WPForms page with the offering |
+| Services page, assessment | WPForms page with the offering |
+| Old `/learn/sessions/request/…`, `/services/enquiry/…` (EN and `/nl/`) | 302 to the WPForms page, query and language prefix kept |
+| `?fides_legacy_form=1` on an old URL | the old form, for comparison or fallback |
+
+The back link on the form page goes to the chosen offering (like the old form) and otherwise to the section. The form page is a separate page, so the services enquiry no longer has its own wording per context; the choice in the form carries it.
+
+## Stored but not notified
+
+On Plus, when the entry is stored but the FIDES mail failed, `note_entry()` adds a note ("The notification mail to the FIDES team could not be sent...") to the entry through `wpforms()->obj('entry_meta')->add(..., 'note')` so an administrator can see it in the entry. This follows the Pro 1.9.7.3 source and is silent on Lite or when the API differs. **Not verified on Plus.**
+
 ## Local tests (1440 and 390 only)
 
-`tests/run-wpforms-request-checks.sh` (about 3 minutes): 121 checks passed in the last run. `ONLY=click` runs the click test alone. The staging script ran locally in read-only mode against the Lite pilot: everything passed except the expected "paid plugin folder at 1.10.2.1" check.
+`tests/run-wpforms-request-checks.sh` (about 3 minutes; the OFF phase sets the option to 0, the ON phase uses the default; sections `routes` and `a11y` cover redirects, links per route in EN and NL, the legacy bypass, focus on the first invalid field, aria, Enter-submit and tab order after a validation error): all checks passed in the last run. With `WITH_EXISTING=1` the services and sessions checks run against the fallback form (option 0). `ONLY=click` runs the click test alone. The staging script ran locally in read-only mode against the Lite pilot: everything passed except the expected "paid plugin folder at 1.10.2.1" check.
 
