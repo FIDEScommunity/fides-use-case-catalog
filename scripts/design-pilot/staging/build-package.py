@@ -113,6 +113,13 @@ def check_glossary(entries, source_json):
     missing = [i for i in src["required_ids"] if i not in ids]
     if missing:
         problems.append("missing ids " + ", ".join(missing))
+    by_legacy = {l: t.get("id") for t in terms for l in (t.get("legacyIds") or [])}
+    bad_legacy = [f"{o}->{n}" for o, n in src.get("legacy_ids", {}).items() if by_legacy.get(o) != n]
+    if bad_legacy:
+        problems.append("legacy ids not mapped " + ", ".join(bad_legacy))
+    listed = [i for i in src.get("absent_ids", []) if i in ids]
+    if listed:
+        problems.append("hidden or merged ids still listed " + ", ".join(listed))
     if problems:
         raise SystemExit("glossary data differs from staging/glossary-source.json: " + "; ".join(problems) + " (see its note for the update steps)")
     return {"source_repo": src["source_repo"], "source_commit": src["source_commit"], "source_commit_published": src.get("source_commit_published", False),

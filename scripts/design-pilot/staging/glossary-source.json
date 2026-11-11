@@ -1,12 +1,12 @@
 {
-  "note": "The glossary data the design review site must show. build-package.py refuses to build, verify-package.sh and staging/preflight.php fail when the bundled glossary-aggregated.json differs. Update with: change data/vocabulary.json in fides-interop-profiles, npm run build:glossary, copy data/glossary-aggregated.json into the pilot glossary plugin copy, then update this file (commit, sha256, terms, vocabulary_sha256) and run verify.",
+  "note": "The glossary data the design review site must show. build-package.py refuses to build, verify-package.sh and staging/preflight.php fail when the bundled glossary-aggregated.json differs. Update with: change data/vocabulary.json in fides-interop-profiles, npm run build:glossary, copy data/glossary-aggregated.json into the pilot glossary plugin copy, then update this file (commit, sha256, terms, vocabulary_sha256, required_ids, legacy_ids, absent_ids) and run verify.",
   "source_repo": "FIDEScommunity/fides-interop-profiles",
   "source_file": "data/glossary-aggregated.json",
-  "source_commit": "aa84e8bd4115f7812ab6cc0d6e7df9be051756ec",
-  "source_commit_published": false,
-  "vocabulary_sha256": "af2ae973a093a06f15cfbb6d02a3b1b5a3266cf718afaaa4c52fb27cf4dcf28f",
-  "sha256": "9ca775e697488920c1f8bb085138eadcf01079962245966e447283f6fb455d0d",
-  "terms": 351,
+  "source_commit": "b27bc883a247590b4c70d71b35ed06041cf2d80a",
+  "source_commit_published": true,
+  "vocabulary_sha256": "a219d5ffcf7b3b81e9f919e6c324d056f28b6a030621f984316cfaa9ff3a3556",
+  "sha256": "96d2efdd66febef680815762cb050c5369f2c691ab84e9edf6445b26a75282a7",
+  "terms": 344,
   "required_ids": [
     "credential",
     "credential-type",
@@ -16,6 +16,25 @@
     "qualified-electronic-registered-delivery-service",
     "qualified-electronic-seal",
     "qeseal",
-    "qesig"
+    "qesig",
+    "sd-jwt-vc",
+    "iso-18013-5",
+    "iso-18013-7",
+    "vcdm-2-0",
+    "mdl-mdoc"
+  ],
+  "source_version": "1.12.0",
+  "legacy_ids": {
+    "sd-jwt-vc-2": "sd-jwt-vc",
+    "iso18013-5": "iso-18013-5",
+    "iso18013-7": "iso-18013-7",
+    "vcdm20": "vcdm-2-0",
+    "mdoc": "mdl-mdoc"
+  },
+  "absent_ids": [
+    "other",
+    "other-2",
+    "qeaa",
+    "qerds"
   ]
 }

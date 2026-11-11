@@ -63,7 +63,7 @@ PY
 
 # Glossary data: the bundled aggregate in the glossary plugin zip is the version recorded in staging/glossary-source.json,
 # also when that file in the repo was changed after the package was built.
-python3 - "$PKG" "$TMP/x" "$HERE/glossary-source.json" <<'PY' && ok "glossary data: bundled aggregate matches glossary-source.json and the manifest (sha256, term count, required ids)" || bad "glossary data differs from glossary-source.json"
+python3 - "$PKG" "$TMP/x" "$HERE/glossary-source.json" <<'PY' && ok "glossary data: bundled aggregate matches glossary-source.json and the manifest (sha256, term count, required, legacy and absent ids)" || bad "glossary data differs from glossary-source.json"
 import hashlib, json, sys
 pkg, x, repo_src = sys.argv[1:4]
 m = json.load(open(pkg + "/manifest.json"))["glossary_data"]
@@ -75,6 +75,9 @@ assert hashlib.sha256(data).hexdigest() == m["sha256"] == src["sha256"], "sha256
 assert len(terms) == m["terms"] == src["terms"], "terms"
 assert m["source_commit"] == src["source_commit"], "source commit"
 assert all(i in ids for i in src["required_ids"]), "required ids"
+by_legacy = {l: t["id"] for t in terms for l in t.get("legacyIds", [])}
+assert all(by_legacy.get(o) == n for o, n in src.get("legacy_ids", {}).items()), "legacy ids"
+assert not any(i in ids for i in src.get("absent_ids", [])), "absent ids"
 assert json.load(open(pkg + "/glossary-source.json"))["sha256"] == src["sha256"], "glossary-source.json in package"
 PY
 grep -q "pre_option_fides_vocabulary_glossary_github_data_url" "$PKG/mu-plugins/fides-design-review-config.php" && ok "config mu-plugin points the glossary at the bundled data" || bad "config mu-plugin has no glossary data source override"

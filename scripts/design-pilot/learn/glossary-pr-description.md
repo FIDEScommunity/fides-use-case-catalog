@@ -1,3 +1,5 @@
+> **Status:** merged as glossary 1.12.0 (PR #4, `b27bc88`, 344 terms). The pilot is pinned to it in `staging/glossary-source.json`.
+
 # Proposed pull request: glossary terms for FIDES Learn
 
 Target: `FIDEScommunity/fides-interop-profiles`, branch `main`. Local commit: `bd923fe` (not pushed). This text is a proposal for the description; the commit message is shorter.

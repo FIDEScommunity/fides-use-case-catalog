@@ -95,6 +95,24 @@ if (! is_array($gs_expect) || empty($gs_expect['sha256'])) {
     $add(count($gs_ids) === (int) ($gs_expect['terms'] ?? -1) ? 'PASS' : 'FAIL', 'glossary term count', count($gs_ids) . ' (expected ' . (int) ($gs_expect['terms'] ?? 0) . ')');
     $add($gs_miss ? 'FAIL' : 'PASS', 'glossary has the revised terms', $gs_miss ? 'missing: ' . implode(', ', $gs_miss) : implode(', ', (array) $gs_expect['required_ids']));
     $gs_url = (string) get_option('fides_vocabulary_glossary_github_data_url', '');
+    $gs_legacy = array();
+    foreach ((array) $gs_terms as $gs_t) {
+        foreach ((array) ($gs_t['legacyIds'] ?? array()) as $gs_l) {
+            $gs_legacy[(string) $gs_l] = (string) ($gs_t['id'] ?? '');
+        }
+    }
+    $gs_bad = array();
+    foreach ((array) ($gs_expect['legacy_ids'] ?? array()) as $gs_o => $gs_n) {
+        if (($gs_legacy[$gs_o] ?? '') !== $gs_n) {
+            $gs_bad[] = $gs_o . '->' . $gs_n;
+        }
+    }
+    foreach ((array) ($gs_expect['absent_ids'] ?? array()) as $gs_a) {
+        if (in_array($gs_a, $gs_ids, true)) {
+            $gs_bad[] = 'listed: ' . $gs_a;
+        }
+    }
+    $add($gs_bad ? 'FAIL' : 'PASS', 'glossary legacy and hidden ids', $gs_bad ? implode(', ', $gs_bad) : count((array) ($gs_expect['legacy_ids'] ?? array())) . ' legacy ids mapped, hidden ids absent');
     $add(preg_match('~raw\.githubusercontent\.com~i', $gs_url) || $gs_url === '' ? 'FAIL' : 'PASS', 'glossary pages read the bundled data', $gs_url !== '' ? $gs_url : 'option empty: the plugin default (GitHub main) would be used; the config mu-plugin is not loaded');
 }
 
