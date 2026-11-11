@@ -102,7 +102,7 @@ async function article(browser, key, width) {
   if (key === "ebw") {
     check(`${tag}: the example use case card links to the catalog record`, (await page.locator(`a[href*="usecase=${KYB}"]`).count()) >= 1);
     const cardText = await page.locator(".fides-learn-record").first().innerText();
-    check(`${tag}: use case status is stated without claiming production`, /not mark the use case as running in production/.test(cardText), cardText.slice(0, 200));
+    check(`${tag}: use case status is stated without claiming production`, /does not mark this use case as in production/.test(cardText), cardText.slice(0, 200));
     const r = await page.request.get(`${BASE}/fides-design-pilot/use-case/?usecase=${KYB}`);
     check(`${tag}: use case detail answers 200`, r.status() === 200);
     check(`${tag}: general use case overview stays linked`, internal.includes("/fides-design-pilot/overview/"));

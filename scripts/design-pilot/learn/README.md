@@ -114,7 +114,10 @@ The **European Business Wallet** article (`topics/for-businesses/european-busine
 same way: text, "Continue learning", sources field and the "Content last checked" line. It describes a
 legislative proposal; recheck the status paragraph before each publication.
 Source URLs keep percent-encoding (`%3A` and similar): the Learn fields use `Fides_DS_Learn::sanitize_field_value()`, not `sanitize_text_field()`, which deletes `%xx`. "Continue learning" lists are grouped under "Learn more" and "Explore in the catalogs"; the closing band (manifest `cta_*`) is the single place for the workshop or catalog button. Glossary wording proposals that the pilot cannot change live in `learn/glossary-proposals.md`. "Terms in this article" shows whole sentences and a "Full definition" button.
-Only links to existing pages are present. The issuer catalog has no pilot page yet (the `issuers/` route redirects to a form), so the article links to credential types, use cases and wallets only.
+Only links to existing pages are present. There are no links to issuer or relying party overviews: the roots `/issuer-catalog/` and `/relying-party-websites/` exist locally but are not pilot pages and not part of the staging package, and `/fides-design-pilot/issuers/` redirects to a form. Add "Browse issuers" and "Browse relying parties" only after they exist inside the pilot or on staging (see "Still needed before staging").
+
+**Use case cards (editor note):** a card is the shortcode `[fides_learn_usecase id="<use case id>" url="{{pilot}}/use-case/" label="Explore the use case"]` in a Shortcode block (the seed content has the token `{{pilot}}`; in the editor the address of the use case overview page is fine). Title, image, organisation and the production sentence ("The catalog does not mark this use case as in production." or "...marks ... as in production, as reported by the organisation.") come from the catalog record, so they follow the record. Only the kicker (default "Example use case") and the link label are editorial. To pick another use case, change `id`: it is the part after `?usecase=` in the address of the use case detail page (for example `.../use-case/?usecase=business-wallet-based-kyb-financial-onboarding-Rzqouv`). If the id is wrong or the record is not published, visitors see no card and editors see an "Editor notice" in its place. Editorial context is a normal paragraph above the card (EBW article: Hovi; "Business wallets: where to start": Robert Bosch GmbH). **Recheck that paragraph whenever the use case changes**: it is not generated. `[fides_learn_record ...]` (manual title and text) remains for cards that need fully custom wording, such as the VOG card on the roles page and the Receive page.
+
 
 **Agent (layout):** change `learn.css`/`learn.js`/`class-fides-ds-learn.php` in the
 tiles worktree; change example content in `learn/content` and `manifest.json`, then
@@ -142,7 +145,8 @@ LEARN_BASE=fides-design-pilot/learn bash create-learn-pages.sh   # route base (a
   a replaced page is written to `pilot-backup/learn-replaced/` first.
 - The script refuses to run outside the pilot (or `LEARN_ALLOW_NON_PILOT=1` on another
   non-production test site) and on `production` environments.
-- Verified by `tests/run-learn-seed-checks.sh` (edit, re-seed, unmarked page, dry run,
+- When the seed updates a page: the stored hash equals the hash of the page as it is now (nobody edited it) and the repo content differs from the page. If the hash differs, the page is `skipped-edited`. "Edited" means: the hash of the page state (title, excerpt, `post_content`, status, menu order, template, the Learn fields and layout meta, empty fields ignored) no longer equals `_fides_learn_seed_hash`, which the seed stored after the last write. A repo change that was never seeded (for example new "Continue learning" lines committed after the last seed run) is simply applied on the next run.
+- Verified by `tests/learn-seed-protection.sh` (throwaway page: created, unchanged, updated, `skipped-edited` for edited content, also in dry-run, and for an edited Sources field; deleted afterwards) and by `tests/run-learn-seed-checks.sh` (edit, re-seed, unmarked page, dry run,
   forced replacement, cleanup).
 
 ## Backup and rebuild
@@ -168,7 +172,7 @@ come from the source site).
 
 1. WordPress 7.1.x, PHP 8.2, theme `blocksy` 2.1.59 + child theme `blocksy-child` 1.0.0.
 2. `blocksy-companion-pro` 2.0.99, `complianz-gdpr` 7.4.6 (consent banner), as on the source site.
-3. `fides-community-tools-tiles` 1.13.33 (shell, design system, **Learn template**) first.
+3. `fides-community-tools-tiles` 1.13.45 or later (shell, design system, **Learn template**, percent-encoding fix `0c89d3f`, `[fides_learn_usecase]`) first. Older versions strip `%3A` from source URLs and do not know the use case shortcode.
 4. `fides-vocabulary-glossary` 1.1.15 (glossary page and `data/glossary-aggregated.json`).
 5. Catalog plugins for the linked pilot pages: `fides-use-case-catalog` 0.21.11, `fides-organization-catalog` 1.18.6, `fides-credential-catalog` 1.7.0, `fides-wallet-catalog` 2.16.4.
 6. Optional: `fides-assistant` 0.6.1 (adds Ask FIDES to the Learn bar; the bar item is absent without it).
@@ -210,8 +214,7 @@ needs those bases to include the sub-directory.
 ### Still needed before staging
 
 Own repo or release for the glossary plugin and the child theme; a decision on the
-four protection points above; a real "Credential" glossary entry (and business wallet
-wording check) in the vocabulary; content review of the two example articles by an
+four protection points above; the glossary proposals in `glossary-proposals.md` (Credential, Credential Type, vct, Mandate) applied by the owner of the external source; destinations for "Browse issuers" and "Browse relying parties" inside the pilot or staging (none today, so no Learn page links to them); a decision on /nl/ routes (they show the English text with Dutch interface labels; there is no Dutch translation); content review of the two example articles by an
 assessed author (no author or date is shown, by design); build of the sessions and
 request pages (24.3-24.6) or removal of their previews; Matomo and request flow stay
 out of scope.
