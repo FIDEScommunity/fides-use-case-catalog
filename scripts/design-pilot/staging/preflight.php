@@ -71,6 +71,33 @@ if (function_exists('fides_design_review_base')) {
     $add('FAIL', 'config mu-plugin fides-design-review-config.php', 'not loaded');
 }
 
+// Glossary data: the active bundled file must be the version the package was built with (glossary-source.json),
+// and the glossary pages must read it instead of GitHub `main`.
+$gs_path = '';
+foreach (array(dirname(__DIR__, 2) . '/glossary-source.json', __DIR__ . '/glossary-source.json') as $candidate) {
+    if (is_readable($candidate)) {
+        $gs_path = $candidate;
+        break;
+    }
+}
+$gs_expect = $gs_path !== '' ? json_decode((string) file_get_contents($gs_path), true) : array();
+$gs_file   = WP_PLUGIN_DIR . '/fides-vocabulary-glossary/data/glossary-aggregated.json';
+if (! is_array($gs_expect) || empty($gs_expect['sha256'])) {
+    $add('WARN', 'glossary data', 'glossary-source.json not found next to the package; version not checked');
+} elseif (! is_readable($gs_file)) {
+    $add('FAIL', 'glossary data', 'plugin fides-vocabulary-glossary has no data/glossary-aggregated.json');
+} else {
+    $gs_raw   = (string) file_get_contents($gs_file);
+    $gs_terms = json_decode($gs_raw, true)['terms'] ?? array();
+    $gs_ids   = array_column(is_array($gs_terms) ? $gs_terms : array(), 'id');
+    $gs_miss  = array_diff((array) ($gs_expect['required_ids'] ?? array()), $gs_ids);
+    $add(hash('sha256', $gs_raw) === $gs_expect['sha256'] ? 'PASS' : 'FAIL', 'glossary data hash', substr(hash('sha256', $gs_raw), 0, 12) . ' (expected ' . substr((string) $gs_expect['sha256'], 0, 12) . ', source commit ' . substr((string) ($gs_expect['source_commit'] ?? ''), 0, 7) . ')');
+    $add(count($gs_ids) === (int) ($gs_expect['terms'] ?? -1) ? 'PASS' : 'FAIL', 'glossary term count', count($gs_ids) . ' (expected ' . (int) ($gs_expect['terms'] ?? 0) . ')');
+    $add($gs_miss ? 'FAIL' : 'PASS', 'glossary has the revised terms', $gs_miss ? 'missing: ' . implode(', ', $gs_miss) : implode(', ', (array) $gs_expect['required_ids']));
+    $gs_url = (string) get_option('fides_vocabulary_glossary_github_data_url', '');
+    $add(preg_match('~raw\.githubusercontent\.com~i', $gs_url) || $gs_url === '' ? 'FAIL' : 'PASS', 'glossary pages read the bundled data', $gs_url !== '' ? $gs_url : 'option empty: the plugin default (GitHub main) would be used; the config mu-plugin is not loaded');
+}
+
 // Existing pages the pilot links to (they are not part of the package).
 $deps = array(
     'use-case-form'       => array('FAIL', 'Submit a use case (aanvraagroute for use cases)'),

@@ -16,6 +16,8 @@
  *  FIDES_DESIGN_REVIEW_SIGN_URL        Manifesto sign form URL (default: standalone: the live site's form; subpath: the form on this
  *                                      site's own /manifesto/ page)
  *  FIDES_DESIGN_REVIEW_BADGE           false hides the "Design review" badge
+ *  FIDES_DESIGN_REVIEW_GLOSSARY_SOURCE 'github' lets the glossary pages read GitHub `main` first (default: the bundled file of the
+ *                                      glossary plugin, so the glossary page and Learn show the same version)
  */
 
 if (! defined('ABSPATH')) {
@@ -307,4 +309,23 @@ add_filter(
     },
     10,
     2
+);
+
+// Glossary data source on the review site: the bundled file of the glossary plugin, not GitHub `main`.
+// The glossary page (tiles) and the plugin script read the URL option first and the bundled file second;
+// Learn reads the bundled file only. Pointing the option at the bundled file makes all three show one version
+// that comes with the package (see staging/glossary-source.json), so an unpublished source change cannot make
+// them differ. Production never loads this file. Set FIDES_DESIGN_REVIEW_GLOSSARY_SOURCE to 'github' to keep the plugin default.
+add_filter(
+    'pre_option_fides_vocabulary_glossary_github_data_url',
+    static function ($pre) {
+        if (defined('FIDES_DESIGN_REVIEW_GLOSSARY_SOURCE') && FIDES_DESIGN_REVIEW_GLOSSARY_SOURCE === 'github') {
+            return $pre;
+        }
+        $main = WP_PLUGIN_DIR . '/fides-vocabulary-glossary/fides-vocabulary-glossary.php';
+        if (! is_readable(dirname($main) . '/data/glossary-aggregated.json')) {
+            return $pre; // no bundled file: keep the plugin default
+        }
+        return plugins_url('data/glossary-aggregated.json', $main);
+    }
 );

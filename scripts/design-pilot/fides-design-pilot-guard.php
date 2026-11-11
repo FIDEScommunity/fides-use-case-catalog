@@ -195,3 +195,22 @@ add_filter(
  * `wp option update fides_ds_request_form_route 0`, or per visit with ?fides_legacy_form=1.
  */
 add_filter('fides_ds_request_form_route_default', '__return_true');
+
+// Glossary data source on the review site: the bundled file of the glossary plugin, not GitHub `main`.
+// The glossary page (tiles) and the plugin script read the URL option first and the bundled file second;
+// Learn reads the bundled file only. Pointing the option at the bundled file makes all three show one version
+// that comes with the package (see staging/glossary-source.json), so an unpublished source change cannot make
+// them differ. Production never loads this file. Set FIDES_PILOT_GLOSSARY_SOURCE to 'github' to keep the plugin default.
+add_filter(
+    'pre_option_fides_vocabulary_glossary_github_data_url',
+    static function ($pre) {
+        if (defined('FIDES_PILOT_GLOSSARY_SOURCE') && FIDES_PILOT_GLOSSARY_SOURCE === 'github') {
+            return $pre;
+        }
+        $main = WP_PLUGIN_DIR . '/fides-vocabulary-glossary/fides-vocabulary-glossary.php';
+        if (! is_readable(dirname($main) . '/data/glossary-aggregated.json')) {
+            return $pre; // no bundled file: keep the plugin default
+        }
+        return plugins_url('data/glossary-aggregated.json', $main);
+    }
+);

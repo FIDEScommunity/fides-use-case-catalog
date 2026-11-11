@@ -61,6 +61,24 @@ PY
   echo count($a), " routes\n";
 ' "$PKG/reference/fides-design-pilot-guard.php" "$PKG/mu-plugins/fides-design-review-config.php" > "$TMP/parity.txt" 2>&1 && ok "route map parity with the local guard ($(cat "$TMP/parity.txt"))" || { cat "$TMP/parity.txt"; bad "route map parity"; }
 
+# Glossary data: the bundled aggregate in the glossary plugin zip is the version recorded in staging/glossary-source.json,
+# also when that file in the repo was changed after the package was built.
+python3 - "$PKG" "$TMP/x" "$HERE/glossary-source.json" <<'PY' && ok "glossary data: bundled aggregate matches glossary-source.json and the manifest (sha256, term count, required ids)" || bad "glossary data differs from glossary-source.json"
+import hashlib, json, sys
+pkg, x, repo_src = sys.argv[1:4]
+m = json.load(open(pkg + "/manifest.json"))["glossary_data"]
+src = json.load(open(repo_src))
+data = open(x + "/fides-vocabulary-glossary/data/glossary-aggregated.json", "rb").read()
+terms = json.loads(data)["terms"]
+ids = {t["id"] for t in terms}
+assert hashlib.sha256(data).hexdigest() == m["sha256"] == src["sha256"], "sha256"
+assert len(terms) == m["terms"] == src["terms"], "terms"
+assert m["source_commit"] == src["source_commit"], "source commit"
+assert all(i in ids for i in src["required_ids"]), "required ids"
+assert json.load(open(pkg + "/glossary-source.json"))["sha256"] == src["sha256"], "glossary-source.json in package"
+PY
+grep -q "pre_option_fides_vocabulary_glossary_github_data_url" "$PKG/mu-plugins/fides-design-review-config.php" && ok "config mu-plugin points the glossary at the bundled data" || bad "config mu-plugin has no glossary data source override"
+
 # Manifest versions equal the plugin headers inside the zips.
 python3 - "$PKG" <<'PY' && ok "manifest versions equal the plugin headers" || bad "manifest versions"
 import json, re, sys, zipfile

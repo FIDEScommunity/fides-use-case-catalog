@@ -32,7 +32,13 @@ Assessment notes: the three general entries use the same wording as "What is a c
 - By id or alias (unchanged, still resolve): glossary deep link `?term=verifiable-credential-type`, Learn `[fides_learn_term term="vct"]` (matches key, name or alias), search for `vct`/`VCT`/the old name, glossary page ids.
 - Show the new name: glossary page (list and open row), glossary SSR list, Learn dialogs use the link text as title and the new definition as body.
 - Search of the workspace found no other consumer: `enrich-vocabulary-urls.mjs` and `docs/vocabulary-opzet.md` use the **key** (unchanged); the credential catalog `aggregated.json` only contains the phrase in an attribute description. Catalog filters (`vocabulary.json` keys) are not affected by the new entries.
-- The glossary page script fetches GitHub `main` first and the local file second. Until the source commit is merged, a local browser shows the published data; the check script serves the local file for that request.
+
+
+- Source order per consumer: glossary page and plugin script GitHub `main` first, bundled file second (the pilot and the review site point the option at the bundled file, see HANDOVER "Glossary data"); Learn the bundled file only; catalog popups `vocabulary.json` from GitHub with a plugin fallback; interop matrix the same with its own copy.
+
+## The 16 eIDAS terms
+
+They were already in `data/vocabulary.json` (commit `1924200`, 2026-08-15); the committed aggregate dated from 2026-07-01, so the rebuild only caught up. They become visible on the glossary page when the aggregate is published: Eidas Trust Services (`eidastrustservices`), QEAA (`qeaa`), QEArch (`qearch`), QERDS (`qerds`), QESeal (`qeseal`), QESig (`qesig`), QPres (`qpres`), QPresSig (`qpressig`), QPresSeal (`qpresseal`), QRemSeal (`qremseal`), QRemSig (`qremsig`), QTimestamp (`qtimestamp`), QVal (`qval`), QValSeal (`qvalseal`), QValSig (`qvalsig`), QWAC (`qwac`). Conflicts: `qeaa`, `qerds` and `qeseal` share a name or alias with the existing long-form terms; no id, alias or name of an existing term moved or disappeared. Details and a suggestion for the owners are in `learn/glossary-pr-description.md`.
 
 ## Still open (staging and production)
 

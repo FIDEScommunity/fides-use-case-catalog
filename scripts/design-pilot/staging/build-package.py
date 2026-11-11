@@ -47,6 +47,7 @@ SEED_FILES = {
     f"{SEED_DIR}/staging/fides-design-review-config.php": "mu-plugins/fides-design-review-config.php",
     f"{SEED_DIR}/staging/rehearsal-checks.cjs": "checks/rehearsal-checks.cjs",
     f"{SEED_DIR}/staging/HANDOVER.md": "HANDOVER.md",
+    f"{SEED_DIR}/staging/glossary-source.json": "glossary-source.json",
     f"{SEED_DIR}/fides-design-pilot-guard.php": "reference/fides-design-pilot-guard.php",
 }
 # Awards images are not in Git (73 MB of binaries). They are collected once from the local media library by
@@ -94,6 +95,28 @@ def det_zip(entries, slug, timestamp):
             zi.external_attr = (0o755 if is_exec else 0o644) << 16
             z.writestr(zi, data)
     return buf.getvalue()
+
+
+def check_glossary(entries, source_json):
+    """The bundled glossary data must be exactly the version recorded in staging/glossary-source.json (committed)."""
+    src = json.loads(source_json)
+    data = next((d for r, d, _ in entries if r == "data/glossary-aggregated.json"), None)
+    if data is None:
+        raise SystemExit("glossary plugin copy has no data/glossary-aggregated.json")
+    terms = json.loads(data).get("terms", [])
+    ids = {t.get("id") for t in terms}
+    problems = []
+    if sha256(data) != src["sha256"]:
+        problems.append(f"sha256 {sha256(data)} != {src['sha256']}")
+    if len(terms) != src["terms"]:
+        problems.append(f"{len(terms)} terms != {src['terms']}")
+    missing = [i for i in src["required_ids"] if i not in ids]
+    if missing:
+        problems.append("missing ids " + ", ".join(missing))
+    if problems:
+        raise SystemExit("glossary data differs from staging/glossary-source.json: " + "; ".join(problems) + " (see its note for the update steps)")
+    return {"source_repo": src["source_repo"], "source_commit": src["source_commit"], "source_commit_published": src.get("source_commit_published", False),
+            "file": "data/glossary-aggregated.json (inside the glossary plugin zip)", "sha256": src["sha256"], "terms": src["terms"], "required_ids": src["required_ids"]}
 
 
 def git_tree_entries(repo, subdir, excludes):
@@ -234,10 +257,13 @@ def main():
 
     # Items without a Git repository.
     non_git = {}
+    glossary_data = {}
     for kind, slug, directory, main_file in NON_GIT:
         if not os.path.isdir(directory):
             raise SystemExit(f"missing {directory}")
         entries = fs_entries(directory)
+        if slug == "fides-vocabulary-glossary":
+            glossary_data = check_glossary(entries, run(["git", "show", f"HEAD:{SEED_DIR}/staging/glossary-source.json"], cwd=uc_repo))
         text = next(d for r, d, _ in entries if r == main_file).decode(errors="replace")
         version = header(text, "Version")
         zdata = det_zip(entries, slug, 1767225600)  # 2026-01-01, files carry no commit time
@@ -261,6 +287,7 @@ def main():
         "plugins": {slug: p["version"] for slug, p in plugins.items()},
         "plugin_files": {slug: {k: v for k, v in p.items() if k != "version"} for slug, p in plugins.items()},
         "non_git": non_git,
+        "glossary_data": glossary_data,
         "awards_images": awards_images,
         "catalog_data_reference": catalog,
         "address_scan_blockers": scan["blockers"],
