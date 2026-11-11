@@ -60,7 +60,7 @@ function check(name, ok, detail) {
       check(`${tag}: internal links answer 200`, bad.length === 0, bad.join(", "));
       check(`${tag}: no link to issuer or relying party overviews`, hrefs.every((h) => !/issuer-catalog|relying-part|\/issuers\/|\/rp\//.test(h)));
       if (p.key === "start") {
-        check(`${tag}: "mandates" is plain text (no glossary popup)`, (await page.locator(".fides-learn-article__body .fides-ds-term", { hasText: /^mandates$/i }).count()) === 0);
+        check(`${tag}: "mandates" opens the glossary definition`, (await page.locator(".fides-learn-article__body .fides-ds-term", { hasText: /^mandates/i }).count()) === 1);
       }
       await context.close();
     }

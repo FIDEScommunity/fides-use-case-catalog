@@ -1,121 +1,47 @@
-# Glossary proposals (for the glossary source owners)
+# Glossary changes for FIDES Learn
 
-The Learn pages read definitions from the glossary data (`fides-vocabulary-glossary/data/glossary-aggregated.json`).
-That file is a bundled copy of the community glossary (`data/glossary-aggregated.json` in the `fides-interop-profiles`
-repository; the plugin option `fides_vocabulary_glossary_github_data_url` can point to it). The pilot copy has no git
-history and is not edited here, so the pilot never shows a definition the source does not contain. The Learn filter
-`fides_learn_vocabulary` exists but is not used for overrides. Nothing below has been applied to the source or to
-production; it is a proposal for the owner of the source.
+Status: **processed locally in the source repository, not merged or published.** Local commit
+`bd923fe` in `/Users/victorvanderhulst/Projects/interop-profiles` (remote `FIDEScommunity/fides-interop-profiles`,
+branch `main`). Nothing was pushed. The pilot's bundled glossary plugin copy was synchronised from the generated file.
 
-## Structure of a term in the source
+## Which file leads
 
-Every entry in `terms` has exactly these fields (checked against all 335 current entries):
+| What | Where | Role |
+|---|---|---|
+| `data/vocabulary.json` | interop-profiles | **Source of truth.** Object keyed by term (`terms["Credential"] = { description, aliases?, url, title? }`), schema `schemas/vocabulary.schema.json`. |
+| `scripts/build-glossary-aggregated.mjs` (`npm run build:glossary`) | interop-profiles | Generates the list below. `id` = slug of the key, `name` = `title` or formatted key, `letter` = first letter of `name`. No network, no pushes; it writes two files. |
+| `data/glossary-aggregated.json` | interop-profiles | Generated, committed. The glossary page script fetches it from GitHub `main` first. |
+| `wordpress-plugin/fides-vocabulary-glossary/data/glossary-aggregated.json` | interop-profiles | Generated copy for the plugin (git-ignored there). |
+| `wordpress/wp-content/plugins/fides-vocabulary-glossary/data/glossary-aggregated.json` | design pilot | **Not in git.** Local copy; Learn dialogs and the server-rendered glossary list read it. |
+| `wordpress-plugin/fides-interop-matrix/assets/vocabulary.json` | interop-profiles | Separate fallback copy for the interop matrix; already differs from the source and was left alone. |
 
-```json
-{ "id": "kebab-case-id", "key": "Display name", "name": "Display name", "description": "…", "url": "https://…", "aliases": ["…"], "letter": "V" }
-```
+The committed aggregate was stale (335 terms against 351 in the source), so the rebuild also added the 16 eIDAS trust
+service terms that were already in `vocabulary.json` (commit `1924200`). Version of `vocabulary.json`: 1.10.1 → 1.11.0.
 
-There is no `related` or `sources` field. The single `url` is the source reference, and `aliases` are matched
-case-insensitively by Learn (and by the glossary popups), so an alias that is too general would capture text in
-unrelated places. `letter` is the first letter of `name`. Existing entries involved: `verifiable-credential`
-("A tamper-evident credential whose authorship (issuer) can be cryptographically verified."), `credentialformat`
-(Credential Format), `vcformat`, `verifiable-credential-type` (alias `vct`, `VCT`), `attestation`,
-`attestation-type` ("An identifier for a type of attestation, unique within the context of the EUDI Wallet
-ecosystem."), `electronic-attestation-of-attributes`.
+## Processed changes (exact values in `data/vocabulary.json`)
 
-## Findings
+1. **Credential** (new, id `credential`): "Information about a subject, such as a person or an organisation, that an issuer provides so the subject can show it to others. The term does not identify a technical format or a legal status." Source: W3C VC Data Model 2.0 (a credential is a set of claims made by an issuer). No aliases, so "attestation" keeps its own EUDI entry.
+2. **Credential Type** (new, id `credential-type`): "A kind of credential, such as a diploma or an employee card. It describes what information a credential of that type is expected to contain and can point to the rules or schema that apply. How a type is defined and identified depends on the ecosystem and the format. The EUDI Wallet ecosystem speaks of an attestation type." Source: W3C VCDM 2.0 `type`. No aliases; `vct` does not belong here.
+3. **vct** (existing key `Verifiable Credential Type`, id `verifiable-credential-type` unchanged): display name through the `title` field is now **Credential Type Identifier (vct)**; text "In SD-JWT VC, the identifier of a credential type. This string (vct) names the type and can link to its schema. Commonly used in EU and EWC attestation catalogs."; aliases `vct`, `VCT` kept, `Verifiable Credential Type` added (the old name keeps matching in search and in Learn). The key was **not** renamed because the id is derived from it; the `title` field changes only what readers see. Source (IETF SD-JWT VC draft) unchanged.
+4. **Mandate** (text only; id, alias `delegation`, url unchanged): the claim "a core European Business Wallet capability" became "A digital authorization that lets one person act on behalf of an organization within defined limits. Mandates are a common topic in business wallet discussions, including the proposed European Business Wallet."
 
-1. There is no general entry **Credential**. The Learn pages use the word everywhere, and the "Terms in this
-   article" box on "The big picture" asks for it.
-2. **Verifiable Credential Type** is named like a general idea but only describes the SD-JWT VC `vct` string. A reader
-   who looks up "credential type" gets a format-specific definition. `attestation-type` is the EUDI equivalent
-   and already exists, so a general entry would sit between the two.
-3. **Mandate** says "a core European Business Wallet capability for delegation". The European Business Wallet is a
-   proposal; the sentence reads as a statement about a finished product (see "What Learn does meanwhile").
+Assessment notes: the three general entries use the same wording as "What is a credential? And what is an attestation?" (credential broad and format-neutral, credential type as a kind, `vct` as the SD-JWT VC identifier only). No definition claims legal status or qualified status. Uncertainty: the Mandate sentence is deliberately vague about what the proposal contains; a legal reviewer may prefer to cite the proposal text. `Credential Format` and `Verifiable Credential` were read and need no change.
 
-## Proposal, in recommended order
+## Consumers of the changed terms
 
-Apply in this order so no reference breaks halfway: first the new entries, then the rename, then the text fix.
+- By id or alias (unchanged, still resolve): glossary deep link `?term=verifiable-credential-type`, Learn `[fides_learn_term term="vct"]` (matches key, name or alias), search for `vct`/`VCT`/the old name, glossary page ids.
+- Show the new name: glossary page (list and open row), glossary SSR list, Learn dialogs use the link text as title and the new definition as body.
+- Search of the workspace found no other consumer: `enrich-vocabulary-urls.mjs` and `docs/vocabulary-opzet.md` use the **key** (unchanged); the credential catalog `aggregated.json` only contains the phrase in an attribute description. Catalog filters (`vocabulary.json` keys) are not affected by the new entries.
+- The glossary page script fetches GitHub `main` first and the local file second. Until the source commit is merged, a local browser shows the published data; the check script serves the local file for that request.
 
-### 1. New entry: Credential
+## Still open (staging and production)
 
-```json
-{
-  "id": "credential",
-  "key": "Credential",
-  "name": "Credential",
-  "description": "Information about a subject, such as a person or an organisation, that an issuer provides so it can be shown to others. The term does not by itself identify a technical format or a legal status.",
-  "url": "https://www.w3.org/TR/vc-data-model-2.0/",
-  "aliases": [],
-  "letter": "C"
-}
-```
+1. Review and merge commit `bd923fe` in `fides-interop-profiles`; GitHub `main` then feeds the glossary page on every site.
+2. Update the glossary plugin copy on staging (and the pilot copy on other machines) with the generated `glossary-aggregated.json`. The pilot copy is **not in git** and is not part of the staging package; copy the file by hand. The previous pilot copy is kept at `tests/output/glossary-aggregated.pilot-before-2026-11-11.json` (not committed).
+3. Optional: legal review of the Mandate sentence. The interop matrix fallback `vocabulary.json` is not regenerated by any script and is out of scope.
 
-Basis: the W3C Verifiable Credentials Data Model 2.0 defines a credential as a set of one or more claims made by an
-issuer, and a verifiable credential as a tamper-evident credential whose authorship can be verified. The text above
-stays general on purpose and does not claim that every credential is verifiable. No aliases: "credentials" and
-"attestation" must not resolve here (`attestation` is its own entry with an EUDI meaning).
+## What Learn does now
 
-### 2. New entry: Credential Type
-
-```json
-{
-  "id": "credential-type",
-  "key": "Credential Type",
-  "name": "Credential Type",
-  "description": "A kind of credential, such as a diploma or an employee card. It describes what information a credential of that type is expected to contain and can point to the rules or schema that apply. How a type is defined and identified depends on the ecosystem and the format used.",
-  "url": "https://www.w3.org/TR/vc-data-model-2.0/#types",
-  "aliases": [],
-  "letter": "C"
-}
-```
-
-Basis: W3C VCDM 2.0 uses `type` for the kind of a credential; EUDI uses "attestation type" for the same idea
-(`attestation-type`); SD-JWT VC identifies it with `vct`. Do not add `vct` or `credential type identifier` as aliases.
-
-### 3. Refine the existing vct entry (keep `id`, so existing references and anchors keep working)
-
-```json
-{
-  "id": "verifiable-credential-type",
-  "key": "Credential Type Identifier (vct)",
-  "name": "Credential Type Identifier (vct)",
-  "description": "In SD-JWT VC, the identifier of a credential type. This string (vct) names the type and can link to its schema. Commonly used in EU and EWC attestation catalogs.",
-  "url": "https://datatracker.ietf.org/doc/draft-ietf-oauth-sd-jwt-vc/",
-  "aliases": ["vct", "VCT", "Verifiable Credential Type"],
-  "letter": "C"
-}
-```
-
-Aliases: keep `vct` and `VCT` (the term people actually search for) and move the old name to an alias, so text that
-still says "Verifiable Credential Type" resolves to the same entry. Do not add "credential type" (it belongs to entry 2).
-Alternative with fewer changes (option B): keep one entry and replace only the description with "A kind of credential,
-describing what information it is expected to contain. In SD-JWT VC, a credential type is identified by a string called
-vct, which names the type and links to its schema; other formats identify types in other ways. Commonly used in EU and
-EWC attestation catalogs." Option A is preferred: it keeps the general idea and the technical identifier apart.
-
-### 4. Soften Mandate (text only)
-
-```json
-{
-  "id": "mandate",
-  "description": "A digital authorization that lets one person act on behalf of an organization within defined limits. Business wallet proposals, including the European Business Wallet proposal, include mandates for delegation."
-}
-```
-
-(Only `description` changes; the other fields stay as they are. Same check for `representation-rights`, which is fine today.)
-
-## What Learn does meanwhile
-
-- "What is a credential? And what is an attestation?" explains credential types in its own words and links only the
-  `vct` identifier to the glossary, so the popup matches what the text says.
-- "Business wallets: where to start" no longer links the word "mandates" to the glossary (the current definition
-  describes the European Business Wallet as if it exists), and the business hub page lists "Representation rights" in
-  its terms box instead of "Mandate". Restore the links after proposal 4 is applied.
-- "Terms in this article" shows whole sentences from the glossary text and a "Full definition" button when more follows.
-- Terms without an entry (now only **Credential**) render as plain text; the seed reports `GLOSSARY-MISSING Credential`.
-- Reviewed in this round: the definitions of every term the Learn articles link (Business wallet → Organizational
-  Wallet, Representation rights, Wallet, Holder, Issuer, Relying Party, Verifier, Credential Status, Electronic
-  Attestation of Attributes, Qualified Electronic Attestation of Attributes, Credential Format, Verifiable Credential,
-  vct, Wallet Provider). Only Mandate and vct needed a note; the others match how the articles use them. Holder,
-  Issuer and Verifier are short role descriptions; Relying Party is phrased for the EUDI Wallet context.
+- "What is a credential? And what is an attestation?" links Credential, credential type and the `vct` identifier to their own entries.
+- The terms lists on "The big picture" (Credential) and "For businesses" (Mandate) work again; "mandates" is linked again on "Business wallets: where to start". The seed no longer reports `GLOSSARY-MISSING`.
+- "Terms in this article" shows whole sentences and a "Full definition" button when more follows.

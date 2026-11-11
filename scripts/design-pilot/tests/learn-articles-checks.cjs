@@ -110,7 +110,7 @@ async function article(browser, key, width) {
     check(`${tag}: closing band says Browse, not Compare`, /Browse business wallets/.test(cta) && !/Compare business wallets/.test(cta), cta.slice(0, 120));
   }
   if (key === "credential") {
-    check(`${tag}: only the vct identifier opens the SD-JWT VC definition`, (await page.locator(".fides-learn-article__body .fides-ds-term", { hasText: "vct" }).count()) === 1 && (await page.locator(".fides-learn-article__body .fides-ds-term", { hasText: /^credential type/i }).count()) === 0);
+    check(`${tag}: credential, credential type and the vct identifier each open their own definition`, (await page.locator(".fides-learn-article__body .fides-ds-term", { hasText: "vct" }).count()) === 1 && (await page.locator(".fides-learn-article__body .fides-ds-term", { hasText: /^credential type/i }).count()) === 1 && (await page.locator(".fides-learn-article__body .fides-ds-term", { hasText: /^credential \(/i }).count()) === 1);
     const body = await page.locator(".fides-learn-article__body").innerText();
     check(`${tag}: the catalog disclaimer appears once`, (body.match(/does not confirm that a credential is qualified/g) || []).length === 1);
   }
