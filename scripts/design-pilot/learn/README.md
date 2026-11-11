@@ -16,6 +16,7 @@ pushed, deployed or synced to utrecht-demo.
 | European Digital Identity Wallet | `topics/the-big-picture/european-digital-identity-wallet/` | no Paper frame (same article template) | article |
 | European Business Wallet | `topics/for-businesses/european-business-wallet/` | no Paper frame (same article template) | article |
 | Issuing credentials for wallets | `topics/for-businesses/issuing-credentials-for-wallets/` | no Paper frame (same article template) | article |
+| Accepting information from a wallet | `topics/for-businesses/accepting-information-from-a-wallet/` | no Paper frame (same article template) | article |
 | EUDI Wallet and European Business Wallet: how do they relate? | `topics/the-big-picture/eudi-wallet-and-european-business-wallet/` | no Paper frame (same article template) | article |
 | What is a credential? And what is an attestation? | `topics/the-big-picture/what-is-a-credential/` | no Paper frame (same article template) | article |
 | Training & workshops | `sessions/` | 24.3, mobile 24.8 | sessions |

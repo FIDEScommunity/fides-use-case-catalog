@@ -108,6 +108,20 @@
    "menu_order": 2
   },
   {
+   "path": "topics/for-businesses/accepting-information-from-a-wallet",
+   "title": "Accepting information from a wallet",
+   "kind": "article",
+   "eyebrow": "Explainer · For businesses",
+   "excerpt": "What does your organisation need to receive and check? What a relying party asks for, what to check and where the decision stays with your organisation.",
+   "sources": "European Commission · EUDI Regulation | https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation\nRegulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nGermany · Relying-party onboarding (developer guide) | https://bmi.usercontent.opencode.de/eudi-wallet/developer-guide/rp/onboarding/rp_highlevel_onboarding/",
+   "cta_title": "Look at your own service",
+   "cta_text": "Work through one process with your team in the Wallet Readiness Workshop.",
+   "cta_label": "View the workshop",
+   "cta_url": "{{learn}}/sessions/wallet-readiness-workshop/",
+   "content": "accepting-information-from-a-wallet.html",
+   "menu_order": 3
+  },
+  {
    "path": "topics/for-businesses/european-business-wallet",
    "title": "European Business Wallet",
    "kind": "article",
