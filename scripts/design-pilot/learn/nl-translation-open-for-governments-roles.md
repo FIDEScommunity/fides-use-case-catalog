@@ -1,5 +1,7 @@
 # Open Dutch strings: Ecosystem roles and For governments (12-13 November 2026)
 
+**Update 13 Nov 2026:** all 24 strings below are now entered as "written by Cursor, for review" (tag C in `learn/nl-translation-changes-roles-governments-2026-11-12.md`, final wording there; some wording differs from the first proposal here). Nothing is open any more except the points under "Out of scope or staying English". The text below is the history.
+
 **Proposals, not entered.** These English segments exist on the pages, but the edited document has no Dutch text that matches the current English (the English changed, or the document does not cover the segment). Nothing here is in the dictionary. After approval, add the rows to `learn/nl-translations.php`, run `apply` and then `export`, and remove the string from `OPEN_ENGLISH` in `tests/nl-roles-governments-checks.cjs`.
 
 Terms follow `learn/nl-terminology.md`. "GBO", "OOTS", "ICTU" and the names of programmes and documents stay as they are.

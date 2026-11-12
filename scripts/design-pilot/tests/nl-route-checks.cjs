@@ -24,10 +24,10 @@ const ARTICLES = ["what-is-a-digital-wallet", "what-is-a-credential", "how-crede
 const ARTICLE_OPENERS = [
   ["what-is-a-digital-wallet", "Een wallet"], ["what-is-a-digital-wallet", "De EUDI Wallet"],
   ["what-is-a-credential", "Een verifieerbaar credential"], ["what-is-a-credential", "Een attribuut"], ["what-is-a-credential", "Een schema"], ["what-is-a-credential", "Een formaat"],
-  ["how-credentials-connect", "De issuer"], ["european-digital-identity-wallet", "De houder"], ["european-digital-identity-wallet", "De issuer"],
-  ["european-digital-identity-wallet", "De ontvangende partij"], ["european-digital-identity-wallet", "De walletaanbieder"],
+  ["how-credentials-connect", "De uitgever"], ["european-digital-identity-wallet", "De houder"], ["european-digital-identity-wallet", "De uitgever (issuer)"],
+  ["european-digital-identity-wallet", "De vertrouwende partij"], ["european-digital-identity-wallet", "De walletaanbieder"],
   ["eudi-wallet-and-european-business-wallet", "De European Digital Identity Wallet"], ["formats-and-protocols", "Een credentialformaat"], ["formats-and-protocols", "Een protocol"],
-  ["trust-and-interoperability", "Een afsprakenstelsel"], ["trust-and-interoperability", "Een vertrouwensregister"], ["issuing-credentials-for-wallets", "Een issuer"],
+  ["trust-and-interoperability", "Een afsprakenstelsel"], ["trust-and-interoperability", "Een vertrouwensregister"], ["issuing-credentials-for-wallets", "Een uitgever (issuer)"],
 ];
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 async function open(page, path) {
@@ -160,7 +160,8 @@ async function links(page, tag) {
     const form = page.locator("form").filter({ has: page.locator("input[type=email], input[name*=mail]") }).first();
     await form.waitFor({ state: "visible", timeout: 8000 }).catch(() => {});
     check(`${tagReq}: form is shown`, await form.isVisible().catch(() => false));
-    const labels = (await form.locator("label, button, [type=submit]").allInnerTexts()).join(" | ");
+    // The WPForms honeypot label (aria-hidden, 1x1 px, random words taken from the other labels and different on every load) is not a user-facing label.
+    const labels = (await form.locator("label:not([aria-hidden='true']), button, [type=submit]").allInnerTexts()).join(" | ");
     check(`${tagReq}: field labels and button are Dutch`, /naam|e-mail|organisatie|versturen|verstuur/i.test(labels) && !/\b(Send request|Name|Organisation|Email)\b/.test(labels.replace(/E-mail/gi, "")), labels);
     await audit(page, tagReq);
     check(`${tagReq}: no horizontal overflow`, (await overflow(page)) <= 0);

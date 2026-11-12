@@ -5,13 +5,13 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 761,
+        "learn": 786,
         "services": 61,
         "shared": 109,
         "start-receive": 35,
         "training": 153
     },
-    "total": 1119,
+    "total": 1144,
     "entries": [
         {
             "original": ", a",
@@ -716,7 +716,8 @@
             "routes": [
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/for-businesses",
-                "learn/topics/for-businesses/business-wallets-where-to-start"
+                "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation"
             ],
             "group": "learn"
         },
@@ -2023,6 +2024,7 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/the-big-picture/formats-and-protocols",
@@ -2057,6 +2059,7 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
                 "learn/topics/the-big-picture/european-digital-identity-wallet",
                 "learn/topics/the-big-picture/formats-and-protocols",
@@ -2303,6 +2306,8 @@
                 "learn/topics/for-businesses",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/the-big-picture/european-digital-identity-wallet",
                 "learn/topics/the-big-picture/how-credentials-connect",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
@@ -2426,19 +2431,6 @@
             ],
             "routes": [
                 "learn"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "Choose a process before choosing a product. What does your organisation need to prove, receive or check?",
-            "translation": "Kies eerst een proces en daarna pas een product. Wat moet uw organisatie aantonen, ontvangen of controleren?",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/for-businesses/business-wallets-where-to-start"
             ],
             "group": "learn"
         },
@@ -2653,6 +2645,19 @@
             "group": "learn"
         },
         {
+            "original": "Consent-based sharing:",
+            "translation": "Delen op basis van toestemming:",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Consider a company that wants to become a supplier to a customer in another EU country. The customer needs to establish which organisation it is dealing with. It may also need company registration information and evidence that the person completing the process is authorised to do so.",
             "translation": "Stel dat een bedrijf leverancier wil worden van een klant in een ander EU-land. De klant moet vaststellen met welke organisatie hij zaken doet. Mogelijk heeft hij ook registratiegegevens nodig en bewijs dat de persoon die het proces doorloopt daartoe bevoegd is.",
             "html": false,
@@ -2705,6 +2710,19 @@
             "group": "learn"
         },
         {
+            "original": "Content last checked: 12 November 2026. Descriptions of the Dutch example follow a published draft and can change.",
+            "translation": "Inhoud voor het laatst gecontroleerd op 12 november 2026. Beschrijvingen van het Nederlandse voorbeeld volgen een gepubliceerd concept en kunnen veranderen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Continue learning",
             "translation": "Verder leren",
             "html": false,
@@ -2721,7 +2739,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
@@ -3068,7 +3089,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
-                "learn/topics/for-businesses/issuing-credentials-for-wallets"
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
+                "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -3177,7 +3201,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -3332,6 +3359,7 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -3480,7 +3508,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
-                "learn/topics/for-businesses/issuing-credentials-for-wallets"
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
+                "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -3600,6 +3631,7 @@
                 "learn/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks",
                 "learn/topics/ecosystem-roles/wallet-providers-and-other-service-providers",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
                 "learn/topics/the-big-picture",
                 "learn/topics/the-big-picture/formats-and-protocols",
@@ -3849,6 +3881,8 @@
                 "learn/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
                 "learn/topics/for-you/receiving-information-in-a-wallet",
                 "learn/topics/the-big-picture",
@@ -3975,7 +4009,8 @@
                 "learn"
             ],
             "routes": [
-                "learn/topics/for-businesses/accepting-information-from-a-wallet"
+                "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -4107,6 +4142,32 @@
             "routes": [
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "In the Netherlands, the programme Gemeenschappelijke Bronontsluiting (GBO), run by ICTU, is developing a shared way for public bodies to make source data available to the EUDI Wallet, to OOTS and, with a citizen’s consent, to private service providers. Its design is still in development.",
+            "translation": "In Nederland ontwikkelt het programma Gemeenschappelijke Bronontsluiting (GBO), uitgevoerd door ICTU, een gedeelde manier waarop overheidsorganisaties brongegevens beschikbaar maken voor de EUDI Wallet, voor OOTS en, met toestemming van de burger, voor private dienstverleners. Het ontwerp is nog in ontwikkeling.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/digital-wallets-and-public-services"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "In the Netherlands, the programme Gemeenschappelijke Bronontsluiting (GBO), run by ICTU, is developing a standardised way for public bodies that hold authoritative data (in Dutch, bronhouders) to make it available for three routes: the EUDI Wallet, OOTS, and sharing with private service providers on the basis of a citizen’s consent. The draft design says it follows European agreements and standards, including eIDAS, OOTS and the EUDI Wallet, and the Dutch implementation of them, such as the NL Wallet and the national OOTS provision. ICTU describes GBO as not intended to become a new, separate system, but as something to anchor in existing national agreement frameworks (afsprakenstelsels).",
+            "translation": "In Nederland ontwikkelt het programma Gemeenschappelijke Bronontsluiting (GBO), uitgevoerd door ICTU, een gestandaardiseerde manier waarop overheidsorganisaties die gezaghebbende gegevens beheren (bronhouders) die beschikbaar maken voor drie routes: de EUDI Wallet, OOTS en delen met private dienstverleners op basis van toestemming van een burger. Het conceptontwerp zegt Europese afspraken en standaarden te volgen, waaronder eIDAS, OOTS en de EUDI Wallet, en de Nederlandse uitwerking daarvan, zoals de NL Wallet en de nationale OOTS-voorziening. ICTU beschrijft GBO als niet bedoeld om een nieuw, afzonderlijk systeem te worden, maar als iets dat moet worden verankerd in bestaande nationale afsprakenstelsels.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
             ],
             "group": "learn"
         },
@@ -4312,6 +4373,7 @@
                 "learn/topics/ecosystem-roles/the-issuer",
                 "learn/topics/for-businesses",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
                 "learn/topics/the-big-picture/european-digital-identity-wallet",
@@ -4342,6 +4404,45 @@
             "group": "learn"
         },
         {
+            "original": "It applies where a Member State requires electronic identification and authentication to access an online service of a public sector body. A service that does not require this is not covered by paragraph 1.",
+            "translation": "Het geldt wanneer een lidstaat elektronische identificatie en authenticatie vereist voor toegang tot een onlinedienst van een overheidsinstantie. Een dienst die dat niet vereist, valt niet onder lid 1.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "It concerns access and authentication. It does not say which attributes or credentials a service must ask for, how the service must be built or what it decides on the basis of the answer.",
+            "translation": "Het gaat om toegang en authenticatie. Het zegt niet welke attributen of credentials een dienst moet opvragen, hoe de dienst moet worden gebouwd of wat de dienst besluit op basis van het antwoord.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "It concerns wallets provided in accordance with the Regulation. It does not mention other kinds of wallets.",
+            "translation": "Het gaat om wallets die overeenkomstig de verordening worden verstrekt. Andere soorten wallets worden niet genoemd.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "It helps, but it is only one part of the interaction. The parties may also need compatible protocol versions, security settings and information about the credential type. They need to understand what the data means and how to check the issuer and credential status where applicable.",
             "translation": "Een overeenkomstig formaat helpt, maar is slechts één onderdeel. De partijen hebben mogelijk ook passende protocolversies, beveiligingsinstellingen en informatie over het credentialtype nodig. Zij moeten begrijpen wat de gegevens betekenen en, waar van toepassing, de uitgever en status van het credential kunnen controleren.",
             "html": false,
@@ -4351,6 +4452,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/formats-and-protocols"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "It says “also accept”. The wallet is added to the means a service accepts. The paragraph does not say that a service may accept only wallets.",
+            "translation": "Er staat “ook accepteren”. De wallet komt erbij als middel dat een dienst accepteert. Het lid zegt niet dat een dienst alleen wallets mag accepteren.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
             ],
             "group": "learn"
         },
@@ -4410,7 +4524,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
@@ -4451,6 +4568,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/trust-and-interoperability"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Look at who issues and uses credentials today: browse",
+            "translation": "Zoek op wie nu credentials uitgeeft en gebruikt: bekijk",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments"
             ],
             "group": "learn"
         },
@@ -4572,6 +4702,21 @@
             "group": "learn"
         },
         {
+            "original": "More on the Dutch example, its version and status",
+            "translation": "Meer over het Nederlandse voorbeeld, de versie en de status",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
+                "learn/topics/for-governments/digital-wallets-and-public-services",
+                "learn/topics/for-governments/issuing-public-information-to-wallets"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "National implementation is still developing. Availability, onboarding and the credentials that can be used may differ between countries and change over time. National pages, such as the Dutch EDI-Stelsel or the German EUDI ecosystem, show how one country approaches this. They are not a uniform EU procedure.",
             "translation": "De invoering in de lidstaten is nog in ontwikkeling. Welke wallets en credentials beschikbaar zijn en hoe u erop aansluit, kan per land verschillen en in de loop van de tijd veranderen. Op de pagina’s van het Nederlandse EDI-Stelsel en het Duitse EUDI-ecosysteem leest u hoe deze landen dat aanpakken. Hun aanpak is niet zonder meer hetzelfde in de hele EU.",
             "html": false,
@@ -4683,7 +4828,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
@@ -4953,6 +5101,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Paragraph 1 does not name a date of its own. When wallets are available follows from other provisions of the Regulation and its implementing acts.",
+            "translation": "Lid 1 noemt zelf geen datum. Wanneer wallets beschikbaar zijn, volgt uit andere bepalingen van de verordening en de uitvoeringshandelingen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
             ],
             "group": "learn"
         },
@@ -5261,6 +5422,19 @@
             "group": "learn"
         },
         {
+            "original": "Read the context, version and status",
+            "translation": "Lees de context, versie en status",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Receives & shares",
             "translation": "Ontvangt en deelt",
             "html": false,
@@ -5350,7 +5524,10 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
                 "learn/topics/the-big-picture/european-digital-identity-wallet",
                 "learn/topics/the-big-picture/what-is-a-credential"
@@ -5461,6 +5638,19 @@
             "routes": [
                 "learn/topics/the-big-picture/formats-and-protocols",
                 "learn/topics/the-big-picture/trust-and-interoperability"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "See public services in practice",
+            "translation": "Bekijk publieke diensten in de praktijk",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments"
             ],
             "group": "learn"
         },
@@ -5602,6 +5792,23 @@
             "group": "learn"
         },
         {
+            "original": "Sharing information from a wallet",
+            "translation": "Informatie delen vanuit een wallet",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-holder",
+                "learn/topics/for-you",
+                "learn/topics/for-you/choosing-and-managing-a-wallet",
+                "learn/topics/for-you/receiving-information-in-a-wallet",
+                "learn/topics/for-you/sharing-information-from-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Some business-wallet products can also issue or verify credentials. Others focus on holding and presenting them. These capabilities vary by product. Identify which roles your organisation needs before comparing providers.",
             "translation": "Sommige business wallets kunnen ook credentials uitgeven of controleren. Andere richten zich op het bewaren en tonen ervan. De mogelijkheden verschillen per product. Bepaal welke rollen uw organisatie nodig heeft voordat u aanbieders vergelijkt.",
             "html": false,
@@ -5670,7 +5877,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
@@ -6001,7 +6211,9 @@
                 "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
@@ -6044,6 +6256,19 @@
             ],
             "routes": [
                 "learn/topics/for-governments/issuing-public-information-to-wallets"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The Dutch GBO draft design describes separate routes by which public data can reach a service: a wallet presentation after issuing, a cross-border evidence request through OOTS, and sharing with private providers on the basis of consent. A service should therefore not assume that a wallet presentation is the only way information reaches it. The design is still in development.",
+            "translation": "Het Nederlandse GBO-conceptontwerp beschrijft afzonderlijke routes waarlangs publieke gegevens een dienst kunnen bereiken: een presentatie vanuit een wallet na uitgifte, een grensoverschrijdend bewijsverzoek via OOTS en delen met private aanbieders op basis van toestemming. Een dienst moet er daarom niet van uitgaan dat een presentatie vanuit een wallet de enige manier is waarop informatie haar bereikt. Het ontwerp is nog in ontwikkeling.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
             ],
             "group": "learn"
         },
@@ -6338,6 +6563,19 @@
             "group": "learn"
         },
         {
+            "original": "The articles use one Dutch programme, Gemeenschappelijke Bronontsluiting (GBO), as an example. Its design is described as a draft that is still in development, and other countries organise this differently.",
+            "translation": "De artikelen gebruiken één Nederlands programma, Gemeenschappelijke Bronontsluiting (GBO), als voorbeeld. Het ontwerp wordt beschreven als een concept dat nog in ontwikkeling is, en andere landen regelen dit anders.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The big picture",
             "translation": "Het grotere geheel",
             "html": false,
@@ -6373,6 +6611,19 @@
             "group": "learn"
         },
         {
+            "original": "The catalog lists Gemeente Nijmegen as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
+            "translation": "De catalogus noemt Gemeente Nijmegen als organisatie. De catalogus markeert deze usecase als in productie, volgens opgave van de organisatie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The catalog lists Hovi as the organisation. The catalog does not mark this use case as in production.",
             "translation": "De catalogus noemt Hovi als organisatie. Volgens de catalogus is deze usecase niet in productie.",
             "html": false,
@@ -6386,6 +6637,19 @@
             "group": "learn"
         },
         {
+            "original": "The catalog lists Kamer van Koophandel as the organisation. The catalog does not mark this use case as in production.",
+            "translation": "De catalogus noemt Kamer van Koophandel als organisatie. De catalogus markeert deze usecase niet als in productie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/digital-wallets-and-public-services"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The catalog lists Robert Bosch GmbH as the organisation. The catalog does not mark this use case as in production.",
             "translation": "De catalogus noemt Robert Bosch GmbH als organisatie en vermeldt deze usecase niet als in productie.",
             "html": false,
@@ -6395,6 +6659,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The catalog lists TECH5 as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
+            "translation": "De catalogus noemt TECH5 als organisatie. De catalogus markeert deze usecase als in productie, volgens opgave van de organisatie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/issuing-public-information-to-wallets"
             ],
             "group": "learn"
         },
@@ -6480,6 +6757,32 @@
         {
             "original": "The draft describes the three routes as having their own parties, legal bases and protocols, so common source access does not mean that all data travels the same way:",
             "translation": "Het ontwerp beschrijft dat elke route eigen partijen, grondslagen en protocollen heeft. Een gemeenschappelijke bronontsluiting betekent dus niet dat alle gegevens op dezelfde manier worden gedeeld:",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The draft presents the verify service as one way to meet the obligation, which it places in Article 45e of the amended eIDAS Regulation, that qualified providers can verify attributes against authentic sources. According to the draft, the parties involved are still deciding which route is preferred. It also says that GBO itself would not be the issuer of public attestations and that using the shared facility is optional.",
+            "translation": "Het ontwerp presenteert de verify-dienst als één manier om te voldoen aan de verplichting, die het onderbrengt in artikel 45e van de gewijzigde eIDAS-verordening, dat gekwalificeerde aanbieders attributen bij authentieke bronnen kunnen verifiëren. Volgens het ontwerp beslissen de betrokken partijen nog welke route de voorkeur heeft. Het ontwerp zegt ook dat GBO zelf niet de uitgever van publieke attestaties zou zijn en dat het gebruik van de gedeelde voorziening optioneel is.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/issuing-public-information-to-wallets"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The draft separates what is described as available from what is still to be realised. It marks several components, including the issuing facility for the EUDI Wallet, as still to be realised, and says the legal basis for consent needs legislation. According to the programme page of ICTU, the development phase runs until December 2026 and the realisation phase through 2027.",
+            "translation": "Het ontwerp maakt onderscheid tussen wat als beschikbaar wordt beschreven en wat nog moet worden gerealiseerd. Het markeert meerdere onderdelen, waaronder de uitgiftevoorziening voor de EUDI Wallet, als nog te realiseren en zegt dat voor de wettelijke grondslag voor toestemming wetgeving nodig is. Volgens de programmapagina van ICTU loopt de ontwikkelfase tot december 2026 en de realisatiefase tot en met 2027.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6847,6 +7150,19 @@
             "group": "learn"
         },
         {
+            "original": "The questions are similar in different countries. The answers depend on national law, existing registers and the wallets that are available.",
+            "translation": "De vragen lijken in verschillende landen op elkaar. De antwoorden hangen af van nationale wetgeving, bestaande registers en de beschikbare wallets.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The receiving service checks it",
             "translation": "De ontvangende dienst controleert de gegevens",
             "html": false,
@@ -6910,6 +7226,7 @@
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-you/sharing-information-from-a-wallet",
                 "learn/topics/the-big-picture/european-digital-identity-wallet"
@@ -7256,6 +7573,19 @@
             "group": "learn"
         },
         {
+            "original": "This is a summary of the text, not legal advice. Read the Regulation and the national rules that apply to your service.",
+            "translation": "Dit is een samenvatting van de tekst en geen juridisch advies. Lees de verordening en de nationale regels die voor uw dienst gelden.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "This is an illustrative example. Not every course provider issues credentials, and not every employer or wallet supports this interaction. The roles in this example are described in",
             "translation": "Dit is een voorbeeld. Niet iedere opleider geeft credentials uit en niet iedere werkgever of wallet ondersteunt deze manier van delen. De rollen in dit voorbeeld worden uitgelegd in",
             "html": false,
@@ -7399,6 +7729,7 @@
                 "learn/topics",
                 "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/the-eudi-wallet-and-national-implementation",
                 "learn/topics/the-big-picture",
                 "learn/topics/the-big-picture/formats-and-protocols",
@@ -7603,6 +7934,7 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
                 "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet",
                 "learn/topics/the-big-picture/european-digital-identity-wallet"
             ],
@@ -7880,6 +8212,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/accepting-information-from-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "What does a service need to receive and check, and what does Article 5f say?",
+            "translation": "Wat moet een dienst ontvangen en controleren, en wat zegt artikel 5f?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments"
             ],
             "group": "learn"
         },
@@ -8768,6 +9113,7 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
                 "learn/topics/the-big-picture/european-digital-identity-wallet"
             ],
             "group": "learn"
@@ -9062,6 +9408,19 @@
         {
             "original": "a person receives an attestation from a public body or a qualified trust service provider and can later show it to a service. The draft describes showing it as taking place outside GBO. The two issuing routes are described in",
             "translation": "een persoon ontvangt een attestatie van een publieke organisatie of een gekwalificeerde vertrouwensdienstverlener en kan die later aan een dienst tonen. Volgens het ontwerp vindt het tonen buiten GBO plaats. De twee uitgifteroutes worden beschreven in",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "a public service in another Member State requests evidence, and the person is described as reviewing and agreeing before it is sent.",
+            "translation": "een publieke dienst in een andere lidstaat bewijs opvraagt, en de persoon wordt beschreven als iemand die dit bekijkt en ermee instemt voordat het wordt verstuurd.",
             "html": false,
             "fragment": true,
             "groups": [
@@ -10184,6 +10543,19 @@
             "group": "learn"
         },
         {
+            "original": "the person gives consent for a specific purpose, recipient and data set, and the private provider is described as receiving a party-specific pseudonym and not the citizen service number.",
+            "translation": "de persoon toestemming geeft voor een specifiek doel, een specifieke ontvanger en een specifieke gegevensset, en de private aanbieder wordt beschreven als ontvanger van een partijspecifiek pseudoniem en niet van het burgerservicenummer.",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "the provider checks attribute values it has been given against the source before issuing.",
             "translation": "de aanbieder controleert aangeleverde attributen bij de bron voordat de attestatie wordt uitgegeven.",
             "html": false,
@@ -11217,7 +11589,9 @@
                 "learn/topics/for-businesses",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11258,7 +11632,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11366,7 +11743,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11423,7 +11803,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11462,7 +11845,10 @@
                 "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/for-businesses",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/the-big-picture/european-digital-identity-wallet",
                 "learn/topics/the-big-picture/formats-and-protocols",
@@ -11505,7 +11891,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11562,7 +11951,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11649,7 +12041,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11705,7 +12100,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11762,7 +12160,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11867,7 +12268,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11924,7 +12328,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -11981,7 +12388,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12038,7 +12448,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12095,7 +12508,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12152,7 +12568,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12209,7 +12628,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12298,7 +12720,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12370,7 +12795,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12427,7 +12855,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12484,7 +12915,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12574,7 +13008,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12631,7 +13068,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12769,7 +13209,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12826,7 +13269,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12883,7 +13329,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -12952,7 +13401,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13004,7 +13456,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13061,7 +13516,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13118,7 +13576,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13175,7 +13636,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13264,7 +13728,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13321,7 +13788,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13457,7 +13927,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13514,7 +13987,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13567,7 +14043,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13619,7 +14098,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13676,7 +14158,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13833,7 +14318,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13890,7 +14378,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -13978,7 +14469,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14035,7 +14529,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14092,7 +14589,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14149,7 +14649,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14222,7 +14725,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14311,7 +14817,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14383,7 +14892,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14520,7 +15032,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14573,7 +15088,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14625,7 +15143,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14678,7 +15199,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14748,7 +15272,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14805,7 +15332,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14880,7 +15410,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -14957,7 +15490,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -15094,7 +15630,10 @@
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
                 "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
