@@ -95,6 +95,47 @@
    "menu_order": 4
   },
   {
+   "path": "topics/for-you",
+   "title": "For you",
+   "kind": "section",
+   "excerpt": "A digital wallet can help you receive and share information, such as a qualification or proof of a particular entitlement. What you can store and where you can use it depends on the wallet, the organisation issuing the information and the service you want to use.",
+   "content": "for-you.html",
+   "menu_order": 1
+  },
+  {
+   "path": "topics/for-you/receiving-information-in-a-wallet",
+   "title": "Receiving information in a wallet",
+   "kind": "article",
+   "eyebrow": "Explainer · For you",
+   "excerpt": "How does information get into a wallet, and who provides it?",
+   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/",
+   "series": "for-you",
+   "content": "receiving-information-in-a-wallet.html",
+   "menu_order": 0
+  },
+  {
+   "path": "topics/for-you/sharing-information-from-a-wallet",
+   "title": "Sharing information from a wallet",
+   "kind": "article",
+   "eyebrow": "Explainer · For you",
+   "excerpt": "What should you look at when a service asks you to share information?",
+   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nEuropean Commission · Selective disclosure of attributes in the EUDI Wallet | https://ec.europa.eu/digital-building-blocks/sites/spaces/EUDIGITALIDENTITYWALLET/pages/949256476/What%2Bis%2Bselective%2Bdisclosure%2Bof%2Battributes\nEuropean Commission · European Digital Identity Wallet | https://digital-strategy.ec.europa.eu/en/factpages/european-digital-identity-wallet",
+   "series": "for-you",
+   "content": "sharing-information-from-a-wallet.html",
+   "menu_order": 1
+  },
+  {
+   "path": "topics/for-you/choosing-and-managing-a-wallet",
+   "title": "Choosing and managing a wallet",
+   "kind": "article",
+   "eyebrow": "Explainer · For you",
+   "excerpt": "What can you check when choosing a wallet, and where can you find help?",
+   "sources": "European Commission · European Digital Identity Wallet | https://digital-strategy.ec.europa.eu/en/factpages/european-digital-identity-wallet",
+   "series": "for-you",
+   "content": "choosing-and-managing-a-wallet.html",
+   "menu_order": 2
+  },
+  {
    "path": "topics/for-governments",
    "title": "For governments",
    "kind": "section",

@@ -121,7 +121,8 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     await page.waitForURL(`**${PAGE}`, { timeout: 8000 }).catch(() => {});
     check(`${tag}: the link opens the overview`, page.url().endsWith(PAGE));
     await open(page, `${L}/topics/`);
-    for (const t of ["For you", "Around the world"]) check(`${tag}: "${t}" stays unlinked`, (await page.locator(`.fides-learn__content li > a`).filter({ hasText: new RegExp(`^${t}$`) }).count()) === 0);
+    for (const t of ["Around the world"]) check(`${tag}: "${t}" stays unlinked`, (await page.locator(`.fides-learn__content li > a`).filter({ hasText: new RegExp(`^${t}$`) }).count()) === 0);
+    // "For you" has its own overview now (checked in tests/for-you-checks.cjs).
     // "For governments" has its own overview now (checked in tests/for-governments-checks.cjs).
     check(`${tag}: "For governments" links to its overview`, (await page.locator(`.fides-learn__content li > a[href$="/topics/for-governments/"]`).count()) === 1);
     check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);

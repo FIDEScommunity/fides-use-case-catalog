@@ -348,3 +348,15 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
   (an editor-approved text); existing translations stay.
 - **25 English strings** stay English on purpose or until the owner decides (`learn/nl-remaining-strings-review.md`; open: "readiness workshop", "Mandate").
 - Staging keeps its write/mail block; no real mail is sent and the request form is only looked at.
+
+## For you (12 November 2026, local only)
+
+- **Seed:** four new Learn pages: `topics/for-you` (kind `section`, content `for-you.html`, menu order 1) and three articles below it (kind `article`, eyebrow
+  "Explainer · For you", series `for-you` so Previous/Next appears): `receiving-information-in-a-wallet`, `sharing-information-from-a-wallet`,
+  `choosing-and-managing-a-wallet`. Sources use the existing `Label | URL` field ("Organisation · Title").
+- **Existing pages that changed (the seed skips them on staging when an editor changed them; then add by hand):**
+  `topics` (the "For you" row is now a link to `/learn/topics/for-you/`), `what-is-a-digital-wallet` (Learn more: "Choosing and managing a wallet"),
+  `what-is-a-credential` (Learn more: "Receiving information in a wallet") and `the-holder` (Learn more: "Sharing information from a wallet").
+  Never use `LEARN_FORCE`. Local result on 12 November 2026: created 4, updated 4, nothing skipped.
+- **Behaviour test:** `tests/for-you-seed.sh` (throwaway tree). Deviations and gaps: `learn/for-you-editorial-gaps.md`.
+- **Dutch:** proposals only, in `learn/nl-translation-changes-for-you.md`; nothing is in `nl-translations.json`.
