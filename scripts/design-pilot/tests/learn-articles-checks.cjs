@@ -69,8 +69,9 @@ async function article(browser, key, width) {
   if (key === "ebw") {
     check(`${tag}: parentheses in the Parliament source URL survive`, sources.some((h) => h.includes("reference=2025/0358(COD)")), sources.join(","));
   }
-  const urlWrap = await page.locator(".fides-learn-sources__url").evaluateAll((els) => els.every((el) => el.scrollWidth <= el.parentElement.clientWidth + 1 || getComputedStyle(el).overflowWrap !== "normal"));
-  check(`${tag}: long source URLs wrap`, urlWrap);
+  const srcWrap = await page.locator(".fides-learn-sources a").evaluateAll((els) => els.every((el) => el.scrollWidth <= el.clientWidth + 1 && getComputedStyle(el).textOverflow !== "ellipsis"));
+  check(`${tag}: long source titles wrap and are not truncated`, srcWrap);
+  check(`${tag}: no visible source URL`, (await page.locator(".fides-learn-sources__url").count()) === 0);
   const checked = await page.locator(".fides-learn-note").last().innerText();
   check(`${tag}: content last checked line is present`, /Content last checked: 11 November 2026/.test(checked), checked);
 

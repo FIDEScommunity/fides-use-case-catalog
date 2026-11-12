@@ -226,10 +226,10 @@ async function article(page, width) {
   // Long text: a long title and an unbreakable URL must not break the layout.
   await page.evaluate(() => {
     document.querySelector(".fides-learn__hero h1").textContent += " " + "Supercalifragilistic".repeat(6);
-    document.querySelector(".fides-learn-sources__url").textContent = "https://example.org/" + "very-long-path-segment/".repeat(12);
+    document.querySelector(".fides-learn-sources__link").firstChild.textContent += " https://example.org/" + "very-long-path-segment/".repeat(12);
     document.querySelector(".fides-learn-article__body p").textContent += " " + "https://example.org/" + "x".repeat(140);
   });
-  check(`article @${width}: long title, URL and text do not overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
+  check(`article @${width}: long title, source title and text do not overflow`, await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1));
 
   await open(page, "art2");
   await baseline(page, "art2", width);
