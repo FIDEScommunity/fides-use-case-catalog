@@ -20,6 +20,15 @@ const ENGLISH_LABELS = /^(Skip to content|Breadcrumb|Footer|Main|Close|Search FI
 const ENGLISH_WORDS = /\b(the|your|with|this|that|you|are|will|from|which|should)\b/;
 const ARTICLES = ["what-is-a-digital-wallet", "what-is-a-credential", "how-credentials-connect", "european-digital-identity-wallet", "eudi-wallet-and-european-business-wallet", "formats-and-protocols", "trust-and-interoperability"].map((s) => `learn/topics/the-big-picture/${s}`)
   .concat(["issuing-credentials-for-wallets", "accepting-information-from-a-wallet", "business-wallets-where-to-start", "european-business-wallet"].map((s) => `learn/topics/for-businesses/${s}`));
+// Sentence openers that used to be the lone fragments A / An / The: path below the Learn root and the Dutch opener expected at the start of the paragraph or list item.
+const ARTICLE_OPENERS = [
+  ["what-is-a-digital-wallet", "Een wallet"], ["what-is-a-digital-wallet", "De EUDI Wallet"],
+  ["what-is-a-credential", "Een verifieerbaar credential"], ["what-is-a-credential", "Een attribuut"], ["what-is-a-credential", "Een schema"], ["what-is-a-credential", "Een formaat"],
+  ["how-credentials-connect", "De issuer"], ["european-digital-identity-wallet", "De houder"], ["european-digital-identity-wallet", "De issuer"],
+  ["european-digital-identity-wallet", "De ontvangende partij"], ["european-digital-identity-wallet", "De walletaanbieder"],
+  ["eudi-wallet-and-european-business-wallet", "De European Digital Identity Wallet"], ["formats-and-protocols", "Een credentialformaat"], ["formats-and-protocols", "Een protocol"],
+  ["trust-and-interoperability", "Een afsprakenstelsel"], ["trust-and-interoperability", "Een vertrouwensregister"], ["issuing-credentials-for-wallets", "Een issuer"],
+];
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 async function open(page, path) {
   const r = await page.goto(`${NL}/${path}`.replace(/\/+$/, "/"), { waitUntil: "domcontentloaded" });
@@ -90,6 +99,31 @@ async function links(page, tag) {
       await links(page, tag);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     }
+    // Sentence openers: the article is part of the term, link or bold text and the whole phrase is one Dutch string.
+    for (const [slug, opener] of ARTICLE_OPENERS) {
+      const path = (/issuing/.test(slug) ? "learn/topics/for-businesses/" : "learn/topics/the-big-picture/") + slug;
+      await open(page, path);
+      const hit = await page.evaluate((o) => {
+        for (const el of document.querySelectorAll("main p, main li")) {
+          const t = el.textContent.replace(/\s+/g, " ").trim();
+          if (t.startsWith(o)) return t.slice(0, 80);
+        }
+        return null;
+      }, opener);
+      check(`A/An/The opener "${opener}" on ${slug} @${width}`, !!hit, "not found");
+      if (hit) console.log(`#   ${slug}: ${hit}`);
+    }
+    // Outside the route: the English-only test page keeps its lone English fragments (no global A/An/The translation).
+    await page.goto(`${ORIGIN}/nl/fides-template-test-eudi-wallet/`, { waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("networkidle").catch(() => {});
+    const lone = await page.evaluate(() => {
+      const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      const found = []; let n;
+      while ((n = w.nextNode())) { const t = n.nodeValue.trim(); if (/^(A|An|The|Een|De|Het)$/.test(t) && n.parentElement && !n.parentElement.closest("script,style")) found.push(t); }
+      return found;
+    });
+    check(`outside the route: English test page keeps lone English fragments @${width}`, !lone.some((t) => /^(Een|De|Het)$/.test(t)), lone.join(","));
+    console.log(`#   test page lone fragments: ${lone.join(", ") || "(none)"}`);
     // Back navigation: Learn -> Topics -> article -> back
     await open(page, "learn");
     await page.locator("main a[href$='/learn/topics/']:visible").first().click();

@@ -286,7 +286,33 @@ $nl = array(
     'Please leave out sensitive personal data and confidential documents.' => 'Laat gevoelige persoonsgegevens en vertrouwelijke documenten weg.',
     'Send request'                            => 'Aanvraag versturen',
     'We read your request and reply by email.' => 'Wij lezen uw aanvraag en reageren per e-mail.',
+    // Learn articles: sentence openers that used to be the lone fragments "A", "An" and "The". The article is now part of
+    // the term, link or bold text, so each opener is one string with its own article (de/het/een is decided per phrase).
+    'A wallet'                                => 'Een wallet',
+    'The EUDI Wallet'                         => 'De EUDI Wallet',
+    'The European Digital Identity Wallet'    => 'De European Digital Identity Wallet',
+    'A verifiable credential'                 => 'Een verifieerbaar credential',
+    'An attribute'                            => 'Een attribuut',
+    'A schema'                                => 'Een schema',
+    'A format'                                => 'Een formaat',
+    'A credential format'                     => 'Een credentialformaat',
+    'A protocol'                              => 'Een protocol',
+    'A rulebook'                              => 'Een afsprakenstelsel',
+    'A trust registry'                        => 'Een vertrouwensregister',
+    'An issuer'                               => 'Een issuer',
+    'The issuer'                              => 'De issuer',
+    'The holder'                              => 'De houder',
+    'The relying party'                       => 'De ontvangende partij',
+    'The wallet provider'                     => 'De walletaanbieder',
 );
+
+/**
+ * LOCAL ONLY. The lone fragments "A", "An" and "The" must not carry a global translation: TranslatePress would turn
+ * every standalone "The" into "De" (also before het-words) and "A"/"An" into "Een". The Learn articles no longer produce
+ * these fragments (see learn/README.md). `apply` empties these three rows (translated = '', status 0) in the local pilot
+ * only; it refuses to run on any other site. The transfer tool neither exports nor imports them.
+ */
+$clear_fragments = array('A', 'An', 'The');
 
 /**
  * Theme and plugin gettext strings (table wp_trp_gettext_nl_nl, keyed by domain + original). Only strings the route pages
@@ -344,6 +370,25 @@ foreach ($gettext as $g) {
         }
         $g_filled++;
     }
+}
+// Empty the lone article fragments, local pilot only (host check; never on staging or production).
+$home_host = (string) wp_parse_url((string) get_option('home'), PHP_URL_HOST);
+$cleared   = 0;
+if ($home_host === 'localhost' || $home_host === '127.0.0.1') {
+    foreach ($clear_fragments as $frag) {
+        $rows = $wpdb->get_results($wpdb->prepare("SELECT id, translated FROM $table WHERE BINARY original = %s", $frag)); // phpcs:ignore
+        foreach ($rows as $row) {
+            if ((string) $row->translated !== '') {
+                if ($mode === 'apply') {
+                    $wpdb->update($table, array('translated' => '', 'status' => 0), array('id' => (int) $row->id));
+                }
+                $cleared++;
+            }
+        }
+    }
+    echo 'lone article fragments ' . ($mode === 'apply' ? 'emptied' : 'still translated') . ": $cleared\n";
+} else {
+    echo "lone article fragments: skipped (not the local pilot site)\n";
 }
 echo "gettext strings " . ($mode === 'apply' ? 'filled' : 'untranslated') . ": $g_filled\n";
 echo ($mode === 'apply' ? 'filled' : 'untranslated') . ": $filled, already translated (kept): $kept, no dictionary row yet: " . count($absent) . "\n";

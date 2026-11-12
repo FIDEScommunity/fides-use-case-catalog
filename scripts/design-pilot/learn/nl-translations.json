@@ -3,15 +3,15 @@
     "language": "nl_NL",
     "source_language": "en_US",
     "domain": "trp_dictionary",
-    "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows; existing translations are never overwritten.",
+    "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 563,
+        "learn": 576,
         "services": 61,
         "shared": 109,
         "start-receive": 35,
         "training": 151
     },
-    "total": 919,
+    "total": 932,
     "entries": [
         {
             "original": ", a",
@@ -391,23 +391,6 @@
             "group": "learn"
         },
         {
-            "original": "A",
-            "translation": "Een",
-            "html": false,
-            "fragment": true,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/for-businesses/business-wallets-where-to-start",
-                "learn/topics/the-big-picture/formats-and-protocols",
-                "learn/topics/the-big-picture/trust-and-interoperability",
-                "learn/topics/the-big-picture/what-is-a-credential",
-                "learn/topics/the-big-picture/what-is-a-digital-wallet"
-            ],
-            "group": "learn"
-        },
-        {
             "original": "A European Business Wallet would be subject to the requirements established under the proposed European framework. The existence of a business wallet today does not, by itself, mean that it meets future European Business Wallet requirements.",
             "translation": "Een European Business Wallet zou moeten voldoen aan de eisen die onder het voorgestelde Europese kader worden vastgesteld. Dat een business wallet nu bestaat, betekent op zichzelf niet dat deze aan toekomstige eisen voor een European Business Wallet voldoet.",
             "html": false,
@@ -508,6 +491,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "A credential format",
+            "translation": "Een credentialformaat",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/formats-and-protocols"
             ],
             "group": "learn"
         },
@@ -657,6 +653,19 @@
             "group": "learn"
         },
         {
+            "original": "A format",
+            "translation": "Een formaat",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A format does not, on its own, determine whether an issuer is acceptable to a relying party or whether a credential has a particular legal status. For credentials, attestations and credential types, see",
             "translation": "Een formaat bepaalt op zichzelf niet of een ontvangende partij de uitgever accepteert of welke juridische status een credential heeft. Meer over credentials, attestaties en credentialtypen leest u in",
             "html": false,
@@ -787,6 +796,19 @@
             "group": "learn"
         },
         {
+            "original": "A protocol",
+            "translation": "Een protocol",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/formats-and-protocols"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A register, certification body or another party may provide information. The supplier may hold or manage a credential, and the customer’s service may receive and check it. These roles are not fixed to particular kinds of organisation. A register is not always the issuer, and an organisation may issue information in one process and receive it in another.",
             "translation": "Een register, certificerende instelling of andere partij kan gegevens verstrekken. De leverancier kan een credential bewaren of beheren en de dienst van de klant kan het ontvangen en controleren. Deze rollen liggen niet vast voor bepaalde soorten organisaties. Een register is niet altijd de uitgever en een organisatie kan in het ene proces gegevens uitgeven en in een ander proces ontvangen.",
             "html": false,
@@ -796,6 +818,32 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "A rulebook",
+            "translation": "Een afsprakenstelsel",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/trust-and-interoperability"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "A schema",
+            "translation": "Een schema",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/what-is-a-credential"
             ],
             "group": "learn"
         },
@@ -892,6 +940,45 @@
             "group": "learn"
         },
         {
+            "original": "A trust registry",
+            "translation": "Een vertrouwensregister",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/trust-and-interoperability"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "A verifiable credential",
+            "translation": "Een verifieerbaar credential",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "A wallet",
+            "translation": "Een wallet",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A wallet can offer another way to receive that information. The holder presents a digital credential, or selected information from it, to your service. Your organisation then checks whether the information is suitable for the decision it needs to make. To choose where to begin, see",
             "translation": "Een wallet kan een andere manier bieden om die gegevens te ontvangen. De houder toont een digitaal credential, of geselecteerde gegevens daaruit, aan uw dienst. Uw organisatie controleert vervolgens of de informatie geschikt is voor de beslissing die zij moet nemen. Om te bepalen waar u begint, zie",
             "html": false,
@@ -931,20 +1018,6 @@
             "group": "learn"
         },
         {
-            "original": "An",
-            "translation": "Een",
-            "html": false,
-            "fragment": true,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/for-businesses/issuing-credentials-for-wallets",
-                "learn/topics/the-big-picture/what-is-a-credential"
-            ],
-            "group": "learn"
-        },
-        {
             "original": "An Electronic Attestation of Attributes issued by a Qualified Trust Service Provider and meeting the requirements of Annex V of the European Digital Identity Regulation.",
             "translation": "Een elektronische attestatie van attributen die is uitgegeven door een gekwalificeerde vertrouwensdienstverlener en voldoet aan de eisen van bijlage V bij de Europese verordening voor digitale identiteit.",
             "html": false,
@@ -967,6 +1040,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "An attribute",
+            "translation": "Een attribuut",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
                 "learn/topics/the-big-picture/what-is-a-credential"
             ],
             "group": "learn"
@@ -1007,6 +1093,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "An issuer",
+            "translation": "Een issuer",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/issuing-credentials-for-wallets"
             ],
             "group": "learn"
         },
@@ -4374,17 +4473,14 @@
             "group": "learn"
         },
         {
-            "original": "The",
-            "translation": "De",
+            "original": "The EUDI Wallet",
+            "translation": "De EUDI Wallet",
             "html": false,
-            "fragment": true,
+            "fragment": false,
             "groups": [
                 "learn"
             ],
             "routes": [
-                "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet",
-                "learn/topics/the-big-picture/european-digital-identity-wallet",
-                "learn/topics/the-big-picture/how-credentials-connect",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
             ],
             "group": "learn"
@@ -4483,6 +4579,19 @@
         {
             "original": "The European Commission states that the proposed Business Wallet architecture will build on the architecture and features of the EUDI Wallet.",
             "translation": "Volgens de Europese Commissie zal de voorgestelde Business Wallet voortbouwen op de architectuur en mogelijkheden van de EUDI Wallet.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The European Digital Identity Wallet",
+            "translation": "De European Digital Identity Wallet",
             "html": false,
             "fragment": false,
             "groups": [
@@ -4815,6 +4924,19 @@
             "group": "learn"
         },
         {
+            "original": "The holder",
+            "translation": "De houder",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/european-digital-identity-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The holder may also need to understand who is requesting information and why. Different ecosystems use different rules and technical arrangements to support these checks. The roles are described in",
             "translation": "Ook de houder moet mogelijk kunnen zien wie gegevens opvraagt en waarom. Ecosystemen gebruiken verschillende regels en technische afspraken voor deze controles. De rollen worden beschreven in",
             "html": false,
@@ -4863,6 +4985,20 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/accepting-information-from-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The issuer",
+            "translation": "De issuer",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/european-digital-identity-wallet",
+                "learn/topics/the-big-picture/how-credentials-connect"
             ],
             "group": "learn"
         },
@@ -4980,6 +5116,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The relying party",
+            "translation": "De ontvangende partij",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/european-digital-identity-wallet"
             ],
             "group": "learn"
         },
@@ -5163,6 +5312,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/issuing-credentials-for-wallets"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The wallet provider",
+            "translation": "De walletaanbieder",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/european-digital-identity-wallet"
             ],
             "group": "learn"
         },
