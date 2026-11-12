@@ -35,6 +35,10 @@ $routes = array(
     'topics/for-governments/accepting-information-from-wallets-in-public-services',
     'topics/for-governments/the-eudi-wallet-and-national-implementation',
 );
+// Optional: SEG_ROUTES="topics/for-you,topics/for-businesses/..." lists other routes below the Learn root.
+if (getenv('SEG_ROUTES')) {
+    $routes = array_values(array_filter(array_map('trim', explode(',', (string) getenv('SEG_ROUTES')))));
+}
 $norm = static function (string $s): string {
     $s = html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     return trim((string) preg_replace('/\s+/u', ' ', $s));

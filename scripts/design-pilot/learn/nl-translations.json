@@ -5,13 +5,13 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 786,
+        "learn": 809,
         "services": 61,
         "shared": 109,
         "start-receive": 35,
         "training": 153
     },
-    "total": 1144,
+    "total": 1167,
     "entries": [
         {
             "original": ", a",
@@ -1920,6 +1920,19 @@
             "group": "learn"
         },
         {
+            "original": "Authentic Source",
+            "translation": "Authentieke bron",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Before choosing a wallet integration, look at the point in your process where information is needed.",
             "translation": "Kijk voordat u een walletaansluiting kiest naar het moment in uw proces waarop gegevens nodig zijn.",
             "html": false,
@@ -2383,6 +2396,19 @@
             "group": "learn"
         },
         {
+            "original": "Check the credential, then decide whether the information is enough.",
+            "translation": "Controleer de credential en beslis daarna of de informatie volstaat.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Check the whole interaction",
             "translation": "Controleer de volledige uitwisseling",
             "html": false,
@@ -2470,6 +2496,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Choose one interaction and settle the information and arrangements.",
+            "translation": "Kies één interactie en leg de informatie en afspraken vast.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses"
             ],
             "group": "learn"
         },
@@ -2626,6 +2665,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Compare wallets and providers",
+            "translation": "Vergelijk wallets en aanbieders",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/business-wallets-where-to-start"
             ],
             "group": "learn"
         },
@@ -2802,6 +2854,19 @@
         {
             "original": "Customer or authority",
             "translation": "Klant of overheidsinstantie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Decide which role your organisation needs to play and shortlist one or two wallets or providers that support it. Then describe one exchange in detail: one transaction, one receiving service and the evidence it needs.",
+            "translation": "Bepaal welke rol uw organisatie moet spelen en maak een shortlist van één of twee wallets of aanbieders die daarbij passen. Beschrijf daarna één uitwisseling in detail: één transactie, één ontvangende dienst en het bewijs dat die nodig heeft.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -3787,6 +3852,19 @@
             "group": "learn"
         },
         {
+            "original": "Holder",
+            "translation": "Houder",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Holder & wallet",
             "translation": "Houder en wallet",
             "html": false,
@@ -3840,6 +3918,22 @@
             "group": "learn"
         },
         {
+            "original": "How can an organisation prepare a wallet use case?",
+            "translation": "Hoe kan een organisatie een wallet-toepassing voorbereiden?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses",
+                "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/issuing-credentials-for-wallets"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "How can organisations prepare?",
             "translation": "Hoe kunnen organisaties zich voorbereiden?",
             "html": false,
@@ -3849,6 +3943,22 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/trust-and-interoperability"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "How can someone act for an organisation?",
+            "translation": "Hoe kan iemand namens een organisatie handelen?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses",
+                "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -4418,7 +4528,7 @@
         },
         {
             "original": "It concerns access and authentication. It does not say which attributes or credentials a service must ask for, how the service must be built or what it decides on the basis of the answer.",
-            "translation": "Het gaat om toegang en authenticatie. Het zegt niet welke attributen of credentials een dienst moet opvragen, hoe de dienst moet worden gebouwd of wat de dienst besluit op basis van het antwoord.",
+            "translation": "Het gaat om toegang en authenticatie. Lid 1 schrijft niet voor welke attributen of credentials een dienst moet opvragen, hoe de dienst moet worden ingericht of welke beslissing de dienst neemt.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -4457,7 +4567,7 @@
         },
         {
             "original": "It says “also accept”. The wallet is added to the means a service accepts. The paragraph does not say that a service may accept only wallets.",
-            "translation": "Er staat “ook accepteren”. De wallet komt erbij als middel dat een dienst accepteert. Het lid zegt niet dat een dienst alleen wallets mag accepteren.",
+            "translation": "In lid 1 staat dat lidstaten de wallets ook moeten accepteren. Het lid bepaalt niet dat een dienst uitsluitend wallets mag accepteren.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -4573,7 +4683,7 @@
         },
         {
             "original": "Look at who issues and uses credentials today: browse",
-            "translation": "Zoek op wie nu credentials uitgeeft en gebruikt: bekijk",
+            "translation": "Bekijk wie credentials uitgeeft en gebruikt:",
             "html": false,
             "fragment": false,
             "groups": [
@@ -4581,6 +4691,19 @@
             ],
             "routes": [
                 "learn/topics/for-governments"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Look at your own exchange",
+            "translation": "Kijk naar uw eigen uitwisseling",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case"
             ],
             "group": "learn"
         },
@@ -5548,6 +5671,21 @@
             "group": "learn"
         },
         {
+            "original": "Relying Party",
+            "translation": "Vertrouwende partij",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles",
+                "learn/topics/for-governments",
+                "learn/topics/the-big-picture"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Relying party",
             "translation": "Vertrouwende partij",
             "html": false,
@@ -5571,6 +5709,19 @@
             ],
             "routes": [
                 "learn/topics/ecosystem-roles/the-relying-party"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Retrieve:",
+            "translation": "Ophalen (retrieve):",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/issuing-public-information-to-wallets"
             ],
             "group": "learn"
         },
@@ -6160,6 +6311,19 @@
             "group": "learn"
         },
         {
+            "original": "Take supplier onboarding as an example. A customer asks for company information, evidence of a certification and confirmation that a representative may act for the supplier. Which role does your organisation play in it?",
+            "translation": "Neem het aansluiten van een leverancier als voorbeeld. Een klant vraagt om bedrijfsgegevens, bewijs van een certificering en bevestiging dat een vertegenwoordiger namens de leverancier mag handelen. Welke rol speelt uw organisatie daarin?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Take the next step for your organisation",
             "translation": "Zet de volgende stap voor uw organisatie",
             "html": false,
@@ -6261,7 +6425,7 @@
         },
         {
             "original": "The Dutch GBO draft design describes separate routes by which public data can reach a service: a wallet presentation after issuing, a cross-border evidence request through OOTS, and sharing with private providers on the basis of consent. A service should therefore not assume that a wallet presentation is the only way information reaches it. The design is still in development.",
-            "translation": "Het Nederlandse GBO-conceptontwerp beschrijft afzonderlijke routes waarlangs publieke gegevens een dienst kunnen bereiken: een presentatie vanuit een wallet na uitgifte, een grensoverschrijdend bewijsverzoek via OOTS en delen met private aanbieders op basis van toestemming. Een dienst moet er daarom niet van uitgaan dat een presentatie vanuit een wallet de enige manier is waarop informatie haar bereikt. Het ontwerp is nog in ontwikkeling.",
+            "translation": "Het Nederlandse GBO-ontwerp beschrijft verschillende routes waarlangs publieke gegevens een dienst kunnen bereiken: via een wallet nadat een attestatie is uitgegeven, via een grensoverschrijdend bewijsverzoek met OOTS en via gegevensdeling met private dienstverleners op basis van toestemming. Een dienst kan gegevens dus ook op andere manieren dan via een wallet ontvangen. Het ontwerp is nog in ontwikkeling.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6395,6 +6559,19 @@
         {
             "original": "The European Commission has proposed a framework for European Business Wallets. The proposal aims to give organisations a way to identify themselves and exchange trusted information across the EU.",
             "translation": "De Europese Commissie heeft een kader voor European Business Wallets voorgesteld. Het voorstel moet organisaties een manier bieden om zich te identificeren en betrouwbare informatie binnen de EU uit te wisselen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/european-business-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The European Commission published its proposal in 2025. The Council adopted its negotiating position on 9 June 2026, and in October 2026 the European Parliament decided to open negotiations with the Council. The final rules and their implementation may differ from the proposal and the negotiating positions. No obligation for organisations follows from the proposal itself.",
+            "translation": "De Europese Commissie publiceerde haar voorstel in 2025. De Raad stelde zijn onderhandelingspositie vast op 9 juni 2026 en het Europees Parlement besloot in oktober 2026 onderhandelingen met de Raad te openen. De uiteindelijke regels en de uitvoering kunnen afwijken van het voorstel en de onderhandelingsposities. Uit het voorstel zelf volgt geen verplichting voor organisaties.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6564,7 +6741,7 @@
         },
         {
             "original": "The articles use one Dutch programme, Gemeenschappelijke Bronontsluiting (GBO), as an example. Its design is described as a draft that is still in development, and other countries organise this differently.",
-            "translation": "De artikelen gebruiken één Nederlands programma, Gemeenschappelijke Bronontsluiting (GBO), als voorbeeld. Het ontwerp wordt beschreven als een concept dat nog in ontwikkeling is, en andere landen regelen dit anders.",
+            "translation": "In deze artikelen gebruiken we het Nederlandse programma Gemeenschappelijke Bronontsluiting (GBO) als voorbeeld. Het ontwerp is nog in ontwikkeling. Andere landen kunnen dit anders inrichten.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6612,7 +6789,7 @@
         },
         {
             "original": "The catalog lists Gemeente Nijmegen as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
-            "translation": "De catalogus noemt Gemeente Nijmegen als organisatie. De catalogus markeert deze usecase als in productie, volgens opgave van de organisatie.",
+            "translation": "De catalogus noemt Gemeente Nijmegen als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6638,7 +6815,7 @@
         },
         {
             "original": "The catalog lists Kamer van Koophandel as the organisation. The catalog does not mark this use case as in production.",
-            "translation": "De catalogus noemt Kamer van Koophandel als organisatie. De catalogus markeert deze usecase niet als in productie.",
+            "translation": "De catalogus noemt de Kamer van Koophandel als betrokken organisatie. De catalogus vermeldt deze usecase niet als in productie.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6664,7 +6841,7 @@
         },
         {
             "original": "The catalog lists TECH5 as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
-            "translation": "De catalogus noemt TECH5 als organisatie. De catalogus markeert deze usecase als in productie, volgens opgave van de organisatie.",
+            "translation": "De catalogus noemt TECH5 als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6769,7 +6946,7 @@
         },
         {
             "original": "The draft presents the verify service as one way to meet the obligation, which it places in Article 45e of the amended eIDAS Regulation, that qualified providers can verify attributes against authentic sources. According to the draft, the parties involved are still deciding which route is preferred. It also says that GBO itself would not be the issuer of public attestations and that using the shared facility is optional.",
-            "translation": "Het ontwerp presenteert de verify-dienst als één manier om te voldoen aan de verplichting, die het onderbrengt in artikel 45e van de gewijzigde eIDAS-verordening, dat gekwalificeerde aanbieders attributen bij authentieke bronnen kunnen verifiëren. Volgens het ontwerp beslissen de betrokken partijen nog welke route de voorkeur heeft. Het ontwerp zegt ook dat GBO zelf niet de uitgever van publieke attestaties zou zijn en dat het gebruik van de gedeelde voorziening optioneel is.",
+            "translation": "Het ontwerp beschrijft de controledienst (verify) als één manier om invulling te geven aan de verplichting voor lidstaten om maatregelen te nemen waarmee gekwalificeerde aanbieders van elektronische attestaties van attributen op verzoek van de gebruiker attributen elektronisch bij authentieke bronnen kunnen verifiëren, ten minste voor de attributen uit bijlage VI die op authentieke bronnen in de publieke sector berusten, binnen het toepasselijke recht. Het ontwerp verwijst daarbij naar artikel 45e van de gewijzigde eIDAS-verordening. Volgens het ontwerp bepalen de betrokken partijen nog welke uitgifteroute de voorkeur heeft. GBO zou zelf geen publieke attestaties uitgeven en gebruik van de gedeelde voorziening is optioneel.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -7377,6 +7554,32 @@
             "group": "learn"
         },
         {
+            "original": "The supplier example is illustrative. Content last checked: 12 November 2026. The legislative status can change.",
+            "translation": "Het leveranciersvoorbeeld is bedoeld ter illustratie. Inhoud voor het laatst gecontroleerd op 12 november 2026. De stand van het wetsvoorstel kan veranderen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/european-business-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The supplier example is illustrative. Content last checked: 12 November 2026. The status of the European Business Wallet proposal can change; check it again before relying on this page.",
+            "translation": "Het leveranciersvoorbeeld is bedoeld ter illustratie. Inhoud voor het laatst gecontroleerd op 12 november 2026. De stand van het voorstel voor de European Business Wallet kan veranderen; controleer die opnieuw voordat u op deze pagina vertrouwt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The technical format in which credentials are encoded. Different formats support different features like selective disclosure, privacy protection, or compatibility with specific standards.",
             "translation": "Het technische formaat waarin credentials worden gecodeerd. Verschillende formaten ondersteunen verschillende mogelijkheden, zoals selectief gegevens delen, privacybescherming of compatibiliteit met specifieke standaarden.",
             "html": false,
@@ -7912,6 +8115,19 @@
             "group": "learn"
         },
         {
+            "original": "Verify:",
+            "translation": "Controleren (verify):",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-governments/issuing-public-information-to-wallets"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Version and status",
             "translation": "Versie en status",
             "html": false,
@@ -7937,6 +8153,19 @@
                 "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
                 "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet",
                 "learn/topics/the-big-picture/european-digital-identity-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Wallet Provider",
+            "translation": "Walletaanbieder",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles"
             ],
             "group": "learn"
         },
@@ -8611,6 +8840,23 @@
             "group": "learn"
         },
         {
+            "original": "What should a service check when receiving a credential?",
+            "translation": "Wat moet een dienst controleren bij ontvangst van een credential?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses",
+                "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "What should an organisation ask?",
             "translation": "Welke vragen kan een organisatie stellen?",
             "html": false,
@@ -8698,6 +8944,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/how-credentials-connect"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "When comparing wallets and providers, consider the credential types, formats and protocols each party supports, and the trust arrangements for the process. Also look at access management, integration with existing systems, deployment and support. A feature listed in a catalog is a starting point for discussion. It does not by itself establish that the complete interaction will work between the parties you have in mind.",
+            "translation": "Houd bij het vergelijken van wallets en aanbieders rekening met de credentialtypen, formaten en protocollen die elke partij ondersteunt en met de afspraken over vertrouwen voor het proces. Kijk ook naar toegangsbeheer, integratie met bestaande systemen, uitrol en ondersteuning. Een functie die in een catalogus staat, is een startpunt voor het gesprek. Het toont op zichzelf niet aan dat de hele uitwisseling werkt tussen de partijen die u op het oog hebt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/business-wallets-where-to-start"
             ],
             "group": "learn"
         },
@@ -9027,6 +9286,19 @@
             "group": "learn"
         },
         {
+            "original": "Which role does your organisation play, and how do you choose a business wallet? Start from one transaction, then compare wallets and providers.",
+            "translation": "Welke rol speelt uw organisatie, en hoe kiest u een business wallet? Begin bij één transactie en vergelijk daarna wallets en aanbieders.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Which rules apply to a service that has to accept wallets, if any?",
             "translation": "Welke acceptatieregels gelden voor de betreffende dienst?",
             "html": false,
@@ -9262,6 +9534,19 @@
             "group": "learn"
         },
         {
+            "original": "Work through one exchange with your team in the Wallet Readiness Workshop.",
+            "translation": "Werk één uitwisseling met uw team uit in de Wallet Readiness Workshop.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Work through one process with your team in the Wallet Readiness Workshop.",
             "translation": "Bespreek samen met uw team één proces in de Wallet Readiness Workshop.",
             "html": false,
@@ -9420,7 +9705,7 @@
         },
         {
             "original": "a public service in another Member State requests evidence, and the person is described as reviewing and agreeing before it is sent.",
-            "translation": "een publieke dienst in een andere lidstaat bewijs opvraagt, en de persoon wordt beschreven als iemand die dit bekijkt en ermee instemt voordat het wordt verstuurd.",
+            "translation": "een publieke dienst in een andere lidstaat bewijs opvraagt en de betrokkene dat volgens het ontwerp kan bekijken en ermee kan instemmen voordat het wordt verstuurd.",
             "html": false,
             "fragment": true,
             "groups": [
@@ -10221,6 +10506,19 @@
             "group": "learn"
         },
         {
+            "original": "may help an organisation manage or present some of that information. Products differ, so the first questions are which role your organisation plays and which interaction you want to support. This article helps you choose a business wallet. To prepare one concrete exchange in detail, see",
+            "translation": "kan helpen om een deel van die gegevens te beheren of te tonen. Producten verschillen, dus de eerste vragen zijn welke rol uw organisatie speelt en welke interactie u wilt ondersteunen. Dit artikel helpt u een business wallet te kiezen. Hoe u één concrete uitwisseling in detail voorbereidt, leest u in",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "or",
             "translation": "of",
             "html": false,
@@ -10544,7 +10842,7 @@
         },
         {
             "original": "the person gives consent for a specific purpose, recipient and data set, and the private provider is described as receiving a party-specific pseudonym and not the citizen service number.",
-            "translation": "de persoon toestemming geeft voor een specifiek doel, een specifieke ontvanger en een specifieke gegevensset, en de private aanbieder wordt beschreven als ontvanger van een partijspecifiek pseudoniem en niet van het burgerservicenummer.",
+            "translation": "de betrokkene toestemming geeft voor een specifiek doel, een specifieke ontvanger en een specifieke gegevensset. Volgens het ontwerp ontvangt de private dienstverlener een pseudoniem dat specifiek voor die partij is, en geen burgerservicenummer.",
             "html": false,
             "fragment": true,
             "groups": [
@@ -10685,6 +10983,19 @@
             "routes": [
                 "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "walks through it. A",
+            "translation": "loopt dat met u door. Een",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/business-wallets-where-to-start"
             ],
             "group": "learn"
         },

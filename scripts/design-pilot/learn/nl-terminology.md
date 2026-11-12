@@ -16,6 +16,10 @@ document.
 | attestation of attributes | attestatie van attributen | Keep EAA and QEAA; do not treat every credential as an EAA or QEAA. |
 | wallet | wallet | At first use "digitale wallet" if needed. Keep "business wallet" and "EUDI Wallet" as common names. |
 | wallet provider | walletaanbieder | Use when the provider of the wallet is meant. |
+| verify | controleren (verify) | Editorial decision of 13 November 2026. First explanation: "controleren (verify)" (for example the label "Controleren (verify):" in the list on "Issuing public information to wallets", and "controledienst (verify)" in the Article 45e paragraph); as a short label "Controleren". Keep "(verify)" where it helps the link with the GBO design. A verifier (the checking party or software) stays "verifier". |
+| retrieve | ophalen (retrieve) | Same decision. First explanation: "ophalen (retrieve)" (label "Ophalen (retrieve):"); short label "Ophalen". |
+| EUDI Wallet | EUDI Wallet | The name stays as it is. |
+| role chips | Houder, Vertrouwende partij, Walletaanbieder, Authentieke bron | The visible chips Holder, Relying Party, Wallet Provider and Authentic Source are Dutch since 13 November 2026 (the chip "Issuer" was already "Uitgever"). Global TranslatePress rows: see "Shared-row effects" in `nl-translation-changes-repair-round-2026-11-13.md`. The glossary definitions are unchanged. |
 | mandate | mandaat | Use "mandaat" where mandates (mandate credentials) are meant. "bevoegdheid" stays for authority or permission in general; the two are different concepts and are not replaced automatically. A sentence that could mean both is left and reported. The term chip "Mandate" stays English. |
 | trust framework | trust framework | Use "trust framework" in Dutch running text, headings and row titles; it is the common term in this field and keeps the Dutch text aligned with the English source. Where it helps the reader, explain it once with "afsprakenstelsel" (for example "trust frameworks (afsprakenstelsels)"). The two terms overlap: an "afsprakenstelsel" can be more precise in a specific Dutch context (for example a national or sector scheme with agreed rules for participants), so let the context decide which term is clearest. Plural: "trust frameworks". Not "trustframeworks" or "vertrouwenskaders". Where the existing Dutch already says "afsprakenstelsel(s)", it is not changed automatically. |
 | selective disclosure | selectief gegevens delen | For the function or concept. "geselecteerde gegevens" stays where the data that was chosen is meant. Explain the English term when it matters to the reader. |
@@ -57,3 +61,12 @@ and the reasoning per place: "Reviewed and left unchanged" in the changes file.
 
 "ontvangende organisatie" and "ontvangende dienst" remain on the route in the general sense (a service or organisation that
 receives information, for example "De ontvangende dienst controleert de gegevens"); that matches the agreements.
+
+## Terminology round 3 (13 November 2026, editorial review of the 26 "Tag C" rows)
+
+Decisions (source: `learn-nl-review-26-zinnen.md`): "EUDI Wallet" stays; "controleren (verify)" and "ophalen (retrieve)" at the first
+explanation, "Controleren" and "Ophalen" as short labels; the four role chips are Dutch (Houder, Vertrouwende partij, Walletaanbieder,
+Authentieke bron); the For you article about sharing from a wallet is titled "Informatie delen vanuit een wallet" everywhere; the practice
+question articles use the formal "u" (never "je/jij/jouw"). Row-by-row old and new Dutch, the shared-row effects and the Article 45e check:
+`learn/nl-translation-changes-repair-round-2026-11-13.md`. Checks: `tests/nl-repair-round-checks.cjs`.
+
