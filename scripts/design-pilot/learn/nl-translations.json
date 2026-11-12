@@ -5,13 +5,13 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 576,
+        "learn": 578,
         "services": 61,
         "shared": 109,
         "start-receive": 35,
         "training": 151
     },
-    "total": 932,
+    "total": 934,
     "entries": [
         {
             "original": ", a",
@@ -249,7 +249,7 @@
         },
         {
             "original": ". It decides what information its service asks for and how it uses the result. It also needs a way to check the information it receives.",
-            "translation": "genoemd. Zij bepaalt welke gegevens haar dienst opvraagt en hoe zij het resultaat gebruikt. Ook heeft zij een manier nodig om de ontvangen gegevens te controleren.",
+            "translation": "(relying party) genoemd. Zij bepaalt welke gegevens haar dienst opvraagt en hoe zij het resultaat gebruikt. Ook heeft zij een manier nodig om de ontvangen gegevens te controleren.",
             "html": false,
             "fragment": true,
             "groups": [
@@ -535,7 +535,7 @@
         },
         {
             "original": "A credential might demonstrate membership in a private association, for example, or convey information used in a regulated process. To decide whether it is suitable, a relying party needs to understand what it confirms, who issued it and which checks and rules apply.",
-            "translation": "Een credential kan bijvoorbeeld een lidmaatschap van een private vereniging aantonen of informatie bevatten die in een gereguleerd proces wordt gebruikt. Om te bepalen of het geschikt is, moet een ontvangende partij begrijpen wat het bevestigt, wie het heeft uitgegeven en welke controles en regels gelden.",
+            "translation": "Een credential kan bijvoorbeeld een lidmaatschap van een private vereniging aantonen of informatie bevatten die in een gereguleerd proces wordt gebruikt. Om te bepalen of het geschikt is, moet een vertrouwende partij begrijpen wat het bevestigt, wie het heeft uitgegeven en welke controles en regels gelden.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -667,7 +667,7 @@
         },
         {
             "original": "A format does not, on its own, determine whether an issuer is acceptable to a relying party or whether a credential has a particular legal status. For credentials, attestations and credential types, see",
-            "translation": "Een formaat bepaalt op zichzelf niet of een ontvangende partij de uitgever accepteert of welke juridische status een credential heeft. Meer over credentials, attestaties en credentialtypen leest u in",
+            "translation": "Een formaat bepaalt op zichzelf niet of een vertrouwende partij de uitgever accepteert of welke juridische status een credential heeft. Meer over credentials, attestaties en credentialtypen leest u in",
             "html": false,
             "fragment": false,
             "groups": [
@@ -1673,7 +1673,7 @@
         },
         {
             "original": "Choose one credential and one intended use. Discuss them with a prospective holder and a relying party before deciding how to implement it.",
-            "translation": "Kies één credential en één beoogde toepassing. Bespreek die met een mogelijke houder en ontvangende partij voordat u beslist hoe u het gaat uitvoeren.",
+            "translation": "Kies één credential en één beoogde toepassing. Bespreek die met een mogelijke houder en vertrouwende partij voordat u beslist hoe u het gaat uitvoeren.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -2837,7 +2837,7 @@
         },
         {
             "original": "Germany · Relying-party onboarding (developer guide)",
-            "translation": "Duitsland · Aansluiten als ontvangende partij (ontwikkelaarshandleiding)",
+            "translation": "Duitsland · Aansluiten als vertrouwende partij (ontwikkelaarshandleiding)",
             "html": false,
             "fragment": false,
             "groups": [
@@ -2888,8 +2888,21 @@
             "group": "learn"
         },
         {
+            "original": "Holder + wallet",
+            "translation": "Houder + wallet",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/how-credentials-connect"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Holders, issuers, relying parties, providers and trust services.",
-            "translation": "Houders, uitgevers, ontvangende partijen, aanbieders en vertrouwensdiensten.",
+            "translation": "Houders, uitgevers, vertrouwende partijen, aanbieders en vertrouwensdiensten.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -2902,7 +2915,7 @@
         },
         {
             "original": "Holders, issuers, relying parties, providers and trust services. Start with",
-            "translation": "Houders, uitgevers, ontvangende partijen, aanbieders en vertrouwensdiensten. Begin met",
+            "translation": "Houders, uitgevers, vertrouwende partijen, aanbieders en vertrouwensdiensten. Begin met",
             "html": false,
             "fragment": false,
             "groups": [
@@ -3344,7 +3357,7 @@
         },
         {
             "original": "Knowing which organisation you are dealing with does not by itself establish what a representative is allowed to do. Ask where the evidence of authority comes from, what it covers, how long it applies and what the receiving party needs to check. The answers depend on the transaction and the applicable rules. See also",
-            "translation": "Weten met welke organisatie u zaken doet, laat niet vanzelf zien wat een vertegenwoordiger mag doen. Vraag waar het bewijs van bevoegdheid vandaan komt, wat het omvat, hoelang het geldt en wat de ontvangende partij moet controleren. De antwoorden hangen af van de transactie en de toepasselijke regels. Zie ook",
+            "translation": "Weten met welke organisatie u zaken doet, laat niet vanzelf zien wat een vertegenwoordiger mag doen. Vraag waar het bewijs van bevoegdheid vandaan komt, wat het omvat, hoelang het geldt en wat de ontvangende organisatie moet controleren. De antwoorden hangen af van de transactie en de toepasselijke regels. Zie ook",
             "html": false,
             "fragment": false,
             "groups": [
@@ -3864,7 +3877,7 @@
         },
         {
             "original": "Questions may include relying-party registration, the declared purpose of a request, the information requested and the technical connection to the service. Requirements and implementation arrangements should be checked against the applicable rules and national guidance. See also",
-            "translation": "Het kan bijvoorbeeld gaan om registratie als ontvangende partij, het opgegeven doel van een verzoek, de gevraagde gegevens en de technische aansluiting op de dienst. Controleer de eisen en uitvoeringsafspraken aan de hand van de toepasselijke regels en nationale richtlijnen. Zie ook",
+            "translation": "Het kan bijvoorbeeld gaan om registratie als vertrouwende partij, het opgegeven doel van een verzoek, de gevraagde gegevens en de technische aansluiting op de dienst. Controleer de eisen en uitvoeringsafspraken aan de hand van de toepasselijke regels en nationale richtlijnen. Zie ook",
             "html": false,
             "fragment": false,
             "groups": [
@@ -3953,6 +3966,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/european-digital-identity-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Relying party",
+            "translation": "Vertrouwende partij",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/how-credentials-connect"
             ],
             "group": "learn"
         },
@@ -5121,7 +5147,7 @@
         },
         {
             "original": "The relying party",
-            "translation": "De ontvangende partij",
+            "translation": "De vertrouwende partij",
             "html": false,
             "fragment": false,
             "groups": [
@@ -5570,7 +5596,7 @@
         },
         {
             "original": "Trust is not a single yes-or-no property of a wallet or credential. For a particular interaction, the receiving party may need to establish:",
-            "translation": "Vertrouwen is niet één eigenschap die een wallet of credential wel of niet heeft. Voor een bepaalde uitwisseling kan de ontvangende partij moeten vaststellen:",
+            "translation": "Vertrouwen is niet één eigenschap die een wallet of credential wel of niet heeft. Voor een bepaalde uitwisseling kan de ontvangende organisatie moeten vaststellen:",
             "html": false,
             "fragment": false,
             "groups": [
@@ -5910,7 +5936,7 @@
         },
         {
             "original": "What does a relying party do?",
-            "translation": "Wat doet een ontvangende partij?",
+            "translation": "Wat doet een vertrouwende partij?",
             "html": false,
             "fragment": false,
             "groups": [
@@ -5962,7 +5988,7 @@
         },
         {
             "original": "What does your organisation need to receive and check? What a relying party asks for, what to check and where the decision stays with your organisation.",
-            "translation": "Welke gegevens moet uw organisatie ontvangen en controleren? Lees wat een ontvangende partij vraagt, wat zij moet controleren en welke beslissing bij uw organisatie blijft.",
+            "translation": "Welke gegevens moet uw organisatie ontvangen en controleren? Lees wat een vertrouwende partij vraagt, wat zij moet controleren en welke beslissing bij uw organisatie blijft.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6861,7 +6887,7 @@
         },
         {
             "original": "can refer to the party that receives and checks a credential, or to the software used to perform those checks. Depending on the solution, the relying party may use its own software or a service provided by another organisation. For the roles in one interaction, see",
-            "translation": "kan verwijzen naar de partij die een credential ontvangt en controleert of naar de software die deze controles uitvoert. Afhankelijk van de oplossing kan de ontvangende partij eigen software gebruiken of een dienst van een andere organisatie. Voor de rollen in een proces, zie",
+            "translation": "kan verwijzen naar de partij die een credential ontvangt en controleert of naar de software die deze controles uitvoert. Afhankelijk van de oplossing kan de vertrouwende partij eigen software gebruiken of een dienst van een andere organisatie. Voor de rollen in een proces, zie",
             "html": false,
             "fragment": true,
             "groups": [
@@ -7424,7 +7450,7 @@
         },
         {
             "original": "relying party",
-            "translation": "ontvangende partij",
+            "translation": "vertrouwende partij",
             "html": false,
             "fragment": true,
             "groups": [
@@ -12077,7 +12103,7 @@
         },
         {
             "original": "Your role: relying party — a service requesting information.",
-            "translation": "Uw rol: ontvangende partij (relying party), een dienst die gegevens opvraagt.",
+            "translation": "Uw rol: vertrouwende partij (relying party), een dienst die gegevens opvraagt.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -13099,7 +13125,7 @@
         },
         {
             "original": "Possible roles for your organisation: issuer, relying party or wallet user.",
-            "translation": "Mogelijke rollen voor uw organisatie: uitgever, ontvangende partij of walletgebruiker.",
+            "translation": "Mogelijke rollen voor uw organisatie: uitgever, vertrouwende partij of walletgebruiker.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -13415,7 +13441,7 @@
         },
         {
             "original": "The roles of issuers, wallet holders and relying parties.",
-            "translation": "De rollen van uitgevers, wallethouders en ontvangende partijen.",
+            "translation": "De rollen van uitgevers, wallethouders en vertrouwende partijen.",
             "html": false,
             "fragment": false,
             "groups": [

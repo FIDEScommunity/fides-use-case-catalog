@@ -147,6 +147,14 @@ $check((int) $wpdb->get_var("SELECT COUNT(*) FROM $copy WHERE id IN (" . implode
 $check((string) $wpdb->get_var($wpdb->prepare("SELECT translated FROM $gcopy WHERE id = %d", $g_rows[0]->id)) !== '', 'an empty gettext row was filled');
 $check((string) $wpdb->get_var($wpdb->prepare("SELECT translated FROM $gcopy WHERE id = %d", $g_rows[1]->id)) === 'AFWIJKENDE GETTEXT', 'a differing gettext translation is never overwritten');
 $check((int) $wpdb->get_var("SELECT COUNT(*) FROM $copy WHERE id IN (" . implode(',', array_merge($outside_ids, $lone_ids)) . ") AND translated <> ''") === 0, 'rows outside the scope are still empty after the second import');
+// Terminology correction: a target row that still holds the old term is reported as differs and kept by import-apply.
+$term_id = (int) $wpdb->get_var("SELECT id FROM $copy WHERE BINARY original = 'relying party' LIMIT 1");
+if ($term_id) {
+    $wpdb->update($copy, array('translated' => 'ontvangende partij', 'status' => 2), array('id' => $term_id));
+    $out = $run('import-apply');
+    $check((string) $wpdb->get_var($wpdb->prepare("SELECT translated FROM $copy WHERE id = %d", $term_id)) === 'ontvangende partij', 'a target row with the old term (ontvangende partij) is kept, not corrected, by import-apply');
+    $check(strpos($out, '    differs: relying party') !== false, 'the old-term row is reported as differs');
+}
 $snapshot = $wpdb->get_results("SELECT id, translated, status FROM $copy ORDER BY id", OBJECT_K);
 $out = $run('import-apply');
 $again = $wpdb->get_results("SELECT id, translated, status FROM $copy ORDER BY id", OBJECT_K);

@@ -160,6 +160,8 @@ LEARN_BASE=fides-design-pilot/learn bash create-learn-pages.sh   # route base (a
 
 Status (12 November 2026): the Dutch route is translated locally for Learn (overview, topics, eleven articles), Training & workshops (`learn/sessions/*`), Services (`services/*`) and the start/receive route (`start/*`). The older line "Learn is not translated yet" no longer applies; `learn/translatepress-nl-inventory.md` keeps the original (historic) inventory.
 
+Terminology for editors and translators (relying party = vertrouwende partij, issuer, holder, mandate, offering names that stay English): `learn/nl-terminology.md`. Changes since the previous package: `learn/nl-translation-changes-2026-11-12.md`. Review of the English strings that stay untranslated: `learn/nl-remaining-strings-review.md`. Checks: `tests/nl-terminology-checks.cjs`.
+
 Where the strings live: the TranslatePress dictionary of the site (table `<prefix>trp_dictionary_en_us_nl_nl`, key = English `original`) plus a few theme/plugin gettext strings (`<prefix>trp_gettext_nl_nl`, key = domain + original). Local database ids differ per site, so they are never transferred.
 
 | File | Purpose |
@@ -188,7 +190,7 @@ What the transfer tool reads and writes (also in the header of `learn/nl-transla
 - **Writes:** only `import-apply`, only `translated` + `status = 2` on an **empty** row whose English source is in the file **and** that is used by one of the routes the file lists for that source (the *import scope*). Rows outside the scope are never touched, neither "same" nor "empty" (for example an empty row that only belongs to the English test page or the glossary). Existing translations stay; there is no overwrite option.
 - **Selection in `status`:** the `scope:` line gives the number of sources in the file and the dictionary rows in scope; the `outside scope:` line gives the number of dictionary rows that are never read for import or changed, and how many rows with an exported source were left alone because they are on another route.
 - **Gettext allowlist** (in the tool): `blocksy` "Skip to content" (theme), `wpforms-lite` "Please enable JavaScript in your browser to complete this form.", "Form has not been submitted, please see the errors below." and "This field is required." (WPForms Lite plugin). Generic interface text, no personal data. A new gettext string needs an entry in the allowlist in the tool.
-- **Privacy check (12 November 2026):** the 932 exported entries contain no email address, phone-like number, token, internal host name, test message or personal name (the exporter excludes such strings and reports them; 0 excluded). Only the placeholder addresses `name@organisation.com` / `naam@organisatie.nl` style examples are allowed.
+- **Privacy check (12 November 2026):** the 934 exported entries contain no email address, phone-like number, token, internal host name, test message or personal name (the exporter excludes such strings and reports them; 0 excluded). Only the placeholder addresses `name@organisation.com` / `naam@organisatie.nl` style examples are allowed.
 
 Fragments: TranslatePress splits a sentence around inline links, glossary buttons and bold text, so pieces such as `A`, `An`, `The`, `and`, `or`, `, a` and `page.` become separate strings with a **global** translation. The lone `A`, `An` and `The` are handled by context, not by a global translation: a global `The` -> `De` is wrong before every neuter noun and would also hit any other page that has a lone "The".
 

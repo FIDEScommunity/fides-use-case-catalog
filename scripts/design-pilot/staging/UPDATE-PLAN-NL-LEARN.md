@@ -8,13 +8,35 @@ with `SHA256SUMS` and `verify-package.sh`. Replace `<wp>` with the WordPress pat
 unpacked package. Real mail and form submissions stay blocked on staging (the config mu-plugin disables external actions); do
 not submit the request form, and do not change that block.
 
+## Changes since package `20261112-071445-34b753ab` (second package, same day)
+
+- **Terminology:** relying party is now "vertrouwende partij" (with "(relying party)" at the first explanation); 18 existing
+  Dutch rows were corrected locally (old "ontvangende partij") and 2 rows were added ("Holder + wallet" -> "Houder + wallet",
+  "Relying party" -> "Vertrouwende partij"). Export: 934 entries (was 932), 4 gettext. Full list (source, old, new):
+  `learn/nl-translation-changes-2026-11-12.md`. Terminology agreements: `learn/nl-terminology.md`.
+- No content, plugin or seed change. The package differs from the previous one in `nl-translations.json` and the documents.
+
+### Deliberate behaviour: staging rows with the old term are NOT corrected
+
+`import-apply` fills **empty** rows only. A staging row that already holds a translation (for example "Wat doet een ontvangende
+partij?") is kept and shown as `differs` in `status`; the new Dutch from the file is never written over it. Consequences and steps:
+
+1. `status` lists each such row under `differs`. Compare the list with the `changed` rows of
+   `learn/nl-translation-changes-2026-11-12.md` (rows with an old value). Expected: up to 18 `differs` if staging holds the
+   previous package's Dutch (the 2 added rows come in as `add` if the rows are empty).
+2. Report the `differs` list to the owner. Do not overwrite on your own and do not add an overwrite option.
+3. Corrections on staging are made by the owner, either in the TranslatePress editor, or from a **correction list that the owner
+   approves**: take the `changed` rows of the changes file (source, new Dutch) and enter them in the editor one by one. Writing
+   them with a script is only allowed on explicit approval of that list.
+4. After the corrections run `status` again: `differs` must be 0 (or contain only rows the owner deliberately keeps).
+
 ## What changes compared with the previous staging state
 
 - `plugins/fides-community-tools-tiles` 1.13.46 (zip) and the other catalog plugin zips, only if their version differs from
   what runs on staging (compare in step 3).
 - `seed/learn/content/*.html` (26 files), `seed/learn/manifest.json`: eight Learn articles got the article inside the term, link
   or bold text (17 sentence openers; wording unchanged).
-- `seed/learn/nl-translations.json` (932 entries + 4 gettext), `seed/learn/nl-translations-transfer.php`,
+- `seed/learn/nl-translations.json` (934 entries + 4 gettext), `seed/learn/nl-translations-transfer.php`,
   `seed/learn/nl-translations.php`, `seed/create-learn-pages.php`.
 - The glossary plugin and its bundled data stay as pinned (`glossary 1.12.2`, `a52a684`, plugin 1.1.16). No change.
 
@@ -96,13 +118,13 @@ strings; it writes nothing in these modes.) Report these lines:
 
 | Line | Meaning | Acceptable |
 |---|---|---|
-| `scope: 932 sources ...` | sources in the file, rows in scope | 932 sources |
+| `scope: 934 sources ...` | sources in the file, rows in scope | 934 sources |
 | `add` | empty rows in scope that would be filled | any number |
 | `same` | already identical | any number |
 | `differs` | existing other translation, **kept** | list them in the report; no action needed |
 | `pending` | no dictionary row yet | explained by the eight new openers before the seed; otherwise open that page under `/nl/` and repeat |
 | `stale` | English source on staging differs from the file | 0 expected after the seed; before it, the old openers of the eight articles |
-| `new` | English strings without a translation, not in the file | 27 (the reviewed list in `learn/nl-remaining-strings-review.md`) |
+| `new` | English strings without a translation, not in the file | 25 (the reviewed list in `learn/nl-remaining-strings-review.md`) |
 | `outside scope` | rows never read or touched | informational |
 | `gettext (allowlist of 4)` | add / same / differs / no row | `differs` is kept; see the status-4 note below |
 
@@ -137,7 +159,7 @@ GET only:
   PLAYWRIGHT_MODULE=<path> node <pkg>/checks/rehearsal-checks.cjs`.
 
 **Success** = steps 1 to 8 finished; second seed all `unchanged`; second `import-apply` reports `add 0`; the verification list is
-green; the report names the skipped pages, the `differs` list, the gettext result and the 27 `new` strings.
+green; the report names the skipped pages, the `differs` list, the gettext result and the 25 `new` strings.
 
 ## 9. Rollback
 
@@ -164,5 +186,5 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
 - **Gettext:** the file carries four strings (Blocksy "Skip to content"; WPForms Lite JavaScript notice, "Form has not been
   submitted…", "This field is required."). The last two have status 4 locally; an empty row on staging gets the text with status 2
   (an editor-approved text); existing translations stay.
-- **27 English strings** stay English until the owner decides (`learn/nl-remaining-strings-review.md`).
+- **25 English strings** stay English on purpose or until the owner decides (`learn/nl-remaining-strings-review.md`; open: "readiness workshop", "Mandate").
 - Staging keeps its write/mail block; no real mail is sent and the request form is only looked at.
