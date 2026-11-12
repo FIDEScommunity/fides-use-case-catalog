@@ -12,6 +12,7 @@ pushed, deployed or synced to utrecht-demo.
 | The big picture | `topics/the-big-picture/` | 24.10 | section |
 | For businesses | `topics/for-businesses/` | 24.12 | section |
 | Ecosystem roles | `topics/ecosystem-roles/` (menu order 4) | no Paper frame (same section template as the other topic pages) | section; the example, six role rows (all links: How credentials connect and the five role articles), back links from the Topics page and five articles; gaps: `learn/ecosystem-roles-editorial-gaps.md`; Dutch proposals (not seeded): `learn/nl-translation-changes-ecosystem-roles.md`; checks: `tests/ecosystem-roles-checks.cjs`, `tests/ecosystem-roles-seed.sh` |
+| For governments | `topics/for-governments/` (menu order 3) | no Paper frame (section template) | section plus four articles (series `for-governments`, Previous/Next): digital wallets and public services, issuing public information to wallets, accepting information from wallets in public services, the EUDI Wallet and national implementation. Dutch GBO example from the Globaal Ontwerp, version 0.9.5 (September 2026), "a draft design submitted for adoption"; sources name the consulted version and date (12 November 2026); status check and gaps: `learn/for-governments-editorial-gaps.md`; Dutch proposals (not seeded): `learn/nl-translation-changes-for-governments.md`; the Topics row links to the overview; back links from the EUDI, issuing and accepting articles; checks: `tests/for-governments-checks.cjs`, `tests/for-governments-seed.sh` (`tests/run-for-governments-checks.sh`) |
 | The holder | `topics/ecosystem-roles/the-holder/` (menu order 0) | no Paper frame (same article template) | article; sources W3C VCDM 2.0 and EC selective disclosure; back link from What is a digital wallet?; checks: `tests/ecosystem-roles-articles-checks.cjs` |
 | The issuer | `topics/ecosystem-roles/the-issuer/` (menu order 1) | no Paper frame (same article template) | article; source W3C VCDM 2.0; back link from Issuing credentials for wallets |
 | The relying party | `topics/ecosystem-roles/the-relying-party/` (menu order 2) | no Paper frame (same article template) | article; sources W3C VCDM 2.0 and EC selective disclosure; back link from Accepting information from a wallet |
@@ -111,7 +112,7 @@ Use the shortcode `[fides_learn_term term="Issuer"]issuer[/fides_learn_term]` fo
 glossary term; "Terms in this article" and "On this page" are generated.
 A list item without a link is shown as a design preview. Previous/next appears only
 when two or more pages share the same series slug (menu order decides the order);
-the seed content has no series.
+only the four For governments articles use a series (`for-governments`).
 
 **European Digital Identity Wallet (article, English source only):** all text, the
 "Continue learning" list and the line "Content last checked: <date>" (last paragraph, a
@@ -137,7 +138,7 @@ re-seed. Block classes the seed uses: `fides-learn-rows` (`--plain`, `--from-zer
 
 ## Package status and counts
 
-Glossary: pinned in `staging/glossary-source.json` (1.12.2, published as `a52a684`; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.51. Sources list (Paper 24.18, styleguide 25.14): one open link line per source (`Organisation · Title`, from the existing `Label | URL` field), no visible URL, long titles wrap; only hosts other than the site's own get the external indicator and open in a new tab (filter `fides_ds_learn_own_hosts` adds own hosts). Markup in `Fides_DS_Learn::source_link()`, styles in `assets/learn.css`; checked by `tests/learn-sources-checks.cjs` and `tests/learn-sources-behaviour.php`. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (27 and 27 on 12 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
+Glossary: pinned in `staging/glossary-source.json` (1.12.2, published as `a52a684`; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.51. Sources list (Paper 24.18, styleguide 25.14): one open link line per source (`Organisation · Title`, from the existing `Label | URL` field), no visible URL, long titles wrap; only hosts other than the site's own get the external indicator and open in a new tab (filter `fides_ds_learn_own_hosts` adds own hosts). Markup in `Fides_DS_Learn::source_link()`, styles in `assets/learn.css`; checked by `tests/learn-sources-checks.cjs` and `tests/learn-sources-behaviour.php`. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (37 and 37 on 12 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
 
 ## Seeding and overwrite protection
 

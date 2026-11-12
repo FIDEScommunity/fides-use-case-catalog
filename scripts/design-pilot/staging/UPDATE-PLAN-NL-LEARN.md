@@ -120,6 +120,24 @@ domain + exact original only. An empty or missing-translation row is filled with
 - Links: the overview links only to destinations that exist in the pilot (use cases, credential types, personal and business wallets,
   organisations, existing Learn articles). `/issuer-catalog/` and `/relying-party-websites/` are not linked.
 
+## For governments (12 November 2026, local only)
+
+- **Seed:** five new Learn pages: `topics/for-governments` (kind `section`, content `for-governments.html`, menu order 3) and four articles below it
+  (kind `article`, eyebrow "Explainer · For governments", series `for-governments` so Previous/Next appears): `digital-wallets-and-public-services`,
+  `issuing-public-information-to-wallets`, `accepting-information-from-wallets-in-public-services`, `the-eudi-wallet-and-national-implementation`.
+  Four existing seed pages changed slightly: `topics` (the For governments row is now a link), `european-digital-identity-wallet`,
+  `issuing-credentials-for-wallets` and `accepting-information-from-a-wallet` (one extra "Learn more" item each). `learn/manifest.json` and
+  `learn/content/` now hold 37 pages and 37 files (read the number from the manifest and `ls learn/content` when the package is built).
+  Tiles are unchanged (1.13.51 stays); no CSS, no glossary change.
+- **Protection:** on a site where nobody edited them, a dry-run shows 5 `would-created` and 4 `would-updated`. A page edited on staging is `skipped-edited`
+  and keeps its text: **the editor must then add the link by hand** (the Topics row "For governments" links to `/learn/topics/for-governments/`; the
+  three articles get a "Learn more" item). Never use `LEARN_FORCE`. Local result on 12 November 2026: created 5, updated 4, nothing skipped.
+  Behaviour test: `tests/for-governments-seed.sh` (throwaway tree).
+- **GBO example:** based on the Globaal Ontwerp, version 0.9.5 (September 2026), "a draft design submitted for adoption". Public status check on
+  12 November 2026 and sources: `learn/for-governments-editorial-gaps.md`. Recheck before staging.
+- **Dutch:** proposals only, in `learn/nl-translation-changes-for-governments.md`; nothing is in `nl-translations.json`.
+- Links go only to destinations that exist in the pilot (use cases, credential types, wallets, organisations, existing Learn articles).
+
 ## Changes since package `20261112-083503-34b753ab` (third package, same day)
 
 - **Terminology round 2:** 21 existing Dutch rows were corrected locally (no rows added or removed; export still 934 entries, 4 gettext):
