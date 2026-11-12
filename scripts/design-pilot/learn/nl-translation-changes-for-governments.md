@@ -7,7 +7,7 @@ TranslatePress editor (`/nl/fides-design-pilot/learn/topics/for-governments/?trp
 kept (with "afsprakenstelsel" where clearer). Dutch terms for GBO: "Gemeenschappelijke Bronontsluiting (GBO)", "Globaal Ontwerp", "bronhouder"
 (public body that holds a source; "source holder" in English), "afsprakenstelsel", "ter vaststelling". The English source stays leading. Sentences
 with inline links are split into fragments by TranslatePress; confirm splits in the editor and decide the article per phrase (see `learn/README.md`, "Fragments").
-The sentence that carries the GBO status is the same on every page; translate it once and reuse it.
+The sentence that carries the GBO status now appears on article 4 only; translate it once. Rows 22 to 24 are new in the second pass.
 
 ## Key strings (headings, leads, status)
 
@@ -15,10 +15,10 @@ The sentence that carries the GBO status is the same on every page; translate it
 |---|---|---|---|
 | 1 | For governments | Voor overheden | overview, breadcrumb, Topics row |
 | 2 | Public organisations meet wallets from two sides: they hold information people need to prove, and they run services that need to receive it. Start with the question closest to yours. | Overheidsorganisaties komen op twee manieren met wallets in aanraking: ze hebben gegevens die mensen moeten kunnen aantonen en ze bieden diensten die gegevens moeten ontvangen. Begin bij de vraag die het dichtst bij de uwe ligt. | overview lead |
-| 3 | How can public organisations work with wallets? | Hoe kunnen overheidsorganisaties met wallets werken? | overview |
+| 3 | Four articles | Vier artikelen | overview (replaces the former heading and lead paragraph) |
 | 4 | Start with a question | Begin met een vraag | overview |
 | 5 | A Dutch example, still in development | Een Nederlands voorbeeld, nog in ontwikkeling | overview, ~4 articles ("A Dutch example" = "Een Nederlands voorbeeld") |
-| 6 | The Dutch example is based on the Globaal Ontwerp (global design) of Gemeenschappelijke Bronontsluiting (GBO), version 0.9.5 (September 2026), a draft design submitted for adoption. Its arrangements are still in development and national arrangements can differ. | Het Nederlandse voorbeeld is gebaseerd op het Globaal Ontwerp van Gemeenschappelijke Bronontsluiting (GBO), versie 0.9.5 (september 2026), een conceptontwerp dat ter vaststelling is aangeboden. De inrichting is nog in ontwikkeling en nationale uitwerkingen kunnen verschillen. | all four articles |
+| 6 | The Dutch example is based on the Globaal Ontwerp (global design) of Gemeenschappelijke Bronontsluiting (GBO), version 0.9.5 (September 2026), a draft design submitted for adoption. Its arrangements are still in development and national arrangements can differ. | Het Nederlandse voorbeeld is gebaseerd op het Globaal Ontwerp van Gemeenschappelijke Bronontsluiting (GBO), versie 0.9.5 (september 2026), een conceptontwerp dat ter vaststelling is aangeboden. De inrichting is nog in ontwikkeling en nationale uitwerkingen kunnen verschillen. | article 4 only (articles 1 to 3 link to it) |
 | 7 | Digital wallets and public services | Digitale wallets en publieke dienstverlening | article 1 title |
 | 8 | Issuing public information to wallets | Publieke gegevens uitgeven aan wallets | article 2 title |
 | 9 | Accepting information from wallets in public services | Gegevens uit wallets accepteren in publieke diensten | article 3 title |
@@ -29,11 +29,14 @@ The sentence that carries the GBO status is the same on every page; translate it
 | 14 | What is set at European level, and what is decided nationally? A starting point for public organisations that want to see where national arrangements come in. | Wat ligt op Europees niveau vast en wat wordt nationaal bepaald? Een startpunt voor overheidsorganisaties die willen zien waar nationale afspraken een rol spelen. | article 4 lead |
 | 15 | Questions to start with / Which question are you asking? | Vragen om mee te beginnen / Welke vraag stelt u? | articles 1 to 3 |
 | 16 | Checking is not deciding | Controleren is niet beslissen | article 3 |
-| 17 | Does a public service have to accept wallets? | Moet een publieke dienst wallets accepteren? | article 3 |
+| 17 | What does Article 5f say about accepting wallets? | Wat zegt artikel 5f over het accepteren van wallets? | article 3 |
 | 18 | What is decided nationally? | Wat wordt nationaal bepaald? | article 4 |
 | 19 | Keep national information current | Houd nationale informatie actueel | article 4 |
 | 20 | The register stays where it is | Het register blijft waar het is | article 2 |
 | 21 | Wallets are one route among several | Wallets zijn één route naast andere | article 1 |
+| 22 | Verify: the provider checks attribute values it has been given against the source before issuing. | Verify: de aanbieder controleert aangeleverde attributen bij de bron voordat hij uitgeeft. | article 2 |
+| 23 | Retrieve: the provider fetches the attributes from the source, on behalf of the public body, and qualifies them. The draft calls this service optional. | Retrieve: de aanbieder haalt de attributen namens de overheidsorganisatie op bij de bron en kwalificeert ze. Het ontwerp noemt deze dienst optioneel. | article 2 |
+| 24 | Article 5f of Regulation (EU) 2024/1183 … paragraph 1 provides that where Member States require electronic identification and authentication to access an online service provided by a public sector body, they shall also accept European Digital Identity Wallets that are provided in accordance with the Regulation. | Artikel 5f van Verordening (EU) 2024/1183 … lid 1 bepaalt dat lidstaten die elektronische identificatie en authenticatie verlangen voor toegang tot een onlinedienst van een overheidsinstantie, ook Europese Digitale Identiteitswallets moeten accepteren die overeenkomstig de verordening zijn verstrekt. | article 3 (check against the Dutch text of the Regulation on EUR-Lex before use) |
 
 ## GBO sentences that need a careful translation
 

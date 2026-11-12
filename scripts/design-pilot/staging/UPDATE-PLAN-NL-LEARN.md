@@ -131,8 +131,9 @@ domain + exact original only. An empty or missing-translation row is filled with
   Tiles are unchanged (1.13.51 stays); no CSS, no glossary change.
 - **Protection:** on a site where nobody edited them, a dry-run shows 5 `would-created` and 4 `would-updated`. A page edited on staging is `skipped-edited`
   and keeps its text: **the editor must then add the link by hand** (the Topics row "For governments" links to `/learn/topics/for-governments/`; the
-  three articles get a "Learn more" item). Never use `LEARN_FORCE`. Local result on 12 November 2026: created 5, updated 4, nothing skipped.
+  three articles get a "Learn more" item). Never use `LEARN_FORCE`. Local result on 12 November 2026: created 5, updated 4, nothing skipped. Second pass (same day): updated 5 (the overview and the four articles), 33 unchanged, nothing skipped; on staging an edited For governments page is skipped and needs the new text by hand.
   Behaviour test: `tests/for-governments-seed.sh` (throwaway tree).
+- **Article 5f and QTSP route:** article 3 explains Article 5f of Regulation (EU) 2024/1183 with an EUR-Lex link; article 2 separates the verify and retrieve services; version and status of the GBO draft now sit on article 4 only. See `learn/for-governments-editorial-gaps.md`.
 - **GBO example:** based on the Globaal Ontwerp, version 0.9.5 (September 2026), "a draft design submitted for adoption". Public status check on
   12 November 2026 and sources: `learn/for-governments-editorial-gaps.md`. Recheck before staging.
 - **Dutch:** proposals only, in `learn/nl-translation-changes-for-governments.md`; nothing is in `nl-translations.json`.

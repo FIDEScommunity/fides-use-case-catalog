@@ -30,22 +30,26 @@
 <h2 class="wp-block-heading">Public bodies and the EUDI Wallet</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>In the European digital identity framework, attestations can be issued in more than one way. [fides_learn_term term="Public Sector Body EAA"]A public sector body attestation[/fides_learn_term] is issued by, or on behalf of, a public sector body that is responsible for an authentic source. [fides_learn_term term="Qualified Electronic Attestation of Attributes"]A qualified attestation[/fides_learn_term] is issued by a [fides_learn_term term="Qualified Trust Service Provider"]qualified trust service provider[/fides_learn_term]. Which route applies depends on the information, the national arrangements and the applicable rules. See <a href="{{learn}}/topics/the-big-picture/european-digital-identity-wallet/">European Digital Identity Wallet</a> for the framework.</p>
+<p>In the European digital identity framework, attestations can be issued in more than one way. [fides_learn_term term="Public Sector Body EAA"]A public sector body attestation[/fides_learn_term] is issued by, or on behalf of, a public sector body that is responsible for an authentic source. [fides_learn_term term="Qualified Electronic Attestation of Attributes"]A qualified attestation[/fides_learn_term] is issued by a [fides_learn_term term="Qualified Trust Service Provider"]qualified trust service provider[/fides_learn_term]. Which route applies depends on the information, the national arrangements and the applicable rules. See <a href="{{learn}}/topics/the-big-picture/european-digital-identity-wallet/">European Digital Identity Wallet</a> for the framework and <a href="{{learn}}/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks/">Trust service providers and trust frameworks</a> for the providers.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">A Dutch example</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>The Dutch GBO draft design describes both routes for the wallet channel. In the first, a public body issues attestations itself and may use a shared facility for the technical side of issuing. In the second, a qualified trust service provider issues on the body’s behalf, after checking or retrieving attributes from the source through an agreed interface. According to the draft, the parties involved are still deciding which route is preferred, and the governance for that choice sits outside GBO.</p>
+<p>The Dutch GBO draft design describes both routes for the wallet. In the first, a public body issues the attestation itself and may use a shared facility for the technical side of issuing. In the second, a qualified trust service provider issues a qualified attestation, and the draft describes two separate services it can use at the source through an authentic source interface:</p>
+<!-- /wp:paragraph -->
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Verify:</strong> the provider checks attribute values it has been given against the source before issuing.</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong>Retrieve:</strong> the provider fetches the attributes from the source, on behalf of the public body, and qualifies them. The draft calls this service optional.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+<!-- wp:paragraph -->
+<p>The draft presents the verify service as one way to meet the obligation, which it places in Article 45e of the amended eIDAS Regulation, that qualified providers can verify attributes against authentic sources. According to the draft, the parties involved are still deciding which route is preferred. It also says that GBO itself would not be the issuer of public attestations and that using the shared facility is optional.</p>
 <!-- /wp:paragraph -->
 <!-- wp:paragraph -->
-<p>The draft also says that GBO itself would not be the issuer of public attestations, that use of the shared facility is optional and that a public body may issue its own attestations outside GBO. Which organisation could provide the shared facility is described as still to be decided. Source holders may use reference components or an equivalent solution of their own, as long as they follow the agreements.</p>
-<!-- /wp:paragraph -->
-<!-- wp:paragraph -->
-<p>The draft marks the issuing facility for the EUDI Wallet as still to be realised. It describes a plan and not a service that is available today. Showing an attestation to a service takes place after issuing and is described as outside GBO.</p>
-<!-- /wp:paragraph -->
-<!-- wp:paragraph -->
-<p>The Dutch example is based on the Globaal Ontwerp (global design) of Gemeenschappelijke Bronontsluiting (GBO), version 0.9.5 (September 2026), a draft design submitted for adoption. Its arrangements are still in development and national arrangements can differ.</p>
+<p>The issuing facility is described as still to be realised, so this is a plan and not a service that is available today. <a href="{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/#a-dutch-example">More on the Dutch example, its version and status</a>.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">What can differ between countries?</h2>
@@ -68,21 +72,13 @@
 <!-- /wp:heading -->
 <!-- wp:list -->
 <ul class="wp-block-list"><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/for-businesses/issuing-credentials-for-wallets/">Issuing credentials for wallets</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/ecosystem-roles/the-issuer/">The issuer</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/the-big-picture/what-is-a-credential/">What is a credential? And what is an attestation?</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/the-big-picture/european-digital-identity-wallet/">European Digital Identity Wallet</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks/">Trust service providers and trust frameworks</a></li>
+<li><a href="{{learn}}/topics/for-governments/digital-wallets-and-public-services/">Digital wallets and public services</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
 <li><a href="{{learn}}/topics/for-governments/accepting-information-from-wallets-in-public-services/">Accepting information from wallets in public services</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/for-governments/">For governments</a></li>
+<li><a href="{{learn}}/topics/for-businesses/issuing-credentials-for-wallets/">Issuing credentials for wallets</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{glossary}}">Open the glossary</a></li>
+<li><a href="{{learn}}/topics/ecosystem-roles/the-issuer/">The issuer</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
 <!-- wp:heading {"level":3} -->

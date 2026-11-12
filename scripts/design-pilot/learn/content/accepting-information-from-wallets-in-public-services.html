@@ -30,25 +30,35 @@
 <p>A technical check can show who issued a credential, whether it was altered and whether it is still valid. It does not show that the information is sufficient for the decision the service has to make. That assessment stays with the service, together with what happens when a check fails. See <a href="{{learn}}/topics/ecosystem-roles/the-relying-party/">The relying party</a> and <a href="{{learn}}/topics/for-businesses/accepting-information-from-a-wallet/">Accepting information from a wallet</a>.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
-<h2 class="wp-block-heading">Does a public service have to accept wallets?</h2>
+<h2 class="wp-block-heading">What does Article 5f say about accepting wallets?</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>That depends on the country, the service and the applicable rules, and these are still developing. There is no single answer that fits every public organisation. The article <a href="{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/">The EUDI Wallet and national implementation</a> explains where national arrangements come in.</p>
+<p>Article 5f of <a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">Regulation (EU) 2024/1183</a>, which amends the eIDAS Regulation, is titled “Cross-border reliance on European Digital Identity Wallets”. For public services, paragraph 1 provides that where Member States require electronic identification and authentication to access an online service provided by a public sector body, they shall also accept European Digital Identity Wallets that are provided in accordance with the Regulation. Read in its own words, this means:</p>
+<!-- /wp:paragraph -->
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>It applies where a Member State requires electronic identification and authentication to access an online service of a public sector body. A service that does not require this is not covered by paragraph 1.</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>It says “also accept”. The wallet is added to the means a service accepts. The paragraph does not say that a service may accept only wallets.</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>It concerns wallets provided in accordance with the Regulation. It does not mention other kinds of wallets.</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>Paragraph 1 does not name a date of its own. When wallets are available follows from other provisions of the Regulation and its implementing acts.</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>It concerns access and authentication. It does not say which attributes or credentials a service must ask for, how the service must be built or what it decides on the basis of the answer.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+<!-- wp:paragraph -->
+<p>Other paragraphs cover private parties. Paragraph 2 concerns private relying parties, other than micro and small enterprises, that are required by law or by contract to use strong user authentication for online identification. They are to accept wallets no later than 36 months from the date the implementing acts referred to in Articles 5a(23) and 5c(6) enter into force, and only on the voluntary request of the user. Paragraph 3 concerns very large online platforms under the Digital Services Act that require user authentication. They are to accept and facilitate wallets, only on the user’s voluntary request and for the minimum data needed. The date for paragraph 2 therefore depends on when those implementing acts enter into force; check the current position.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"fides-learn-note"} -->
+<p class="fides-learn-note">This is a summary of the text, not legal advice. Read the Regulation and the national rules that apply to your service.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">A Dutch example</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>The Dutch GBO draft design describes three routes by which a service can obtain public data, each with its own parties, legal bases and protocols. In the wallet route, a person first receives an attestation from a public body or a qualified trust service provider. The person can then show it to a service. The draft describes that step as taking place after issuing and outside GBO.</p>
-<!-- /wp:paragraph -->
-<!-- wp:paragraph -->
-<p>The other two routes are different. In the OOTS route, a public service in another Member State requests evidence, and the person is described as reviewing and agreeing before it is sent. In the route for private service providers, the person gives consent for a specific purpose, recipient and data set, and the provider is described as receiving a party-specific pseudonym and not the citizen service number. A service should therefore not assume that a wallet presentation is the only way information reaches it.</p>
-<!-- /wp:paragraph -->
-<!-- wp:paragraph -->
-<p>The draft describes several components for these routes as still to be realised, and parts of the legal basis, such as the one for consent, as needing legislation. It describes a direction and not a finished service.</p>
-<!-- /wp:paragraph -->
-<!-- wp:paragraph -->
-<p>The Dutch example is based on the Globaal Ontwerp (global design) of Gemeenschappelijke Bronontsluiting (GBO), version 0.9.5 (September 2026), a draft design submitted for adoption. Its arrangements are still in development and national arrangements can differ.</p>
+<p>The Dutch GBO draft design describes separate routes by which public data can reach a service: a wallet presentation after issuing, a cross-border evidence request through OOTS, and sharing with private providers on the basis of consent. A service should therefore not assume that a wallet presentation is the only way information reaches it. The design is still in development. <a href="{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/#a-dutch-example">More on the Dutch example, its version and status</a>.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">An example from the catalog</h2>
@@ -65,21 +75,13 @@
 <!-- /wp:heading -->
 <!-- wp:list -->
 <ul class="wp-block-list"><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/for-businesses/accepting-information-from-a-wallet/">Accepting information from a wallet</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/ecosystem-roles/the-relying-party/">The relying party</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/the-big-picture/trust-and-interoperability/">Trust and interoperability</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/the-big-picture/formats-and-protocols/">Formats and protocols: what do they do?</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
 <li><a href="{{learn}}/topics/for-governments/issuing-public-information-to-wallets/">Issuing public information to wallets</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
 <li><a href="{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/">The EUDI Wallet and national implementation</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/for-governments/">For governments</a></li>
+<li><a href="{{learn}}/topics/for-businesses/accepting-information-from-a-wallet/">Accepting information from a wallet</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{glossary}}">Open the glossary</a></li>
+<li><a href="{{learn}}/topics/ecosystem-roles/the-relying-party/">The relying party</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
 <!-- wp:heading {"level":3} -->

@@ -5,7 +5,7 @@
 <h2 class="wp-block-heading">What is set at European level?</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>Regulation (EU) 2024/1183, also called eIDAS 2, sets common requirements for the [fides_learn_term term="European Digital Identity Wallet"]European Digital Identity Wallet[/fides_learn_term]. Member States are responsible for making at least one wallet available under that framework, and the European Commission has said this should happen by the end of 2026. Technical specifications are developed at European level, for example in the Architecture and Reference Framework. See <a href="{{learn}}/topics/the-big-picture/european-digital-identity-wallet/">European Digital Identity Wallet</a> for an overview.</p>
+<p><a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">Regulation (EU) 2024/1183</a>, also called eIDAS 2, sets common requirements for the [fides_learn_term term="European Digital Identity Wallet"]European Digital Identity Wallet[/fides_learn_term]. Member States are responsible for making at least one wallet available under that framework, and the European Commission has said this should happen by the end of 2026. Technical specifications are developed at European level, for example in the Architecture and Reference Framework. Article 5f of the Regulation also sets rules on accepting wallets; for public services it is summarised in <a href="{{learn}}/topics/for-governments/accepting-information-from-wallets-in-public-services/">Accepting information from wallets in public services</a>. See <a href="{{learn}}/topics/the-big-picture/european-digital-identity-wallet/">European Digital Identity Wallet</a> for an overview.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">What is decided nationally?</h2>
@@ -29,15 +29,30 @@
 <li>Who maintains the national documentation, and how current is it?</li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
-<!-- wp:heading {"level":2} -->
-<h2 class="wp-block-heading">A Dutch example</h2>
+<!-- wp:heading {"level":2,"anchor":"a-dutch-example"} -->
+<h2 class="wp-block-heading" id="a-dutch-example">A Dutch example</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>The Dutch GBO draft design says it follows European agreements and standards, including eIDAS, OOTS and the EUDI Wallet, and the Dutch implementation of them, such as the NL Wallet and the national OOTS provision. ICTU describes GBO as not intended to become a new, separate system, but as something to anchor in existing national agreement frameworks (afsprakenstelsels).</p>
+<p>In the Netherlands, the programme Gemeenschappelijke Bronontsluiting (GBO), run by ICTU, is developing a standardised way for public bodies that hold authoritative data (in Dutch, bronhouders) to make it available for three routes: the EUDI Wallet, OOTS, and sharing with private service providers on the basis of a citizen’s consent. The draft design says it follows European agreements and standards, including eIDAS, OOTS and the EUDI Wallet, and the Dutch implementation of them, such as the NL Wallet and the national OOTS provision. ICTU describes GBO as not intended to become a new, separate system, but as something to anchor in existing national agreement frameworks (afsprakenstelsels).</p>
 <!-- /wp:paragraph -->
 <!-- wp:paragraph -->
-<p>The draft separates what is described as available from what is still to be realised. It marks several components, including the issuing facility for the EUDI Wallet, as still to be realised. According to the programme page of ICTU, the development phase runs until December 2026 and the realisation phase through 2027.</p>
+<p>The draft describes the three routes as having their own parties, legal bases and protocols, so common source access does not mean that all data travels the same way:</p>
 <!-- /wp:paragraph -->
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><strong>EUDI Wallet:</strong> a person receives an attestation from a public body or a qualified trust service provider and can later show it to a service. The draft describes showing it as taking place outside GBO. The two issuing routes are described in <a href="{{learn}}/topics/for-governments/issuing-public-information-to-wallets/">Issuing public information to wallets</a>.</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong>OOTS:</strong> a public service in another Member State requests evidence, and the person is described as reviewing and agreeing before it is sent.</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong>Consent-based sharing:</strong> the person gives consent for a specific purpose, recipient and data set, and the private provider is described as receiving a party-specific pseudonym and not the citizen service number.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+<!-- wp:paragraph -->
+<p>The draft separates what is described as available from what is still to be realised. It marks several components, including the issuing facility for the EUDI Wallet, as still to be realised, and says the legal basis for consent needs legislation. According to the programme page of ICTU, the development phase runs until December 2026 and the realisation phase through 2027.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Version and status</h3>
+<!-- /wp:heading -->
 <!-- wp:paragraph -->
 <p>The public GBO documentation consulted on 12 November 2026 describes the global design as in development and not final. Its review overview lists the design as being processed for adoption. The pages consulted do not state that the design has been adopted, and a newer version than 0.9.5 was not listed there. Use the current documentation for the legal status and the current arrangements.</p>
 <!-- /wp:paragraph -->
@@ -58,19 +73,13 @@
 <!-- /wp:heading -->
 <!-- wp:list -->
 <ul class="wp-block-list"><!-- wp:list-item -->
+<li><a href="{{learn}}/topics/for-governments/accepting-information-from-wallets-in-public-services/">Accepting information from wallets in public services</a></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
 <li><a href="{{learn}}/topics/the-big-picture/european-digital-identity-wallet/">European Digital Identity Wallet</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
 <li><a href="{{learn}}/topics/the-big-picture/eudi-wallet-and-european-business-wallet/">EUDI Wallet and European Business Wallet: how do they relate?</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
 <li><a href="{{learn}}/topics/the-big-picture/trust-and-interoperability/">Trust and interoperability</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks/">Trust service providers and trust frameworks</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/for-governments/digital-wallets-and-public-services/">Digital wallets and public services</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/for-governments/">For governments</a></li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{glossary}}">Open the glossary</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
 <!-- wp:heading {"level":3} -->

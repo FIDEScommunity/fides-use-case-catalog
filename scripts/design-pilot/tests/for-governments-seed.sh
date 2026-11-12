@@ -38,15 +38,26 @@ for i, s in enumerate(slugs):
     for line in lines:
         assert re.match(r"^[^|]+ · [^|]+ \| https://\S+$", line.strip()) or re.match(r"^Regulation \(EU\) [^|]+ \| https://\S+$", line.strip()), f"{s}: source line format: {line}"
     assert any("version 0.9.5 (September 2026)" in l and "consulted 12 November 2026" in l and "ictu.github.io/GBO-GO" in l for l in lines), f"{s}: GBO global design source names version, month and consulted date"
+    urls = [l.split("|")[-1].strip() for l in lines]
+    assert len(urls) == len(set(urls)), f"{s}: no duplicate source URLs"
     body = (here / "learn/content" / e["content"]).read_text()
     assert not re.search(r"localhost|127\.0\.0\.1|issuer-catalog|relying-party-websites|interop-profiles|interop-matrix", body), f"{s}: no local host/unavailable destination"
-    assert "version 0.9.5 (September 2026), a draft design submitted for adoption" in body, f"{s}: draft status wording"
+    full = "version 0.9.5 (September 2026), a draft design submitted for adoption" in body
+    assert full == (s == slugs[3]), f"{s}: version and status wording only on article 4"
+    if s != slugs[3]: assert "{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/#a-dutch-example" in body, f"{s}: links to the Dutch example on article 4"
+    ln = re.search(r"Learn more.*?<!-- /wp:list -->", body, re.S)
+    assert ln and 3 <= ln.group(0).count("<li>") <= 4, f"{s}: Learn more has 3-4 links"
+    if s == slugs[2]:
+        assert "https://eur-lex.europa.eu/eli/reg/2024/1183/oj" in body and "Article 5f of" in body and any("Article 5f | https://eur-lex.europa.eu/eli/reg/2024/1183/oj" in l for l in lines), f"{s}: Article 5f passage, EUR-Lex link and source line"
+    if s == slugs[1]:
+        assert "<strong>Verify:</strong>" in body and "<strong>Retrieve:</strong>" in body, f"{s}: QTSP route separates verify and retrieve"
     assert "Content last checked: 12 November 2026" in body, f"{s}: last checked date"
     assert "{{learn}}/topics/for-governments/" in body, f"{s}: links to a sibling or the overview"
     entries.append((s, e))
 ov = (here / "learn/content" / hub["content"]).read_text()
 for s in slugs: assert f'<a href="{{{{learn}}}}/topics/for-governments/{s}/">' in ov, f"overview links to {s}"
-assert "version 0.9.5 (September 2026), a draft design submitted for adoption" in ov, "overview: draft status wording"
+assert "a draft design submitted for adoption" not in ov and "#a-dutch-example" in ov and "still in development" in ov, "overview: short Dutch example, status lives on article 4"
+assert "How can public organisations work with wallets?" not in ov and "fides_learn_terms" in ov, "overview: one intro, glossary terms panel kept"
 assert "Design preview" not in ov and "not available yet" not in ov, "overview has no preview or placeholder text"
 topics = (here / "learn/content/topics.html").read_text()
 assert '<a href="{{learn}}/topics/for-governments/">For governments</a>' in topics, "Topics row links to the overview"
