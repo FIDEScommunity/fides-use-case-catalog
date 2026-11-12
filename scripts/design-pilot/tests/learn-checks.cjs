@@ -180,7 +180,7 @@ async function article(page, width) {
   const toc = page.locator(".fides-learn-toc");
   const summary = toc.locator("summary");
   const links = (await toc.locator("a").allTextContents()).map((t) => t.trim());
-  check(`article @${width}: contents menu lists the five sections`, links.length === 5 && links[0] === "Start with the question", links.join("|"));
+  check(`article @${width}: contents menu lists the seven sections`, links.length === 7 && links[0] === "Follow the information" && links[3] === "The receiving service checks it", links.join("|"));
   if (width >= 900) {
     check(`article @${width}: contents menu open beside the text`, (await toc.evaluate((el) => el.open)) && (await toc.boundingBox()).x > (await page.locator(".fides-learn-article__body").boundingBox()).x + 600);
   } else {
@@ -188,13 +188,13 @@ async function article(page, width) {
     await summary.click();
     check(`article @${width}: summary opens the contents menu`, await toc.evaluate((el) => el.open));
   }
-  await toc.getByRole("link", { name: "What is checked?" }).click();
+  await toc.getByRole("link", { name: "The roles can differ" }).click();
   await page.waitForTimeout(900);
   const target = await page.evaluate(() => {
-    const el = document.getElementById("what-is-checked");
+    const el = document.getElementById("the-roles-can-differ");
     return { hash: location.hash, top: Math.round(el.getBoundingClientRect().top) };
   });
-  check(`article @${width}: contents link jumps to its section`, target.hash === "#what-is-checked" && target.top >= 0 && target.top < 400, JSON.stringify(target));
+  check(`article @${width}: contents link jumps to its section`, target.hash === "#the-roles-can-differ" && target.top >= 0 && target.top < 400, JSON.stringify(target));
 
   // Role flow.
   const flow = await page.locator(".fides-learn-flow li").allInnerTexts();
@@ -215,7 +215,7 @@ async function article(page, width) {
   const box = await page.locator(".fides-learn-terms-box").innerText();
   check(`article @${width}: "Terms in this article" derives from the vocabulary`, /issuer/i.test(box) && /holder/i.test(box) && /relying party/i.test(box), box.slice(0, 120));
   const sources = await page.locator(".fides-learn-sources a").evaluateAll((as) => as.map((a) => [a.href, a.target, a.rel]));
-  check(`article @${width}: sources open in a new tab with rel`, sources.length === 2 && sources.every((s) => s[1] === "_blank" && /noopener/.test(s[2])), JSON.stringify(sources));
+  check(`article @${width}: sources open in a new tab with rel`, sources.length === 3 && sources.every((s) => s[1] === "_blank" && /noopener/.test(s[2])), JSON.stringify(sources));
   const cta = await page.getByRole("link", { name: /Explore use cases/ }).getAttribute("href");
   check(`article @${width}: closing band routes to the pilot use cases`, cta === "/fides-design-pilot/overview/", cta);
   // Order on small screens: contents menu, text, terms, sources.
