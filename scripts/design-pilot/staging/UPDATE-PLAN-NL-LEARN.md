@@ -8,6 +8,22 @@ with `SHA256SUMS` and `verify-package.sh`. Replace `<wp>` with the WordPress pat
 unpacked package. Real mail and form submissions stay blocked on staging (the config mu-plugin disables external actions); do
 not submit the request form, and do not change that block.
 
+## Changes adopted from staging (12 November 2026, afternoon)
+
+Two changes that were already made and checked on the review site are now in the local sources, so the next package carries them:
+
+- **Request form notice removed.** The visitor notice "Local pilot view. Nothing you enter here is sent or stored. No email is sent,
+  nothing is booked and nothing is paid. ..." is gone from the Learn request form template (`Fides_DS_Learn::render_request()` in the
+  tiles plugin, used by the training and service requests). Form, fields, the `onsubmit` guard and the mail block are unchanged;
+  the `<noscript>` line "JavaScript is needed for this preview form." stays. The two Dutch lines for the notice were removed from
+  `learn/nl-translations.php` (they were never in the transfer file). Rows already in a staging dictionary are harmless and unused.
+- **Wallet Readiness Workshop: language row.** `learn/manifest.json` (page `sessions/wallet-readiness-workshop`, field `details`) has a
+  new row `Workshop language | Dutch. English available on request.` between "Format" and "Price" (EN: "Workshop language" /
+  "Dutch. English available on request."; NL: "Voertaal" / "Nederlands. Op verzoek ook in het Engels."). Two new transfer entries
+  (label and value are two TranslatePress strings), file now 936 entries (153 training). The seed updates the page only while it is
+  unchanged; staging pages edited there are `skipped-edited` (the workshop page was adjusted on staging, so expect that line for it and
+  no change). On staging `status` reports these two rows as `same` (already translated identically) or `add` if still empty.
+
 ## Standalone review site (fix of the transfer tool, 12 November 2026)
 
 The review site is a standalone WordPress installation: `home_url()` ends in `/design-review` and the route roots `learn`, `services`
@@ -31,12 +47,12 @@ roots below it) and read the English pages over HTTP; on staging it therefore fo
 
 ### Files for a translations-only update
 
-Replace in the unpacked package (the Dutch file is unchanged; the tool changed). Nothing is copied into the web root or the plugins:
+Replace in the unpacked package (the tool and, since the workshop-language row, the Dutch file changed). Nothing is copied into the web root or the plugins:
 
 | File (repository) | In the package | Needed |
 |---|---|---|
 | `scripts/design-pilot/learn/nl-translations-transfer.php` | `<pkg>/seed/learn/nl-translations-transfer.php` | yes, **replace** (new version) |
-| `scripts/design-pilot/learn/nl-translations.json` | `<pkg>/seed/learn/nl-translations.json` | yes (same file as in the package, sha256 `3f579169...cad1`) |
+| `scripts/design-pilot/learn/nl-translations.json` | `<pkg>/seed/learn/nl-translations.json` | yes, **replace** (936 entries; sha256 `026c802d...6331`; the two workshop-language rows are new) |
 | `scripts/design-pilot/learn/nl-translations.php` | `<pkg>/seed/learn/nl-translations.php` | no (local authoring helper, do not run on staging) |
 
 ### Steps
@@ -60,7 +76,7 @@ wp --path=<wp> cache flush ; purge page cache/CDN ; then the GET checks of secti
 The 27 routes of the file include `learn/sessions/request-wpforms` and the other form pages; the GET only renders them. If a route
 answers 404 the page does not exist on staging; its sources then stay untouched. If the `/nl/` URL form differs, take it from the
 language switcher link of the site. If step 1 cannot be run from the server (blocked loopback), open the 27 URLs in a browser.
-Expected `status` after step 1: `scope: 934 sources ...`, rows in scope about 935, `pending` 0, `add` = all rows without a translation,
+Expected `status` after step 1: `scope: 936 sources ...`, rows in scope about 937, `pending` 0, `add` = all rows without a translation,
 `differs` = rows that hold other Dutch (see the lists in the sections above), `stale/new check skipped`, gettext `add`/`same`/`differs`.
 
 Example of the `differs` output (the existing translation is kept):
@@ -84,7 +100,7 @@ domain + exact original only. An empty or missing-translation row is filled with
   "wallethouder", "mandaten", "selectief gegevens delen", and "de workshop" for one repeated offering name. Full list (source, old,
   new, routes, reason): `learn/nl-translation-changes-2026-11-12-b.md`. Rules: `learn/nl-terminology.md`.
 - The package folder name is timestamp based (newest under `staging-package/`, `latest`). The Dutch file is identified by its sha256:
-  `seed/learn/nl-translations.json` = `3f579169012e860eac249dbbb96f84b0cd435987eb15cebf0b776e184e60cad1`.
+  `seed/learn/nl-translations.json` = `026c802ddf970b17b3ec94b9c21ac548458c8d0cebc93e79e003cf26b0e06331`.
 - The local-only correction mode (`nl-translations.php correct`) is in the package for traceability. **Do not run it on staging**: it
   refuses to write unless the site host is localhost, and staging corrections follow the procedure below.
 - No content, plugin or seed change; the package differs from the previous one in `nl-translations.json`, `nl-translations.php`,
@@ -134,7 +150,7 @@ partij?") is kept and shown as `differs` in `status`; the new Dutch from the fil
   what runs on staging (compare in step 3).
 - `seed/learn/content/*.html` (26 files), `seed/learn/manifest.json`: eight Learn articles got the article inside the term, link
   or bold text (17 sentence openers; wording unchanged).
-- `seed/learn/nl-translations.json` (934 entries + 4 gettext), `seed/learn/nl-translations-transfer.php`,
+- `seed/learn/nl-translations.json` (936 entries + 4 gettext), `seed/learn/nl-translations-transfer.php`,
   `seed/learn/nl-translations.php`, `seed/create-learn-pages.php`.
 - The glossary plugin and its bundled data stay as pinned (`glossary 1.12.2`, `a52a684`, plugin 1.1.16). No change.
 
@@ -216,7 +232,7 @@ strings, and writes nothing in these modes. See "Standalone review site" above f
 
 | Line | Meaning | Acceptable |
 |---|---|---|
-| `scope: 934 sources ...` | sources in the file, rows in scope | 934 sources |
+| `scope: 936 sources ...` | sources in the file, rows in scope | 936 sources |
 | `add` | empty rows in scope that would be filled | any number |
 | `same` | already identical | any number |
 | `differs` | existing other translation, **kept** | list them in the report; no action needed |

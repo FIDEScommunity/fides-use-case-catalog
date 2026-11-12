@@ -202,7 +202,7 @@ async function checkNavigation(page, L, width, where) {
       check(`${L("enquiry")}: "What happens next" says it describes the live process`, /What happens next/.test(next) && /preview\. Once it is live/.test(next) && /We will read your enquiry/.test(next), next.slice(0, 200));
       check(`${L("enquiry")}: JavaScript texts are also in the page as translatable strings`, (await page.locator("[data-fides-learn-strings] li").count()) >= 14 && (await page.locator('[data-fides-learn-strings] li[data-key="back"]').textContent()) === "Back to %s");
       check(`${L("enquiry")}: no price or fee in the next steps`, !/€|\bprice\b|\bfee\b/i.test(await page.locator("main").innerText()));
-      check(`${L("enquiry")}: local notice present, no overflow`, /Nothing you enter here is sent or stored/.test(await page.locator(".fides-learn-pilot-note").first().innerText()) && !(await overflow(page)));
+      check(`${L("enquiry")}: no "Local pilot view" visitor notice, no overflow`, !/Local pilot view|Lokale pilotweergave|Nothing you enter here is sent or stored|Wat u hier invult, wordt niet verstuurd/.test(await page.locator("main").innerText()) && !(await overflow(page)));
       await page.locator("[data-fides-learn-remove-context]").click();
       check(`${L("enquiry")}: removing context resets label, back link and URL`, (await page.locator("[data-fides-learn-context-label]").innerText()) === "Services · no specific offering" && (await page.locator("[data-fides-learn-back-label]").innerText()) === "Back to Services" && !new URL(page.url()).searchParams.has("offering"));
       await page.selectOption("#fides-learn-offering", "wallet-readiness-assessment");

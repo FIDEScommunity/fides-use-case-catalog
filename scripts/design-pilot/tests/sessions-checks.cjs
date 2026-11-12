@@ -125,7 +125,7 @@ async function layout(page, label) {
     // Enquiry behaviour.
       await go(page, `${LEARN}/sessions/request/?offering=wallet-readiness-workshop`);
       check(`${L("enquiry")}: noindex and no Learn bar`, /noindex/.test(await page.locator('meta[name="robots"]').getAttribute("content")) && (await page.locator(".fides-learn-bar").count()) === 0);
-      check(`${L("enquiry")}: pilot notice says nothing is sent`, /Nothing you enter here is sent or stored/.test(await page.locator(".fides-learn-pilot-note").innerText()));
+      check(`${L("enquiry")}: no "Local pilot view" visitor notice`, !/Local pilot view|Lokale pilotweergave|Nothing you enter here is sent or stored|Wat u hier invult, wordt niet verstuurd/.test(await page.locator("main").innerText()));
       const q1 = await page.locator("[data-fides-learn-question-label]").innerText();
       await page.selectOption("#fides-learn-offering", "wallet-introduction");
       const q2 = await page.locator("[data-fides-learn-question-label]").innerText();

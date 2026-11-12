@@ -191,7 +191,7 @@ What the transfer tool reads and writes (also in the header of `learn/nl-transla
 - **Writes:** only `import-apply`, only `translated` + `status = 2` on an **empty** row whose English source is in the file **and** that is used by one of the routes the file lists for that source (the *import scope*). Rows outside the scope are never touched, neither "same" nor "empty" (for example an empty row that only belongs to the English test page or the glossary). Existing translations stay; there is no overwrite option.
 - **Selection in `status`:** the `scope:` line gives the number of sources in the file and the dictionary rows in scope; the `outside scope:` line gives the number of dictionary rows that are never read for import or changed, and how many rows with an exported source were left alone because they are on another route.
 - **Gettext allowlist** (in the tool): `blocksy` "Skip to content" (theme), `wpforms-lite` "Please enable JavaScript in your browser to complete this form.", "Form has not been submitted, please see the errors below." and "This field is required." (WPForms Lite plugin). Generic interface text, no personal data. A new gettext string needs an entry in the allowlist in the tool.
-- **Privacy check (12 November 2026):** the 934 exported entries contain no email address, phone-like number, token, internal host name, test message or personal name (the exporter excludes such strings and reports them; 0 excluded). Only the placeholder addresses `name@organisation.com` / `naam@organisatie.nl` style examples are allowed.
+- **Privacy check (12 November 2026):** the 936 exported entries contain no email address, phone-like number, token, internal host name, test message or personal name (the exporter excludes such strings and reports them; 0 excluded). Only the placeholder addresses `name@organisation.com` / `naam@organisatie.nl` style examples are allowed.
 
 Fragments: TranslatePress splits a sentence around inline links, glossary buttons and bold text, so pieces such as `A`, `An`, `The`, `and`, `or`, `, a` and `page.` become separate strings with a **global** translation. The lone `A`, `An` and `The` are handled by context, not by a global translation: a global `The` -> `De` is wrong before every neuter noun and would also hit any other page that has a lone "The".
 
@@ -387,3 +387,9 @@ requests. A source is in scope when it is in `nl-translations.json` and one of i
 after the English page was rendered once under `/nl/`: open the routes with a plain GET first (see `staging/UPDATE-PLAN-NL-LEARN.md`,
 "Standalone review site", which also lists the files for a translations-only update: `learn/nl-translations-transfer.php` and
 `learn/nl-translations.json`). `stale` and `new` need rendered pages and are skipped without HTTP; locally add the argument `http`.
+
+### Request form notice and workshop language row (12 November 2026)
+
+The visitor notice "Local pilot view" no longer appears in the request form template (tiles: `Fides_DS_Learn::render_request()`); tests check its absence
+(`tests/request-notice-behaviour.php`, `tests/workshop-language-checks.cjs`). The Wallet Readiness Workshop details have a "Workshop language" row
+(`learn/manifest.json`, `nl-translations.php`: "Voertaal"; transfer file 936 entries).

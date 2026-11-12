@@ -9,9 +9,9 @@
         "services": 61,
         "shared": 109,
         "start-receive": 35,
-        "training": 151
+        "training": 153
     },
-    "total": 934,
+    "total": 936,
     "entries": [
         {
             "original": ", a",
@@ -12636,6 +12636,19 @@
             "group": "training"
         },
         {
+            "original": "Dutch. English available on request.",
+            "translation": "Nederlands. Op verzoek ook in het Engels.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "training"
+            ],
+            "routes": [
+                "learn/sessions/wallet-readiness-workshop"
+            ],
+            "group": "training"
+        },
+        {
             "original": "EUDI Wallet and business wallet developments.",
             "translation": "Ontwikkelingen rond de EUDI Wallet en business wallets.",
             "html": false,
@@ -13963,6 +13976,19 @@
         {
             "original": "Workshop details",
             "translation": "Praktische informatie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "training"
+            ],
+            "routes": [
+                "learn/sessions/wallet-readiness-workshop"
+            ],
+            "group": "training"
+        },
+        {
+            "original": "Workshop language",
+            "translation": "Voertaal",
             "html": false,
             "fragment": false,
             "groups": [
