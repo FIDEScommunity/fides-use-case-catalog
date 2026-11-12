@@ -206,6 +206,68 @@ $nl = array(
     'Back to Wallet readiness assessment'     => 'Terug naar Wallet readiness assessment',
     'Back to Wallet Introduction'             => 'Terug naar Wallet Introduction',
     'For example: we are preparing a service that could use digital wallets.' => 'Bijvoorbeeld: wij bereiden een dienst voor die digitale wallets kan gebruiken.',
+    // Site shell: skip link, header menu, search and footer (labels and screen-reader texts). Proper names and product terms stay English.
+    'Skip to content' => 'Naar de inhoud',
+    'New to wallets?' => 'Nieuw met wallets?',
+    'Start with what your organization wants to achieve.' => 'Begin bij wat uw organisatie wil bereiken.',
+    'Find your starting point' => 'Vind uw startpunt',
+    'Discover' => 'Ontdekken',
+    'Use cases' => 'Usecases',
+    'Organizations' => 'Organisaties',
+    'Global map' => 'Wereldkaart',
+    'Themes, sectors & countries' => 'Thema’s, sectoren en landen',
+    'Learn & connect' => 'Leren en verbinden',
+    'Topics & guides' => 'Onderwerpen en gidsen',
+    'Browse catalogs' => 'Catalogi bekijken',
+    'Personal wallets' => 'Persoonlijke wallets',
+    'Credential types' => 'Credentialtypen',
+    'Issuers' => 'Uitgevers',
+    'Ecosystem' => 'Ecosysteem',
+    'Meet & participate' => 'Ontmoeten en meedoen',
+    'Events & materials' => 'Evenementen en materialen',
+    'Community tracks' => 'Community-tracks',
+    'Contribute' => 'Bijdragen',
+    'Submit a use case' => 'Een usecase indienen',
+    'List your organization' => 'Uw organisatie vermelden',
+    'Update a listing' => 'Een vermelding bijwerken',
+    'Plans' => 'Abonnementen',
+    'Tools & API' => 'Tools en API',
+    'Ask & learn' => 'Vragen en leren',
+    'Use FIDES with AI' => 'FIDES gebruiken met AI',
+    'Data & integration' => 'Data en integratie',
+    'Build & test' => 'Bouwen en testen',
+    'Interop profiles' => 'Interoperabiliteitsprofielen',
+    'About FIDES' => 'Over FIDES',
+    'Search FIDES' => 'Zoeken in FIDES',
+    'Close' => 'Sluiten',
+    'FIDES menu' => 'FIDES-menu',
+    'Wallets & credential types' => 'Wallets en credentialtypen',
+    'Other destinations' => 'Andere bestemmingen',
+    'Learn menu:' => 'Learn-menu:',
+    'Terms' => 'Voorwaarden',
+    'News' => 'Nieuws',
+    'Sign in' => 'Inloggen',
+    'Local design pilot · not published' => 'Lokale designpilot · niet gepubliceerd',
+    'Main' => 'Hoofdnavigatie',
+    'Breadcrumb' => 'Kruimelpad',
+    'Footer' => 'Voettekst',
+    // Visually hidden suffixes of the card links (screen readers)
+    '(View training)' => '(Bekijk de training)',
+    '(View introduction session)' => '(Bekijk de introductiesessie)',
+    '(View workshop)' => '(Bekijk de workshop)',
+    '(Register interest)' => '(Interesse doorgeven)',
+    // Start page (/start/)
+    'Start with what you want to achieve.' => 'Begin bij wat u wilt bereiken.',
+    'Understand how wallets, digital credentials and organizations work together. Then find your next step.' => 'Begrijp hoe wallets, digitale credentials en organisaties samenwerken. Zoek daarna uw volgende stap.',
+    'What brings you here?' => 'Waarom bent u hier?',
+    'Let people present proof to your service.' => 'Laat mensen bewijs tonen aan uw dienst.',
+    'Give people digital proof they can reuse.' => 'Geef mensen digitaal bewijs dat zij kunnen hergebruiken.',
+    'Issue digital credentials' => 'Digitale credentials uitgeven',
+    'Understand what this means for us' => 'Begrijp wat dit voor ons betekent',
+    // TranslatePress stores the typographic apostrophe as an entity in this original.
+    'Start with your organization&#8217;s process and questions.' => 'Begin bij het proces en de vragen van uw organisatie.',
+    'Already know your way?' => 'Weet u de weg al?',
+    'Go straight to the catalogs.' => 'Ga direct naar de catalogi.',
     // WPForms request form (page /learn/sessions/request-wpforms/). TranslatePress reaches the form HTML; the mail texts,
     // the confirmation and the script validation messages are Dutch in Fides_DS_Request_Form because TranslatePress does not.
     'Learn / Request'                         => 'Leren / Aanvraag',
@@ -225,6 +287,16 @@ $nl = array(
     'Send request'                            => 'Aanvraag versturen',
     'We read your request and reply by email.' => 'Wij lezen uw aanvraag en reageren per e-mail.',
 );
+
+/**
+ * Theme and plugin gettext strings (table wp_trp_gettext_nl_nl, keyed by domain + original). Only strings the route pages
+ * show: the skip link (Blocksy) and the WPForms notice that is shown without JavaScript.
+ */
+$gettext = array(
+    array('blocksy', 'Skip to content', 'Naar de inhoud'),
+    array('wpforms-lite', 'Please enable JavaScript in your browser to complete this form.', 'Schakel JavaScript in uw browser in om dit formulier te voltooien.'),
+);
+$gtable = $GLOBALS['wpdb']->prefix . 'trp_gettext_nl_nl';
 
 /** The forms TranslatePress may have stored an original in. */
 $forms = array(
@@ -263,6 +335,17 @@ foreach ($nl as $en => $dutch) {
         $absent[] = $en;
     }
 }
+$g_filled = 0;
+foreach ($gettext as $g) {
+    $row = $wpdb->get_row($wpdb->prepare("SELECT id, translated FROM $gtable WHERE domain = %s AND BINARY original = %s LIMIT 1", $g[0], $g[1])); // phpcs:ignore
+    if ($row && trim((string) $row->translated) === '') {
+        if ($mode === 'apply') {
+            $wpdb->update($gtable, array('translated' => $g[2], 'status' => 2), array('id' => (int) $row->id));
+        }
+        $g_filled++;
+    }
+}
+echo "gettext strings " . ($mode === 'apply' ? 'filled' : 'untranslated') . ": $g_filled\n";
 echo ($mode === 'apply' ? 'filled' : 'untranslated') . ": $filled, already translated (kept): $kept, no dictionary row yet: " . count($absent) . "\n";
 foreach ($absent as $en) {
     echo '  - ' . substr($en, 0, 90) . "\n";

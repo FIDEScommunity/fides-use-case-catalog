@@ -1,6 +1,6 @@
 # TranslatePress inventory: first Dutch route (Learn)
 
-Status: inventory only. Nothing is translated. English is the source; translations are managed in TranslatePress and need a human content review (no unreviewed machine translation as final). Generated from `learn/manifest.json` and `learn/content/*.html` on 11 November 2026 (26 content files, 26 manifest pages); regenerate the per-page lists when content changes.
+Status (12 November 2026): **the inventory below is historic**, written before anything was translated. The Dutch route is now translated locally (Learn, Training & workshops, Services, start/receive); see `learn/README.md`, section "Dutch translations (TranslatePress): transfer, status and editing", and the transfer file `learn/nl-translations.json`. English is the source; translations are managed in TranslatePress and need a human content review (no unreviewed machine translation as final). Generated from `learn/manifest.json` and `learn/content/*.html` on 11 November 2026 (26 content files, 26 manifest pages); regenerate the per-page lists when content changes.
 
 ## Scope and order
 

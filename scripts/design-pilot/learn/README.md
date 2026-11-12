@@ -156,6 +156,34 @@ LEARN_BASE=fides-design-pilot/learn bash create-learn-pages.sh   # route base (a
 - Verified by `tests/learn-seed-protection.sh` (throwaway page: created, unchanged, updated, `skipped-edited` for edited content, also in dry-run, and for an edited Sources field; deleted afterwards) and by `tests/run-learn-seed-checks.sh` (edit, re-seed, unmarked page, dry run,
   forced replacement, cleanup).
 
+## Dutch translations (TranslatePress): transfer, status and editing
+
+Status (12 November 2026): the Dutch route is translated locally for Learn (overview, topics, eleven articles), Training & workshops (`learn/sessions/*`), Services (`services/*`) and the start/receive route (`start/*`). The older line "Learn is not translated yet" no longer applies; `learn/translatepress-nl-inventory.md` keeps the original (historic) inventory.
+
+Where the strings live: the TranslatePress dictionary of the site (table `<prefix>trp_dictionary_en_us_nl_nl`, key = English `original`) plus a few theme/plugin gettext strings (`<prefix>trp_gettext_nl_nl`, key = domain + original). Local database ids differ per site, so they are never transferred.
+
+| File | Purpose |
+| --- | --- |
+| `learn/nl-translations.json` | **Transfer file** (export of the local state). Key = English source text, value = Dutch text, plus `group` (`learn`, `training`, `services`, `start-receive`, `shared`), the routes that use it (path below the pilot root, no ids) and `fragment: true` for sentence pieces. A `gettext` list holds the theme/plugin strings. No form entries, mail logs, users or options are read; the exporter skips strings that look like email addresses, phone numbers or test text and reports them. |
+| `learn/nl-translations-transfer.php` | `export`, `status`, `import` (dry run) and `import-apply` for WP-CLI (`wp eval-file`). |
+| `learn/nl-translations.php` | Hand-written Dutch for strings that have no translation yet (Services, Training, shell labels, start page). `status` / `apply` fill empty rows only. |
+| `tests/nl-translations-transfer-behaviour.php` | Behaviour test on a scratch copy of the dictionary (the real table is only read). |
+| `tests/nl-route-checks.cjs` | Browser checks of the Dutch routes at 1440 and 390 px (nothing is submitted). |
+
+Commands (local pilot: `source env.sh`; `pilot_wp eval-file ...`; target site: `wp eval-file seed/learn/...`):
+
+```
+pilot_wp eval-file learn/nl-translations-transfer.php export            # rewrite learn/nl-translations.json from the dictionary
+pilot_wp eval-file learn/nl-translations-transfer.php status            # dry run on this site, changes nothing
+pilot_wp eval-file learn/nl-translations-transfer.php import-apply      # fills EMPTY rows only
+```
+
+What `status` shows per run: **add** (row exists without translation: would be filled), **same** (already identical), **differs** (the target has another translation: kept and only reported, there is deliberately no overwrite option), **pending** (no dictionary row yet: open the English page once under `/nl/`), **stale** (the string in the file is neither in the dictionary nor on the current English pages: the English source sentence changed or was removed), **new** (an English string on the route pages has a row without translation and is not in the file: it needs a translation). `import-apply` is repeatable; a second run reports 0 to add.
+
+How an editor works: translate or correct in the TranslatePress editor (`/nl/...?trp-edit-translation=true`), then run `export`, review `git diff learn/nl-translations.json` and commit. Without the editor step the file never changes. When an English source sentence changes: `status` lists the old sentence as **stale** and the new one as **new**; translate the new sentence in the editor, run `export`, and the stale entry disappears from the file (stale rows stay in the TranslatePress database, which is harmless). Never edit the dictionary table by hand.
+
+Fragments: TranslatePress splits sentences around inline links and glossary buttons, so pieces such as `A`, `An`, `The`, `and`, `or`, `, a` and `page.` are separate strings with a **global** translation. They are flagged `fragment: true` in the file. Checked on 12 November 2026 over all 103 published pages of the local pilot (English pages scanned for the exact text nodes): `A`, `An` and `The` occur only in the Learn articles (where they are needed: "A [wallet] ..." would otherwise show an English "A") and on the English-only test page `fides-template-test-eudi-wallet` (not part of the package), where the Dutch view shows "Een"/"De" in front of English text. `and` and `or` also occur on the Dutch overview pages and in the "or Ask FIDES" separators, where "en" and "of" is the right meaning. The glossary letter "A" is built in the browser, so TranslatePress never sees it. Caveat: `The` is "De", which is wrong before a neuter noun ("Het"); review the Dutch sentence when an English sentence starts with a linked or bold piece after "The". If a fragment ever shows up in the wrong place, give the source sentence in the template or Learn content a longer form instead of translating the fragment, and remove the fragment from the file.
+
 ## Backup and rebuild
 
 ```bash
