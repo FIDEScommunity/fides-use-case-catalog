@@ -1,5 +1,7 @@
 # Dutch proposals: Ecosystem roles overview (12 November 2026)
 
+**Entered 12-13 Nov 2026 (local pilot):** the rows of this proposal that match the current English were entered in `learn/nl-translations.php` and exported (see `learn/nl-translation-changes-roles-governments-2026-11-12.md` for the entered Dutch and its source tag, and `learn/nl-translation-open-for-governments-roles.md` for what is still a proposal). The status line below describes the state before entry.
+
 **Status: proposal only.** Nothing here is seeded, imported or written to `learn/nl-translations.json` / `nl-translations.php`.
 Existing translations are not changed. Translate in the TranslatePress editor
 (`/nl/fides-design-pilot/learn/topics/ecosystem-roles/?trp-edit-translation=true`) after review, then export

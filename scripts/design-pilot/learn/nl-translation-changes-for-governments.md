@@ -1,5 +1,7 @@
 # Dutch proposals: Learn > Topics > For governments (12 November 2026)
 
+**Entered 12-13 Nov 2026 (local pilot):** the rows of this proposal that match the current English were entered in `learn/nl-translations.php` and exported (see `learn/nl-translation-changes-roles-governments-2026-11-12.md` for the entered Dutch and its source tag, and `learn/nl-translation-open-for-governments-roles.md` for what is still a proposal). The status line below describes the state before entry.
+
 **Status: proposal only. None of these Dutch strings, including rows 24 and 25, is in `learn/nl-translations.json`, `nl-translations.php` or the local TranslatePress table (read-only check on 12 November 2026).** Nothing here is seeded, imported or written to `learn/nl-translations.json` / `nl-translations.php`. Translate in the
 TranslatePress editor (`/nl/fides-design-pilot/learn/topics/for-governments/?trp-edit-translation=true`) after review, then export
 (`wp eval-file learn/nl-translations-transfer.php export`). Terms follow `learn/nl-terminology.md`: "vertrouwende partij" (relying party),

@@ -115,8 +115,7 @@ domain + exact original only. An empty or missing-translation row is filled with
   The trust page links to the organisation catalog with `?role=eidas_trust_service_provider` and `?cert=qtsp` (separate links; both work together as well).
   On staging, check that the organisation data there contains organisations with that role and with QTSP certification, and that the chips show.
   Dutch proposals for the articles: `learn/nl-translation-changes-ecosystem-roles-articles.md` (not seeded).
-- **Dutch:** proposals only, in `learn/nl-translation-changes-ecosystem-roles.md` (22 new strings, reused rows listed). Nothing is in
-  `nl-translations.json` or `nl-translations.php`, so the package carries no new Dutch for this page until the owner approves.
+- **Dutch (entered 12-13 Nov 2026, local pilot):** see the section "Dutch for Ecosystem roles and For governments" below. (Earlier status: proposals only.)
 - Links: the overview links only to destinations that exist in the pilot (use cases, credential types, personal and business wallets,
   organisations, existing Learn articles). `/issuer-catalog/` and `/relying-party-websites/` are not linked.
 
@@ -136,7 +135,15 @@ domain + exact original only. An empty or missing-translation row is filled with
 - **Article 5f and QTSP route:** article 3 explains Article 5f of Regulation (EU) 2024/1183 with an EUR-Lex link; article 2 separates the verify and retrieve services; version and status of the GBO draft now sit on article 4 only. See `learn/for-governments-editorial-gaps.md`.
 - **GBO example:** based on the Globaal Ontwerp, version 0.9.5 (September 2026), "a draft design submitted for adoption". Public status check on
   12 November 2026 and sources: `learn/for-governments-editorial-gaps.md`. Recheck before staging.
-- **Dutch:** proposals only, in `learn/nl-translation-changes-for-governments.md`; nothing is in `nl-translations.json`.
+- **Dutch (entered 12-13 Nov 2026, local pilot):** see the next section. (Earlier status: proposals only.)
+
+## Dutch for Ecosystem roles and For governments (12-13 November 2026, local only)
+
+- **What is entered:** 195 new dictionary rows (100 from the edited document, 81 exact matches from the proposal files, 7 agent completions and 7 interface labels; list with tags: `learn/nl-translation-changes-roles-governments-2026-11-12.md`) for the 11 pages `topics/ecosystem-roles` (+5 articles) and `topics/for-governments` (+4 articles). No existing translation was changed.
+- **What is not entered:** about 24 English strings that the document does not cover or whose English changed (Dutch example texts, the Article 5f questions, catalog card lines, the For governments overview intro). Proposals: `learn/nl-translation-open-for-governments-roles.md`. These pages therefore still show those English sentences on staging after import.
+- **Transfer file:** `learn/nl-translations.json` now has 1119 entries (761 learn, 61 services, 109 shared, 35 start-receive, 153 training) + 4 gettext (was 936). `status` locally: add 0, same 1120, differs 0, new 0, stale 0. 12 old source-line rows ("Organisation · Title", no longer rendered as one string) dropped out of the export: they were stale already before this change. sha256 of the file: `69de9442...b354b26`. Replace the file in the package at step "Files for a translations-only update".
+- **Seed change:** `learn/content/the-relying-party.html` (one sentence: the article "A" is now part of the verifier term, so it is no longer a lone fragment). On a site where nobody edited the page: one `would-updated`; an edited page is `skipped-edited` and keeps its text, and then the lone English fragment "A" before the term stays untranslated (harmless, the row "A verifier" simply does not match).
+- **Import on staging:** as in the steps above (GET each route once under /nl/, dry run, apply twice). The 11 new routes are in the file, so `scope` grows to 1119 sources; `add` should equal the rows that exist on staging and are still empty; a row already translated differently on staging is kept and reported as `differs`. Nothing was run on staging.
 - Links go only to destinations that exist in the pilot (use cases, credential types, wallets, organisations, existing Learn articles).
 
 ## Changes since package `20261112-083503-34b753ab` (third package, same day)
