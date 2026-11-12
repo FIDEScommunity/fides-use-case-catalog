@@ -1,13 +1,13 @@
 # Dutch proposals: Learn > Topics > For governments (12 November 2026)
 
-**Status: proposal only.** Nothing here is seeded, imported or written to `learn/nl-translations.json` / `nl-translations.php`. Translate in the
+**Status: proposal only. None of these Dutch strings, including rows 24 and 25, is in `learn/nl-translations.json`, `nl-translations.php` or the local TranslatePress table (read-only check on 12 November 2026).** Nothing here is seeded, imported or written to `learn/nl-translations.json` / `nl-translations.php`. Translate in the
 TranslatePress editor (`/nl/fides-design-pilot/learn/topics/for-governments/?trp-edit-translation=true`) after review, then export
 (`wp eval-file learn/nl-translations-transfer.php export`). Terms follow `learn/nl-terminology.md`: "vertrouwende partij" (relying party),
 "uitgever (issuer)" at the first prose mention per page, "houder", "walletaanbieder", "credential" and "wallet" unchanged, "trust framework"
 kept (with "afsprakenstelsel" where clearer). Dutch terms for GBO: "Gemeenschappelijke Bronontsluiting (GBO)", "Globaal Ontwerp", "bronhouder"
 (public body that holds a source; "source holder" in English), "afsprakenstelsel", "ter vaststelling". The English source stays leading. Sentences
 with inline links are split into fragments by TranslatePress; confirm splits in the editor and decide the article per phrase (see `learn/README.md`, "Fragments").
-The sentence that carries the GBO status now appears on article 4 only; translate it once. Rows 22 to 24 are new in the second pass.
+The sentence that carries the GBO status now appears on article 4 only; translate it once. Rows 22 to 25 are new in the second pass.
 
 ## Key strings (headings, leads, status)
 
@@ -36,7 +36,8 @@ The sentence that carries the GBO status now appears on article 4 only; translat
 | 21 | Wallets are one route among several | Wallets zijn één route naast andere | article 1 |
 | 22 | Verify: the provider checks attribute values it has been given against the source before issuing. | Verify: de aanbieder controleert aangeleverde attributen bij de bron voordat hij uitgeeft. | article 2 |
 | 23 | Retrieve: the provider fetches the attributes from the source, on behalf of the public body, and qualifies them. The draft calls this service optional. | Retrieve: de aanbieder haalt de attributen namens de overheidsorganisatie op bij de bron en kwalificeert ze. Het ontwerp noemt deze dienst optioneel. | article 2 |
-| 24 | Article 5f of Regulation (EU) 2024/1183 … paragraph 1 provides that where Member States require electronic identification and authentication to access an online service provided by a public sector body, they shall also accept European Digital Identity Wallets that are provided in accordance with the Regulation. | Artikel 5f van Verordening (EU) 2024/1183 … lid 1 bepaalt dat lidstaten die elektronische identificatie en authenticatie verlangen voor toegang tot een onlinedienst van een overheidsinstantie, ook Europese Digitale Identiteitswallets moeten accepteren die overeenkomstig de verordening zijn verstrekt. | article 3 (check against the Dutch text of the Regulation on EUR-Lex before use) |
+| 24 | For public services, paragraph 1 provides that where Member States require electronic identification and authentication to access an online service provided by a public sector body, they shall also accept European Digital Identity Wallets that are provided in accordance with the Regulation. | Als een lidstaat elektronische identificatie en authenticatie vereist voor toegang tot een onlinedienst van een overheidsinstantie, moet die lidstaat ook EUDI Wallets accepteren die aan de verordening voldoen. | article 3 (wording supplied by the user, verbatim; the English matches in substance: Member State, public sector body, online service, EUDI Wallets that comply with the Regulation, "also") |
+| 25 | The Regulation also contains rules for certain private parties and for very large online platforms. Their conditions are set out in Article 5f of Regulation (EU) 2024/1183; read them there, as some depend on implementing acts and on the type of service. | De verordening bevat ook regels voor bepaalde private partijen en voor zeer grote online platforms. De voorwaarden staan in artikel 5f van Verordening (EU) 2024/1183; lees ze daar, want sommige hangen af van uitvoeringshandelingen en van het soort dienst. | article 3 (shortened paragraphs 2 and 3) |
 
 ## GBO sentences that need a careful translation
 
