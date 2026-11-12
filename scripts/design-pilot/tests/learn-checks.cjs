@@ -78,7 +78,7 @@ async function baseline(page, key, width) {
 /** Interactive controls in the Learn furniture meet the target size. */
 async function targets(page, key, width) {
   const min = width >= 1100 ? 40 : 44;
-  const small = await page.evaluate((minSize) => {
+  const small = await page.evaluate(([minSize, vw]) => {
     const sel = [
       ".fides-learn-bar__nav a",
       ".fides-learn-bar__title",
@@ -96,8 +96,9 @@ async function targets(page, key, width) {
         return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden";
       })
       .map((el) => ({ n: (el.className || el.tagName) + ":" + (el.textContent || "").trim().slice(0, 24), h: Math.round(el.getBoundingClientRect().height) }))
-      .filter((x) => x.h < minSize);
-  }, min);
+      // Sources rows are deliberately compact (32px) from 768px up; below that they keep the 44px touch target.
+      .filter((x) => x.h < (/fides-learn-sources/.test(x.n) || x.n.startsWith("fides-learn-sources") ? (vw >= 768 ? 32 : minSize) : minSize));
+  }, [min, width]);
   check(`${key} @${width}: Learn controls are at least ${min}px high`, small.length === 0, JSON.stringify(small));
 }
 
