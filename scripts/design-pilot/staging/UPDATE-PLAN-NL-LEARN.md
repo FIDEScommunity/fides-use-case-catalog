@@ -367,3 +367,17 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
   Never use `LEARN_FORCE`. Local result on 12 November 2026: created 4, updated 4, nothing skipped.
 - **Behaviour test:** `tests/for-you-seed.sh` (throwaway tree). Deviations and gaps: `learn/for-you-editorial-gaps.md`.
 - **Dutch:** proposals only, in `learn/nl-translation-changes-for-you.md`; nothing is in `nl-translations.json`.
+
+## Practice questions for organisations (12 November 2026, local only)
+
+- **Seed:** three new Learn pages below `topics/for-businesses` (kind `article`, eyebrow "Explainer · For businesses", no series):
+  `how-can-someone-act-for-an-organisation`, `how-can-an-organisation-prepare-a-wallet-use-case`,
+  `what-should-a-service-check-when-receiving-a-credential`. Sources use the existing `Label | URL` field. The manifest has 44 pages and 44 content files.
+- **Existing pages that changed (the seed skips them on staging when an editor changed them; then add by hand):**
+  `topics/for-businesses` (three new rows; the unlinked row "Company identity and representation" is now the linked row "How can someone act for an organisation?"),
+  `business-wallets-where-to-start` (Learn more: "How can someone act for an organisation?"),
+  `accepting-information-from-a-wallet` (Learn more: "What should a service check when receiving a credential?") and
+  `issuing-credentials-for-wallets` (Learn more: "How can an organisation prepare a wallet use case?").
+  Never use `LEARN_FORCE`. Local result on 12 November 2026: created 3, updated 4, nothing skipped.
+- **Behaviour test:** `tests/practice-questions-seed.sh` (throwaway tree). Sources, deviations, overlap and gaps: `learn/practice-questions-editorial-gaps.md`.
+- **Dutch:** proposals only, in `learn/nl-translation-changes-practice-questions.md`; nothing is in `nl-translations.json`. The English row title "Company identity and representation" is gone (its Dutch row is unused; the description row stays valid).

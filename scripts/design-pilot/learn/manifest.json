@@ -315,6 +315,40 @@
    "menu_order": 3
   },
   {
+   "path": "topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+   "title": "How can an organisation prepare a wallet use case?",
+   "kind": "article",
+   "eyebrow": "Explainer · For businesses",
+   "excerpt": "A wallet may be useful when people or organisations need to provide information to a service. Start by describing the process and the information needed. That makes it easier to decide whether a wallet fits and which parties need to be involved.",
+   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nRegulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nFIDES · Verifiable Credentials | https://fides.community/topics/verifiable-credentials/",
+   "cta_title": "Look at your own process",
+   "cta_text": "Work through one interaction with your team in the Wallet Readiness Workshop.",
+   "cta_label": "View the workshop",
+   "cta_url": "{{learn}}/sessions/wallet-readiness-workshop/",
+   "content": "how-can-an-organisation-prepare-a-wallet-use-case.html",
+   "menu_order": 4
+  },
+  {
+   "path": "topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
+   "title": "What should a service check when receiving a credential?",
+   "kind": "article",
+   "eyebrow": "Explainer · For businesses",
+   "excerpt": "When a service receives information from a wallet, a technical check can help establish whether it can rely on the credential. The service also needs to decide whether the information is suitable for its particular purpose.",
+   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nRegulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nEuropean Commission · Selective disclosure of attributes in the EUDI Wallet | https://ec.europa.eu/digital-building-blocks/sites/spaces/EUDIGITALIDENTITYWALLET/pages/949256476/What%2Bis%2Bselective%2Bdisclosure%2Bof%2Battributes",
+   "content": "what-should-a-service-check-when-receiving-a-credential.html",
+   "menu_order": 5
+  },
+  {
+   "path": "topics/for-businesses/how-can-someone-act-for-an-organisation",
+   "title": "How can someone act for an organisation?",
+   "kind": "article",
+   "eyebrow": "Explainer · For businesses",
+   "excerpt": "A person may need to act for an organisation when signing an agreement, accessing a service or sharing information. The organisation and the person may each need to be identified. The receiving service may also need to establish whether the person has authority to act for that organisation.",
+   "sources": "Regulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nW3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nDirective (EU) 2025/25 (EUR-Lex) | https://eur-lex.europa.eu/eli/dir/2025/25/oj\nEuropean Commission · Proposal for a Regulation on European Business Wallets (COM(2025) 838) | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0838\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets\nEU Digital Identity Wallet · Architecture and Reference Framework | https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework",
+   "content": "how-can-someone-act-for-an-organisation.html",
+   "menu_order": 6
+  },
+  {
    "path": "topics/for-businesses/european-business-wallet",
    "title": "European Business Wallet",
    "kind": "article",
