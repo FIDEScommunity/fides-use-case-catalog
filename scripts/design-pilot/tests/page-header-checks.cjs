@@ -317,8 +317,7 @@ function verifyCrumbs(tag, key, loc, m) {
     });
     check(`back ${loc}: Back is a separate action from the breadcrumb`, back.sameBox, JSON.stringify(back));
     check(`back ${loc}: Back link carries the search state`, !!back.href && /mattr/i.test(decodeURIComponent(back.href)), back.href);
-    check(`back ${loc}: Back label says "Back to results"${loc === "NL" ? " (NL label is a known open point if English)" : ""}`, loc === "NL" ? true : /Back to results/.test(back.label), back.label);
-    if (loc === "NL") console.log(`info - back NL label: "${back.label}"`);
+    check(`back ${loc}: Back label says "${loc === "NL" ? "Terug naar resultaten" : "Back to results"}"`, loc === "NL" ? /Terug naar resultaten/.test(back.label) : /Back to results/.test(back.label), back.label);
     await page.click(".fides-ds-detail-top__back a");
     await page.waitForSelector(".fides-uc-pilot__list .fides-ds-card--row", { timeout: 30000 });
     await page.waitForTimeout(500);

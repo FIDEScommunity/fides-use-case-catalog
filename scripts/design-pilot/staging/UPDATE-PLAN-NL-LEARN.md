@@ -146,7 +146,7 @@ partij?") is kept and shown as `differs` in `status`; the new Dutch from the fil
 
 ## What changes compared with the previous staging state
 
-- `plugins/fides-community-tools-tiles` 1.13.50 (zip) and the other catalog plugin zips, only if their version differs from
+- `plugins/fides-community-tools-tiles` 1.13.51 (zip) and the other catalog plugin zips, only if their version differs from
   what runs on staging (compare in step 3).
 - `seed/learn/content/*.html` (26 files), `seed/learn/manifest.json`: eight Learn articles got the article inside the term, link
   or bold text (17 sentence openers; wording unchanged).
@@ -185,7 +185,7 @@ Check that the dump files are non-empty (`ls -l "$B"`). Keep the folder until th
 
 1. Unpack the package next to the site (not into the web root), e.g. `<pkg>`.
 2. Compare versions: `unzip -p <pkg>/plugins/fides-community-tools-tiles-*.zip fides-community-tools-tiles/fides-community-tools-tiles.php | rg "Version:"`
-   must say 1.13.50; do the same for the other zips and the glossary zip (`1.1.16`). Install a zip only where the staging version
+   must say 1.13.51; do the same for the other zips and the glossary zip (`1.1.16`). Install a zip only where the staging version
    differs (`wp plugin install <zip> --force --activate`, tiles first). Copy `<pkg>/mu-plugins/fides-design-review-config.php` to
    `wp-content/mu-plugins/` only if its sha256 differs.
 3. `wp --path=<wp> cache flush` (object cache); purge the page cache or CDN for `/design-review/` if one exists.

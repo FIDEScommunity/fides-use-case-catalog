@@ -106,6 +106,8 @@ if (class_exists('Fides_DS_Detail_Top')) {
     $check(strpos($top, 'fides-ds-detail-top--header') !== false, 'detail top uses the page-header variant');
     $check(strpos($top, 'aria-current="page"') !== false, 'detail breadcrumb ends with the current record');
     $check(strpos($top, 'data-fides-ds-back="wallet"') !== false && strpos($top, 'fides-ds-detail-top__back') !== false, 'Back to results is a separate action with its return hook');
+    $check(strpos($top, '<span hidden data-fides-ds-back-return>Back to results</span>') !== false, 'the return wording is a hidden, translatable text next to the back link');
+    $check(strpos(Fides_DS_Detail_Top::render(array('back_url' => 'https://example.test/', 'back_label' => 'Back')), 'data-fides-ds-back-return') === false, 'a plain back link has no return text');
     $check(strpos($top, '<nav class="fides-ph__crumbs fides-ds-detail-top__crumbs"') !== false, 'breadcrumb keeps the legacy detail-top hook class');
     $legacy = Fides_DS_Detail_Top::render(array('back_url' => 'https://example.test/', 'back_label' => 'Back', 'crumbs' => array(array('Explorer', 'https://example.test/'), array('Organizations', 'https://example.test/o/'))));
     $check(strpos($legacy, 'fides-ph__crumbs') === false && strpos($legacy, 'fides-ds-detail-top--header') === false, 'other detail pages keep the legacy breadcrumb until they migrate');

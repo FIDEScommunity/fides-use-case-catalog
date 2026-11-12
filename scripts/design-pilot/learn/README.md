@@ -131,7 +131,7 @@ re-seed. Block classes the seed uses: `fides-learn-rows` (`--plain`, `--from-zer
 
 ## Package status and counts
 
-Glossary: pinned in `staging/glossary-source.json` (1.12.2, published as `a52a684`; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.48. Sources list (Paper 24.18, styleguide 25.14): one open link line per source (`Organisation · Title`, from the existing `Label | URL` field), no visible URL, long titles wrap; only hosts other than the site's own get the external indicator and open in a new tab (filter `fides_ds_learn_own_hosts` adds own hosts). Markup in `Fides_DS_Learn::source_link()`, styles in `assets/learn.css`; checked by `tests/learn-sources-checks.cjs` and `tests/learn-sources-behaviour.php`. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (26 and 26 on 11 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
+Glossary: pinned in `staging/glossary-source.json` (1.12.2, published as `a52a684`; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.51. Sources list (Paper 24.18, styleguide 25.14): one open link line per source (`Organisation · Title`, from the existing `Label | URL` field), no visible URL, long titles wrap; only hosts other than the site's own get the external indicator and open in a new tab (filter `fides_ds_learn_own_hosts` adds own hosts). Markup in `Fides_DS_Learn::source_link()`, styles in `assets/learn.css`; checked by `tests/learn-sources-checks.cjs` and `tests/learn-sources-behaviour.php`. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (26 and 26 on 11 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
 
 ## Seeding and overwrite protection
 
@@ -224,9 +224,9 @@ come from the source site).
 
 1. WordPress 7.1.x, PHP 8.2, theme `blocksy` 2.1.59 + child theme `blocksy-child` 1.0.0.
 2. `blocksy-companion-pro` 2.0.99, `complianz-gdpr` 7.4.6 (consent banner), as on the source site.
-3. `fides-community-tools-tiles` 1.13.45 or later (pilot: 1.13.48) (shell, design system, **Learn template**, percent-encoding fix `0c89d3f`, `[fides_learn_usecase]`) first. Older versions strip `%3A` from source URLs and do not know the use case shortcode.
+3. `fides-community-tools-tiles` 1.13.45 or later (pilot: 1.13.51) (shell, design system, **Learn template**, percent-encoding fix `0c89d3f`, `[fides_learn_usecase]`) first. Older versions strip `%3A` from source URLs and do not know the use case shortcode.
 4. `fides-vocabulary-glossary` 1.1.16 (glossary page, `legacyIds` handling and `data/glossary-aggregated.json`; the data file must match `staging/glossary-source.json`).
-5. Catalog plugins for the linked pilot pages: `fides-use-case-catalog` 0.21.11, `fides-organization-catalog` 1.18.6, `fides-credential-catalog` 1.7.0, `fides-wallet-catalog` 2.16.4.
+5. Catalog plugins for the linked pilot pages: `fides-use-case-catalog` 0.21.11, `fides-organization-catalog` 1.18.6, `fides-credential-catalog` 1.7.0, `fides-wallet-catalog` 2.16.5.
 6. Optional: `fides-assistant` 0.6.1 (adds Ask FIDES to the Learn bar; the bar item is absent without it).
 7. Pilot guard mu-plugin (`fides-design-pilot-guard.php`), pages `fides-design-pilot` and the glossary page, then `create-learn-pages.sh`.
 

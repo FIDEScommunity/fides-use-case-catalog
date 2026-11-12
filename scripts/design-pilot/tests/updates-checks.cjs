@@ -8,6 +8,10 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const PAGE_URL = `${BASE}/fides-design-pilot/updates/`;
 const WIDTHS = (process.env.WIDTHS || "1440,1100,768,390,320").split(",").map(Number);
+// Fixed test message, see tests/updates-fixture.php.
+const FIXTURE_TITLE = "Fixture message about the pilot wallet milestone";
+const FIXTURE_URL = "https://press.fixture-source.test/articles/pilot-wallet-milestone";
+const FIXTURE_SOURCE = "Fixture Press";
 let failures = 0;
 const check = (n, ok, d) => { if (!ok) failures += 1; console.log(`${ok ? "ok" : "not ok"} - ${n}${d && !ok ? ` (${d})` : ""}`); };
 const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -15,7 +19,7 @@ const rows = (p) => p.locator(".fides-updates__item");
 const texts = (loc, sel) => loc.evaluateAll((els, s) => els.map((e) => (e.querySelector(s) || {}).textContent || ""), sel);
 
 (async () => {
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
   for (const w of WIDTHS) {
     const tag = `${w}px`;
     const ctx = await browser.newContext({ viewport: { width: w, height: 900 } });
@@ -49,15 +53,22 @@ const texts = (loc, sel) => loc.evaluateAll((els, s) => els.map((e) => (e.queryS
     const extInfo = await ext.evaluate((e) => { const a = e.querySelector("a.fides-ds-card__link"); return { href: a.href, arrow: e.querySelector(".fides-ds-card__arrow").textContent, hint: /opens the original post/.test(a.textContent) }; });
     check(`${tag}: external row links to the original post with ↗`, !extInfo.href.startsWith(BASE) && /^https?:/.test(extInfo.href) && extInfo.arrow === "↗" && extInfo.hint, JSON.stringify(extInfo));
 
-    // Publication source apart from the organization (data driven: needs a post on another site in the feed).
-    await page.goto(`${PAGE_URL}?q=biometric`, { waitUntil: "domcontentloaded" });
+    // Publication source apart from the organization. Fixed fixture message (tests/updates-fixture.php, set by
+    // run-updates-checks.sh): organization = a catalog organization, publication source = "Fixture Press" on another host.
+    // The old search "biometric" depended on what the live or bundled feed held that day and could return nothing.
+    await page.goto(`${PAGE_URL}?q=${encodeURIComponent(FIXTURE_TITLE)}`, { waitUntil: "domcontentloaded" });
     const apart = await page.evaluate(() => [...document.querySelectorAll(".fides-updates__item")].map((li) => {
       const src = li.querySelector(".fides-ds-card__fact--source");
       const owner = li.querySelector(".fides-ds-card__fact--owner");
       const a = li.querySelector("a.fides-ds-card__link");
-      return { src: src ? src.textContent.trim() : "", owner: owner ? owner.textContent.trim() : "", name: a ? a.textContent.replace(/\s+/g, " ").trim() : "", host: src ? src.textContent.replace(/^Source:\s*/, "").trim() : "" };
+      return { src: src ? src.textContent.trim() : "", owner: owner ? owner.textContent.trim() : "", href: a ? a.href : "" };
     }));
-    check(`${tag}: organization and publication source are separate facts, link name names the source`, apart.length > 0 && apart.every((r) => r.src.startsWith("Source: ") && r.owner && !r.owner.includes(r.host) && r.name.includes(`opens the original post on ${r.host}`)), JSON.stringify(apart));
+    check(`${tag}: fixture message is found (run via run-updates-checks.sh so the fixture is set)`, apart.length === 1 && apart[0].href === FIXTURE_URL, JSON.stringify(apart));
+    check(`${tag}: organization and publication source are separate facts`, apart.length === 1 && apart[0].src === `Source: ${FIXTURE_SOURCE}` && apart[0].owner !== "" && !apart[0].owner.includes(FIXTURE_SOURCE), JSON.stringify(apart));
+    const linkName = page.getByRole("link", { name: new RegExp(FIXTURE_SOURCE) });
+    check(`${tag}: accessible link name names the publication source`, (await linkName.count()) === 1 && /opens the original post on Fixture Press/.test(await linkName.first().evaluate((a) => a.textContent.replace(/\s+/g, " "))), String(await linkName.count()));
+    await linkName.first().focus();
+    check(`${tag}: the link takes keyboard focus`, await page.evaluate(() => !!document.activeElement && document.activeElement.matches("a.fides-ds-card__link")));
     await page.goto(PAGE_URL, { waitUntil: "domcontentloaded" });
 
     // Layout (Paper 26.5): list and FIDES/Learn column side by side from 1024px, stacked below, list first.

@@ -220,6 +220,10 @@ $nl = array(
     'Topics & guides' => 'Onderwerpen en gidsen',
     'Browse catalogs' => 'Catalogi bekijken',
     'Personal wallets' => 'Persoonlijke wallets',
+    // Wallet record: back actions (the "Back to results" text is rendered hidden by Fides_DS_Detail_Top and swapped in by design-system.js)
+    'Back to results' => 'Terug naar resultaten',
+    'All personal wallets' => 'Alle persoonlijke wallets',
+    'All business wallets' => 'Alle zakelijke wallets',
     'Credential types' => 'Credentialtypen',
     'Issuers' => 'Uitgevers',
     'Ecosystem' => 'Ecosysteem',
