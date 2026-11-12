@@ -80,6 +80,7 @@
    "kind": "article",
    "eyebrow": "Explainer · Ecosystem roles",
    "excerpt": "A wallet provider makes a wallet available to people or organisations. The wallet helps its users receive, manage and present information. Other providers may supply software or services to the organisations that issue or check that information.",
+   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/",
    "content": "wallet-providers-and-other-service-providers.html",
    "menu_order": 3
   },
