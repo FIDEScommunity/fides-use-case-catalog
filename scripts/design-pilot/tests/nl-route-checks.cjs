@@ -3,7 +3,7 @@
  * (the form is shown, never submitted: every non-GET request is aborted and counted), and the start/receive route.
  * Per page: language, no English interface or screen-reader labels, links keep /nl/ and answer 200, back navigation,
  * no horizontal overflow, no console errors, and at least one Dutch aria-label.
- * Run: PLAYWRIGHT_MODULE=... CHROME_PATH=... node tests/nl-route-checks.cjs   (WIDTHS=1440,390 by default)
+ * Run: PLAYWRIGHT_MODULE=... CHROME_PATH=... node tests/nl-route-checks.cjs   (WIDTHS=1440,390 by default; NL_PATHS=a,b runs only those routes)
  */
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const ORIGIN = process.env.PILOT_ORIGIN || "http://localhost:10088";
@@ -29,6 +29,9 @@ const ARTICLE_OPENERS = [
   ["eudi-wallet-and-european-business-wallet", "De European Digital Identity Wallet"], ["formats-and-protocols", "Een credentialformaat"], ["formats-and-protocols", "Een protocol"],
   ["trust-and-interoperability", "Een afsprakenstelsel"], ["trust-and-interoperability", "Een vertrouwensregister"], ["issuing-credentials-for-wallets", "Een uitgever (issuer)"],
 ];
+// Technology and Around the world (13 November 2026): English until the proposals in learn/nl-translation-changes-technology-around-world.md are entered, so these routes report their untranslated sentences.
+const TECH_WORLD = ["technology", "technology/how-do-wallets-and-services-exchange-information", "technology/credential-formats-and-interoperability", "technology/trust-frameworks-and-registries",
+  "around-the-world", "around-the-world/the-netherlands", "around-the-world/germany", "around-the-world/un-transparency-protocol"].map((s) => `learn/topics/${s}`);
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 async function open(page, path) {
   const r = await page.goto(`${NL}/${path}`.replace(/\/+$/, "/"), { waitUntil: "domcontentloaded" });
@@ -90,8 +93,22 @@ async function links(page, tag) {
     // Safety: nothing may be submitted. Every non-GET request is aborted and counted (except the read-only TranslatePress lookup).
     await page.route("**/*", (route) => { const body = route.request().postData() || ""; if (/action=trp_get_translations/.test(body)) return route.continue(); /* read-only TranslatePress lookup for text inserted by scripts */ if (route.request().method() !== "GET" && route.request().method() !== "HEAD") { blocked += 1; blockedKinds.add(`${route.request().method()} ${new URL(route.request().url()).pathname} ${(route.request().postData() || '').slice(0, 40).replace(/[^\w=&.-]/g, '')}`); return route.abort(); } return route.continue(); });
 
+    // Focused run (NL_PATHS=learn/topics/technology,...): only these routes, nothing else.
+    if (process.env.NL_PATHS) {
+      for (const path of process.env.NL_PATHS.split(",")) {
+        const tag = `/nl/${path} @${width}`;
+        const r = await open(page, path);
+        check(`${tag}: answers 200`, r.status() === 200);
+        await audit(page, tag);
+        await links(page, tag);
+        check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
+      }
+      check(`@${width}: no console errors`, errors.length === 0, errors.join(" | "));
+      await context.close();
+      continue;
+    }
     // 1. Learn -> Topics -> articles
-    for (const path of ["learn", "learn/topics", "learn/topics/the-big-picture"].concat(ARTICLES)) {
+    for (const path of ["learn", "learn/topics", "learn/topics/the-big-picture"].concat(ARTICLES, TECH_WORLD)) {
       const tag = `/nl/${path} @${width}`;
       const r = await open(page, path);
       check(`${tag}: answers 200`, r.status() === 200);
