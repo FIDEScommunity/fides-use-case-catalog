@@ -8,12 +8,16 @@
  *   wp eval-file learn/nl-translations-transfer.php import [file]          dry run as well (a reminder; same output as status)
  *   wp eval-file learn/nl-translations-transfer.php import-apply [file]    fills EMPTY dictionary rows of the exported route set only
  *   An optional third argument names a scratch copy of the dictionary table (<prefix>trp_test_*) for tests.
+ *   status/import/import-apply make NO HTTP request (standalone review sites block them). The optional extra argument `http` adds the
+ *   local-only stale/new check (renders the English route pages over HTTP); it is never needed for an import.
  *
  * WHAT THE TOOL READS (and nothing else)
  *  1. Page structure: wp_posts columns ID, post_name, post_parent of published pages (to find the route pages below the
- *     top-level pages learn, services and start). No page content, no other post types, no users, no options except 'home'.
- *  2. The public HTML of each English route page over HTTP (wp_remote_get on its permalink, no login, GET only). The texts of
- *     that HTML form the "pool": what the route pages show.
+ *     top-level pages learn, services and start, either at the top level of a standalone site or below one pilot page).
+ *     No page content, no other post types, no users, no options except 'home'.
+ *  2. Only `export` (and the optional `http` argument of status/import, local only): the public HTML of each English route page
+ *     over HTTP (wp_remote_get on its permalink, no login, GET only). The texts form the "pool": what the route pages show.
+ *     Without it (the default for status/import/import-apply, always on a standalone review site) no request is made.
  *  3. wp_trp_original_meta: only rows with meta_key = 'post_parent_id' AND meta_value IN (route page ids)
  *     (columns original_id, meta_value), and for rows that are checked on import only those original_ids.
  *  4. wp_trp_dictionary_en_us_nl_nl: columns id, original, translated, status, original_id, and only
@@ -54,6 +58,7 @@ if (! in_array($mode, array('export', 'status', 'import', 'import-apply'), true)
     return;
 }
 
+$http_skipped = ! ($mode === 'export' || in_array('http', array_slice($args, 1), true)); // optional extra argument `http`: local stale/new check over HTTP
 global $wpdb;
 $table     = $wpdb->prefix . 'trp_dictionary_en_us_nl_nl';
 if (isset($args[2]) && preg_match('/^' . preg_quote($wpdb->prefix, '/') . 'trp_test_[A-Za-z0-9_]+$/', (string) $args[2])) {
@@ -137,21 +142,28 @@ foreach ($by_id as $id => $p) {
         $chain[] = $cur;
     }
     $n = count($chain);
-    if ($n < 2) {
+    // Two layouts: the local pilot nests the route roots below one top-level pilot page (/fides-design-pilot/learn/...); a
+    // standalone review site has them at the top level (/design-review/learn/... where /design-review is the home path, or /learn/...).
+    // The top-level chain element is chain[$n - 1]; the route root is that element itself (standalone) or its child (pilot page).
+    $top = $chain[ $n - 1 ];
+    if (isset($roots[ $top->post_name ])) {
+        $root_index = $n - 1;
+        $skip_slugs = 0;
+    } elseif ($n >= 2 && isset($roots[ $chain[ $n - 2 ]->post_name ])) {
+        $root_index = $n - 2;
+        $skip_slugs = 1; // drop the pilot root slug (differs per site)
+    } else {
         continue;
     }
-    $candidate = $chain[ $n - 2 ]; // the route root is the child of the top-level pilot page
-    if (! isset($roots[ $candidate->post_name ])) {
-        continue;
-    }
+    $candidate = $chain[ $root_index ];
     $group = $roots[ $candidate->post_name ];
     $slugs = array_reverse(array_map(static function ($c) { return $c->post_name; }, $chain));
-    array_shift($slugs); // drop the pilot root slug (differs per site)
+    $slugs = array_slice($slugs, $skip_slugs);
     $route = implode('/', $slugs);
     if ($group === 'learn' && strpos($route . '/', 'learn/sessions/') === 0) {
         $group = 'training'; // Training & workshops live under learn/sessions
     }
-    $route_pages[ $id ] = array('group' => $group, 'route' => $route, 'url' => get_permalink($id));
+    $route_pages[ $id ] = array('group' => $group, 'route' => $route, 'url' => $http_skipped ? '' : get_permalink($id)); // the permalink is only needed to read the page over HTTP (export)
 }
 
 /** Text pool of the English route pages (text nodes, attributes, element texts), used to tell what the pages use. */
@@ -164,7 +176,12 @@ $add_pool = static function (string $text, int $id) use (&$pool, $norm): void {
     }
     $pool[ $n ][ $id ] = true;
 };
-foreach ($route_pages as $id => $info) {
+// The page text pool needs the rendered English pages over HTTP. Only `export` (run on the pilot where the pages are reachable) does that.
+// status/import/import-apply make no request unless the optional argument `http` is given (local pilot only, for the stale/new signal): the scope then comes from the page hierarchy and the TranslatePress parent-page links alone.
+if ($http_skipped) {
+    $pool_ok = false;
+}
+foreach ($http_skipped ? array() : $route_pages as $id => $info) {
     $resp = wp_remote_get($info['url'], array('timeout' => 20, 'sslverify' => false, 'redirection' => 3));
     if (is_wp_error($resp) || (int) wp_remote_retrieve_response_code($resp) !== 200) {
         $pool_ok = false;
@@ -469,6 +486,11 @@ foreach ($rows as $r) {
     }
 }
 
+$existing_routes = array();
+foreach ($route_pages as $rp) {
+    $existing_routes[ $rp['route'] ] = $rp['route'];
+}
+$existing_routes = array_values($existing_routes);
 $stat = array('add' => array(), 'same' => 0, 'differs' => array(), 'pending' => array(), 'stale' => array(), 'new' => array(), 'outside_route' => array(), 'rows_in_scope' => 0);
 foreach ($scope as $n => $e) {
     $orig  = $expand((string) $e['original']);
@@ -487,6 +509,14 @@ foreach ($scope as $n => $e) {
         $row_routes = array();
         foreach ($row_route_ids($row, $parents) as $pid) {
             $row_routes[ $route_pages[ $pid ]['route'] ] = true;
+        }
+        if ($http_skipped) {
+            // No page text pool without HTTP, and the TranslatePress parent-page links only name the page where a string was
+            // first recorded. The file already lists the routes each source belongs to (decided at export time from the rendered
+            // pages), so the scope is: at least one of those routes exists as a published page on this site.
+            foreach (array_intersect((array) $e['routes'], $existing_routes) as $er) {
+                $row_routes[ $er ] = true;
+            }
         }
         if (! array_intersect(array_keys($row_routes), (array) $e['routes'])) {
             $stat['outside_route'][] = $e['original'];
@@ -576,6 +606,8 @@ foreach (array_slice(array_keys($stat['new']), 0, 400) as $x) {
     $out('    new: ' . substr($x, 0, 90));
 }
 $out("  gettext (allowlist of " . count($gettext_allow) . "): add {$g_stat['add']}, same {$g_stat['same']}, differs {$g_stat['differs']} (kept), no row yet {$g_stat['missing']}, not allowlisted (ignored) {$g_stat['not_allowed']}");
-if (! $pool_ok) {
+if ($http_skipped) {
+    $out('  stale/new check skipped: no HTTP (scope: the routes listed in the file that exist as pages on this site; no request was made).');
+} elseif (! $pool_ok) {
     $out('  note: some route pages could not be read; stale, new and route scope could not be determined reliably.');
 }

@@ -167,8 +167,9 @@ Where the strings live: the TranslatePress dictionary of the site (table `<prefi
 | File | Purpose |
 | --- | --- |
 | `learn/nl-translations.json` | **Transfer file** (export of the local state). Key = English source text, value = Dutch text, plus `group` (`learn`, `training`, `services`, `start-receive`, `shared`), the routes that use it (path below the pilot root, no ids; also the import scope) and `fragment: true` for sentence pieces. A `gettext` list holds four allowlisted theme/plugin strings. The exporter skips strings that look like email addresses, phone numbers or test text and reports them. See "What the transfer tool reads and writes" below. |
-| `learn/nl-translations-transfer.php` | `export`, `status`, `import` (dry run) and `import-apply` for WP-CLI (`wp eval-file`). |
+| `learn/nl-translations-transfer.php` | `export`, `status`, `import` (dry run) and `import-apply` for WP-CLI (`wp eval-file`). Works on the pilot (route roots below one pilot page) and on a standalone review site (roots at the top level); status/import make no HTTP request. |
 | `learn/nl-translations.php` | Hand-written Dutch for strings that have no translation yet (Services, Training, shell labels, start page). `status` / `apply` fill empty rows only; `apply` also empties the lone `A`/`An`/`The` rows on localhost. |
+| `tests/nl-translations-transfer-standalone.php` | Imitates the standalone staging layout (scratch page hierarchy and scratch dictionary, `home` on `/design-review`, all HTTP refused) and checks scope, dry run, fill-empty-only, `differs`, second run 0. |
 | `tests/nl-translations-transfer-behaviour.php` | Behaviour test on a scratch copy of the dictionary (the real table is only read). |
 | `tests/nl-route-checks.cjs` | Browser checks of the Dutch routes at 1440 and 390 px (nothing is submitted). |
 
@@ -377,3 +378,12 @@ FIDES serves an international audience, while its own services and physical trai
 - **Translation.** The availability line and the partnership text are server-rendered, so TranslatePress can translate them. Until a Dutch translation exists, a Dutch URL shows the English text. Changed English strings lose their Dutch translation: the partnership excerpt ("Are you a training provider looking to offer …"), the hub block ("Do you run training courses …") and the partnership page body ("FIDES works with training partners …"). Translate the new availability and partnership strings in TranslatePress.
 - **Assessment details.** The Wallet readiness assessment details box has four rows (For, Starting point, Independent advice, Availability). The "Getting started" row was removed; the contact buttons stay. Language, location, duration and delivery are not stated until FIDES has decided them.
 - **Orphaned Dutch rows.** TranslatePress keeps rows whose English source changed. Currently unused and left in place: "Getting started", "Are you a training provider looking to offer a practical course on digital wallets…" and "FIDES works with training partners to deliver accessible programmes…". Remove them in the TranslatePress editor when convenient.
+
+### Standalone review site
+
+On a standalone WordPress site (staging: `home_url()` ends in `/design-review`, the pages `learn`, `services`, `start` are top-level) the
+transfer tool derives the routes from the page hierarchy in the database and makes no HTTP request, because staging blocks outgoing
+requests. A source is in scope when it is in `nl-translations.json` and one of its listed routes exists as a page. Rows only exist
+after the English page was rendered once under `/nl/`: open the routes with a plain GET first (see `staging/UPDATE-PLAN-NL-LEARN.md`,
+"Standalone review site", which also lists the files for a translations-only update: `learn/nl-translations-transfer.php` and
+`learn/nl-translations.json`). `stale` and `new` need rendered pages and are skipped without HTTP; locally add the argument `http`.

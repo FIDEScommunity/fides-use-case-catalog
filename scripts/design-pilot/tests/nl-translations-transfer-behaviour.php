@@ -20,8 +20,11 @@ $check = static function (bool $ok, string $name) use (&$fail): void {
         $fail++;
     }
 };
-$run = static function (string $mode) use ($tool, &$file, $copy): string {
+$run = static function (string $mode, bool $http = false) use ($tool, &$file, $copy): string {
     $args = array($mode, $file, $copy);
+    if ($http) {
+        $args[] = 'http'; // local stale/new check over HTTP (the default status/import makes no request)
+    }
     ob_start();
     include $tool;
     return (string) ob_get_clean();
@@ -101,7 +104,7 @@ $before = $wpdb->get_results("SELECT id, translated FROM $copy ORDER BY id", OBJ
 
 $file_real = $file;
 $file = $stale_file;
-$out = $run('status');
+$out = $run('status', true);
 $file = $file_real;
 $after = $wpdb->get_results("SELECT id, translated FROM $copy ORDER BY id", OBJECT_K);
 $check($before == $after, 'dry run (status) writes nothing');

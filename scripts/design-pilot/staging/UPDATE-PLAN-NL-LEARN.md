@@ -8,6 +8,75 @@ with `SHA256SUMS` and `verify-package.sh`. Replace `<wp>` with the WordPress pat
 unpacked package. Real mail and form submissions stay blocked on staging (the config mu-plugin disables external actions); do
 not submit the request form, and do not change that block.
 
+## Standalone review site (fix of the transfer tool, 12 November 2026)
+
+The review site is a standalone WordPress installation: `home_url()` ends in `/design-review` and the route roots `learn`, `services`
+and `start` are **top-level pages**. The first version of the tool assumed the local layout (one top-level pilot page with these
+roots below it) and read the English pages over HTTP; on staging it therefore found 0 rows in scope. Now:
+
+- **Routes** come from the page hierarchy in `wp_posts` (`post_name` / `post_parent` of published pages), for both layouts: roots at the
+  top level (standalone, any home sub-path or root) or below one top-level pilot page. A route is the page path below the site root
+  (`learn/topics/the-big-picture/what-is-a-credential`), the same string as `routes` in `nl-translations.json`.
+- **No HTTP.** `status`, `import` and `import-apply` make no request of any kind (no `wp_remote_get`, no loopback). Scope: the source
+  is in the file AND at least one of the routes listed for it exists as a page on this site. Sources whose routes do not exist as pages
+  stay untouched. The stale and new signals need rendered pages, so they are skipped on staging; the output says
+  `stale/new check skipped: no HTTP`. `stale` and `new` then show 0 and are not meaningful. (Locally an optional extra argument
+  `http` brings them back: `status <file> <scratch> http`; never needed for an import.)
+- **Unchanged protection:** dry run writes nothing; `import-apply` fills empty rows only, never overwrites (`differs` is listed),
+  no overwrite option, second run 0 changes, `A`/`An`/`The` skipped, only `home`/`siteurl` options are read, `correct` stays localhost only.
+- **Rows must exist.** TranslatePress creates a dictionary row for a string when the English page is rendered under `/nl/`.
+  `pending` in the output = no row yet. The tool does **not** create rows (that would mean writing `trp_original_strings`,
+  `trp_dictionary_*` and `trp_original_meta` by hand: TranslatePress-internal ids and meta, not worth the risk). The safe way:
+  open each route page once under `/nl/` with a plain GET (a browser, or the loop below), then run `status` again until `pending` is 0.
+
+### Files for a translations-only update
+
+Replace in the unpacked package (the Dutch file is unchanged; the tool changed). Nothing is copied into the web root or the plugins:
+
+| File (repository) | In the package | Needed |
+|---|---|---|
+| `scripts/design-pilot/learn/nl-translations-transfer.php` | `<pkg>/seed/learn/nl-translations-transfer.php` | yes, **replace** (new version) |
+| `scripts/design-pilot/learn/nl-translations.json` | `<pkg>/seed/learn/nl-translations.json` | yes (same file as in the package, sha256 `3f579169...cad1`) |
+| `scripts/design-pilot/learn/nl-translations.php` | `<pkg>/seed/learn/nl-translations.php` | no (local authoring helper, do not run on staging) |
+
+### Steps
+
+```
+# 0. backup (as in step 2 of this plan): the TranslatePress tables at least
+wp --path=<wp> db export "$B/db-translatepress.sql" --tables="$(wp --path=<wp> db tables 'wp_trp_*' --format=csv)"
+# 1. make the Dutch rows exist: GET every route once under /nl/ (no login, GET only)
+cd <pkg>/seed/learn
+php -r '$d=json_decode(file_get_contents("nl-translations.json"),true);$r=[];foreach($d["entries"] as $e)foreach($e["routes"] as $x)$r[$x]=1;ksort($r);echo implode("\n",array_keys($r)),"\n";' \
+  | while read -r r; do curl -s -o /dev/null -w "%{http_code} $r\n" "https://staging.fides.community/design-review/nl/$r/"; done
+# 2. dry run (writes nothing, no HTTP)
+wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php status
+# 3. apply (empty rows in scope only), twice
+wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php import-apply
+wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php import-apply     # must report: add 0
+# 4. cache
+wp --path=<wp> cache flush ; purge page cache/CDN ; then the GET checks of section 8
+```
+
+The 27 routes of the file include `learn/sessions/request-wpforms` and the other form pages; the GET only renders them. If a route
+answers 404 the page does not exist on staging; its sources then stay untouched. If the `/nl/` URL form differs, take it from the
+language switcher link of the site. If step 1 cannot be run from the server (blocked loopback), open the 27 URLs in a browser.
+Expected `status` after step 1: `scope: 934 sources ...`, rows in scope about 935, `pending` 0, `add` = all rows without a translation,
+`differs` = rows that hold other Dutch (see the lists in the sections above), `stale/new check skipped`, gettext `add`/`same`/`differs`.
+
+Example of the `differs` output (the existing translation is kept):
+
+```
+  differs (existing translation kept, only reported): 2
+    differs: Overview
+    differs: What do recipients and relying parties need to know?
+  gettext (allowlist of 4): add 1, same 2, differs 1 (kept), no row yet 0, not allowlisted (ignored) 0
+```
+
+**Gettext** (4 strings: Blocksy "Skip to content", three WPForms Lite strings): they are in the file; `trp_gettext_nl_nl` rows are read by
+domain + exact original only. An empty or missing-translation row is filled with status 2; a row with another translation stays
+(`differs ... (kept)`); "no row yet" means TranslatePress has not seen the string (open a page that shows it). Verify with
+`wp --path=<wp> db query "SELECT original, translated, status FROM wp_trp_gettext_nl_nl WHERE original IN ('Skip to content','This field is required.')"`.
+
 ## Changes since package `20261112-083503-34b753ab` (third package, same day)
 
 - **Terminology round 2:** 21 existing Dutch rows were corrected locally (no rows added or removed; export still 934 entries, 4 gettext):
@@ -142,8 +211,8 @@ wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php status
 wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php import      # dry run as well, same output
 ```
 
-(The tool reads only the route pages' public HTML, the dictionary rows of the exported strings and four allowlisted gettext
-strings; it writes nothing in these modes.) Report these lines:
+(The tool makes no HTTP request; it reads the page hierarchy, the dictionary rows of the exported strings and four allowlisted gettext
+strings, and writes nothing in these modes. See "Standalone review site" above for the stale/new lines.) Report these lines:
 
 | Line | Meaning | Acceptable |
 |---|---|---|
@@ -152,8 +221,8 @@ strings; it writes nothing in these modes.) Report these lines:
 | `same` | already identical | any number |
 | `differs` | existing other translation, **kept** | list them in the report; no action needed |
 | `pending` | no dictionary row yet | explained by the eight new openers before the seed; otherwise open that page under `/nl/` and repeat |
-| `stale` | English source on staging differs from the file | 0 expected after the seed; before it, the old openers of the eight articles |
-| `new` | English strings without a translation, not in the file | 25 (the reviewed list in `learn/nl-remaining-strings-review.md`) |
+| `stale` | English source on staging differs from the file | skipped without HTTP (shows 0, not meaningful on staging) |
+| `new` | English strings without a translation, not in the file | skipped without HTTP (shows 0); the 25 reviewed strings are in `learn/nl-remaining-strings-review.md` |
 | `outside scope` | rows never read or touched | informational |
 | `gettext (allowlist of 4)` | add / same / differs / no row | `differs` is kept; see the status-4 note below |
 
@@ -166,7 +235,7 @@ Otherwise stop and report; nothing has been written to the database yet.
 1. Seed: `WP="wp --path=<wp>" <pkg>/seed/seed.sh apply`. **No `LEARN_FORCE`, no `PILOT_FORCE`.** Run `apply` a second time:
    every page must be `unchanged`.
 2. `wp --path=<wp> rewrite flush`, then open the Dutch pages again (step 4) so the new opener strings get rows.
-3. `wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php status` again: `pending` and `stale` must be 0.
+3. `wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php status` again: `pending` must be 0 (`stale` is not checked without HTTP).
 4. `wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php import-apply` (fills empty rows in scope only; never
    overwrites; the second run reports `add 0`). Run it a second time and keep that output.
 5. Do **not** run `nl-translations.php apply` on staging (it is the local authoring helper; it only touches the lone `A`/`An`/`The`
