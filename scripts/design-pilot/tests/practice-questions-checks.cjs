@@ -21,17 +21,19 @@ const PAGES = [
       ["Directive (EU) 2025/25 (EUR-Lex)", "", "https://eur-lex.europa.eu/eli/dir/2025/25/oj"],
       ["European Commission", "Proposal for a Regulation on European Business Wallets (COM(2025) 838)", "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0838"],
       ["European Commission", "European Business Wallets", "https://digital-strategy.ec.europa.eu/en/policies/business-wallets"],
+      ["Council of the EU", "European business wallets: Council adopts negotiating position", "https://www.consilium.europa.eu/en/press/press-releases/2026/06/09/european-business-wallets-council-adopts-negotiating-position/"],
+      ["European Parliament", "Legislative procedure file 2025/0358(COD)", "https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0358(COD)"],
       ["EU Digital Identity Wallet", "Architecture and Reference Framework", "https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework"]],
     headings: ["Identity and authority are different questions", "Identity, authority and mandate", "Where can evidence of authority come from?", "What do European sources say today?", "Questions to ask", "Continue learning"],
     links: ["business-wallets-where-to-start", "how-credentials-connect", "accepting-information-from-a-wallet", "what-should-a-service-check-when-receiving-a-credential", "european-business-wallet", "business-wallets"], terms: 1, learnMore: 5, cta: false },
-  { slug: "how-can-an-organisation-prepare-a-wallet-use-case", title: "How can an organisation prepare a wallet use case?", intro: /^A wallet may be useful when people or organisations need to provide information to a service\./,
+  { slug: "how-can-an-organisation-prepare-a-wallet-use-case", title: "How can an organisation prepare a wallet use case?", intro: /^Before choosing a product, describe one concrete exchange/,
     sources: [W3C, REG, ["FIDES", "Verifiable Credentials", "https://fides.community/topics/verifiable-credentials/"]],
-    headings: ["Choose one interaction", "Understand the information", "Discuss the practical arrangements", "Continue learning"],
-    links: ["how-credentials-connect", "issuing-credentials-for-wallets", "accepting-information-from-a-wallet", "business-wallets-where-to-start", "formats-and-protocols", "wallet-readiness-workshop", "/overview/"], terms: 0, learnMore: 5, cta: true },
+    headings: ["Describe one exchange", "Who is involved?", "Which information is exchanged, and where does it come from?", "How does the receiving service check it?", "What happens if something goes wrong?", "Agree the practical arrangements", "Plan the first test", "Continue learning"],
+    links: ["how-credentials-connect", "issuing-credentials-for-wallets", "accepting-information-from-a-wallet", "business-wallets-where-to-start", "what-should-a-service-check-when-receiving-a-credential", "formats-and-protocols", "wallet-readiness-workshop", "/overview/"], terms: 0, learnMore: 6, cta: true },
   { slug: "what-should-a-service-check-when-receiving-a-credential", title: "What should a service check when receiving a credential?", intro: /^When a service receives information from a wallet, a technical check can help establish whether it can rely on the credential\./,
     sources: [W3C, REG, SD],
     headings: ["Check the credential", "Decide whether the information is enough", "Make the request clear", "Continue learning"],
-    links: ["accepting-information-from-a-wallet", "the-relying-party", "trust-and-interoperability", "what-is-a-credential", "how-can-someone-act-for-an-organisation", "/credentials/"], terms: 1, learnMore: 5, cta: false },
+    links: ["accepting-information-from-a-wallet", "the-relying-party", "trust-and-interoperability", "how-can-someone-act-for-an-organisation", "/credentials/"], terms: 1, learnMore: 3, cta: false },
 ];
 const BACKLINKS = [
   ["topics/for-businesses/", ["how-can-an-organisation-prepare-a-wallet-use-case", "what-should-a-service-check-when-receiving-a-credential", "how-can-someone-act-for-an-organisation"]],
@@ -173,6 +175,16 @@ async function focusOk(page, tag, locators) {
       const hs = norm(await page.locator(".fides-learn__content a[href], .fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       for (const to of tos) check(`${tag}: links to ${to}`, hs.filter((h) => h === `${G}${to}/`).length === 1, hs.filter((h) => h.includes(to)).join(","));
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
+    }
+    // Business wallets: where to start points to the practice article and keeps the role and choice focus.
+    {
+      const tag = `where-to-start focus @${width}`;
+      await open(page, `${G}business-wallets-where-to-start/`);
+      const hs = norm(await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      check(`${tag}: links to the preparation article`, hs.some((h) => h === `${G}how-can-an-organisation-prepare-a-wallet-use-case/`), hs.join(" "));
+      const heads = (await page.locator(".fides-learn-article__body h2").allInnerTexts()).map(squash);
+      for (const h of ["Identify the roles", "Separate identity from authority", "Compare wallets and providers", "How does the European Business Wallet fit?", "Prepare a small first step"]) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
+      check(`${tag}: use case card is still present`, (await page.locator(".fides-learn-article__body a", { hasText: "Explore the use case" }).count()) >= 1);
     }
     await context.close();
   }

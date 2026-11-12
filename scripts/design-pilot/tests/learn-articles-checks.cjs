@@ -73,7 +73,7 @@ async function article(browser, key, width) {
   check(`${tag}: long source titles wrap and are not truncated`, srcWrap);
   check(`${tag}: no visible source URL`, (await page.locator(".fides-learn-sources__url").count()) === 0);
   const checked = await page.locator(".fides-learn-note").last().innerText();
-  check(`${tag}: content last checked line is present`, /Content last checked: 11 November 2026/.test(checked), checked);
+  check(`${tag}: content last checked line is present`, /Content last checked: 1[12] November 2026/.test(checked), checked);
 
   // Terms box: whole sentences only; glossary dialog returns focus to its trigger (pages that use terms).
   const term = page.locator(".fides-learn-article__body .fides-ds-term").first();

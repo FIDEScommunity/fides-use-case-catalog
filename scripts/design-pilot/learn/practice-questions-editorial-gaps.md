@@ -26,7 +26,7 @@ No new series; the Topics page already links to For businesses and needed no cha
 | Regulation (EU) 2024/1183 (eIDAS 2), Art. 3(1) and 3(3) as inserted, Annex VI point 9, recital on attestations of attributes | https://eur-lex.europa.eu/eli/reg/2024/1183/oj | Electronic identification can concern "a natural person representing another natural person or a legal person"; "powers and mandates to represent natural or legal persons" is in the Annex VI minimum list (Member States ensure measures so that qualified providers of attestations can verify those attributes against the relevant public-sector authentic source); a recital names them as an example attestation. |
 | W3C Verifiable Credentials Data Model 2.0, section 5.9 "Authorization" and the verification/validation terms | https://www.w3.org/TR/vc-data-model-2.0/ | Credentials are meant for reliably identifying subjects; authorisation is not an appropriate use of the data model without an accompanying authorisation framework. |
 | Directive (EU) 2025/25, recitals on the digital EU power of attorney and legal representatives in business registers | https://eur-lex.europa.eu/eli/dir/2025/25/oj | Common multilingual template, to authorise a person to represent a company in specific cross-border procedures within the scope of the directive; drawn up under national legal requirements; without prejudice to national rules on powers of attorney; Member States choose whether a specific one must be filed; information on legal representatives is disclosed in business registers. |
-| Commission proposal COM(2025) 838 (European Business Wallets), Art. 2 definitions (18) authorised representative and (19) mandate, recital 18, financial statement | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0838 | The proposal defines "mandate" narrowly (authorisation by the wallet owner to an authorised representative to act for the owner in operating the functions of a designated wallet) and aims at compatibility with the digital EU power of attorney. |
+| Commission proposal COM(2025) 838 (European Business Wallets), Art. 3 definitions (18) authorised representative and (19) mandate, Art. 3(1)(c), recital 18, financial statement | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0838 | The proposal defines "mandate" narrowly (authorisation by the wallet owner to an authorised representative to act for the owner in operating the functions of a designated wallet) and aims at compatibility with the digital EU power of attorney. |
 | European Commission, European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets | Status page of the proposal (the existing Learn article "European Business Wallet" tracks the legislative status; this page only links to it). |
 | EUDI Wallet Architecture and Reference Framework (main chapters 2 and 3, discussion topic I) | https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework | Section 2.6.5 describes a dedicated representation attestation for a natural person representing another natural person; chapter 3 states that wallet units for legal persons were removed in view of a separate business wallet; discussion topic I covers only natural-to-natural representation. |
 
@@ -106,25 +106,31 @@ No new series; the Topics page already links to For businesses and needed no cha
 | The relying party (Ecosystem roles) and For governments articles | The relying party checks and decides; no statement on representation. | None. |
 | Readiness Workshop | The workshop can discuss roles and governance; nothing on representation. | None. |
 
-### Article 2 (preparing a wallet use case)
+### Article 2 (preparing a wallet use case), after the second pass
 
-| Existing page | Overlap | Contradiction |
+The article is now about describing **one concrete exchange** (one set of information, one receiving service, one first test). Sections: Describe one exchange, Who is involved?, Which information is exchanged, and where does it come from?, How does the receiving service check it?, What happens if something goes wrong?, Agree the practical arrangements, Plan the first test. Choice and role of a business wallet are left to "Business wallets: where to start" and linked once from the first section.
+
+| Existing page | Overlap that remains | Division of labour |
 |---|---|---|
-| Business wallets: where to start | Strong: "Start with one transaction", "Identify the roles", "Prepare a small first step" repeat the idea. The new article is general (not business-wallet specific), has the employer qualification example and the "practical arrangements" section. | None; the article tells the reader which to read first. |
-| Accepting information from a wallet | "Start with the service" and "Prepare for a first discussion" overlap with the "Choose one interaction" section. | None. |
-| Issuing credentials for wallets | "Start with a purpose" and the closing paragraph (one credential, one use, discuss with a holder and a relying party) overlap. This page links to the new article (back link). | None. |
-| Wallet Readiness Workshop | The "Discuss" and "Test assumptions" parts are what the workshop does with a team. Called out by the CTA, not repeated. | None. |
-| Editorial recommendation | The article overlaps a lot with where-to-start. Editors may decide to merge the practical-arrangements section into where-to-start and drop this page; the page is kept because the user asked for it. | n/a |
+| Business wallets: where to start | The supplier and employer examples are both single exchanges; both mention roles. | where-to-start: which role your organisation plays, what a business wallet is, how to choose wallets and providers, EBW, first step. This article: describe the exchange itself. Each links to the other. Removed from this article: "Choose one interaction" as selection advice, the paragraph about starting from an own wallet. Removed from where-to-start: the "map the current process" questions (now only a pointer). |
+| Accepting information from a wallet | "Start with the service" asks the same four questions for a receiving service. | Accepting stays the receiving-side guide; this article uses one sentence ("How does the receiving service check it?") and links to the checking article. |
+| Issuing credentials for wallets | "Start with a purpose" and the closing paragraph overlap with "Which information is exchanged..." | Issuing is the issuer-side guide; links to this article (back link). |
+| Wallet Readiness Workshop | The first test and the open questions are what the workshop works through. | CTA only. |
 
-### Article 3 (checking a received credential)
+### Article 3 (checking a received credential), after the second pass
 
-| Existing page | Overlap | Contradiction |
+The repetition of the accepting article's check list is replaced by one pointer. What stays: W3C verification and validity period, status/revocation, the revocation rule for qualified attestations, presenter check with the link to the authority article, W3C validation versus verification, selective disclosure, Article 5b duties of relying parties. "Learn more" went from five to three links (Accepting information from a wallet, The relying party, Trust and interoperability); the link to "How can someone act for an organisation?" stays inline; "What is a credential?" was dropped. Catalog link: Browse credential types. All three sources are still used (W3C: verification, validity, validation; Regulation: revocation and Article 5b; EC page: selective disclosure).
+
+| Existing page | Overlap that remains | Division of labour |
 |---|---|---|
-| Accepting information from a wallet | Strong: "What needs to be checked?" lists the same checks (issuer accepted, altered, validity, status, presenter, sufficiency). The new article shows the checks in the language of the specification, adds the Art. 5b rules and the "valid is not enough" example; accepting now links to it (back link). | None. |
-| The relying party (Ecosystem roles; **dirty in the working tree from the translation agent, not touched**) | "Verifier performs technical checks, relying party uses the information". | None. |
-| For governments: accepting information in public services | Same checks in a public-service context. | None. |
-| Trust and interoperability | Trust anchors and trust framework. The new article does not cover trust anchors. | None. |
-| What is a credential? | Validity and status as concepts. | None. |
+| Accepting information from a wallet | Both state that a valid credential is not automatically enough (one sentence plus example here, kept for context). | Accepting: the plain-language check list and the service view. This article: what the specifications say behind it. One short pointer at the top. |
+| The relying party (Ecosystem roles; not touched) | "Verifier performs technical checks, relying party uses the information." | None. |
+| For governments: accepting information in public services | Same checks in a public-service setting. | None. |
+| Trust and interoperability | Trust anchors: not covered here, linked in Learn more. | None. |
+
+### Business wallets: where to start, after the second pass
+
+Role and choice: the intro now says the page helps to choose a business wallet; "Start with one transaction" asks which role the organisation plays; "Check the whole interaction" became "Compare wallets and providers"; "Prepare a small first step" is now: decide on the role, shortlist one or two wallets or providers, then describe one exchange (link to the practice article). The use case card, "Identify the roles", "Separate identity from authority" and "How does the European Business Wallet fit?" are unchanged. No heading anchors are linked anywhere (grep of content, tests and manifest). The manifest excerpt changed with the content.
 
 ## Links and destinations
 
@@ -145,6 +151,11 @@ No new series; the Topics page already links to For businesses and needed no cha
 Not changed on purpose: Ecosystem roles and For governments pages (including the working-copy edit of `the-relying-party.html` by the
 translation agent), Topics, the glossary, tiles, interop profiles.
 
+## Second pass (12 November 2026)
+
+- Article 2 restructured around one concrete exchange, where-to-start sharpened on role and choice, article 3 shortened, legal passages checked claim by claim (`learn/practice-questions-legal-check-2026-11-12.md`).
+- Changed text because of the legal check: the Directive 2025/25 bullet and the EBW proposal bullet in article 1 (Article 16c, scope, 31 July 2028, evidence, Council position, status), the closing sentence of the same section, one Parliament sentence on `european-business-wallet`. Sources added to article 1: Council press release (403 for scripts, read through search) and the OEIL procedure file.
+
 ## Dutch
 
 - Proposals only, `learn/nl-translation-changes-practice-questions.md`; nothing is seeded or entered in TranslatePress.
@@ -153,6 +164,6 @@ translation agent), Topics, the glossary, tiles, interop profiles.
 
 ## Open points
 
-- Recheck the European Business Wallet proposal status and the national situation before staging; the article only says "still in the legislative process".
+- Recheck the European Business Wallet proposal status (Parliament plenary position, trilogues) and the national situation before staging; see `learn/practice-questions-legal-check-2026-11-12.md` for the status as checked on 12 November 2026.
 - Legal review of the section "What do European sources say today?" is advisable before publishing on the live site (four sources, no legal conclusion).
 - Menu order 4 to 6 is only used for lists; the overview row order is: where to start, European Business Wallet, prepare, accepting, issuing, check, act.
