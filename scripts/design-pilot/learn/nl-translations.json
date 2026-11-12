@@ -667,7 +667,7 @@
         },
         {
             "original": "A format does not, on its own, determine whether an issuer is acceptable to a relying party or whether a credential has a particular legal status. For credentials, attestations and credential types, see",
-            "translation": "Een formaat bepaalt op zichzelf niet of een vertrouwende partij de uitgever accepteert of welke juridische status een credential heeft. Meer over credentials, attestaties en credentialtypen leest u in",
+            "translation": "Een formaat bepaalt op zichzelf niet of een vertrouwende partij de uitgever (issuer) accepteert of welke juridische status een credential heeft. Meer over credentials, attestaties en credentialtypen leest u in",
             "html": false,
             "fragment": false,
             "groups": [
@@ -810,7 +810,7 @@
         },
         {
             "original": "A register, certification body or another party may provide information. The supplier may hold or manage a credential, and the customer’s service may receive and check it. These roles are not fixed to particular kinds of organisation. A register is not always the issuer, and an organisation may issue information in one process and receive it in another.",
-            "translation": "Een register, certificerende instelling of andere partij kan gegevens verstrekken. De leverancier kan een credential bewaren of beheren en de dienst van de klant kan het ontvangen en controleren. Deze rollen liggen niet vast voor bepaalde soorten organisaties. Een register is niet altijd de uitgever en een organisatie kan in het ene proces gegevens uitgeven en in een ander proces ontvangen.",
+            "translation": "Een register, certificerende instelling of andere partij kan gegevens verstrekken. De leverancier kan een credential bewaren of beheren en de dienst van de klant kan het ontvangen en controleren. Deze rollen liggen niet vast voor bepaalde soorten organisaties. Een register is niet altijd de uitgever (issuer) en een organisatie kan in het ene proces gegevens uitgeven en in een ander proces ontvangen.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -1098,7 +1098,7 @@
         },
         {
             "original": "An issuer",
-            "translation": "Een issuer",
+            "translation": "Een uitgever (issuer)",
             "html": false,
             "fragment": false,
             "groups": [
@@ -1491,7 +1491,7 @@
         },
         {
             "original": "Browse use cases, then follow the connections to issuers, wallets and services.",
-            "translation": "Bekijk usecases en volg de koppelingen naar issuers, wallets en diensten.",
+            "translation": "Bekijk usecases en volg de koppelingen naar uitgevers, wallets en diensten.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -1587,7 +1587,7 @@
         },
         {
             "original": "Can create and issue new credentials to users or businesses (issuer role).",
-            "translation": "Kan nieuwe credentials aanmaken en uitgeven aan personen of bedrijven (issuer-rol).",
+            "translation": "Kan nieuwe credentials aanmaken en uitgeven aan personen of bedrijven (uitgeversrol).",
             "html": false,
             "fragment": false,
             "groups": [
@@ -1983,7 +1983,7 @@
         },
         {
             "original": "Depending on the credential and its supporting infrastructure, checks can establish whether the information was altered, who secured it, and whether it is within its validity period. Status information may also be available. Those technical checks are distinct from deciding whether an issuer is suitable for the claim or whether the evidence meets a service’s requirements.",
-            "translation": "Afhankelijk van de credential en de onderliggende infrastructuur kan worden gecontroleerd of de informatie is gewijzigd, wie die heeft beveiligd en of de geldigheidsduur nog loopt. Ook kan statusinformatie beschikbaar zijn. Deze technische controles staan los van de vraag of de issuer een geschikte bron is voor de betreffende verklaring en of het bewijs aan de eisen van een dienst voldoet.",
+            "translation": "Afhankelijk van de credential en de onderliggende infrastructuur kan worden gecontroleerd of de informatie is gewijzigd, wie die heeft beveiligd en of de geldigheidsduur nog loopt. Ook kan statusinformatie beschikbaar zijn. Deze technische controles staan los van de vraag of de uitgever een geschikte bron is voor de betreffende verklaring en of het bewijs aan de eisen van een dienst voldoet.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -2605,7 +2605,7 @@
         },
         {
             "original": "For example, a course provider could issue proof that a person completed a course. The person could receive it in a compatible wallet and later present it to an employer. The employer would decide what it needs to check and whether it accepts the issuer for that purpose.",
-            "translation": "Een opleider kan bijvoorbeeld een bewijs uitgeven dat iemand een cursus heeft afgerond. Die persoon kan het bewijs ontvangen in een geschikte wallet en later aan een werkgever tonen. De werkgever bepaalt wat moet worden gecontroleerd en of de uitgever voor dat doel wordt geaccepteerd.",
+            "translation": "Een opleider kan bijvoorbeeld een bewijs uitgeven dat iemand een cursus heeft afgerond. Die persoon kan het bewijs ontvangen in een geschikte wallet en later aan een werkgever tonen. De werkgever bepaalt wat moet worden gecontroleerd en of de uitgever (issuer) voor dat doel wordt geaccepteerd.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -2644,7 +2644,7 @@
         },
         {
             "original": "For example, an employer wants to check whether an applicant holds a particular qualification. The employer does not necessarily need the applicant’s full education history. It first needs to determine what must be demonstrated, which issuers it can rely on and what happens if the information cannot be provided.",
-            "translation": "Een werkgever wil bijvoorbeeld controleren of een sollicitant een bepaalde kwalificatie heeft. Daarvoor is niet noodzakelijk het volledige opleidingsoverzicht nodig. De werkgever moet eerst bepalen wat moet worden aangetoond, welke uitgevers hij vertrouwt en wat er gebeurt als de gegevens niet kunnen worden verstrekt.",
+            "translation": "Een werkgever wil bijvoorbeeld controleren of een sollicitant een bepaalde kwalificatie heeft. Daarvoor is niet noodzakelijk het volledige opleidingsoverzicht nodig. De werkgever moet eerst bepalen wat moet worden aangetoond, welke uitgevers (issuers) hij vertrouwt en wat er gebeurt als de gegevens niet kunnen worden verstrekt.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -2954,7 +2954,7 @@
         },
         {
             "original": "How credentials connect issuers, wallets and services",
-            "translation": "Hoe credentials issuers, wallets en diensten verbinden",
+            "translation": "Hoe credentials uitgevers, wallets en diensten verbinden",
             "html": false,
             "fragment": false,
             "groups": [
@@ -3082,7 +3082,7 @@
         },
         {
             "original": "ISO (18013-5) binary (CBOR) format for mobile documents with strong authentication and selective disclosure. See also Mobile Driving Licence Credential for the mDL use case.",
-            "translation": "ISO-formaat (18013-5) voor mobiele documenten, met sterke authenticatie en de mogelijkheid om geselecteerde gegevens te delen. Zie ook Mobile Driving Licence Credential voor het mobiele rijbewijs.",
+            "translation": "ISO-formaat (18013-5) voor mobiele documenten, met sterke authenticatie en selectief gegevens delen. Zie ook Mobile Driving Licence Credential voor het mobiele rijbewijs.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -3669,7 +3669,7 @@
         },
         {
             "original": "Organisation data, mandates, business wallets and data exchange.",
-            "translation": "Organisatiegegevens, bevoegdheden, business wallets en gegevensuitwisseling.",
+            "translation": "Organisatiegegevens, mandaten, business wallets en gegevensuitwisseling.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -4386,7 +4386,7 @@
         },
         {
             "original": "Suppose a supplier presents a digital credential to a customer. The customer’s service may be able to read and check it, but the customer still needs to decide whether the issuer is appropriate and whether the information answers its business question.",
-            "translation": "Stel dat een leverancier een digitaal credential aan een klant toont. De dienst van de klant kan het mogelijk lezen en controleren, maar de klant moet nog bepalen of de uitgever geschikt is en of de gegevens antwoord geven op de zakelijke vraag.",
+            "translation": "Stel dat een leverancier een digitaal credential aan een klant toont. De dienst van de klant kan het mogelijk lezen en controleren, maar de klant moet nog bepalen of de uitgever (issuer) geschikt is en of de gegevens antwoord geven op de zakelijke vraag.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -4873,7 +4873,7 @@
         },
         {
             "original": "The employer needs to understand what the credential says and check whether it accepts the issuer for that purpose. A successful technical check can help establish that the credential is authentic. The employer still needs to decide whether the qualification meets its requirements.",
-            "translation": "De werkgever moet begrijpen wat het credential zegt en beoordelen of hij de uitgever voor dat doel accepteert. Een geslaagde technische controle kan helpen vaststellen dat het credential authentiek is. De werkgever beslist nog steeds zelf of de kwalificatie aan de functie-eisen voldoet.",
+            "translation": "De werkgever moet begrijpen wat het credential zegt en beoordelen of hij de uitgever (issuer) voor dat doel accepteert. Een geslaagde technische controle kan helpen vaststellen dat het credential authentiek is. De werkgever beslist nog steeds zelf of de kwalificatie aan de functie-eisen voldoet.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -5016,7 +5016,7 @@
         },
         {
             "original": "The issuer",
-            "translation": "De issuer",
+            "translation": "De uitgever (issuer)",
             "html": false,
             "fragment": false,
             "groups": [
@@ -5330,7 +5330,7 @@
         },
         {
             "original": "The wallet holder needs to understand what they are receiving and when they may use it.",
-            "translation": "De walletgebruiker moet begrijpen wat hij ontvangt en wanneer hij het kan gebruiken.",
+            "translation": "De wallethouder moet begrijpen wat hij ontvangt en wanneer hij het kan gebruiken.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -5923,7 +5923,7 @@
         },
         {
             "original": "What do recipients and relying parties need to know?",
-            "translation": "Wat moeten ontvangers weten?",
+            "translation": "Wat moeten ontvangers en vertrouwende partijen weten?",
             "html": false,
             "fragment": false,
             "groups": [
@@ -6674,7 +6674,7 @@
         },
         {
             "original": "You may be able to use the same credential with more than one service. What can be reused, and what you need to share, depends on the credential and the service. Selective disclosure can limit the information presented when it is supported; it is not a property of every wallet interaction.",
-            "translation": "Mogelijk kunt u dezelfde credential bij meerdere diensten gebruiken. Wat u kunt hergebruiken en welke gegevens u moet delen, hangt af van de credential en de dienst. Selectieve verstrekking kan de gedeelde informatie beperken als die mogelijkheid wordt ondersteund; niet elke uitwisseling met een wallet biedt dit.",
+            "translation": "Mogelijk kunt u dezelfde credential bij meerdere diensten gebruiken. Wat u kunt hergebruiken en welke gegevens u moet delen, hangt af van de credential en de dienst. Selectief gegevens delen kan de gedeelde informatie beperken als die mogelijkheid wordt ondersteund; niet elke uitwisseling met een wallet biedt dit.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -11921,7 +11921,7 @@
         },
         {
             "original": "See how an issuer, a wallet and a service work together, or read what to check when you receive information in",
-            "translation": "Lees hoe een uitgever, een wallet en een dienst samenwerken, of wat u controleert bij",
+            "translation": "Lees hoe een uitgever (issuer), een wallet en een dienst samenwerken, of wat u controleert bij",
             "html": false,
             "fragment": false,
             "groups": [
@@ -13125,7 +13125,7 @@
         },
         {
             "original": "Possible roles for your organisation: issuer, relying party or wallet user.",
-            "translation": "Mogelijke rollen voor uw organisatie: uitgever, vertrouwende partij of walletgebruiker.",
+            "translation": "Mogelijke rollen voor uw organisatie: uitgever (issuer), vertrouwende partij of walletgebruiker.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -13375,7 +13375,7 @@
         },
         {
             "original": "The Wallet Readiness Workshop works through use cases, impact and first priorities with your team.",
-            "translation": "In de Wallet Readiness Workshop werkt uw team aan usecases, impact en eerste prioriteiten.",
+            "translation": "In de workshop werkt uw team aan usecases, impact en eerste prioriteiten.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -13441,7 +13441,7 @@
         },
         {
             "original": "The roles of issuers, wallet holders and relying parties.",
-            "translation": "De rollen van uitgevers, wallethouders en vertrouwende partijen.",
+            "translation": "De rollen van uitgevers (issuers), wallethouders en vertrouwende partijen.",
             "html": false,
             "fragment": false,
             "groups": [

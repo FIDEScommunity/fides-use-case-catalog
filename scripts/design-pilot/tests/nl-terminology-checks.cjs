@@ -17,19 +17,24 @@ function check(name, ok, detail) {
 }
 // path below the pilot root, and phrases (regex) that must occur in a paragraph, list item or heading of that page
 const PAGES = [
-  ["learn/topics/the-big-picture/how-credentials-connect", [/^Houder \+ wallet/, /^Vertrouwende partij/, /^De (issuer|uitgever)/]],
+  ["learn/topics/the-big-picture/how-credentials-connect", [/^Houder \+ wallet/, /^Vertrouwende partij/, /^De uitgever \(issuer\)/]],
   ["learn/topics/the-big-picture/european-digital-identity-wallet", [/^De vertrouwende partij/, /^De houder/, /^De walletaanbieder/]],
   ["learn/topics/the-big-picture/formats-and-protocols", [/vertrouwende partij/]],
   ["learn/topics/the-big-picture/trust-and-interoperability", []],
   ["learn/topics/the-big-picture/what-is-a-credential", [/vertrouwende partij/]],
-  ["learn/topics/for-businesses/issuing-credentials-for-wallets", [/vertrouwende partij/]],
+  ["learn/topics/the-big-picture/what-is-a-digital-wallet", []],
+  ["learn/sessions/wallet-introduction", [/^In de workshop werkt uw team/, /Wallet Readiness Workshop/]],
+  ["learn/topics/for-businesses/issuing-credentials-for-wallets", [/vertrouwende partij/, /^Wat moeten ontvangers en vertrouwende partijen weten\?$/, /^De wallethouder moet begrijpen wat hij ontvangt/]],
   ["learn/topics/for-businesses/accepting-information-from-a-wallet", [/\(relying party\) genoemd/, /Wat doet een vertrouwende partij\?/, /registratie als vertrouwende partij/]],
   ["learn/topics/for-businesses/business-wallets-where-to-start", [/vertrouwende partij|vertegenwoordiger/]],
-  ["learn/sessions/wallet-readiness-workshop", [/Mogelijke rollen voor uw organisatie: uitgever, vertrouwende partij/]],
-  ["learn/topics", [/vertrouwende partijen/]],
+  ["learn/sessions/wallet-readiness-workshop", [/Mogelijke rollen voor uw organisatie: uitgever \(issuer\), vertrouwende partij/]],
+  ["learn/topics", [/vertrouwende partijen/, /Organisatiegegevens, mandaten, business wallets en gegevensuitwisseling\./]],
+  ["learn/topics/for-businesses", []],
   ["learn/sessions/eudi-business-wallets-in-practice", [/vertrouwende partijen/]],
   ["start/receive", [/vertrouwende partij \(relying party\)/]],
 ];
+// Pages where the first prose mention of the issuer must read "uitgever (issuer)" (second round of terminology rules)
+const FIRST_ISSUER = new Set(["how-credentials-connect", "what-is-a-credential", "what-is-a-digital-wallet", "formats-and-protocols", "trust-and-interoperability", "accepting-information-from-a-wallet", "business-wallets-where-to-start", "issuing-credentials-for-wallets", "wallet-readiness-workshop", "eudi-business-wallets-in-practice", "receive"]);
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 async function open(page, path) {
   const r = await page.goto(`${NL}/${path}`.replace(/\/+$/, "/"), { waitUntil: "domcontentloaded" });
@@ -46,6 +51,7 @@ async function open(page, path) {
     const errors = [];
     let blocked = 0;
     const kinds = new Set();
+    const seen = {};
     page.on("console", (m) => m.type() === "error" && !/favicon|Failed to load resource|Content Security Policy|the server responded/.test(m.text()) && errors.push(m.text()));
     page.on("pageerror", (e) => errors.push(String(e)));
     await page.route("**/*", (route) => {
@@ -61,7 +67,8 @@ async function open(page, path) {
       const data = await page.evaluate(() => {
         const skip = "#cmplz-cookiebanner-container, .cmplz-cookiebanner, .fides-assistant, [data-fides-ssr], script, style";
         const blocks = [...document.querySelectorAll("main p, main li, main h1, main h2, main h3, main a, main button")].filter((e) => !e.closest(skip)).map((e) => e.textContent.replace(/\s+/g, " ").trim()).filter(Boolean);
-        return { blocks, text: document.querySelector("main") ? document.querySelector("main").innerText : "" };
+        const proseBlocks = [...document.querySelectorAll("main p, main li")].filter((e) => !e.closest(skip)).map((e) => e.textContent.replace(/\s+/g, " ").trim()).filter(Boolean);
+        return { blocks, proseBlocks, text: document.querySelector("main") ? document.querySelector("main").innerText : "" };
       });
       check(`${tag}: no "ontvangende partij" (relying party is "vertrouwende partij")`, !/ontvangende partij/i.test(data.text), (data.text.match(/.{40}ontvangende partij.{20}/i) || [""])[0]);
       for (const p of phrases) {
@@ -69,10 +76,29 @@ async function open(page, path) {
         check(`${tag}: ${p}`, !!hit, "not found");
         if (hit) console.log(`#   ${path.split("/").pop()}: ${hit.slice(0, 110)}`);
       }
+      // issuer rules: first prose mention "uitgever (issuer)", no "De issuer"/"Een issuer"/"issuers"/"issuer-rol" in running Dutch
+      const key = path.split("/").pop();
+      // prose = paragraphs and list items longer than 45 characters (skips table-of-contents entries and labels); the "(definitie)" popup label and the title of the linked article do not count as a mention
+      const prose = data.proseBlocks.map((b) => b.replace(/ ?\(definitie\)/g, "").replace(/Hoe credentials uitgevers, wallets en diensten verbinden/g, "")).filter((b) => b.length > 45);
+      const firstIssuer = prose.find((b) => /\buitgevers?\b/i.test(b));
+      if (FIRST_ISSUER.has(key)) {
+        check(`${tag}: first prose mention reads "uitgever(s) (issuer(s))"`, !!firstIssuer && /uitgevers? \(issuers?\)/i.test(firstIssuer), firstIssuer || "no mention");
+        if (firstIssuer) console.log(`#   first issuer mention on ${key}: ${firstIssuer.slice(0, 120)}`);
+      }
+      const later = prose.slice(prose.indexOf(firstIssuer) + 1).filter((b) => /\(issuers?\)/i.test(b));
+      if (later.length) console.log(`#   note: "(issuer)" repeated after the first mention on ${key}: ${later.length}x, e.g. ${later[0].slice(0, 90)}`);
+      const stripped = data.text.replace(/\(issuers?\)/gi, "").replace(/Issuer Catalog|Credential Issuer/g, "");
+      check(`${tag}: no "De issuer"/"Een issuer"/"issuers"/"issuer-rol" in running text`, !/\b(?:[Dd]e|[Ee]en) issuer\b|\bissuers\b|issuer-rol/.test(stripped), (stripped.match(/.{30}(?:\b(?:[Dd]e|[Ee]en) issuer\b|\bissuers\b|issuer-rol).{20}/) || [""])[0]);
+      check(`${tag}: no "De walletgebruiker moet begrijpen"`, !/De walletgebruiker moet begrijpen/.test(data.text));
+      for (const b of data.blocks) { if (/^Mandate( \(definitie\))?$/.test(b)) seen.mandateChip = true; if (/^Mandaat( \(definitie\))?$/.test(b)) seen.mandaatChip = true; if (/Organisatiegegevens, mandaten,/.test(b)) seen.cardMandaten = true; }
       const org = data.blocks.filter((b) => /ontvangende organisatie|ontvangende dienst/i.test(b));
       if (org.length) console.log(`#   ontvangende organisatie/dienst (general sense) on ${path.split("/").pop()}: ${org.length}x, e.g. ${org[0].slice(0, 90)}`);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     }
+    check(`@${width}: "Mandate" chip stays English (never "Mandaat")`, !seen.mandaatChip, "chip translated");
+    console.log(`#   Mandate chip seen: ${!!seen.mandateChip}; card "Organisatiegegevens, mandaten, ..." seen: ${!!seen.cardMandaten}`);
+    check(`@${width}: "Mandate" chip seen in English`, !!seen.mandateChip, "chip not found");
+    check(`@${width}: card text uses "mandaten"`, !!seen.cardMandaten, "card not found");
     // Training & workshops -> offering -> request (form shown, not submitted)
     await open(page, "learn/sessions");
     const offer = page.locator("a[href*='/learn/sessions/eudi-business-wallets-in-practice']").first();

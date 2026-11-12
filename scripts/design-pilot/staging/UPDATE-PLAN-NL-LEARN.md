@@ -8,6 +8,35 @@ with `SHA256SUMS` and `verify-package.sh`. Replace `<wp>` with the WordPress pat
 unpacked package. Real mail and form submissions stay blocked on staging (the config mu-plugin disables external actions); do
 not submit the request form, and do not change that block.
 
+## Changes since package `20261112-083503-34b753ab` (third package, same day)
+
+- **Terminology round 2:** 21 existing Dutch rows were corrected locally (no rows added or removed; export still 934 entries, 4 gettext):
+  the heading with "vertrouwende partijen", "uitgever (issuer)" at the first mention per page and "uitgever(s)" instead of "issuer(s)",
+  "wallethouder", "mandaten", "selectief gegevens delen", and "de workshop" for one repeated offering name. Full list (source, old,
+  new, routes, reason): `learn/nl-translation-changes-2026-11-12-b.md`. Rules: `learn/nl-terminology.md`.
+- The package folder name is timestamp based (newest under `staging-package/`, `latest`). The Dutch file is identified by its sha256:
+  `seed/learn/nl-translations.json` = `3f579169012e860eac249dbbb96f84b0cd435987eb15cebf0b776e184e60cad1`.
+- The local-only correction mode (`nl-translations.php correct`) is in the package for traceability. **Do not run it on staging**: it
+  refuses to write unless the site host is localhost, and staging corrections follow the procedure below.
+- No content, plugin or seed change; the package differs from the previous one in `nl-translations.json`, `nl-translations.php`,
+  the tests and the documents.
+
+### Staging rows that may still hold the old value (not overwritten)
+
+`import-apply` never overwrites. If staging holds the Dutch of an earlier package, these rows show up as `differs` in `status`:
+
+- **This round: up to 21 rows**, all listed with old and new Dutch in `learn/nl-translation-changes-2026-11-12-b.md`
+  (heading; "De issuer"/"Een issuer" openers; the 11 "(issuer)" first mentions; "issuers" rows; "(issuer-rol)"; "De walletgebruiker moet
+  begrijpen ..."; "Organisatiegegevens, bevoegdheden ..."; the mDoc description; "Selectieve verstrekking ..."; "In de Wallet Readiness
+  Workshop werkt ..."). Staging holding the package-2 Dutch has all 21 as `differs`; staging holding the package-1 Dutch also has
+  the 18 rows below.
+- **Previous round: up to 18 rows** "ontvangende partij" -> "vertrouwende partij" plus 2 added rows ("Houder + wallet", "Vertrouwende
+  partij"; these come in as `add` if the rows are empty): `learn/nl-translation-changes-2026-11-12.md`.
+- A row can appear in both lists (its value changed twice); apply the newest value of the b list.
+- Expected `differs` for a staging site that holds the Dutch of the first package: up to 39 rows; of the second package: up to 21.
+  Report the list to the owner; corrections are entered by the owner in the TranslatePress editor, or by a script only from a
+  correction list the owner approved (take source and new Dutch from the changes files). Never add an overwrite option.
+
 ## Changes since package `20261112-071445-34b753ab` (second package, same day)
 
 - **Terminology:** relying party is now "vertrouwende partij" (with "(relying party)" at the first explanation); 18 existing

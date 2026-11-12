@@ -30,12 +30,12 @@ Verdicts: **keep** = leave English on purpose (official name, abbreviation or st
 | 14 | EUDI Wallet Readiness | Training topic list item on `learn/sessions` (neighbouring items are Dutch: "Walletconnectors en integratie", "Uitgifte van credentials en authentieke bronnen") | **resolved: keep** | Stays English as topic name for now (terminology agreement); the earlier proposal "EUDI Wallet-gereedheid" is dropped |
 | 15 | Wallet Introduction | Name of an inhouse session (cards on Learn and Training & workshops, CTA texts) | **resolved: keep** | Offering name stays "Wallet Introduction" (terminology agreement) |
 | 16 | Wallet Readiness Workshop | Name of an inhouse workshop (cards, CTA texts) | **resolved: keep** | Offering name stays "Wallet Readiness Workshop" (terminology agreement) |
-| 17 | readiness workshop | Running text, Learn "Business wallets: where to start" (last step) and a CTA | **open** | The agreements name the offering, not the running-text phrase; unchanged English until decided. Suggestion: leave as is, it reads as a name |
+| 17 | readiness workshop | Running text, Learn "Business wallets: where to start" (last step) and a CTA | **resolved: keep** | Lowercase link text to the Wallet Readiness Workshop offering; stays English like the offering name (terminology round 2). The repeated offering name on `learn/sessions/wallet-introduction` became "de workshop" (a translated row, not part of these 27) |
 | 18 | Wallet | Glossary term name shown as chip on Learn and on the glossary page | **keep** | Same word in Dutch usage; term name from the glossary data |
 | 19 | Credential | Bold term name in "What is a credential?" and term chip; glossary term | **keep** | Same word in Dutch usage ("credential") |
 | 20 | credential | Running text term label in "What is a digital wallet?" | **keep** | Same word in Dutch usage; the sentence around it is Dutch |
 | 21 | Relying Party | Glossary term name (chip, glossary page, organisation catalog filter) | **keep** | Glossary data is English; the Dutch running text uses "ontvangende partij" (see #2) |
-| 22 | Mandate | Glossary term name (chip on Learn "For businesses") | **open (proposal)** | Terminology: "mandaat" when the authority to act on behalf of another is meant. Chip label proposal "Mandaat"; not applied because the row also appears on the glossary page (out of scope). Running text already uses "mandaat/mandaten" |
+| 22 | Mandate | Glossary term name (chip on Learn "For businesses") | **resolved: keep** | The term chip stays English (terminology round 2; glossary term, shared with the glossary page, out of scope). Running text uses "mandaat/mandaten" for mandate credentials |
 | 23 | business wallet | Running text term label, "Business wallets: where to start" | **keep** | Established Dutch usage: "business wallet" |
 | 24 | Business wallet | Glossary term name / chip (Learn, wallet catalog, organisation catalog) | **keep** | Same |
 | 25 | business wallets | Running text term label in "For businesses" and "European Business Wallet" | **keep** | Same (plural "business wallets") |
@@ -44,10 +44,8 @@ Verdicts: **keep** = leave English on purpose (official name, abbreviation or st
 
 Notes for the owner:
 
-- **Resolved:** #1, #2 (translated by the owner locally), #12, #14, #15, #16, #27 (stay English by the agreements).
-- **Open:** #17 (running-text "readiness workshop") and #22 ("Mandate" chip: proposal "Mandaat"). All others stay English on
-  purpose (verdict **keep**) and need no action.
-- **Terminology deviations found in the local translations** (not changed by the author; proposals in `learn/nl-terminology.md`,
-  section "Open deviations").
+- **Resolved:** #1, #2 (translated by the owner locally), #12, #14, #15, #16, #17, #22, #27 (stay English by the agreements).
+- **Open:** none. All other strings stay English on purpose (verdict **keep**) and need no action.
+- **Terminology deviations found in the local translations** (applied in terminology round 2: `learn/nl-terminology.md`, `learn/nl-translation-changes-2026-11-12-b.md`).
 - Entries that stay English need no action; `status` keeps listing them as **new** until a translation exists. The tool lists
   "Credential"/"credential" and "Business wallet"/"business wallet" separately because they are separate dictionary rows.

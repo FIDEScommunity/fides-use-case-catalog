@@ -3,7 +3,7 @@
  * Dutch (nl_NL) texts for the Services pages, the enquiry form and the Training & workshops blocks that
  * point to Services, written by hand. They go into the TranslatePress dictionary (wp_trp_dictionary_en_us_nl_nl).
  *
- * Run with WP-CLI: wp eval-file learn/nl-translations.php apply|status
+ * Run with WP-CLI: wp eval-file learn/nl-translations.php apply|status|correct   (correct = local terminology corrections, see below)
  *  - apply:  fills rows that have no translation yet. A row an editor already translated (status 2) is never
  *            touched. Rows only exist after the English page was opened once under /nl/.
  *  - status: lists strings without a dictionary row (open the page under /nl/ first) and rows still untranslated.
@@ -315,6 +315,100 @@ $nl = array(
 $clear_fragments = array('A', 'An', 'The');
 
 /**
+ * LOCAL TERMINOLOGY CORRECTIONS (see learn/nl-terminology.md and learn/nl-translation-changes-2026-11-12-b.md).
+ * Each entry: English source, the expected CURRENT Dutch, the corrected Dutch. `wp eval-file learn/nl-translations.php correct`
+ * rewrites a row only while its current translation still equals the expected old value (so any other translation an editor
+ * made is never overwritten) and only on localhost. Repeatable: a second run changes nothing. Staging rows are never changed by
+ * this script or by the transfer tool; corrections there are made in the TranslatePress editor from the reviewed change list.
+ */
+$corrections = array(
+    // Correction 1: heading lost "relying parties".
+    array('What do recipients and relying parties need to know?',
+          'Wat moeten ontvangers weten?',
+          'Wat moeten ontvangers en vertrouwende partijen weten?'),
+    // Correction 2: first prose mention on both pages that use it (How credentials connect, EUDI Wallet roles list).
+    array('The issuer',
+          'De issuer',
+          'De uitgever (issuer)'),
+    // Correction 2: first prose mention on the Issuing page.
+    array('An issuer',
+          'Een issuer',
+          'Een uitgever (issuer)'),
+    // Correction 2: first prose mention on What is a credential.
+    array('The employer needs to understand what the credential says and check whether it accepts the issuer for that purpose. A successful technical check can help establish that the credential is authentic. The employer still needs to decide whether the qualification meets its requirements.',
+          'De werkgever moet begrijpen wat het credential zegt en beoordelen of hij de uitgever voor dat doel accepteert. Een geslaagde technische controle kan helpen vaststellen dat het credential authentiek is. De werkgever beslist nog steeds zelf of de kwalificatie aan de functie-eisen voldoet.',
+          'De werkgever moet begrijpen wat het credential zegt en beoordelen of hij de uitgever (issuer) voor dat doel accepteert. Een geslaagde technische controle kan helpen vaststellen dat het credential authentiek is. De werkgever beslist nog steeds zelf of de kwalificatie aan de functie-eisen voldoet.'),
+    // Correction 2: first prose mention on What is a digital wallet.
+    array('For example, a course provider could issue proof that a person completed a course. The person could receive it in a compatible wallet and later present it to an employer. The employer would decide what it needs to check and whether it accepts the issuer for that purpose.',
+          'Een opleider kan bijvoorbeeld een bewijs uitgeven dat iemand een cursus heeft afgerond. Die persoon kan het bewijs ontvangen in een geschikte wallet en later aan een werkgever tonen. De werkgever bepaalt wat moet worden gecontroleerd en of de uitgever voor dat doel wordt geaccepteerd.',
+          'Een opleider kan bijvoorbeeld een bewijs uitgeven dat iemand een cursus heeft afgerond. Die persoon kan het bewijs ontvangen in een geschikte wallet en later aan een werkgever tonen. De werkgever bepaalt wat moet worden gecontroleerd en of de uitgever (issuer) voor dat doel wordt geaccepteerd.'),
+    // Correction 2: first prose mention on Formats and protocols.
+    array('A format does not, on its own, determine whether an issuer is acceptable to a relying party or whether a credential has a particular legal status. For credentials, attestations and credential types, see',
+          'Een formaat bepaalt op zichzelf niet of een vertrouwende partij de uitgever accepteert of welke juridische status een credential heeft. Meer over credentials, attestaties en credentialtypen leest u in',
+          'Een formaat bepaalt op zichzelf niet of een vertrouwende partij de uitgever (issuer) accepteert of welke juridische status een credential heeft. Meer over credentials, attestaties en credentialtypen leest u in'),
+    // Correction 2: first prose mention on Trust and interoperability.
+    array('Suppose a supplier presents a digital credential to a customer. The customer’s service may be able to read and check it, but the customer still needs to decide whether the issuer is appropriate and whether the information answers its business question.',
+          'Stel dat een leverancier een digitaal credential aan een klant toont. De dienst van de klant kan het mogelijk lezen en controleren, maar de klant moet nog bepalen of de uitgever geschikt is en of de gegevens antwoord geven op de zakelijke vraag.',
+          'Stel dat een leverancier een digitaal credential aan een klant toont. De dienst van de klant kan het mogelijk lezen en controleren, maar de klant moet nog bepalen of de uitgever (issuer) geschikt is en of de gegevens antwoord geven op de zakelijke vraag.'),
+    // Correction 2: first prose mention on Accepting information from a wallet.
+    array('For example, an employer wants to check whether an applicant holds a particular qualification. The employer does not necessarily need the applicant’s full education history. It first needs to determine what must be demonstrated, which issuers it can rely on and what happens if the information cannot be provided.',
+          'Een werkgever wil bijvoorbeeld controleren of een sollicitant een bepaalde kwalificatie heeft. Daarvoor is niet noodzakelijk het volledige opleidingsoverzicht nodig. De werkgever moet eerst bepalen wat moet worden aangetoond, welke uitgevers hij vertrouwt en wat er gebeurt als de gegevens niet kunnen worden verstrekt.',
+          'Een werkgever wil bijvoorbeeld controleren of een sollicitant een bepaalde kwalificatie heeft. Daarvoor is niet noodzakelijk het volledige opleidingsoverzicht nodig. De werkgever moet eerst bepalen wat moet worden aangetoond, welke uitgevers (issuers) hij vertrouwt en wat er gebeurt als de gegevens niet kunnen worden verstrekt.'),
+    // Correction 2: first prose mention on the receive page.
+    array('See how an issuer, a wallet and a service work together, or read what to check when you receive information in',
+          'Lees hoe een uitgever, een wallet en een dienst samenwerken, of wat u controleert bij',
+          'Lees hoe een uitgever (issuer), een wallet en een dienst samenwerken, of wat u controleert bij'),
+    // Correction 2: first prose mention on the training page.
+    array('The roles of issuers, wallet holders and relying parties.',
+          'De rollen van uitgevers, wallethouders en vertrouwende partijen.',
+          'De rollen van uitgevers (issuers), wallethouders en vertrouwende partijen.'),
+    // Correction 2: first prose mention on Business wallets where to start (intro paragraph; the diagram note stays "uitgever").
+    array('A register, certification body or another party may provide information. The supplier may hold or manage a credential, and the customer’s service may receive and check it. These roles are not fixed to particular kinds of organisation. A register is not always the issuer, and an organisation may issue information in one process and receive it in another.',
+          'Een register, certificerende instelling of andere partij kan gegevens verstrekken. De leverancier kan een credential bewaren of beheren en de dienst van de klant kan het ontvangen en controleren. Deze rollen liggen niet vast voor bepaalde soorten organisaties. Een register is niet altijd de uitgever en een organisatie kan in het ene proces gegevens uitgeven en in een ander proces ontvangen.',
+          'Een register, certificerende instelling of andere partij kan gegevens verstrekken. De leverancier kan een credential bewaren of beheren en de dienst van de klant kan het ontvangen en controleren. Deze rollen liggen niet vast voor bepaalde soorten organisaties. Een register is niet altijd de uitgever (issuer) en een organisatie kan in het ene proces gegevens uitgeven en in een ander proces ontvangen.'),
+    // Correction 2: first prose mention on the Wallet Readiness Workshop page.
+    array('Possible roles for your organisation: issuer, relying party or wallet user.',
+          'Mogelijke rollen voor uw organisatie: uitgever, vertrouwende partij of walletgebruiker.',
+          'Mogelijke rollen voor uw organisatie: uitgever (issuer), vertrouwende partij of walletgebruiker.'),
+    // Correction 2: running text, later on the page than the first mention (English "issuer" replaced).
+    array('Depending on the credential and its supporting infrastructure, checks can establish whether the information was altered, who secured it, and whether it is within its validity period. Status information may also be available. Those technical checks are distinct from deciding whether an issuer is suitable for the claim or whether the evidence meets a service’s requirements.',
+          'Afhankelijk van de credential en de onderliggende infrastructuur kan worden gecontroleerd of de informatie is gewijzigd, wie die heeft beveiligd en of de geldigheidsduur nog loopt. Ook kan statusinformatie beschikbaar zijn. Deze technische controles staan los van de vraag of de issuer een geschikte bron is voor de betreffende verklaring en of het bewijs aan de eisen van een dienst voldoet.',
+          'Afhankelijk van de credential en de onderliggende infrastructuur kan worden gecontroleerd of de informatie is gewijzigd, wie die heeft beveiligd en of de geldigheidsduur nog loopt. Ook kan statusinformatie beschikbaar zijn. Deze technische controles staan los van de vraag of de uitgever een geschikte bron is voor de betreffende verklaring en of het bewijs aan de eisen van een dienst voldoet.'),
+    // Correction 2: running text "issuers" -> "uitgevers".
+    array('Browse use cases, then follow the connections to issuers, wallets and services.',
+          'Bekijk usecases en volg de koppelingen naar issuers, wallets en diensten.',
+          'Bekijk usecases en volg de koppelingen naar uitgevers, wallets en diensten.'),
+    // Correction 2: title/link text "issuers" -> "uitgevers" (shared by 12 pages).
+    array('How credentials connect issuers, wallets and services',
+          'Hoe credentials issuers, wallets en diensten verbinden',
+          'Hoe credentials uitgevers, wallets en diensten verbinden'),
+    // Correction 2: "issuer-rol" -> "uitgeversrol" (term definition shown on 6 pages).
+    array('Can create and issue new credentials to users or businesses (issuer role).',
+          'Kan nieuwe credentials aanmaken en uitgeven aan personen of bedrijven (issuer-rol).',
+          'Kan nieuwe credentials aanmaken en uitgeven aan personen of bedrijven (uitgeversrol).'),
+    // Correction 3: the holder role of the credential model (the person who receives the credential), not a "user".
+    array('The wallet holder needs to understand what they are receiving and when they may use it.',
+          'De walletgebruiker moet begrijpen wat hij ontvangt en wanneer hij het kan gebruiken.',
+          'De wallethouder moet begrijpen wat hij ontvangt en wanneer hij het kan gebruiken.'),
+    // Correction 4: "mandates" in the topic card means mandate credentials; "bevoegdheid" stays where authority in general is meant.
+    array('Organisation data, mandates, business wallets and data exchange.',
+          'Organisatiegegevens, bevoegdheden, business wallets en gegevensuitwisseling.',
+          'Organisatiegegevens, mandaten, business wallets en gegevensuitwisseling.'),
+    // Correction 5: "selective disclosure" is the capability (concept), not the chosen data.
+    array('ISO (18013-5) binary (CBOR) format for mobile documents with strong authentication and selective disclosure. See also Mobile Driving Licence Credential for the mDL use case.',
+          'ISO-formaat (18013-5) voor mobiele documenten, met sterke authenticatie en de mogelijkheid om geselecteerde gegevens te delen. Zie ook Mobile Driving Licence Credential voor het mobiele rijbewijs.',
+          'ISO-formaat (18013-5) voor mobiele documenten, met sterke authenticatie en selectief gegevens delen. Zie ook Mobile Driving Licence Credential voor het mobiele rijbewijs.'),
+    // Correction 5: concept "selective disclosure" -> agreed term.
+    array('You may be able to use the same credential with more than one service. What can be reused, and what you need to share, depends on the credential and the service. Selective disclosure can limit the information presented when it is supported; it is not a property of every wallet interaction.',
+          'Mogelijk kunt u dezelfde credential bij meerdere diensten gebruiken. Wat u kunt hergebruiken en welke gegevens u moet delen, hangt af van de credential en de dienst. Selectieve verstrekking kan de gedeelde informatie beperken als die mogelijkheid wordt ondersteund; niet elke uitwisseling met een wallet biedt dit.',
+          'Mogelijk kunt u dezelfde credential bij meerdere diensten gebruiken. Wat u kunt hergebruiken en welke gegevens u moet delen, hangt af van de credential en de dienst. Selectief gegevens delen kan de gedeelde informatie beperken als die mogelijkheid wordt ondersteund; niet elke uitwisseling met een wallet biedt dit.'),
+    // Correction 6: second mention of the offering name on the same page (repetition).
+    array('The Wallet Readiness Workshop works through use cases, impact and first priorities with your team.',
+          'In de Wallet Readiness Workshop werkt uw team aan usecases, impact en eerste prioriteiten.',
+          'In de workshop werkt uw team aan usecases, impact en eerste prioriteiten.'),
+);
+
+/**
  * Theme and plugin gettext strings (table wp_trp_gettext_nl_nl, keyed by domain + original). Only strings the route pages
  * show: the skip link (Blocksy) and the WPForms notice that is shown without JavaScript.
  */
@@ -389,6 +483,49 @@ if ($home_host === 'localhost' || $home_host === '127.0.0.1') {
     echo 'lone article fragments ' . ($mode === 'apply' ? 'emptied' : 'still translated') . ": $cleared\n";
 } else {
     echo "lone article fragments: skipped (not the local pilot site)\n";
+}
+// Terminology corrections (local only): rewrite a row only when it still holds the expected old Dutch.
+$corr = array('changed' => 0, 'already' => 0, 'kept' => array(), 'missing' => array(), 'manual' => array());
+if ($home_host === 'localhost' || $home_host === '127.0.0.1') {
+    $decode = static function (string $x): string { return trim((string) preg_replace('/\s+/u', ' ', html_entity_decode($x, ENT_QUOTES | ENT_HTML5, 'UTF-8'))); };
+    foreach ($corrections as $c) {
+        $variants = array();
+        foreach (array($c[0], str_replace('&', '&amp;', $c[0]), str_replace('&', '&#038;', $c[0])) as $v) {
+            $variants[ $v ] = true;
+            $variants[ preg_replace_callback('/[\x{2018}\x{2019}\x{201C}\x{201D}\x{2013}\x{2014}\x{2026}]/u', static function ($m) { return '&#' . mb_ord($m[0], 'UTF-8') . ';'; }, $v) ] = true;
+        }
+        $found = false;
+        foreach (array_keys($variants) as $v) {
+            $rows = $wpdb->get_results($wpdb->prepare("SELECT id, original, translated FROM $table WHERE BINARY original = %s", $v)); // phpcs:ignore
+            foreach ($rows as $row) {
+                $found = true;
+                $cur = (string) $row->translated;
+                if ($decode($cur) === $decode($c[2])) {
+                    $corr['already']++;
+                } elseif ($decode($cur) === $decode($c[1])) {
+                    if ($cur !== html_entity_decode($cur, ENT_QUOTES | ENT_HTML5, 'UTF-8')) {
+                        $corr['manual'][] = substr($c[0], 0, 70); // stored with entities: change it in the editor
+                        continue;
+                    }
+                    if ($mode === 'correct') {
+                        $wpdb->update($table, array('translated' => $c[2], 'status' => 2), array('id' => (int) $row->id));
+                    }
+                    $corr['changed']++;
+                } else {
+                    $corr['kept'][] = substr($c[0], 0, 70);
+                }
+            }
+        }
+        if (! $found) {
+            $corr['missing'][] = substr($c[0], 0, 70);
+        }
+    }
+    echo 'terminology corrections ' . ($mode === 'correct' ? 'applied' : 'pending') . ": {$corr['changed']}, already done: {$corr['already']}, kept (other translation): " . count($corr['kept']) . ', no row: ' . count($corr['missing']) . ', manual: ' . count($corr['manual']) . "\n";
+    foreach (array('kept', 'missing', 'manual') as $k) {
+        foreach ($corr[ $k ] as $x) {
+            echo "  $k: $x\n";
+        }
+    }
 }
 echo "gettext strings " . ($mode === 'apply' ? 'filled' : 'untranslated') . ": $g_filled\n";
 echo ($mode === 'apply' ? 'filled' : 'untranslated') . ": $filled, already translated (kept): $kept, no dictionary row yet: " . count($absent) . "\n";
