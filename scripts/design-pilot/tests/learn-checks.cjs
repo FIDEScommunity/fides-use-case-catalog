@@ -61,7 +61,9 @@ async function baseline(page, key, width) {
     // Separators are CSS-generated, so the text is the labels joined by spaces.
     check(`${label}: breadcrumb`, crumb.replace(/\s+/g, " ").trim() === spec.crumb.replace(/ \/ /g, " "), crumb);
   } else if (key !== "overview" && key !== "topics") {
-    check(`${label}: mobile back link replaces breadcrumb`, await page.locator(".fides-learn__back").isVisible());
+    // Shared page header: the breadcrumb stays on phones (direct parent and current page); the extra back link is gone.
+    const shown = await page.locator(".fides-ph__crumbs li").evaluateAll((lis) => lis.filter((li) => li.offsetParent !== null).length);
+    check(`${label}: mobile breadcrumb keeps parent and current page, no extra back link`, shown === 2 && !(await page.locator(".fides-learn__back").isVisible()), String(shown));
   }
   // Active tab.
   if (width >= 900) {

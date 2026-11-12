@@ -14,8 +14,13 @@
   padding-block: var(--fides-ds-catalog-intro-padding) var(--fides-ds-space-8);
 }
 
+/* A shared page header (.fides-ph) owns the space above and below itself. */
+.fides-ds .fides-uc-pilot__page:has(> .fides-ph) {
+  padding-top: 0;
+}
+
 /* Compact toolbar (Paper 16.1): title row, intro, one search row, one filter row. */
-.fides-ds .fides-uc-pilot__intro {
+.fides-ds .fides-uc-pilot__intro:where(:not(.fides-ph)) {
   display: grid;
   gap: var(--fides-ds-space-3);
   padding-bottom: 20px;
@@ -38,7 +43,12 @@
   line-height: 22px;
 }
 
-.fides-ds .fides-uc-pilot__lead {
+/* In a shared page header the action may exceed the H1 line box (touch target) without adding height to the row. */
+.fides-ds .fides-ph .fides-uc-pilot__title-row > .fides-uc-pilot__add {
+  margin-block: calc((var(--fides-ph-title-compact-leading) - var(--fides-ds-touch-target)) / 2);
+}
+
+.fides-ds .fides-uc-pilot__lead:where(:not(.fides-ph__intro)) {
   color: var(--fides-ds-body);
   font-size: 16px;
   line-height: 24px;
@@ -922,6 +932,11 @@ html.fides-uc-pilot-panel-open {
   padding-block: var(--fides-ds-space-5) 0;
 }
 
+/* A detail page whose top row is the shared page header owns its start spacing (24px / 32px). */
+.fides-ds.fides-uc-detail:has(.fides-ds-detail-top--header) {
+  padding-top: 0;
+}
+
 .fides-ds .fides-uc-detail__hero {
   display: grid;
   gap: var(--fides-ds-space-6);
@@ -1681,7 +1696,7 @@ html.fides-uc-pilot-panel-open {
 }
 
 @media (min-width: 1100px) {
-  .fides-ds.fides-uc-pilot .fides-uc-pilot__intro {
+  .fides-ds.fides-uc-pilot .fides-uc-pilot__intro:where(:not(.fides-ph)) {
     padding-bottom: var(--fides-ds-space-4);
   }
   .fides-ds.fides-uc-detail .fides-uc-detail__hero {

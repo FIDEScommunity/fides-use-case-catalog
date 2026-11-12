@@ -125,7 +125,7 @@ async function overviewDesktop(browser, type) {
     };
   });
   check(`${tag}: no script errors`, errors.length === 0, errors.join(" | "));
-  check(`${tag}: H1 30/36`, first.h1 && first.h1[0] === "30px" && first.h1[1] === "36px", JSON.stringify(first.h1));
+  check(`${tag}: H1 36/42 (compact page-header role at 1440)`, first.h1 && first.h1[0] === "36px" && first.h1[1] === "42px", JSON.stringify(first.h1));
   check(`${tag}: logo slot 120 x 75 contain`, first.media[0] === 120 && first.media[1] === 75 && (first.fit === "contain" || first.fit === "none"), `${first.media.join("x")} ${first.fit}`);
   check(`${tag}: name 20/26`, first.title[0] === "20px" && first.title[1] === "26px", first.title.join("/"));
   check(`${tag}: facts with Updated date`, /Updated\u00a0\d{1,2}\u00a0[A-Z][a-z]{2}\u00a0\d{4}/.test(first.facts), first.facts);

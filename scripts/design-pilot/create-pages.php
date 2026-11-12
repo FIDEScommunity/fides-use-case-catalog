@@ -541,14 +541,14 @@ foreach ($awards_pages as $awards_page) {
 pilot_upsert_page(
     '{{base}}/updates',
     'Updates',
-    "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"48px\",\"bottom\":\"0px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
-    . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:48px;padding-bottom:0px\">"
-    . "<!-- wp:paragraph {\"className\":\"fides-ds-kicker\"} -->\n<p class=\"fides-ds-kicker\">FIDES · Knowledge &amp; ecosystem</p>\n<!-- /wp:paragraph -->\n"
-    . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ds-heading-1 fides-ds-heading-1--catalog\"} -->\n<h1 class=\"wp-block-heading fides-ds-heading-1 fides-ds-heading-1--catalog\">Updates</h1>\n<!-- /wp:heading -->\n"
-    . "<!-- wp:paragraph {\"className\":\"fides-ds-lead\"} -->\n<p class=\"fides-ds-lead\">Follow developments in digital identity, wallets and trusted data.</p>\n<!-- /wp:paragraph -->"
+    "<!-- wp:group {\"className\":\"fides-ds fides-ds-page fides-ph\",\"layout\":{\"type\":\"default\"}} -->\n"
+    . "<div class=\"wp-block-group fides-ds fides-ds-page fides-ph\">"
+    . "<!-- wp:paragraph {\"className\":\"fides-ds-kicker fides-ph__label\"} -->\n<p class=\"fides-ds-kicker fides-ph__label\">FIDES · Knowledge &amp; ecosystem</p>\n<!-- /wp:paragraph -->\n"
+    . "<!-- wp:heading {\"level\":1,\"className\":\"fides-ph__title fides-ph__title--standard\"} -->\n<h1 class=\"wp-block-heading fides-ph__title fides-ph__title--standard\">Updates</h1>\n<!-- /wp:heading -->\n"
+    . "<!-- wp:paragraph {\"className\":\"fides-ds-lead fides-ph__intro\"} -->\n<p class=\"fides-ds-lead fides-ph__intro\">Follow developments in digital identity, wallets and trusted data.</p>\n<!-- /wp:paragraph -->"
     . "</div>\n<!-- /wp:group -->\n"
-    . "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"style\":{\"spacing\":{\"padding\":{\"top\":\"32px\"}}},\"layout\":{\"type\":\"default\"}} -->\n"
-    . "<div class=\"wp-block-group fides-ds fides-ds-page\" style=\"padding-top:32px\"><!-- wp:shortcode -->[fides_updates]<!-- /wp:shortcode --></div>\n<!-- /wp:group -->",
+    . "<!-- wp:group {\"className\":\"fides-ds fides-ds-page\",\"layout\":{\"type\":\"default\"}} -->\n"
+    . "<div class=\"wp-block-group fides-ds fides-ds-page\"><!-- wp:shortcode -->[fides_updates]<!-- /wp:shortcode --></div>\n<!-- /wp:group -->",
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE
