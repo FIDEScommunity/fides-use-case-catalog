@@ -37,6 +37,14 @@
    "menu_order": 2
   },
   {
+   "path": "topics/ecosystem-roles",
+   "title": "Ecosystem roles",
+   "kind": "section",
+   "excerpt": "A wallet interaction involves several parties. One provides information, another holds it, and a service requests and checks it. Providers and trust services may support the process.",
+   "content": "ecosystem-roles.html",
+   "menu_order": 4
+  },
+  {
    "path": "topics/the-big-picture/what-is-a-digital-wallet",
    "title": "What is a digital wallet?",
    "kind": "article",

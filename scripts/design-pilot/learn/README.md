@@ -11,6 +11,7 @@ pushed, deployed or synced to utrecht-demo.
 | Topics | `topics/` | 24.2 | topics |
 | The big picture | `topics/the-big-picture/` | 24.10 | section |
 | For businesses | `topics/for-businesses/` | 24.12 | section |
+| Ecosystem roles | `topics/ecosystem-roles/` (menu order 4) | no Paper frame (same section template as the other topic pages) | section; overview only: the example, six role rows (only "How credentials connect..." is a link; holder, issuer, relying party, providers and trust services are unlinked "Design preview" rows that point to existing articles in their text), back links from the Topics page and five articles; no role pages exist; gaps: `learn/ecosystem-roles-editorial-gaps.md`; Dutch proposals (not seeded): `learn/nl-translation-changes-ecosystem-roles.md`; checks: `tests/ecosystem-roles-checks.cjs`, `tests/ecosystem-roles-seed.sh` |
 | How credentials connect issuers, wallets and services | `topics/the-big-picture/how-credentials-connect/` | 24.18, mobile 24.20 | article |
 | Business wallets: where to start | `topics/for-businesses/business-wallets-where-to-start/` | 24.19 | article |
 | European Digital Identity Wallet | `topics/the-big-picture/european-digital-identity-wallet/` | no Paper frame (same article template) | article |
@@ -131,7 +132,7 @@ re-seed. Block classes the seed uses: `fides-learn-rows` (`--plain`, `--from-zer
 
 ## Package status and counts
 
-Glossary: pinned in `staging/glossary-source.json` (1.12.2, published as `a52a684`; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.51. Sources list (Paper 24.18, styleguide 25.14): one open link line per source (`Organisation · Title`, from the existing `Label | URL` field), no visible URL, long titles wrap; only hosts other than the site's own get the external indicator and open in a new tab (filter `fides_ds_learn_own_hosts` adds own hosts). Markup in `Fides_DS_Learn::source_link()`, styles in `assets/learn.css`; checked by `tests/learn-sources-checks.cjs` and `tests/learn-sources-behaviour.php`. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (26 and 26 on 11 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
+Glossary: pinned in `staging/glossary-source.json` (1.12.2, published as `a52a684`; see `staging/HANDOVER.md` "Glossary data"). Tiles: pilot 1.13.51. Sources list (Paper 24.18, styleguide 25.14): one open link line per source (`Organisation · Title`, from the existing `Label | URL` field), no visible URL, long titles wrap; only hosts other than the site's own get the external indicator and open in a new tab (filter `fides_ds_learn_own_hosts` adds own hosts). Markup in `Fides_DS_Learn::source_link()`, styles in `assets/learn.css`; checked by `tests/learn-sources-checks.cjs` and `tests/learn-sources-behaviour.php`. Learn content: count `learn/content/*.html` and the `pages` in `learn/manifest.json` at build time (27 and 27 on 12 November 2026). A seed dry-run (`LEARN_DRY_RUN=1`) lists pages an editor changed on staging as skipped; nothing is forced (`LEARN_FORCE` stays unused).
 
 ## Seeding and overwrite protection
 

@@ -93,6 +93,23 @@ domain + exact original only. An empty or missing-translation row is filled with
 (`differs ... (kept)`); "no row yet" means TranslatePress has not seen the string (open a page that shows it). Verify with
 `wp --path=<wp> db query "SELECT original, translated, status FROM wp_trp_gettext_nl_nl WHERE original IN ('Skip to content','This field is required.')"`.
 
+## Ecosystem roles overview (12 November 2026, local only)
+
+- **Seed:** one new Learn page, `topics/ecosystem-roles` (kind `section`, Learn template, content `learn/content/ecosystem-roles.html`), and
+  six existing seed pages with a small content change: `topics` (the Ecosystem roles row title is now a link) and a "Ecosystem roles" item in the
+  "Learn more" list of `how-credentials-connect`, `trust-and-interoperability`, `what-is-a-digital-wallet`, `issuing-credentials-for-wallets`
+  and `accepting-information-from-a-wallet`. `learn/manifest.json` and `learn/content/` now hold 27 pages and 27 files (read the number from
+  the manifest and `ls learn/content` when the package is built). Tiles are unchanged (1.13.51 stays); no CSS, no glossary change.
+- **Protection:** a dry-run (`LEARN_DRY_RUN=1`) lists the page as `would-created` and the six changes as `would-updated` on a site where nobody edited them.
+  A page edited on staging is reported `skipped-edited` and keeps its text; then add the "Ecosystem roles" link by hand in the editor. Never use
+  `LEARN_FORCE`. Behaviour test: `tests/ecosystem-roles-seed.sh` (throwaway tree; created, unchanged, skipped-edited, skipped-unmarked).
+- **Not written:** the five role articles (holder, issuer, relying party, wallet providers and other service providers, trust services and
+  trust frameworks) have no pages; the overview shows them as unlinked rows. What each still needs: `learn/ecosystem-roles-editorial-gaps.md`.
+- **Dutch:** proposals only, in `learn/nl-translation-changes-ecosystem-roles.md` (22 new strings, reused rows listed). Nothing is in
+  `nl-translations.json` or `nl-translations.php`, so the package carries no new Dutch for this page until the owner approves.
+- Links: the overview links only to destinations that exist in the pilot (use cases, credential types, personal and business wallets,
+  organisations, existing Learn articles). `/issuer-catalog/` and `/relying-party-websites/` are not linked.
+
 ## Changes since package `20261112-083503-34b753ab` (third package, same day)
 
 - **Terminology round 2:** 21 existing Dutch rows were corrected locally (no rows added or removed; export still 934 entries, 4 gettext):
