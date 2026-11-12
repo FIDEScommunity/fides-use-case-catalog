@@ -25,9 +25,11 @@ $check(isset(apply_filters('theme_page_templates', array())[ Fides_DS_Learn::TEM
 $issuer = Fides_DS_Learn::find_term('Issuer');
 $check(is_array($issuer) && $issuer['key'] === 'issuer' && trim($issuer['description']) !== '', 'term lookup finds Issuer in the vocabulary');
 $check((Fides_DS_Learn::find_term('business wallet')['name'] ?? '') === 'Organizational Wallet', 'term lookup matches an alias case-insensitively');
-$check(Fides_DS_Learn::find_term('Credential') === null, 'a term without vocabulary entry is not invented');
+// A made-up name: "Credential" is a real glossary term since 1.12.0, so it cannot serve as the undefined example.
+$check(Fides_DS_Learn::find_term('Unlisted Test Term') === null, 'a term without vocabulary entry is not invented');
+$check(Fides_DS_Learn::find_term('Credential') !== null, 'Credential has a vocabulary entry (glossary 1.12.0 and later)');
 Fides_DS_Learn::$missing = array();
-$check(do_shortcode('[fides_learn_term term="Credential"]credential[/fides_learn_term]') === 'credential' && Fides_DS_Learn::$missing === array('Credential'), 'undefined term renders plain text and is reported');
+$check(do_shortcode('[fides_learn_term term="Unlisted Test Term"]credential[/fides_learn_term]') === 'credential' && Fides_DS_Learn::$missing === array('Unlisted Test Term'), 'undefined term renders plain text and is reported');
 $check(strpos(do_shortcode('[fides_learn_term term="Issuer"]issuer[/fides_learn_term]'), 'data-fides-ds-term') !== false, 'defined term renders the shared glossary button');
 $check(strpos(do_shortcode('[fides_learn_terms terms="Verifiable credential=Verifiable Credential|Issuer"]'), '>Verifiable credential<') !== false, 'Label=Term shows the label with the vocabulary definition');
 Fides_DS_Glossary::reset();

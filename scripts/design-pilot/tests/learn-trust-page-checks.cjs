@@ -15,7 +15,8 @@ const PAGE = `${T}/the-big-picture/trust-and-interoperability/`;
 const ROOT = path.resolve(__dirname, "../../../..");
 const GLOSSARY = JSON.parse(fs.readFileSync(path.join(ROOT, "wordpress/wp-content/plugins/fides-vocabulary-glossary/data/glossary-aggregated.json"), "utf8")).terms;
 const BYNAME = Object.fromEntries(GLOSSARY.map((t) => [t.name, t]));
-const TERMS = { "Attestation Rulebook": /^rulebook \(definition\)$/i };
+// Since 5f7f6f8 the article is part of the chip text ("A wallet", "The EUDI Wallet"), so it is optional in the patterns.
+const TERMS = { "Attestation Rulebook": /^(?:(?:a|an|the) )?rulebook \(definition\)$/i };
 const BACKLINKS = ["the-big-picture", "the-big-picture/formats-and-protocols", "the-big-picture/what-is-a-credential", "the-big-picture/how-credentials-connect"];
 let failures = 0;
 function check(name, ok, detail) {

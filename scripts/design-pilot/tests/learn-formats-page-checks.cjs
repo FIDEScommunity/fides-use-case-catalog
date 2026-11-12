@@ -15,7 +15,8 @@ const PAGE = `${T}/the-big-picture/formats-and-protocols/`;
 const ROOT = path.resolve(__dirname, "../../../..");
 const GLOSSARY = JSON.parse(fs.readFileSync(path.join(ROOT, "wordpress/wp-content/plugins/fides-vocabulary-glossary/data/glossary-aggregated.json"), "utf8")).terms;
 const BYNAME = Object.fromEntries(GLOSSARY.map((t) => [t.name, t]));
-const TERMS = { "Credential Format": /^credential format \(definition\)$/i, "mDL/mDoc": /^mDoc \(definition\)$/i, "SD-JWT-VC": /^SD-JWT VC \(definition\)$/i, OpenID4VCI: /^OpenID4VCI \(definition\)$/i, OpenID4VP: /^OpenID4VP \(definition\)$/i, "Interop Profile": /^interoperability profile \(definition\)$/i };
+// Since 5f7f6f8 the article is part of the chip text ("A wallet", "The EUDI Wallet"), so it is optional in the patterns.
+const TERMS = { "Credential Format": /^(?:(?:a|an|the) )?credential format \(definition\)$/i, "mDL/mDoc": /^(?:(?:a|an|the) )?mDoc \(definition\)$/i, "SD-JWT-VC": /^(?:(?:a|an|the) )?SD-JWT VC \(definition\)$/i, OpenID4VCI: /^(?:(?:a|an|the) )?OpenID4VCI \(definition\)$/i, OpenID4VP: /^(?:(?:a|an|the) )?OpenID4VP \(definition\)$/i, "Interop Profile": /^(?:(?:a|an|the) )?interoperability profile \(definition\)$/i };
 const BACKLINKS = ["the-big-picture", "the-big-picture/what-is-a-credential", "the-big-picture/how-credentials-connect", "the-big-picture/what-is-a-digital-wallet", "for-businesses/accepting-information-from-a-wallet", "for-businesses/issuing-credentials-for-wallets"];
 let failures = 0;
 function check(name, ok, detail) {
