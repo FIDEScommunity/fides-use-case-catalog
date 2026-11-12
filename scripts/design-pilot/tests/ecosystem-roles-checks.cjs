@@ -1,7 +1,7 @@
 /**
  * Targeted checks for the Learn overview "Ecosystem roles" (topics/ecosystem-roles/).
  * Page: 200, English, one H1, breadcrumb Learn / Topics / Ecosystem roles, Topics current in the Learn bar, the six
- * role rows (only the first is a link; the unwritten role articles are not linked and no empty pages exist), glossary
+ * role rows (all six are links to existing pages, no "Design preview"/"In preparation" label, no "for now" paragraph), glossary
  * terms open by keyboard, every internal link answers 200, no unavailable destinations, no local host in the content,
  * no horizontal overflow, visible focus, no console errors.
  * Links: the Topics row links to the overview; the five existing articles link back to it.
@@ -19,9 +19,8 @@ const BACKLINKS = [
   "topics/for-businesses/issuing-credentials-for-wallets",
   "topics/for-businesses/accepting-information-from-a-wallet",
 ];
-const ROLES = ["How credentials connect issuers, wallets and services", "The holder", "The issuer", "The relying party", "Wallet providers and other service providers", "Trust services and trust frameworks"];
-// Role articles that are not written yet: no page may exist for them.
-const UNWRITTEN = ["the-holder", "the-issuer", "the-relying-party", "wallet-providers", "trust-services-and-trust-frameworks", "holder", "issuer", "relying-party"];
+const ROLES = ["How credentials connect issuers, wallets and services", "The holder", "The issuer", "The relying party", "Wallet providers and other service providers", "Trust service providers and trust frameworks"];
+const ROLE_SLUGS = ["the-holder", "the-issuer", "the-relying-party", "wallet-providers-and-other-service-providers", "trust-service-providers-and-trust-frameworks"];
 let failures = 0;
 function check(name, ok, detail) {
   if (!ok) failures += 1;
@@ -65,7 +64,11 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     check(`${tag}: example flow lists issuer, holder + wallet, relying party`, /Issuer.*Training provider.*Holder \+ wallet.*Recipient.*Relying party.*Employer/.test(squash(await content.locator("ol.fides-learn-flow").innerText())));
     const rows = await content.locator("ul.fides-learn-rows > li").evaluateAll((lis) => lis.map((li) => ({ text: li.innerText.replace(/\s+/g, " ").trim(), titleIsLink: !!li.querySelector(":scope > a") })));
     check(`${tag}: six role rows in order`, rows.length === 6 && ROLES.every((n, i) => rows[i].text.startsWith(n)), rows.map((x) => x.text.slice(0, 30)).join("|"));
-    check(`${tag}: only the existing article is a linked row title`, rows[0].titleIsLink && rows.slice(1).every((x) => !x.titleIsLink));
+    check(`${tag}: every row title is a link`, rows.length === 6 && rows.every((x) => x.titleIsLink));
+    const rowHrefs = await content.locator("ul.fides-learn-rows > li > a").evaluateAll((as) => as.map((a) => new URL(a.href).pathname));
+    check(`${tag}: the five role rows link to the role articles in order`, ROLE_SLUGS.every((slug, i) => rowHrefs[i + 1] === `${PAGE}${slug}/`), rowHrefs.join(","));
+    const bodyText = await content.innerText();
+    check(`${tag}: no "Design preview" or "In preparation" label and no "not available yet" paragraph`, !/Design preview|In preparation|not available yet|for now\./i.test(bodyText) && (await content.locator(".fides-learn-rows li").evaluateAll((lis) => lis.every((li) => getComputedStyle(li, "::after").content === "none" || !/Design preview|In preparation/.test(getComputedStyle(li, "::after").content)))));
     const rowHeights = await content.locator("ul.fides-learn-rows > li").evaluateAll((lis) => lis.map((li) => li.getBoundingClientRect().height));
     check(`${tag}: rows are at least 44px high`, rowHeights.every((h) => h >= 44), rowHeights.join(","));
     const aside = squash(await content.locator(".fides-learn-panel__aside").innerText());
@@ -94,12 +97,8 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     const bad = [];
     for (const h of internal) { const x = await page.request.get(`${BASE}${h}`); if (x.status() !== 200) bad.push(`${h} ${x.status()}`); }
     check(`${tag}: ${internal.length} internal links answer 200`, internal.length >= 10 && bad.length === 0, bad.join(", "));
-    for (const dest of ["how-credentials-connect", "what-is-a-digital-wallet", "issuing-credentials-for-wallets", "accepting-information-from-a-wallet", "trust-and-interoperability", "eudi-wallet-and-european-business-wallet", "credentials", "personal-wallets", "business-wallets", "organizations", "overview"]) {
+    for (const dest of ["how-credentials-connect", ...ROLE_SLUGS, "eudi-wallet-and-european-business-wallet", "credentials", "personal-wallets", "business-wallets", "organizations", "overview"]) {
       check(`${tag}: links to ${dest}`, internal.some((h) => h.includes(`/${dest}/`)));
-    }
-    for (const slug of UNWRITTEN) {
-      const x = await page.request.get(`${BASE}${L}/topics/ecosystem-roles/${slug}/`);
-      check(`${tag}: no empty role page at ecosystem-roles/${slug}/`, x.status() === 404 || !x.url().endsWith(`/ecosystem-roles/${slug}/`), `${x.status()} ${x.url()}`);
     }
 
     // Focus and overflow.

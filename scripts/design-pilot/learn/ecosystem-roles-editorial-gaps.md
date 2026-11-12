@@ -1,33 +1,29 @@
-# Ecosystem roles: what is still missing (editorial round, 12 November 2026)
+# Ecosystem roles: what is still open (editorial round, 12 November 2026)
 
-The overview `topics/ecosystem-roles/` exists. The five role articles from the editorial outline are **not written**, and no empty pages were
-created for them: the rows on the overview have no link and show the "Design preview" label. Each row points to the closest existing
-article in its description. When an article is published, link its row title (and remove the "for now" pointer), add it to
-`learn/manifest.json` with `kind: article`, `eyebrow: "Explainer · Ecosystem roles"`, `sources`, and a content file under `learn/content/`.
-Also remove the paragraph "Where a separate article about a role is not available yet..." from `ecosystem-roles.html` once all rows are linked.
+The overview `topics/ecosystem-roles/` and its five role articles exist (the holder, the issuer, the relying party, wallet providers and other
+service providers, trust service providers and trust frameworks). All six rows on the overview are links. Source of the texts: the editorial
+draft "Learn, Ecosystem roles". The articles describe general roles and set out no specific legal obligations.
 
-Source of the plan: the editorial outline "Learn Topics, vervolgopzet" (section "Eerste uitwerking, Ecosystem roles"). Sources named below still need to be
-chosen by the editors; none is quoted here as fact.
+## Still open
 
-| Role / article | Content still needed (from the outline) | Existing article used for now | Follow-up links to add when written |
-|---|---|---|---|
-| The holder | Who receives and shares information; which choices the holder has; how it works when someone acts on behalf of an organisation. | What is a digital wallet? | Back link to the overview; Business wallets: where to start (acting for an organisation); the personal and business wallet catalogs; For you (when it exists); a mandate article (none exists). |
-| The issuer | Who provides a credential; where the information comes from; how issuing relates to responsibility for the content. | Issuing credentials for wallets | Credential Catalog (credential types); issuer catalog (only on the full site, see below); What is a credential?; For governments (when it exists, public issuers). |
-| The relying party | Who requests information and why; what a technical check delivers; which assessment stays with the service. | Accepting information from a wallet | Relying party websites catalog (only on the full site, see below); Receive information from wallets (route, already linked from other articles); Trust and interoperability. |
-| Wallet providers and other service providers | Which software and services can support an interaction; how responsibilities differ per setup (own software, service from another organisation). | none (the overview describes it in one sentence) | Personal and business wallet catalogs; organisation catalog; What is a digital wallet?; EUDI and EBW comparison (without equating roles or legal frameworks). |
-| Trust services and trust frameworks | An introduction to trust services, agreements and registers. Legal qualifications only with a concrete source and applicable framework. | Trust and interoperability | Organisation catalog (qualified trust service providers, only if the editors confirm the listing fits); interop profiles / matrix (no pilot destination, see below); Formats and protocols. |
-
-## Destinations that are not available in the pilot
-
-- `Browse issuers` (`/issuer-catalog/`) and `Browse relying parties` (`/relying-party-websites/`) exist only on the full site; the overview does not link to
-  them. Add them to the "Explore in the catalogs" paragraph and to the issuer and relying party articles when the destinations exist in the target environment.
-- Interop profiles and interop matrix have no pilot page.
-- For you and For governments are "Design preview" rows on Topics; the issuer and holder articles should link to them once they exist.
+| Item | What is missing |
+|---|---|
+| For you | The page does not exist. The holder article should link to it when it does (it is a "Design preview"/"In preparation" row on Topics). |
+| For governments | The page does not exist. The issuer article should link to it (public issuers) when it does. |
+| A mandate article | None exists. The holder article mentions mandates in one sentence (glossary term only) and points nowhere. |
+| Issuer catalog | `Browse issuers` (`/issuer-catalog/`) exists only on the full site. Add it to "Explore in the catalogs" on the issuer article when the destination exists in the target environment. |
+| Relying party catalog | `Browse relying parties` (`/relying-party-websites/`) exists only on the full site. Add it to the relying party article when it exists. |
+| Interop profiles and matrix | No pilot page; the trust article does not link to them. |
+| Sources for "Wallet providers and other service providers" | The draft names no source for this article. None was added. |
+| "Trust framework" and "Trust service provider" | No glossary entry exists, so these terms are plain text on the trust article. Glossary content is out of scope here. |
+| Role articles for staging | A staging copy of Topics, the four extended articles or the overview that an editor changed is `skipped-edited`; add the missing links by hand (see `staging/UPDATE-PLAN-NL-LEARN.md`). |
 
 ## Other points for the editors
 
-- The Topics description of Ecosystem roles ("Holders, issuers, relying parties, providers and trust services") is unchanged.
-- The overview uses the same example as "How credentials connect issuers, wallets and services" (training provider, recipient, employer); keep the two in step.
+- The overview and "How credentials connect issuers, wallets and services" use the same example (training provider, recipient, employer); the holder
+  article uses a student and an employer. Keep the examples consistent when one of them changes.
 - EUDI and EBW: the overview only points to the comparison article. Role articles should say which framework a statement applies to.
-- Check the German and other country examples in "How credentials connect" are not copied into the role articles without their own source and date.
-- A staging page that an editor already changed is skipped by the seed (also in dry-run). That applies to Topics and the five articles that now link back: if they were edited on staging, add the "Ecosystem roles" link there by hand (see `staging/UPDATE-PLAN-NL-LEARN.md`).
+- Check that German and other country examples in "How credentials connect" are not copied into the role articles without their own source and date.
+- The trust article links to the organisation catalog with the role filter `eIDAS Trust Service Provider` (`?role=eidas_trust_service_provider`) and the certification filter
+  `QTSP (eIDAS)` (`?cert=qtsp`). Check on staging that the organisation data there shows results and the selected filter chips.
+- The overview row for the last role now carries the article title "Trust service providers and trust frameworks" (earlier "Trust services and trust frameworks").

@@ -103,8 +103,18 @@ domain + exact original only. An empty or missing-translation row is filled with
 - **Protection:** a dry-run (`LEARN_DRY_RUN=1`) lists the page as `would-created` and the six changes as `would-updated` on a site where nobody edited them.
   A page edited on staging is reported `skipped-edited` and keeps its text; then add the "Ecosystem roles" link by hand in the editor. Never use
   `LEARN_FORCE`. Behaviour test: `tests/ecosystem-roles-seed.sh` (throwaway tree; created, unchanged, skipped-edited, skipped-unmarked).
-- **Not written:** the five role articles (holder, issuer, relying party, wallet providers and other service providers, trust services and
-  trust frameworks) have no pages; the overview shows them as unlinked rows. What each still needs: `learn/ecosystem-roles-editorial-gaps.md`.
+- **Role articles (12 November 2026, later round):** five new article pages below `topics/ecosystem-roles/`: `the-holder`, `the-issuer`,
+  `the-relying-party`, `wallet-providers-and-other-service-providers`, `trust-service-providers-and-trust-frameworks` (kind `article`, eyebrow
+  "Explainer · Ecosystem roles", content files of the same name, sources from the manifest). The overview rows are now links (the "Read ... for now"
+  pointers and the "not available yet" paragraph are gone) and four existing articles got one extra "Learn more" item pointing to their role article
+  (`what-is-a-digital-wallet` -> the holder, `issuing-credentials-for-wallets` -> the issuer, `accepting-information-from-a-wallet` -> the relying party,
+  `trust-and-interoperability` -> trust service providers and trust frameworks). `learn/manifest.json` and `learn/content/` now hold 32 pages and 32 files.
+  On a site where nobody edited them, a dry-run shows 5 `would-created` and 5 `would-updated` (the overview and the four articles). A page edited on
+  staging is `skipped-edited`: add the extra "Learn more" link by hand (the five new pages are created either way). Tests: `tests/ecosystem-roles-articles-checks.cjs`,
+  `tests/ecosystem-roles-articles-seed.sh` (both run from `tests/run-ecosystem-roles-checks.sh`).
+  The trust page links to the organisation catalog with `?role=eidas_trust_service_provider` and `?cert=qtsp` (separate links; both work together as well).
+  On staging, check that the organisation data there contains organisations with that role and with QTSP certification, and that the chips show.
+  Dutch proposals for the articles: `learn/nl-translation-changes-ecosystem-roles-articles.md` (not seeded).
 - **Dutch:** proposals only, in `learn/nl-translation-changes-ecosystem-roles.md` (22 new strings, reused rows listed). Nothing is in
   `nl-translations.json` or `nl-translations.php`, so the package carries no new Dutch for this page until the owner approves.
 - Links: the overview links only to destinations that exist in the pilot (use cases, credential types, personal and business wallets,
