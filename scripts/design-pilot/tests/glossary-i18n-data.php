@@ -32,8 +32,6 @@ $nl = array(
     'Check the spelling, try an abbreviation or use fewer words.' => 'Controleer de spelling, probeer een afkorting of gebruik minder woorden.',
     'Also known as {alias}'                    => 'Ook bekend als {alias}',
     'Also known as:'                           => 'Ook bekend als:',
-    'Link to this term'                        => 'Link naar deze term',
-    'Link copied'                              => 'Link gekopieerd',
     'Source:'                                  => 'Bron:',
     '(opens in a new tab)'                     => '(opent in een nieuw tabblad)',
 );

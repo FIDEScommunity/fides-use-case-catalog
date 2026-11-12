@@ -104,11 +104,11 @@ async function main() {
     await page.waitForSelector("[data-glossary-ready]", { state: "attached", timeout: 20000 });
     const panel = await page.evaluate(() => {
       const p = document.querySelector(".fides-glossary__definition");
-      return p ? { text: p.innerText.replace(/\s+/g, " "), title: p.querySelector("h3").textContent.trim(), body: p.querySelector(".fides-glossary__definition-text").textContent.trim(), permalink: p.querySelector("[data-glossary-permalink]").textContent.trim() } : null;
+      return p ? { text: p.innerText.replace(/\s+/g, " "), title: p.querySelector("h3").textContent.trim(), body: p.querySelector(".fides-glossary__definition-text").textContent.trim() } : null;
     });
     check("panel opens from the Dutch deeplink", Boolean(panel));
     if (panel) {
-      check("panel labels are Dutch", panel.permalink === "Link naar deze term" && panel.text.includes("Ook bekend als:") && panel.text.includes("Bron:") && panel.text.includes("(opent in een nieuw tabblad)"), panel.text.slice(0, 200));
+      check("panel labels are Dutch", !panel.text.includes("Link naar deze term") && panel.text.includes("Ook bekend als:") && panel.text.includes("Bron:") && panel.text.includes("(opent in een nieuw tabblad)"), panel.text.slice(0, 200));
       check("term name and definition stay English source data", panel.title === String(full.name).trim() && panel.body === String(full.description).trim());
     }
   }

@@ -169,7 +169,7 @@ async function inline(page, width, data) {
   const text = await panel.innerText();
   check(`${tag}: description, aliases and source are shown`, text.includes(term.description.slice(0, 40)) && text.includes("Also known as") && text.includes(term.aliases[0]) && /Source:/.test(text), text.slice(0, 120));
   check(`${tag}: source link opens in a new tab with a hint`, (await panel.locator("a[target=_blank]").getAttribute("rel")) === "noopener" && /opens in a new tab/.test(text));
-  check(`${tag}: link to this term carries ?term=`, new RegExp(`term=${encodeURIComponent(term.id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`).test(await panel.locator("[data-glossary-permalink]").getAttribute("href")));
+  check(`${tag}: no "Link to this term" action in the open term`, (await panel.locator("[data-glossary-permalink], .fides-glossary__permalink, .fides-glossary__copied").count()) === 0 && !/Link to this term/i.test(text));
   check(`${tag}: URL holds the term while open`, page.url().includes("term="));
   check(`${tag}: no horizontal overflow while open`, !(await overflow(page)));
   await page.screenshot({ path: path.join(OUT, `glossary-open-${width}.png`) });
