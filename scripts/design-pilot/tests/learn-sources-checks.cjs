@@ -82,7 +82,15 @@ async function run() {
               target: li.querySelector("a").getAttribute("target"),
               indicator: !!li.querySelector('a [aria-hidden="true"]'),
               aria: li.querySelector("a").getAttribute("aria-label"),
-              lines: Math.max(1, Math.round((li.querySelector("a").getBoundingClientRect().height - 20) / lineH)),
+              lines: Math.max(1, Math.round((li.querySelector("a").getBoundingClientRect().height - parseFloat(getComputedStyle(li.querySelector("a")).paddingTop) * 2) / lineH)),
+              fs: getComputedStyle(li.querySelector("a")).fontSize,
+              lh: getComputedStyle(li.querySelector("a")).lineHeight,
+              hasDot: li.querySelector("a").textContent.includes(" · "),
+              nameEls: li.querySelectorAll("a strong").length,
+              nameText: li.querySelector("a strong") ? li.querySelector("a strong").textContent : "",
+              nameWeight: li.querySelector("a strong") ? getComputedStyle(li.querySelector("a strong")).fontWeight : null,
+              titleWeight: getComputedStyle(li.querySelector("a")).fontWeight,
+              gapBelow: li.nextElementSibling ? Math.round(li.nextElementSibling.getBoundingClientRect().top - li.getBoundingClientRect().bottom) : 0,
               trunc: li.querySelector("a").scrollWidth > li.querySelector("a").clientWidth + 1 || getComputedStyle(li.querySelector("a")).textOverflow === "ellipsis" || getComputedStyle(li.querySelector("a")).overflow === "hidden",
               height: Math.round(li.querySelector("a").getBoundingClientRect().height),
             })),
@@ -98,7 +106,11 @@ async function run() {
         check(`${tag}: list is open by default`, info.visible && (!info.inDetails || info.detailsOpen));
         check(`${tag}: long titles wrap, no truncation`, info.items.every((i) => !i.trunc));
         check(`${tag}: no horizontal page overflow`, info.overflow <= 0, String(info.overflow));
-        check(`${tag}: link height is at least 44px, no contradicting aria-label`, info.items.every((i) => i.height >= 44 && (i.aria === null || i.aria === "")), JSON.stringify(info.items.map((i) => [i.height, i.aria])));
+        const minH = width < 768 ? 44 : 32;
+        check(`${tag}: link height is at least ${minH}px (44px on mobile), no contradicting aria-label`, info.items.every((i) => i.height >= minH && (i.aria === null || i.aria === "")), JSON.stringify(info.items.map((i) => [i.height, i.aria])));
+        check(`${tag}: 16px text, 24px line height, no extra gap between sources`, info.items.every((i) => i.fs === "16px" && i.lh === "24px" && i.gapBelow === 0), JSON.stringify(info.items.map((i) => [i.fs, i.lh, i.gapBelow])));
+        check(`${tag}: source name is semibold only when the label has one, title stays normal`, info.items.every((i) => (i.hasDot ? i.nameEls === 1 && Number(i.nameWeight) >= 600 && !i.liText.startsWith(" ") && i.liText.startsWith(i.nameText + " · ") : i.nameEls === 0) && Number(i.titleWeight) <= 400), JSON.stringify(info.items.map((i) => [i.nameEls, i.nameWeight, i.titleWeight])));
+        if (label.startsWith("long title")) check(`${tag}: a label without a source name exists here and is all normal weight`, info.items.some((i) => !i.hasDot && i.nameEls === 0), JSON.stringify(info.items.map((i) => i.liText)));
         check(`${tag}: external indicator and new tab only for other hosts`, info.items.every((i) => {
           const ext = new URL(i.href, BASE).host !== HOST;
           return i.indicator === ext && (i.target === "_blank") === ext;

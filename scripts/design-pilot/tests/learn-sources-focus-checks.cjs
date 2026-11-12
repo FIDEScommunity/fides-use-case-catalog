@@ -41,7 +41,9 @@ function measure() {
     }
   }
   const li = a.closest("li");
-  const next = li && li.nextElementSibling ? li.nextElementSibling.querySelector("a").getBoundingClientRect() : null;
+  // The ring may reach into the next link's own padding (transparent), but never onto its text: compare with the next text top.
+  const nextA = li && li.nextElementSibling ? li.nextElementSibling.querySelector("a") : null;
+  const next = nextA ? { top: nextA.getBoundingClientRect().top + parseFloat(getComputedStyle(nextA).paddingTop) } : null;
   const last = ring[ring.length - 1];
   const lineH = parseFloat(cs.lineHeight);
   const bg = (() => {
