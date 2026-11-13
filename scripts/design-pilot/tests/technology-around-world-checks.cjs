@@ -38,7 +38,7 @@ const HUBS = [
     links: ["credentials/", "personal-wallets/", "business-wallets/", "overview/"] },
   { key: "around-the-world", path: WORLD, h1: "Digital trust around the world", crumbs: ["Learn", "Topics", "Around the world"], intro: /^Countries and international initiatives are developing different ways to use digital identity, wallets and verifiable information\./,
     headings: ["Explore by country", "Explore international initiatives", "Explore in FIDES"], panel: "Check the source and the date",
-    rows: [`${WORLD}the-netherlands/`, `${WORLD}germany/`, `${L}/topics/the-big-picture/european-digital-identity-wallet/`, `${L}/topics/for-governments/the-eudi-wallet-and-national-implementation/`, `${WORLD}un-transparency-protocol/`],
+    rows: [`${WORLD}the-netherlands/`, `${WORLD}germany/`, `${WORLD}india/`, `${WORLD}canada/`, `${WORLD}united-states/`, `${WORLD}honduras/`, `${WORLD}ethiopia/`, `${L}/topics/the-big-picture/european-digital-identity-wallet/`, `${L}/topics/for-governments/the-eudi-wallet-and-national-implementation/`, `${WORLD}un-transparency-protocol/`],
     links: ["overview/", "organizations/", "personal-wallets/", "business-wallets/"] },
 ];
 const PAGES = [
@@ -49,7 +49,7 @@ const PAGES = [
   { group: "technology", parent: "Technology", slug: "credential-formats-and-interoperability", title: "Credential formats and interoperability",
     eyebrow: /Explainer\s*·\s*Technology/i, intro: /^See what a format describes and what else affects compatibility/, sources: [S.vcdm, S.sd, S.iso],
     headings: ["What does a format describe?", "More than a format", "Comparing products", "Continue learning"],
-    links: ["formats-and-protocols", "how-do-wallets-and-services-exchange-information", "trust-and-interoperability", "credentials/", "personal-wallets", "business-wallets"], terms: 4, learnMore: 3, note: /Content last checked: 13 November 2026/, must: [/Internet-Draft/, /version 26/, /ISO\/IEC 18013-5/, /Recommendation \(May 2025\)/] },
+    links: ["formats-and-protocols", "how-do-wallets-and-services-exchange-information", "trust-and-interoperability", "credentials/", "personal-wallets", "business-wallets"], terms: 4, learnMore: 4, note: /Content last checked: 13 November 2026/, must: [/Internet-Draft/, /version 26/, /ISO\/IEC 18013-5/, /Recommendation \(May 2025\)/] },
   { group: "technology", parent: "Technology", slug: "trust-frameworks-and-registries", title: "Trust frameworks and registries",
     eyebrow: /Explainer\s*·\s*Technology/i, intro: /^How do participants agree on rules/, sources: [S.tl, S.arf, S.vcdm],
     headings: ["What is a trust framework?", "What can a registry provide?", "Trusted lists and qualified trust services", "Questions to ask", "Continue learning"],

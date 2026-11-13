@@ -396,6 +396,15 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
 - **Not linked (no pilot destination):** issuer overview, relying party overview, interop profiles. Tiles unchanged.
 - **Tests:** `tests/run-technology-around-world-checks.sh`.
 
+## Around the world: five country pages (13 November 2026, local only)
+
+- **Seed:** five new article pages under `topics/around-the-world`: `india`, `canada`, `united-states`, `honduras`, `ethiopia`. The manifest has 57 pages and 57 content files. Changed existing seed pages: `around-the-world` (five rows in "Explore by country") and `credential-formats-and-interoperability` (fourth "Learn more" link to the United States page). Dry run: 5 would-create, 2 would-update, 0 skipped.
+- **Hash protection:** on staging an edited copy of `around-the-world` or `credential-formats-and-interoperability` is `skipped-edited` (also in the dry run); add the rows and the link by hand. Run `LEARN_DRY_RUN=1` first and report `skipped-edited`/`skipped-unmarked`; never use `LEARN_FORCE`.
+- **Time-sensitive facts to re-check right before staging:** Utah (1 January 2027) and West Virginia (4 May 2027) end of TSA acceptance; the CBP pipeline crude oil test (2 July 2026, one year); BC Wallet and BC Services Card app status; the DIGER credential list (residence card, INM); the FaydaPass status; the Swiggy and BIEN record status. Details: `learn/around-world-countries-fact-check-2026-11-13.md`.
+- **FaydaPass status discrepancy:** the record (`faydapass-rP7gpJ`, `productionDeployment: yes`, National ID Program catalog file) says in production; the programme's authentication page (https://www.id.gov.et/authentication) calls the wallet work in progress. The cause is the record field, not the display. The record was not changed; the Ethiopia page uses editorial card text and makes no production claim. The record owner has to clarify it. The Neoflow record has a similar difference with the CBP test.
+- **Dutch:** not entered; proposals in `learn/nl-translation-changes-around-world-countries.md`. The /nl/ routes show English body text.
+- **Tests:** `tests/run-around-world-countries-checks.sh`; `tests/technology-around-world-checks.cjs` was updated for nine hub rows and four links on the formats page.
+
 ## Cross links between Explore and Learn (13 November 2026, local only)
 
 **One set, in this order:** (1) tiles 1.13.52, (2) credential catalog 7f89c44, organization catalog efe56868 and the use case catalog readme/plugin change, (3) Learn

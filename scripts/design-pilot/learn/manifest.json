@@ -268,6 +268,56 @@
    "menu_order": 2
   },
   {
+   "path": "topics/around-the-world/india",
+   "title": "India — Aadhaar and digital identity",
+   "kind": "article",
+   "eyebrow": "Country · Around the world",
+   "excerpt": "What is Aadhaar, and how does it relate to identity checks in services?",
+   "sources": "UIDAI · Aadhaar Handbook for Residents, consulted 13 November 2026 | https://www.uidai.gov.in/images/LR_Aadhaar_Handbook_2026.pdf\nUIDAI · Clarification on Aadhaar and date of birth, consulted 13 November 2026 | https://uidai.gov.in/images/clarifications_regarding_date_of_birth.pdf\nUIDAI · Aadhaar App: frequently asked questions, consulted 13 November 2026 | https://uidai.gov.in/en/aadhaar-app-faq",
+   "content": "india.html",
+   "menu_order": 3
+  },
+  {
+   "path": "topics/around-the-world/canada",
+   "title": "Canada — digital credentials and public services",
+   "kind": "article",
+   "eyebrow": "Country · Around the world",
+   "excerpt": "How are public bodies in Canada working on digital credentials?",
+   "sources": "Government of Canada · Trusted access to digital services, consulted 13 November 2026 | https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/digital-credentials.html\nGovernment of British Columbia · BC Wallet, consulted 13 November 2026 | https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet\nGovernment of British Columbia · Digital trust: Legal Professional credential governance, consulted 13 November 2026 | https://developer.gov.bc.ca/docs/default/component/digital-trust/governance/justice/legal-professional/governance/\nU.S. Customs and Border Protection · Notice of a National Customs Automation Program test for pipeline crude oil (Federal Register, 2 June 2026), consulted 13 November 2026 | https://www.govinfo.gov/content/pkg/FR-2026-06-02/html/2026-10979.htm",
+   "content": "canada.html",
+   "menu_order": 4
+  },
+  {
+   "path": "topics/around-the-world/united-states",
+   "title": "United States — mobile driving licences",
+   "kind": "article",
+   "eyebrow": "Country · Around the world",
+   "excerpt": "What are mobile driving licences in the United States, and what affects where they are accepted?",
+   "sources": "NIST · Tap for ID: Your Next Driver’s License Might Also Live on Your Phone (17 December 2025), consulted 13 November 2026 | https://www.nist.gov/blogs/taking-measure/tap-id-your-next-drivers-license-might-also-live-your-phone\nTransportation Security Administration · Participating States and Eligible Digital IDs, consulted 13 November 2026 | https://www.tsa.gov/digital-id/participating-states\nCalifornia DMV · California mDL, consulted 13 November 2026 | https://www.dmv.ca.gov/portal/california-mdl/",
+   "content": "united-states.html",
+   "menu_order": 5
+  },
+  {
+   "path": "topics/around-the-world/honduras",
+   "title": "Honduras — Billetera Electrónica Nacional",
+   "kind": "article",
+   "eyebrow": "Country · Around the world",
+   "excerpt": "What is BIEN, the national electronic wallet of Honduras?",
+   "sources": "DIGER · Billetera Electrónica Nacional BIEN, consulted 13 November 2026 | https://diger.gob.hn/identidad-digital\nDIGER · Preguntas frecuentes, consulted 13 November 2026 | https://www.diger.gob.hn/identidad-digital/preguntas-frecuentes",
+   "content": "honduras.html",
+   "menu_order": 6
+  },
+  {
+   "path": "topics/around-the-world/ethiopia",
+   "title": "Ethiopia — Fayda digital identity",
+   "kind": "article",
+   "eyebrow": "Country · Around the world",
+   "excerpt": "What is Fayda, and what does the programme say about FaydaPass?",
+   "sources": "Fayda National ID · About, consulted 13 November 2026 | https://www.id.gov.et/about\nFayda National ID · Authentication, consulted 13 November 2026 | https://www.id.gov.et/authentication\nFayda National ID · Credentials, consulted 13 November 2026 | https://id.gov.et/credentials\nNational ID Program, Ethiopia · FaydaPass (Google Play listing), consulted 13 November 2026 | https://play.google.com/store/apps/details?id=et.fayda.nidfaydaApp",
+   "content": "ethiopia.html",
+   "menu_order": 7
+  },
+  {
    "path": "topics/the-big-picture/what-is-a-digital-wallet",
    "title": "What is a digital wallet?",
    "kind": "article",
