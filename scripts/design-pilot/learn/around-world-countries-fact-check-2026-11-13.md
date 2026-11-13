@@ -101,3 +101,42 @@ Result values: **confirmed** (read in the named primary source), **adjusted** (t
 
 Re-check: Utah and West Virginia dates, the CBP test period, BC Wallet and BC Services Card app status, the DIGER credential
 list (INM), the FaydaPass status, and the Swiggy and BIEN record status.
+
+## Second pass (13 November 2026, same day)
+
+Time-sensitive facts and source status re-checked, quickly ageing detail reduced, and concrete plans or trials tied to a
+source, a status and the check date 13 November 2026. Record values: see `around-world-country-record-status.md`.
+
+### Source status
+
+| Source | Status on 13 November 2026 |
+|---|---|
+| Federal Register notice of 2 June 2026 (CBP crude oil test) | read; names Neoflow as the platform and a one-year test planned from 2 July 2026 |
+| BC Wallet page and BC DevHub governance page | read (the DevHub page via a search mirror, because it needs JavaScript) |
+| TSA, California DMV, NIST pages | read |
+| DIGER BIEN pages | read with WebFetch; curl gets a 403 challenge |
+| id.gov.et and Google Play (FaydaPass) | read; `www.id.gov.et` and the UIDAI PDFs time out with curl |
+
+Unreachable from here and therefore not relied on: the UIDAI PDFs by direct fetch (search excerpts only) and `www.id.gov.et`.
+
+### Changes to the page texts
+
+- India: the Swiggy paragraph says the use case was submitted by UIDAI and that the sources consulted do not confirm how
+  Swiggy uses the app.
+- Canada: the "coming months" wording is gone ("the source gave no dates"). The BC Wallet page is described as checked on 13
+  November 2026 and giving no date. The CBP test is described with its planned dates, and the page says it has not
+  checked whether the test started or changed.
+- United States: the TSA list is described as "checked on 13 November 2026".
+- Honduras: the INM sentence follows DIGER's overview page; the TECH5 submitter sentence was added.
+- Ethiopia: the Google Play listing is described as "checked on 13 November 2026".
+
+### Practice cards
+
+All six cards, rendered at 1440 and 390 px, show the sentence the record supports and no more. The Swiggy and BIEN cards
+changed to editorial text with a caveat (`fides_learn_record`). Neoflow and FaydaPass already had editorial text. TSA and
+California keep the standard sentence. The use-case detail pages show "In production" for all six, as the records say.
+
+### Before staging
+
+Re-check on the day: CBP test status, Utah and West Virginia dates, BC Wallet and BC Services Card app status, the DIGER
+credential list (INM), the FaydaPass status, TSA list.

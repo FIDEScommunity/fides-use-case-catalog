@@ -432,3 +432,27 @@ the use case catalog readme/plugin change) and before the Learn pages that link 
 **What is a digital wallet?** links to The holder in running text ("For more on the role of the holder, see ..."); `tests/ecosystem-roles-articles-checks.cjs` expects exactly one such link in the article body.
 
 **Organization QTSP check:** `tests/org-qtsp-filter-checks.cjs` serves the aggregate file read by `tests/org-qtsp-filter-data-check.cjs` to the page (the page normally loads the live GitHub aggregate first), so the expected counts and the page use one data source.
+
+## Around the world: country pages, second round (13 November 2026)
+
+- **Links.** Every country page now has three Learn more links, and each is chosen for a reason:
+
+| Page | Before | After | Why |
+|---|---|---|---|
+| india | What is a digital wallet?; How credentials connect issuers, wallets and services | Sharing information from a wallet; How credentials connect...; What should a service check when receiving a credential? | The page is about identity checks in services, so the holder and verifier articles fit better than the basic wallet article. |
+| canada | What is a credential?; Business wallets: where to start | same two + Issuing public information to wallets | Public bodies issue credentials in the plans described. |
+| united-states | What is a digital wallet?; Credential formats and interoperability | Sharing information from a wallet; Credential formats...; Accepting information from wallets in public services | Driving licences are shown to a checkpoint or service. |
+| honduras | Issuing public information to wallets; How credentials connect... | same two + Receiving information in a wallet | The page describes a citizen wallet. |
+| ethiopia | What is a digital wallet?; How credentials connect... | same two + Issuing public information to wallets | The programme issues credentials. Ethiopia has no incoming link from an article (no article fits the page better than the hub). |
+
+- **Articles that now link back to a country page** (max four links each): digital-wallets-and-public-services (replaced
+  "What is a digital wallet?" with Around the world), issuing-public-information-to-wallets (replaced "Issuing credentials
+  for wallets" with Honduras), accepting-information-from-wallets-in-public-services (replaced "The relying party" with United
+  States), what-should-a-service-check-when-receiving-a-credential (India added, four links), receiving-information-in-a-wallet
+  (Honduras added, four links), un-transparency-protocol (Canada added, three links). "The EUDI Wallet and national
+  implementation" (four links) and "What is a digital wallet?" (four links, the holder via running text) are unchanged.
+- **Practice cards.** Swiggy and BIEN use `[fides_learn_record]` with editorial text. See `around-world-country-record-status.md`.
+- **Dutch.** 91 rows entered locally; see `nl-translation-changes-around-world-countries-final-2026-11-13.md`. Transfer file: 1430 entries.
+- **Tests.** `tests/around-world-countries-checks.cjs` now also checks the link lists and titles against the manifest, the
+  card texts and the Dutch pages. `tests/technology-around-world-checks.cjs` expects three links on the UN Transparency Protocol page.
+

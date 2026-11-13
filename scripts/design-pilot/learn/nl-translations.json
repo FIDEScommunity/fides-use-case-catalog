@@ -5,13 +5,13 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 981,
+        "learn": 1072,
         "services": 61,
         "shared": 109,
         "start-receive": 35,
         "training": 153
     },
-    "total": 1339,
+    "total": 1430,
     "entries": [
         {
             "original": "(OOTS) and for sharing data with private service providers on the basis of consent. ICTU says GBO is not meant to become a new, separate system but is to be anchored in existing national agreement frameworks.",
@@ -732,6 +732,19 @@
             "group": "learn"
         },
         {
+            "original": "A FIDES catalog use case describes several Honduran public authorities issuing credentials into BIEN. The catalog attributes the description and status to the organisation that submitted it, TECH5, not to DIGER. Its list of issuing authorities differs in places from DIGER’s own pages, so check the record and official programme information for current details.",
+            "translation": "Een usecase in de FIDES-catalogus beschrijft hoe meerdere Hondurese overheidsorganen credentials uitgeven in BIEN. De catalogus schrijft de beschrijving en de status toe aan de organisatie die de usecase heeft ingediend, TECH5, en niet aan DIGER. De lijst met organen die credentials uitgeven wijkt op onderdelen af van de eigen pagina’s van DIGER; raadpleeg daarom de vermelding en de officiële programma-informatie voor actuele details.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A business wallet could support the exchange of that information. The customer would still need to decide which checks its process requires and how to handle the result.",
             "translation": "Een business wallet kan de uitwisseling van die informatie ondersteunen. De klant moet nog steeds bepalen welke controles voor zijn proces nodig zijn en wat hij met de uitkomst doet.",
             "html": false,
@@ -1092,6 +1105,19 @@
             "group": "learn"
         },
         {
+            "original": "A licence on a phone",
+            "translation": "Een rijbewijs op een telefoon",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A natural or legal person who provides Wallet Solutions in the EUDI Wallet ecosystem.",
             "translation": "Een natuurlijke persoon of rechtspersoon die walletoplossingen aanbiedt binnen het EUDI Wallet-ecosysteem.",
             "html": false,
@@ -1418,6 +1444,19 @@
             "group": "learn"
         },
         {
+            "original": "A service may use the information in a mobile licence to check an attribute, such as whether a person meets an age requirement. The California DMV, for example, lists age-restricted retail purchases among the uses of its mobile licence in the CA DMV Wallet. The information requested and the technical interaction depend on the service and the implementation.",
+            "translation": "Een dienst kan de informatie in een mobiel rijbewijs gebruiken om een attribuut te controleren, bijvoorbeeld of iemand aan een leeftijdseis voldoet. De California DMV noemt bijvoorbeeld aankopen met een leeftijdsgrens in de detailhandel onder de toepassingen van het mobiele rijbewijs in de CA DMV Wallet. Welke informatie wordt gevraagd en hoe de technische interactie verloopt, hangt af van de dienst en de implementatie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A service presents a request to the wallet holder. The holder can review the request and decide whether to share the requested information.",
             "translation": "Een dienst legt een verzoek voor aan de wallethouder. De houder kan het verzoek bekijken en beslissen of hij de gevraagde gegevens deelt.",
             "html": false,
@@ -1627,6 +1666,19 @@
             "group": "learn"
         },
         {
+            "original": "A wallet can bring together information from different public bodies. Which credentials are available, who can receive them and where they are accepted depend on the service and the current national arrangements. Consult DIGER for instructions and current availability.",
+            "translation": "Een wallet kan informatie van verschillende overheidsorganen samenbrengen. Welke credentials beschikbaar zijn, wie ze kan ontvangen en waar ze worden geaccepteerd, hangt af van de dienst en de actuele nationale afspraken. Raadpleeg DIGER voor instructies en de actuele beschikbaarheid.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A wallet can offer another way to receive that information. The holder presents a digital credential, or selected information from it, to your service. Your organisation then checks whether the information is suitable for the decision it needs to make. To choose where to begin, see",
             "translation": "Een wallet kan een andere manier bieden om die gegevens te ontvangen. De houder toont een digitaal credential, of geselecteerde gegevens daaruit, aan uw dienst. Uw organisatie controleert vervolgens of de informatie geschikt is voor de beslissing die zij moet nemen. Om te bepalen waar u begint, zie",
             "html": false,
@@ -1744,6 +1796,32 @@
             "group": "learn"
         },
         {
+            "original": "Aadhaar can help an organisation establish or verify identity in a process. The system and the services that use it are different parts of the interaction: UIDAI provides identification and authentication infrastructure, while an organisation decides how that fits its own service and applicable rules.",
+            "translation": "Aadhaar kan een organisatie helpen om in een proces een identiteit vast te stellen of te controleren (verify). Het systeem en de diensten die het gebruiken zijn verschillende onderdelen van de interactie: UIDAI levert de infrastructuur voor identificatie en authenticatie, terwijl een organisatie zelf bepaalt hoe dat past bij de eigen dienst en de geldende regels.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Aadhaar is India’s identification system for residents. The Unique Identification Authority of India (UIDAI) issues Aadhaar numbers and provides ways to authenticate identity. Organisations using Aadhaar in a service have their own responsibilities for how it is used.",
+            "translation": "Aadhaar is het identificatiesysteem van India voor inwoners. De Unique Identification Authority of India (UIDAI) geeft Aadhaar-nummers uit en biedt manieren om een identiteit te authenticeren. Organisaties die Aadhaar in een dienst gebruiken, hebben hun eigen verantwoordelijkheden voor de manier waarop het wordt gebruikt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Accepting information from wallets in public services",
             "translation": "Gegevens uit wallets accepteren in publieke diensten",
             "html": false,
@@ -1752,6 +1830,7 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-governments",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
@@ -1917,6 +1996,19 @@
             "routes": [
                 "learn/topics/for-you/receiving-information-in-a-wallet",
                 "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "An example from British Columbia",
+            "translation": "Een voorbeeld uit Brits-Columbia",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
             ],
             "group": "learn"
         },
@@ -2180,9 +2272,15 @@
             "routes": [
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
+                "learn/topics/for-governments/digital-wallets-and-public-services",
                 "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
             ],
             "group": "learn"
@@ -2319,6 +2417,19 @@
             "group": "learn"
         },
         {
+            "original": "British Columbia describes BC Wallet as an app for storing digital credentials. One example is a credential for lawyers issued through the Law Society of British Columbia. Check the current provider information to see which credentials and services are available.",
+            "translation": "Brits-Columbia beschrijft BC Wallet als een app voor het bewaren van digitale credentials. Een voorbeeld is een credential voor advocaten, uitgegeven via de Law Society of British Columbia. Raadpleeg de actuele informatie van de aanbieder om te zien welke credentials en diensten beschikbaar zijn.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Browse all terms →",
             "translation": "Bekijk alle begrippen →",
             "html": false,
@@ -2430,6 +2541,9 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/honduras",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/ecosystem-roles/wallet-providers-and-other-service-providers",
                 "learn/topics/for-governments/digital-wallets-and-public-services",
@@ -2461,6 +2575,8 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/india",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/wallet-providers-and-other-service-providers",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
@@ -2648,6 +2764,7 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
                 "learn/topics/ecosystem-roles/wallet-providers-and-other-service-providers",
                 "learn/topics/for-businesses",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
@@ -2725,6 +2842,21 @@
             ],
             "routes": [
                 "learn/topics/for-governments/digital-wallets-and-public-services"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Canada — digital credentials and public services",
+            "translation": "Canada — digitale credentials en publieke diensten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/un-transparency-protocol"
             ],
             "group": "learn"
         },
@@ -3163,6 +3295,32 @@
             "group": "learn"
         },
         {
+            "original": "Content last checked: 13 November 2026. Aadhaar rules and the Aadhaar App change; check UIDAI before relying on a feature or a requirement.",
+            "translation": "Inhoud voor het laatst gecontroleerd op 13 november 2026. De regels voor Aadhaar en de Aadhaar App veranderen; raadpleeg UIDAI voordat u op een functie of een eis vertrouwt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Content last checked: 13 November 2026. Acceptance by states, airports and services changes; check the responsible authorities before relying on it.",
+            "translation": "Inhoud voor het laatst gecontroleerd op 13 november 2026. Acceptatie door staten, luchthavens en diensten verandert; raadpleeg de verantwoordelijke instanties voordat u erop vertrouwt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Content last checked: 13 November 2026. Each page names its responsible source and the date it was checked. Plans are described as plans and can change.",
             "translation": "Inhoud voor het laatst gecontroleerd op 13 november 2026. Elke pagina noemt de verantwoordelijke bron en de datum van controle. Plannen worden als plannen beschreven en kunnen veranderen.",
             "html": false,
@@ -3241,6 +3399,19 @@
             "group": "learn"
         },
         {
+            "original": "Content last checked: 13 November 2026. The federal platforms and the customs test are described as plans and tests; check the responsible bodies for their current status.",
+            "translation": "Inhoud voor het laatst gecontroleerd op 13 november 2026. De federale platforms en de douanetest worden beschreven als plannen en tests; raadpleeg de verantwoordelijke instanties voor de actuele status.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Content last checked: 13 November 2026. The launch date is a plan announced in September 2026; check the programme’s current information before relying on it.",
             "translation": "Inhoud voor het laatst gecontroleerd op 13 november 2026. De lanceringsdatum is een plan dat in september 2026 is aangekondigd; controleer de actuele informatie van het programma voordat u erop vertrouwt.",
             "html": false,
@@ -3254,6 +3425,32 @@
             "group": "learn"
         },
         {
+            "original": "Content last checked: 13 November 2026. The list of available credentials changes; check DIGER before relying on it.",
+            "translation": "Inhoud voor het laatst gecontroleerd op 13 november 2026. De lijst met beschikbare credentials verandert; raadpleeg DIGER voordat u erop vertrouwt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Content last checked: 13 November 2026. The status of FaydaPass is described differently in the programme’s published information; check the programme before relying on a claim about it.",
+            "translation": "Inhoud voor het laatst gecontroleerd op 13 november 2026. De status van FaydaPass wordt in de gepubliceerde informatie van het programma verschillend beschreven; raadpleeg het programma voordat u op een bewering over FaydaPass vertrouwt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Continue learning",
             "translation": "Verder leren",
             "html": false,
@@ -3262,9 +3459,14 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
                 "learn/topics/ecosystem-roles/the-relying-party",
@@ -3332,8 +3534,13 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
-                "learn/topics/around-the-world/the-netherlands"
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
+                "learn/topics/around-the-world/the-netherlands",
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -3346,6 +3553,7 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/technology",
                 "learn/topics/technology/credential-formats-and-interoperability",
                 "learn/topics/technology/how-do-wallets-and-services-exchange-information",
@@ -3380,6 +3588,19 @@
             "group": "learn"
         },
         {
+            "original": "Credentials and verification",
+            "translation": "Credentials en controle",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Customer or authority",
             "translation": "Klant of overheidsinstantie",
             "html": false,
@@ -3389,6 +3610,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "DIGER says BIEN is available for Android and iOS. It lists the biometric national identity document (from the National Registry of Persons, RNP), the driving licence (from the transport directorate, DNVT), the firearms carry permit (from the National Police) and the vehicle inspection slip (from the Property Institute). Its FAQ says the residence card for foreign residents, from the National Immigration Institute (INM), will be added later, while its overview page presents INM as an identity provider that issues a digital residence card.",
+            "translation": "DIGER geeft aan dat BIEN beschikbaar is voor Android en iOS. Het noemt het biometrische nationale identiteitsdocument (van het Nationaal Register van Personen, RNP), het rijbewijs (van de vervoersdirectie, DNVT), de vergunning om vuurwapens te dragen (van de Nationale Politie) en het keuringsbewijs voor voertuigen (van het Eigendomsinstituut). In de veelgestelde vragen staat dat de verblijfskaart voor buitenlandse inwoners, van het Nationaal Immigratie-instituut (INM), later wordt toegevoegd, terwijl de overzichtspagina INM presenteert als identiteitsaanbieder die een digitale verblijfskaart uitgeeft.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
             ],
             "group": "learn"
         },
@@ -3415,6 +3649,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/how-credentials-connect"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Digital credentials can also be used between organisations. The FIDES catalog contains a Neoflow use case describing the use of digital information in a Canada–United States energy supply chain. Its account and status are those reported in the catalog; consult the parties involved for current details.",
+            "translation": "Digitale credentials kunnen ook tussen organisaties worden gebruikt. De FIDES-catalogus bevat een usecase van Neoflow over het gebruik van digitale informatie in een energietoeleveringsketen tussen Canada en de Verenigde Staten. De beschrijving en de status zijn zoals gemeld in de catalogus; raadpleeg de betrokken partijen voor actuele details.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
             ],
             "group": "learn"
         },
@@ -3598,6 +3845,46 @@
             "group": "learn"
         },
         {
+            "original": "Ethiopia",
+            "translation": "Ethiopië",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Ethiopia — Fayda digital identity",
+            "translation": "Ethiopië — Fayda en digitale identiteit",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world",
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Ethiopia’s National ID Program describes Fayda as a foundational digital identity programme for residents. It issues a Fayda Identification Number after registration and provides ways to verify identity in services.",
+            "translation": "Het National ID Program van Ethiopië beschrijft Fayda als een fundamenteel programma voor digitale identiteit voor inwoners. Het geeft na registratie een Fayda Identification Number uit en biedt manieren om identiteit in diensten te controleren (verify).",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "European Commission — EU trusted lists",
             "translation": "Europese Commissie — EU-vertrouwenslijsten (trusted lists)",
             "html": false,
@@ -3753,6 +4040,45 @@
             "group": "learn"
         },
         {
+            "original": "Explore Aadhaar, India’s identification system, and an example of identity checks in a service.",
+            "translation": "Ontdek Aadhaar, het identificatiesysteem van India, en een voorbeeld van identiteitscontroles in een dienst.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore BIEN, the national electronic wallet of Honduras.",
+            "translation": "Ontdek BIEN, de nationale elektronische wallet van Honduras.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore Fayda, Ethiopia’s national digital identity programme, and what it says about FaydaPass.",
+            "translation": "Ontdek Fayda, het nationale programma voor digitale identiteit van Ethiopië, en wat het programma zegt over FaydaPass.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Explore a Readiness Workshop →",
             "translation": "Bekijk de Readiness Workshop →",
             "html": false,
@@ -3831,6 +4157,19 @@
             "group": "learn"
         },
         {
+            "original": "Explore federal and provincial work on digital credentials and a cross-border trade example.",
+            "translation": "Ontdek het federale en provinciale werk aan digitale credentials en een voorbeeld uit de grensoverschrijdende handel.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Explore how participants agree on rules and find information about one another.",
             "translation": "Ontdek hoe deelnemers regels afspreken en informatie over elkaar vinden.",
             "html": false,
@@ -3865,9 +4204,14 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -3917,6 +4261,19 @@
             "group": "learn"
         },
         {
+            "original": "Explore mobile driving licences offered by states and other jurisdictions.",
+            "translation": "Ontdek mobiele rijbewijzen die worden aangeboden door staten en andere rechtsgebieden.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Explore organisations in",
             "translation": "Bekijk organisaties in",
             "html": false,
@@ -3925,7 +4282,11 @@
                 "learn"
             ],
             "routes": [
-                "learn/topics/around-the-world/germany"
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india"
             ],
             "group": "learn"
         },
@@ -3938,7 +4299,8 @@
                 "learn"
             ],
             "routes": [
-                "learn/topics/around-the-world/the-netherlands"
+                "learn/topics/around-the-world/the-netherlands",
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -3965,7 +4327,11 @@
                 "learn"
             ],
             "routes": [
-                "learn/topics/around-the-world/germany"
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india"
             ],
             "group": "learn"
         },
@@ -3978,7 +4344,8 @@
                 "learn"
             ],
             "routes": [
-                "learn/topics/around-the-world/the-netherlands"
+                "learn/topics/around-the-world/the-netherlands",
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -4012,6 +4379,32 @@
             "group": "learn"
         },
         {
+            "original": "Explore the BIEN use case",
+            "translation": "Bekijk de BIEN-usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore the California use case",
+            "translation": "Bekijk de usecase uit Californië",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Explore the Dutch EDI programme and the programme for shared access to public-source data.",
             "translation": "Ontdek het Nederlandse programma EDI en het programma voor gezamenlijke toegang tot gegevens uit publieke bronnen.",
             "html": false,
@@ -4021,6 +4414,19 @@
             ],
             "routes": [
                 "learn/topics/around-the-world"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore the FaydaPass use case",
+            "translation": "Bekijk de FaydaPass-usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
             ],
             "group": "learn"
         },
@@ -4064,6 +4470,19 @@
             "group": "learn"
         },
         {
+            "original": "Explore the Neoflow use case",
+            "translation": "Bekijk de Neoflow-usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Explore the Nijmegen use case",
             "translation": "Bekijk de Nijmegen-usecase",
             "html": false,
@@ -4086,6 +4505,32 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/un-transparency-protocol"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore the Swiggy use case",
+            "translation": "Bekijk de Swiggy-usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore the TSA use case",
+            "translation": "Bekijk de TSA-usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -4180,6 +4625,11 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
@@ -4209,7 +4659,11 @@
                 "learn"
             ],
             "routes": [
-                "learn/topics/around-the-world/germany"
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india"
             ],
             "group": "learn"
         },
@@ -4222,7 +4676,8 @@
                 "learn"
             ],
             "routes": [
-                "learn/topics/around-the-world/the-netherlands"
+                "learn/topics/around-the-world/the-netherlands",
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -4288,6 +4743,32 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/issuing-credentials-for-wallets"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "FaydaPass and its status",
+            "translation": "FaydaPass en de status ervan",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Federal services",
+            "translation": "Federale diensten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
             ],
             "group": "learn"
         },
@@ -4503,6 +4984,19 @@
             "group": "learn"
         },
         {
+            "original": "For the related U.S. customs programme, a notice in the Federal Register of 2 June 2026 says U.S. Customs and Border Protection (CBP) will run a test of this method for crude oil transported by pipeline from Canada and Mexico. The test was to begin on 2 July 2026 and run for one year, subject to extension, modification or early termination. The notice is the source for this; this page has not checked whether the test has started or changed since.",
+            "translation": "Voor het bijbehorende Amerikaanse douaneprogramma staat in een bekendmaking in het Federal Register van 2 juni 2026 dat de U.S. Customs and Border Protection (CBP) een test zal uitvoeren van deze methode voor ruwe olie die per pijpleiding uit Canada en Mexico wordt vervoerd. De test zou op 2 juli 2026 beginnen en een jaar duren, met mogelijke verlenging, wijziging of vroegtijdige beëindiging. De bekendmaking is hiervoor de bron; deze pagina heeft niet gecontroleerd of de test is begonnen of sindsdien is gewijzigd.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "For the three routes and the status of the draft design, see the Dutch example in",
             "translation": "Voor de drie routes en de status van het conceptontwerp ziet u het Nederlandse voorbeeld in",
             "html": false,
@@ -4641,6 +5135,19 @@
             "group": "learn"
         },
         {
+            "original": "From an identity system to services",
+            "translation": "Van identiteitssysteem naar diensten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "From documents to reusable information",
             "translation": "Van documenten naar herbruikbare gegevens",
             "html": false,
@@ -4676,6 +5183,19 @@
             ],
             "routes": [
                 "learn/topics/ecosystem-roles/the-issuer"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "From national services to cross-border trade",
+            "translation": "Van nationale diensten naar grensoverschrijdende handel",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
             ],
             "group": "learn"
         },
@@ -4857,6 +5377,48 @@
             "group": "learn"
         },
         {
+            "original": "Honduras has introduced BIEN, the Billetera Electrónica Nacional. DIGER, the government body responsible for the programme, describes BIEN as an official mobile application through which users can obtain a digital identity credential.",
+            "translation": "Honduras heeft BIEN geïntroduceerd, de Billetera Electrónica Nacional. DIGER, de overheidsinstantie die verantwoordelijk is voor het programma, beschrijft BIEN als een officiële mobiele applicatie waarmee gebruikers een credential voor digitale identiteit kunnen verkrijgen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Honduras — Billetera Electrónica Nacional",
+            "translation": "Honduras — Billetera Electrónica Nacional",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/for-governments/issuing-public-information-to-wallets",
+                "learn/topics/for-you/receiving-information-in-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "How are public bodies in Canada working on digital credentials?",
+            "translation": "Hoe werken overheidsorganen in Canada aan digitale credentials?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "How can an organisation prepare a wallet use case?",
             "translation": "Hoe kan een organisatie een wallet-toepassing voorbereiden?",
             "html": false,
@@ -4924,6 +5486,9 @@
             ],
             "routes": [
                 "learn/topics",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -5214,6 +5779,19 @@
             "group": "learn"
         },
         {
+            "original": "In Canada, work on digital credentials involves public bodies at different levels. The Government of Canada describes work on a common approach to sign-in and credentials for access to federal services. Provinces also publish their own information and offer services in their jurisdictions.",
+            "translation": "In Canada zijn bij het werk aan digitale credentials overheidsorganen op verschillende niveaus betrokken. De Canadese overheid beschrijft het werk aan een gemeenschappelijke aanpak voor inloggen en credentials voor toegang tot federale diensten. Ook provincies publiceren hun eigen informatie en bieden diensten aan binnen hun rechtsgebied.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "In SD-JWT VC, the identifier of a credential type. This string (vct) names the type and can link to its schema. Commonly used in EU and EWC attestation catalogs.",
             "translation": "In SD-JWT VC de identificatie van een credentialtype. Deze tekenreeks (vct) benoemt het type en kan naar het schema verwijzen. Wordt onder meer gebruikt in EU- en EWC-attestatiecatalogi.",
             "html": false,
@@ -5306,6 +5884,19 @@
             "group": "learn"
         },
         {
+            "original": "In the United States, digital identity developments include",
+            "translation": "In de Verenigde Staten behoren",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "In this example, a company representative opens a business bank account in another EU member state, using credentials from a business wallet instead of uploaded documents.",
             "translation": "In dit voorbeeld opent een vertegenwoordiger van een bedrijf een zakelijke bankrekening in een andere EU-lidstaat. Daarbij gebruikt de vertegenwoordiger credentials uit een business wallet in plaats van documenten te uploaden.",
             "html": false,
@@ -5328,6 +5919,21 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/formats-and-protocols"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "India — Aadhaar and digital identity",
+            "translation": "India — Aadhaar en digitale identiteit",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world",
+                "learn/topics/around-the-world/india",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -5542,6 +6148,9 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/honduras",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/for-businesses/issuing-credentials-for-wallets",
                 "learn/topics/for-governments",
@@ -5614,6 +6223,19 @@
             ],
             "routes": [
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Its authentication information describes online and offline verification methods. Offline verification uses a QR code on the Fayda credential. Online verification includes eKYC with a one-time password, a selfie or a fingerprint scan. The suitability of a method depends on the service and the arrangements in place.",
+            "translation": "De authenticatie-informatie van het programma beschrijft online en offline controlemethoden. Offline controle gebeurt met een QR-code op het Fayda-credential. Online controle omvat onder meer eKYC met een eenmalig wachtwoord, een selfie of een vingerafdrukscan. Welke methode geschikt is, hangt af van de dienst en de afspraken die gelden.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
             ],
             "group": "learn"
         },
@@ -5691,9 +6313,14 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
                 "learn/topics/ecosystem-roles/the-relying-party",
@@ -5938,6 +6565,19 @@
             "group": "learn"
         },
         {
+            "original": "NIST describes a mobile driving licence as a digital form of a driving licence that can be presented from a phone. NIST notes that states and territories issue the licences and that several standards organisations are involved. Some airports accept participating mobile licences. The Transportation Security Administration (TSA) lists the participating states and wallets and says travellers should still carry a physical ID. Its list, checked on 13 November 2026, also shows that acceptance can end: it says Utah’s mobile licence will no longer be accepted from 1 January 2027 and West Virginia’s from 4 May 2027. Check the relevant state and the organisation requesting identification for current availability and requirements.",
+            "translation": "NIST beschrijft een mobiel rijbewijs als een digitale vorm van een rijbewijs die vanaf een telefoon kan worden getoond. NIST merkt op dat staten en territoria de rijbewijzen uitgeven en dat meerdere standaardenorganisaties erbij betrokken zijn. Sommige luchthavens accepteren mobiele rijbewijzen van deelnemende staten. De Transportation Security Administration (TSA) vermeldt de deelnemende staten en wallets en geeft aan dat reizigers nog steeds een fysiek identiteitsbewijs bij zich moeten hebben. Uit haar lijst, gecontroleerd op 13 november 2026, blijkt ook dat acceptatie kan eindigen: volgens de lijst wordt het mobiele rijbewijs van Utah vanaf 1 januari 2027 niet meer geaccepteerd en dat van West Virginia vanaf 4 mei 2027. Raadpleeg de betreffende staat en de organisatie die om identificatie vraagt voor de actuele beschikbaarheid en eisen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "National implementation is still developing. Availability, onboarding and the credentials that can be used may differ between countries and change over time. National pages, such as the Dutch EDI-Stelsel or the German EUDI ecosystem, show how one country approaches this. They are not a uniform EU procedure.",
             "translation": "De invoering in de lidstaten is nog in ontwikkeling. Welke wallets en credentials beschikbaar zijn en hoe u erop aansluit, kan per land verschillen en in de loop van de tijd veranderen. Op de pagina’s van het Nederlandse EDI-Stelsel en het Duitse EUDI-ecosysteem leest u hoe deze landen dat aanpakken. Hun aanpak is niet zonder meer hetzelfde in de hele EU.",
             "html": false,
@@ -6069,9 +6709,14 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
                 "learn/topics/ecosystem-roles/the-relying-party",
@@ -6632,6 +7277,19 @@
             "group": "learn"
         },
         {
+            "original": "Public credentials in one wallet",
+            "translation": "Publieke credentials in één wallet",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Public information is also exchanged without a wallet. Public bodies can exchange data with each other through registers and agreed interfaces. For cross-border procedures, the European Once-Only Technical System (OOTS) is described as letting a person ask authorities in one Member State to send evidence to a public service in another. Wallets, registers and cross-border exchange can exist side by side, with different parties and rules for each.",
             "translation": "Overheidsorganisaties wisselen ook gegevens uit via registers en afgesproken koppelingen. Voor grensoverschrijdende procedures kunnen burgers via het Europese Once-Only Technical System (OOTS) bewijsstukken tussen overheidsorganisaties laten uitwisselen. Bij elke route horen eigen afspraken en betrokken partijen.",
             "html": false,
@@ -6828,6 +7486,23 @@
             "group": "learn"
         },
         {
+            "original": "Receiving information in a wallet",
+            "translation": "Informatie ontvangen in een wallet",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/for-you",
+                "learn/topics/for-you/receiving-information-in-a-wallet",
+                "learn/topics/for-you/sharing-information-from-a-wallet",
+                "learn/topics/the-big-picture/what-is-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Receiving service",
             "translation": "Ontvangende dienst",
             "html": false,
@@ -6957,6 +7632,32 @@
             "group": "learn"
         },
         {
+            "original": "Responsible source: DIGER, the government body responsible for BIEN. The official pages are in Spanish. They were checked on 13 November 2026. This page makes no statement about the legal acceptance of digital credentials in Honduras.",
+            "translation": "Verantwoordelijke bron: DIGER, de overheidsinstantie die verantwoordelijk is voor BIEN. De officiële pagina’s zijn in het Spaans. Ze zijn geraadpleegd op 13 november 2026. Deze pagina doet geen uitspraak over de wettelijke acceptatie van digitale credentials in Honduras.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Responsible source: UIDAI, the authority that issues Aadhaar numbers and publishes the Aadhaar App. The pages were checked on 13 November 2026.",
+            "translation": "Verantwoordelijke bron: UIDAI, de autoriteit die Aadhaar-nummers uitgeeft en de Aadhaar App publiceert. De pagina’s zijn geraadpleegd op 13 november 2026.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Responsible source: UN/CEFACT, through the UN Transparency Protocol site. The pages were checked on 13 November 2026.",
             "translation": "Verantwoordelijke bron: UN/CEFACT, via de site van het UN Transparency Protocol. De pagina’s zijn gecontroleerd op 13 november 2026.",
             "html": false,
@@ -6983,6 +7684,19 @@
             "group": "learn"
         },
         {
+            "original": "Responsible source: the National ID Program of Ethiopia (Fayda). The pages were checked on 13 November 2026.",
+            "translation": "Verantwoordelijke bron: het National ID Program van Ethiopië (Fayda). De pagina’s zijn geraadpleegd op 13 november 2026.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Responsible sources: Programma EDI-Stelsel NL (Ministry of the Interior and Kingdom Relations) for the EDI pages, and ICTU for GBO. Both were checked on 13 November 2026.",
             "translation": "Verantwoordelijke bronnen: Programma EDI-Stelsel NL (Ministerie van Binnenlandse Zaken en Koninkrijksrelaties) voor de EDI-pagina’s en ICTU voor GBO. Beide zijn gecontroleerd op 13 november 2026.",
             "html": false,
@@ -6992,6 +7706,32 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/the-netherlands"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Responsible sources: the Government of Canada (Canadian Digital Service) for the federal platforms, the Government of British Columbia for BC Wallet and its credentials, and U.S. Customs and Border Protection, through the Federal Register, for the customs test. The pages were checked on 13 November 2026.",
+            "translation": "Verantwoordelijke bronnen: de Canadese overheid (Canadian Digital Service) voor de federale platforms, de overheid van Brits-Columbia voor BC Wallet en de bijbehorende credentials, en de U.S. Customs and Border Protection, via het Federal Register, voor de douanetest. De pagina’s zijn geraadpleegd op 13 november 2026.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Responsible sources: the National Institute of Standards and Technology (NIST), the Transportation Security Administration (TSA) and the California Department of Motor Vehicles (DMV). The pages were checked on 13 November 2026. The NIST article is dated 17 December 2025.",
+            "translation": "Verantwoordelijke bronnen: het National Institute of Standards and Technology (NIST), de Transportation Security Administration (TSA) en het California Department of Motor Vehicles (DMV). De pagina’s zijn geraadpleegd op 13 november 2026. Het NIST-artikel is gedateerd 17 december 2025.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -7302,6 +8042,8 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/india",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/for-you",
                 "learn/topics/for-you/choosing-and-managing-a-wallet",
@@ -7371,9 +8113,14 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
                 "learn/topics/ecosystem-roles/the-relying-party",
@@ -7708,6 +8455,19 @@
             "group": "learn"
         },
         {
+            "original": "Swiggy: Delivery Agent and Customer Identity Verification is a catalog use case about identity checks involving a service platform. The description and the reported status come from the organisation that submitted it, the Unique Identification Authority of India, not from Swiggy. The sources consulted for this page do not confirm how Swiggy uses the Aadhaar App.",
+            "translation": "Swiggy: Delivery Agent and Customer Identity Verification is een usecase uit de catalogus over identiteitscontroles bij een dienstenplatform. De beschrijving en de gemelde status komen van de organisatie die de usecase heeft ingediend, de Unique Identification Authority of India, en niet van Swiggy. De geraadpleegde bronnen bevestigen niet hoe Swiggy de Aadhaar App gebruikt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "TS11-related metadata",
             "translation": "TS11-gerelateerde metadata",
             "html": false,
@@ -7801,6 +8561,7 @@
                 "learn/topics/around-the-world/germany",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
@@ -8100,6 +8861,45 @@
             "group": "learn"
         },
         {
+            "original": "The FIDES catalog includes a FaydaPass use case submitted by the National ID Program. Read the record alongside the programme’s current information to understand the intended interaction and its development status.",
+            "translation": "De FIDES-catalogus bevat een FaydaPass-usecase die is ingediend door het National ID Program. Lees de vermelding samen met de actuele informatie van het programma om de beoogde interactie en de ontwikkelingsstatus te begrijpen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The FIDES catalog includes a use case about mobile driving licences at airport checkpoints and examples from California. The records describe particular implementations; they do not establish availability across all states or airports.",
+            "translation": "De FIDES-catalogus bevat een usecase over mobiele rijbewijzen bij de controlepunten op luchthavens en voorbeelden uit Californië. De vermeldingen beschrijven bepaalde implementaties; ze bewijzen niet dat mobiele rijbewijzen in alle staten of op alle luchthavens beschikbaar zijn.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The FIDES catalog includes examples submitted by organisations describing how the Aadhaar App can be used in a service. These examples are useful for exploring the roles involved, but a catalog entry does not establish that every organisation uses the same process.",
+            "translation": "De FIDES-catalogus bevat voorbeelden die organisaties hebben ingediend over hoe de Aadhaar App in een dienst kan worden gebruikt. Deze voorbeelden zijn handig om de betrokken rollen te verkennen, maar een catalogusvermelding bewijst niet dat elke organisatie hetzelfde proces gebruikt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The FIDES catalogs can help locate credential types, organisations and wallet listings for further investigation. The information shown depends on the sources and submissions available for each listing; it should be checked with the relevant parties before a decision is made.",
             "translation": "De FIDES-catalogi kunnen helpen credentialtypen, organisaties en wallets te vinden voor verder onderzoek. De getoonde informatie hangt af van de beschikbare bronnen en inzendingen. Controleer deze bij de betrokken partijen voordat u een beslissing neemt.",
             "html": false,
@@ -8174,6 +8974,19 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/the-netherlands"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The Government of Canada’s page says the Canadian Digital Service (CDS), part of Service Canada, is building two platforms: CanadaLogin, a sign-in for federal services, and GC Issue and Verify, which will let government departments issue digital versions of credentials such as work permits and boating licences. The page describes both in the future tense, calls their use optional and says CDS will work with partner departments to test features. These are plans, and when this page was checked on 13 November 2026 the source gave no dates.",
+            "translation": "Op de pagina van de Canadese overheid staat dat de Canadian Digital Service (CDS), onderdeel van Service Canada, twee platforms bouwt: CanadaLogin, een inlogvoorziening voor federale diensten, en GC Issue and Verify, waarmee overheidsdepartementen digitale versies kunnen uitgeven van credentials zoals werkvergunningen en vaarbewijzen. De pagina beschrijft beide in de toekomstige tijd, noemt het gebruik optioneel en zegt dat CDS samen met partnerdepartementen functies zal testen. Dit zijn plannen, en toen deze pagina op 13 november 2026 werd gecontroleerd, noemde de bron geen data.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
             ],
             "group": "learn"
         },
@@ -8332,6 +9145,19 @@
             "group": "learn"
         },
         {
+            "original": "The catalog lists California DMV as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
+            "translation": "De catalogus noemt California DMV als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The catalog lists Gemeente Nijmegen as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
             "translation": "De catalogus noemt Gemeente Nijmegen als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie.",
             "html": false,
@@ -8385,6 +9211,32 @@
             "group": "learn"
         },
         {
+            "original": "The catalog lists National ID Program as the organisation and marks this use case as in production, as reported by the organisation. The programme’s authentication page describes the FaydaPass wallet as work in progress, so check the programme for what is in use.",
+            "translation": "De catalogus noemt National ID Program als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie. Op de authenticatiepagina van het programma wordt de FaydaPass-wallet beschreven als werk in uitvoering; raadpleeg het programma om te zien wat in gebruik is.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The catalog lists Neoflow (Mavennet Inc.) as the organisation and marks this use case as in production, as reported by the organisation. CBP describes the related customs programme as a one-year test.",
+            "translation": "De catalogus noemt Neoflow (Mavennet Inc.) als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie. CBP beschrijft het bijbehorende douaneprogramma als een test van een jaar.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The catalog lists Reeco as the organisation. The catalog does not mark this use case as in production.",
             "translation": "De catalogus noemt Reeco als betrokken organisatie. Volgens de catalogus is deze usecase niet in productie.",
             "html": false,
@@ -8411,6 +9263,19 @@
             "group": "learn"
         },
         {
+            "original": "The catalog lists TECH5 as the organisation and marks this use case as in production, as reported by the organisation. DIGER’s pages describe BIEN as available, and name the National Registry of Persons (RNP) and three other bodies as issuers.",
+            "translation": "De catalogus noemt TECH5 als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie. De pagina’s van DIGER beschrijven BIEN als beschikbaar en noemen daarbij het Nationaal Register van Personen (RNP) en drie andere organen die credentials uitgeven.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The catalog lists TECH5 as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
             "translation": "De catalogus noemt TECH5 als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie.",
             "html": false,
@@ -8419,7 +9284,34 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/honduras",
                 "learn/topics/for-governments/issuing-public-information-to-wallets"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The catalog lists Transportation Security Administration (TSA) as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
+            "translation": "De catalogus noemt de Transportation Security Administration (TSA) als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The catalog lists the Unique Identification Authority of India as the organisation and marks this use case as in production, as reported by the organisation. The sources consulted for this page do not confirm how Swiggy uses the Aadhaar App.",
+            "translation": "De catalogus noemt de Unique Identification Authority of India als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie. De geraadpleegde bronnen bevestigen niet hoe Swiggy de Aadhaar App gebruikt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
             ],
             "group": "learn"
         },
@@ -8959,6 +9851,45 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The programme describes several forms of Fayda identification, including a digital copy and a physical card. The programme lists a downloadable paper form (eFayda), a digital copy in the National ID mini app inside the telebirr super app, and a physical ID card on request.",
+            "translation": "Het programma beschrijft meerdere vormen van Fayda-identificatie, waaronder een digitale kopie en een fysieke kaart. Het programma noemt een downloadbaar papieren formulier (eFayda), een digitale kopie in de National ID-mini-app binnen de telebirr-superapp en een fysieke identiteitskaart op aanvraag.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The programme’s authentication page, consulted on 13 November 2026, says it is working on FaydaPass, a digital credential wallet intended to serve as a credential repository for citizens and for multiple use cases, not only Fayda credentials. That page does not describe the wallet as available. An app named FaydaPass, published by the National ID Program, is listed in Google Play (checked on 13 November 2026), so the programme’s published information does not describe the wallet’s status consistently. This page therefore does not state which credentials the wallet issues or which institutions use it. Check the programme for current status.",
+            "translation": "Op de authenticatiepagina van het programma, geraadpleegd op 13 november 2026, staat dat het werkt aan FaydaPass, een digitale credential-wallet die bedoeld is als opslagplaats voor credentials van burgers en voor meerdere usecases, niet alleen voor Fayda-credentials. Die pagina beschrijft de wallet niet als beschikbaar. In Google Play staat een app met de naam FaydaPass, gepubliceerd door het National ID Program (gecontroleerd op 13 november 2026). De gepubliceerde informatie van het programma beschrijft de status van de wallet daarom niet consistent. Deze pagina vermeldt dus niet welke credentials de wallet uitgeeft of welke instellingen deze gebruiken. Raadpleeg het programma voor de actuele status.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The province’s digital trust documentation lists the Law Society of British Columbia as the issuer of this Lawyer Credential, available to practising lawyers since 15 January 2025. The provincial BC Wallet page, checked on 13 November 2026, says the province is adding BC Wallet functionality to the BC Services Card app. It gives no date.",
+            "translation": "In de documentatie van de provincie over digitaal vertrouwen staat de Law Society of British Columbia als uitgever (issuer) van deze Lawyer Credential, die sinds 15 januari 2025 beschikbaar is voor praktiserende advocaten. De BC Wallet-pagina van de provincie, gecontroleerd op 13 november 2026, zegt dat de provincie de functionaliteit van BC Wallet toevoegt aan de BC Services Card-app. De pagina noemt geen datum.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
             ],
             "group": "learn"
         },
@@ -9772,6 +10703,32 @@
             "group": "learn"
         },
         {
+            "original": "UIDAI also publishes the Aadhaar App. According to UIDAI, an Aadhaar number holder can use the app to share Aadhaar verifiable credentials, in full or in part and with consent, with organisations that verify them offline.",
+            "translation": "UIDAI publiceert ook de Aadhaar App. Volgens UIDAI kan een houder van een Aadhaar-nummer met de app verifieerbare Aadhaar-credentials geheel of gedeeltelijk en met toestemming delen met organisaties die ze offline controleren.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "UIDAI states that an Aadhaar number is a proof of identity, not of citizenship or domicile, and that Aadhaar is not in itself a proof of date of birth.",
+            "translation": "UIDAI geeft aan dat een Aadhaar-nummer een bewijs van identiteit is, niet van staatsburgerschap of domicilie, en dat Aadhaar op zichzelf geen bewijs van geboortedatum is.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "UNTP in a use case",
             "translation": "UNTP in een usecase",
             "html": false,
@@ -9859,6 +10816,35 @@
             ],
             "routes": [
                 "learn/topics/technology"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "United States",
+            "translation": "de Verenigde Staten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "United States — mobile driving licences",
+            "translation": "Verenigde Staten — mobiele rijbewijzen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world",
+                "learn/topics/around-the-world/united-states",
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
+                "learn/topics/technology/credential-formats-and-interoperability"
             ],
             "group": "learn"
         },
@@ -10149,6 +11135,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/accepting-information-from-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "What are mobile driving licences in the United States, and what affects where they are accepted?",
+            "translation": "Wat zijn mobiele rijbewijzen in de Verenigde Staten, en wat bepaalt waar ze worden geaccepteerd?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -10492,6 +11491,45 @@
             "group": "learn"
         },
         {
+            "original": "What is Aadhaar, and how does it relate to identity checks in services?",
+            "translation": "Wat is Aadhaar, en hoe hangt het samen met identiteitscontroles in diensten?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "What is BIEN, the national electronic wallet of Honduras?",
+            "translation": "Wat is BIEN, de nationale elektronische wallet van Honduras?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "What is Fayda, and what does the programme say about FaydaPass?",
+            "translation": "Wat is Fayda, en wat zegt het programma over FaydaPass?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "What is PID?",
             "translation": "Wat is een PID?",
             "html": false,
@@ -10527,6 +11565,7 @@
             ],
             "routes": [
                 "learn/topics",
+                "learn/topics/around-the-world/canada",
                 "learn/topics/around-the-world/un-transparency-protocol",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -10556,6 +11595,9 @@
             ],
             "routes": [
                 "learn/topics",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/india",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/wallet-providers-and-other-service-providers",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
@@ -10806,6 +11848,7 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/india",
                 "learn/topics/for-businesses",
                 "learn/topics/for-businesses/accepting-information-from-a-wallet",
                 "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
@@ -11058,9 +12101,14 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
-                "learn/topics/around-the-world/un-transparency-protocol"
+                "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -12707,6 +13755,32 @@
             "group": "learn"
         },
         {
+            "original": "mobile driving licences",
+            "translation": "mobiele rijbewijzen",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "offered by individual states and other jurisdictions. Availability and acceptance vary by jurisdiction and by the organisation checking the licence.",
+            "translation": "die door afzonderlijke staten en andere rechtsgebieden worden aangeboden, tot de ontwikkelingen op het gebied van digitale identiteit. Beschikbaarheid en acceptatie verschillen per rechtsgebied en per organisatie die het rijbewijs controleert.",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "or",
             "translation": "of",
             "html": false,
@@ -13311,6 +14385,32 @@
             "group": "learn"
         },
         {
+            "original": "· Aadhaar App: frequently asked questions, consulted 13 November 2026",
+            "translation": "· Aadhaar App: frequently asked questions, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Aadhaar Handbook for Residents, consulted 13 November 2026",
+            "translation": "· Aadhaar Handbook for Residents, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "· About the UNTP, consulted 13 November 2026",
             "translation": "· About the UNTP, geraadpleegd op 13 november 2026",
             "html": false,
@@ -13320,6 +14420,19 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/un-transparency-protocol"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· About, consulted 13 November 2026",
+            "translation": "· About, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
             ],
             "group": "learn"
         },
@@ -13346,6 +14459,110 @@
             ],
             "routes": [
                 "learn/topics/technology/trust-frameworks-and-registries"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Authentication, consulted 13 November 2026",
+            "translation": "· Authentication, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· BC Wallet, consulted 13 November 2026",
+            "translation": "· BC Wallet, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Billetera Electrónica Nacional BIEN, consulted 13 November 2026",
+            "translation": "· Billetera Electrónica Nacional BIEN, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· California mDL, consulted 13 November 2026",
+            "translation": "· California mDL, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Clarification on Aadhaar and date of birth, consulted 13 November 2026",
+            "translation": "· Clarification on Aadhaar and date of birth, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/india"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Credentials, consulted 13 November 2026",
+            "translation": "· Credentials, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Digital trust: Legal Professional credential governance, consulted 13 November 2026",
+            "translation": "· Digital trust: Legal Professional credential governance, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· FaydaPass (Google Play listing), consulted 13 November 2026",
+            "translation": "· FaydaPass (Google Play-vermelding), geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/ethiopia"
             ],
             "group": "learn"
         },
@@ -13415,6 +14632,45 @@
             "group": "learn"
         },
         {
+            "original": "· Notice of a National Customs Automation Program test for pipeline crude oil (Federal Register, 2 June 2026), consulted 13 November 2026",
+            "translation": "· Notice of a National Customs Automation Program test for pipeline crude oil (Federal Register, 2 juni 2026), geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Participating States and Eligible Digital IDs, consulted 13 November 2026",
+            "translation": "· Participating States and Eligible Digital IDs, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Preguntas frecuentes, consulted 13 November 2026",
+            "translation": "· Preguntas frecuentes, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/honduras"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "· SD-JWT-based Verifiable Digital Credentials (SD-JWT VC), Internet-Draft draft-ietf-oauth-sd-jwt-vc-26, consulted 13 November 2026",
             "translation": "· SD-JWT-based Verifiable Digital Credentials (SD-JWT VC), Internet-Draft draft-ietf-oauth-sd-jwt-vc-26, geraadpleegd op 13 november 2026",
             "html": false,
@@ -13429,6 +14685,19 @@
             "group": "learn"
         },
         {
+            "original": "· Tap for ID: Your Next Driver’s License Might Also Live on Your Phone (17 December 2025), consulted 13 November 2026",
+            "translation": "· Tap for ID: Your Next Driver’s License Might Also Live on Your Phone (17 december 2025), geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/united-states"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "· The EUDI Wallet ecosystem, consulted 13 November 2026",
             "translation": "· The EUDI Wallet ecosystem, geraadpleegd op 13 november 2026",
             "html": false,
@@ -13438,6 +14707,19 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/germany"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "· Trusted access to digital services, consulted 13 November 2026",
+            "translation": "· Trusted access to digital services, geraadpleegd op 13 november 2026",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/canada"
             ],
             "group": "learn"
         },
@@ -14275,6 +15557,7 @@
                 "learn/topics/around-the-world/germany",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-relying-party",
@@ -14319,9 +15602,14 @@
             "routes": [
                 "learn",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -14438,9 +15726,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -14506,9 +15799,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -14603,9 +15901,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -14671,9 +15974,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -14769,9 +16077,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -14836,9 +16149,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -14904,9 +16222,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15020,9 +16343,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15088,9 +16416,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15156,9 +16489,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15224,9 +16562,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15292,9 +16635,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15360,9 +16708,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15428,9 +16781,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15528,9 +16886,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15611,9 +16974,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15679,9 +17047,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15747,9 +17120,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15848,9 +17226,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -15916,9 +17299,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16065,9 +17453,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16133,9 +17526,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16201,9 +17599,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16281,9 +17684,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16344,9 +17752,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16412,9 +17825,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16480,9 +17898,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16548,9 +17971,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16648,9 +18076,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16716,9 +18149,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16863,9 +18301,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16931,9 +18374,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -16995,9 +18443,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17058,9 +18511,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17126,9 +18584,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17294,9 +18757,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17362,9 +18830,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17418,7 +18891,12 @@
                 "start-receive"
             ],
             "routes": [
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles/the-issuer",
                 "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/the-big-picture/how-credentials-connect",
@@ -17464,9 +18942,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17532,9 +19015,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17600,9 +19088,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17668,9 +19161,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17752,9 +19250,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17852,9 +19355,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -17935,9 +19443,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18083,9 +19596,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18147,9 +19665,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18210,9 +19733,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18274,9 +19802,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18355,9 +19888,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18423,9 +19961,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18509,9 +20052,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18597,9 +20145,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",
@@ -18745,9 +20298,14 @@
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics",
                 "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
                 "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/ecosystem-roles/the-holder",
                 "learn/topics/ecosystem-roles/the-issuer",

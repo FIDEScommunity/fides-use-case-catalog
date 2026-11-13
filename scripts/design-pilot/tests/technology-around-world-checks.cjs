@@ -67,7 +67,7 @@ const PAGES = [
   { group: "around-the-world", parent: "Around the world", slug: "un-transparency-protocol", title: "UN Transparency Protocol",
     eyebrow: /Initiative\s*·\s*Around the world/i, intro: /^What is the UN Transparency Protocol/, sources: [S.untp, S.about],
     headings: ["What is the UNTP digital product passport?", "Status", "Where the information comes from", "Continue learning"],
-    links: ["what-is-a-credential", "formats-and-protocols", "overview/", "credentials/"], terms: 2, learnMore: 2, note: /Content last checked: 13 November 2026/, dated: true,
+    links: ["what-is-a-credential", "formats-and-protocols", "overview/", "credentials/", "canada/"], terms: 2, learnMore: 3, note: /Content last checked: 13 November 2026/, dated: true,
     must: [/Work in Progress/, /pre-production pilot/, /0\.8\.0/, /does not conflict with national regulations such as the EU digital product passport/] },
 ];
 const BACKLINKS = [

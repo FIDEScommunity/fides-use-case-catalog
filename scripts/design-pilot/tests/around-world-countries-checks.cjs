@@ -8,9 +8,15 @@
  * no "Design preview", no horizontal overflow, visible keyboard focus on the new links and cards, no console errors.
  * Overview: seven country rows in order, rows match the page titles. Credential formats page: the added United States link.
  * Filter links: the country links show their chip and more than 0 results on the pilot catalogs.
+ * Added 13 November 2026 (round 2): Learn more lists of the five pages (3 links, real page titles from the manifest, links to the
+ * right routes), the links added from existing articles (list lengths at most 4, expected targets, replaced links gone, link text =
+ * manifest title), card wording against the repo records (productionDeployment yes/no, caveat sentences), and the five /nl/ routes (Dutch
+ * text, strict u-form: no je/jij/jouw, Dutch card and source wording, /nl/ links, at most 4 Learn more links, no overflow, focus).
  * Run: PLAYWRIGHT_MODULE=... CHROME_PATH=... node tests/around-world-countries-checks.cjs   (WIDTHS=1440,390 by default)
  */
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
+const fs = require("fs");
+const path = require("path");
 const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const WIDTHS = (process.env.WIDTHS || "1440,390").split(",").map(Number);
 const P = "/fides-design-pilot";
@@ -24,44 +30,66 @@ const UC = {
   bien: "honduras-billetera-electronica-nacional-bien-4-gob-authorities-issuing-into-one-citizen-controlled-wallet-YVNSXc",
   fayda: "faydapass-rP7gpJ",
 };
+const ROOT = path.resolve(__dirname, "../../..");
+const MANIFEST = JSON.parse(fs.readFileSync(path.join(__dirname, "../learn/manifest.json"), "utf8")).pages;
+const titleOf = (route) => (MANIFEST.find((p) => p.path === route) || {}).title;
+/** Links added from, or changed in, existing articles (round 2). `has` must be in the Learn more list, `not` must be gone. */
+const ARTICLES = [
+  { route: "topics/for-governments/digital-wallets-and-public-services", n: 4, has: ["topics/around-the-world"], not: ["what-is-a-digital-wallet"] },
+  { route: "topics/for-governments/issuing-public-information-to-wallets", n: 4, has: ["topics/around-the-world/honduras"], not: ["issuing-credentials-for-wallets"] },
+  { route: "topics/for-governments/accepting-information-from-wallets-in-public-services", n: 4, has: ["topics/around-the-world/united-states"], not: ["the-relying-party"] },
+  { route: "topics/for-businesses/what-should-a-service-check-when-receiving-a-credential", n: 4, has: ["topics/around-the-world/india"], not: [] },
+  { route: "topics/for-you/receiving-information-in-a-wallet", n: 4, has: ["topics/around-the-world/honduras"], not: [] },
+  { route: "topics/around-the-world/un-transparency-protocol", n: 3, has: ["topics/around-the-world/canada"], not: [] },
+  { route: "topics/for-governments/the-eudi-wallet-and-national-implementation", n: 4, has: ["topics/for-governments/accepting-information-from-wallets-in-public-services", "topics/the-big-picture/european-digital-identity-wallet", "topics/around-the-world", "topics/around-the-world/the-netherlands"], not: [] },
+  { route: "topics/the-big-picture/what-is-a-digital-wallet", n: 4, has: [], not: [], bodyHas: ["topics/ecosystem-roles/the-holder"] },
+];
+/** The five /nl/ routes: Dutch title, sentences that must be present, card sentence and link label. */
+const NL = {
+  india: { h1: "India — Aadhaar en digitale identiteit", must: [/UIDAI geeft aan dat een Aadhaar-nummer een bewijs van identiteit is/, /De geraadpleegde bronnen bevestigen niet hoe Swiggy de Aadhaar App gebruikt/, /Inhoud voor het laatst gecontroleerd op 13 november 2026/, /Verantwoordelijke bron: UIDAI/], label: "Bekijk de Swiggy-usecase" },
+  canada: { h1: "Canada — digitale credentials en publieke diensten", must: [/Dit zijn plannen/, /sinds 15 januari 2025 beschikbaar/, /een jaar duren, met mogelijke verlenging, wijziging of vroegtijdige beëindiging/, /Verantwoordelijke bronnen:/], label: "Bekijk de Neoflow-usecase" },
+  "united-states": { h1: "Verenigde Staten — mobiele rijbewijzen", must: [/1 januari 2027/, /4 mei 2027/, /fysiek identiteitsbewijs/, /mobiele rijbewijzen/], label: "Bekijk de TSA-usecase" },
+  honduras: { h1: "Honduras — Billetera Electrónica Nacional", must: [/DIGER geeft aan dat BIEN beschikbaar is voor Android en iOS/, /later wordt toegevoegd/, /geen uitspraak over de wettelijke acceptatie/], label: "Bekijk de BIEN-usecase" },
+  ethiopia: { h1: "Ethiopië — Fayda en digitale identiteit", must: [/werkt aan FaydaPass/, /niet consistent/, /Raadpleeg het programma voor de actuele status/], label: "Bekijk de FaydaPass-usecase" },
+};
 const IN_PROD = "marks this use case as in production, as reported by the organisation";
 const PAGES = [
   { slug: "india", title: "India — Aadhaar and digital identity", intro: /^What is Aadhaar, and how does it relate to identity checks in services\?/, cc: "IN", country: "India", the: "",
     sources: [["UIDAI", "Aadhaar Handbook for Residents", "https://www.uidai.gov.in/images/LR_Aadhaar_Handbook_2026.pdf"], ["UIDAI", "Clarification on Aadhaar and date of birth", "https://uidai.gov.in/images/clarifications_regarding_date_of_birth.pdf"], ["UIDAI", "Aadhaar App: frequently asked questions", "https://uidai.gov.in/en/aadhaar-app-faq"]],
     headings: ["From an identity system to services", "See it in practice", "Where the information comes from", "Continue learning"],
-    learn: ["how-credentials-connect", "what-is-a-digital-wallet"], cats: ["overview/", "personal-wallets/"], terms: 0, learnMore: 2,
-    cards: [{ id: UC.swiggy, title: "Swiggy: Delivery Agent and Customer Identity Verification", status: `The catalog lists Unique Identification Authority of India as the organisation. The catalog ${IN_PROD}.`, label: "Explore the Swiggy use case" }],
-    must: [/Unique Identification Authority of India \(UIDAI\)/, /not of citizenship or domicile/, /not in itself a proof of date of birth/, /do not confirm how this platform uses the Aadhaar App/, /Responsible source: UIDAI/],
+    learn: ["how-credentials-connect", "sharing-information-from-a-wallet", "what-should-a-service-check-when-receiving-a-credential"], cats: ["overview/", "personal-wallets/"], terms: 0, learnMore: 3,
+    cards: [{ id: UC.swiggy, title: "Swiggy: Delivery Agent and Customer Identity Verification", status: `The catalog lists the Unique Identification Authority of India as the organisation and ${IN_PROD}. The sources consulted for this page do not confirm how Swiggy uses the Aadhaar App.`, label: "Explore the Swiggy use case" }],
+    must: [/Unique Identification Authority of India \(UIDAI\)/, /not of citizenship or domicile/, /not in itself a proof of date of birth/, /do not confirm how Swiggy uses the Aadhaar App/, /not from Swiggy/, /Responsible source: UIDAI/],
     mustNot: [/Aadhaar (is|are) (mandatory|required) for/i] },
   { slug: "canada", title: "Canada — digital credentials and public services", intro: /^How are public bodies in Canada working on digital credentials\?/, cc: "CA", country: "Canada", the: "",
     sources: [["Government of Canada", "Trusted access to digital services", "https://www.canada.ca/en/government/system/digital-government/digital-government-innovations/digital-credentials.html"], ["Government of British Columbia", "BC Wallet", "https://www2.gov.bc.ca/gov/content/governments/government-id/bc-wallet"], ["Government of British Columbia", "Digital trust: Legal Professional credential governance", "https://developer.gov.bc.ca/docs/default/component/digital-trust/governance/justice/legal-professional/governance/"], ["U.S. Customs and Border Protection", "Notice of a National Customs Automation Program test", "https://www.govinfo.gov/content/pkg/FR-2026-06-02/html/2026-10979.htm"]],
     headings: ["Federal services", "An example from British Columbia", "From national services to cross-border trade", "Where the information comes from", "Continue learning"],
-    learn: ["what-is-a-credential", "business-wallets-where-to-start"], cats: ["overview/", "organizations/"], terms: 0, learnMore: 2,
+    learn: ["what-is-a-credential", "business-wallets-where-to-start", "issuing-public-information-to-wallets"], cats: ["overview/", "organizations/"], terms: 0, learnMore: 3,
     cards: [{ id: UC.neoflow, title: "Neoflow Digital Energy Passport for Cross-Border Crude Oil Clearance", status: `The catalog lists Neoflow (Mavennet Inc.) as the organisation and ${IN_PROD}. CBP describes the related customs programme as a one-year test.`, label: "Explore the Neoflow use case" }],
-    must: [/These are plans\./, /Lawyer Credential/, /15 January 2025/, /26 October 2026/, /BC Services Card app/, /2 June 2026/, /one year, subject to extension, modification or early termination/],
-    mustNot: [/barrels|bbl|45-90 days|25%|tariff/i] },
+    must: [/These are plans, and when this page was checked on 13 November 2026 the source gave no dates\./, /Lawyer Credential/, /15 January 2025/, /checked on 13 November 2026, says the province is adding BC Wallet functionality to the BC Services Card app\. It gives no date\./, /BC Services Card app/, /2 June 2026/, /one year, subject to extension, modification or early termination/, /has not checked whether the test has started or changed since/],
+    mustNot: [/barrels|bbl|45-90 days|25%|tariff/i, /26 October 2026|in the coming months/] },
   { slug: "united-states", title: "United States — mobile driving licences", intro: /^What are mobile driving licences in the United States, and what affects where they are accepted\?/, cc: "US", country: "United States", the: "the ",
     sources: [["NIST", "Tap for ID", "https://www.nist.gov/blogs/taking-measure/tap-id-your-next-drivers-license-might-also-live-your-phone"], ["Transportation Security Administration", "Participating States and Eligible Digital IDs", "https://www.tsa.gov/digital-id/participating-states"], ["California DMV", "California mDL", "https://www.dmv.ca.gov/portal/california-mdl/"]],
     headings: ["A licence on a phone", "See it in practice", "Where the information comes from", "Continue learning"],
-    learn: ["what-is-a-digital-wallet", "credential-formats-and-interoperability"], cats: ["overview/", "personal-wallets/"], terms: 1, learnMore: 2,
+    learn: ["sharing-information-from-a-wallet", "accepting-information-from-wallets-in-public-services", "credential-formats-and-interoperability"], cats: ["overview/", "personal-wallets/"], terms: 1, learnMore: 3,
     cards: [
       { id: UC.tsa, title: "USA Secure Domestic Travel: TSA Mobile Driver's License at Airport Checkpoints", status: `The catalog lists Transportation Security Administration (TSA) as the organisation. The catalog ${IN_PROD}.`, label: "Explore the TSA use case" },
       { id: UC.california, title: "The California mDL and Its Growing Use and Ecosystem of Stakeholders", status: `The catalog lists California DMV as the organisation. The catalog ${IN_PROD}.`, label: "Explore the California use case" }],
-    must: [/they do not establish availability across all states or airports/, /1 January 2027/, /4 May 2027/, /physical ID/, /17 December 2025/, /age-restricted retail purchases/],
+    must: [/they do not establish availability across all states or airports/, /Its list, checked on 13 November 2026, also shows that acceptance can end/, /1 January 2027/, /4 May 2027/, /physical ID/, /17 December 2025/, /age-restricted retail purchases/],
     mustNot: [/\b(2|two) million\b|271 airports|45,800|6\.83/i] },
   { slug: "honduras", title: "Honduras — Billetera Electrónica Nacional", intro: /^What is BIEN, the national electronic wallet of Honduras\?/, cc: "HN", country: "Honduras", the: "",
     sources: [["DIGER", "Billetera Electrónica Nacional BIEN", "https://diger.gob.hn/identidad-digital"], ["DIGER", "Preguntas frecuentes", "https://www.diger.gob.hn/identidad-digital/preguntas-frecuentes"]],
     headings: ["Public credentials in one wallet", "See it in practice", "Where the information comes from", "Continue learning"],
-    learn: ["issuing-public-information-to-wallets", "how-credentials-connect"], cats: ["overview/", "organizations/"], terms: 0, learnMore: 2,
-    cards: [{ id: UC.bien, title: "Honduras: Billetera Electronica Nacional (BIEN) - 4 gob authorities issuing into one citizen-controlled wallet", status: `The catalog lists TECH5 as the organisation. The catalog ${IN_PROD}.`, label: "Explore the BIEN use case" }],
-    must: [/DIGER, the government body responsible/, /will be added later/, /differs in places from DIGER/, /official pages are in Spanish/, /no statement about the legal acceptance/],
+    learn: ["issuing-public-information-to-wallets", "how-credentials-connect", "receiving-information-in-a-wallet"], cats: ["overview/", "organizations/"], terms: 0, learnMore: 3,
+    cards: [{ id: UC.bien, title: "Honduras: Billetera Electronica Nacional (BIEN) - 4 gob authorities issuing into one citizen-controlled wallet", status: `The catalog lists TECH5 as the organisation and ${IN_PROD}. DIGER’s pages describe BIEN as available, and name the National Registry of Persons (RNP) and three other bodies as issuers.`, label: "Explore the BIEN use case" }],
+    must: [/DIGER, the government body responsible/, /will be added later, while its overview page presents INM as an identity provider that issues a digital residence card/, /TECH5, not to DIGER/, /differs in places from DIGER/, /official pages are in Spanish/, /no statement about the legal acceptance/],
     mustNot: [/legal(ly)? (valid|equivalen)/i, /Resolution No/i] },
   { slug: "ethiopia", title: "Ethiopia — Fayda digital identity", intro: /^What is Fayda, and what does the programme say about FaydaPass\?/, cc: "ET", country: "Ethiopia", the: "",
     sources: [["Fayda National ID", "About", "https://www.id.gov.et/about"], ["Fayda National ID", "Authentication", "https://www.id.gov.et/authentication"], ["Fayda National ID", "Credentials", "https://id.gov.et/credentials"], ["National ID Program, Ethiopia", "FaydaPass (Google Play listing)", "https://play.google.com/store/apps/details?id=et.fayda.nidfaydaApp"]],
     headings: ["Credentials and verification", "FaydaPass and its status", "Where the information comes from", "Continue learning"],
-    learn: ["what-is-a-digital-wallet", "how-credentials-connect"], cats: ["overview/", "organizations/"], terms: 0, learnMore: 2,
+    learn: ["what-is-a-digital-wallet", "how-credentials-connect", "issuing-public-information-to-wallets"], cats: ["overview/", "organizations/"], terms: 0, learnMore: 3,
     cards: [{ id: UC.fayda, title: "Faydapass", status: `The catalog lists National ID Program as the organisation and ${IN_PROD}. The programme’s authentication page describes the FaydaPass wallet as work in progress, so check the programme for what is in use.`, label: "Explore the FaydaPass use case" }],
-    must: [/working on FaydaPass/, /does not describe the wallet as available/, /does not describe the wallet’s status consistently/, /does not state which credentials the wallet issues or which institutions use it/, /Check the programme for current status/],
+    must: [/working on FaydaPass/, /listed in Google Play \(checked on 13 November 2026\)/, /does not describe the wallet as available/, /does not describe the wallet’s status consistently/, /does not state which credentials the wallet issues or which institutions use it/, /Check the programme for current status/],
     mustNot: [/FaydaPass (is|has been) (now )?(live|launched|in production|available)/i, /(Ministry|Coopbank|Visa)/] },
 ];
 const OVERVIEW_ROWS = [`${WORLD}the-netherlands/`, `${WORLD}germany/`, ...["india", "canada", "united-states", "honduras", "ethiopia"].map((s) => `${WORLD}${s}/`), `${L}/topics/the-big-picture/european-digital-identity-wallet/`, `${L}/topics/for-governments/the-eudi-wallet-and-national-implementation/`, `${WORLD}un-transparency-protocol/`];
@@ -166,6 +194,66 @@ async function crumbCheck(page, tag, names, parents) {
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     }
 
+
+    // Learn more of the five pages: manifest titles, expected routes (the page loop below checks the links themselves).
+    for (const a of PAGES) {
+      const tag = `${a.slug} Learn more @${width}`;
+      await open(page, `${WORLD}${a.slug}/`);
+      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((x) => ({ text: x.textContent.replace(/\s+/g, " ").trim(), path: new URL(x.href).pathname })) : []; });
+      check(`${tag}: ${a.learnMore} links, none twice, none to itself`, lm.length === a.learnMore && new Set(lm.map((x) => x.path)).size === lm.length && lm.every((x) => !x.path.endsWith(`/${a.slug}/`)), JSON.stringify(lm));
+      for (const x of lm) {
+        const route = x.path.replace(`${L}/`, "").replace(/\/$/, "");
+        check(`${tag}: link text is the page title (${route})`, titleOf(route) === x.text, `${x.text} vs ${titleOf(route)}`);
+      }
+    }
+
+    // Links added from existing articles.
+    for (const art of ARTICLES) {
+      const tag = `${art.route.split("/").pop()} @${width}`;
+      const r = await open(page, `${L}/${art.route}/`);
+      check(`${tag}: article answers 200`, r && r.status() === 200);
+      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((x) => ({ text: x.textContent.replace(/\s+/g, " ").trim(), path: new URL(x.href).pathname })) : []; });
+      check(`${tag}: "Learn more" has ${art.n} links (at most 4)`, lm.length === art.n && lm.length <= 4, lm.map((x) => x.path).join(","));
+      for (const h of art.has) check(`${tag}: Learn more links to ${h}`, lm.some((x) => x.path === `${L}/${h}/`), lm.map((x) => x.path).join(","));
+      for (const h of art.not) check(`${tag}: replaced link to ${h} is gone`, !lm.some((x) => x.path.includes(h)));
+      for (const x of lm) {
+        const route = x.path.replace(`${L}/`, "").replace(/\/$/, "");
+        if (MANIFEST.some((p) => p.path === route)) check(`${tag}: link text is the page title (${route})`, titleOf(route) === x.text, `${x.text} vs ${titleOf(route)}`);
+      }
+      for (const h of art.bodyHas || []) check(`${tag}: running text links to ${h}`, (await page.locator(`.fides-learn-article__body a[href$="${L}/${h}/"]`).count()) > 0);
+      check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
+      await focusOk(page, tag, page.locator(".fides-learn-article__body h3:text-is('Learn more') + ul a").first(), "the first Learn more link");
+    }
+
+    // Cards against the repo records: status values and caveats.
+    {
+      const tag = `records @${width}`;
+      const recs = {};
+      for (const f of fs.readdirSync(path.join(ROOT, "community-catalogs"))) {
+        const file = path.join(ROOT, "community-catalogs", f, "use-case-catalog.json");
+        if (!fs.existsSync(file)) continue;
+        for (const u of JSON.parse(fs.readFileSync(file, "utf8")).useCases || []) if (Object.values(UC).includes(u.id)) recs[u.id] = u;
+      }
+      check(`${tag}: all six records exist in community-catalogs`, Object.keys(recs).length === 6, Object.keys(recs).join(","));
+      check(`${tag}: productionDeployment is one of the supported values (yes, no)`, Object.values(recs).every((u) => ["yes", "no", ""].includes(u.productionDeployment)), JSON.stringify(Object.values(recs).map((u) => u.productionDeployment)));
+      for (const a of PAGES) {
+        await open(page, `${WORLD}${a.slug}/`);
+        for (const c of a.cards) {
+          const text = squash(await page.locator(`.fides-learn-record[data-fides-learn-record="usecase:${c.id}"]`).innerText());
+          const rec = recs[c.id];
+          if (!rec) continue;
+          check(`${tag}: ${c.id.slice(0, 24)}… card says "in production" only because the record says yes`, /in production/.test(text) === (rec.productionDeployment === "yes"), `${rec.productionDeployment} / ${text.slice(0, 80)}`);
+          check(`${tag}: ${c.id.slice(0, 24)}… card names the record organisation (${rec.organizationName})`, text.includes(rec.organizationName) || text.includes(rec.organizationName.replace(/^Unique/, "the Unique")), text.slice(0, 160));
+        }
+      }
+      for (const id of [UC.swiggy, UC.neoflow, UC.bien, UC.fayda]) {
+        const a = PAGES.find((x) => x.cards.some((c) => c.id === id));
+        await open(page, `${WORLD}${a.slug}/`);
+        const text = squash(await page.locator(`.fides-learn-record[data-fides-learn-record="usecase:${id}"]`).innerText());
+        check(`${tag}: ${a.slug} card carries a source caveat next to the reported status`, /do not confirm|describes the related customs programme as a one-year test|DIGER’s pages describe BIEN as available|work in progress/.test(text), text);
+      }
+    }
+
     for (const a of PAGES) {
       const tag = `${a.slug} @${width}`;
       const r = await open(page, `${WORLD}${a.slug}/`);
@@ -236,6 +324,38 @@ async function crumbCheck(page, tag, names, parents) {
       await focusOk(page, tag, page.locator(".fides-learn-record a.fides-ds-action-link").first(), "the first card link");
       await focusOk(page, tag, page.locator(".fides-learn-sources__link").first(), "the first source link");
       check(`${tag}: no console errors`, errors.length === 0, errors.join(" | "));
+    }
+
+
+    // Dutch routes: Dutch text, strict u-form, /nl/ links, at most four Learn more links, no overflow, visible focus.
+    for (const a of PAGES) {
+      const tag = `/nl/${a.slug} @${width}`;
+      const nl = NL[a.slug];
+      const r = await open(page, `/nl${WORLD}${a.slug}/`);
+      check(`${tag}: answers 200`, r && r.status() === 200);
+      check(`${tag}: Dutch page`, /^nl/i.test(await page.evaluate(() => document.documentElement.lang)));
+      const h1s = (await page.locator("h1").allInnerTexts()).map(squash);
+      check(`${tag}: H1 "${nl.h1}"`, h1s.length === 1 && h1s[0] === nl.h1, h1s.join("|"));
+      const body = squash(await page.locator(".fides-learn-article__body").innerText());
+      for (const re of nl.must) check(`${tag}: Dutch text contains ${re}`, re.test(body));
+      const main = squash(await page.locator("main").innerText());
+      check(`${tag}: no je/jij/jouw/jou/jullie (strict u-form)`, !/\b(je|jij|jouw|jou|jullie)\b/i.test(main), (main.match(/\b(je|jij|jouw|jou|jullie)\b/i) || [""])[0]);
+      check(`${tag}: no English sentence left in the body paragraphs`, !(await page.locator(".fides-learn-article__body p").evaluateAll((ps) => ps.map((p) => p.textContent.replace(/\s+/g, " ").trim()).filter((s) => /\b(the|which|that|are|with|from|can|for)\b/.test(s) && !/^Swiggy: /.test(s)))).length, (await page.locator(".fides-learn-article__body p").evaluateAll((ps) => ps.map((p) => p.textContent.trim()).filter((s) => /\b(the|which|that|are|with|from|can|for)\b/.test(s) && !/^Swiggy: /.test(s)))).join(" || ").slice(0, 200));
+      for (const c of a.cards) {
+        const card = page.locator(`.fides-learn-record[data-fides-learn-record="usecase:${c.id}"]`);
+        check(`${tag}: card exists`, (await card.count()) === 1);
+        const text = squash(await card.innerText());
+        check(`${tag}: card status in Dutch ("Volgens opgave van de organisatie is deze usecase in productie")`, /Volgens opgave van de organisatie is deze usecase in productie/.test(text), text);
+        check(`${tag}: card link label Dutch`, text.includes(nl.label) || a.cards.length > 1, text);
+      }
+      const hrefs = await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")));
+      const internal = norm(hrefs).filter((h) => h.startsWith("/") && !/^\/fides-design-pilot\/(overview|organizations|personal-wallets|use-case)/.test(h));
+      check(`${tag}: learn links keep the /nl/ prefix`, internal.length > 0 && internal.every((h) => h.startsWith("/nl/")), internal.filter((h) => !h.startsWith("/nl/")).join(","));
+      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => /Meer uitleg|Learn more/.test(x.textContent.trim())); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
+      check(`${tag}: Learn more ("Meer uitleg") has ${a.learnMore} links (at most 4)`, lm === a.learnMore && lm <= 4, lm);
+      check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
+      await focusOk(page, tag, page.locator(".fides-learn-article__body ul a").first(), "the first list link");
+      await focusOk(page, tag, page.locator(".fides-learn-record a.fides-ds-action-link").first(), "the first card link");
     }
 
     // Filter links: chip and count > 0 on the pilot catalogs.

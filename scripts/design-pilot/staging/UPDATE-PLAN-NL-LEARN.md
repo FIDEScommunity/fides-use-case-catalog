@@ -402,8 +402,28 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
 - **Hash protection:** on staging an edited copy of `around-the-world` or `credential-formats-and-interoperability` is `skipped-edited` (also in the dry run); add the rows and the link by hand. Run `LEARN_DRY_RUN=1` first and report `skipped-edited`/`skipped-unmarked`; never use `LEARN_FORCE`.
 - **Time-sensitive facts to re-check right before staging:** Utah (1 January 2027) and West Virginia (4 May 2027) end of TSA acceptance; the CBP pipeline crude oil test (2 July 2026, one year); BC Wallet and BC Services Card app status; the DIGER credential list (residence card, INM); the FaydaPass status; the Swiggy and BIEN record status. Details: `learn/around-world-countries-fact-check-2026-11-13.md`.
 - **FaydaPass status discrepancy:** the record (`faydapass-rP7gpJ`, `productionDeployment: yes`, National ID Program catalog file) says in production; the programme's authentication page (https://www.id.gov.et/authentication) calls the wallet work in progress. The cause is the record field, not the display. The record was not changed; the Ethiopia page uses editorial card text and makes no production claim. The record owner has to clarify it. The Neoflow record has a similar difference with the CBP test.
-- **Dutch:** not entered; proposals in `learn/nl-translation-changes-around-world-countries.md`. The /nl/ routes show English body text.
+- **Dutch:** entered locally on 13 November 2026 (second round, see below); first proposals in `learn/nl-translation-changes-around-world-countries.md`.
 - **Tests:** `tests/run-around-world-countries-checks.sh`; `tests/technology-around-world-checks.cjs` was updated for nine hub rows and four links on the formats page.
+
+### Around the world: country pages, second round (13 November 2026, local only)
+
+- **Changed seed pages (11):** `india`, `canada`, `united-states`, `honduras`, `ethiopia` (text, cards, Learn more), and six existing
+  articles with one changed link each: `digital-wallets-and-public-services`, `issuing-public-information-to-wallets`,
+  `accepting-information-from-wallets-in-public-services`, `what-should-a-service-check-when-receiving-a-credential`,
+  `receiving-information-in-a-wallet`, `un-transparency-protocol`. Link lists and reasons: `learn/README.md`.
+- **Hash protection:** on staging, any of these eleven pages that was edited by hand is `skipped-edited` (also in the dry run) and
+  an unmarked one is `skipped-unmarked`. Run `LEARN_DRY_RUN=1` first, report both, never use `LEARN_FORCE`. For a skipped page add the
+  changed paragraphs and links by hand. Local dry run on 13 November 2026: 58 unchanged, none skipped.
+- **Dutch:** 91 rows entered locally through `learn/nl-translations.php` (only empty rows are filled). Transfer file 1430 entries.
+  On staging use `import-apply`; rows that already differ are kept and reported, not overwritten. Change list:
+  `learn/nl-translation-changes-around-world-countries-final-2026-11-13.md`.
+- **Records:** no record was changed. Handover actions for the owners (FaydaPass, Neoflow, BIEN, Swiggy, California DMV wallet): see
+  `learn/around-world-country-record-status.md`.
+- **Re-check right before staging:** CBP test status, Utah and West Virginia dates, BC Wallet and BC Services Card app status, DIGER
+  credential list (INM), FaydaPass status, TSA list.
+- **Remaining English on /nl/ for these pages:** glossary definitions (out of scope), record titles (stay English), and a few
+  pre-existing paragraphs in `receiving-information-in-a-wallet` and `what-should-a-service-check-when-receiving-a-credential`
+  that were not part of this task.
 
 ## Cross links between Explore and Learn (13 November 2026, local only)
 
