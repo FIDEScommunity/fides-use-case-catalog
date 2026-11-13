@@ -1,6 +1,7 @@
 # Dutch proposals: cross links between Explore and Learn (not seeded)
 
-Status (13 November 2026): proposals for review. Nothing here is in `nl-translations.json`, in the TranslatePress dictionary or in the seed.
+Status (13 November 2026, updated later the same day): the proposals below were reviewed and entered locally, with some improvements; see
+`nl-translation-changes-explore-crosslinks-final-2026-11-13.md` for the old proposal -> entered text. The original text of this file is kept as the record of the proposal.
 Terminology follows `learn/nl-terminology.md` (formal "u", "uitgever", "vertrouwende partij", "wallet" and "credential" stay).
 Do not overwrite existing human translations. Link labels that equal a Learn article title already show the Dutch article title
 (the label is translated through the existing title row), for example "Een wallet kiezen en beheren".

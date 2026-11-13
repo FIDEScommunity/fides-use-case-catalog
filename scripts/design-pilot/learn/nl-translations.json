@@ -5,13 +5,13 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 957,
+        "learn": 981,
         "services": 61,
         "shared": 109,
         "start-receive": 35,
         "training": 153
     },
-    "total": 1315,
+    "total": 1339,
     "entries": [
         {
             "original": "(OOTS) and for sharing data with private service providers on the basis of consent. ICTU says GBO is not meant to become a new, separate system but is to be anchored in existing national agreement frameworks.",
@@ -1314,6 +1314,19 @@
             "group": "learn"
         },
         {
+            "original": "A relying party in practice",
+            "translation": "Een vertrouwende partij in de praktijk",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-relying-party"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A relying party is an organisation or service that requests and uses information from a wallet. An employer checking a qualification is one example. The organisation needs to decide what information it needs and what it will use it for.",
             "translation": "Een vertrouwende partij (relying party) is een organisatie of dienst die gegevens uit een wallet opvraagt en gebruikt. Een werkgever die een kwalificatie controleert, is een voorbeeld. De organisatie moet bepalen welke gegevens ze nodig heeft en waarvoor ze die gebruikt.",
             "html": false,
@@ -1945,6 +1958,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/issuing-credentials-for-wallets"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "An issuer in practice",
+            "translation": "Een uitgever in de praktijk",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-issuer"
             ],
             "group": "learn"
         },
@@ -3779,6 +3805,19 @@
             "group": "learn"
         },
         {
+            "original": "Explore credential types that report",
+            "translation": "Bekijk credentialtypen met vermelding van",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/credential-formats-and-interoperability"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Explore developments across countries and ecosystems.",
             "translation": "Bekijk ontwikkelingen in verschillende landen en ecosystemen.",
             "html": false,
@@ -3878,6 +3917,32 @@
             "group": "learn"
         },
         {
+            "original": "Explore organisations in",
+            "translation": "Bekijk organisaties in",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/germany"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore organisations in the",
+            "translation": "Bekijk organisaties in",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/the-netherlands"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Explore organisations with",
             "translation": "Verken organisaties met",
             "html": false,
@@ -3888,6 +3953,46 @@
             "routes": [
                 "learn/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks",
                 "learn/topics/technology/trust-frameworks-and-registries"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore personal wallets from",
+            "translation": "Bekijk persoonlijke wallets uit",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/germany"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore personal wallets from the",
+            "translation": "Bekijk persoonlijke wallets uit",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/the-netherlands"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore personal wallets that report",
+            "translation": "Bekijk persoonlijke wallets met vermelding van",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/credential-formats-and-interoperability",
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
             ],
             "group": "learn"
         },
@@ -3933,6 +4038,19 @@
             "group": "learn"
         },
         {
+            "original": "Explore the Interac use case",
+            "translation": "Bekijk de Interac-usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-issuer"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Explore the KYB use case",
             "translation": "Bekijk de KYB-usecase",
             "html": false,
@@ -3942,6 +4060,32 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/european-business-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore the Nijmegen use case",
+            "translation": "Bekijk de Nijmegen-usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-relying-party"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore the Reeco use case",
+            "translation": "Bekijk de Reeco-usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/un-transparency-protocol"
             ],
             "group": "learn"
         },
@@ -4053,6 +4197,32 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore use cases from",
+            "translation": "Bekijk usecases uit",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/germany"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explore use cases from the",
+            "translation": "Bekijk usecases uit",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/the-netherlands"
             ],
             "group": "learn"
         },
@@ -4320,6 +4490,19 @@
             "group": "learn"
         },
         {
+            "original": "For more on the role of the holder, see",
+            "translation": "Meer over de rol van de houder leest u in",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "For the three routes and the status of the draft design, see the Dutch example in",
             "translation": "Voor de drie routes en de status van het conceptontwerp ziet u het Nederlandse voorbeeld in",
             "html": false,
@@ -4536,6 +4719,21 @@
                 "learn/topics/for-governments/the-eudi-wallet-and-national-implementation",
                 "learn/topics/the-big-picture/european-digital-identity-wallet",
                 "learn/topics/the-big-picture/how-credentials-connect"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Germany",
+            "translation": "Duitsland",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/germany",
+                "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/issuing-credentials-for-wallets"
             ],
             "group": "learn"
         },
@@ -5775,6 +5973,19 @@
             ],
             "routes": [
                 "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Netherlands",
+            "translation": "Nederland",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/the-netherlands"
             ],
             "group": "learn"
         },
@@ -8129,6 +8340,7 @@
                 "learn"
             ],
             "routes": [
+                "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
             ],
             "group": "learn"
@@ -8147,6 +8359,19 @@
             "group": "learn"
         },
         {
+            "original": "The catalog lists Interac as the organisation. The catalog marks this use case as in production, as reported by the organisation.",
+            "translation": "De catalogus noemt Interac als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-issuer"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The catalog lists Kamer van Koophandel as the organisation. The catalog does not mark this use case as in production.",
             "translation": "De catalogus noemt de Kamer van Koophandel als betrokken organisatie. De catalogus vermeldt deze usecase niet als in productie.",
             "html": false,
@@ -8156,6 +8381,19 @@
             ],
             "routes": [
                 "learn/topics/for-governments/digital-wallets-and-public-services"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The catalog lists Reeco as the organisation. The catalog does not mark this use case as in production.",
+            "translation": "De catalogus noemt Reeco als betrokken organisatie. Volgens de catalogus is deze usecase niet in productie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/un-transparency-protocol"
             ],
             "group": "learn"
         },
@@ -9305,6 +9543,45 @@
             "group": "learn"
         },
         {
+            "original": "This use case describes a textile product passport that is issued as a verifiable credential based on UNTP.",
+            "translation": "Deze usecase beschrijft een digitaal productpaspoort voor textiel dat wordt uitgegeven als verifieerbaar credential op basis van UNTP.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/un-transparency-protocol"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "This use case shows a municipality acting as a relying party: it asks a person to share specific attributes to log in to a municipal account.",
+            "translation": "Deze usecase laat zien hoe een gemeente optreedt als vertrouwende partij: zij vraagt een persoon specifieke attributen te delen, zodat die kan inloggen bij een gemeentelijk account.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-relying-party"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "This use case shows an organisation that issues a credential to a person, who keeps it in an app and can share it later with other organisations.",
+            "translation": "Deze usecase laat zien hoe een organisatie een credential uitgeeft aan een persoon. De persoon bewaart het credential in een app en kan het later delen met andere organisaties.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-issuer"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "This use case shows how a digital VOG can be shared with an organisation that needs to check it.",
             "translation": "Deze usecase laat zien hoe een digitale VOG kan worden gedeeld met een organisatie die deze moet controleren.",
             "html": false,
@@ -9491,6 +9768,19 @@
             ],
             "routes": [
                 "learn/topics/for-governments/digital-wallets-and-public-services"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "UNTP in a use case",
+            "translation": "UNTP in een usecase",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/un-transparency-protocol"
             ],
             "group": "learn"
         },
@@ -12039,6 +12329,32 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "for issuance",
+            "translation": "voor uitgifte",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "for presentation",
+            "translation": "voor presentatie",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
             ],
             "group": "learn"
         },
@@ -17102,6 +17418,9 @@
                 "start-receive"
             ],
             "routes": [
+                "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/ecosystem-roles/the-issuer",
+                "learn/topics/ecosystem-roles/the-relying-party",
                 "learn/topics/the-big-picture/how-credentials-connect",
                 "start/receive"
             ],

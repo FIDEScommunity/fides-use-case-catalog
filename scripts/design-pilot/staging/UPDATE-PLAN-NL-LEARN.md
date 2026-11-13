@@ -398,7 +398,14 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
 
 ## Cross links between Explore and Learn (13 November 2026, local only)
 
-Dutch: proposals in `learn/nl-translation-changes-explore-crosslinks.md`, not yet in the dictionary or `nl-translations.json`. Until they are imported the strip,
-the lines and the new Learn sentences are English on `/nl/`, as the Business wallets strip already is; link labels equal to a Learn title show the Dutch title.
-Import only through a TranslatePress export/import, `u` form, without overwriting existing human translations. Staging risks: tiles >= 1.13.52, the editorial
-links option on staging (hand edits are kept by the seed), hash-protected Learn pages (skipped-edited/skipped-unmarked must be read from the dry run).
+**One set, in this order:** (1) tiles 1.13.52, (2) credential catalog 7f89c44, organization catalog efe56868 and the use case catalog readme/plugin change, (3) Learn
+pages and editorial links by seed (dry run first), (4) Dutch transfer file. Tiles first; the catalogs and Learn pages need its `line` variant and
+`[fides_editorial_inline]`. Details and the checklist: `staging/HANDOVER.md`, section "Cross links between Explore and Learn".
+
+Dutch: the texts are entered locally (`learn/nl-translation-changes-explore-crosslinks-final-2026-11-13.md`, 24 new sources in `nl-translations.json`, status add 0 /
+differs 0). Import with `import-apply` (fills empty rows only, never overwrites existing human translations, `u` form). Three strip strings
+("Choosing a wallet?", "Learn what to look for and how to manage it.", the QTSP line) have no TranslatePress row yet and stay English on `/nl/` until the rows are
+created in the editor; the same gap exists for the Business wallets strip. The two country words "Germany" / "Netherlands" are shared rows ("Duitsland" / "Nederland").
+
+Before the seed on staging: check `fides_ds_editorial_links` (a hand-edited option is skipped as a whole, so add the seven new contexts by hand then), the target
+pages are published, run `LEARN_DRY_RUN=1` and read `skipped-edited` / `skipped-unmarked`. Never `LEARN_FORCE`. Local dry run on 13 November 2026: 58 unchanged, editorial links unchanged, no skipped.

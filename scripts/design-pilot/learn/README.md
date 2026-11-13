@@ -421,4 +421,13 @@ address as fallback), `organization-overview:roles` and `organization-overview:q
 self-described roles apart from imported certification data). New variant `line` (one muted line with an action link).
 From Learn: `[fides_learn_usecase]` cards in The issuer (Interac), The relying party (Nijmegen) and UN Transparency Protocol (Reeco); filter links in
 Credential formats and interoperability, How do wallets and services exchange information, The Netherlands and Germany (only filters with a chip and results > 0).
-Tests: `tests/explore-learn-crosslinks-behaviour.php`, `tests/explore-learn-crosslinks-checks.cjs`. Dutch proposals: `nl-translation-changes-explore-crosslinks.md`.
+Tests: `tests/explore-learn-crosslinks-behaviour.php`, `tests/explore-learn-crosslinks-checks.cjs`. Dutch: proposals in `nl-translation-changes-explore-crosslinks.md`, entered texts and deviations in `nl-translation-changes-explore-crosslinks-final-2026-11-13.md`. Open data question (Reusable KYC, VOG): `explore-open-data-checks.md`.
+
+**Roll-out (staging): one set, tiles first.** Tiles 1.13.52 (2859c80) must be live before the catalog changes (credential-catalog 7f89c44, organization-catalog efe56868,
+the use case catalog readme/plugin change) and before the Learn pages that link to the new catalog filters; otherwise the lines do not render
+(the use case intro keeps plain text). Then seed with `LEARN_DRY_RUN=1` first (never `LEARN_FORCE`). A hand-edited option `fides_ds_editorial_links` is skipped as a whole
+(`skipped-edited` / `skipped-unmarked`): keep the editor's entries and add the seven new contexts by hand. Checklist and local dry run result: `staging/HANDOVER.md`.
+
+**What is a digital wallet?** links to The holder in running text ("For more on the role of the holder, see ..."); `tests/ecosystem-roles-articles-checks.cjs` expects exactly one such link in the article body.
+
+**Organization QTSP check:** `tests/org-qtsp-filter-checks.cjs` serves the aggregate file read by `tests/org-qtsp-filter-data-check.cjs` to the page (the page normally loads the live GitHub aggregate first), so the expected counts and the page use one data source.

@@ -4,6 +4,9 @@
  * compares the listed organisations with the expected sets from tests/output/org-qtsp-filter-expected.json
  * (run tests/org-qtsp-filter-data-check.cjs first), and opens the detail of a few organisations to confirm the
  * role or the QTSP certification is shown there.
+ * DATA SOURCE: the page loads the organisation aggregate from GitHub first (live, it changes over time). To keep the expectation
+ * meaningful, the browser serves the file the data check read (exp.file) for that remote request, so page and expectation use the
+ * same data. The check fails if the page did not request the remote aggregate (it would then show data from another source).
  * Run: PLAYWRIGHT_MODULE=... CHROME_PATH=... node tests/org-qtsp-filter-checks.cjs
  */
 const fs = require("fs");
@@ -12,6 +15,8 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const BASE = process.env.PILOT_URL || "http://localhost:10088";
 const WIDTHS = (process.env.WIDTHS || "1440,390").split(",").map(Number);
 const exp = JSON.parse(fs.readFileSync(path.join(__dirname, "output/org-qtsp-filter-expected.json"), "utf8"));
+const REMOTE_AGGREGATE = /raw\.githubusercontent\.com\/FIDEScommunity\/fides-organization-catalog\/main\/data\/aggregated\.json/;
+const aggregateBody = fs.readFileSync(exp.file, "utf8");
 const slug = (id) => id.replace(/^org:/, "");
 let failures = 0;
 const check = (n, ok, d) => { if (!ok) failures += 1; console.log(`${ok ? "ok" : "not ok"} - ${n}${d && !ok ? ` (${String(d).slice(0, 300)})` : ""}`); };
@@ -32,6 +37,8 @@ const rows = (page) => page.evaluate(() => [...document.querySelectorAll("#fides
   const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined, headless: true });
   for (const width of WIDTHS) {
     const page = await (await browser.newContext({ viewport: { width, height: 900 } })).newPage();
+    let served = 0;
+    await page.route(REMOTE_AGGREGATE, (route) => { served += 1; return route.fulfill({ status: 200, contentType: "application/json", headers: { "access-control-allow-origin": "*" }, body: aggregateBody }); });
     for (const c of CASES) {
       const tag = `${c.q} @${width}`;
       await open(page, `/fides-design-pilot/organizations/${c.q}`);
@@ -51,6 +58,8 @@ const rows = (page) => page.evaluate(() => [...document.querySelectorAll("#fides
       check(`${tag}: all pages list ${want.size} unique organisations`, ids.length === want.size && seen.length === ids.length, `${seen.length} rows, ${ids.length} unique`);
       check(`${tag}: nobody missing, nobody extra`, ids.every((i) => want.has(i)) && [...want].every((i) => ids.includes(i)), `extra ${ids.filter((i) => !want.has(i)).slice(0, 5)} missing ${[...want].filter((i) => !ids.includes(i)).slice(0, 5)}`);
     }
+    check(`data source @${width}: the page loaded the aggregate that the expectation was derived from`, served > 0, "the remote aggregate was never requested");
+    await page.close();
   }
   await browser.close();
   console.log(failures ? `${failures} failure(s)` : "all checks passed");

@@ -1,9 +1,10 @@
 /**
  * Data check for the organisation filters used by the trust-service-providers article:
  * role=eidas_trust_service_provider (ecosystemRoleCodes) versus cert=qtsp (certifications[].code).
- * Reads the pilot's aggregate (read-only), mirrors the plugin matching (exact code equality) and prints counts,
+ * Reads the pilot's bundled aggregate snapshot (read-only; AGGREGATE overrides the path), mirrors the plugin matching (exact code equality) and prints counts,
  * the intersection, a spread sample and the "not matching" controls. Writes tests/output/org-qtsp-filter-expected.json
- * for the browser check. No network, no writes outside tests/output.
+ * for the browser check, which serves this SAME file to the page (see org-qtsp-filter-checks.cjs), so page and expectation share one
+ * data source and the counts never drift against the live GitHub aggregate. No network, no writes outside tests/output.
  * Run: node tests/org-qtsp-filter-data-check.cjs
  */
 const fs = require("fs");
@@ -44,5 +45,5 @@ console.log("sample OUT (cert=qtsp):");
 for (const o of neg) console.log(`  ${slug(o)} | roles [${roleCodes(o).join(",")}] | certs [${certCodes(o).join(",")}] | in qtsp filter: ${isQtsp(o)}`);
 check("controls are all outside the QTSP filter", neg.every((o) => !isQtsp(o)));
 fs.mkdirSync(path.join(__dirname, "output"), { recursive: true });
-fs.writeFileSync(path.join(__dirname, "output/org-qtsp-filter-expected.json"), JSON.stringify({ role: role.map((o) => o.id), qtsp: qtsp.map((o) => o.id), both: both.map((o) => o.id), neg: neg.map((o) => o.id) }));
+fs.writeFileSync(path.join(__dirname, "output/org-qtsp-filter-expected.json"), JSON.stringify({ file: FILE, total: orgs.length, role: role.map((o) => o.id), qtsp: qtsp.map((o) => o.id), both: both.map((o) => o.id), neg: neg.map((o) => o.id) }));
 process.exit(failures ? 1 : 0);

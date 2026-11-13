@@ -711,6 +711,39 @@ $nl = array(
     'UNTP is still under development. The specification page consulted on 13 November 2026 is labelled “Work in Progress” and says it is suitable for pre-production pilot implementations. Its schema and sample files are version 0.8.0. The page shows no publication date. The public review has closed, and the UNTP team says it expects to release version 1.0. Consult the current specification for its status and intended use.' => 'UNTP is nog in ontwikkeling. De specificatiepagina die op 13 november 2026 is geraadpleegd, heet “Work in Progress” en zegt dat de specificatie geschikt is voor pilotimplementaties vóór productie. De schema- en voorbeeldbestanden zijn versie 0.8.0. De pagina toont geen publicatiedatum. De publieke review is gesloten en het UNTP-team verwacht versie 1.0 uit te brengen. Raadpleeg de actuele specificatie voor de status en het beoogde gebruik.',
     'Status' => 'Status',
     'Choosing and managing a wallet' => 'Een wallet kiezen en beheren',
+    // Round 2026-11-13 (Explore and Learn cross links): see learn/nl-translation-changes-explore-crosslinks-final-2026-11-13.md.
+    'Organizations describe their own roles.' => 'Organisaties beschrijven zelf welke rollen zij hebben.',
+    'Ecosystem roles explained' => 'Rollen in het ecosysteem uitgelegd',
+    'Formats are one way to compare credential types.' => 'Formaten zijn één manier om credentialtypen met elkaar te vergelijken.',
+    'Explore credential types that report' => 'Bekijk credentialtypen met vermelding van',
+    'Explore personal wallets that report' => 'Bekijk persoonlijke wallets met vermelding van',
+    'for issuance' => 'voor uitgifte',
+    'for presentation' => 'voor presentatie',
+    'Explore use cases from the' => 'Bekijk usecases uit',
+    'Explore use cases from' => 'Bekijk usecases uit',
+    'Explore organisations in the' => 'Bekijk organisaties in',
+    'Explore organisations in' => 'Bekijk organisaties in',
+    'Explore personal wallets from the' => 'Bekijk persoonlijke wallets uit',
+    'Explore personal wallets from' => 'Bekijk persoonlijke wallets uit',
+    'Germany' => 'Duitsland',
+    'Netherlands' => 'Nederland',
+    'An issuer in practice' => 'Een uitgever in de praktijk',
+    'This use case shows an organisation that issues a credential to a person, who keeps it in an app and can share it later with other organisations.' => 'Deze usecase laat zien hoe een organisatie een credential uitgeeft aan een persoon. De persoon bewaart het credential in een app en kan het later delen met andere organisaties.',
+    'The catalog lists Interac as the organisation. The catalog marks this use case as in production, as reported by the organisation.' => 'De catalogus noemt Interac als betrokken organisatie. Volgens opgave van de organisatie is deze usecase in productie.',
+    'Explore the Interac use case' => 'Bekijk de Interac-usecase',
+    'A relying party in practice' => 'Een vertrouwende partij in de praktijk',
+    'This use case shows a municipality acting as a relying party: it asks a person to share specific attributes to log in to a municipal account.' => 'Deze usecase laat zien hoe een gemeente optreedt als vertrouwende partij: zij vraagt een persoon specifieke attributen te delen, zodat die kan inloggen bij een gemeentelijk account.',
+    'Explore the Nijmegen use case' => 'Bekijk de Nijmegen-usecase',
+    'UNTP in a use case' => 'UNTP in een usecase',
+    'This use case describes a textile product passport that is issued as a verifiable credential based on UNTP.' => 'Deze usecase beschrijft een digitaal productpaspoort voor textiel dat wordt uitgegeven als verifieerbaar credential op basis van UNTP.',
+    'The catalog lists Reeco as the organisation. The catalog does not mark this use case as in production.' => 'De catalogus noemt Reeco als betrokken organisatie. Volgens de catalogus is deze usecase niet in productie.',
+    'Explore the Reeco use case' => 'Bekijk de Reeco-usecase',
+    'For more on the role of the holder, see' => 'Meer over de rol van de houder leest u in',
+    // Strip strings of the Explore pages. They only receive a Dutch text once TranslatePress has a dictionary row for them;
+    // the strip is rendered by JavaScript and the dictionary has no row yet (reported by status as "no dictionary row yet").
+    'Choosing a wallet?' => 'Een wallet kiezen?',
+    'Learn what to look for and how to manage it.' => 'Lees waar u op let en hoe u een wallet beheert.',
+    'QTSP certification is imported from trusted list data. It is separate from the roles organizations describe for themselves.' => 'QTSP-certificering is overgenomen uit de gegevens van vertrouwenslijsten (trusted lists). Dit staat los van de rollen die organisaties zelf beschrijven.',
 );
 
 /**
@@ -862,6 +895,13 @@ $corrections = array(
     array('Wallets &amp; credentials · Ecosystem roles · Technology · Around the world',
           'Wallets en credentials · Rollen in het ecosysteem · Technologie · Wereldwijd',
           'Wallets en credentials · Rollen in het ecosysteem · Technologie · Internationaal'),
+    // Round 2026-11-13 (Explore and Learn cross links): the catalog button already says "credentialtypen"; the two rows entered earlier used "credential types".
+    array('Formats are one way to compare credential types.',
+          'Formaten zijn één manier om credential types met elkaar te vergelijken.',
+          'Formaten zijn één manier om credentialtypen met elkaar te vergelijken.'),
+    array('Explore credential types that report',
+          'Bekijk credential types met vermelding van',
+          'Bekijk credentialtypen met vermelding van'),
     // Round 2026-11-13: DvTP list fragment.
     array('the person gives consent for a specific purpose, recipient and data set, and the private provider is described as receiving a party-specific pseudonym and not the citizen service number.',
           'de persoon toestemming geeft voor een specifiek doel, een specifieke ontvanger en een specifieke gegevensset, en de private aanbieder wordt beschreven als ontvanger van een partijspecifiek pseudoniem en niet van het burgerservicenummer.',

@@ -228,9 +228,36 @@ Known limits of the Dutch version: the cookie consent banner (Complianz), the As
 
 ## Cross links between Explore and Learn (13 November 2026, local only)
 
-Staging risks: the tiles plugin must be >= 1.13.52 (new `line` variant and `[fides_editorial_inline]`); catalog plugin changes (credential, organization,
-use case) are in "Unreleased (design pilot)" and depend on it. Without the tiles update the new lines simply do not render and the use case intro keeps
-plain text. The option `fides_ds_editorial_links` on staging may be edited by hand: the seed leaves edited entries alone, so the new contexts must be checked
-there. The Learn pages (the issuer, the relying party, UN Transparency Protocol, credential formats, how wallets exchange information, The Netherlands,
-Germany) are hash protected: edited or unmarked pages are skipped and reported by `create-learn-pages.sh` (`LEARN_DRY_RUN=1` first, never `LEARN_FORCE`).
-The Reusable KYC and VOG records say `productionDeployment: yes` while their text describes a pilot or testnet: not changed, see the report.
+**These changes go together. Roll them out as one set, in this order:**
+
+1. `fides-community-tools-tiles` **1.13.52** (commit 2859c80): the `line` variant and the shortcode `[fides_editorial_inline]`. Tiles first, because the catalogs and
+   the catalogs use both (the Learn pages only link to the catalogs and use the existing Learn template). A catalog plugin without the new tiles renders nothing for
+   the new lines and keeps plain text in the use case intro.
+2. The three catalog plugins (any order, after tiles): `fides-credential-catalog` (commit 7f89c44, Learn links in the attestations dialog and the formats section),
+   `fides-organization-catalog` (commit efe56868, roles line and QTSP-only line), `fides-use-case-catalog` (readme/plugin change of ff745cc: nested shortcodes in the
+   enclosed intro text).
+3. The Learn content and the editorial links (`create-learn-pages.sh` / `seed.sh`, dry run first), then the Dutch transfer file (`nl-translations.json`, import in
+   `status` first). Pages that use the new sentences: the issuer, the relying party, UN Transparency Protocol, credential formats and interoperability,
+   how wallets and services exchange information, The Netherlands, Germany, What is a digital wallet?.
+
+If only some parts arrive: tiles without the catalog changes shows nothing new; the catalog changes without tiles lose the lines and the intro links (no error);
+Learn pages without the catalogs link to filters that do not exist yet. So do not ship the catalogs or the Learn pages before tiles 1.13.52.
+
+**Handover checklist (staging, read-only checks before the seed):**
+
+- [ ] Tiles on staging is 1.13.52 or higher; the three catalog plugins contain the commits above.
+- [ ] Option `fides_ds_editorial_links`: look at the existing entries. The seed treats the whole option as one unit: if it was edited by hand (or has no seed hash) the
+      seed reports `editorial links skipped-edited` / `skipped-unmarked` and does NOT add the new contexts. Hand-edited entries stay as they are; the new
+      contexts then have to be added by hand: `wallet-overview:personal`, `credential-explain`, `credential-formats`, `usecase-overview:digital-wallets`,
+      `usecase-overview:verifiable-credentials`, `organization-overview:roles`, `organization-overview:qtsp` (source: `learn/editorial-links.json`).
+- [ ] Every target page of those entries is published on staging (choosing and managing a wallet, what is a credential, credential formats and interoperability,
+      what is a digital wallet, ecosystem roles, trust service providers and trust frameworks). An entry whose target is not published renders nothing.
+- [ ] Fallback: the two intro words on Use cases fall back to the old fides.community address when the entry or target is missing; the other lines simply do not render.
+- [ ] Run the seed dry run: `LEARN_DRY_RUN=1` (never `LEARN_FORCE`). Read `skipped-edited` and `skipped-unmarked` per page and for `editorial links`; edited pages stay as
+      they are and must be updated by hand or by an editor decision.
+- [ ] Dutch: `nl-translations-transfer.php status`; `import-apply` only fills empty rows. Three strip strings have no dictionary row yet (see
+      `learn/nl-translation-changes-explore-crosslinks-final-2026-11-13.md`); they stay English on `/nl/` until the rows exist.
+- [ ] Data: the Reusable KYC and VOG records say `productionDeployment: yes` while their text describes a testnet or a pilot; not changed, see `learn/explore-open-data-checks.md`.
+
+Local dry run (13 November 2026, pilot database, no staging): `LEARN_DRY_RUN=1 bash create-learn-pages.sh` -> `editorial links unchanged (9 entries)`, 58 pages
+unchanged, no `skipped-edited`, no `skipped-unmarked`. Tests: `tests/explore-learn-crosslinks-checks.cjs`.
