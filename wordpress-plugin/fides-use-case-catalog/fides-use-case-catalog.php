@@ -2269,7 +2269,8 @@ function fides_use_case_catalog_list_shortcode($atts = array(), $content = ''): 
     if ($design === 'pilot') {
         $add_url = esc_url_raw(trim((string) $atts['add_url']));
         // Enclosed shortcode content is the page intro: first paragraph under the title.
-        $intro = trim(wp_kses_post((string) $content));
+        // Nested shortcodes (for example [fides_editorial_inline]) are resolved first, so editorial links follow the site routing.
+        $intro = trim(wp_kses_post(do_shortcode((string) $content)));
         return sprintf(
             '<div id="fides-use-case-catalog-root" class="fides-ds fides-uc-pilot" data-columns="%s" data-design="pilot" data-detail-url="%s" data-title="%s" data-add-url="%s" data-intro="%s" aria-busy="true">%s</div>',
             esc_attr($columns),

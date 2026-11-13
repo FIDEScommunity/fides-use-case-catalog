@@ -395,3 +395,10 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
 - **Facts to re-check right before staging:** German launch date (2 January 2027), UNTP version and status (0.8.0, Work in Progress), GBO 0.9.5, SD-JWT VC draft-26 status (IESG evaluation, has a DISCUSS), ISO 18013-5 revision, content of the Dutch EDI page, OpenID versions.
 - **Not linked (no pilot destination):** issuer overview, relying party overview, interop profiles. Tiles unchanged.
 - **Tests:** `tests/run-technology-around-world-checks.sh`.
+
+## Cross links between Explore and Learn (13 November 2026, local only)
+
+Dutch: proposals in `learn/nl-translation-changes-explore-crosslinks.md`, not yet in the dictionary or `nl-translations.json`. Until they are imported the strip,
+the lines and the new Learn sentences are English on `/nl/`, as the Business wallets strip already is; link labels equal to a Learn title show the Dutch title.
+Import only through a TranslatePress export/import, `u` form, without overwriting existing human translations. Staging risks: tiles >= 1.13.52, the editorial
+links option on staging (hand edits are kept by the seed), hash-protected Learn pages (skipped-edited/skipped-unmarked must be read from the dry run).

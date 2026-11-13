@@ -87,7 +87,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
 
       // Links.
       const hrefs = await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")));
-      check(`${tag}: no local host in the content links`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h)));
+      check(`${tag}: no hardcoded local host in the content links (record cards resolve their permalink at render time)`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h) || /\/use-case\/\?usecase=/.test(h)));
       check(`${tag}: no link to issuer-catalog or relying-party-websites`, hrefs.every((h) => !/issuer-catalog|relying-party-websites/.test(h)));
       for (const l of a.links) check(`${tag}: links to ${l}`, hrefs.some((h) => h.includes(l)), hrefs.join(" "));
       const groups = await page.locator(".fides-learn-article__body h3").allInnerTexts();

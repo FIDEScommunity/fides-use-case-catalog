@@ -212,7 +212,9 @@ pilot_upsert_page(
     '{{base}}/overview',
     'Use cases (design pilot)',
     '<!-- wp:shortcode -->[fides_use_case_catalog design="pilot" title="Use cases" detail_url="{{pilot}}/use-case/" add_url="{{site}}/use-case-form/"]'
-    . '<p>Discover real-world examples of <a href="https://fides.community/topics/personal-wallets/">digital wallets</a> and <a href="https://fides.community/topics/credentials/">verifiable credentials</a> in action — passwordless login, age verification, digital travel, cross-border and public services, and more.</p>'
+    // The two explanation links are editorial: [fides_editorial_inline] resolves them to the Learn articles chosen in the
+    // editorial links (usecase-overview:*), keeping the language route, and falls back to the live fides.community page.
+    . '<p>Discover real-world examples of [fides_editorial_inline context="usecase-overview:digital-wallets" fallback="https://fides.community/topics/personal-wallets/"]digital wallets[/fides_editorial_inline] and [fides_editorial_inline context="usecase-overview:verifiable-credentials" fallback="https://fides.community/topics/credentials/"]verifiable credentials[/fides_editorial_inline] in action — passwordless login, age verification, digital travel, cross-border and public services, and more.</p>'
     . '<p>Learn from proven patterns, compare approaches, and reuse what works instead of starting from scratch.</p>'
     . '[/fides_use_case_catalog]<!-- /wp:shortcode -->',
     $parent,

@@ -410,3 +410,15 @@ The visitor notice "Local pilot view" no longer appears in the request form temp
 - Dutch entered locally (148 rows + 2 corrections; transfer file 1315 entries): `learn/nl-translation-changes-technology-around-world-final-2026-11-13.md`. Names: "Technologie", "Internationaal" (nav title and breadcrumb), H1 "Digitaal vertrouwen wereldwijd".
 - Seed: "The EUDI Wallet and national implementation" links to Around the world and The Netherlands (four Learn more links); "What is a digital wallet?" has four Learn more links; UNTP wording follows the specification (shipper issues the passport, each actor in the chain issues one, W3C VC, "does not conflict" with national regulations such as the EU DPP); SD-JWT VC label unified; German source replaced by the English page.
 - Tests: `tests/technology-around-world-nl-checks.cjs` (new; routes, topic names, nav title vs H1, links, QTSP filter link in EN and NL, overflow at 1440 and 390). `tests/nl-route-checks.cjs` ignores "d-you" in the English-word check. The glossary definitions on four new routes are still English (out of scope), so `NL_PATHS` runs for those report them.
+
+## Cross links between Explore and Learn (13 November 2026, local only)
+
+Entrances from the catalogs go through `editorial-links.json` (option `fides_ds_editorial_links`); a context without an entry, or with an unpublished
+target page, renders nothing, and the language route (`/nl/`) is added by TranslatePress. New contexts: `wallet-overview:personal` (strip, same pattern as
+Business wallets), `credential-explain` (link in the "Credentials & attestations" dialog), `credential-formats` (line at the end of Formats & identifiers),
+`usecase-overview:digital-wallets` and `usecase-overview:verifiable-credentials` (intro words, via `[fides_editorial_inline]` with the old fides.community
+address as fallback), `organization-overview:roles` and `organization-overview:qtsp` (the second only while `cert=qtsp` is active; the wording keeps
+self-described roles apart from imported certification data). New variant `line` (one muted line with an action link).
+From Learn: `[fides_learn_usecase]` cards in The issuer (Interac), The relying party (Nijmegen) and UN Transparency Protocol (Reeco); filter links in
+Credential formats and interoperability, How do wallets and services exchange information, The Netherlands and Germany (only filters with a chip and results > 0).
+Tests: `tests/explore-learn-crosslinks-behaviour.php`, `tests/explore-learn-crosslinks-checks.cjs`. Dutch proposals: `nl-translation-changes-explore-crosslinks.md`.

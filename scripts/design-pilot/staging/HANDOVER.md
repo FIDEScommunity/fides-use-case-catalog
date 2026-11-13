@@ -225,3 +225,12 @@ Link paths in Dutch: TranslatePress filters `home_url()` per language (`/design-
 Known limits of the Dutch version: the cookie consent banner (Complianz), the Ask FIDES assistant widget and the data of the catalogs stay English; the section name "Learn" stays English on purpose; header and footer texts that are not part of the seeded pages can stay English until translated in the editor; Contact, Privacy, Terms and the other links without a pilot page open the live site (English); catalog data (descriptions, names) is English.
 
 **Technology and Around the world (Dutch, local pilot 13 Nov 2026):** transfer file 1315 entries (148 rows + 2 corrections), see `learn/nl-translation-changes-technology-around-world-final-2026-11-13.md` and the section in `staging/UPDATE-PLAN-NL-LEARN.md`. Staging risks: six seed pages changed after the first seed (skipped when edited on staging, never use `LEARN_FORCE`); "Around the world" and the topics-page row stay "Wereldwijd" on staging until changed by hand ("Internationaal"); re-check the dates and versions listed in the plan before going live; glossary definitions on the new pages are English.
+
+## Cross links between Explore and Learn (13 November 2026, local only)
+
+Staging risks: the tiles plugin must be >= 1.13.52 (new `line` variant and `[fides_editorial_inline]`); catalog plugin changes (credential, organization,
+use case) are in "Unreleased (design pilot)" and depend on it. Without the tiles update the new lines simply do not render and the use case intro keeps
+plain text. The option `fides_ds_editorial_links` on staging may be edited by hand: the seed leaves edited entries alone, so the new contexts must be checked
+there. The Learn pages (the issuer, the relying party, UN Transparency Protocol, credential formats, how wallets exchange information, The Netherlands,
+Germany) are hash protected: edited or unmarked pages are skipped and reported by `create-learn-pages.sh` (`LEARN_DRY_RUN=1` first, never `LEARN_FORCE`).
+The Reusable KYC and VOG records say `productionDeployment: yes` while their text describes a pilot or testnet: not changed, see the report.

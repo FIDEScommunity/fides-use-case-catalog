@@ -1,6 +1,6 @@
 {
  "version": 1,
- "note": "Editor-chosen links from catalog pages to explanations (option fides_ds_editorial_links). Keys are contexts chosen by the rendering page. A context without an entry, or with a target page that is not published, renders nothing. Tokens: {{learn}}, {{start}}, {{pilot}}.",
+ "note": "Editor-chosen links from catalog pages to explanations (option fides_ds_editorial_links). Keys are contexts chosen by the rendering page. A context without an entry, or with a target page that is not published, renders nothing (the inline use case links fall back to their fides.community address). Tokens: {{learn}}, {{start}}, {{pilot}}. Contexts used by the pilot: usecase:<id>, wallet-overview:<personal|organizational>, credential-explain, credential-formats, usecase-overview:<digital-wallets|verifiable-credentials>, organization-overview:roles, organization-overview:qtsp.",
  "entries": {
   "usecase:digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC": {
    "variant": "band",
@@ -16,6 +16,55 @@
    "text": "Understand what they do before comparing solutions.",
    "label": "Business wallets explained",
    "target": "{{learn}}/topics/for-businesses/business-wallets-where-to-start/"
+  },
+  "wallet-overview:personal": {
+   "variant": "strip",
+   "title": "Choosing a wallet?",
+   "text": "Learn what to look for and how to manage it.",
+   "label": "Choosing and managing a wallet",
+   "target": "{{learn}}/topics/for-you/choosing-and-managing-a-wallet/"
+  },
+  "credential-explain": {
+   "variant": "line",
+   "title": "What is a credential?",
+   "text": "",
+   "label": "What is a credential? And what is an attestation?",
+   "target": "{{learn}}/topics/the-big-picture/what-is-a-credential/"
+  },
+  "credential-formats": {
+   "variant": "line",
+   "title": "Credential formats",
+   "text": "Formats are one way to compare credential types.",
+   "label": "Credential formats and interoperability",
+   "target": "{{learn}}/topics/technology/credential-formats-and-interoperability/"
+  },
+  "usecase-overview:digital-wallets": {
+   "variant": "line",
+   "title": "What is a digital wallet?",
+   "text": "",
+   "label": "What is a digital wallet?",
+   "target": "{{learn}}/topics/the-big-picture/what-is-a-digital-wallet/"
+  },
+  "usecase-overview:verifiable-credentials": {
+   "variant": "line",
+   "title": "What is a credential?",
+   "text": "",
+   "label": "What is a credential? And what is an attestation?",
+   "target": "{{learn}}/topics/the-big-picture/what-is-a-credential/"
+  },
+  "organization-overview:roles": {
+   "variant": "line",
+   "title": "Ecosystem roles",
+   "text": "Organizations describe their own roles.",
+   "label": "Ecosystem roles explained",
+   "target": "{{learn}}/topics/ecosystem-roles/"
+  },
+  "organization-overview:qtsp": {
+   "variant": "line",
+   "title": "Trust service providers and trust frameworks",
+   "text": "QTSP certification is imported from trusted list data. It is separate from the roles organizations describe for themselves.",
+   "label": "Trust service providers and trust frameworks",
+   "target": "{{learn}}/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks/"
   }
  }
 }
