@@ -5,13 +5,13 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 1072,
+        "learn": 1096,
         "services": 61,
         "shared": 109,
         "start-receive": 35,
         "training": 153
     },
-    "total": 1430,
+    "total": 1454,
     "entries": [
         {
             "original": "(OOTS) and for sharing data with private service providers on the basis of consent. ICTU says GBO is not meant to become a new, separate system but is to be anchored in existing national agreement frameworks.",
@@ -517,6 +517,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/accepting-information-from-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": ". This article looks at what the specifications say behind them.",
+            "translation": ". Dit artikel kijkt naar wat de specificaties erachter zeggen.",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -1431,6 +1444,19 @@
             "group": "learn"
         },
         {
+            "original": "A school, public authority or other organisation may offer information that you can receive in a digital wallet. It might be a qualification, a permit or another statement about you. The organisation providing it is called the",
+            "translation": "Een school, overheidsinstantie of andere organisatie kan informatie aanbieden die u in een digitale wallet kunt ontvangen. Dat kan een kwalificatie zijn, een vergunning of een andere verklaring over u. De organisatie die de informatie verstrekt, heet",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-you/receiving-information-in-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "A service can ask the wallet",
             "translation": "Een dienst kan de wallet",
             "html": false,
@@ -1440,6 +1466,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "A service may also need to determine whether the person presenting the information is entitled to use it. How that check works depends on the technology and the situation. Whether a person may act for an organisation is a separate question; see",
+            "translation": "Een dienst moet mogelijk ook vaststellen of de persoon die de informatie toont, die mag gebruiken. Hoe die controle werkt, hangt af van de technologie en de situatie. Of een persoon namens een organisatie mag handelen, is een aparte vraag; zie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -1623,6 +1662,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/trust-and-interoperability"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "A valid credential can contain information that does not meet a service’s requirements. For example, an employer may receive a valid qualification that does not cover a required skill. The service needs its own criteria for deciding what to accept and what to do if a check fails or information is missing.",
+            "translation": "Een geldig credential kan informatie bevatten die niet voldoet aan de eisen van een dienst. Een werkgever kan bijvoorbeeld een geldige kwalificatie ontvangen die een vereiste vaardigheid niet dekt. De dienst heeft eigen criteria nodig om te bepalen wat zij accepteert en wat zij doet als een controle mislukt of informatie ontbreekt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -2417,6 +2469,19 @@
             "group": "learn"
         },
         {
+            "original": "Before you add something",
+            "translation": "Voordat u iets toevoegt",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-you/receiving-information-in-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "British Columbia describes BC Wallet as an app for storing digital credentials. One example is a credential for lawyers issued through the Law Society of British Columbia. Check the current provider information to see which credentials and services are available.",
             "translation": "Brits-Columbia beschrijft BC Wallet als een app voor het bewaren van digitale credentials. Een voorbeeld is een credential voor advocaten, uitgegeven via de Law Society of British Columbia. Raadpleeg de actuele informatie van de aanbieder om te zien welke credentials en diensten beschikbaar zijn.",
             "html": false,
@@ -2861,6 +2926,19 @@
             "group": "learn"
         },
         {
+            "original": "Check the credential",
+            "translation": "Controleer het credential",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Check the credential, then decide whether the information is enough.",
             "translation": "Controleer de credential en beslis daarna of de informatie volstaat.",
             "html": false,
@@ -2896,6 +2974,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/business-wallets-where-to-start"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Check which organisation is issuing the information and whether you recognise the request. Look at what the information says, who it is about and whether it has an expiry date. The issuer or your wallet provider can explain what to do if something looks wrong.",
+            "translation": "Controleer welke organisatie de informatie uitgeeft en of u het verzoek herkent. Kijk wat de informatie zegt, over wie die gaat en of er een vervaldatum is. De uitgever of uw walletaanbieder kan uitleggen wat u moet doen als iets niet klopt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-you/receiving-information-in-a-wallet"
             ],
             "group": "learn"
         },
@@ -3627,6 +3718,19 @@
             "group": "learn"
         },
         {
+            "original": "Decide whether the information is enough",
+            "translation": "Beslis of de informatie voldoende is",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Decide which role your organisation needs to play and shortlist one or two wallets or providers that support it. Then describe one exchange in detail: one transaction, one receiving service and the evidence it needs.",
             "translation": "Bepaal welke rol uw organisatie moet spelen en maak een shortlist van één of twee wallets of aanbieders die daarbij passen. Beschrijf daarna één uitwisseling in detail: één transactie, één ontvangende dienst en het bewijs dat die nodig heeft.",
             "html": false,
@@ -3950,6 +4054,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/formats-and-protocols"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Explain who is asking for the information and why. Depending on the wallet and credential, a person may be able to share selected information rather than every attribute in a credential.",
+            "translation": "Leg uit wie om de informatie vraagt en waarom. Afhankelijk van de wallet en het credential kan een persoon geselecteerde informatie delen in plaats van elk attribuut van een credential.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -4865,6 +4982,19 @@
             "group": "learn"
         },
         {
+            "original": "For European Digital Identity Wallets, the Regulation requires a relying party to register in the Member State where it is established, to state its intended use of wallets including the data it will request, and to identify itself to the user. A relying party may not request data other than what it indicated at registration, and it is responsible for authenticating and validating the data it receives.",
+            "translation": "Voor Europese Digital Identity Wallets vereist de verordening dat een vertrouwende partij (relying party) zich registreert in de lidstaat waar zij is gevestigd, haar beoogde gebruik van wallets opgeeft, inclusief de gegevens die zij zal opvragen, en zich identificeert bij de gebruiker. Een vertrouwende partij mag geen andere gegevens opvragen dan zij bij de registratie heeft aangegeven en is verantwoordelijk voor het authenticeren en valideren van de ontvangen gegevens.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "For businesses",
             "translation": "Voor organisaties",
             "html": false,
@@ -4980,6 +5110,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "For qualified electronic attestations of attributes, the European Digital Identity Regulation provides that a revoked attestation loses its validity from the moment of revocation.",
+            "translation": "Voor gekwalificeerde elektronische attestaties van attributen bepaalt de Europese verordening digitale identiteit dat een ingetrokken attestatie vanaf het moment van intrekking haar geldigheid verliest.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -5779,6 +5922,19 @@
             "group": "learn"
         },
         {
+            "original": "Imagine you have completed a course. The education provider offers you a digital qualification. You follow its instructions and add the qualification to a compatible wallet. Later, you may be able to share information from it with an employer who asks for evidence of that qualification.",
+            "translation": "Stel dat u een cursus hebt afgerond. De opleider biedt u een digitale kwalificatie aan. U volgt de instructies en voegt de kwalificatie toe aan een compatibele wallet. Later kunt u mogelijk informatie hieruit delen met een werkgever die bewijs van die kwalificatie vraagt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-you/receiving-information-in-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "In Canada, work on digital credentials involves public bodies at different levels. The Government of Canada describes work on a common approach to sign-in and credentials for access to federal services. Provinces also publish their own information and offer services in their jurisdictions.",
             "translation": "In Canada zijn bij het werk aan digitale credentials overheidsorganen op verschillende niveaus betrokken. De Canadese overheid beschrijft het werk aan een gemeenschappelijke aanpak voor inloggen en credentials voor toegang tot federale diensten. Ook provincies publiceren hun eigen informatie en bieden diensten aan binnen hun rechtsgebied.",
             "html": false,
@@ -5814,6 +5970,19 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/un-transparency-protocol"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "In W3C terms, verification covers whether a credential is an authentic and current statement of the issuer: the securing mechanism is satisfied and, if a",
+            "translation": "Volgens W3C omvat verificatie of een credential een authentieke en actuele verklaring van de uitgever (issuer) is: aan het beveiligingsmechanisme wordt voldaan en, als",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -6468,6 +6637,19 @@
             ],
             "routes": [
                 "learn"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Make the request clear",
+            "translation": "Maak het verzoek duidelijk",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -8079,6 +8261,19 @@
             "group": "learn"
         },
         {
+            "original": "Some information stays relevant for a long time. Other information may change or expire. Depending on the credential, an issuer may update, replace or withdraw it. Check with the issuer if you need a correction or a new credential.",
+            "translation": "Sommige informatie blijft lang relevant. Andere informatie kan veranderen of verlopen. Afhankelijk van het credential kan een uitgever die bijwerken, vervangen of intrekken. Vraag het de uitgever als u een correctie of een nieuw credential nodig hebt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-you/receiving-information-in-a-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Some organisations will also need to assess whether wallet acceptance requirements apply to their services. That depends on the organisation, the service and the applicable rules. There is no single acceptance duty for every organisation.",
             "translation": "Sommige organisaties moeten ook nagaan of voor hun diensten een verplichting geldt om wallets te accepteren. Dat hangt af van de organisatie, de dienst en de toepasselijke regels. Er geldt niet één algemene acceptatieplicht voor iedere organisatie.",
             "html": false,
@@ -9110,6 +9305,19 @@
             "group": "learn"
         },
         {
+            "original": "The basic checks are listed in",
+            "translation": "De basiscontroles staan in",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The big picture",
             "translation": "Het grotere geheel",
             "html": false,
@@ -9486,6 +9694,19 @@
             "group": "learn"
         },
         {
+            "original": "The employer example is illustrative. Content last checked: 12 November 2026. Technical checks and legal requirements differ per credential, wallet and country; check the applicable rules for a specific use.",
+            "translation": "Het voorbeeld van de werkgever is illustratief. Inhoud voor het laatst gecontroleerd op 12 november 2026. Technische controles en wettelijke eisen verschillen per credential, wallet en land; controleer de toepasselijke regels voor een specifiek gebruik.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "The employer needs to understand what the credential says and check whether it accepts the issuer for that purpose. A successful technical check can help establish that the credential is authentic. The employer still needs to decide whether the qualification meets its requirements.",
             "translation": "De werkgever moet begrijpen wat het credential zegt en beoordelen of hij de uitgever (issuer) voor dat doel accepteert. Een geslaagde technische controle kan helpen vaststellen dat het credential authentiek is. De werkgever beslist nog steeds zelf of de kwalificatie aan de functie-eisen voldoet.",
             "html": false,
@@ -9509,6 +9730,19 @@
             "routes": [
                 "learn/topics/ecosystem-roles",
                 "learn/topics/the-big-picture/how-credentials-connect"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The example is illustrative. Availability and the steps involved depend on the issuer and the wallet.",
+            "translation": "Het voorbeeld is illustratief. Beschikbaarheid en de benodigde stappen hangen af van de uitgever en de wallet.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-you/receiving-information-in-a-wallet"
             ],
             "group": "learn"
         },
@@ -9582,6 +9816,22 @@
                 "learn/topics/for-governments/digital-wallets-and-public-services",
                 "learn/topics/for-governments/issuing-public-information-to-wallets",
                 "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "The examples are illustrative. What a wallet can do differs per wallet and credential. Content last checked: 12 November 2026. Check the provider and the current European and national situation before relying on a feature.",
+            "translation": "De voorbeelden zijn illustratief. Wat een wallet kan, verschilt per wallet en credential. Inhoud voor het laatst gecontroleerd op 12 november 2026. Controleer de aanbieder en de actuele Europese en nationale situatie voordat u op een functie vertrouwt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-you",
+                "learn/topics/for-you/choosing-and-managing-a-wallet",
+                "learn/topics/for-you/receiving-information-in-a-wallet",
+                "learn/topics/for-you/sharing-information-from-a-wallet"
             ],
             "group": "learn"
         },
@@ -10969,6 +11219,19 @@
             "group": "learn"
         },
         {
+            "original": "W3C makes the same distinction: verifying a credential does not establish that the claims in it are true. A verifier validates the claims against its own rules, and relies on them only after evaluating the issuer, the proof, the subject and the claims.",
+            "translation": "W3C maakt hetzelfde onderscheid: het controleren (verify) van een credential stelt niet vast dat de claims erin waar zijn. Een verifier valideert de claims aan de hand van eigen regels en vertrouwt erop pas nadat de uitgever, het bewijs, het onderwerp en de claims zijn beoordeeld.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Wallet Provider",
             "translation": "Walletaanbieder",
             "html": false,
@@ -11461,6 +11724,19 @@
             ],
             "routes": [
                 "learn/topics/technology/how-do-wallets-and-services-exchange-information"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "What happens if information changes?",
+            "translation": "Wat gebeurt er als informatie verandert?",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-you/receiving-information-in-a-wallet"
             ],
             "group": "learn"
         },
@@ -11959,6 +12235,19 @@
             ],
             "routes": [
                 "learn/topics/the-big-picture/how-credentials-connect"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "When a service receives information from a wallet, a technical check can help establish whether it can rely on the credential. The service also needs to decide whether the information is suitable for its particular purpose.",
+            "translation": "Wanneer een dienst informatie uit een wallet ontvangt, kan een technische controle helpen vaststellen of zij op het credential kan vertrouwen. De dienst moet ook beslissen of de informatie geschikt is voor haar specifieke doel.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -13581,6 +13870,19 @@
             "group": "learn"
         },
         {
+            "original": "is present, the status check succeeds. The data model also lets an issuer express when a credential becomes valid and when it ceases to be valid. Status information may indicate that a credential has been suspended or revoked, where a status mechanism is provided and can be checked.",
+            "translation": "aanwezig zijn, slaagt de statuscontrole. Het datamodel laat een uitgever ook aangeven wanneer een credential geldig wordt en wanneer de geldigheid eindigt. Statusinformatie kan aangeven dat een credential is opgeschort of ingetrokken, wanneer een statusmechanisme beschikbaar is en kan worden gecontroleerd.",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "is the ability of parties and their systems to work together for an intended interaction. That can require agreement at several levels:",
             "translation": "is het vermogen van partijen en hun systemen om voor een bepaald doel samen te werken. Daarvoor kunnen afspraken op verschillende niveaus nodig zijn:",
             "html": false,
@@ -14077,6 +14379,19 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/european-business-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "status",
+            "translation": "statusgegevens",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },

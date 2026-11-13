@@ -228,6 +228,8 @@ Known limits of the Dutch version: the cookie consent banner (Complianz), the As
 
 **Around the world, five country pages (Dutch and links, local pilot 13 Nov 2026):** 91 Dutch rows entered locally, transfer file 1430 entries, see `learn/nl-translation-changes-around-world-countries-final-2026-11-13.md` and the section in `staging/UPDATE-PLAN-NL-LEARN.md`. Eleven seed pages changed (five country pages and six articles with one link each); on staging an edited page is `skipped-edited`, so dry run first, never `LEARN_FORCE`. Records were not changed; open questions per owner (National ID Program, Neoflow/Mavennet, TECH5/DIGER, UIDAI, California DMV) are in `learn/around-world-country-record-status.md`.
 
+**Two For you / For businesses articles (Dutch, local pilot 13 Nov 2026):** 24 Dutch rows entered locally, transfer file 1454 entries (`learn/nl-translation-changes-two-articles-2026-11-13.md`). Risk: if staging already holds rows for these sources with another translation, `import-apply` keeps them (`differs`); run `status` first. Known remaining English (glossary definitions, catalogue titles): `learn/nl-known-english-remains.md`.
+
 ## Cross links between Explore and Learn (13 November 2026, local only)
 
 **These changes go together. Roll them out as one set, in this order:**

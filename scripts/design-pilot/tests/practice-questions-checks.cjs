@@ -33,7 +33,7 @@ const PAGES = [
   { slug: "what-should-a-service-check-when-receiving-a-credential", title: "What should a service check when receiving a credential?", intro: /^When a service receives information from a wallet, a technical check can help establish whether it can rely on the credential\./,
     sources: [W3C, REG, SD],
     headings: ["Check the credential", "Decide whether the information is enough", "Make the request clear", "Continue learning"],
-    links: ["accepting-information-from-a-wallet", "the-relying-party", "trust-and-interoperability", "how-can-someone-act-for-an-organisation", "/credentials/"], terms: 1, learnMore: 3, cta: false },
+    links: ["accepting-information-from-a-wallet", "the-relying-party", "trust-and-interoperability", "how-can-someone-act-for-an-organisation", "/credentials/"], terms: 1, learnMore: 4, cta: false },
 ];
 const BACKLINKS = [
   ["topics/for-businesses/", ["how-can-an-organisation-prepare-a-wallet-use-case", "what-should-a-service-check-when-receiving-a-credential", "how-can-someone-act-for-an-organisation"]],

@@ -432,6 +432,8 @@ pages and editorial links by seed (dry run first), (4) Dutch transfer file. Tile
 `[fides_editorial_inline]`. Details and the checklist: `staging/HANDOVER.md`, section "Cross links between Explore and Learn".
 
 Dutch: the texts are entered locally (`learn/nl-translation-changes-explore-crosslinks-final-2026-11-13.md`, 24 new sources in `nl-translations.json`, status add 0 /
+
+- **Two articles (Dutch, entered locally 13 November 2026):** 24 rows, transfer file 1430 → 1454 (`learn/nl-translation-changes-two-articles-2026-11-13.md`). Status add 0 / differs 0 locally. On staging check `status` for `differs` (existing rows are never overwritten) and fix those in the editor from the change list. Known English remains: `learn/nl-known-english-remains.md`.
 differs 0). Import with `import-apply` (fills empty rows only, never overwrites existing human translations, `u` form). Three strip strings
 ("Choosing a wallet?", "Learn what to look for and how to manage it.", the QTSP line) have no TranslatePress row yet and stay English on `/nl/` until the rows are
 created in the editor; the same gap exists for the Business wallets strip. The two country words "Germany" / "Netherlands" are shared rows ("Duitsland" / "Nederland").

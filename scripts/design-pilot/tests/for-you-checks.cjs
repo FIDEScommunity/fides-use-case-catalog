@@ -17,7 +17,7 @@ const EW = ["European Commission", "European Digital Identity Wallet", "https://
 const PAGES = [
   { slug: "receiving-information-in-a-wallet", title: "Receiving information in a wallet", intro: /^How does information get into a wallet, and who provides it\?/, sources: [W3C],
     headings: ["An example", "Before you add something", "What happens if information changes?", "Continue learning"],
-    links: ["sharing-information-from-a-wallet", "what-is-a-credential", "how-credentials-connect", "personal-wallets"], terms: 1, learnMore: 3 },
+    links: ["sharing-information-from-a-wallet", "what-is-a-credential", "how-credentials-connect", "personal-wallets"], terms: 1, learnMore: 4 },
   { slug: "sharing-information-from-a-wallet", title: "Sharing information from a wallet", intro: /^What should you look at when a service asks you to share information\?/, sources: [W3C, SD, EW],
     headings: ["Check the request", "What can you choose to share?", "What happens afterwards?", "Continue learning"],
     links: ["receiving-information-in-a-wallet", "the-holder", "the-relying-party", "european-digital-identity-wallet", "personal-wallets"], terms: 1, learnMore: 4 },

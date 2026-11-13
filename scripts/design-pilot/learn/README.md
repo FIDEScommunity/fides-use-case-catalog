@@ -453,6 +453,7 @@ the use case catalog readme/plugin change) and before the Learn pages that link 
   implementation" (four links) and "What is a digital wallet?" (four links, the holder via running text) are unchanged.
 - **Practice cards.** Swiggy and BIEN use `[fides_learn_record]` with editorial text. See `around-world-country-record-status.md`.
 - **Dutch.** 91 rows entered locally; see `nl-translation-changes-around-world-countries-final-2026-11-13.md`. Transfer file: 1430 entries.
+- **Dutch, two articles (13 November 2026).** 24 rows entered locally for "Receiving information in a wallet" and "What should a service check when receiving a credential?"; see `nl-translation-changes-two-articles-2026-11-13.md`. Transfer file: 1454 entries. Remaining English glossary definitions and catalogue titles: `nl-known-english-remains.md`. Checks: `tests/nl-two-articles-checks.cjs`, report `tests/nl-english-remains-report.cjs`.
 - **Tests.** `tests/around-world-countries-checks.cjs` now also checks the link lists and titles against the manifest, the
   card texts and the Dutch pages. `tests/technology-around-world-checks.cjs` expects three links on the UN Transparency Protocol page.
 
