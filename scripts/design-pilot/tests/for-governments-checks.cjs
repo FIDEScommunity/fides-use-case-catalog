@@ -21,7 +21,7 @@ const EC = ["European Commission", "EUDI Regulation", "https://digital-strategy.
 const EUR = ["Regulation (EU) 2024/1183 (EUR-Lex)", null, "https://eur-lex.europa.eu/eli/reg/2024/1183/oj"];
 const EUR5F = ["European Union", "Regulation (EU) 2024/1183 (eIDAS 2), Article 5f", "https://eur-lex.europa.eu/eli/reg/2024/1183/oj"];
 const A4 = "the-eudi-wallet-and-national-implementation/#a-dutch-example";
-const DE = ["Germany", "EUDI ecosystem roles", "https://eudi-wallet.gov.de/oekosystem"];
+const DE = ["German EUDI Wallet programme", "The EUDI Wallet ecosystem", "https://eudi-wallet.gov.de/en/ecosystem"];
 const NLEDI = ["EDI-Stelsel Nederland", "Background on European digital identity", "https://edi.pleio.nl/page/view/418945e3-ced5-42e2-aeb6-a799ad2f9bce/achtergrondinformatie-europese-digitale-identiteit-edi"];
 const PAGES = [
   { slug: "digital-wallets-and-public-services", title: "Digital wallets and public services", intro: /^People regularly have to show public services information that a public body holds\./, sources: [ICTU, GBO_GO], status: false, dutchMax: 90,
@@ -35,7 +35,7 @@ const PAGES = [
     links: ["accepting-information-from-a-wallet", "ecosystem-roles/the-relying-party", "the-eudi-wallet-and-national-implementation", "issuing-public-information-to-wallets", "business-wallets"], card: "nijmegen-attribute-based-municipal-login" },
   { slug: "the-eudi-wallet-and-national-implementation", title: "The EUDI Wallet and national implementation", intro: /^What is set at European level, and what is decided nationally\?/, sources: [EC, EUR5F, DE, NLEDI, GBO_GO, GBO_DOC, ICTU], status: true, five: true,
     headings: ["What is set at European level?", "What is decided nationally?", "Questions to ask in your own country", "A Dutch example", "Keep national information current", "Continue learning"],
-    links: ["european-digital-identity-wallet", "eudi-wallet-and-european-business-wallet", "trust-and-interoperability", "accepting-information-from-wallets-in-public-services", "personal-wallets", "organizations/"], card: null },
+    links: ["european-digital-identity-wallet", "around-the-world/", "around-the-world/the-netherlands", "accepting-information-from-wallets-in-public-services", "personal-wallets", "organizations/"], card: null },
 ];
 const UNAVAILABLE = /issuer-catalog|relying-party-websites|interop-profiles|interop-matrix|\/matrix/;
 const linkCache = new Map();

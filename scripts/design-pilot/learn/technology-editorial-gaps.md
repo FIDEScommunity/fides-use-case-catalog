@@ -48,3 +48,8 @@ the QTSP filter again; those places are marked in the table and are deliberate (
 - Missing destinations (not linked, no route invented): issuer overview, relying party overview, interop profiles and matrix; there is no pilot page per country beyond the two written ones.
 - Countries are examples, not a complete list: more countries only with an actual primary source and an owner who maintains the page.
 - `tests/learn-recovery-checks.cjs` still reports one older failure that is not caused by this work: "What is a digital wallet?" has seven "Learn more" items (the check allows fewer).
+
+## Resolved 13 November 2026
+
+- Topic names in Dutch: "Technologie" and "Internationaal" (H1 "Digitaal vertrouwen wereldwijd"). The nav title and the H1 are separate strings.
+- The recovery test that expected seven Learn more links on "What is a digital wallet?" now passes with four links.

@@ -38,3 +38,9 @@ shown by the source itself on the date of checking. Not legal advice.
 ## To check again before staging
 
 German launch date (2 January 2027) and wording of the FAQ, UNTP version and status (0.8.0 / Work in Progress / expected 1.0), GBO design version (0.9.5) and status, SD-JWT VC status (draft 26, IESG), ISO/IEC 18013-5 revision, OpenID4VCI/VP errata versions, EDI page content.
+
+## Update 13 November 2026 (later the same day)
+
+- The German source on three articles (national implementation, how credentials connect, European Digital Identity Wallet) is now the English page `https://eudi-wallet.gov.de/en/ecosystem`. The English and German pages make the same claims (roles, national registry, production-like test environment).
+- SD-JWT VC label unified everywhere: "SD-JWT-based Verifiable Digital Credentials (SD-JWT VC)" (draft-ietf-oauth-sd-jwt-vc-26, updated 2026-11-06, submitted to the IESG, evaluation with a DISCUSS).
+- UNTP (specification page, "Work in Progress", schema and samples v0.8.0, no publication date): the passport is issued by the shipper of the goods; each actor issues a passport about the product it ships; every passport is a W3C VC; the specification says it does not conflict with national regulations such as the EU DPP and is upstream B2B data. The page text now says this.

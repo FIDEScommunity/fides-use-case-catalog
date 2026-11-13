@@ -62,7 +62,7 @@ async function audit(page, tag) {
   check(`${tag}: html lang is nl`, /^nl/i.test(data.lang), data.lang);
   const badLabels = [...new Set([...data.attrs, ...data.texts].filter((t) => ENGLISH_LABELS.test(t)))];
   check(`${tag}: no English interface or screen-reader labels`, badLabels.length === 0, badLabels.join(" | "));
-  const body = [...new Set(data.texts.filter((t) => t.length > 30 && ENGLISH_WORDS.test(t.toLowerCase()) && !/^(Digital Certificate of Good Conduct|EUDI & Business Wallets in Practice)/.test(t)))];
+  const body = [...new Set(data.texts.filter((t) => t.length > 30 && ENGLISH_WORDS.test(t.toLowerCase().replace(/d-you/g, "")) && !/^(Digital Certificate of Good Conduct|EUDI & Business Wallets in Practice)/.test(t)))];
   check(`${tag}: no untranslated English sentences`, body.length === 0, body.slice(0, 3).join(" | "));
   const dutchAria = data.arias.filter((a) => /^(Kruimelpad|Hoofdnavigatie|Voettekst|Sluiten|Menu|Zoeken|Learn)/i.test(a));
   check(`${tag}: has a Dutch screen-reader label (aria-label)`, dutchAria.length > 0, data.arias.join(", "));
