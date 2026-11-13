@@ -2193,7 +2193,7 @@ function fides_use_case_catalog_list_shortcode($atts = array(), $content = ''): 
     );
     $columns = in_array($atts['columns'], array('2', '3', '4'), true) ? $atts['columns'] : '3';
     $design = ($atts['design'] === 'pilot' && Fides_Use_Case_Design::available()) ? 'pilot' : '';
-    $detail_url = $design === 'pilot' ? esc_url_raw(trim((string) $atts['detail_url'])) : '';
+    $detail_url = $design === 'pilot' ? esc_url_raw(Fides_Use_Case_Design::local_url((string) $atts['detail_url'])) : '';
     $ask_fides_available = has_action('fides_assistant_enqueue_headless') !== false;
 
     if ($design === 'pilot') {

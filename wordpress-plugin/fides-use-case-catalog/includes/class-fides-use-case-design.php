@@ -336,6 +336,16 @@ final class Fides_Use_Case_Design {
     }
 
     /**
+     * Root-relative addresses from shortcode attributes ("/fides-design-pilot/use-case/") go through home_url(), so the
+     * Dutch (TranslatePress) site keeps visitors on /nl/ instead of sending them to the English page. Absolute
+     * addresses and anything else stay as they are.
+     */
+    public static function local_url(string $url): string {
+        $url = trim($url);
+        return ($url !== '' && $url[0] === '/' && strpos($url, '//') !== 0) ? home_url($url) : $url;
+    }
+
+    /**
      * Detail URL: the pilot detail page when configured, otherwise the canonical
      * share URL /use-case/{id}/ (which opens the existing listing modal).
      */

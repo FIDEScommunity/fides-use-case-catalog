@@ -52,7 +52,7 @@ final class Fides_Use_Case_Detail_Page {
         }
         Fides_Use_Case_Design::enqueue();
 
-        $listing_url = trim((string) $atts['listing_url']);
+        $listing_url = Fides_Use_Case_Design::local_url((string) $atts['listing_url']);
         if ($listing_url === '') {
             $page_id     = fides_use_case_catalog_listing_page_id();
             $listing_url = $page_id > 0 ? (string) get_permalink($page_id) : home_url(fides_use_case_catalog_listing_path());
