@@ -189,7 +189,7 @@ async function crumbCheck(page, tag, names, parents) {
     {
       const tag = `credential formats @${width}`;
       await open(page, `${L}/topics/technology/credential-formats-and-interoperability/`);
-      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((a) => new URL(a.href).pathname) : []; });
+      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((a) => new URL(a.href).pathname) : []; });
       check(`${tag}: "Learn more" has 4 links including the United States page`, lm.length === 4 && lm.includes(`${WORLD}united-states/`), lm.join(","));
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     }
@@ -199,7 +199,7 @@ async function crumbCheck(page, tag, names, parents) {
     for (const a of PAGES) {
       const tag = `${a.slug} Learn more @${width}`;
       await open(page, `${WORLD}${a.slug}/`);
-      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((x) => ({ text: x.textContent.replace(/\s+/g, " ").trim(), path: new URL(x.href).pathname })) : []; });
+      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((x) => ({ text: x.textContent.replace(/\s+/g, " ").trim(), path: new URL(x.href).pathname })) : []; });
       check(`${tag}: ${a.learnMore} links, none twice, none to itself`, lm.length === a.learnMore && new Set(lm.map((x) => x.path)).size === lm.length && lm.every((x) => !x.path.endsWith(`/${a.slug}/`)), JSON.stringify(lm));
       for (const x of lm) {
         const route = x.path.replace(`${L}/`, "").replace(/\/$/, "");
@@ -212,7 +212,7 @@ async function crumbCheck(page, tag, names, parents) {
       const tag = `${art.route.split("/").pop()} @${width}`;
       const r = await open(page, `${L}/${art.route}/`);
       check(`${tag}: article answers 200`, r && r.status() === 200);
-      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((x) => ({ text: x.textContent.replace(/\s+/g, " ").trim(), path: new URL(x.href).pathname })) : []; });
+      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((x) => ({ text: x.textContent.replace(/\s+/g, " ").trim(), path: new URL(x.href).pathname })) : []; });
       check(`${tag}: "Learn more" has ${art.n} links (at most 4)`, lm.length === art.n && lm.length <= 4, lm.map((x) => x.path).join(","));
       for (const h of art.has) check(`${tag}: Learn more links to ${h}`, lm.some((x) => x.path === `${L}/${h}/`), lm.map((x) => x.path).join(","));
       for (const h of art.not) check(`${tag}: replaced link to ${h} is gone`, !lm.some((x) => x.path.includes(h)));
@@ -220,9 +220,9 @@ async function crumbCheck(page, tag, names, parents) {
         const route = x.path.replace(`${L}/`, "").replace(/\/$/, "");
         if (MANIFEST.some((p) => p.path === route)) check(`${tag}: link text is the page title (${route})`, titleOf(route) === x.text, `${x.text} vs ${titleOf(route)}`);
       }
-      for (const h of art.bodyHas || []) check(`${tag}: running text links to ${h}`, (await page.locator(`.fides-learn-article__body a[href$="${L}/${h}/"]`).count()) > 0);
+      for (const h of art.bodyHas || []) check(`${tag}: running text links to ${h}`, (await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href$="${L}/${h}/"]`).count()) > 0);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
-      await focusOk(page, tag, page.locator(".fides-learn-article__body h3:text-is('Learn more') + ul a").first(), "the first Learn more link");
+      await focusOk(page, tag, page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3:text-is('Learn more') + ul a").first(), "the first Learn more link");
     }
 
     // Cards against the repo records: status values and caveats.
@@ -266,7 +266,7 @@ async function crumbCheck(page, tag, names, parents) {
       check(`${tag}: eyebrow "Country · Around the world"`, /Country\s*·\s*Around the world/i.test(eyebrow || squash(await page.locator("main").innerText())), eyebrow);
       const intro = squash(await page.locator(".fides-learn__intro").first().innerText().catch(() => ""));
       check(`${tag}: intro text`, a.intro.test(intro), intro);
-      const heads = (await page.locator(".fides-learn-article__body h2").allInnerTexts()).map(squash);
+      const heads = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h2").allInnerTexts()).map(squash);
       for (const x of a.headings) check(`${tag}: section "${x}"`, heads.includes(x), heads.join("|"));
       const body = squash(await page.locator(".fides-learn-article__body").innerText());
       check(`${tag}: last checked date`, /Content last checked: 13 November 2026/.test(body));
@@ -276,11 +276,11 @@ async function crumbCheck(page, tag, names, parents) {
       for (const re of a.mustNot) check(`${tag}: text does not contain ${re}`, !re.test(body));
       const lone = await loneArticles(page, ".fides-learn-article__body");
       check(`${tag}: no lone article before a link or term`, lone.length === 0, lone.join(" | "));
-      const chips = await page.locator(".fides-learn-article__body p button.fides-ds-term, .fides-learn-article__body li button.fides-ds-term").count();
+      const chips = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) p button.fides-ds-term, :is(.fides-learn-article__body, .fides-learn-continue) li button.fides-ds-term").count();
       check(`${tag}: glossary term chips in the text (${a.terms})`, chips === a.terms, chips);
-      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
+      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
       check(`${tag}: "Learn more" has ${a.learnMore} links (at most 4)`, lm === a.learnMore && lm <= 4, lm);
-      const groups = await page.locator(".fides-learn-article__body h3").allInnerTexts();
+      const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();
       check(`${tag}: groups "Learn more" and "Explore in the catalogs"`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
 
       // Sources: exactly the named ones, organisation in bold, external, new tab, consulted date.
@@ -310,7 +310,7 @@ async function crumbCheck(page, tag, names, parents) {
       check(`${tag}: no editor notice (every record exists and is published)`, (await page.locator(".fides-learn-record-notice").count()) === 0);
 
       // Links.
-      const hrefs = norm(await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      const hrefs = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       check(`${tag}: no local host in the content links`, hrefs.every((x) => !/localhost|127\.0\.0\.1/.test(x)));
       check(`${tag}: no link to an unavailable destination`, hrefs.every((x) => !UNAVAILABLE.test(x)), hrefs.filter((x) => UNAVAILABLE.test(x)).join(","));
       for (const l of [...a.learn, ...a.cats]) check(`${tag}: links to ${l}`, hrefs.some((x) => x.includes(l)), hrefs.join(" "));
@@ -320,7 +320,7 @@ async function crumbCheck(page, tag, names, parents) {
 
       // Keyboard: first body link of the list, the first card link and the first source link.
       await open(page, `${WORLD}${a.slug}/`);
-      await focusOk(page, tag, page.locator(".fides-learn-article__body ul a").first(), "the first list link");
+      await focusOk(page, tag, page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a").first(), "the first list link");
       await focusOk(page, tag, page.locator(".fides-learn-record a.fides-ds-action-link").first(), "the first card link");
       await focusOk(page, tag, page.locator(".fides-learn-sources__link").first(), "the first source link");
       check(`${tag}: no console errors`, errors.length === 0, errors.join(" | "));
@@ -340,7 +340,7 @@ async function crumbCheck(page, tag, names, parents) {
       for (const re of nl.must) check(`${tag}: Dutch text contains ${re}`, re.test(body));
       const main = squash(await page.locator("main").innerText());
       check(`${tag}: no je/jij/jouw/jou/jullie (strict u-form)`, !/\b(je|jij|jouw|jou|jullie)\b/i.test(main), (main.match(/\b(je|jij|jouw|jou|jullie)\b/i) || [""])[0]);
-      check(`${tag}: no English sentence left in the body paragraphs`, !(await page.locator(".fides-learn-article__body p").evaluateAll((ps) => ps.map((p) => p.textContent.replace(/\s+/g, " ").trim()).filter((s) => /\b(the|which|that|are|with|from|can|for)\b/.test(s) && !/^Swiggy: /.test(s)))).length, (await page.locator(".fides-learn-article__body p").evaluateAll((ps) => ps.map((p) => p.textContent.trim()).filter((s) => /\b(the|which|that|are|with|from|can|for)\b/.test(s) && !/^Swiggy: /.test(s)))).join(" || ").slice(0, 200));
+      check(`${tag}: no English sentence left in the body paragraphs`, !(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) p").evaluateAll((ps) => ps.map((p) => p.textContent.replace(/\s+/g, " ").trim()).filter((s) => /\b(the|which|that|are|with|from|can|for)\b/.test(s) && !/^Swiggy: /.test(s)))).length, (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) p").evaluateAll((ps) => ps.map((p) => p.textContent.trim()).filter((s) => /\b(the|which|that|are|with|from|can|for)\b/.test(s) && !/^Swiggy: /.test(s)))).join(" || ").slice(0, 200));
       for (const c of a.cards) {
         const card = page.locator(`.fides-learn-record[data-fides-learn-record="usecase:${c.id}"]`);
         check(`${tag}: card exists`, (await card.count()) === 1);
@@ -348,13 +348,13 @@ async function crumbCheck(page, tag, names, parents) {
         check(`${tag}: card status in Dutch ("Volgens opgave van de organisatie is deze usecase in productie")`, /Volgens opgave van de organisatie is deze usecase in productie/.test(text), text);
         check(`${tag}: card link label Dutch`, text.includes(nl.label) || a.cards.length > 1, text);
       }
-      const hrefs = await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")));
+      const hrefs = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")));
       const internal = norm(hrefs).filter((h) => h.startsWith("/") && !/^\/fides-design-pilot\/(overview|organizations|personal-wallets|use-case)/.test(h));
       check(`${tag}: learn links keep the /nl/ prefix`, internal.length > 0 && internal.every((h) => h.startsWith("/nl/")), internal.filter((h) => !h.startsWith("/nl/")).join(","));
-      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => /Meer uitleg|Learn more/.test(x.textContent.trim())); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
+      const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => /Meer uitleg|Learn more/.test(x.textContent.trim())); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
       check(`${tag}: Learn more ("Meer uitleg") has ${a.learnMore} links (at most 4)`, lm === a.learnMore && lm <= 4, lm);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
-      await focusOk(page, tag, page.locator(".fides-learn-article__body ul a").first(), "the first list link");
+      await focusOk(page, tag, page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a").first(), "the first list link");
       await focusOk(page, tag, page.locator(".fides-learn-record a.fides-ds-action-link").first(), "the first card link");
     }
 

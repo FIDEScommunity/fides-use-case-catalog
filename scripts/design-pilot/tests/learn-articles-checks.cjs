@@ -41,7 +41,7 @@ async function article(browser, key, width) {
   check(`${tag}: no horizontal overflow`, overflow <= 0, String(overflow));
 
   // Links: token based (no host in the href), every internal target answers 200.
-  const hrefs = await page.locator(".fides-learn-article__body a[href]:not(.fides-learn-record a), .fides-learn-band a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+  const hrefs = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]:not(.fides-learn-record a), .fides-learn-band a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
   check(`${tag}: no local host typed into the content`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h)));
   const internal = [...new Set(hrefs.filter((h) => h.startsWith("/")))];
   const bad = [];
@@ -52,12 +52,12 @@ async function article(browser, key, width) {
   check(`${tag}: ${internal.length} internal links answer 200`, bad.length === 0, bad.join(", "));
 
   // Continue learning is grouped.
-  const groups = await page.locator(".fides-learn-article__body h3").allInnerTexts();
+  const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();
   check(`${tag}: Continue learning has "Learn more" and "Explore in the catalogs"`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
 
   // No duplicate destination between the list and the closing band.
   const band = await page.locator(".fides-learn-band a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
-  const listed = await page.locator(".fides-learn-article__body ul a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+  const listed = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
   check(`${tag}: closing band does not repeat a listed link`, band.every((h) => !listed.includes(h)), band.join(","));
 
   // Sources: href keeps percent-encoding and long URLs do not break the layout.
@@ -90,7 +90,7 @@ async function article(browser, key, width) {
   }
 
   // Keyboard focus is visible on an article link.
-  const link = page.locator(".fides-learn-article__body ul a").first();
+  const link = page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a").first();
   await link.scrollIntoViewIfNeeded();
   await page.keyboard.press("Tab");
   await link.focus();

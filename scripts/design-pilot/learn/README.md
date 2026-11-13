@@ -457,3 +457,24 @@ the use case catalog readme/plugin change) and before the Learn pages that link 
 - **Tests.** `tests/around-world-countries-checks.cjs` now also checks the link lists and titles against the manifest, the
   card texts and the Dutch pages. `tests/technology-around-world-checks.cjs` expects three links on the UN Transparency Protocol page.
 
+
+## Article template: contents, aside and Continue learning (Paper 24.21 / 24.22, 13 November 2026, local only)
+
+Tiles 1.13.54 (`includes/class-fides-ds-learn.php`, `assets/learn.css`, `assets/learn.js`). Applies to every Learn **article** page; overview, topic and glossary pages are unchanged.
+
+- **One DOM, two layouts.** The article is one CSS grid without duplicate sections. Order in the DOM and on mobile: contents (collapsible bar), text, Terms in this article, Continue learning, Sources & further reading, then the series navigation and the practice band. From 900 px the right column holds, in this order: On this page, Terms in this article, Continue learning, Sources & further reading (column 280-384 px, not sticky, as in Paper). The practice band stays a separate band under the article.
+- **Contents.** On mobile the "On this page" bar is closed first and opens with a click, Enter or Space. A link scrolls to the section (offset below the sticky header), moves focus to the section heading and sets `aria-current="location"`. Existing heading ids and hash anchors are unchanged.
+- **Continue learning is still an editable section.** It remains the H2 "Continue learning" with the H3 groups "Learn more" and "Explore in the catalogs" at the end of the page text; the renderer lifts it into the right column (desktop) or below Terms (mobile). An empty group, or an empty section, is not shown. The "Content last checked" note stays in the body.
+- **Guideline: 3 + 2.** At most three article links in "Learn more" and two catalog links; a link to the same destination as the practice band is left out. The renderer never cuts a list: it shows what the editor wrote.
+
+### How an editor manages the Continue learning links
+
+1. Open the article in the WordPress page editor.
+2. Scroll to the heading "Continue learning" at the end of the text.
+3. Under "Learn more" or "Explore in the catalogs" edit, add, remove or reorder the list items (normal list blocks and links). Keep to three and two.
+4. Remove all items of a group to hide that group; remove both groups to hide the section.
+5. Update. The page is now marked as edited, so the seed (hash protection) skips it (`skipped-edited`) and never overwrites the change. Never use `LEARN_FORCE`.
+
+Only the example article "How credentials connect issuers, wallets and services" is trimmed to 3 + 2 in the seed. The other articles that still exceed the guideline are listed in `learn/continue-learning-selection.md` (current links and a proposal) and `learn/continue-learning-pending.json` (read by `tests/learn-article-template-checks.cjs`; remove an entry when the page is fixed, the test then expects it within 3 + 2).
+
+Tests: `tests/learn-article-template-checks.cjs` (EN/NL, 1440/390, two detailed articles, sample over all articles, Tab order, Enter/Space and contents jumps). Expectations changed in the older tests: sources link size 14/21 (desktop) and 15/22 (mobile) in `learn-sources-checks.cjs`; six contents entries and the static desktop summary in `learn-checks.cjs`; the article body selector also covers `.fides-learn-continue`; the example is no longer expected to link to Formats and protocols or Trust and interoperability (`learn-formats-page-checks.cjs`, `learn-trust-page-checks.cjs`). The old upper bound of four "Learn more" links in several tests stays as a ceiling for the pending articles; the 3 + 2 rule lives in the new test.

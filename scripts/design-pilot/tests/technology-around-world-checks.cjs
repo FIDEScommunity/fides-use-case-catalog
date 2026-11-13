@@ -206,7 +206,7 @@ async function crumbCheck(page, tag, names, parents) {
       check(`${tag}: eyebrow`, a.eyebrow.test(eyebrow || squash(await page.locator("main").innerText())), eyebrow);
       const intro = squash(await page.locator(".fides-learn__intro").first().innerText().catch(() => ""));
       check(`${tag}: intro text`, a.intro.test(intro), intro);
-      const heads = (await page.locator(".fides-learn-article__body h2").allInnerTexts()).map(squash);
+      const heads = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h2").allInnerTexts()).map(squash);
       for (const x of a.headings) check(`${tag}: section "${x}"`, heads.includes(x), heads.join("|"));
       const body = squash(await page.locator(".fides-learn-article__body").innerText());
       check(`${tag}: last checked date`, a.note.test(body));
@@ -219,11 +219,11 @@ async function crumbCheck(page, tag, names, parents) {
       }
       const lone = await loneArticles(page, ".fides-learn-article__body");
       check(`${tag}: no lone article before a link or term`, lone.length === 0, lone.join(" | "));
-      const chips = await page.locator(".fides-learn-article__body p button.fides-ds-term, .fides-learn-article__body li button.fides-ds-term").count();
+      const chips = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) p button.fides-ds-term, :is(.fides-learn-article__body, .fides-learn-continue) li button.fides-ds-term").count();
       check(`${tag}: glossary term chips in the text (${a.terms})`, chips === a.terms, chips);
-      const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
+      const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
       check(`${tag}: "Learn more" has ${a.learnMore} links`, learnMore === a.learnMore, learnMore);
-      const groups = await page.locator(".fides-learn-article__body h3").allInnerTexts();
+      const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();
       check(`${tag}: groups "Learn more" and "Explore in the catalogs"`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
 
       // Sources: exactly the named ones, name in bold, external, new tab.
@@ -235,7 +235,7 @@ async function crumbCheck(page, tag, names, parents) {
       }
 
       // Links.
-      const hrefs = norm(await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      const hrefs = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       check(`${tag}: no local host in the content links`, hrefs.every((x) => !/localhost|127\.0\.0\.1/.test(x)));
       check(`${tag}: no link to an unavailable destination (issuer catalog, relying party websites, interop profiles or matrix)`, hrefs.every((x) => !UNAVAILABLE.test(x)), hrefs.filter((x) => UNAVAILABLE.test(x)).join(","));
       for (const l of a.links) check(`${tag}: links to ${l}`, hrefs.some((x) => x.includes(l)), hrefs.join(" "));
@@ -255,7 +255,7 @@ async function crumbCheck(page, tag, names, parents) {
         const q = hrefs.find((x) => x.includes("cert=qtsp"));
         check(`${tag}: QTSP filter link points at the pilot organisation catalog`, !!q && q.startsWith("/fides-design-pilot/organizations/") && /[?&]cert=qtsp\b/.test(q), q);
         if (q) {
-          await page.locator(`.fides-learn-article__body a[href$="cert=qtsp"]`).first().click();
+          await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href$="cert=qtsp"]`).first().click();
           await page.waitForURL("**cert=qtsp**", { timeout: 10000 }).catch(() => {});
           await page.waitForSelector("#fides-org-catalog-root .fides-uc-pilot__count", { timeout: 30000 }).catch(() => {});
           const countText = (await page.locator("[data-pilot-count]").first().textContent().catch(() => "")) || "";
@@ -269,7 +269,7 @@ async function crumbCheck(page, tag, names, parents) {
 
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
       await open(page, `${base}${a.slug}/`);
-      await focusOk(page, tag, [page.locator(".fides-learn-article__body ul a").first(), page.locator(".fides-learn-sources__link").first()]);
+      await focusOk(page, tag, [page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a").first(), page.locator(".fides-learn-sources__link").first()]);
       check(`${tag}: no console errors`, errors.length === 0, errors.join(" | "));
     }
 
@@ -305,7 +305,7 @@ async function crumbCheck(page, tag, names, parents) {
       const tag = `back link ${from} @${width}`;
       const r = await open(page, `${L}/${from}`);
       check(`${tag}: page answers 200`, r && r.status() === 200);
-      const hs = norm(await page.locator(".fides-learn__content a[href], .fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      const hs = norm(await page.locator(".fides-learn__content a[href], :is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       for (const to of tos) check(`${tag}: links to ${to}`, hs.some((x) => x === `${L}/topics/${to}`), hs.filter((x) => /technology|around-the-world/.test(x)).join(","));
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     }

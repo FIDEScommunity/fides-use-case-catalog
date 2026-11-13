@@ -69,7 +69,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
       const intro = squash(await page.locator(".fides-learn__intro").first().innerText().catch(() => ""));
       check(`${tag}: intro text`, a.intro.test(intro), intro);
       check(`${tag}: eyebrow "Explainer · Ecosystem roles"`, (await page.locator(".fides-learn__eyebrow").allTextContents()).some((t) => /Explainer · Ecosystem roles/.test(squash(t))));
-      const heads = (await page.locator(".fides-learn__content h2, .fides-learn-article__body h2").allInnerTexts()).map(squash);
+      const heads = (await page.locator(".fides-learn__content h2, :is(.fides-learn-article__body, .fides-learn-continue) h2").allInnerTexts()).map(squash);
       for (const h of a.headings) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
 
       // Sources: exactly the named ones, name in bold, external, new tab.
@@ -86,11 +86,11 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
       check(`${tag}: ${a.terms.length} glossary term(s) rendered`, terms.length >= a.terms.length, terms.join("|"));
 
       // Links.
-      const hrefs = await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")));
+      const hrefs = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")));
       check(`${tag}: no hardcoded local host in the content links (record cards resolve their permalink at render time)`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h) || /\/use-case\/\?usecase=/.test(h)));
       check(`${tag}: no link to issuer-catalog or relying-party-websites`, hrefs.every((h) => !/issuer-catalog|relying-party-websites/.test(h)));
       for (const l of a.links) check(`${tag}: links to ${l}`, hrefs.some((h) => h.includes(l)), hrefs.join(" "));
-      const groups = await page.locator(".fides-learn-article__body h3").allInnerTexts();
+      const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();
       check(`${tag}: groups "Learn more" and "Explore in the catalogs"`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
       const internal = [...new Set(hrefs.filter((h) => h.startsWith("/")))];
       const bad = [];
@@ -106,7 +106,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
       }
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
       // Visible focus on the first link in "Learn more" and on the first source.
-      const focusTargets = [page.locator(".fides-learn-article__body ul a").first(), page.locator(".fides-learn-sources__link").first()];
+      const focusTargets = [page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a").first(), page.locator(".fides-learn-sources__link").first()];
       for (const t of focusTargets) {
         if (!(await t.count())) continue;
         await t.focus();
@@ -145,7 +145,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     check(`overview @${width}: no "Design preview" label and no "not available yet" text`, !/Design preview|not available yet/i.test(await page.locator(".fides-learn__content").innerText()));
     for (const [p, slug] of Object.entries(BACK)) {
       await open(page, `${L}/${p}/`);
-      const n = await page.locator(`.fides-learn-article__body a[href$="/topics/ecosystem-roles/${slug}/"]`).count();
+      const n = await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href$="/topics/ecosystem-roles/${slug}/"]`).count();
       check(`${p.split("/").pop()} @${width}: one link to ${slug}`, n === 1, n);
       check(`${p.split("/").pop()} @${width}: no horizontal overflow`, (await overflow(page)) <= 0);
     }

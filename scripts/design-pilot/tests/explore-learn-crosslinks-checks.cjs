@@ -218,7 +218,7 @@ const ringVisible = (r) => r.found && r.visible && r.outlineStyle !== "none" && 
       for (const lang of ["en", "nl"]) {
         const pre = lang === "nl" ? "/nl" : "";
         await open(page, `${pre}${LEARN}/${f.from}/`, "h1");
-        const hrefs = await page.locator(".fides-learn-article__body a[href], main a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+        const hrefs = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href], main a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
         check(`filter link ${tag}: present on the ${lang} Learn page ${f.from}`, hrefs.some((h) => path(h) === `${pre}${P}${f.href}`), hrefs.filter((h) => /\?(format|issuance|presentation|country)=/.test(h)).join(" "));
       }
       await open(page, `${P}${f.href}`);

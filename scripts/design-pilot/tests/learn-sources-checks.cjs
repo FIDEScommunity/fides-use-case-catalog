@@ -108,7 +108,9 @@ async function run() {
         check(`${tag}: no horizontal page overflow`, info.overflow <= 0, String(info.overflow));
         const minH = width < 768 ? 44 : 32;
         check(`${tag}: link height is at least ${minH}px (44px on mobile), no contradicting aria-label`, info.items.every((i) => i.height >= minH && (i.aria === null || i.aria === "")), JSON.stringify(info.items.map((i) => [i.height, i.aria])));
-        check(`${tag}: 16px text, 24px line height, no extra gap between sources`, info.items.every((i) => i.fs === "16px" && i.lh === "24px" && i.gapBelow === 0), JSON.stringify(info.items.map((i) => [i.fs, i.lh, i.gapBelow])));
+        // Since the article template of Paper 24.21 / 24.22 (tiles 1.13.54) the sources sit in the side column: 14px/21px from 900px, 15px/22px below.
+        const [wantFs, wantLh] = width >= 900 ? ["14px", "21px"] : ["15px", "22px"];
+        check(`${tag}: ${wantFs} text, ${wantLh} line height, no extra gap between sources (Paper 24.21 / 24.22)`, info.items.every((i) => i.fs === wantFs && i.lh === wantLh && i.gapBelow === 0), JSON.stringify(info.items.map((i) => [i.fs, i.lh, i.gapBelow])));
         check(`${tag}: source name is semibold only when the label has one, title stays normal`, info.items.every((i) => (i.hasDot ? i.nameEls === 1 && Number(i.nameWeight) >= 600 && !i.liText.startsWith(" ") && i.liText.startsWith(i.nameText + " · ") : i.nameEls === 0) && Number(i.titleWeight) <= 400), JSON.stringify(info.items.map((i) => [i.nameEls, i.nameWeight, i.titleWeight])));
         if (label.startsWith("long title")) check(`${tag}: a label without a source name exists here and is all normal weight`, info.items.some((i) => !i.hasDot && i.nameEls === 0), JSON.stringify(info.items.map((i) => i.liText)));
         check(`${tag}: external indicator and new tab only for other hosts`, info.items.every((i) => {

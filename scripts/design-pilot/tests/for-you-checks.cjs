@@ -137,14 +137,14 @@ async function focusOk(page, tag, locators) {
       check(`${tag}: eyebrow "Explainer · For you"`, /Explainer\s*·\s*For you/i.test(eyebrow || squash(await page.locator("main").innerText())), eyebrow);
       const intro = squash(await page.locator(".fides-learn__intro").first().innerText().catch(() => ""));
       check(`${tag}: intro text`, a.intro.test(intro), intro);
-      const heads = (await page.locator(".fides-learn-article__body h2").allInnerTexts()).map(squash);
+      const heads = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h2").allInnerTexts()).map(squash);
       for (const h of a.headings) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
       const body = squash(await page.locator(".fides-learn-article__body").innerText());
       check(`${tag}: illustrative note and last checked date`, /The examples are illustrative\./.test(body) && /Content last checked: 12 November 2026/.test(body));
-      check(`${tag}: glossary term chips (${a.terms})`, (await page.locator(".fides-learn-article__body button.fides-ds-term").count()) === a.terms);
-      const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
+      check(`${tag}: glossary term chips (${a.terms})`, (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) button.fides-ds-term").count()) === a.terms);
+      const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
       check(`${tag}: "Learn more" has ${a.learnMore} links`, learnMore === a.learnMore, learnMore);
-      const groups = await page.locator(".fides-learn-article__body h3").allInnerTexts();
+      const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();
       check(`${tag}: groups "Learn more" and "Explore in the catalogs"`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
 
       // Sources: exactly the named ones, name in bold, external, new tab.
@@ -156,7 +156,7 @@ async function focusOk(page, tag, locators) {
       }
 
       // Links.
-      const hrefs = norm(await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      const hrefs = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       check(`${tag}: no local host in the content links`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h)));
       check(`${tag}: no link to an unavailable destination (issuer catalog, relying party websites, interop profiles or matrix)`, hrefs.every((h) => !UNAVAILABLE.test(h)), hrefs.filter((h) => UNAVAILABLE.test(h)).join(","));
       for (const l of a.links) check(`${tag}: links to ${l}`, hrefs.some((h) => h.includes(l)), hrefs.join(" "));
@@ -169,7 +169,7 @@ async function focusOk(page, tag, locators) {
       check(`${tag}: Next is ${i < PAGES.length - 1 ? PAGES[i + 1].slug : "absent"}`, i < PAGES.length - 1 ? next.join() === `${G}${PAGES[i + 1].slug}/` : next.length === 0, next.join());
 
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
-      await focusOk(page, tag, [page.locator(".fides-learn-article__body ul a").first(), page.locator(".fides-learn-sources__link").first()]);
+      await focusOk(page, tag, [page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a").first(), page.locator(".fides-learn-sources__link").first()]);
       check(`${tag}: no console errors`, errors.length === 0, errors.join(" | "));
     }
 
@@ -197,7 +197,7 @@ async function focusOk(page, tag, locators) {
       const tag = `back link ${from} @${width}`;
       const r = await open(page, `${L}/${from}`);
       check(`${tag}: page answers 200`, r && r.status() === 200);
-      const hs = norm(await page.locator(".fides-learn__content a[href], .fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      const hs = norm(await page.locator(".fides-learn__content a[href], :is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       check(`${tag}: links to ${to}`, hs.some((h) => h === `${L}/topics/${to}`), hs.filter((h) => h.includes("for-you")).join(","));
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     }

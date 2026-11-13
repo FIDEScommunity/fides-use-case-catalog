@@ -17,7 +17,7 @@ const GLOSSARY = JSON.parse(fs.readFileSync(path.join(ROOT, "wordpress/wp-conten
 const BYNAME = Object.fromEntries(GLOSSARY.map((t) => [t.name, t]));
 // Since 5f7f6f8 the article is part of the chip text ("A wallet", "The EUDI Wallet"), so it is optional in the patterns.
 const TERMS = { "Attestation Rulebook": /^(?:(?:a|an|the) )?rulebook \(definition\)$/i };
-const BACKLINKS = ["the-big-picture", "the-big-picture/formats-and-protocols", "the-big-picture/what-is-a-credential", "the-big-picture/how-credentials-connect"];
+const BACKLINKS = ["the-big-picture", "the-big-picture/formats-and-protocols", "the-big-picture/what-is-a-credential"];
 let failures = 0;
 function check(name, ok, detail) {
   if (!ok) failures += 1;
@@ -47,7 +47,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     const crumbs = squash(await page.locator("nav[aria-label*=readcrumb], .fides-learn-breadcrumb, .breadcrumb").first().innerText().catch(() => ""));
     check(`${tag}: sits under The big picture`, /The big picture/.test(crumbs), crumbs);
-    const hrefs = await page.locator(".fides-learn-article__body a[href], .fides-learn-band a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+    const hrefs = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href], .fides-learn-band a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
     check(`${tag}: no local host typed into the content`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h)));
     const internal = [...new Set(hrefs.filter((h) => h.startsWith("/")))];
     const bad = [];
@@ -56,10 +56,10 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     for (const dest of ["formats-and-protocols", "what-is-a-credential", "issuing-credentials-for-wallets", "accepting-information-from-a-wallet", "credentials"]) {
       check(`${tag}: links to ${dest}`, internal.some((h) => h.includes(`/${dest}/`)));
     }
-    const groups = await page.locator(".fides-learn-article__body h3").allInnerTexts();
+    const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();
     check(`${tag}: Continue learning groups`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
     const band = await page.locator(".fides-learn-band a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
-    const listed = await page.locator(".fides-learn-article__body ul a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
+    const listed = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
     check(`${tag}: closing band does not repeat a listed link`, band.every((h) => !listed.includes(h)), band.join(","));
     const sources = await page.locator(".fides-learn-sources a").evaluateAll((as) => as.map((a) => a.getAttribute("href")));
     check(`${tag}: ${sources.length} sources, all https`, sources.length >= 3 && sources.every((h) => /^https:\/\//.test(h)), sources.join(","));
@@ -88,7 +88,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
             const rr = await open(page, `${T}/${p}/`);
       tag = `${p.split("/").pop()} @${width}`;
       check(`${tag}: answers 200`, rr && rr.status() === 200);
-      check(`${tag}: links to Trust and interoperability`, (await page.locator(`.fides-learn-article__body a[href$="/trust-and-interoperability/"]`).count()) >= 1 || (await page.locator(`a[href$="/trust-and-interoperability/"]`).count()) >= 1);
+      check(`${tag}: links to Trust and interoperability`, (await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href$="/trust-and-interoperability/"]`).count()) >= 1 || (await page.locator(`a[href$="/trust-and-interoperability/"]`).count()) >= 1);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     }
 

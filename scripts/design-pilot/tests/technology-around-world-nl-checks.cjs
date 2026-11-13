@@ -42,7 +42,7 @@ async function open(page, url) {
 }
 async function qtsp(page, tag, prefix) {
   await open(page, `${prefix}${LEARN}/topics/technology/trust-frameworks-and-registries/`);
-  const link = page.locator('.fides-learn-article__body a[href*="cert=qtsp"]').first();
+  const link = page.locator(':is(.fides-learn-article__body, .fides-learn-continue) a[href*="cert=qtsp"]').first();
   const href = await link.getAttribute("href");
   const text = squash(await link.innerText());
   check(`${tag}: QTSP link points at ${prefix}/fides-design-pilot/organizations/?cert=qtsp`, href === `${prefix}/fides-design-pilot/organizations/?cert=qtsp`, href);
@@ -126,12 +126,12 @@ async function qtsp(page, tag, prefix) {
     for (const [lang, prefix, title] of [["en", "", "Around the world"], ["nl", "/nl", "Internationaal"]]) {
       tag = `/${lang}/the-eudi-wallet-and-national-implementation @${width}`;
       await open(page, `${prefix}${LEARN}/topics/for-governments/the-eudi-wallet-and-national-implementation/`);
-      const items = await page.locator(".fides-learn-article__body h3:has-text('Learn more'), .fides-learn-article__body h3:has-text('Meer uitleg')").first().evaluate((h) => { let ul = h.nextElementSibling; while (ul && ul.tagName !== "UL") ul = ul.nextElementSibling; return [...ul.querySelectorAll("li a")].map((a) => ({ t: a.textContent.trim(), h: new URL(a.href).pathname })); });
+      const items = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3:has-text('Learn more'), :is(.fides-learn-article__body, .fides-learn-continue) h3:has-text('Meer uitleg')").first().evaluate((h) => { let ul = h.nextElementSibling; while (ul && ul.tagName !== "UL") ul = ul.nextElementSibling; return [...ul.querySelectorAll("li a")].map((a) => ({ t: a.textContent.trim(), h: new URL(a.href).pathname })); });
       check(`${tag}: Learn more has at most four links (${items.length})`, items.length > 0 && items.length <= 4, items.length);
       const w = items.find((x) => x.h === `${prefix}${LEARN}/topics/around-the-world/`);
       check(`${tag}: Learn more links to the international overview as "${title}"`, !!w && w.t === title, JSON.stringify(items));
       if (w) {
-        await page.locator(`.fides-learn-article__body a[href$="/topics/around-the-world/"]`).first().click();
+        await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href$="/topics/around-the-world/"]`).first().click();
         await page.waitForLoadState("load");
         const crumb = squash(await page.locator("nav[aria-label=Breadcrumb], nav[aria-label=Kruimelpad], nav.fides-learn-breadcrumb").first().textContent().catch(() => ""));
         check(`${tag}: link text equals the title of the page it opens (breadcrumb "${crumb.slice(-30)}")`, crumb.endsWith(title), crumb);
@@ -140,7 +140,7 @@ async function qtsp(page, tag, prefix) {
       // What is a digital wallet?: at most four Learn more links, includes the new Technology article.
       tag = `/${lang}/what-is-a-digital-wallet @${width}`;
       await open(page, `${prefix}${LEARN}/topics/the-big-picture/what-is-a-digital-wallet/`);
-      const wl = await page.locator(".fides-learn-article__body h3:has-text('Learn more'), .fides-learn-article__body h3:has-text('Meer uitleg')").first().evaluate((h) => { let ul = h.nextElementSibling; while (ul && ul.tagName !== "UL") ul = ul.nextElementSibling; return [...ul.querySelectorAll("li a")].map((a) => ({ t: a.textContent.trim(), h: new URL(a.href).pathname })); });
+      const wl = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3:has-text('Learn more'), :is(.fides-learn-article__body, .fides-learn-continue) h3:has-text('Meer uitleg')").first().evaluate((h) => { let ul = h.nextElementSibling; while (ul && ul.tagName !== "UL") ul = ul.nextElementSibling; return [...ul.querySelectorAll("li a")].map((a) => ({ t: a.textContent.trim(), h: new URL(a.href).pathname })); });
       check(`${tag}: Learn more has at most four links (${wl.length})`, wl.length > 0 && wl.length <= 4, wl.length);
       check(`${tag}: Learn more points at the Technology article on exchange`, wl.some((x) => x.h === `${prefix}${LEARN}/topics/technology/how-do-wallets-and-services-exchange-information/`), JSON.stringify(wl));
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);

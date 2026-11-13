@@ -440,3 +440,10 @@ created in the editor; the same gap exists for the Business wallets strip. The t
 
 Before the seed on staging: check `fides_ds_editorial_links` (a hand-edited option is skipped as a whole, so add the seven new contexts by hand then), the target
 pages are published, run `LEARN_DRY_RUN=1` and read `skipped-edited` / `skipped-unmarked`. Never `LEARN_FORCE`. Local dry run on 13 November 2026: 58 unchanged, editorial links unchanged, no skipped.
+
+## Learn article template (13 November 2026, local only)
+
+- Install **tiles 1.13.54** before anything else (step 3); the layout change is CSS/PHP/JS only, no database write.
+- Seed: one page changes (`how-credentials-connect`, from five to three article links plus two catalog links). Pages edited on staging are skipped (`skipped-edited`), a known and accepted risk: the page keeps working with its old list.
+- No translation rows are added; the Dutch import is unchanged. Internal links in Dutch stay under `/nl/`.
+- A new staging package is needed; none was built here.

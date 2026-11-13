@@ -1,0 +1,138 @@
+{
+  "around-the-world/canada": {
+    "catalogs": 5,
+    "learnMore": 3
+  },
+  "around-the-world/ethiopia": {
+    "catalogs": 5,
+    "learnMore": 3
+  },
+  "around-the-world/germany": {
+    "catalogs": 5,
+    "learnMore": 2
+  },
+  "around-the-world/honduras": {
+    "catalogs": 5,
+    "learnMore": 3
+  },
+  "around-the-world/india": {
+    "catalogs": 5,
+    "learnMore": 3
+  },
+  "around-the-world/the-netherlands": {
+    "catalogs": 5,
+    "learnMore": 2
+  },
+  "around-the-world/united-states": {
+    "catalogs": 5,
+    "learnMore": 3
+  },
+  "ecosystem-roles/the-holder": {
+    "catalogs": 2,
+    "learnMore": 5
+  },
+  "ecosystem-roles/the-issuer": {
+    "catalogs": 1,
+    "learnMore": 4
+  },
+  "ecosystem-roles/the-relying-party": {
+    "catalogs": 1,
+    "learnMore": 4
+  },
+  "ecosystem-roles/trust-service-providers-and-trust-frameworks": {
+    "catalogs": 3,
+    "learnMore": 5
+  },
+  "ecosystem-roles/wallet-providers-and-other-service-providers": {
+    "catalogs": 3,
+    "learnMore": 4
+  },
+  "for-businesses/accepting-information-from-a-wallet": {
+    "catalogs": 4,
+    "learnMore": 10
+  },
+  "for-businesses/business-wallets-where-to-start": {
+    "catalogs": 2,
+    "learnMore": 6
+  },
+  "for-businesses/european-business-wallet": {
+    "catalogs": 1,
+    "learnMore": 5
+  },
+  "for-businesses/how-can-an-organisation-prepare-a-wallet-use-case": {
+    "catalogs": 1,
+    "learnMore": 6
+  },
+  "for-businesses/how-can-someone-act-for-an-organisation": {
+    "catalogs": 1,
+    "learnMore": 5
+  },
+  "for-businesses/issuing-credentials-for-wallets": {
+    "catalogs": 3,
+    "learnMore": 11
+  },
+  "for-businesses/what-should-a-service-check-when-receiving-a-credential": {
+    "catalogs": 1,
+    "learnMore": 4
+  },
+  "for-governments/accepting-information-from-wallets-in-public-services": {
+    "catalogs": 3,
+    "learnMore": 4
+  },
+  "for-governments/digital-wallets-and-public-services": {
+    "catalogs": 3,
+    "learnMore": 4
+  },
+  "for-governments/issuing-public-information-to-wallets": {
+    "catalogs": 3,
+    "learnMore": 4
+  },
+  "for-governments/the-eudi-wallet-and-national-implementation": {
+    "catalogs": 3,
+    "learnMore": 4
+  },
+  "for-you/receiving-information-in-a-wallet": {
+    "catalogs": 1,
+    "learnMore": 4
+  },
+  "for-you/sharing-information-from-a-wallet": {
+    "catalogs": 1,
+    "learnMore": 4
+  },
+  "technology/credential-formats-and-interoperability": {
+    "catalogs": 6,
+    "learnMore": 4
+  },
+  "technology/how-do-wallets-and-services-exchange-information": {
+    "catalogs": 4,
+    "learnMore": 4
+  },
+  "technology/trust-frameworks-and-registries": {
+    "catalogs": 2,
+    "learnMore": 4
+  },
+  "the-big-picture/eudi-wallet-and-european-business-wallet": {
+    "catalogs": 1,
+    "learnMore": 5
+  },
+  "the-big-picture/european-digital-identity-wallet": {
+    "catalogs": 2,
+    "learnMore": 11
+  },
+  "the-big-picture/formats-and-protocols": {
+    "catalogs": 3,
+    "learnMore": 4
+  },
+  "the-big-picture/trust-and-interoperability": {
+    "catalogs": 1,
+    "learnMore": 8
+  },
+  "the-big-picture/what-is-a-credential": {
+    "catalogs": 1,
+    "learnMore": 12
+  },
+  "the-big-picture/what-is-a-digital-wallet": {
+    "catalogs": 2,
+    "learnMore": 4
+  }
+}

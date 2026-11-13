@@ -146,31 +146,31 @@ async function focusOk(page, tag, locators) {
       const intro = squash(await page.locator(".fides-learn__intro").first().innerText().catch(() => ""));
       check(`${tag}: intro text`, a.intro.test(intro), intro);
       check(`${tag}: eyebrow "Explainer · For governments"`, (await page.locator(".fides-learn__eyebrow").allTextContents()).some((t) => /Explainer · For governments/.test(squash(t))));
-      const heads = (await page.locator(".fides-learn-article__body h2").allInnerTexts()).map(squash);
+      const heads = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h2").allInnerTexts()).map(squash);
       for (const h of a.headings) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
       const body = squash(await page.locator(".fides-learn-article__body").innerText());
       check(`${tag}: ${a.status ? "states" : "does not repeat"} the GBO version and draft-for-adoption status`, a.status ? STATUS.test(body) && /0\.9\.5/.test(body) : !STATUS.test(body) && !/Version and status/.test(body), body.slice(0, 100));
       if (!a.status) {
-        const toA4 = norm(await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")))).filter((h) => h.endsWith(A4));
+        const toA4 = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")))).filter((h) => h.endsWith(A4));
         check(`${tag}: one link to the Dutch example on article 4 (anchor)`, toA4.length === 1, toA4.join(","));
-        const words = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h2")].find((x) => x.textContent.trim() === "A Dutch example"); let n = 0; for (let e = h && h.nextElementSibling; e && e.tagName !== "H2"; e = e.nextElementSibling) { if (e.classList.contains("fides-learn-usecase") || e.querySelector(".fides-learn-usecase")) break; n += e.textContent.split(/\s+/).filter(Boolean).length; } return n; });
+        const words = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h2")].find((x) => x.textContent.trim() === "A Dutch example"); let n = 0; for (let e = h && h.nextElementSibling; e && e.tagName !== "H2"; e = e.nextElementSibling) { if (e.classList.contains("fides-learn-usecase") || e.querySelector(".fides-learn-usecase")) break; n += e.textContent.split(/\s+/).filter(Boolean).length; } return n; });
         check(`${tag}: Dutch example is short (${words} words, max ${a.dutchMax})`, words > 0 && words <= a.dutchMax, words);
       } else {
         check(`${tag}: article 4 has the anchored Dutch example, version and status`, (await page.locator("#a-dutch-example").count()) === 1 && /Version and status/.test(body));
       }
       if (a.qtsp) {
-        const strong = (await page.locator(".fides-learn-article__body li strong").allInnerTexts()).map(squash);
+        const strong = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) li strong").allInnerTexts()).map(squash);
         check(`${tag}: QTSP route separates verify from retrieve`, strong.includes("Verify:") && strong.includes("Retrieve:") && /optional/.test(body) && /checks? attribute values it has been given/.test(body), strong.join("|"));
       }
       if (a.fiveF) {
-        const eur = await page.locator(".fides-learn-article__body a[href='https://eur-lex.europa.eu/eli/reg/2024/1183/oj']").count();
+        const eur = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href='https://eur-lex.europa.eu/eli/reg/2024/1183/oj']").count();
         check(`${tag}: Article 5f passage links to EUR-Lex and states the conditions`, eur >= 1 && /Article 5f of Regulation \(EU\) 2024\/1183/.test(body) && /paragraph 1 provides that where Member States require electronic identification and authentication to access an online service provided by a public sector body, they shall also accept/.test(body) && /also contains rules for certain private parties and for very large online platforms/.test(body) && /not legal advice/.test(body), body.slice(0, 80));
         const five = squash(await page.locator(".fides-learn-article__body h2:has-text('Article 5f') ~ p").first().innerText().catch(() => "")) + " " + body.slice(body.indexOf("Article 5f"), body.indexOf("This is a summary"));
         check(`${tag}: no deadline or exact date in the 5f passage (paragraphs 2 and 3 only point to EUR-Lex)`, !/36 months|\b(19|20)\d\d\b/.test(body.slice(body.indexOf("What does Article 5f"), body.indexOf("This is a summary")).replace(/2024\/1183/g, "")), five.slice(0, 200));
         check(`${tag}: paragraph 1 keeps "also accept" for public sector bodies`, /public sector body, they shall also accept European Digital Identity Wallets that are provided in accordance with the Regulation/.test(body));
         check(`${tag}: 5f wording is neutral (no "must" claims beyond the text, no "only wallets")`, /does not say that a service may accept only wallets/.test(body) && !/\byou must\b/i.test(body));
       }
-      if (a.five) check(`${tag}: mentions Article 5f and points to article 3`, /Article 5f of the Regulation also sets rules on accepting wallets/.test(body) && (await page.locator(".fides-learn-article__body a[href*='accepting-information-from-wallets-in-public-services']").count()) >= 1);
+      if (a.five) check(`${tag}: mentions Article 5f and points to article 3`, /Article 5f of the Regulation also sets rules on accepting wallets/.test(body) && (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href*='accepting-information-from-wallets-in-public-services']").count()) >= 1);
       check(`${tag}: says the arrangements are still in development`, /still in development|still to be realised|still developing/.test(body));
       check(`${tag}: content last checked 12 November 2026`, /Content last checked: 12 November 2026/.test(body));
 
@@ -182,23 +182,23 @@ async function focusOk(page, tag, locators) {
         const hit = src.find((s) => s.href === href);
         check(`${tag}: source "${name}${title ? " · " + title.slice(0, 40) : ""}"`, !!hit && (title ? hit.name === name && hit.text.includes(title) : hit.text.includes(name)) && hit.target === "_blank", JSON.stringify(hit));
       }
-      const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn-article__body h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
+      const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
       check(`${tag}: "Learn more" has 3-4 links (${learnMore})`, learnMore >= 3 && learnMore <= 4, learnMore);
       const go = src.find((s) => s.href === GBO_GO[2]);
       check(`${tag}: GBO source states version 0.9.5, September 2026 and the consulted date`, !!go && /version 0\.9\.5 \(September 2026\)/.test(go.text) && /consulted 12 November 2026/.test(go.text), go && go.text);
 
       // Links.
-      const hrefs = norm(await page.locator(".fides-learn-article__body a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      const hrefs = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       check(`${tag}: no local host in the content links`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h)));
       check(`${tag}: no link to an unavailable destination (issuer catalog, relying party websites, interop profiles or matrix)`, hrefs.every((h) => !UNAVAILABLE.test(h)), hrefs.filter((h) => UNAVAILABLE.test(h)).join(","));
       for (const l of a.links) check(`${tag}: links to ${l}`, hrefs.some((h) => h.includes(l)), hrefs.join(" "));
-      const groups = await page.locator(".fides-learn-article__body h3").allInnerTexts();
+      const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();
       check(`${tag}: groups "Learn more" and "Explore in the catalogs"`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
       check(`${tag}: links back to the For governments overview`, hrefs.some((h) => h.replace(/\/$/, "") === `${L}/topics/for-governments`) || (await page.locator("nav[aria-label=Breadcrumb] a[href$='/topics/for-governments/']").count()) === 1);
       await linksOk(page, tag, hrefs, src.map((s) => s.href));
 
       // Use case card: a card (or none for the last article) that opens an existing use case.
-      const cardLinks = norm(await page.locator(".fides-learn-article__body a[href*='/use-case/?usecase=']").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      const cardLinks = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href*='/use-case/?usecase=']").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       if (a.card) {
         check(`${tag}: use case card for ${a.card.slice(0, 40)}`, cardLinks.some((h) => h.includes(`usecase=${a.card}`)), cardLinks.join(","));
         const bodyCard = await page.locator(".fides-learn-article__body").innerHTML();
@@ -212,7 +212,7 @@ async function focusOk(page, tag, locators) {
       check(`${tag}: Next is ${i < PAGES.length - 1 ? PAGES[i + 1].slug : "absent"}`, i < PAGES.length - 1 ? next.join() === `${G}${PAGES[i + 1].slug}/` : next.length === 0, next.join());
 
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
-      await focusOk(page, tag, [page.locator(".fides-learn-article__body ul a").first(), page.locator(".fides-learn-sources__link").first()]);
+      await focusOk(page, tag, [page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a").first(), page.locator(".fides-learn-sources__link").first()]);
       check(`${tag}: no console errors`, errors.length === 0, errors.join(" | "));
     }
 

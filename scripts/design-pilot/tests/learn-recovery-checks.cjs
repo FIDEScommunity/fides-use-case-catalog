@@ -21,7 +21,7 @@ async function open(page, url) {
   return r;
 }
 async function links(page, tag) {
-  const hrefs = await page.locator(".fides-learn-rows a[href], .fides-learn-article__body a[href], .fides-learn-band a[href]").evaluateAll((as) => [...new Set(as.map((a) => a.getAttribute("href")))]);
+  const hrefs = await page.locator(".fides-learn-rows a[href], :is(.fides-learn-article__body, .fides-learn-continue) a[href], .fides-learn-band a[href]").evaluateAll((as) => [...new Set(as.map((a) => a.getAttribute("href")))]);
   check(`${tag}: no local host typed into links`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h || "")));
   const bad = [];
   for (const h of hrefs.filter((h) => h && h.startsWith("/"))) { const r = await page.request.get(`${BASE}${h}`); if (r.status() !== 200) bad.push(`${h} ${r.status()}`); }
@@ -59,7 +59,7 @@ async function links(page, tag) {
       tag = `${slug} @${width}`;
       r = await open(page, `${T}/${parent}/${slug}/`);
       check(`${tag}: answers 200`, r.status() === 200);
-      const learn = await page.locator(".fides-learn-article__body h3:has-text('Learn more') + ul li").count();
+      const learn = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3:has-text('Learn more') + ul li").count();
       check(`${tag}: Learn more is short (${learn} items)`, learn > 0 && learn <= 4, String(learn));
       await links(page, tag);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);

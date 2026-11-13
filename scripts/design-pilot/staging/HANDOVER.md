@@ -386,3 +386,10 @@ Re-check on the day of the installation: CBP test status (any later Federal Regi
 ### Request route
 
 The request route (Services -> enquiry/request form) was checked up to the form, EN and NL, with 0 submissions (`tests/nl-route-checks.cjs`: Dutch form fields shown, no non-GET request). No form was submitted and no mail was sent.
+
+## Learn article template (Paper 24.21 / 24.22, 13 November 2026, local only)
+
+- **Tiles 1.13.54 first** (renderer, `learn.css`, `learn.js`); then the seed. A new staging package is needed and was NOT built.
+- **Seed:** one changed page, `how-credentials-connect` (3 + 2 links). A staging page that was edited by hand reports `skipped-edited` and keeps its own links; that page then still shows the old five-plus links (the layout still works). Run the seed dry run first; never `LEARN_FORCE`.
+- No new Dutch UI labels: "Continue learning", "Learn more" and "Explore in the catalogs" already have rows. Nothing to export.
+- Editors keep managing the links in the page editor (see `learn/README.md`). Articles that still exceed 3 + 2: `learn/continue-learning-selection.md`.

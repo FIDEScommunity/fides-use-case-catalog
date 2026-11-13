@@ -91,6 +91,7 @@ async function targets(page, key, width) {
       ".fides-learn__back",
     ].join(",");
     return [...document.querySelectorAll(sel)]
+      .filter((el) => !(vw >= 900 && el.matches(".fides-learn-toc summary"))) // static heading on desktop, not a control (tabindex -1)
       .filter((el) => {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden";
@@ -185,7 +186,8 @@ async function article(page, width) {
   const toc = page.locator(".fides-learn-toc");
   const summary = toc.locator("summary");
   const links = (await toc.locator("a").allTextContents()).map((t) => t.trim());
-  check(`article @${width}: contents menu lists the seven sections`, links.length === 7 && links[0] === "Follow the information" && links[3] === "The receiving service checks it", links.join("|"));
+  // Since tiles 1.13.54 "Continue learning" lives in the side column (Paper 24.21) and is not a contents entry: six sections.
+  check(`article @${width}: contents menu lists the six sections`, links.length === 6 && links[0] === "Follow the information" && links[3] === "The receiving service checks it", links.join("|"));
   if (width >= 900) {
     check(`article @${width}: contents menu open beside the text`, (await toc.evaluate((el) => el.open)) && (await toc.boundingBox()).x > (await page.locator(".fides-learn-article__body").boundingBox()).x + 600);
   } else {
