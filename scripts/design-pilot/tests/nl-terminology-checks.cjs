@@ -35,9 +35,21 @@ const PAGES = [
 ];
 // Pages where the first prose mention of the issuer must read "uitgever (issuer)" (second round of terminology rules)
 const FIRST_ISSUER = new Set(["how-credentials-connect", "what-is-a-credential", "what-is-a-digital-wallet", "formats-and-protocols", "trust-and-interoperability", "accepting-information-from-a-wallet", "business-wallets-where-to-start", "issuing-credentials-for-wallets", "wallet-readiness-workshop", "eudi-business-wallets-in-practice", "receive"]);
+// "credential" is a het-word in Dutch (editorial decision of 13 November 2026): "het credential", "dat/hetzelfde credential",
+// "een digitaal credential". Every manifest page is read; the patterns find the de-word forms. The capitalised product names
+// "Lawyer Credential" and compounds such as "credential-wallet" do not match (lowercase word, no hyphen or letter after it).
+const MANIFEST = require("../learn/manifest.json").pages.map((p) => (p.tree === "start" ? `start/${p.path}` : p.tree === "services" ? `services/${p.path}` : `learn/${p.path}`.replace(/\/$/, "")));
+const DE_CREDENTIAL = /\b(?:de|De|dezelfde|Dezelfde|welke|Welke|deze|Deze|die|Die|iedere|elke)\s+(?:\p{L}+e\s+)?credential(?![-\p{L}])|\b(?:een|Een|geen|Geen)\s+\p{L}+e\s+credential(?![-\p{L}])/u;
 const overflow = (page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
 async function open(page, path) {
-  const r = await page.goto(`${NL}/${path}`.replace(/\/+$/, "/"), { waitUntil: "domcontentloaded" });
+  const url = `${NL}/${path}`.replace(/\/+$/, "/");
+  let r;
+  try {
+    r = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 45000 });
+  } catch (err) {
+    console.log(`# retry ${url}: ${err.message.split("\n")[0]}`);
+    r = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+  }
   const deny = page.locator(".cmplz-btn.cmplz-deny:visible").first();
   if (await deny.waitFor({ state: "visible", timeout: 1200 }).then(() => true, () => false)) await deny.click();
   await page.waitForLoadState("networkidle").catch(() => {});
@@ -122,6 +134,15 @@ async function open(page, path) {
     console.log(`# aborted non-GET requests: ${blocked}`);
     check(`@${width}: nothing was submitted`, submits.length === 0, submits.join("; "));
     check(`@${width}: no console errors`, errors.length === 0, errors.join(" | "));
+    // "het credential" on every manifest page (also the pages without other terminology checks)
+    const genderHits = [];
+    for (const path of MANIFEST) {
+      await open(page, path);
+      const text = await page.evaluate(() => (document.querySelector("main") ? document.querySelector("main").innerText : "").replace(/\s+/g, " "));
+      const hit = text.match(new RegExp(".{0,50}" + DE_CREDENTIAL.source + ".{0,30}", "u"));
+      if (hit) genderHits.push(`${path}: ${hit[0]}`);
+    }
+    check(`@${width}: no "de credential" (credential is a het-word) on ${MANIFEST.length} manifest pages`, genderHits.length === 0, genderHits.join(" || "));
     await context.close();
   }
   await browser.close();

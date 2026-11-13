@@ -22,7 +22,7 @@ The earlier layout (pilot below another site's root, `/design-review/` as a page
 | `non-git/plugins/fides-vocabulary-glossary-*.zip` | glossary plugin (Learn articles and the glossary page use it) | **Local WordPress copy**: no Git repository exists |
 | `non-git/themes/blocksy-child-*.zip` | 16-line child theme of Blocksy | **Local WordPress copy**: no Git repository exists |
 | `mu-plugins/fides-design-review-config.php` | route mapping, noindex, disabled external actions, standalone detection | **Git** (`use-case-catalog/scripts/design-pilot/staging/`) |
-| `seed/` | `seed.sh`, `create-pages.php`, `create-learn-pages.php`, `staging/preflight.php`, `staging/seed-guard.php`, `learn/` (manifest, 44 Learn HTML files (the overview, the three practice-question articles under For businesses (acting for an organisation, preparing a wallet use case, checking a received credential), the For you overview and its three articles (receiving, sharing, choosing and managing a wallet), the For governments overview and its four articles (digital wallets and public services, issuing public information, accepting information in public services, the EUDI Wallet and national implementation), topic pages including the Ecosystem roles overview and its five role articles (the holder, the issuer, the relying party, wallet providers and other service providers, trust service providers and trust frameworks), and eleven articles: "Trust and interoperability", EUDI Wallet, European Business Wallet, their comparison, "What is a credential?", "What is a digital wallet?", "Formats and protocols: what do they do?", "Issuing credentials for wallets", "Accepting information from a wallet", plus the two reworked articles "How credentials connect..." and "Business wallets: where to start"), editorial links, `nl-translations.php`), `awards/` (content, image manifests with file/size/SHA-256, and `awards/images/`: the 107 bundled award images + `PROVENANCE.txt`) | **Git** |
+| `seed/` | `seed.sh`, `create-pages.php`, `create-learn-pages.php`, `staging/preflight.php`, `staging/seed-guard.php`, `learn/` (manifest, 57 HTML content files, one per manifest page (52 Learn pages, 3 Services pages, 2 start pages; the summary that follows names a selection only: the overview, the three practice-question articles under For businesses (acting for an organisation, preparing a wallet use case, checking a received credential), the For you overview and its three articles (receiving, sharing, choosing and managing a wallet), the For governments overview and its four articles (digital wallets and public services, issuing public information, accepting information in public services, the EUDI Wallet and national implementation), topic pages including the Ecosystem roles overview and its five role articles (the holder, the issuer, the relying party, wallet providers and other service providers, trust service providers and trust frameworks), and eleven articles: "Trust and interoperability", EUDI Wallet, European Business Wallet, their comparison, "What is a credential?", "What is a digital wallet?", "Formats and protocols: what do they do?", "Issuing credentials for wallets", "Accepting information from a wallet", plus the two reworked articles "How credentials connect..." and "Business wallets: where to start"), editorial links, `nl-translations.php`), `awards/` (content, image manifests with file/size/SHA-256, and `awards/images/`: the 107 bundled award images + `PROVENANCE.txt`) | **Git** |
 | `catalog-data/*.json` | reference copy of the four committed crawler outputs | **Git** (not installed; see section 7) |
 | `checks/rehearsal-checks.cjs` | browser checks that also run against the real staging URL (GET only; the signed-in form check needs a reviewer account) | **Git** |
 | `reference/fides-design-pilot-guard.php` | the local-only guard. **Do not install** | **Git** |
@@ -265,3 +265,124 @@ Learn pages without the catalogs link to filters that do not exist yet. So do no
 
 Local dry run (13 November 2026, pilot database, no staging): `LEARN_DRY_RUN=1 bash create-learn-pages.sh` -> `editorial links unchanged (9 entries)`, 58 pages
 unchanged, no `skipped-edited`, no `skipped-unmarked`. Tests: `tests/explore-learn-crosslinks-checks.cjs`.
+
+## Recovery round and package of 13 November 2026 (evening, local only)
+
+Nothing in this round was run on staging or production. Tiles is **1.13.53** (1.13.52 plus one CSS change, see below); the catalog plugins are use case 0.21.11,
+organization 1.18.6, wallet 2.16.5, credential 1.7.0. Install tiles first.
+
+### What changed since the previous package
+
+- **Language kept in the catalogs** (use-case-catalog `eef93b2`, credential-catalog `1e0b25b`, organization-catalog `1741e9a5`, wallet-catalog `f8e322e`): result cards, script-rendered
+  cards after search, filter and paging, and the back link keep `/nl/`, the search and the filters. Test: `tests/catalog-language-links-checks.cjs` (real clicks, EN and NL, 1440 and 390 px,
+  use cases, credential types, organizations, personal and business wallets).
+- **Tiles 1.13.53** (`assets/learn.css`, plugin header, readme): a Learn list item with the class `fides-learn-rows__item--plain` gets no automatic label; the "In preparation" label of
+  `fides-learn-rows--prep` lists reads "In voorbereiding" on `html[lang|=nl]`. Local design pilot only.
+- **Learn content (4 pages)**: `topics` (the "Wallets & credentials" row is a plain compact row with its two deepening links, no "Design preview"), `overview` (For you and For governments rows are links),
+  `for-businesses` and `the-big-picture` (rows use the `--prep` list class). "Design preview" no longer appears anywhere in Learn: `tests/learn-no-design-preview-checks.cjs`.
+- **"Het credential"**: 13 Dutch rows corrected, old to new in `learn/nl-translation-changes-credential-gender-2026-11-13.md`; `tests/nl-terminology-checks.cjs` fails on "de credential".
+  "Ontvangende partij" in the Technology articles stays: the English source says "receiving party" in the generic sense, not the role "relying party".
+
+### Numbers (do not mix them up)
+
+| Number | Meaning |
+|---|---|
+| **57** manifest pages | `learn/manifest.json` pages: 52 Learn (tree `learn`), 3 Services, 2 start. One HTML file each under `learn/content/` (57 files). |
+| **58** in the seed summary (`SUMMARY {"unchanged":58}`) | The seed counts **57 pages + 1 editorial-links option** (`fides_ds_editorial_links`, 9 entries). It reports one line per page and one for the option, so 58 is the number of seeded objects, not of pages. |
+| **9** editorial link entries | `learn/editorial-links.json`. |
+| **1454** transfer entries | `learn/nl-translations.json` after the export of this round (+4 gettext strings). Local `status`: add 0, same 1455 rows, differs 0, pending 0, stale 0, new 0. (the status counts dictionary rows, so it can be one higher than the number of sources when a source has two rows.) |
+
+### Seed and Dutch import on the review site (steps for the installer, in this order)
+
+1. Install tiles 1.13.53, then the four catalog plugins from `plugins/`.
+2. **Dry run first**: `LEARN_DRY_RUN=1 bash seed/create-learn-pages.sh` (or the `seed.sh` dry-run option). Never `LEARN_FORCE`. Read every `skipped-edited` and `skipped-unmarked` line and the `editorial links` line.
+   Pages that this package changes: `topics`, `topics/for-businesses`, `topics/the-big-picture`, `overview` (this round); earlier rounds: see the lists in `UPDATE-PLAN-NL-LEARN.md`. A page an editor changed on staging is **skipped**
+   and keeps its text. Known: the Wallet Readiness Workshop page was edited on staging (expect `skipped-edited` for `sessions/wallet-readiness-workshop`; its new language row is then missing). For every other
+   skipped page the plan says what to add by hand (editorial links entries, the "Ecosystem roles" link, the extra Learn more links). If `topics` is skipped, the "Wallets & credentials" row keeps the label
+   "Design preview": edit that row by hand (class `fides-learn-rows__item--plain` on the list item, see the seed file `learn/content/topics.html`).
+3. Run the seed (without `LEARN_FORCE`), then open the `/nl/` routes once (Learn, Services, start, the four catalog overviews).
+4. `wp eval-file seed/learn/nl-translations-transfer.php status` (dry run), read the `differs` list, then `import-apply` twice (the second run must add 0).
+5. **Expected `differs` rows** (the staging dictionary already holds other Dutch; the import never overwrites; correct them by hand in the TranslatePress editor from the change lists):
+   - **13 rows of "het credential"** (`learn/nl-translation-changes-credential-gender-2026-11-13.md`): if staging holds the old text with "de credential";
+   - **"Around the world"**: "Wereldwijd" on staging, "Internationaal" in the file (page title, nav title, breadcrumb, Topics row), and the Topics list row ending in "Wereldwijd" -> "Internationaal"
+     (`learn/nl-translation-changes-technology-around-world-final-2026-11-13.md`; further rows with "Wereldwijd" or "Initiatief/Land · Internationaal" sources: same lists);
+   - the rows of earlier corrections: up to 11 Tag C rows (`nl-translation-changes-repair-round-2026-11-13.md`), up to 18 (`nl-translation-changes-2026-11-12.md`), up to 39/21 rows from the first and second package
+     (`UPDATE-PLAN-NL-LEARN.md`, "Expected differs");
+   - gettext: the four allowlisted rows may differ if staging holds other Dutch.
+   After the corrections `status` must show differs 0, or only rows the owner deliberately keeps.
+
+### First impression in Dutch: cookie banner
+
+Measured locally (`tests/cookie-banner-first-visit-probe.cjs`, first visit without a consent cookie, Complianz 7.4.6): the banner (`cmplz-cookiebanner`, "Manage Consent", buttons Accept / Deny / Save preferences) is
+**English on `/nl/`** and covers **65% of the viewport at 390 x 844 px** (547 px high) and 17% at 1440 x 900 (414 px high). The screenshots are `tests/output/cookie-banner-{EN,NL}-390.png` (not committed).
+How the banner can be Dutch on the review site:
+- The banner text is server-rendered into the page, so TranslatePress has dictionary rows for it (empty rows exist locally). One row was filled temporarily as a test ("Accept" -> "Accepteren"), the NL page showed it, and the row was emptied again.
+  So the rows can be translated in the TranslatePress editor. The strings: Manage Consent, the "To provide the best experiences..." paragraph, Functional, Always active, Preferences, Statistics, Marketing, their four descriptions,
+  Manage options, Manage services, Manage {vendor_count} vendors, Read more about these purposes, Accept, Deny, View preferences, Save preferences. They are **not** in `nl-translations-transfer.php` (outside the Learn/Services/start routes) and not in the package.
+- Complianz itself only hooks into WPML and Polylang for the banner texts (`cmplz_translate()` in the plugin); there is no TranslatePress hook. The dictionary rows are therefore the route that was verified for this site.
+- To reduce the cover on mobile, set the banner layout in the Complianz wizard (banner position and a shorter text or a compact layout); that is a plugin setting of the review site and was **not** changed here (no licence or settings touched).
+- Complianz is optional for the review site (it is not in the package). Without it there is no banner and nothing to translate.
+
+### Dutch links and labels between Learn and Explore (checked on `/nl/`)
+
+Dutch: the Learn links of the catalogs (article titles as link labels), the Learn lines of the credential and organization overviews, the Topics rows. **Still English on `/nl/`** (no TranslatePress row exists; the strings sit in `data-learn-title` /
+`data-learn-text` attributes that the JavaScript turns into the strip, and TranslatePress neither stores nor translates those; rows cannot be created by the existing transfer tool, and the strings are outside its route scope):
+- Personal wallets strip: "Choosing a wallet?" and "Learn what to look for and how to manage it." (Dutch is prepared in `learn/nl-translations.php`: "Een wallet kiezen?", "Lees waar u op let en hoe u een wallet beheert.");
+- Business wallets strip: "New to business wallets?", "Understand what they do before comparing solutions.", "Business wallets explained" (proposal: "Nieuw met business wallets?", "Begrijp wat ze doen voordat u oplossingen vergelijkt.", "Business wallets uitgelegd");
+- the intro link "Looking for a wallet for your organization? Business wallets" on Personal wallets (proposal: "Zoekt u een wallet voor uw organisatie? Business wallets");
+- Updates: "Explore Learn" and the sentence "New to digital wallets? Learn how wallets and credentials connect." (proposal: "Bekijk Learn", "Nieuw met digitale wallets? Lees hoe wallets en credentials samenhangen.");
+- Credential types overview: "Credentials & attestations explained", "Explain -> TS11 metadata";
+- Use cases intro: the intro sentence is rendered by the script; the only translated piece is the connecting word "and", which shows as "en" inside the English sentence ("digital wallets en verifiable credentials"). That row ("and" -> "en") was entered by an editor and is kept;
+- the QTSP line on Organizations (see `nl-translation-changes-explore-crosslinks-final-2026-11-13.md`).
+Options to resolve (owner decision): (a) open the page in the TranslatePress editor on the review site so rows are created, then enter the Dutch above; (b) have the tiles code translate these attribute strings with `__()`/gettext (a code change, not done here).
+The filter labels ("Filters", "Alle ...") and card labels are Dutch except "Filters 0" (the count button) on Credential types and the wallet overviews, which shows English "Filters".
+
+### Remaining English headings and introductions outside Learn (NL routes, 1440 and 390 px, same result at both)
+
+Measured with `tests/nl-outside-learn-probe.cjs` (report in `tests/output/x-outside-learn.txt`, not committed):
+
+| Route (under `/nl/design-review/` on the review site) | H1 | Introduction |
+|---|---|---|
+| home | "FIDES design pilot" (pilot title; no intro text) | - |
+| `about-fides/` | English: "An independent platform for wallets and verifiable credentials" | English: "We help organizations understand the technology, find suitable solutions, and prepare for implementation." |
+| `manifesto/` | English: "The FIDES Manifesto" | English: "Seven principles for a digital world people can trust." |
+| `global-digital-trust-awards/` | English title (proper name) | English: "Celebrating practical applications of digital wallets and verifiable credentials from around the world." |
+| `fides-community-awards/` | English title (proper name) | English: "The first FIDES Community Awards brought together practical applications of business wallets and verifiable credentials. ..." |
+| `updates/` | "Updates" (same word) | English: "Follow developments in digital identity, wallets and trusted data." |
+| `overview/` (Use cases) | "Usecases" (Dutch) | English (mixed with "en", see above) |
+| `credentials/` | English: "Credential Types" | English: "Find credential types, inspect their attributes and reuse the published schemas." |
+| `organizations/` | "Organisaties" | English: "Discover organizations shaping the global ecosystem of digital wallets and verifiable credentials and explore their roles." |
+| `personal-wallets/` | "Persoonlijke wallets" | English: "Explore digital wallets for individuals." |
+| `business-wallets/` | "Business wallets" (term) | English: "Explore digital wallets and related tooling that allow organizations to receive, store, present, issue or verify verifiable credentials." |
+| header "Learn" menu section | "Learn" stays English on purpose | - |
+| Ask FIDES assistant intro | English ("Ask me about use cases, ...") | - |
+| cookie banner | English (see above) | - |
+
+These are **review decisions**, not defects of the Learn translation: the earlier decision was that Dutch covers Learn, Services, start and the Learn/Explore references. Known and reported separately:
+**English glossary definitions** on 4 pages (Credential formats and interoperability: 1; Trust frameworks and registries: 1; The Netherlands: 2; UN Transparency Protocol: 2) and **original catalog titles** (UN Transparency Protocol: "Reeco Textile DPP ..."; United States and the issuer article show "The California mDL ..." and "From Repeated Verification to Reusable Trust ...", listed in `learn/nl-known-english-remains.md`).
+The full NL route check ends with 578 ok and 8 failing checks = exactly those 4 pages x 2 widths.
+
+### Open record status questions (no record was changed; nobody has confirmed a different value)
+
+| # | Record (id) | Part | Value in the record | What the source says (13 November 2026) | Who confirms |
+|---|---|---|---|---|---|
+| 1 | Reusable KYC (`reusable-kyc-on-open-standards-...-JBaAQX`, Solidus Network, WordPress-managed) | use case | `productionDeployment: yes` | its own summary says "runs today on a public testnet... no production deployment"; docs.solidus.network lists a testnet and a beta wallet but also Verify as a live product | Solidus Network (record owner, WordPress update form) |
+| 2 | VOG as a verifiable credential (`digital-certificate-of-good-conduct-vog-...-yjw4BC`, Credenco/Justis, WordPress-managed) | use case | `yes` | credenco.com/case/vog: "a controlled pilot in a production environment", evaluated early 2026, large-scale issuance from 2026 onward | Credenco together with Justis; plus a catalog decision on what "in production" means |
+| 3 | FaydaPass (`faydapass-rP7gpJ`, National ID Program) | use case | `yes` | id.gov.et/authentication: "working on" the wallet; a FaydaPass app is listed on Google Play | National ID Program |
+| 4 | Neoflow (`neoflow-digital-energy-passport-...-RZDhoP`, Mavennet) | use case | `yes` | Federal Register 2026-10979: a one-year CBP test planned from 2 July 2026, using the Neoflow platform; routine operation not shown | Neoflow (Mavennet), CBP for the test |
+| 5 | BIEN (`honduras-billetera-electronica-nacional-bien-...-YVNSXc`, submitted by TECH5) | use case, issuer list in the text | `yes` | DIGER: available; four issuers; INM residence card: overview presents it, FAQ says "próximamente" | TECH5 (text), DIGER (INM) |
+| 6 | Swiggy and the Aadhaar App (`delivery-agent-and-customer-identity-verification-...-p0mDau`, UIDAI) | use case | `yes` | UIDAI FAQ: Aadhaar App supports consent-based sharing with OVSEs; no source names Swiggy | UIDAI |
+| 7 | CA DMV Wallet (`ca-dmv-wallet`, wallet-catalog, GitHub-only) | wallet status | `beta`, description says "mDL pilot" | California DMV: "a free, optional app" available to Californians, uses at 800+ locations; no "beta" or "pilot" | California DMV or the wallet catalog maintainers; proposed `production` |
+
+WordPress-managed records (rows 1, 2, 6 and the others submitted through WordPress) can only be changed by the owner in the update form; a local edit would be overwritten by the next sync.
+
+### Time-sensitive sources (re-read on 13 November 2026, no page text changed)
+
+TSA participating states (Utah 1 January 2027, West Virginia 4 May 2027), California DMV mDL page, Federal Register 2026-10979 (test from 2 July 2026, one year), BC Wallet page (updated 26 October 2026, BC Services Card app, no date),
+Canada.ca "Trusted access to digital services" (still plans, "in the coming months"), UIDAI Aadhaar App FAQ (updated 18 September 2026), DIGER BIEN overview and FAQ, id.gov.et authentication (FaydaPass "working on").
+Unreachable by curl (read with WebFetch instead): UIDAI FAQ, Canada.ca, DIGER, `www.id.gov.et`. PDFs not readable with the tools: UIDAI handbook and date-of-birth clarification (earlier pass only). Details: `learn/around-world-countries-fact-check-2026-11-13.md`, "Third pass".
+Re-check on the day of the installation: CBP test status (any later Federal Register notice), the TSA list, the BC Services Card app, the FaydaPass status.
+
+### Request route
+
+The request route (Services -> enquiry/request form) was checked up to the form, EN and NL, with 0 submissions (`tests/nl-route-checks.cjs`: Dutch form fields shown, no non-GET request). No form was submitted and no mail was sent.

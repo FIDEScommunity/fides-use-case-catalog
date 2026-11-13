@@ -140,3 +140,25 @@ California keep the standard sentence. The use-case detail pages show "In produc
 
 Re-check on the day: CBP test status, Utah and West Virginia dates, BC Wallet and BC Services Card app status, the DIGER
 credential list (INM), the FaydaPass status, TSA list.
+
+## Third pass (13 November 2026, recovery round before the staging package)
+
+All time-sensitive passages were read again from the primary sources, on the same day. No page text had to change.
+Fetched with curl where it works, otherwise with the WebFetch tool (the sources below marked "WebFetch").
+
+| Page | Passage | Source and result on 13 November 2026 |
+|---|---|---|
+| United States | TSA list: Utah no longer accepted from 1 January 2027, West Virginia from 4 May 2027; "more than 250 checkpoints" is not repeated on the page | TSA, Participating States (curl, HTTP 200): both dates read as written. The page still names no checkpoint count. |
+| United States | California DMV lists age-restricted retail purchases among the uses of the CA DMV Wallet | California DMV, California mDL (`/portal/california-mdl/`, WebFetch): table row "TruAge for Age Restricted Purchases at Retail" is "Yes" for the CA DMV Wallet only. The page also says "800+ locations"; the pilot page makes no count claim. |
+| Canada | CBP pipeline crude oil test: planned start 2 July 2026, one year, subject to extension, modification or early termination; Neoflow named | Federal Register notice 2026-10979 (text version, HTTP 200): "will commence on July 2, 2026, and will run for one year, subject to any extension, modification, or early termination"; Neoflow is named as the platform. No later notice was looked for; the page says it has not checked whether the test started or changed. |
+| Canada | BC Wallet functionality is being added to the BC Services Card app, no date given | BC Wallet page (curl, HTTP 200), "Last updated on October 26, 2026": same wording, no date. |
+| Canada | Federal platforms described as plans | Canada.ca "Trusted access to digital services" (WebFetch; curl gets no answer): still says CDS "is building" the platforms and that testing will happen "in the coming months". The page keeps its plan wording and no date. |
+| India | Aadhaar App lets the holder share Aadhaar Verifiable Credentials in full or in part with consent | UIDAI Aadhaar App FAQ (WebFetch; curl gets no answer), "Last Updated: 18 Sep 2026": confirmed, including the OVSE route. The page says nothing about Swiggy beyond "the sources consulted do not confirm"; the FAQ names no Swiggy flow either. |
+| Honduras | BIEN credentials and issuers; INM residence card | DIGER overview page (WebFetch; curl gets 403): lists RNP, Policía Nacional, DNVT, Instituto de la Propiedad as issuers and presents INM as a provider of the residence card (CERe). DIGER FAQ (WebFetch): "Próximamente se sumará el Carnet de Residencia". The two DIGER pages still disagree; the page states both. The overview now also says "validez legal en todo Honduras"; the pilot page still makes no legal-acceptance claim. |
+| Ethiopia | FaydaPass: the programme is "working on" a digital credential wallet | id.gov.et/authentication (curl, HTTP 200): "We are also working on a Digital Credential Wallet called FaydaPass". `www.id.gov.et/about` read with WebFetch (no FaydaPass statement). |
+
+Sources that curl could not reach (timeout or 403), read with WebFetch instead: UIDAI FAQ, Canada.ca, DIGER (both pages), `www.id.gov.et/about`.
+Not read (PDF, not supported by the tools): the UIDAI Aadhaar Handbook and the date-of-birth clarification; their claims rest on the earlier pass.
+
+Record statuses: nothing was changed. No source or record owner confirmed a different value. Open questions per record: see
+`around-world-country-record-status.md` and `explore-open-data-checks.md`, and the table in `staging/HANDOVER.md` ("Open record status questions").

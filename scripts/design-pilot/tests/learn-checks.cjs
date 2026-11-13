@@ -148,7 +148,9 @@ async function route(page, width) {
     link: Boolean(li.querySelector("a")),
     tag: getComputedStyle(li.querySelector(".fides-learn-rows__title"), "::after").content,
   })));
-  check(`overview @${width}: design-only rows are not links and are labelled`, planned.length >= 2 && planned.every((p) => !p.link && /Design preview/.test(p.tag)), JSON.stringify(planned));
+  // 13 November 2026: For you and For governments exist as pages, so no overview row is design-only any more and no
+  // "Design preview" label is shown (see tests/learn-no-design-preview-checks.cjs).
+  check(`overview @${width}: every row is a link and no row carries a "Design preview" label`, planned.every((p) => p.link || !/Design preview/.test(p.tag)) && planned.length === 0, JSON.stringify(planned));
   check(`overview @${width}: no request form or search field is pretended`, (await page.locator(".fides-learn form, .fides-learn input[type=search], .fides-learn input[type=text]").count()) === 0);
 
   await page.getByRole("link", { name: /^Explore topics/ }).click();

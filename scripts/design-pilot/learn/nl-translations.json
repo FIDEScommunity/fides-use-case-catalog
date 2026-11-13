@@ -184,7 +184,7 @@
         },
         {
             "original": ", often using a wallet. When you present it, the employer acts as the verifier, or",
-            "translation": ", vaak met een wallet. Wanneer u de credential toont, treedt de werkgever op als verifier, of",
+            "translation": ", vaak met een wallet. Wanneer u het credential toont, treedt de werkgever op als verifier, of",
             "html": false,
             "fragment": true,
             "groups": [
@@ -824,7 +824,7 @@
         },
         {
             "original": "A credential can contain information about a person, an organisation or another subject. It also contains or refers to information that helps a receiving party establish who issued it and check whether it has been altered. The details depend on the format and the way the credential is secured.",
-            "translation": "Een credential kan informatie bevatten over een persoon, een organisatie of een ander onderwerp. Het bevat ook informatie waarmee een ontvangende partij kan vaststellen wie de credential heeft uitgegeven en of die is gewijzigd, of verwijst daarnaar. De details hangen af van het formaat en van de manier waarop de credential is beveiligd.",
+            "translation": "Een credential kan informatie bevatten over een persoon, een organisatie of een ander onderwerp. Het bevat ook informatie waarmee een ontvangende partij kan vaststellen wie het credential heeft uitgegeven en of dat is gewijzigd, of verwijst daarnaar. De details hangen af van het formaat en van de manier waarop het credential is beveiligd.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -876,7 +876,7 @@
         },
         {
             "original": "A credential format specifies how information and its associated proof are represented. A receiving service needs to understand the format to process the credential and carry out the relevant checks. For a first explanation, see",
-            "translation": "Een credentialformaat legt vast hoe informatie en het bijbehorende bewijs worden weergegeven. Een ontvangende dienst moet het formaat begrijpen om de credential te verwerken en de relevante controles uit te voeren. Voor een eerste uitleg ziet u",
+            "translation": "Een credentialformaat legt vast hoe informatie en het bijbehorende bewijs worden weergegeven. Een ontvangende dienst moet het formaat begrijpen om het credential te verwerken en de relevante controles uit te voeren. Voor een eerste uitleg ziet u",
             "html": false,
             "fragment": false,
             "groups": [
@@ -1302,7 +1302,7 @@
         },
         {
             "original": "A receiving service asks for information it needs. Depending on the wallet, credential and request, the holder may be able to share selected information. The service then checks the response and decides whether it is sufficient for its purpose.",
-            "translation": "Een ontvangende dienst vraagt om de informatie die zij nodig heeft. Afhankelijk van de wallet, de credential en het verzoek kan de houder soms geselecteerde gegevens delen. De dienst controleert vervolgens het antwoord en beslist of dat voldoende is voor het beoogde doel.",
+            "translation": "Een ontvangende dienst vraagt om de informatie die zij nodig heeft. Afhankelijk van de wallet, het credential en het verzoek kan de houder soms geselecteerde gegevens delen. De dienst controleert vervolgens het antwoord en beslist of dat voldoende is voor het beoogde doel.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -2940,7 +2940,7 @@
         },
         {
             "original": "Check the credential, then decide whether the information is enough.",
-            "translation": "Controleer de credential en beslis daarna of de informatie volstaat.",
+            "translation": "Controleer het credential en beslis daarna of de informatie volstaat.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -3745,7 +3745,7 @@
         },
         {
             "original": "Depending on the credential and its supporting infrastructure, checks can establish whether the information was altered, who secured it, and whether it is within its validity period. Status information may also be available. Those technical checks are distinct from deciding whether an issuer is suitable for the claim or whether the evidence meets a service’s requirements.",
-            "translation": "Afhankelijk van de credential en de onderliggende infrastructuur kan worden gecontroleerd of de informatie is gewijzigd, wie die heeft beveiligd en of de geldigheidsduur nog loopt. Ook kan statusinformatie beschikbaar zijn. Deze technische controles staan los van de vraag of de uitgever een geschikte bron is voor de betreffende verklaring en of het bewijs aan de eisen van een dienst voldoet.",
+            "translation": "Afhankelijk van het credential en de onderliggende infrastructuur kan worden gecontroleerd of de informatie is gewijzigd, wie die heeft beveiligd en of de geldigheidsduur nog loopt. Ook kan statusinformatie beschikbaar zijn. Deze technische controles staan los van de vraag of de uitgever een geschikte bron is voor de betreffende verklaring en of het bewijs aan de eisen van een dienst voldoet.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -5910,7 +5910,7 @@
         },
         {
             "original": "Imagine you are applying for a role that requires a particular qualification. Today you might upload a certificate and wait while the employer checks it. With a digital credential, the issuing training provider can give you a form of evidence that another service can check electronically.",
-            "translation": "Stel dat u solliciteert naar een functie waarvoor een bepaalde kwalificatie nodig is. Nu uploadt u misschien een certificaat en wacht u tot de werkgever het heeft gecontroleerd. Met een digitale credential kan de opleider u een bewijs geven dat een andere dienst elektronisch kan controleren.",
+            "translation": "Stel dat u solliciteert naar een functie waarvoor een bepaalde kwalificatie nodig is. Nu uploadt u misschien een certificaat en wacht u tot de werkgever het heeft gecontroleerd. Met een digitaal credential kan de opleider u een bewijs geven dat een andere dienst elektronisch kan controleren.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -8262,7 +8262,7 @@
         },
         {
             "original": "Some information stays relevant for a long time. Other information may change or expire. Depending on the credential, an issuer may update, replace or withdraw it. Check with the issuer if you need a correction or a new credential.",
-            "translation": "Sommige informatie blijft lang relevant. Andere informatie kan veranderen of verlopen. Afhankelijk van het credential kan een uitgever die bijwerken, vervangen of intrekken. Vraag het de uitgever als u een correctie of een nieuw credential nodig hebt.",
+            "translation": "Sommige informatie blijft lang relevant. Andere informatie kan veranderen of verlopen. Afhankelijk van het credential kan een uitgever het bijwerken, vervangen of intrekken. Vraag het de uitgever als u een correctie of een nieuw credential nodig hebt.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -8455,7 +8455,7 @@
         },
         {
             "original": "Start with an actual credential and interaction, and use the questions in",
-            "translation": "Begin met een daadwerkelijke credential en interactie en gebruik de vragen uit",
+            "translation": "Begin met een daadwerkelijk credential en interactie en gebruik de vragen uit",
             "html": false,
             "fragment": false,
             "groups": [
@@ -9989,7 +9989,7 @@
         },
         {
             "original": "The issuer needs to make a credential available, and the wallet needs to request or receive it. The parties may need to establish which credential is being issued and whether the intended recipient is eligible to receive it.",
-            "translation": "De uitgever moet een credential beschikbaar stellen en de wallet moet die opvragen of ontvangen. De partijen moeten mogelijk vaststellen welke credential wordt uitgegeven en of de beoogde ontvanger die mag ontvangen.",
+            "translation": "De uitgever moet een credential beschikbaar stellen en de wallet moet dat opvragen of ontvangen. De partijen moeten mogelijk vaststellen welk credential wordt uitgegeven en of de beoogde ontvanger het mag ontvangen.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -10320,7 +10320,7 @@
         },
         {
             "original": "The specification says every UNTP passport is issued as a W3C verifiable credential. The product information and the credential that carries it serve different purposes: one describes the product, while the other supports checking who issued the information and whether it has been altered.",
-            "translation": "De specificatie zegt dat elk UNTP-paspoort wordt uitgegeven als een verifieerbare credential volgens W3C. De productinformatie en de credential die de informatie bevat, dienen verschillende doelen: de ene beschrijft het product, de andere helpt te controleren wie de informatie heeft uitgegeven en of die is gewijzigd.",
+            "translation": "De specificatie zegt dat elk UNTP-paspoort wordt uitgegeven als een verifieerbaar credential volgens W3C. De productinformatie en het credential dat de informatie bevat, dienen verschillende doelen: de ene beschrijft het product, de andere helpt te controleren wie de informatie heeft uitgegeven en of die is gewijzigd.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -12977,7 +12977,7 @@
         },
         {
             "original": "You may be able to use the same credential with more than one service. What can be reused, and what you need to share, depends on the credential and the service. Selective disclosure can limit the information presented when it is supported; it is not a property of every wallet interaction.",
-            "translation": "Mogelijk kunt u dezelfde credential bij meerdere diensten gebruiken. Wat u kunt hergebruiken en welke gegevens u moet delen, hangt af van de credential en de dienst. Selectief gegevens delen kan de gedeelde informatie beperken als die mogelijkheid wordt ondersteund; niet elke uitwisseling met een wallet biedt dit.",
+            "translation": "Mogelijk kunt u hetzelfde credential bij meerdere diensten gebruiken. Wat u kunt hergebruiken en welke gegevens u moet delen, hangt af van het credential en de dienst. Selectief gegevens delen kan de gedeelde informatie beperken als die mogelijkheid wordt ondersteund; niet elke uitwisseling met een wallet biedt dit.",
             "html": false,
             "fragment": false,
             "groups": [
@@ -13381,7 +13381,7 @@
         },
         {
             "original": "creates the credential. You receive and manage it as the",
-            "translation": "maakt de credential aan. U ontvangt en beheert die als",
+            "translation": "maakt het credential aan. U ontvangt en beheert dat als",
             "html": false,
             "fragment": true,
             "groups": [
