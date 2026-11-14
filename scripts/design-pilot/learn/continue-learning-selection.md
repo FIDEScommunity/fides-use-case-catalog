@@ -11,6 +11,13 @@ Guideline (not absolute): at most three links to other articles ("Learn more") a
 3. **Protocol and format filters in the two Technology articles sit in the running text**, next to the term they explain, not in Continue learning (no extra overlap there). Only filters the catalogs support are linked (see "Technology filter links" below).
 4. **Formats hub (`formats-and-protocols`) is a Learn link wherever an article talks about formats or protocols** and the link fits in the three: restored on the relying party, what is a credential, accepting information from a wallet and issuing credentials (fourth link). Trust and interoperability links to Trust service providers and trust frameworks.
 
+## Empty catalog filters: editorial rule, no automation (decision 14 November 2026)
+
+- **No mechanism in tiles** that hides or removes a filter link when it returns 0 results. The rule stays editorial: a filter that returns no results is never linked (see decision 2 above).
+- The check is `tests/learn-filter-links-checks.cjs` (every filter link must return more than 0 results and show its chip). It stays the only automated control; it is not extended here.
+- **Why a re-check is needed:** results depend on catalog data, which can change between now and the next staging update. The counts above are a snapshot of 14 November 2026.
+- **Before every staging update:** run the check again and replace or remove any link that now returns 0 results. The step is in `staging/HANDOVER.md` (section "Learn repair round", item "Before the next staging update"); that is the only checklist, do not copy it elsewhere.
+
 ## Repair round 14 November 2026 (before → after)
 
 | Article | Before (Learn more) | After (Learn more) | Catalogs | Reason |

@@ -23,6 +23,10 @@ No sentence in the class "other" remains on these routes.
 - Glossary definitions come from the glossary data, which is a separate Dutch round (decision: glossary stays English).
 - Catalogue titles are the own titles of use case, credential, organisation and wallet records. They are catalogue data, not Learn content.
 
-## How to resolve later
+## Decision of 14 November 2026
+- The English glossary definitions and catalogue titles listed above **stay for now**. The glossary translation round is **parked** (no date). No catalogue records are translated in this task; the route checks keep reporting these sentences as known.
+- Technical names (SD-JWT VC, mdoc, ISO mDoc) are not translated; see `nl-terminology.md`.
+
+## How to resolve later (parked)
 - Glossary definitions: a glossary translation round (rows in TranslatePress for the definitions, or the glossary i18n data in `tests/glossary-i18n-data.php`).
 - Catalogue titles: give the records their own Dutch titles in the catalogue (or translate the record title rows); then the route check passes without changes.

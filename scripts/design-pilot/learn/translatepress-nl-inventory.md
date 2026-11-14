@@ -141,7 +141,7 @@ Not in this inventory: the EUDI/EBW articles, Business wallets: where to start, 
 
 ## Glossary terms used by the first route
 
-Wallet, Credential, Verifiable Credential, Credential Type, vct, Credential Format, Holder, Issuer, Relying Party, Verifier, Credential Status, Selective Disclosure, Electronic Attestation of Attributes (EAA), Qualified Electronic Attestation of Attributes (QEAA), European Digital Identity Wallet, European Business Wallet. All ids are from glossary 1.12.0/1.12.1. The popup label is a string in the page; the definition is data and is English only. Decide before translating: leave definitions English with a Dutch note on the page, or add Dutch definitions to the glossary data (a data and plugin change, outside Learn).
+Wallet, Credential, Verifiable Credential, Credential Type, vct, Credential Format, Holder, Issuer, Relying Party, Verifier, Credential Status, Selective Disclosure, Electronic Attestation of Attributes (EAA), Qualified Electronic Attestation of Attributes (QEAA), European Digital Identity Wallet, European Business Wallet. All ids are from glossary 1.12.0/1.12.1. The popup label is a string in the page; the definition is data and is English only. Decision of 14 November 2026: definitions stay English for now and the glossary translation round is parked (see `nl-known-english-remains.md`); the alternative, Dutch definitions in the glossary data, is a data and plugin change outside Learn.
 
 ## Checks after translating
 

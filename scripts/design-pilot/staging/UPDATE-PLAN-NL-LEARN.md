@@ -452,4 +452,5 @@ pages are published, run `LEARN_DRY_RUN=1` and read `skipped-edited` / `skipped-
 
 - Seed: seven Learn pages (`the-relying-party`, `what-is-a-credential`, `accepting-information-from-a-wallet`, `issuing-credentials-for-wallets`, `trust-and-interoperability`, `how-do-wallets-and-services-exchange-information`, `credential-formats-and-interoperability`); dry run first, nothing skipped locally, a page edited on staging is `skipped-edited` (add the links by hand), never `LEARN_FORCE`.
 - Dutch: six new rows (transfer file 1454 -> 1458 entries); run `status`, open the changed Technology articles once under `/nl/`, then `import-apply`. Status add 0 / differs 0 locally.
+- Before the next staging update: re-check the filter links (`tests/learn-filter-links-checks.cjs`), see the checklist in `staging/HANDOVER.md` (section "Learn repair round"). English glossary definitions and catalog titles on `/nl/` are known and parked (`learn/nl-known-english-remains.md`).
 - Details: `learn/continue-learning-selection.md`, `staging/HANDOVER.md` (section "Learn repair round"). No new staging package was built; tiles stays 1.13.55.
