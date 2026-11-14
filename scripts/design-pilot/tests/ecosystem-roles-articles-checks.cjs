@@ -148,7 +148,11 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     for (const [p, slug] of Object.entries(BACK)) {
       await open(page, `${L}/${p}/`);
       const n = await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href$="/topics/ecosystem-roles/${slug}/"]`).count();
-      check(`${p.split("/").pop()} @${width}: one link to ${slug}`, n === 1, n);
+      // 14 November 2026: "Accepting information from a wallet" defines the relying party in its own text and leads to the Formats hub instead of the
+      // role page (learn/continue-learning-selection.md); the role page links back to it, so the other direction stays.
+      const expected = p.endsWith("accepting-information-from-a-wallet") ? 0 : 1;
+      check(`${p.split("/").pop()} @${width}: ${expected} link(s) to ${slug}`, n === expected, n);
+      if (expected === 0) check(`${p.split("/").pop()} @${width}: links to the Formats hub instead`, (await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href$="/topics/the-big-picture/formats-and-protocols/"]`).count()) >= 1);
       check(`${p.split("/").pop()} @${width}: no horizontal overflow`, (await overflow(page)) <= 0);
     }
     await context.close();

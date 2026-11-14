@@ -1,19 +1,62 @@
 # Continue learning: editorial selection (Paper 24.21 / 24.22)
 
-Rule: at most three links to other articles ("Learn more") and two to catalogs ("Explore in the catalogs"). Exception: country articles show three `?country=` catalog filters (use cases, organisations, personal wallets). A destination that equals the practice-band call to action is left out. Hub links stay only where the reader needs them. Empty groups are not shown. External links (for example the EU trusted list) stay in Sources. Status 13 November 2026. All 34 articles are applied in `learn/content/*.html`.
+Guideline (not absolute): at most three links to other articles ("Learn more") and two to catalogs ("Explore in the catalogs"). Exceptions: two articles with a fourth Learn link at the client's request; country articles show three `?country=` catalog filters (use cases, organisations, personal wallets). A destination that equals the practice-band call to action is left out. Hub links stay only where the reader needs them. Empty groups are not shown. External links (for example the EU trusted list) stay in Sources. Status 14 November 2026 (repair round, see below). All 34 articles are applied in `learn/content/*.html`. The tables further down show the 13 November selection; where the repair round changed an article, the "Repair round" table is authoritative.
 
-## Decisions that need an editorial choice
+## Decisions (all closed on 14 November 2026)
 
-The selection below is a proposal that is already seeded. These choices are open; the list is also in `learn/continue-learning-pending.json` (informational, the tests only report it).
+`learn/continue-learning-pending.json` is now empty (`{}`): there are no open selection decisions. Link rules chosen by the client:
 
-- `ecosystem-roles/wallet-providers-and-other-service-providers`: Browse organisations is as relevant as the two wallet catalogs. Kept: personal and business wallets.
-- `for-governments/digital-wallets-and-public-services`: Browse organisations versus Browse personal wallets: both fit. Kept: use cases and personal wallets.
-- `for-governments/accepting-information-from-wallets-in-public-services`: The United States example (mobile driving licences) is as relevant as the business article on accepting. Kept: the business article.
-- `technology/how-do-wallets-and-services-exchange-information`: OpenID4VCI (issuance) and OpenID4VP (presentation) filters are equally relevant. Kept: the OpenID4VCI filter next to the general link.
-- `technology/credential-formats-and-interoperability`: SD-JWT VC and ISO mDoc filters are equally relevant (credential types, wallets). Kept: SD-JWT VC credential types.
-- `around-the-world/*`: Country articles show three country filters (use cases, organisations, personal wallets) instead of two. Decide whether countries with few records should link a filter that may return an almost empty list.
-- `ecosystem-roles/the-relying-party`: Formats and protocols was dropped as a hub; add it back if the article should lead readers to the protocol explanation.
-- `for-businesses/accepting-information-from-a-wallet`, `for-businesses/issuing-credentials-for-wallets`, `the-big-picture/what-is-a-credential`: these no longer link to "Formats and protocols: what do they do?" (it is part of the 3 Learn links only where it is the next step). Only "What is a digital wallet?" links to it (once, in the body). Decide whether one of them should lead readers to Formats.
+1. **3 + 2 is a guideline, not an absolute rule.** At most three Learn links and two catalog links is the default. Two articles show a fourth Learn link because the client asked for it explicitly (`for-businesses/issuing-credentials-for-wallets`, `the-big-picture/trust-and-interoperability`; listed in `FOUR_LEARN_LINKS` in `tests/learn-article-template-checks.cjs`). A destination that equals the practice-band call to action stays out.
+2. **Country articles keep three `?country=XX` filters** (use cases, organisations, personal wallets), but only filters that return results on the current catalog data (checked 14 November 2026: all 21 links return 1 to 179 results and show their chip; Honduras and Ethiopia are the smallest with 1 to 2 results). A filter that returns no results is never linked: business wallets for Honduras and Ethiopia return 0 and are not linked. There is **no automatic hiding** of an empty filter in the Learn template (the lists are plain editable links); the editorial rule is: if a filter link returns 0 results, remove it or replace it with another relevant link in WordPress. `tests/learn-filter-links-checks.cjs` verifies every filter link on the country and Technology articles (results > 0 and the chip names the filter) and fails when data changes make a link empty.
+3. **Protocol and format filters in the two Technology articles sit in the running text**, next to the term they explain, not in Continue learning (no extra overlap there). Only filters the catalogs support are linked (see "Technology filter links" below).
+4. **Formats hub (`formats-and-protocols`) is a Learn link wherever an article talks about formats or protocols** and the link fits in the three: restored on the relying party, what is a credential, accepting information from a wallet and issuing credentials (fourth link). Trust and interoperability links to Trust service providers and trust frameworks.
+
+## Repair round 14 November 2026 (before → after)
+
+| Article | Before (Learn more) | After (Learn more) | Catalogs | Reason |
+|---|---|---|---|---|
+| `ecosystem-roles/the-relying-party` | Accepting information from a wallet; Trust and interoperability | + Formats and protocols: what do they do? (third link) | unchanged: Explore use cases | The article discusses technical checks and requests; the Formats hub fits within three links and displaces nothing. |
+| `the-big-picture/what-is-a-credential` | What is a digital wallet?; How credentials connect…; Accepting information from a wallet | What is a digital wallet?; How credentials connect…; **Formats and protocols: what do they do?** | unchanged: Explore use cases | The article has a section "Where do schemas and formats fit?". Displaced link: Accepting information from a wallet (practice article, one step further; the practice band already offers Browse credential types). |
+| `for-businesses/accepting-information-from-a-wallet` | What should a service check…; The relying party; Receive information from wallets | What should a service check…; **Formats and protocols: what do they do?**; Receive information from wallets | unchanged: Explore use cases; Browse credential types | The article defines the relying party in its own text, so the role page is the weaker link. Displaced link: The relying party (the role page still links to this article). |
+| `for-businesses/issuing-credentials-for-wallets` | What is a credential?; The issuer; Accepting information from a wallet | same three **+ Formats and protocols: what do they do?** (fourth, explicit client request) | unchanged | Client choice 3. Documented exception to the guideline. |
+| `the-big-picture/trust-and-interoperability` | Formats and protocols; Trust frameworks and registries; What is a credential? | same three **+ Trust service providers and trust frameworks** (fourth, explicit client request) | unchanged | Client choice 4. Documented exception to the guideline; the TSP article was no longer reachable from here. |
+| `technology/how-do-wallets-and-services-exchange-information` | Catalogs: Browse personal wallets; personal wallets that report OpenID4VCI | Learn links unchanged. Catalogs: Browse personal wallets; **Browse business wallets** | filters moved into the text | OpenID4VCI and OpenID4VP filters (personal and business wallets) are linked once each in the paragraph that names the protocol; the rail keeps two general links so the same filter is not offered twice. |
+| `technology/credential-formats-and-interoperability` | Catalogs: Browse credential types; credential types that report SD-JWT VC | Learn links unchanged. Catalogs: Browse credential types; **Browse personal wallets** | filters moved into the text | SD-JWT VC and mdoc filters (credential types and personal wallets) in a new paragraph under "Comparing products"; the rail keeps two general links. |
+| `ecosystem-roles/wallet-providers-and-other-service-providers` | unchanged | unchanged (personal and business wallets) | – | Decision: the article is about wallet providers, so the two wallet catalogs fit best; organisations remain reachable through the organisation catalog. |
+| `for-governments/digital-wallets-and-public-services` | unchanged | unchanged (use cases and personal wallets) | – | Decision: wallets are what a public body wants to see; organisations less so. |
+| `for-governments/accepting-information-from-wallets-in-public-services` | unchanged | unchanged (business article kept; the United States example stays reachable from Around the world) | – | Decision: the business article is the stronger next step for readers on this route. |
+| `around-the-world/*` (7 countries) | three country filters | unchanged | see below | All filters return results; see "Country filters". |
+
+### Country filters (14 November 2026, pilot catalogs)
+
+| Country | Use cases | Organisations | Personal wallets | Kept / replaced / removed |
+|---|---|---|---|---|
+| India `IN` | 11 | 179 | 5 | all kept |
+| Canada `CA` | 4 | 19 | 2 | all kept |
+| United States `US` | 7 | 51 | 5 | all kept |
+| Honduras `HN` | 1 | 1 | 1 | all kept (small but not empty) |
+| Ethiopia `ET` | 1 | 2 | 1 | all kept (small but not empty) |
+| The Netherlands `NL` | 15 | 83 | 11 | all kept |
+| Germany `DE` | 6 | 41 | 5 | all kept |
+
+The UNTP article has no country filters and none were added. Each link shows its chip ("Country: …") on the catalog page.
+
+### Technology filter links (supported parameters, checked 14 November 2026)
+
+Supported by the catalogs: `credentials/?format=sd_jwt_vc|mdoc`, `personal-wallets/` and `business-wallets/` with `?format=sd_jwt_vc|mdoc`, `?issuance=OpenID4VCI`, `?presentation=OpenID4VP`. There is no filter for protocols other than these two; `?protocol=` is not a parameter (it shows the unfiltered list and no chip) and is not used. `jwt_vc_json` and `ldp_vc` return no personal or business wallets and are not named in the articles, so they are not linked.
+
+| Article | Link (text) | URL | Chip | Results |
+|---|---|---|---|---|
+| exchange (OpenID4VCI paragraph) | personal wallets | `personal-wallets/?issuance=OpenID4VCI` | Issuance protocol: OpenID4VCI | 41 |
+| exchange (OpenID4VCI paragraph) | business wallets | `business-wallets/?issuance=OpenID4VCI` | Issuance protocol: OpenID4VCI | 37 |
+| exchange (OpenID4VP paragraph) | personal wallets | `personal-wallets/?presentation=OpenID4VP` | Presentation protocol: OpenID4VP | 42 |
+| exchange (OpenID4VP paragraph) | business wallets | `business-wallets/?presentation=OpenID4VP` | Presentation protocol: OpenID4VP | 37 |
+| formats (new paragraph) | SD-JWT VC | `credentials/?format=sd_jwt_vc` | Format: SD-JWT VC | 68 |
+| formats | mdoc | `credentials/?format=mdoc` | Format: ISO mDoc | 22 |
+| formats | SD-JWT VC | `personal-wallets/?format=sd_jwt_vc` | VC format: SD-JWT VC | 36 |
+| formats | mdoc | `personal-wallets/?format=mdoc` | VC format: ISO mDoc | 33 |
+
+Counts are the 14 November 2026 values on the pilot data; the test only requires more than 0.
 
 ## Per article (before → after)
 

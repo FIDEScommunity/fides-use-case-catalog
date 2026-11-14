@@ -393,3 +393,14 @@ The request route (Services -> enquiry/request form) was checked up to the form,
 - **Seed:** 34 Learn articles change (Continue learning reduced to 3 + 2, country articles 3 + 3 country filters; `what-is-a-digital-wallet` also gets one Formats paragraph). Local dry run: 34 would-updated, 24 unchanged, 0 skipped. A staging page that was edited by hand reports `skipped-edited` and keeps its own links; the layout still works. Run the seed dry run first; never `LEARN_FORCE`.
 - **One new Dutch row:** "For what these formats and protocols do, see" (route `learn/topics/the-big-picture/what-is-a-digital-wallet`), exported to `learn/nl-translations.json` (1450 entries; four stale rows of removed link texts left the file). Open the NL page once on staging, then `import-apply`.
 - Editors keep managing the links in the page editor (see `learn/README.md`). Open editorial decisions: `learn/continue-learning-selection.md` and `learn/continue-learning-pending.json`.
+
+## Learn repair round: Continue learning links and filter links (14 November 2026, local only)
+
+- **Seed:** seven Learn pages change (`the-relying-party`, `what-is-a-credential`, `accepting-information-from-a-wallet`, `issuing-credentials-for-wallets`, `trust-and-interoperability`, `how-do-wallets-and-services-exchange-information`, `credential-formats-and-interoperability`). Local dry run: 7 would-updated, 51 unchanged, no `skipped-edited`, no `skipped-unmarked`. On staging, run `LEARN_DRY_RUN=1` first. A page that was edited by hand there is skipped and keeps the old links: add the new links by hand (Formats link on the relying party, what is a credential, accepting and issuing; the TSP link on trust and interoperability; the filter links in the text of the two Technology articles). Never `LEARN_FORCE`. After the seed, check that links keep their bold labels (countries, "SD-JWT VC").
+- **Dutch:** six new rows in `learn/nl-translations.json` (1458 entries). Open the two Technology articles once under `/nl/`, run `status` and `import-apply` (fills empty rows only).
+- **Links:** `learn/continue-learning-selection.md` has the decisions, the country filter counts and the supported catalog filter parameters. The pending list is empty. An empty filter is never linked; the template does not hide an empty filter, so an editor removes or replaces a link that returns 0 results. The new test `tests/learn-filter-links-checks.cjs` checks every filter link.
+- **No new staging package was built.** Tiles is unchanged (1.13.55).
+
+## Explore by theme and sector (14 November 2026, local only)
+
+The local pages `themes/` and `sectors/` are **not yet in the package** (see `explore/README.md`).

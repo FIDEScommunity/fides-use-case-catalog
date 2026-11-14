@@ -128,13 +128,17 @@ async function qtsp(page, tag, prefix) {
       await open(page, `${prefix}${LEARN}/topics/for-governments/the-eudi-wallet-and-national-implementation/`);
       const items = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3:has-text('Learn more'), :is(.fides-learn-article__body, .fides-learn-continue) h3:has-text('Meer uitleg')").first().evaluate((h) => { let ul = h.nextElementSibling; while (ul && ul.tagName !== "UL") ul = ul.nextElementSibling; return [...ul.querySelectorAll("li a")].map((a) => ({ t: a.textContent.trim(), h: new URL(a.href).pathname })); });
       check(`${tag}: Learn more has at most four links (${items.length})`, items.length > 0 && items.length <= 4, items.length);
-      const w = items.find((x) => x.h === `${prefix}${LEARN}/topics/around-the-world/`);
-      check(`${tag}: Learn more links to the international overview as "${title}"`, !!w && w.t === title, JSON.stringify(items));
+      // Since the 3 + 2 selection (13 November 2026, learn/continue-learning-selection.md) this article links to the concrete
+      // country example (The Netherlands) instead of the Around the world hub; the hub stays reachable from the Learn overview and
+      // "Digital wallets and public services". The link must carry the real page title (`title`, the hub name, is only used when the hub is linked).
+      const hub = items.find((x) => x.h === `${prefix}${LEARN}/topics/around-the-world/`);
+      const w = hub || items.find((x) => x.h === `${prefix}${LEARN}/topics/around-the-world/the-netherlands/`);
+      check(`${tag}: Learn more links to a country example or the international overview`, !!w && (hub ? w.t === title : /Netherlands|Nederland/.test(w.t)), JSON.stringify(items));
       if (w) {
-        await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href$="/topics/around-the-world/"]`).first().click();
+        await page.locator(`:is(.fides-learn-article__body, .fides-learn-continue) a[href="${w.h}"]`).first().click();
         await page.waitForLoadState("load");
         const crumb = squash(await page.locator("nav[aria-label=Breadcrumb], nav[aria-label=Kruimelpad], nav.fides-learn-breadcrumb").first().textContent().catch(() => ""));
-        check(`${tag}: link text equals the title of the page it opens (breadcrumb "${crumb.slice(-30)}")`, crumb.endsWith(title), crumb);
+        check(`${tag}: link text equals the title of the page it opens (breadcrumb "${crumb.slice(-30)}")`, crumb.endsWith(w.t), crumb);
       }
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
       // What is a digital wallet?: at most four Learn more links, includes the new Technology article.

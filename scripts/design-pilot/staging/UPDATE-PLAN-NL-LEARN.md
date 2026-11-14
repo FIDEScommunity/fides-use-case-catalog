@@ -447,3 +447,9 @@ pages are published, run `LEARN_DRY_RUN=1` and read `skipped-edited` / `skipped-
 - Seed: 34 article pages change (Continue learning to 3 + 2; `what-is-a-digital-wallet` gets one extra paragraph with the Formats link). Pages edited on staging are skipped (`skipped-edited`), a known and accepted risk: the page keeps working with its old list (and, for the wallet page, without the Formats paragraph). Run the dry run first.
 - One Dutch row is added ("For what these formats and protocols do, see"); in `learn/nl-translations.json` (1450 entries). Run `status`, open the NL wallet page once, then `import-apply`. Internal links in Dutch stay under `/nl/`.
 - A new staging package is needed; none was built here.
+
+## Learn repair round (14 November 2026, local only)
+
+- Seed: seven Learn pages (`the-relying-party`, `what-is-a-credential`, `accepting-information-from-a-wallet`, `issuing-credentials-for-wallets`, `trust-and-interoperability`, `how-do-wallets-and-services-exchange-information`, `credential-formats-and-interoperability`); dry run first, nothing skipped locally, a page edited on staging is `skipped-edited` (add the links by hand), never `LEARN_FORCE`.
+- Dutch: six new rows (transfer file 1454 -> 1458 entries); run `status`, open the changed Technology articles once under `/nl/`, then `import-apply`. Status add 0 / differs 0 locally.
+- Details: `learn/continue-learning-selection.md`, `staging/HANDOVER.md` (section "Learn repair round"). No new staging package was built; tiles stays 1.13.55.

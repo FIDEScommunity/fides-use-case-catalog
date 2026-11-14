@@ -7,7 +7,9 @@
  * sections, ids or tab stops), contents jumps (focus on the heading, aria-current, scroll offset), keyboard order and
  * the collapsible contents on mobile, heading hierarchy, no overflow, practice band under the article, links under /nl/.
  * Sample pass: every Learn article from learn/manifest.json (EN and NL, both widths) gets the structural checks and the
- * "at most 3 Learn more + 2 catalogs" rule (country articles: up to 3 catalog links). Articles whose selection
+ * "at most 3 Learn more + 2 catalogs" rule (country articles: up to 3 catalog links; two articles may show a fourth
+ * Learn link, see FOUR_LEARN_LINKS). Every filter link on country and Technology articles is checked for results in
+ * tests/learn-filter-links-checks.cjs. Articles whose selection
  * needs an editorial decision are listed in learn/continue-learning-pending.json; the list is informational (reported,
  * never failing) and may only name existing articles.
  *
@@ -35,6 +37,8 @@ const DETAILED = [
 const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "manifest.json"), "utf8")).pages;
 const ARTICLES = manifest.filter((p) => p.kind === "article" && p.content).map((p) => p.path);
 const PENDING = JSON.parse(fs.readFileSync(path.join(ROOT, "continue-learning-pending.json"), "utf8"));
+// Documented exceptions to the 3 Learn more guideline: a fourth link the client asked for explicitly.
+const FOUR_LEARN_LINKS = ["for-businesses/issuing-credentials-for-wallets", "the-big-picture/trust-and-interoperability"];
 const slugOf = (p) => p.split("/").slice(1).join("/");
 
 let failures = 0;
@@ -160,8 +164,10 @@ function structure(tag, s, width, lang, strictCounts, pendingKey) {
   const isCountry = pendingKey && /^around-the-world\//.test(pendingKey) && pendingKey !== "around-the-world/un-transparency-protocol";
   const catLinks = s.groups.filter((g) => !/^(Learn more|Meer uitleg)$/i.test(g.label.trim())).flatMap((g) => g.links);
   const countryOnly = cat <= 2 || catLinks.every((l) => /[?&]country=/.test(l.href));
-  const over = lm > 3 || cat > (isCountry ? 3 : 2);
-  check(`${tag}: at most 3 Learn more and ${isCountry ? 3 : 2} catalog links (${lm}+${cat})`, !over && countryOnly, `${lm}+${cat}`);
+  // Guideline 3 + 2; the client asked explicitly for one extra Learn link on two articles (learn/continue-learning-selection.md).
+  const maxLearn = pendingKey && FOUR_LEARN_LINKS.includes(pendingKey) ? 4 : 3;
+  const over = lm > maxLearn || cat > (isCountry ? 3 : 2);
+  check(`${tag}: at most ${maxLearn} Learn more and ${isCountry ? 3 : 2} catalog links (${lm}+${cat})`, !over && countryOnly, `${lm}+${cat}`);
   if (pendingKey && Object.prototype.hasOwnProperty.call(PENDING, pendingKey)) note(`editorial decision open: ${pendingKey} (${lm}+${cat})`);
   if (lang === "nl") {
     const bad = s.asideLinks.filter((h) => new URL(h).origin === ORIGIN && /\/fides-design-pilot\//.test(h) && !/\/nl\/fides-design-pilot\//.test(h) && !/\/wp-content\//.test(h));

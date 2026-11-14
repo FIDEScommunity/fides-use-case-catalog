@@ -199,14 +199,19 @@ const ringVisible = (r) => r.found && r.visible && r.outlineStyle !== "none" && 
     }
 
     // 6. Filter links used by Technology and Around the world: chip and count > 0 on the catalog.
-    // `unlinked`: Continue learning is limited to two catalog links, so the page keeps the SD-JWT VC credential filter only
-    // (editorial decision pending, learn/continue-learning-selection.md). The filter itself is still checked on the catalog.
+    // The Technology filters sit in the running text (all linked); the full per-article check is
+    // tests/learn-filter-links-checks.cjs. `unlinked` marks a filter that is checked on the catalog only.
+    const T1 = "technology/credential-formats-and-interoperability";
+    const T2 = "technology/how-do-wallets-and-services-exchange-information";
     const filters = [
-      { from: "technology/credential-formats-and-interoperability", href: "/credentials/?format=sd_jwt_vc", chip: /Format: SD-JWT VC/i },
-      { from: "technology/credential-formats-and-interoperability", href: "/credentials/?format=mdoc", chip: /Format: ISO mDoc/i, unlinked: true },
-      { from: "technology/credential-formats-and-interoperability", href: "/personal-wallets/?format=sd_jwt_vc", chip: /VC format: SD-JWT VC/i, unlinked: true },
-      { from: "technology/how-do-wallets-and-services-exchange-information", href: "/personal-wallets/?issuance=OpenID4VCI", chip: /Issuance protocol: OpenID4VCI/i },
-      { from: "technology/how-do-wallets-and-services-exchange-information", href: "/personal-wallets/?presentation=OpenID4VP", chip: /Presentation protocol: OpenID4VP/i, unlinked: true },
+      { from: T1, href: "/credentials/?format=sd_jwt_vc", chip: /Format: SD-JWT VC/i },
+      { from: T1, href: "/credentials/?format=mdoc", chip: /Format: ISO mDoc/i },
+      { from: T1, href: "/personal-wallets/?format=sd_jwt_vc", chip: /VC format: SD-JWT VC/i },
+      { from: T1, href: "/personal-wallets/?format=mdoc", chip: /VC format: ISO mDoc/i },
+      { from: T2, href: "/personal-wallets/?issuance=OpenID4VCI", chip: /Issuance protocol: OpenID4VCI/i },
+      { from: T2, href: "/business-wallets/?issuance=OpenID4VCI", chip: /Issuance protocol: OpenID4VCI/i },
+      { from: T2, href: "/personal-wallets/?presentation=OpenID4VP", chip: /Presentation protocol: OpenID4VP/i },
+      { from: T2, href: "/business-wallets/?presentation=OpenID4VP", chip: /Presentation protocol: OpenID4VP/i },
       { from: "around-the-world/the-netherlands", href: "/overview/?country=NL", chip: /Country: Netherlands/i },
       { from: "around-the-world/the-netherlands", href: "/organizations/?country=NL", chip: /Country: Netherlands/i },
       { from: "around-the-world/the-netherlands", href: "/personal-wallets/?country=NL", chip: /Country: Netherlands/i },

@@ -5,13 +5,13 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 1096,
+        "learn": 1100,
         "services": 61,
         "shared": 109,
         "start-receive": 35,
         "training": 153
     },
-    "total": 1454,
+    "total": 1458,
     "entries": [
         {
             "original": "(OOTS) and for sharing data with private service providers on the basis of consent. ICTU says GBO is not meant to become a new, separate system but is to be anchored in existing national agreement frameworks.",
@@ -105,6 +105,19 @@
             "group": "learn"
         },
         {
+            "original": ", and personal wallets that report",
+            "translation": ", en persoonlijke wallets met vermelding van",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/credential-formats-and-interoperability"
+            ],
+            "group": "learn"
+        },
+        {
             "original": ", is an electronic attestation that allows attributes to be authenticated. It is a term used in the eIDAS framework.",
             "translation": ", een elektronische attestatie waarmee attributen kunnen worden geauthenticeerd. Het is een term uit het eIDAS-kader.",
             "html": false,
@@ -144,8 +157,34 @@
             "group": "learn"
         },
         {
+            "original": ", is one specification for issuing credentials. It describes interactions between an issuer and a wallet, and the OpenID Foundation has published version 1.0 as a final specification (September 2025). An implementation must also support the credential format and the other requirements of the particular interaction. To see which wallets report OpenID4VCI for issuance, explore the",
+            "translation": "genoemd, is één specificatie voor het uitgeven van credentials. Ze beschrijft de interacties tussen een uitgever en een wallet; de OpenID Foundation heeft versie 1.0 gepubliceerd als definitieve specificatie (september 2025). Een implementatie moet ook het credentialformaat en de overige eisen van de betreffende interactie ondersteunen. Wilt u zien welke wallets OpenID4VCI voor uitgifte vermelden? Bekijk dan de",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
+            ],
+            "group": "learn"
+        },
+        {
             "original": ", is one specification for requesting and presenting credentials; version 1.0 is also published as a final specification (July 2025). Other protocols and interaction methods also exist. Which one is used depends on the ecosystem and the products involved.",
             "translation": ", is één specificatie voor het opvragen en tonen van credentials; ook versie 1.0 is gepubliceerd als definitieve specificatie (juli 2025). Er bestaan ook andere protocollen en interactiemethoden. Welke wordt gebruikt, hangt af van het ecosysteem en de betrokken producten.",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": ", is one specification for requesting and presenting credentials; version 1.0 is also published as a final specification (July 2025). Other protocols and interaction methods also exist. Which one is used depends on the ecosystem and the products involved. To see which wallets report OpenID4VP for presentation, explore the",
+            "translation": ", is één specificatie voor het opvragen en tonen van credentials; ook versie 1.0 is gepubliceerd als definitieve specificatie (juli 2025). Er bestaan ook andere protocollen en interactiemethoden. Welke wordt gebruikt, hangt af van het ecosysteem en de betrokken producten. Wilt u zien welke wallets OpenID4VP voor presentatie vermelden? Bekijk dan de",
             "html": false,
             "fragment": true,
             "groups": [
@@ -4247,19 +4286,6 @@
             "group": "learn"
         },
         {
-            "original": "Explore credential types that report",
-            "translation": "Bekijk credentialtypen met vermelding van",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/technology/credential-formats-and-interoperability"
-            ],
-            "group": "learn"
-        },
-        {
             "original": "Explore developments across countries and ecosystems.",
             "translation": "Bekijk ontwikkelingen in verschillende landen en ecosystemen.",
             "html": false,
@@ -4462,19 +4488,6 @@
             "routes": [
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/united-states"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "Explore personal wallets that report",
-            "translation": "Bekijk persoonlijke wallets met vermelding van",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
             ],
             "group": "learn"
         },
@@ -5147,6 +5160,19 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/the-netherlands"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "For the two formats named above, the catalogs show what is reported: credential types that report",
+            "translation": "Voor de twee hierboven genoemde formaten tonen de catalogi wat is gemeld: credentialtypen met vermelding van",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/credential-formats-and-interoperability"
             ],
             "group": "learn"
         },
@@ -13255,6 +13281,25 @@
             "group": "learn"
         },
         {
+            "original": "business wallets",
+            "translation": "business wallets",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/around-the-world",
+                "learn/topics/ecosystem-roles",
+                "learn/topics/for-businesses",
+                "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-governments",
+                "learn/topics/technology",
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "can describe how a credential type is intended to be issued, presented and checked, together with the rules and responsibilities applying to it. The content and authority of a rulebook depend on the ecosystem that uses it.",
             "translation": "kan beschrijven hoe een credentialtype wordt uitgegeven, getoond en gecontroleerd en welke regels en verantwoordelijkheden daarbij gelden. De inhoud en het gezag van zo’n stelsel hangen af van het ecosysteem dat het gebruikt.",
             "html": false,
@@ -13676,19 +13721,6 @@
             "group": "learn"
         },
         {
-            "original": "for issuance",
-            "translation": "voor uitgifte",
-            "html": false,
-            "fragment": true,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
-            ],
-            "group": "learn"
-        },
-        {
             "original": "for that information?",
             "translation": "voor die gegevens?",
             "html": false,
@@ -13754,6 +13786,19 @@
                 "learn/topics/the-big-picture/european-digital-identity-wallet",
                 "learn/topics/the-big-picture/how-credentials-connect",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "in the catalogs.",
+            "translation": "in de catalogi.",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
             ],
             "group": "learn"
         },
@@ -14085,6 +14130,7 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/technology/credential-formats-and-interoperability",
                 "learn/topics/technology/trust-frameworks-and-registries"
             ],
             "group": "learn"
@@ -14112,6 +14158,19 @@
             ],
             "routes": [
                 "learn/topics/ecosystem-roles/the-holder"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "or the",
+            "translation": "of de",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
             ],
             "group": "learn"
         },
@@ -14168,7 +14227,8 @@
                 "learn/topics/around-the-world",
                 "learn/topics/ecosystem-roles",
                 "learn/topics/for-governments",
-                "learn/topics/technology"
+                "learn/topics/technology",
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
             ],
             "group": "learn"
         },
