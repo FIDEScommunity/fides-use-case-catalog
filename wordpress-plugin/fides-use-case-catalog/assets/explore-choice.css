@@ -1,0 +1,472 @@
+/*
+ * Explore by theme / sector (Paper "Explore · Themes" 12690/2501 and "Explore · Sectors" 9650/2501, page 03).
+ * Values come from the Paper artboards (get_jsx): H1 36/42, lead 18/28, choice 16/24 600 with 10/18 padding and a
+ * #AEBACA border, chosen choice #0848A3 with white text, hero title 48/52 and intro 19/29, 448×252 image slot,
+ * "On this page" bar with 14px block padding, card 22/28 with a 2px brand top line, relation heading 26/32.
+ * Mobile values step down to the shared design-system sizes. Colours use the design-system tokens.
+ */
+
+.fides-ds .fides-explore__page {
+  padding-top: var(--fides-ds-space-5, 24px);
+  padding-bottom: var(--fides-ds-space-6, 32px);
+}
+
+.fides-ds .fides-explore__head {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--fides-ds-line, #e4e4e4);
+}
+
+.fides-ds .fides-explore__crumb {
+  margin: 0;
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.fides-ds .fides-explore__title {
+  margin: 0;
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 30px;
+  line-height: 36px;
+  font-weight: 700;
+}
+
+.fides-ds .fides-explore__lead {
+  margin: 0;
+  max-width: 720px;
+  color: var(--fides-ds-body, #2a2a2a);
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.fides-ds .fides-explore__notice {
+  margin: 0;
+  padding: 12px 16px;
+  border-left: 3px solid var(--fides-ds-error, #a12622);
+  background: var(--fides-ds-soft, #f2f7ff);
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.fides-ds .fides-explore__choices-label {
+  margin: 0 0 8px;
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.fides-ds .fides-explore__choice-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fides-ds .fides-explore__choice-list > li {
+  margin: 0;
+  padding: 0;
+}
+
+.fides-ds .fides-explore__choice {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  box-sizing: border-box;
+  border: 1px solid #aebaca;
+  background: var(--fides-ds-ground, #ffffff);
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fides-ds .fides-explore__choice:hover {
+  background: var(--fides-ds-soft, #f2f7ff);
+  border-color: var(--fides-ds-link, #0848a3);
+}
+
+.fides-ds .fides-explore__choice.is-current,
+.fides-ds .fides-explore__choice[aria-current="true"] {
+  border-color: var(--fides-ds-link, #0848a3);
+  background: var(--fides-ds-link, #0848a3);
+  color: #ffffff;
+}
+
+/* Themes: three columns like the Paper chips (32% wide), one column on a phone. */
+.fides-ds .fides-explore__choice-list--theme {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.fides-ds .fides-explore__choice-list--theme .fides-explore__choice {
+  height: 100%;
+}
+
+.fides-ds .fides-explore__start {
+  margin-top: 18px;
+  padding: 28px 24px;
+  border-left: 3px solid var(--fides-ds-brand, #0a6ef3);
+  background: var(--fides-ds-soft, #f2f7ff);
+}
+
+.fides-ds .fides-explore__start-title {
+  margin: 0 0 12px;
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+.fides-ds .fides-explore__start p {
+  margin: 0;
+  color: var(--fides-ds-body, #2a2a2a);
+  font-size: 18px;
+  line-height: 28px;
+}
+
+/* Chosen overview */
+.fides-ds .fides-explore__hero {
+  display: grid;
+  gap: 24px;
+  align-items: center;
+  padding-top: 24px;
+}
+
+.fides-ds .fides-explore__selected-title {
+  margin: 0 0 16px;
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 36px;
+  line-height: 40px;
+  font-weight: 700;
+}
+
+.fides-ds .fides-explore__selected-title:focus-visible,
+.fides-ds .fides-explore__start-title:focus-visible {
+  outline: 3px solid var(--fides-ds-link, #0848a3);
+  outline-offset: 4px;
+}
+
+.fides-ds .fides-explore__intro {
+  max-width: 720px;
+  color: var(--fides-ds-body, #2a2a2a);
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.fides-ds .fides-explore__intro > * {
+  margin: 0 0 12px;
+}
+
+.fides-ds .fides-explore__intro > :last-child {
+  margin-bottom: 0;
+}
+
+.fides-ds .fides-explore__intro a {
+  color: var(--fides-ds-link, #0848a3);
+  font-weight: 600;
+}
+
+.fides-ds .fides-explore__figure {
+  margin: 0;
+  width: 100%;
+  background: var(--fides-ds-soft, #f2f7ff);
+  border: 1px solid var(--fides-ds-section-divider, #8fa8c6);
+}
+
+.fides-ds .fides-explore__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 252px;
+  object-fit: cover;
+}
+
+.fides-ds .fides-explore__onpage {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 24px;
+  margin-top: 24px;
+  padding: 6px 0;
+  border-block: 1px solid var(--fides-ds-line, #e4e4e4);
+}
+
+.fides-ds .fides-explore__onpage-label {
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 15px;
+  line-height: 23px;
+  font-weight: 700;
+}
+
+.fides-ds .fides-explore__onpage ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fides-ds .fides-explore__onpage li {
+  margin: 0;
+}
+
+.fides-ds .fides-explore__onpage a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fides-ds .fides-explore__onpage a:hover,
+.fides-ds .fides-explore__list a:hover,
+.fides-ds .fides-explore__card-title a:hover {
+  text-decoration: underline;
+}
+
+.fides-ds .fides-explore__section {
+  scroll-margin-top: 16px;
+  padding-top: 32px;
+}
+
+.fides-ds .fides-explore__section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+}
+
+.fides-ds .fides-explore__h2 {
+  margin: 0;
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 700;
+}
+
+.fides-ds .fides-explore__h2--small {
+  font-size: 22px;
+  line-height: 28px;
+}
+
+.fides-ds .fides-explore__count {
+  margin: 4px 0 0;
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.fides-ds .fides-explore__cards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fides-ds .fides-explore__cards > li {
+  display: flex;
+  margin: 0;
+}
+
+.fides-ds .fides-explore__card {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  width: 100%;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  border-top: 2px solid var(--fides-ds-brand, #0a6ef3);
+  background: var(--fides-ds-soft, #f2f7ff);
+}
+
+.fides-ds .fides-explore__card-meta {
+  margin: 0;
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: 500;
+}
+
+.fides-ds .fides-explore__card-title {
+  margin: 0;
+  font-size: 20px;
+  line-height: 26px;
+  font-weight: 700;
+}
+
+.fides-ds .fides-explore__card-title a {
+  color: var(--fides-ds-link, #0848a3);
+  text-decoration: none;
+}
+
+.fides-ds .fides-explore__card-summary {
+  margin: 0;
+  color: var(--fides-ds-body, #2a2a2a);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.fides-ds .fides-explore__columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 48px;
+  align-items: start;
+}
+
+.fides-ds .fides-explore__list {
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fides-ds .fides-explore__row {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 12px 0;
+  border-top: 1px solid var(--fides-ds-line, #e4e4e4);
+}
+
+.fides-ds .fides-explore__row-name,
+.fides-ds .fides-explore__plain-name {
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+}
+
+.fides-ds .fides-explore__plain-name {
+  color: var(--fides-ds-ink, #0e0e0e);
+}
+
+.fides-ds .fides-explore__row-name a {
+  display: inline-block;
+  min-height: 24px;
+  color: var(--fides-ds-link, #0848a3);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.fides-ds .fides-explore__row-from {
+  color: var(--fides-ds-body, #2a2a2a);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.fides-ds .fides-explore__check {
+  margin-left: 6px;
+}
+
+.fides-ds .fides-explore__more {
+  margin: 4px 0 0;
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.fides-ds .fides-explore__empty {
+  margin-top: 24px;
+  padding: 24px;
+  border-left: 3px solid var(--fides-ds-brand, #0a6ef3);
+  background: var(--fides-ds-soft, #f2f7ff);
+}
+
+.fides-ds .fides-explore__empty-title {
+  margin: 0 0 8px;
+  font-size: 22px;
+  line-height: 30px;
+}
+
+.fides-ds .fides-explore__empty p {
+  margin: 0 0 8px;
+  color: var(--fides-ds-body, #2a2a2a);
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.fides-ds .fides-explore__again {
+  margin: 32px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid var(--fides-ds-line, #e4e4e4);
+  text-align: right;
+}
+
+@media (min-width: 600px) {
+  .fides-ds .fides-explore__choice-list--theme {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fides-ds .fides-explore__cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .fides-ds .fides-explore__title {
+    font-size: 36px;
+    line-height: 42px;
+  }
+
+  .fides-ds .fides-explore__choice-list--theme {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .fides-ds .fides-explore__selected-title {
+    font-size: 48px;
+    line-height: 52px;
+  }
+
+  .fides-ds .fides-explore__intro {
+    font-size: 19px;
+    line-height: 29px;
+  }
+
+  .fides-ds .fides-explore__hero {
+    grid-template-columns: minmax(0, 1fr) 448px;
+    gap: 56px;
+  }
+
+  .fides-ds .fides-explore__hero--no-image {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fides-ds .fides-explore__h2 {
+    font-size: 28px;
+    line-height: 34px;
+  }
+
+  .fides-ds .fides-explore__h2--small {
+    font-size: 26px;
+    line-height: 32px;
+  }
+
+  .fides-ds .fides-explore__card-title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+
+  .fides-ds .fides-explore__columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 48px;
+  }
+
+  .fides-ds .fides-explore__columns--single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

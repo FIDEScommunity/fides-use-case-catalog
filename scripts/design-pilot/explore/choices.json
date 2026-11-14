@@ -1,0 +1,166 @@
+{
+ "version": 1,
+ "note": "Introductions are draft editorial text. Image: none seeded; editors add a featured image to the page. See README.",
+ "choices": [
+  {
+   "kind": "theme",
+   "slug": "identity_access",
+   "title": "Identity & Access",
+   "intro": "Many services need to know who they are dealing with, or whether someone may use them. These examples cover personal identity, onboarding and secure access, and show how wallets and credentials can be used to share only what is needed.",
+   "menu_order": 0,
+   "learn": {
+    "path": "topics/for-you/sharing-information-from-a-wallet",
+    "label": "Sharing information from a wallet"
+   }
+  },
+  {
+   "kind": "theme",
+   "slug": "business_authority",
+   "title": "Business & Mandates",
+   "intro": "When someone opens a company bank account, submits a tender or signs for a supplier, the other party checks which organisation is involved and what that person is authorised to do. Wallets and credentials can help exchange evidence for both checks.",
+   "menu_order": 1,
+   "learn": {
+    "path": "topics/for-businesses/how-can-someone-act-for-an-organisation",
+    "label": "How can someone act for an organisation?"
+   }
+  },
+  {
+   "kind": "theme",
+   "slug": "payments_commerce",
+   "title": "Payments & Commerce",
+   "intro": "Payments and commerce depend on knowing who is paying, who is being paid and what each party is entitled to do. These examples show how wallets and credentials can support trusted payments and other financial interactions.",
+   "menu_order": 2
+  },
+  {
+   "kind": "theme",
+   "slug": "work_qualifications",
+   "title": "Work & Qualifications",
+   "intro": "Employers, schools and professional bodies often need to check diplomas, skills and professional status. These examples show how education, skills and professional evidence can be issued to a wallet and shared when it is needed.",
+   "menu_order": 3
+  },
+  {
+   "kind": "theme",
+   "slug": "products_trade_supply_chains",
+   "title": "Products, Trade & Supply Chains",
+   "intro": "Products, shipments and trade documents pass through many organisations. These examples cover trade documents, digital product passports and trusted data sharing along the chain.",
+   "menu_order": 4
+  },
+  {
+   "kind": "theme",
+   "slug": "government_compliance",
+   "title": "Government & Compliance",
+   "intro": "Public services and regulators ask for evidence of identity, entitlement or compliance. These examples show what is exchanged between people, businesses and public bodies, and who checks it.",
+   "menu_order": 5,
+   "learn": {
+    "path": "topics/for-governments/digital-wallets-and-public-services",
+    "label": "Digital wallets and public services"
+   }
+  },
+  {
+   "kind": "sector",
+   "slug": "agriculture",
+   "title": "Agriculture",
+   "intro": "Farms, producers and inspectors may need to show who produced something and under which rules. The examples show what information is exchanged and who checks it.",
+   "menu_order": 0
+  },
+  {
+   "kind": "sector",
+   "slug": "construction",
+   "title": "Construction",
+   "intro": "Construction projects involve many parties that may need to show identity, qualifications or permits. The examples show what information is exchanged and who checks it.",
+   "menu_order": 1
+  },
+  {
+   "kind": "sector",
+   "slug": "digital",
+   "title": "Digital",
+   "intro": "Digital services and platforms may need to verify who is using them and what a person or organisation is entitled to do. The examples show what information is exchanged and who checks it.",
+   "menu_order": 2
+  },
+  {
+   "kind": "sector",
+   "slug": "education",
+   "title": "Education",
+   "intro": "Schools, universities and employers may need to verify enrolment, diplomas or other qualifications. The examples show what information is exchanged and who checks it.",
+   "menu_order": 3
+  },
+  {
+   "kind": "sector",
+   "slug": "energy",
+   "title": "Energy",
+   "intro": "Energy companies and other market participants may need to confirm who is involved and what they are authorised to do. The examples show what information is exchanged and who checks it.",
+   "menu_order": 4
+  },
+  {
+   "kind": "sector",
+   "slug": "finance",
+   "title": "Finance",
+   "intro": "Banks and other financial services may need to verify the identity of a person or company and what that person is authorised to do. The examples show what information is exchanged and who checks it.",
+   "menu_order": 5
+  },
+  {
+   "kind": "sector",
+   "slug": "food",
+   "title": "Food",
+   "intro": "Food producers, processors and retailers may need to show where products come from and how they were handled. The examples show what information is exchanged and who checks it.",
+   "menu_order": 6
+  },
+  {
+   "kind": "sector",
+   "slug": "healthcare",
+   "title": "Healthcare",
+   "intro": "Healthcare organisations may need to verify a clinician’s identity, check entitlement to care or confirm which organisation sent a report. The examples show what information is exchanged and who checks it.",
+   "menu_order": 7,
+   "learn": {
+    "path": "topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
+    "label": "What should a service check when receiving a credential?"
+   }
+  },
+  {
+   "kind": "sector",
+   "slug": "manufacturing",
+   "title": "Manufacturing",
+   "intro": "Manufacturers may need to share verified information about products, suppliers and compliance with their partners. The examples show what information is exchanged and who checks it.",
+   "menu_order": 8
+  },
+  {
+   "kind": "sector",
+   "slug": "mobility",
+   "title": "Mobility",
+   "intro": "Travel and transport services may need to verify identity, driving entitlements or tickets. The examples show what information is exchanged and who checks it.",
+   "menu_order": 9
+  },
+  {
+   "kind": "sector",
+   "slug": "public_sector",
+   "title": "Public Sector",
+   "intro": "Public bodies may need to verify identity or entitlement, and people may need to prove facts to public services. The examples show what information is exchanged and who checks it.",
+   "menu_order": 10,
+   "learn": {
+    "path": "topics/for-governments/digital-wallets-and-public-services",
+    "label": "Digital wallets and public services"
+   }
+  },
+  {
+   "kind": "sector",
+   "slug": "retail",
+   "title": "Retail",
+   "intro": "Retailers and their customers may need to check information such as age or identity at the moment of sale. The examples show what information is exchanged and who checks it.",
+   "menu_order": 11
+  },
+  {
+   "kind": "sector",
+   "slug": "supply_chain",
+   "title": "Supply Chain",
+   "intro": "Supply chains involve many organisations that may need to share verified information about goods and who handled them. The examples show what information is exchanged and who checks it.",
+   "menu_order": 12
+  },
+  {
+   "kind": "sector",
+   "slug": "trade",
+   "title": "Trade",
+   "intro": "Trade between companies, also across borders, may need verified information about the parties and the documents involved. The examples show what information is exchanged and who checks it.",
+   "menu_order": 13
+  }
+ ]
+}

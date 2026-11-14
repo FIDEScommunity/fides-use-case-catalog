@@ -37,10 +37,12 @@ require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-design
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-detail-page.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-featured.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-spotlight.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-explore-choice.php';
 Fides_Use_Case_Design::bootstrap();
 Fides_Use_Case_Detail_Page::bootstrap();
 Fides_Use_Case_Featured::bootstrap();
 Fides_Use_Case_Spotlight::bootstrap();
+Fides_Use_Case_Explore_Choice::bootstrap();
 
 // Boot the SSR/SEO renderer (no-op shim when the tiles base class is absent).
 Fides_Use_Case_Catalog_SSR::bootstrap();

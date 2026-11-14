@@ -648,7 +648,7 @@ final class Fides_Use_Case_Design {
      * @param array<string, mixed> $item
      * @return list<string>
      */
-    private static function theme_bundle_codes(array $item): array {
+    public static function theme_bundle_codes(array $item): array {
         $config = class_exists('Fides_Use_Case_Discovery_Shortcode') ? Fides_Use_Case_Discovery_Shortcode::theme_config() : array();
         $themes = isset($item['themes']) && is_array($item['themes']) ? $item['themes'] : array();
         if (! $themes) {
@@ -720,7 +720,7 @@ final class Fides_Use_Case_Design {
      * @param array<string, mixed> $item
      * @return list<string>
      */
-    private static function sector_codes(array $item): array {
+    public static function sector_codes(array $item): array {
         $known   = function_exists('fides_use_case_catalog_sectors') ? fides_use_case_catalog_sectors() : array();
         $codes   = array();
         $primary = self::primary_sector($item);

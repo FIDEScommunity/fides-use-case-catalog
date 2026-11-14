@@ -543,7 +543,7 @@ final class Fides_Use_Case_Detail_Page {
      * @param array<string, mixed> $item
      * @return array<string, array{label:string, anchor:string, items:list<array{label:string, href:string, external:bool, source:string, identifier:string}>}>
      */
-    private static function relation_groups(array $item): array {
+    public static function relation_groups(array $item): array {
         $links  = isset($item['links']) && is_array($item['links']) ? $item['links'] : array();
         $groups = array();
         foreach (self::RELATION_GROUPS as $key => $config) {

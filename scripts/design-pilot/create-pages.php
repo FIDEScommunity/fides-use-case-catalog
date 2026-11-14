@@ -222,6 +222,25 @@ pilot_upsert_page(
     PILOT_SHELL_TEMPLATE
 );
 
+// Explore by theme / sector (Paper page 03). The text and image per choice live in separate editorial pages
+// (create-explore-pages.sh); these two pages only hold the shortcode.
+pilot_upsert_page(
+    '{{base}}/themes',
+    'Explore by theme (design pilot)',
+    '<!-- wp:shortcode -->[fides_explore_choice kind="theme" overview_url="{{pilot}}/overview/" detail_url="{{pilot}}/use-case/"]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+pilot_upsert_page(
+    '{{base}}/sectors',
+    'Explore by sector (design pilot)',
+    '<!-- wp:shortcode -->[fides_explore_choice kind="sector" overview_url="{{pilot}}/overview/" detail_url="{{pilot}}/use-case/"]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
 pilot_upsert_page(
     '{{base}}/use-case',
     'Use case detail (design pilot)',
