@@ -197,6 +197,10 @@ $parent = pilot_upsert_page(
     . "<!-- wp:list-item --><li><a href=\"{{pilot}}/wallet/\">Wallet detail</a></li><!-- /wp:list-item -->"
     . "<!-- wp:list-item --><li><a href=\"{{pilot}}/credentials/\">Credential types</a></li><!-- /wp:list-item -->"
     . "<!-- wp:list-item --><li><a href=\"{{pilot}}/credential/\">Credential type detail</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"{{pilot}}/issuers/\">Issuers</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"{{pilot}}/issuer/\">Issuer detail</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"{{pilot}}/relying-parties/\">Relying parties</a></li><!-- /wp:list-item -->"
+    . "<!-- wp:list-item --><li><a href=\"{{pilot}}/relying-party/\">Relying party detail</a></li><!-- /wp:list-item -->"
     . "</ul>\n<!-- /wp:list -->",
     0,
     array('has_hero_section' => 'enabled'),
@@ -317,6 +321,46 @@ pilot_upsert_page(
     '{{base}}/credential',
     'Credential type detail (design pilot)',
     '<!-- wp:shortcode -->[fides_credential_detail id="' . PILOT_CREDENTIAL_ID . '" listing_url="{{pilot}}/credentials/" use_case_detail_url="{{pilot}}/use-case/"]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+// Issuer pilot: what an issuer offers (credential configurations, wallets it names, linked use cases).
+pilot_upsert_page(
+    '{{base}}/issuers',
+    'Issuers (design pilot)',
+    '<!-- wp:shortcode -->[fides_issuer_catalog design="pilot" title="Issuers" detail_url="{{pilot}}/issuer/" add_url="{{site}}/issuers-submit/"'
+    . ' intro="Find services that issue verifiable credentials to wallets and see which credentials they offer."]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+pilot_upsert_page(
+    '{{base}}/issuer',
+    'Issuer detail (design pilot)',
+    '<!-- wp:shortcode -->[fides_issuer_detail id="issuer:animo:bundesdruckerei:test" listing_url="{{pilot}}/issuers/" use_case_detail_url="{{pilot}}/use-case/"]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+// Relying party pilot: what a service asks for or accepts (accepted credentials, wallets it names, linked use cases).
+pilot_upsert_page(
+    '{{base}}/relying-parties',
+    'Relying parties (design pilot)',
+    '<!-- wp:shortcode -->[fides_rp_catalog design="pilot" title="Relying Parties" detail_url="{{pilot}}/relying-party/" add_url="{{site}}/relying-parties-submit/"'
+    . ' intro="Find services that ask for or accept verifiable credentials and see which credentials and wallets they support."]<!-- /wp:shortcode -->',
+    $parent,
+    $layout_meta,
+    PILOT_SHELL_TEMPLATE
+);
+
+pilot_upsert_page(
+    '{{base}}/relying-party',
+    'Relying party detail (design pilot)',
+    '<!-- wp:shortcode -->[fides_rp_detail id="pass2rent-car-rental-verifier" listing_url="{{pilot}}/relying-parties/" use_case_detail_url="{{pilot}}/use-case/"]<!-- /wp:shortcode -->',
     $parent,
     $layout_meta,
     PILOT_SHELL_TEMPLATE

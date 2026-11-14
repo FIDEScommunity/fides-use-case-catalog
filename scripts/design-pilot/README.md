@@ -11,6 +11,8 @@ Branch `feature/fides-design-pilot` in three worktrees:
 | --- | --- |
 | `fides-community-tools-tiles` | Shared design layer: `assets/design-system.css`, `assets/design-system.js` (`window.FidesDS.card`), `includes/class-fides-ds-card.php` (`Fides_DS_Card::render`), self-hosted Inter, and the site shell (`includes/class-fides-ds-site-shell.php`, `templates/site-shell.php`) |
 | `use-case-catalog` | Use-case mapping and pilot views (this folder plus the plugin includes below) |
+| `issuer-catalog` | Issuer pilot overview and record (`includes/class-fides-issuer-design.php`, `-overview.php`, `-detail-page.php`, `assets/issuer-design.css`/`.js`) |
+| `rp-catalog` | Relying party pilot overview and record (same layout, `includes/class-fides-rp-*.php`, `assets/rp-design.css`/`.js`) |
 | `organization-catalog` | Organization pilot overview (`design="pilot"` in `organization-catalog.js`) and detail page (`includes/class-fides-organization-design.php`, `includes/class-fides-organization-detail-page.php`, `assets/organization-design.css`) |
 
 ## Scripts
@@ -623,6 +625,30 @@ The new glossary (`Fides_DS_Glossary_Page`, tiles) is opt-in. A page with `[fide
 - Dutch (TranslatePress): glossary.js composes its interface in the browser, which TranslatePress cannot see. The page therefore renders every string once as a hidden text node (`ul[data-glossary-strings]`, built from `Fides_DS_Glossary_Page::strings()`). TranslatePress finds and translates those nodes on the server and glossary.js reads the result. The English text in the page config is the fallback. The JS-built shell has `data-no-dynamic-translation`: without it the TranslatePress dynamic translator blanked the result count after a few searches. Placeholders in braces must stay in the translation. Plurals are two strings (`{n} term`, `{n} terms`); a language with more plural forms needs more keys.
 - Translator list: open `/nl/glossary/` once, then TranslatePress → Translate Site, filter on this page. The 23 strings (source texts in `strings()`) are: Search glossary terms; Search by term or abbreviation; Search; Clear search; Browse by letter; Glossary terms; Select a term to view its definition; All; terms ({n}); Terms starting with; {n} term; {n} terms; {count} match “{query}”; {count} starting with {letter}; {count} match “{query}”, starting with {letter}; Terms beginning with a number or symbol; Terms beginning with {letter}; No terms match “{query}”.; Check the spelling, try an abbreviation or use fewer words.; Also known as {alias}; Also known as:; Source:; (opens in a new tab).
 - Tests: `tests/run-glossary-checks.sh` (English, 1440 to 320) and `tests/run-glossary-i18n-checks.sh`. The second one stores a temporary nl_NL test translation in the local database and restores the previous values afterwards, also on failure.
+
+## Issuers and relying parties (2026-11-14)
+
+Pages: `/fides-design-pilot/issuers/` and `/issuer/?issuer=<id>`, `/relying-parties/` and `/relying-party/?rp=<id>` (seeded by
+`create-pages.php`; the guard maps the pilot detail pages and `/ecosystem-explorer/relying-party-catalog/`). The plugin
+symlinks `fides-issuer-catalog` and `fides-rp-catalog` point to the worktrees like the other pilot plugins.
+
+- **Same pattern as organizations**: the overview is server-rendered (`[fides_issuer_catalog design="pilot"]`,
+  `[fides_rp_catalog design="pilot"]`) with search, filters, sort and paging as GET parameters; the record is
+  `[fides_issuer_detail]` / `[fides_rp_detail]`. Reused: `Fides_DS_Card` rows, `Fides_DS_Detail_Top`, popovers and options, section
+  navigation, read-more, show-all lists, the use-case rows and band, the media gallery (relying parties) and the organization closing block.
+  The classic listing, modal and SSR stay untouched; `?issuer=` / `?rp=` on the pilot overview redirect to the pilot record.
+- **Issuers** say what an issuer offers: credential configurations (format, signing algorithms, linked credential type), wallets it names,
+  linked use cases (`links.issuers`), metadata endpoints. Filters: environment, country, credential format, credential type.
+- **Relying parties** say what a service asks for or accepts, as recorded: accepted credentials (format variants of one type are one row),
+  supported wallets, protocols, formats, interoperability profiles, features, documentation and test credentials, media, linked use cases
+  (`links.rps`). Filters: readiness, interaction, country, credential format, accepted credential, supported wallet. A block without data is
+  not rendered; the interaction mode is shown only when recorded (the listing script assumes "remote" for a missing value, the pilot does not).
+- **Relations**: a credential or wallet row opens the credential or wallet pilot record when the catalog knows it, else it is a plain row.
+  The credential pilot links back to issuer and RP records (`?issuers=a,b` / `?rps=a,b` open the pilot overview).
+- **Tests**: `tests/run-issuer-rp-checks.sh` (1440 and 390 px, EN and NL; overview, filter, empty state, record, back, keyboard, relation, limited
+  record, deeplink, add route, Explorer route). `KINDS=issuers|relying-parties`, `WIDTHS`, `LOCALES` limit a run.
+- **Dutch**: the fixed interface texts are in `learn/nl-translations.php` (block of 2026-11-14, list in
+  `learn/nl-translation-changes-issuers-rp-2026-11-14.md`). Catalog content and the generated row meta line stay English.
 
 ## Staging preparation (`/design-review/`)
 

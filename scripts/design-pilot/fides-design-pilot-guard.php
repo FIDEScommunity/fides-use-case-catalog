@@ -71,8 +71,8 @@ add_filter(
             '/ecosystem-explorer/personal-wallets/'         => '/fides-design-pilot/personal-wallets/',
             '/ecosystem-explorer/organizational-wallets/'   => '/fides-design-pilot/business-wallets/',
             '/ecosystem-explorer/credential-catalog/'       => '/fides-design-pilot/credentials/',
-            '/ecosystem-explorer/issuer-catalog/'           => '/issuer-catalog/',
-            '/ecosystem-explorer/relying-party-catalog/'    => '/relying-party-websites/',
+            '/ecosystem-explorer/issuer-catalog/'           => '/fides-design-pilot/issuers/',
+            '/ecosystem-explorer/relying-party-catalog/'    => '/fides-design-pilot/relying-parties/',
             '/community-tools/glossary/'                    => '/glossary/',
             '/organizations/'                               => '/fides-design-pilot/organizations/',
             '/organizations/submit-organization/'           => '/organizations-submit/',
@@ -112,7 +112,7 @@ add_filter(
  */
 // The catalog design views look up their pilot detail page by scanning the first 20 pages with the pilot marker.
 // With the Learn pages that scan misses the detail pages, so name the detail pages explicitly.
-foreach (array('wallet' => 'wallet', 'organization' => 'organization', 'credential' => 'credential') as $fides_pilot_type => $fides_pilot_slug) {
+foreach (array('wallet' => 'wallet', 'organization' => 'organization', 'credential' => 'credential', 'issuer' => 'issuer', 'rp' => 'relying-party') as $fides_pilot_type => $fides_pilot_slug) {
     add_filter(
         'fides_' . $fides_pilot_type . '_pilot_detail_base',
         static function () use ($fides_pilot_slug) {
