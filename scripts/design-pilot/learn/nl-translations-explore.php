@@ -53,6 +53,9 @@ $nl = array(
     'Catalog content is shown in English.' => 'Catalogusinhoud wordt in het Engels getoond.',
     'Names with an arrow open a page in this catalog. “Listing only” means an example names it, but the catalog has no page for it.' => 'Namen met een pijl openen een pagina in deze catalogus. “Alleen vermeld” betekent dat een voorbeeld de naam noemt, maar de catalogus er geen pagina voor heeft.',
     'Browse all use cases'        => 'Bekijk alle usecases',
+    // Repair round 2026-11-14 (b): chosen name as heading, phone action
+    'Change sector'               => 'Sector wijzigen',
+    'Change theme'                => 'Thema wijzigen',
     // Theme titles and sector names
     'Identity &amp; Access'                => 'Identiteit en toegang',
     'Business &amp; Mandates'              => 'Bedrijven en mandaten',
@@ -121,6 +124,11 @@ $gettext = array(
     array('fides-use-case-catalog', 'Showing %1$d of %2$d. Each is listed once, even when it appears in several examples.', 'Toont %1$d van %2$d. Elk item staat één keer in de lijst, ook als het in meerdere voorbeelden voorkomt.'),
     array('fides-use-case-catalog', '%d in total. Each is listed once, even when it appears in several examples.', '%d in totaal. Elk item staat één keer in de lijst, ook als het in meerdere voorbeelden voorkomt.'),
     array('fides-use-case-catalog', 'In %1$d of these %2$d examples', 'In %1$d van deze %2$d voorbeelden'),
+    // Repair round 2026-11-14 (b)
+    array('fides-use-case-catalog', 'Related use case', 'Gerelateerde usecase'),
+    array('fides-use-case-catalog', '%d related use cases', '%d gerelateerde usecases'),
+    array('fides-use-case-catalog', 'These credential types, organisations and wallets belong to the use case shown above.', 'Deze credentialtypen, organisaties en wallets horen bij de hierboven getoonde usecase.'),
+    array('fides-use-case-catalog', 'These credential types, organisations and wallets belong to the use cases shown above.', 'Deze credentialtypen, organisaties en wallets horen bij de hierboven getoonde usecases.'),
     array('fides-use-case-catalog', '%d more listed in these examples. Open a use case to see them.', 'Nog %d genoemd in deze voorbeelden. Open een usecase om ze te zien.'),
 );
 

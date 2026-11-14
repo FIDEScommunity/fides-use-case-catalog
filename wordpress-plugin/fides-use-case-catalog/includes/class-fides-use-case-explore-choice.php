@@ -110,7 +110,53 @@ final class Fides_Use_Case_Explore_Choice {
                 return strcasecmp((string) $a['title'], (string) $b['title']);
             }
         );
+
+        // Editorial order: the featured ids that match this choice come first, in the order of the data file.
+        $featured = self::featured_ids($kind, $slug);
+        if ($featured) {
+            $by_id = array();
+            foreach ($match as $item) {
+                $by_id[ (string) $item['id'] ] = $item;
+            }
+            $front = array();
+            foreach ($featured as $id) {
+                if (isset($by_id[ $id ])) {
+                    $front[ $id ] = $by_id[ $id ];
+                }
+            }
+            $rest  = array_filter($match, static fn (array $item): bool => ! isset($front[ (string) $item['id'] ]));
+            $match = array_merge(array_values($front), array_values($rest));
+        }
         return $match;
+    }
+
+    /**
+     * Editorial order of one choice: use case ids from data/explore-featured-use-cases.json (key "<kind>:<slug>"),
+     * adjustable with the filter `fides_explore_choice_featured`. Ids that are not published or do not match the choice are
+     * ignored by the caller, so the file can only reorder what the catalog already matches.
+     *
+     * @return list<string>
+     */
+    public static function featured_ids(string $kind, string $slug): array {
+        static $file = null;
+        if ($file === null) {
+            $file = array();
+            $path = FIDES_USE_CASE_CATALOG_PATH . 'data/explore-featured-use-cases.json';
+            if (is_readable($path)) {
+                $decoded = json_decode((string) file_get_contents($path), true); // phpcs:ignore WordPress.WP.AlternativeFunctions
+                if (is_array($decoded) && isset($decoded['featured']) && is_array($decoded['featured'])) {
+                    $file = $decoded['featured'];
+                }
+            }
+        }
+        $ids = array();
+        foreach ((array) ($file[ $kind . ':' . $slug ] ?? array()) as $id) {
+            if (is_string($id) && $id !== '' && ! in_array($id, $ids, true)) {
+                $ids[] = $id;
+            }
+        }
+        $ids = apply_filters('fides_explore_choice_featured', $ids, $kind, $slug);
+        return is_array($ids) ? array_values(array_filter($ids, 'is_string')) : array();
     }
 
     /**
@@ -486,18 +532,30 @@ final class Fides_Use_Case_Explore_Choice {
         $param       = self::kinds()[ $kind ];
         $base_url    = self::page_url();
 
+        // The heading says what is chosen; without a choice it names the page.
+        $editorial = $slug !== '' ? self::editorial($kind, $slug, $choices[ $slug ]) : null;
+        $heading   = $editorial !== null ? $editorial['title'] : $words['title'];
+
         ob_start();
         ?>
 <div class="fides-ds fides-explore" data-fides-explore="<?php echo esc_attr($kind); ?>" data-param="<?php echo esc_attr($param); ?>" data-selected="<?php echo esc_attr($slug); ?>">
   <div class="fides-ds-page fides-explore__page">
-    <header class="fides-explore__head">
+    <header class="fides-explore__head" data-fides-explore-head>
       <p class="fides-explore__crumb"><?php echo esc_html('Explore / ' . $words['plural']); ?></p>
-      <h1 class="fides-ds-heading-1 fides-explore__title"><?php echo esc_html($words['title']); ?></h1>
-      <p class="fides-explore__lead"><?php echo esc_html($words['lead']); ?></p>
+      <div class="fides-explore__titlerow">
+        <h1 class="fides-ds-heading-1 fides-explore__title" id="fides-explore-title" tabindex="-1"><?php echo esc_html($heading); ?></h1>
+        <?php if ($slug !== '') : ?>
+          <?php /* Phones: the list is folded away after a choice; this link opens it (a plain #anchor link works without JavaScript). */ ?>
+          <a class="fides-explore__change" href="#fides-explore-choices" aria-controls="fides-explore-choices" data-fides-explore-change><?php echo esc_html($words['change']); ?></a>
+        <?php endif; ?>
+      </div>
+      <?php if ($slug === '') : ?>
+        <p class="fides-explore__lead"><?php echo esc_html($words['lead']); ?></p>
+      <?php endif; ?>
       <?php if ($req['invalid'] !== '') : ?>
         <p class="fides-explore__notice fides-explore__notice--invalid" role="status" data-fides-explore-notice><?php echo esc_html(sprintf($kind === 'sector' ? __('“%s” is not a sector we know. Choose one of the options below.', 'fides-use-case-catalog') : __('“%s” is not a theme we know. Choose one of the options below.', 'fides-use-case-catalog'), $req['invalid'])); ?></p>
       <?php endif; ?>
-      <nav class="fides-explore__choices" aria-labelledby="fides-explore-choices-label" data-fides-explore-choices>
+      <nav class="fides-explore__choices" id="fides-explore-choices" aria-labelledby="fides-explore-choices-label" data-fides-explore-choices>
         <p class="fides-explore__choices-label" id="fides-explore-choices-label"><?php echo esc_html('Choose a ' . strtolower($words['singular'])); ?></p>
         <ul class="fides-explore__choice-list fides-explore__choice-list--<?php echo esc_attr($kind); ?>">
           <?php foreach ($choices as $choice_slug => $choice_label) :
@@ -518,7 +576,7 @@ final class Fides_Use_Case_Explore_Choice {
       if ($slug === '') {
           echo self::intro_state_html($words); // phpcs:ignore WordPress.Security.EscapeOutput
       } else {
-          echo self::selected_html($kind, $slug, $choices[ $slug ], $items, $overview, $detail_base, $words); // phpcs:ignore WordPress.Security.EscapeOutput
+          echo self::selected_html($kind, $slug, $editorial ?? self::editorial($kind, $slug, $choices[ $slug ]), $items, $overview, $detail_base, $words); // phpcs:ignore WordPress.Security.EscapeOutput
       }
       ?>
     </div>
@@ -538,6 +596,7 @@ final class Fides_Use_Case_Explore_Choice {
                 'lead'     => 'Choose a sector to see how digital trust is used, with examples and related organisations.',
                 'empty'    => 'Choose a sector to get started',
                 'again'    => 'Choose another sector',
+                'change'   => 'Change sector',
             );
         }
         return array(
@@ -547,6 +606,7 @@ final class Fides_Use_Case_Explore_Choice {
             'lead'     => 'Choose a theme to explore use cases, credential types and organisations across sectors.',
             'empty'    => 'Choose a theme to get started',
             'again'    => 'Choose another theme',
+            'change'   => 'Change theme',
         );
     }
 
@@ -562,9 +622,8 @@ final class Fides_Use_Case_Explore_Choice {
      * @param array<int, array<string, mixed>> $items
      * @param array<string, string>            $words
      */
-    private static function selected_html(string $kind, string $slug, string $label, array $items, string $overview, string $detail_base, array $words): string {
+    private static function selected_html(string $kind, string $slug, array $editorial, array $items, string $overview, string $detail_base, array $words): string {
         $param     = self::kinds()[ $kind ];
-        $editorial = self::editorial($kind, $slug, $label);
         $selection = self::selection($kind, $slug, $items);
         $rel       = $selection['relations'];
         $all_url   = add_query_arg($param, $slug, $overview);
@@ -585,17 +644,20 @@ final class Fides_Use_Case_Explore_Choice {
             }
         }
 
-        $html  = '<section class="fides-explore__selected" aria-labelledby="fides-explore-selected-title" data-fides-explore-state="selected" data-fides-explore-title="' . esc_attr($editorial['title'] . ' · ' . $words['title']) . '">';
-        $html .= '<div class="fides-explore__hero' . ($editorial['image'] === '' ? ' fides-explore__hero--no-image' : '') . '">';
-        $html .= '<div class="fides-explore__hero-text"><h2 class="fides-explore__selected-title" id="fides-explore-selected-title" tabindex="-1">' . esc_html($editorial['title']) . '</h2>';
-        if ($editorial['intro'] !== '') {
-            $html .= '<div class="fides-explore__intro">' . $editorial['intro'] . '</div>';
+        // The chosen name is the page heading (H1, in the header); the result starts with the introduction and the image.
+        $html  = '<section class="fides-explore__selected" aria-labelledby="fides-explore-title" data-fides-explore-state="selected" data-fides-explore-title="' . esc_attr($editorial['title'] . ' · ' . $words['title']) . '">';
+        if ($editorial['intro'] !== '' || $editorial['image'] !== '') {
+            $html .= '<div class="fides-explore__hero' . ($editorial['image'] === '' ? ' fides-explore__hero--no-image' : '') . '">';
+            $html .= '<div class="fides-explore__hero-text">';
+            if ($editorial['intro'] !== '') {
+                $html .= '<div class="fides-explore__intro">' . $editorial['intro'] . '</div>';
+            }
+            $html .= '</div>';
+            if ($editorial['image'] !== '') {
+                $html .= '<figure class="fides-explore__figure">' . $editorial['image'] . '</figure>';
+            }
+            $html .= '</div>';
         }
-        $html .= '</div>';
-        if ($editorial['image'] !== '') {
-            $html .= '<figure class="fides-explore__figure">' . $editorial['image'] . '</figure>';
-        }
-        $html .= '</div>';
 
         if (! $shown) {
             $html .= '<div class="fides-explore__empty" data-fides-explore-state="empty"><h3 class="fides-explore__empty-title">No examples yet</h3>'
@@ -604,11 +666,14 @@ final class Fides_Use_Case_Explore_Choice {
             return $html . '</section>';
         }
 
-        $html .= '<nav class="fides-explore__onpage" aria-label="On this page"><span class="fides-explore__onpage-label" aria-hidden="true">On this page</span><ul>';
+        // The shared "On this page" bar (as on the use case detail page): tabs from 1100px, folded below; sticky on every width.
+        $html .= '<details class="fides-ds-section-nav fides-explore__sections" data-fides-ds-section-nav data-fides-explore-sections>'
+            . '<summary>On this page <svg class="fides-ds-section-nav__chevron" aria-hidden="true" focusable="false" width="12" height="8" viewBox="0 0 12 8"><path d="M1 1.5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></summary>'
+            . '<nav aria-label="On this page"><ul>';
         foreach ($sections as $anchor => $text) {
             $html .= '<li><a href="#' . esc_attr($anchor) . '">' . esc_html($text) . '</a></li>';
         }
-        $html .= '</ul></nav>';
+        $html .= '</ul></nav></details>';
 
         // Use cases.
         $html .= '<section class="fides-explore__section" id="explore-use-cases" aria-labelledby="explore-use-cases-title">';
@@ -635,7 +700,10 @@ final class Fides_Use_Case_Explore_Choice {
 
         // Credential types, organisations and wallets: each record once, from the shown examples only.
         $n = count($shown);
-        $html .= '<p class="fides-explore__legend" data-fides-explore-legend>Names with an arrow open a page in this catalog. “Listing only” means an example names it, but the catalog has no page for it.</p>';
+        if ($rel['credentials'] || $rel['organizations'] || $rel['wallets']) {
+            // Said once here instead of in every heading and row.
+            $html .= '<p class="fides-explore__relations-note" data-fides-explore-relations-note>' . esc_html($n === 1 ? __('These credential types, organisations and wallets belong to the use case shown above.', 'fides-use-case-catalog') : __('These credential types, organisations and wallets belong to the use cases shown above.', 'fides-use-case-catalog')) . '</p>';
+        }
         if ($rel['credentials'] || $rel['organizations']) {
             $html .= '<div class="fides-explore__columns">';
             if ($rel['credentials']) {
@@ -650,8 +718,20 @@ final class Fides_Use_Case_Explore_Choice {
             $html .= '<div class="fides-explore__columns fides-explore__columns--single">' . self::relation_section('explore-wallets', 'wallets', $rel['wallets'], $n, $anchors) . '</div>';
         }
 
-        $html .= '<p class="fides-explore__again"><a class="fides-ds-action-link" href="#fides-explore-choices-label"><span>' . esc_html($words['again']) . '</span> <span aria-hidden="true">↑</span></a></p>';
+        $html .= '<p class="fides-explore__again"><a class="fides-ds-action-link" href="#fides-explore-choices" data-fides-explore-change><span>' . esc_html($words['again']) . '</span> <span aria-hidden="true">↑</span></a></p>';
         return $html . '</section>';
+    }
+
+    /**
+     * The visible text of a label in the current language, through the TranslatePress dictionary (the document title is built
+     * in PHP, so it is not translated as a whole string). English pages and a missing TranslatePress return the text unchanged.
+     */
+    private static function translate_text(string $text): string {
+        if ($text === '' || self::is_english() || ! function_exists('trp_translate')) {
+            return $text;
+        }
+        $out = trim(html_entity_decode(wp_strip_all_tags((string) trp_translate(esc_html($text), null, false)), ENT_QUOTES, 'UTF-8'));
+        return $out !== '' ? $out : $text;
     }
 
     /** True on an English page; the catalog texts are English, so other languages mark and announce them. */
@@ -722,18 +802,10 @@ final class Fides_Use_Case_Explore_Choice {
         return '<span class="fides-ds-card__media fides-ds-card__media--contain fides-explore__logo" data-logo="' . ($logo !== '' ? 'image' : 'placeholder') . '">' . $img . $initials . '</span>';
     }
 
-    /** Heading and count sentences per relation type, honest about what is counted (unique records of the shown examples). */
-    private static function relation_texts(string $type, int $examples, int $total, int $shown_rows): array {
-        $names = array(
-            'credentials'   => array(__('Credential types in this example', 'fides-use-case-catalog'), __('Credential types in these %d examples', 'fides-use-case-catalog')),
-            'organizations' => array(__('Organisations in this example', 'fides-use-case-catalog'), __('Organisations in these %d examples', 'fides-use-case-catalog')),
-            'wallets'       => array(__('Wallets in this example', 'fides-use-case-catalog'), __('Wallets in these %d examples', 'fides-use-case-catalog')),
-        );
-        $heading = $examples === 1 ? $names[ $type ][0] : sprintf($names[ $type ][1], $examples);
-        $count   = $total > $shown_rows
-            ? sprintf(__('Showing %1$d of %2$d. Each is listed once, even when it appears in several examples.', 'fides-use-case-catalog'), $shown_rows, $total)
-            : sprintf(__('%d in total. Each is listed once, even when it appears in several examples.', 'fides-use-case-catalog'), $total);
-        return array($heading, $count);
+    /** Plain heading per relation type. Which examples they belong to is said once above the lists, not in every heading. */
+    private static function relation_heading(string $type): string {
+        $names = array('credentials' => 'Credential types', 'organizations' => 'Organisations', 'wallets' => 'Wallets');
+        return $names[ $type ] ?? '';
     }
 
     /**
@@ -743,16 +815,16 @@ final class Fides_Use_Case_Explore_Choice {
     private static function relation_section(string $anchor, string $type, array $rows, int $shown_cases, array $anchors): string {
         $total = count($rows);
         $rows  = array_slice($rows, 0, (int) apply_filters('fides_explore_choice_list_limit', self::LIST_LIMIT));
-        list($heading, $count) = self::relation_texts($type, $shown_cases, $total, count($rows));
+        $heading = self::relation_heading($type);
         $attrs = self::catalog_text_attrs();
         $html  = '<section class="fides-explore__section fides-explore__relations" id="' . esc_attr($anchor) . '" data-relation="' . esc_attr($type) . '" data-total="' . esc_attr((string) $total) . '" aria-labelledby="' . esc_attr($anchor . '-title') . '">'
             . '<h2 class="fides-explore__h2 fides-explore__h2--small" id="' . esc_attr($anchor . '-title') . '">' . esc_html($heading) . '</h2>'
-            . '<p class="fides-explore__count">' . esc_html($count) . '</p><ul class="fides-explore__list">';
+            . '<ul class="fides-explore__list">';
         foreach ($rows as $row) {
             $label = (string) $row['label'];
             $name  = $row['detail']
                 ? '<a class="fides-explore__link" href="' . esc_url((string) $row['href']) . '"><span' . $attrs . '>' . esc_html($label) . '</span> <span aria-hidden="true">→</span></a>'
-                : '<span class="fides-explore__plain-name"' . $attrs . '>' . esc_html($label) . '</span> <span class="fides-explore__badge">Listing only</span>';
+                : '<span class="fides-explore__plain-name"' . $attrs . '>' . esc_html($label) . '</span>';
             $chips = '';
             $types = array();
             if ($row['kind'] === 'personalWallets') {
@@ -764,9 +836,10 @@ final class Fides_Use_Case_Explore_Choice {
                 $chips .= '<li class="fides-explore__chip">' . esc_html((string) $chip) . '</li>';
             }
             $cases = $row['use_cases'];
-            $text  = $shown_cases === 1
-                ? __('In the example shown', 'fides-use-case-catalog')
-                : sprintf(__('In %1$d of these %2$d examples', 'fides-use-case-catalog'), count($cases), $shown_cases);
+            // The name and link of each related use case stay one click away (native <details>).
+            $text  = count($cases) === 1
+                ? __('Related use case', 'fides-use-case-catalog')
+                : sprintf(__('%d related use cases', 'fides-use-case-catalog'), count($cases));
             $list  = '';
             foreach ($cases as $case_id => $case_title) {
                 $roles = $row['case_roles'][ $case_id ] ?? array();
@@ -839,7 +912,7 @@ final class Fides_Use_Case_Explore_Choice {
     public static function filter_title_parts($parts) {
         $state = self::current_state();
         if ($state !== null && is_array($parts)) {
-            $parts['title'] = $state['label'] . ' · ' . $state['words']['title'];
+            $parts['title'] = self::translate_text($state['label']) . ' · ' . self::translate_text($state['words']['title']);
         }
         return $parts;
     }

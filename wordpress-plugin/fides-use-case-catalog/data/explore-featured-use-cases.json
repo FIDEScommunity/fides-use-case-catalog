@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "note": "Editorial order for Explore by theme / sector. Key = '<kind>:<slug>' (theme bundle code or sector slug); value = use case ids, most recognisable example first. Only ids that are published AND match the choice are used, in this order; the remaining slots follow the default order (in production first, then newest). An id that is missing from the catalog is skipped, so a stale entry never breaks a page. Nothing is shown that the record does not say: cards, images and status badges come from the record. Filter: fides_explore_choice_featured.",
+  "featured": {
+    "sector:education": [
+      "instant-digital-verification-of-education-credentials-using-verifytt-2qkCDD",
+      "iiit-bangalore-digital-academic-credential-issuance-and-verification-rm2bTO",
+      "gradus-verify-the-diploma-before-you-interview-obA7P8",
+      "cross-border-micro-credentials-the-eu-ace-chain-eu-ch-MUUYsm"
+    ],
+    "theme:business_authority": [
+      "reusable-kyb-due-digital-due-diligence-for-financial-transactions-E06Xyi",
+      "mandator-public-procurement-portal-0aYOCh",
+      "from-document-trust-to-digital-trust-verifiable-credentials-across-the-contract-lifecycle-w9egMf",
+      "ingo-digital-verifiable-and-secure-subcontractor-management-including-physical-access-ZHHRjx"
+    ]
+  }
+}

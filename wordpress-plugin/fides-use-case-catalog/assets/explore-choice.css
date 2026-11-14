@@ -25,12 +25,55 @@
   line-height: 22px;
 }
 
+/* Heading = the chosen name (or the page name without a choice); on phones the "Change" action sits beside it. */
+.fides-ds .fides-explore__titlerow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 20px;
+}
+
 .fides-ds .fides-explore__title {
   margin: 0;
   color: var(--fides-ds-ink, #0e0e0e);
-  font-size: 30px;
-  line-height: 36px;
+  font-size: 34px;
+  line-height: 40px;
   font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.fides-ds .fides-explore__title:focus-visible {
+  outline: 3px solid var(--fides-ds-link, #0848a3);
+  outline-offset: 4px;
+}
+
+.fides-ds .fides-explore__change {
+  display: none;
+  align-items: center;
+  min-height: 44px;
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.fides-ds .fides-explore__change:focus-visible {
+  outline: 3px solid var(--fides-ds-link, #0848a3);
+  outline-offset: 2px;
+}
+
+/* Below 1100px, after a choice: the list is folded away until "Change …" (or the #anchor target) opens it. Without a choice
+   or on a wide screen every choice stays visible. */
+@media (max-width: 1099px) {
+  .fides-ds .fides-explore:not([data-selected=""]) .fides-explore__change {
+    display: inline-flex;
+  }
+
+  .fides-ds .fides-explore:not([data-selected=""]) .fides-explore__choices:not(.is-open):not(:target) {
+    display: none;
+  }
 }
 
 .fides-ds .fides-explore__lead {
@@ -132,6 +175,11 @@
   line-height: 28px;
 }
 
+.fides-ds .fides-explore__start-title:focus-visible {
+  outline: 3px solid var(--fides-ds-link, #0848a3);
+  outline-offset: 4px;
+}
+
 /* Chosen overview */
 .fides-ds .fides-explore__hero--no-image .fides-explore__intro {
   max-width: none;
@@ -144,18 +192,8 @@
   padding-top: 24px;
 }
 
-.fides-ds .fides-explore__selected-title {
-  margin: 0 0 16px;
-  color: var(--fides-ds-ink, #0e0e0e);
-  font-size: 36px;
-  line-height: 40px;
-  font-weight: 700;
-}
-
-.fides-ds .fides-explore__selected-title:focus-visible,
-.fides-ds .fides-explore__start-title:focus-visible {
-  outline: 3px solid var(--fides-ds-link, #0848a3);
-  outline-offset: 4px;
+.fides-ds .fides-explore__hero-text:empty {
+  display: none;
 }
 
 .fides-ds .fides-explore__intro {
@@ -193,56 +231,47 @@
   object-fit: cover;
 }
 
-.fides-ds .fides-explore__onpage {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 24px;
+/* "On this page": the shared section bar (tiles .fides-ds-section-nav). Sticky from the moment the bar reaches the top, like the use
+   case detail page. On a phone the bar is one 48px row that folds the list away (the list opens below it and closes after a link). */
+.fides-ds .fides-explore__sections {
+  position: sticky;
+  top: var(--wp-admin--admin-bar--height, 0px);
+  z-index: 5;
   margin-top: 24px;
-  padding: 6px 0;
-  border-block: 1px solid var(--fides-ds-line, #e4e4e4);
 }
 
-.fides-ds .fides-explore__onpage-label {
-  color: var(--fides-ds-ink, #0e0e0e);
-  font-size: 15px;
-  line-height: 23px;
-  font-weight: 700;
+.fides-ds .fides-explore__sections > summary {
+  min-height: 48px;
 }
 
-.fides-ds .fides-explore__onpage ul {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 24px;
+.fides-ds .fides-explore__sections[open] {
+  max-height: calc(100vh - var(--wp-admin--admin-bar--height, 0px));
+  overflow-y: auto;
+}
+
+.fides-ds .fides-explore__sections ul {
   margin: 0;
-  padding: 0;
   list-style: none;
 }
 
-.fides-ds .fides-explore__onpage li {
+.fides-ds .fides-explore__sections li {
   margin: 0;
 }
 
-.fides-ds .fides-explore__onpage a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--fides-ds-link, #0848a3);
-  font-size: 16px;
-  line-height: 24px;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.fides-ds .fides-explore__onpage a:hover,
 .fides-ds .fides-explore__list a:hover,
 .fides-ds .fides-explore__card-title a:hover {
   text-decoration: underline;
 }
 
+/* Anchors and focus never end up under the sticky bar (48px on a phone, 56px from 1100px, plus air). */
 .fides-ds .fides-explore__section {
-  scroll-margin-top: 16px;
+  scroll-margin-top: 64px;
   padding-top: 32px;
+}
+
+.fides-ds .fides-explore__result a,
+.fides-ds .fides-explore__result summary {
+  scroll-margin-top: 72px;
 }
 
 .fides-ds .fides-explore__section-head {
@@ -283,7 +312,7 @@
 .fides-ds .fides-explore__card-item {
   margin: 0;
   padding: 0;
-  scroll-margin-top: 16px;
+  scroll-margin-top: 72px;
 }
 
 .fides-ds .fides-explore__cards .fides-ds-card--row {
@@ -316,26 +345,7 @@
   }
 }
 
-/* Status stays visible and is never toned down: first fact of the card, own colour per value. */
-.fides-ds .fides-explore__cards .fides-ds-card__fact:has(.fides-explore__status) {
-  order: -1;
-}
-
-.fides-ds .fides-explore__cards .fides-ds-card--row .fides-explore__status {
-  padding: 3px 10px;
-  border: 1px solid var(--fides-ds-ink, #0e0e0e);
-  font-size: 13px;
-  line-height: 20px;
-  font-weight: 700;
-  color: var(--fides-ds-ink, #0e0e0e);
-  background: #ffffff;
-}
-
-.fides-ds .fides-explore__cards .fides-ds-card--row .fides-explore__status--production {
-  border-color: var(--fides-ds-link, #0848a3);
-  background: var(--fides-ds-link, #0848a3);
-  color: #ffffff;
-}
+/* Status badge: the shared catalog card badge (same style as the use case overview), no local override. */
 
 .fides-ds .fides-explore__lang-note {
   margin: 4px 0 0;
@@ -344,7 +354,8 @@
   line-height: 22px;
 }
 
-.fides-ds .fides-explore__legend {
+/* Said once above the credential type, organisation and wallet lists. */
+.fides-ds .fides-explore__relations-note {
   margin: 24px 0 0;
   padding: 10px 16px;
   border-left: 3px solid var(--fides-ds-brand, #0a6ef3);
@@ -429,19 +440,6 @@
 
 .fides-ds .fides-explore__link:hover {
   text-decoration: underline;
-}
-
-.fides-ds .fides-explore__badge {
-  display: inline-block;
-  margin-left: 6px;
-  padding: 0 8px;
-  border: 1px dashed var(--fides-ds-muted, #4a4a4a);
-  color: var(--fides-ds-muted, #4a4a4a);
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: 600;
-  white-space: nowrap;
-  vertical-align: 2px;
 }
 
 .fides-ds .fides-explore__chips {
@@ -571,17 +569,34 @@
 
 @media (min-width: 1100px) {
   .fides-ds .fides-explore__title {
-    font-size: 36px;
-    line-height: 42px;
+    font-size: 48px;
+    line-height: 52px;
+  }
+
+  /* Wide: all choices are always visible, the phone action is not needed. */
+  .fides-ds .fides-explore__change {
+    display: none !important;
+  }
+
+  .fides-ds .fides-explore__sections {
+    margin-top: 32px;
+  }
+
+  .fides-ds .fides-explore__result a,
+  .fides-ds .fides-explore__result summary {
+    scroll-margin-top: 80px;
+  }
+
+  .fides-ds .fides-explore__section {
+    scroll-margin-top: 80px;
+  }
+
+  .fides-ds .fides-explore__card-item {
+    scroll-margin-top: 88px;
   }
 
   .fides-ds .fides-explore__choice-list--theme {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .fides-ds .fides-explore__selected-title {
-    font-size: 48px;
-    line-height: 52px;
   }
 
   .fides-ds .fides-explore__intro {

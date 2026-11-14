@@ -55,38 +55,59 @@
     var next = data.root;
     var result = root.querySelector("[data-fides-explore-result]");
     var nextResult = next.querySelector("[data-fides-explore-result]");
-    if (!result || !nextResult) return false;
+    var head = root.querySelector("[data-fides-explore-head]");
+    var nextHead = next.querySelector("[data-fides-explore-head]");
+    if (!result || !nextResult || !head || !nextHead) return false;
     result.innerHTML = nextResult.innerHTML;
-    // Choices: copy the chosen marker (aria-current, check mark and hidden text) from the server markup.
-    var list = root.querySelector("[data-fides-explore-choices] ul");
-    var nextList = next.querySelector("[data-fides-explore-choices] ul");
-    if (list && nextList) list.innerHTML = nextList.innerHTML;
-    // Notice for an unknown slug lives in the header.
-    var oldNotice = root.querySelector("[data-fides-explore-notice]");
-    var newNotice = next.querySelector("[data-fides-explore-notice]");
-    if (oldNotice) oldNotice.remove();
-    if (newNotice) {
-      var head = root.querySelector(".fides-explore__head");
-      var choices = root.querySelector("[data-fides-explore-choices]");
-      if (head && choices) head.insertBefore(document.importNode(newNotice, true), choices);
-    }
+    // The header holds the heading (the chosen name), the "Change" action, the notice and the choices: take it as a whole.
+    head.innerHTML = nextHead.innerHTML;
     root.setAttribute("data-selected", next.getAttribute("data-selected") || "");
     if (data.title) document.title = data.title;
+    // The "On this page" bar of the new result needs its tabs / folded state and current-section marking.
+    if (window.FidesDS && window.FidesDS.initSectionNavs) window.FidesDS.initSectionNavs(result);
     var state = result.querySelector("[data-fides-explore-title]");
+    var heading = head.querySelector(".fides-explore__title");
+    var newNotice = head.querySelector("[data-fides-explore-notice]");
     var message = "";
     if (state) {
-      message = state.querySelector(".fides-explore__selected-title").textContent + " selected";
+      message = heading.textContent + " selected";
     } else if (newNotice) {
       message = newNotice.textContent;
     } else {
       message = "No selection";
     }
     live().textContent = message;
-    if (focus) {
-      var heading = result.querySelector(".fides-explore__selected-title, .fides-explore__start-title");
-      if (heading) heading.focus({ preventScroll: false });
-    }
+    setExpanded(false);
+    if (focus && heading) heading.focus({ preventScroll: false });
     return true;
+  }
+
+  // Phones: after a choice the list is folded away; "Change sector / theme" (or "Choose another …") opens it.
+  function setExpanded(open) {
+    Array.prototype.forEach.call(root.querySelectorAll("[data-fides-explore-change]"), function (link) {
+      link.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  }
+
+  function toggleChoices(link) {
+    var choices = root.querySelector("[data-fides-explore-choices]");
+    if (!choices) return;
+    // The bar action closes an open list again; "Choose another …" at the end of the page only opens it.
+    if (choices.classList.contains("is-open") && link.classList.contains("fides-explore__change")) {
+      choices.classList.remove("is-open");
+      setExpanded(false);
+      return;
+    }
+    openChoices();
+  }
+
+  function openChoices() {
+    var choices = root.querySelector("[data-fides-explore-choices]");
+    if (!choices) return;
+    choices.classList.add("is-open");
+    setExpanded(true);
+    var target = choices.querySelector(".fides-explore__choice[aria-current]") || choices.querySelector(".fides-explore__choice");
+    if (target) target.focus();
   }
 
   function go(url, push) {
@@ -106,12 +127,18 @@
   }
 
   root.addEventListener("click", function (event) {
+    var change = event.target.closest && event.target.closest("a[data-fides-explore-change]");
+    if (change && !event.defaultPrevented && event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) {
+      event.preventDefault();
+      toggleChoices(change);
+      return;
+    }
     var link = event.target.closest && event.target.closest("a.fides-explore__choice");
     if (!link || event.defaultPrevented) return;
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     if (slugOf(link.href) === (root.getAttribute("data-selected") || "") && slugOf(link.href) !== "") {
-      var current = root.querySelector(".fides-explore__selected-title");
+      var current = root.querySelector(".fides-explore__title");
       if (current) current.focus();
       return;
     }
@@ -127,6 +154,7 @@
     }
   });
 
+  setExpanded(false);
   window.history.replaceState({ fidesExplore: root.getAttribute("data-selected") || "" }, "", window.location.href);
   window.addEventListener("popstate", function () {
     go(window.location.href, false);

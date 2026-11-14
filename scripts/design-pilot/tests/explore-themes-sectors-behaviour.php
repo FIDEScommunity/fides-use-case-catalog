@@ -168,13 +168,14 @@ foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {
                 $check(strpos($html, 'data-relation="' . $bucket . '"') === false, "{$kind}:{$slug} no {$bucket} section without data");
                 continue;
             }
-            $expected = $n === 1 ? $noun . ' in this example' : $noun . ' in these ' . $n . ' examples';
-            $check(strpos($html, '>' . $expected . '</h2>') !== false, "{$kind}:{$slug} heading is exactly '{$expected}'");
+            $check(strpos($html, '>' . $noun . '</h2>') !== false, "{$kind}:{$slug} heading is exactly '{$noun}' (the examples are named once, not in every heading)");
             $check(strpos($html, 'data-relation="' . $bucket . '" data-total="' . $total . '"') !== false, "{$kind}:{$slug} {$bucket} total is the number of unique records ({$total})");
-            $shown_rows = min($total, Fides_Use_Case_Explore_Choice::LIST_LIMIT);
-            $sentence   = $total > $shown_rows ? 'Showing ' . $shown_rows . ' of ' . $total . '. Each is listed once' : $total . ' in total. Each is listed once';
-            $check(strpos($html, $sentence) !== false, "{$kind}:{$slug} {$bucket} count sentence is honest ('{$sentence}')");
         }
+        $check(substr_count($html, 'data-fides-explore-relations-note') === (($row['credentials'] + $row['organizations'] + $row['wallets']) > 0 ? 1 : 0), "{$kind}:{$slug} the sentence that the lists belong to the shown use cases appears exactly once");
+        $check(strpos($html, 'Each is listed once') === false && strpos($html, 'In 1 of these') === false && strpos($html, 'of these') === false && strpos($html, 'Listing only') === false && strpos($html, 'fides-explore__legend') === false, "{$kind}:{$slug} no repeated duplicate explanation, no 'In N of these examples', no 'Listing only'");
+        $check(preg_match_all('/<details class="fides-explore__from"><summary>(Related use case|[2-4] related use cases)<\/summary>/', $html) === substr_count($html, '<details class="fides-explore__from">'), "{$kind}:{$slug} every row summary is 'Related use case' or 'N related use cases'");
+        $check(strpos($html, '<h1 class="fides-ds-heading-1 fides-explore__title" id="fides-explore-title" tabindex="-1">') !== false && substr_count($html, '<h1') === 1 && strpos($html, 'data-fides-explore-change>' . ($kind === 'sector' ? 'Change sector' : 'Change theme')) !== false, "{$kind}:{$slug} one H1 (the chosen name) and the phone action Change {$kind}");
+        $check(strpos($html, 'class="fides-ds-section-nav fides-explore__sections" data-fides-ds-section-nav') !== false && strpos($html, '<summary>On this page') !== false && strpos($html, 'class="fides-explore__onpage"') === false, "{$kind}:{$slug} uses the shared 'On this page' section bar");
         // Anchors of the "In N of these examples" lists exist.
         preg_match_all('/<details class="fides-explore__from">.*?<\/details>/s', $html, $lists);
         $anchors_ok = true;
@@ -186,9 +187,10 @@ foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {
             $anchors_ok = $anchors_ok && ! empty($hrefs[1]);
         }
         $check($anchors_ok, "{$kind}:{$slug} every example list links to an example card on the page");
-        // Without a catalog page: plain name with the "Listing only" label, no link.
-        $check(substr_count($html, '<span class="fides-explore__badge">Listing only</span>') === (int) preg_match_all('/data-detail="no"/', $html), "{$kind}:{$slug} every listing only row has the label and only those");
-        $check(preg_match_all('/data-detail="no"[^>]*>(?:(?!<\/li>).)*<a class="fides-explore__link"/s', $html) === 0, "{$kind}:{$slug} a listing only row never links");
+        // Without a catalog page: plain name, no link, no label (linked rows have an arrow).
+        $check(substr_count($html, 'fides-explore__badge') === 0 && substr_count($html, 'fides-explore__link"') === (int) preg_match_all('/data-detail="yes"/', $html), "{$kind}:{$slug} only rows with a catalog page have a link, none has a label");
+        $check(preg_match_all('/data-detail="no"[^>]*>(?:(?!<\/li>).)*<a class="fides-explore__link"/s', $html) === 0, "{$kind}:{$slug} a row without a catalog page never links");
+        $check(substr_count($html, 'fides-explore__link"') === substr_count($html, '<span aria-hidden="true">→</span></a></span>'), "{$kind}:{$slug} every link has its arrow");
         $check(strpos($html, 'lang="en" data-no-translation') === false && strpos($html, 'data-fides-explore-lang-note') === false, "{$kind}:{$slug} English page: no language marks");
         add_filter('locale', $locale_filter, PHP_INT_MAX);
         $nl = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => $kind, 'overview_url' => '/fides-design-pilot/overview/', 'detail_url' => '/fides-design-pilot/use-case/'));
@@ -233,8 +235,8 @@ add_filter('fides_use_case_design_items', static function () use ($dups) {
 }, 99);
 Fides_Use_Case_Design::flush_cache();
 $dhtml = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => 'sector', 'overview_url' => '/fides-design-pilot/overview/'));
-$check(strpos($dhtml, 'Organisations in these 3 examples') !== false && strpos($dhtml, 'data-relation="organizations" data-total="2"') !== false && strpos($dhtml, '2 in total.') !== false, 'fixture: heading counts examples (3), the sentence counts unique organisations (2)');
-$check(substr_count($dhtml, '<span class="fides-explore__badge">Listing only</span>') === 1 && strpos($dhtml, 'Ghost Org</span> <span class="fides-explore__badge">') !== false && strpos($dhtml, 'href="https://example.invalid') === false, 'fixture: the unknown organisation is plain text, labelled Listing only, its own website is not linked');
+$check(strpos($dhtml, '>Organisations</h2>') !== false && strpos($dhtml, 'data-relation="organizations" data-total="2"') !== false && strpos($dhtml, '<summary>3 related use cases</summary>') !== false && strpos($dhtml, '<summary>Related use case</summary>') !== false, 'fixture: plain heading, two unique organisations, the summaries count related use cases (3 and 1)');
+$check(strpos($dhtml, 'Listing only') === false && strpos($dhtml, 'Ghost Org</span></span>') !== false && strpos($dhtml, 'href="https://example.invalid') === false, 'fixture: the unknown organisation is plain text without a label, its own website is not linked');
 $check(strpos($dhtml, '· Issuer</span>') !== false && strpos($dhtml, '· Relying Party</span>') !== false, 'fixture: per-example role shown in the example list');
 remove_all_filters('fides_use_case_design_items');
 $single = array($mk('sx-1', 'Single example', array('organizations' => array($real), 'credentials' => array(array('refId' => null, 'labelRaw' => 'Unlisted credential', 'url' => null, 'source' => 'manual', 'walletType' => null)))));
@@ -243,7 +245,7 @@ add_filter('fides_use_case_design_items', static function () use ($single) {
 }, 99);
 Fides_Use_Case_Design::flush_cache();
 $shtml = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => 'sector', 'overview_url' => '/fides-design-pilot/overview/'));
-$check(strpos($shtml, 'Organisations in this example') !== false && strpos($shtml, 'In the example shown') !== false && strpos($shtml, 'these 1 examples') === false, 'fixture: one example gives singular wording');
+$check(strpos($shtml, '>Organisations</h2>') !== false && strpos($shtml, '<summary>Related use case</summary>') !== false && strpos($shtml, 'belong to the use case shown above.') !== false && strpos($shtml, 'related use cases') === false, 'fixture: one example gives singular wording');
 remove_all_filters('fides_use_case_design_items');
 Fides_Use_Case_Design::flush_cache();
 $_GET = array();
@@ -252,11 +254,11 @@ $_GET = array();
 global $wpdb;
 $dict = $wpdb->prefix . 'trp_dictionary_en_us_nl_nl';
 $get  = $wpdb->prefix . 'trp_gettext_nl_nl';
-foreach (array('Listing only', 'Catalog content is shown in English.', 'In production', 'Not in production', 'No examples yet', 'Browse all use cases') as $en) {
+foreach (array('Catalog content is shown in English.', 'In production', 'Not in production', 'No examples yet', 'Browse all use cases', 'Change sector', 'Change theme') as $en) {
     $t = (string) $wpdb->get_var($wpdb->prepare("SELECT translated FROM $dict WHERE BINARY original = %s LIMIT 1", $en)); // phpcs:ignore
     $check($t !== '', "Dutch dictionary row for '{$en}'" . ($t !== '' ? " ({$t})" : ''));
 }
-foreach (array('In the example shown', 'Organisations in these %d examples', 'Credential types in these %d examples', 'Wallets in these %d examples', 'The catalog has no published use case here yet.', '“%s” is not a theme we know. Choose one of the options below.', '“%s” is not a sector we know. Choose one of the options below.') as $en) {
+foreach (array('Related use case', '%d related use cases', 'These credential types, organisations and wallets belong to the use cases shown above.', 'The catalog has no published use case here yet.', '“%s” is not a theme we know. Choose one of the options below.', '“%s” is not a sector we know. Choose one of the options below.') as $en) {
     $t = (string) $wpdb->get_var($wpdb->prepare("SELECT translated FROM $get WHERE domain = 'fides-use-case-catalog' AND BINARY original = %s LIMIT 1", $en)); // phpcs:ignore
     $check($t !== '', "Dutch gettext row for '{$en}'");
 }
@@ -336,6 +338,35 @@ $_GET = array('theme' => 'business_authority');
 $wrong = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => 'sector'));
 $check(strpos($wrong, 'data-fides-explore-state="none"') !== false, 'a theme parameter on the sector page is ignored');
 $_GET = array();
+
+// No choice: the heading names the page, no phone action, all choices; a chosen page names the choice.
+foreach (array('theme' => array('Explore by theme', 'Business & Mandates', 'business_authority'), 'sector' => array('Explore by sector', 'Education', 'education')) as $kind => $words) {
+    $_GET = array();
+    $h = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => $kind));
+    $check(strpos($h, 'tabindex="-1">' . $words[0] . '</h1>') !== false && strpos($h, 'data-fides-explore-change') === false && strpos($h, 'data-fides-ds-section-nav') === false, "{$kind}: without a choice the H1 is '{$words[0]}', there is no Change action and no section bar");
+    $_GET = array($kind => $words[2]);
+    $h = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => $kind));
+    $check(strpos($h, 'tabindex="-1">' . str_replace('&', '&amp;', $words[1]) . '</h1>') !== false, "{$kind}: with a choice the H1 is the chosen name '{$words[1]}'");
+}
+$_GET = array();
+
+// Editorial order (data/explore-featured-use-cases.json): featured use cases come first, only when they match the choice.
+$front = static function (string $kind, string $slug) use ($items): array {
+    return array_column(array_slice(Fides_Use_Case_Explore_Choice::matching_items($kind, $slug, $items), 0, 4), 'id');
+};
+$check($front('sector', 'education') === Fides_Use_Case_Explore_Choice::featured_ids('sector', 'education') && count($front('sector', 'education')) === 4, 'editorial order: Education starts with the four featured use cases, in the order of the data file');
+$edu_titles = array_column(array_slice(Fides_Use_Case_Explore_Choice::matching_items('sector', 'education', $items), 0, 2), 'title');
+$check(strpos((string) $edu_titles[0], 'Verification of Education Credentials') !== false && strpos((string) $edu_titles[1], 'Academic Credential') !== false, 'editorial order: Education leads with diploma / academic credential verification');
+$biz = array_column(array_slice(Fides_Use_Case_Explore_Choice::matching_items('theme', 'business_authority', $items), 0, 2), 'title');
+$check(strpos((string) $biz[0], 'Hypersign KYB') === 0 && strpos((string) $biz[1], 'Mandator') === 0, 'editorial order: Business & Mandates leads with Hypersign KYB and Mandator');
+$stale = static function ($ids, $k, $s) { return $k === 'sector' && $s === 'education' ? array_merge(array('does-not-exist', 'faster-onboarding-not-matching'), $ids) : $ids; };
+add_filter('fides_explore_choice_featured', $stale, 10, 3);
+$check(Fides_Use_Case_Explore_Choice::matching_items('sector', 'education', $items)[0]['id'] === $front('sector', 'education')[0], 'editorial order: an unknown id in the data is skipped, a stale entry changes nothing');
+remove_filter('fides_explore_choice_featured', $stale);
+$foreign = static function ($ids, $k, $s) { return $k === 'sector' && $s === 'education' ? array('mandator-public-procurement-portal-0aYOCh') : $ids; };
+add_filter('fides_explore_choice_featured', $foreign, 10, 3);
+$check(! in_array('mandator-public-procurement-portal-0aYOCh', array_column(Fides_Use_Case_Explore_Choice::matching_items('sector', 'education', $items), 'id'), true), 'editorial order: a featured id that does not match the choice is never added');
+remove_filter('fides_explore_choice_featured', $foreign);
 
 // Editorial pages: one per choice, marked by the seed, published.
 foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {

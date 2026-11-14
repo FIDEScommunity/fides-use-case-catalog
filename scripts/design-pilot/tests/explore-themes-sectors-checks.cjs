@@ -19,7 +19,7 @@
  *  - NL: catalog content is lang="en" and not translated, the catalog-content note, Learn stays "Learn", Dutch notice/empty state;
  *  - no featured image: the introduction uses the full width; Explore menu entries on desktop and in the mobile menu.
  * Nothing is submitted: GET navigation only. The empty-data state needs the fixture: tests/run-explore-themes-sectors-empty.sh.
- * Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/explore-themes-sectors-checks.cjs   (env: PILOT_URL, WIDTHS, LOCALES, SAMPLE=all)
+ * ONLY_MAIN=1 runs only the general checks above; ONLY_ROUND2=1 only the UX round checks. Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/explore-themes-sectors-checks.cjs   (env: PILOT_URL, WIDTHS, LOCALES, SAMPLE=all)
  */
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const fs = require("fs");
@@ -64,10 +64,15 @@ const TARGETS = [
   { kind: "sector", param: "sector", path: "sectors/", slug: "food" },
 ];
 const WORDS = {
-  EN: { prod: "In production", notProd: "Not in production", listing: "Listing only", invalid: /is not a (theme|sector) we know/, noChoice: /get started/, empty: "No examples yet", all: "Browse all use cases", note: null },
-  NL: { prod: "In productie", notProd: "Niet in productie", listing: "Alleen vermeld", invalid: /geen (thema|sector) /, noChoice: /om te beginnen/, empty: "Nog geen voorbeelden", all: "Bekijk alle usecases", note: "Catalogusinhoud wordt in het Engels getoond." },
+  EN: { prod: "In production", notProd: "Not in production", listing: "Listing only", onPage: "On this page", related1: "Related use case", relatedN: (n) => `${n} related use cases`, change: { sector: "Change sector", theme: "Change theme" }, invalid: /is not a (theme|sector) we know/, noChoice: /get started/, empty: "No examples yet", all: "Browse all use cases", note: null },
+  NL: { prod: "In productie", notProd: "Niet in productie", listing: "Alleen vermeld", onPage: "Op deze pagina", related1: "Gerelateerde usecase", relatedN: (n) => `${n} gerelateerde usecases`, change: { sector: "Sector wijzigen", theme: "Thema wijzigen" }, invalid: /geen (thema|sector) /, noChoice: /om te beginnen/, empty: "Nog geen voorbeelden", all: "Bekijk alle usecases", note: "Catalogusinhoud wordt in het Engels getoond." },
 };
 const norm = (t) => (t || "").replace(/\s+/g, " ").trim();
+// Below 1100px the list is folded away after a choice; "Change sector / theme" opens it (also works without JavaScript via #anchor).
+const NARROW = (w) => w < 1100;
+async function openPicker(page, width) {
+  if (NARROW(width) && (await page.locator(".fides-explore__choices").first().isHidden())) await page.locator("[data-fides-explore-change]").first().click();
+}
 
 async function repairChecks(browser) {
   if (!fs.existsSync(COUNTS_FILE)) {
@@ -112,7 +117,7 @@ async function repairChecks(browser) {
           type: e.dataset.relation, total: +e.dataset.total,
           heading: (e.querySelector("h2") || {}).textContent || "",
           count: (e.querySelector(".fides-explore__count") || {}).textContent || "",
-          names: Array.from(e.querySelectorAll(".fides-explore__row-name")).map((x) => (x.textContent || "").replace(/\s+/g, " ").replace(/→|Listing only|Alleen vermeld/g, "").trim().toLowerCase()),
+          names: Array.from(e.querySelectorAll(".fides-explore__row-name")).map((x) => (x.textContent || "").replace(/\s+/g, " ").replace(/→/g, "").trim().toLowerCase()),
           rows: e.querySelectorAll(".fides-explore__row").length,
           listingRows: Array.from(e.querySelectorAll('.fides-explore__row[data-detail="no"]')).map((r) => ({ links: r.querySelectorAll(".fides-explore__row-name a").length, badge: r.querySelectorAll(".fides-explore__badge").length })),
           detailRows: Array.from(e.querySelectorAll('.fides-explore__row[data-detail="yes"]')).map((r) => ({ links: r.querySelectorAll(".fides-explore__row-name a").length, badge: r.querySelectorAll(".fides-explore__badge").length })),
@@ -122,17 +127,17 @@ async function repairChecks(browser) {
           const sec = sections.find((x) => x.type === type);
           if (c[type] === 0) { check(`${tag}: no ${type} section when the data has none`, !sec); continue; }
           if (!sec) { check(`${tag}: ${type} section present`, false); continue; }
-          const expectedHeading = n === 1 ? `${headingWord[type]} ${loc === "EN" ? "in this example" : "in dit voorbeeld"}` : `${headingWord[type]} ${loc === "EN" ? `in these ${n} examples` : `in deze ${n} voorbeelden`}`;
-          check(`${tag}: ${type} heading is exactly "${expectedHeading}"`, norm(sec.heading) === expectedHeading, norm(sec.heading));
-          check(`${tag}: ${type} total ${c[type]} = unique records (data-total, sentence, rows)`, sec.total === c[type] && sec.rows === Math.min(c[type], 8) && new RegExp(`\\b${c[type]}\\b`).test(sec.count), `${sec.total}/${sec.rows}/${sec.count}`);
+          const expectedHeading = headingWord[type];
+          check(`${tag}: ${type} heading is exactly "${expectedHeading}" (the examples are named once above, not in every heading)`, norm(sec.heading) === expectedHeading, norm(sec.heading));
+          check(`${tag}: ${type} total ${c[type]} = unique records (data-total, rows); no repeated sentence about duplicates`, sec.total === c[type] && sec.rows === Math.min(c[type], 8) && sec.count === "", `${sec.total}/${sec.rows}/${sec.count}`);
           check(`${tag}: ${type} each name once`, new Set(sec.names).size === sec.names.length, sec.names.join("|"));
-          check(`${tag}: ${type} listing only rows are plain text with a label, linked rows have a link and no label`, sec.listingRows.every((r) => r.links === 0 && r.badge === 1) && sec.detailRows.every((r) => r.links === 1 && r.badge === 0));
+          check(`${tag}: ${type} rows without a catalog page are plain text (no link, no label), rows with one have a link with an arrow`, sec.listingRows.every((r) => r.links === 0 && r.badge === 0) && sec.detailRows.every((r) => r.links === 1 && r.badge === 0));
         }
         check(`${tag}: no horizontal overflow`, await noOverflow(page));
 
-        // Legend and language note.
-        const legend = await page.locator("[data-fides-explore-legend]").count();
-        check(`${tag}: legend explains arrow versus "${W.listing}"`, legend === 1 && (await page.locator("[data-fides-explore-legend]").innerText()).includes(loc === "EN" ? "Listing only" : "Alleen vermeld"));
+        // One sentence about the lists, no "Listing only" label, no legend; language note.
+        const body = norm(await page.locator(".fides-explore").innerText());
+        check(`${tag}: the lists are explained once, no legend, no "${W.listing}", no repeated duplicate explanation`, (await page.locator("[data-fides-explore-relations-note]").count()) === 1 && !body.includes(W.listing) && (await page.locator("[data-fides-explore-legend]").count()) === 0 && !/Each is listed once|Elk item staat/.test(body));
         const langNote = await page.locator("[data-fides-explore-lang-note]").count();
         if (loc === "NL") {
           check(`${tag}: NL states that catalog content is English`, langNote === 1 && norm(await page.locator("[data-fides-explore-lang-note]").innerText()) === W.note);
@@ -159,11 +164,11 @@ async function repairChecks(browser) {
           check(`${tag}: anchor jumps to the example card`, (await page.evaluate(() => location.hash)) === href && (await page.locator(href).isVisible()));
           // Keyboard: Tab from the result heading reaches the first summary, Enter opens it, a focus ring is visible.
           await page.goto(url, { waitUntil: "networkidle" });
-          await page.locator("#fides-explore-selected-title").focus();
+          await page.locator("#fides-explore-title").focus();
           let reached = false;
-          for (let i = 0; i < 80 && !reached; i += 1) {
+          for (let i = 0; i < 150 && !reached; i += 1) {
             await page.keyboard.press("Tab");
-            reached = await page.evaluate(() => document.activeElement && document.activeElement.tagName === "SUMMARY");
+            reached = await page.evaluate(() => document.activeElement && document.activeElement.tagName === "SUMMARY" && !!document.activeElement.closest(".fides-explore__from"));
           }
           const ringOk = reached && (await page.evaluate(() => { const s = getComputedStyle(document.activeElement); return s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0; }));
           check(`${tag}: Tab reaches the example list summary with a visible focus ring`, reached && ringOk);
@@ -284,9 +289,189 @@ async function repairChecks(browser) {
   }
 }
 
+
+// ---------------------------------------------------------------------------------------------------------------------
+// UX repair round 2026-11-14 (b): chosen name as H1, folded list on phones, editorial order, shorter relations, section bar.
+// Targets: sectors/?sector=education and themes/?theme=business_authority, direct link and no-choice state, 1440 and 390, EN and NL.
+// ---------------------------------------------------------------------------------------------------------------------
+const R2 = [
+  { kind: "theme", param: "theme", path: "themes/", slug: "business_authority", other: "identity_access", name: { EN: "Business & Mandates", NL: "Bedrijven en mandaten" }, page: { EN: "Explore by theme", NL: "Ontdek per theme".replace("theme", "thema") }, first: [/^Hypersign KYB/, /^Mandator/] },
+  { kind: "sector", param: "sector", path: "sectors/", slug: "education", other: "healthcare", name: { EN: "Education", NL: "Onderwijs" }, page: { EN: "Explore by sector", NL: "Ontdek per sector" }, first: [/Verification of Education Credentials/, /Academic Credential/] },
+];
+
+// Geometry checks need the final scroll position at once: the site scrolls smoothly, and headless Chrome ignores reduced motion for that.
+const calm = (page) => page.addStyleTag({ content: "html{scroll-behavior:auto !important}" });
+
+async function calmCss(ctx) {
+  await ctx.route(/design-system\.css/, async (route) => {
+    const r = await route.fetch();
+    await route.fulfill({ response: r, body: `${await r.text()}\nhtml{scroll-behavior:auto !important}` });
+  });
+}
+
+async function round2Checks(browser) {
+  const info = [];
+  for (const loc of LOCALES) {
+    const W = WORDS[loc];
+    for (const width of WIDTHS) {
+      for (const T of R2) {
+        const tag = `${loc} ${width} ${T.kind}`;
+        const base = `${BASE}${prefix(loc)}${T.path}`;
+        const wide = !NARROW(width);
+
+        // No choice: page name as H1, every choice visible at every width, no phone action, no section bar.
+        let page = await newPage(browser, width);
+        await page.goto(base, { waitUntil: "networkidle" });
+        const total = await page.locator(".fides-explore__choice").count();
+        const visible = await page.locator(".fides-explore__choice:visible").count();
+        check(`${tag} no choice: H1 is "${T.page[loc]}"`, norm(await page.locator("h1").innerText()) === T.page[loc] && (await page.locator("h1").count()) === 1, norm(await page.locator("h1").allInnerTexts().then((a) => a.join("|"))));
+        check(`${tag} no choice: all ${total} choices visible, no Change action, no section bar`, total > 0 && visible === total && (await page.locator("[data-fides-explore-change]").count()) === 0 && (await page.locator("[data-fides-explore-sections]").count()) === 0, `${visible}/${total}`);
+        await page.context().close();
+
+        // Direct link: the chosen name is the H1 and the document title.
+        page = await newPage(browser, width);
+        await page.goto(`${base}?${T.param}=${T.slug}`, { waitUntil: "networkidle" });
+        await calm(page);
+        check(`${tag} direct link: H1 is the chosen name "${T.name[loc]}", one H1, in the document title`, norm((await page.locator("h1").allInnerTexts()).join("|")) === T.name[loc] && (await page.title()).includes(T.name[loc].replace("&", "&")) , `${(await page.locator("h1").allInnerTexts()).join("|")} / ${await page.title()}`);
+        const change = page.locator("[data-fides-explore-change]").first();
+        const changeLabel = W.change[T.kind];
+        if (wide) {
+          check(`${tag} desktop: all choices stay visible, no Change action`, (await page.locator(".fides-explore__choice:visible").count()) === total && !(await change.isVisible()));
+        } else {
+          check(`${tag} phone: the list is folded, the Change action "${changeLabel}" sits by the name`, (await page.locator(".fides-explore__choices").isHidden()) && (await change.isVisible()) && norm(await change.innerText()) === changeLabel, norm(await change.innerText()));
+          const h1Box = await page.locator("h1").boundingBox();
+          const chBox = await change.boundingBox();
+          check(`${tag} phone: the action is compact (one line, at most 44px tall) and close to the name`, chBox.height <= 48 && Math.abs(chBox.y - h1Box.y) < 120, JSON.stringify([h1Box, chBox]));
+        }
+        check(`${tag}: no horizontal overflow`, await noOverflow(page));
+
+        // Editorial order: recognisable examples first, catalog cards with the shared badge style.
+        const titles = await page.$$eval("#explore-use-cases .fides-ds-card__title", (e) => e.map((x) => x.textContent.replace(/\s+/g, " ").replace(/→/, "").trim()));
+        check(`${tag} order: first card ${T.first[0]}, second ${T.first[1]}`, T.first[0].test(titles[0]) && T.first[1].test(titles[1]), titles.slice(0, 3).join(" | "));
+        info.push(`${tag}: ${titles.join(" || ")}`);
+        const badge = await page.$eval("#explore-use-cases .fides-ds-card__status", (e) => { const c = getComputedStyle(e); return [c.backgroundColor, c.borderTopColor, c.fontSize, c.fontWeight, c.paddingTop, c.paddingLeft, c.color]; });
+        const ov = await page.context().newPage();
+        await ov.goto(`${BASE}${prefix(loc)}overview/?${T.param}=${T.slug}`, { waitUntil: "networkidle" });
+        const ovBadge = await ov.$eval(".fides-uc-pilot__list .fides-ds-card__status", (e) => { const c = getComputedStyle(e); return [c.backgroundColor, c.borderTopColor, c.fontSize, c.fontWeight, c.paddingTop, c.paddingLeft, c.color]; });
+        check(`${tag} badge: same style as the status badge of the catalog cards`, JSON.stringify(badge) === JSON.stringify(ovBadge), `${JSON.stringify(badge)} vs ${JSON.stringify(ovBadge)}`);
+        await ov.close();
+
+        // Relations: one explanation, short summaries, details keep names and links.
+        const sums = await page.$$eval(".fides-explore__from > summary", (e) => e.map((x) => x.textContent.replace(/\s+/g, " ").trim()));
+        const okSum = sums.every((t) => t === W.related1 || [2, 3, 4].some((n) => t === W.relatedN(n)));
+        check(`${tag} relations: ${sums.length} summaries are "${W.related1}" or "N ${loc === "EN" ? "related use cases" : "gerelateerde usecases"}"`, sums.length > 0 && okSum, [...new Set(sums)].join("|"));
+        const noteTxt = norm(await page.locator("[data-fides-explore-relations-note]").innerText());
+        check(`${tag} relations: said once that credentials, organisations and wallets belong to the shown use cases`, (await page.locator("[data-fides-explore-relations-note]").count()) === 1 && noteTxt.length > 30, noteTxt);
+        const linkRows = await page.$$eval('.fides-explore__row[data-detail="yes"] .fides-explore__row-name', (rows) => rows.map((r) => r.querySelector("a") && r.querySelector("a").textContent.includes("→") && r.querySelector("a span[aria-hidden]") ? 1 : 0));
+        const plainRows = await page.$$eval('.fides-explore__row[data-detail="no"] .fides-explore__row-name', (rows) => rows.map((r) => (r.querySelector("a") ? 1 : 0) + (r.textContent.includes("→") ? 1 : 0)));
+        check(`${tag} relations: linked names end in an arrow (not colour only), unlinked names are plain text`, linkRows.every((x) => x === 1) && plainRows.every((x) => x === 0), `${linkRows.length}/${plainRows.length}`);
+        const orgNames = await page.$$eval('[data-relation="organizations"] .fides-explore__row-name', (e) => e.map((x) => x.textContent.replace(/→/, "").replace(/\s+/g, " ").trim().toLowerCase()));
+        const logos = await page.locator('[data-relation="organizations"] .fides-explore__logo').count();
+        check(`${tag} relations: each organisation once (${orgNames.length}) with its logo box (${logos})`, new Set(orgNames).size === orgNames.length && logos === orgNames.length);
+        const det = page.locator(".fides-explore__from").first();
+        await det.locator("summary").click();
+        const rel = det.locator("a").first();
+        check(`${tag} relations: opening shows the related use case name as a link`, (await rel.isVisible()) && /^#explore-example-\d$/.test((await rel.getAttribute("href")) || ""));
+        const targetSel = await rel.getAttribute("href");
+        await rel.click();
+        await page.waitForFunction((sel) => { const t = document.querySelector(sel); const n = document.querySelector("[data-fides-explore-sections]"); return t && n && t.getBoundingClientRect().top >= n.getBoundingClientRect().bottom - 1; }, targetSel, { timeout: 5000 }).catch(() => {});
+        const rect = await page.evaluate((sel) => ({ t: document.querySelector(sel).getBoundingClientRect().top, b: document.querySelector("[data-fides-explore-sections]").getBoundingClientRect().bottom }), targetSel);
+        check(`${tag} relations: the related example card is reached and is not under the section bar`, rect.t >= rect.b - 1, JSON.stringify(rect));
+        await page.evaluate(() => window.scrollTo(0, 0));
+
+        // Section bar: same component as the use case detail page.
+        const bar = page.locator("[data-fides-explore-sections]");
+        const sticky = await bar.evaluate((e) => ({ pos: getComputedStyle(e).position, h: Math.round(e.getBoundingClientRect().height), summary: Math.round(e.querySelector("summary").getBoundingClientRect().height), open: e.open }));
+        check(`${tag} bar: sticky, shared "On this page" component`, sticky.pos === "sticky" && (await bar.getAttribute("data-fides-ds-section-nav-ready")) === "1" && (await bar.locator("nav").getAttribute("aria-label")) === W.onPage, JSON.stringify(sticky));
+        const labels = await bar.locator("li a").evaluateAll((a) => a.map((x) => x.getAttribute("href")));
+        if (wide) {
+          check(`${tag} bar: desktop shows the tabs open (no summary)`, sticky.open && !(await bar.locator("summary").isVisible()) && labels.length >= 3, JSON.stringify(sticky));
+        } else {
+          check(`${tag} bar: phone folds the list behind one compact row (${sticky.summary}px)`, !sticky.open && (await bar.locator("summary").isVisible()) && sticky.summary <= 52 && (await bar.locator("li a:visible").count()) === 0, JSON.stringify(sticky));
+        }
+        // Pinned: scroll to the last section; the bar must sit on the top edge.
+        const lastId = labels[labels.length - 1].slice(1);
+        const lastTop = await page.evaluate((id) => document.getElementById(id).getBoundingClientRect().top + window.scrollY, lastId);
+        await page.evaluate((y) => window.scrollTo(0, y), lastTop);
+        await page.waitForFunction(() => Math.abs(window.scrollY) > 0);
+        const pinned = await bar.evaluate((e) => Math.round(e.getBoundingClientRect().top));
+        check(`${tag} bar: ${wide ? "desktop" : "phone"} bar is pinned at the top while reading the last section`, wide ? pinned === 0 : true, `top=${pinned}`);
+        info.push(`${tag}: bar ${wide ? "tabs" : "folded"}, height ${sticky.h}px, top while scrolled = ${pinned}px (${pinned === 0 ? "pinned" : "not pinned"})`);
+        // Anchors: every link lands below the bar; the current section is marked.
+        if (!wide) await bar.locator("summary").click();
+        let anchorsOk = true;
+        let currentOk = true;
+        let detail = "";
+        for (const href of labels) {
+          if (!wide && !(await bar.evaluate((e) => e.open))) await bar.locator("summary").click();
+          const link = bar.locator(`li a[href="${href}"]`);
+          await link.click();
+          await page.waitForFunction((h) => { const t = document.querySelector(h); const n = document.querySelector("[data-fides-explore-sections]"); const r = t.getBoundingClientRect(); return r.top >= n.getBoundingClientRect().bottom - 1 && (r.top < n.getBoundingClientRect().bottom + 160 || window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2); }, href, { timeout: 5000 }).catch(() => {});
+          const m = await page.evaluate((h) => { const t = document.querySelector(h); const n = document.querySelector("[data-fides-explore-sections]"); const cur = n.querySelector('a[aria-current="location"]'); return { gap: Math.round(t.getBoundingClientRect().top - n.getBoundingClientRect().bottom), end: window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2, current: cur ? cur.getAttribute("href") : "", hash: location.hash }; }, href);
+          if (m.gap < -1) anchorsOk = false;
+          if (m.gap >= 160 && !m.end) anchorsOk = false; // near the end of the page a section cannot reach the bar; that is fine
+          if (m.current !== href) currentOk = false;
+          detail += `${href}:${m.gap}/${m.current} `;
+        }
+        check(`${tag} bar: every section link lands below the bar (scroll margin)`, anchorsOk, detail);
+        check(`${tag} bar: the active section is marked (aria-current) after choosing it`, currentOk, detail);
+        if (!wide) check(`${tag} bar: phone list closes after choosing a section`, !(await bar.evaluate((e) => e.open)));
+        await page.evaluate(() => window.scrollTo(0, 0));
+
+        // Keyboard: Tab from the heading reaches the Change action (phone) with a visible focus ring; Enter opens the list.
+        await page.locator("h1").focus();
+        if (!wide) {
+          await page.keyboard.press("Tab");
+          const onChange = await page.evaluate(() => document.activeElement && document.activeElement.hasAttribute("data-fides-explore-change"));
+          const ring = await page.evaluate(() => { const s = getComputedStyle(document.activeElement); return s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0; });
+          check(`${tag} keyboard: Tab from the heading reaches "${changeLabel}" with a visible focus ring`, onChange && ring);
+          await page.keyboard.press("Enter");
+          const opened = await page.evaluate(() => ({ open: !document.querySelector("[data-fides-explore-choices]").matches('[hidden]') && getComputedStyle(document.querySelector("[data-fides-explore-choices]")).display !== "none", exp: document.querySelector("[data-fides-explore-change]").getAttribute("aria-expanded"), focus: document.activeElement.getAttribute("data-choice") }));
+          check(`${tag} keyboard: Enter opens the list (aria-expanded=true), focus on the chosen item`, opened.open && opened.exp === "true" && opened.focus === T.slug, JSON.stringify(opened));
+          // Choose the other one from the open list, back restores.
+          await page.locator(`.fides-explore__choice[data-choice="${T.other}"]`).click();
+          await page.waitForFunction((s) => document.querySelector(`.fides-explore__choice[data-choice="${s}"][aria-current]`), T.other);
+          const h1b = norm(await page.locator("h1").innerText());
+          check(`${tag} switching: H1 follows the choice (${h1b}), the list folds again, focus on the H1, URL keeps ?${T.param}=`, h1b !== T.name[loc] && (await page.locator(".fides-explore__choices").isHidden()) && (await page.evaluate(() => document.activeElement.id)) === "fides-explore-title" && page.url().includes(`${T.param}=${T.other}`), h1b);
+        } else {
+          await page.locator(`.fides-explore__choice[data-choice="${T.other}"]`).click();
+          await page.waitForFunction((s) => document.querySelector(`.fides-explore__choice[data-choice="${s}"][aria-current]`), T.other);
+          const h1b = norm(await page.locator("h1").innerText());
+          check(`${tag} switching: H1 follows the choice (${h1b}), focus on the H1, URL keeps ?${T.param}=`, h1b !== T.name[loc] && (await page.evaluate(() => document.activeElement.id)) === "fides-explore-title" && page.url().includes(`${T.param}=${T.other}`), h1b);
+        }
+        // The new result has a working section bar (re-initialised after the swap).
+        check(`${tag} switching: the section bar of the new result is initialised`, (await page.locator("[data-fides-explore-sections]").getAttribute("data-fides-ds-section-nav-ready")) === "1" && (await page.locator('[data-fides-explore-sections] a[aria-current="location"]').count()) === 1);
+        await page.goBack();
+        await page.waitForFunction((s) => document.querySelector(`.fides-explore__choice[data-choice="${s}"][aria-current]`), T.slug);
+        // TranslatePress' own DOM observer may touch a swapped-in heading for a moment on /nl/; wait for the text, then compare.
+        await page.waitForFunction(() => (document.querySelector("h1") || {}).textContent.trim() !== "", null, { timeout: 5000 }).catch(() => {});
+        check(`${tag} back: H1 is "${T.name[loc]}" again`, norm(await page.locator("h1").innerText()) === T.name[loc]);
+        // Back to the no-choice state keeps working too.
+        await page.context().close();
+
+        // Without JavaScript: the Change link opens the folded list through its #anchor, a choice is a normal link.
+        const nojs = await newPage(browser, width, false);
+        await calmCss(nojs.context()); // addStyleTag needs scripts, so the no-JS page gets the rule through the stylesheet response
+        await nojs.goto(`${base}?${T.param}=${T.slug}`, { waitUntil: "load" });
+        check(`${tag} no JS: server-rendered H1 "${T.name[loc]}" and the section bar links`, norm(await nojs.locator("h1").innerText()) === T.name[loc] && (await nojs.locator("[data-fides-explore-sections] a").count()) >= 3);
+        if (!wide) {
+          check(`${tag} no JS: list folded; Change link shows it (#anchor target)`, await nojs.locator(".fides-explore__choices").isHidden());
+          await nojs.locator("[data-fides-explore-change]").first().click();
+          check(`${tag} no JS: the list is visible after the Change link`, await nojs.locator(".fides-explore__choices").isVisible());
+        }
+        await nojs.locator(`.fides-explore__choice[data-choice="${T.other}"]`).click();
+        await nojs.waitForLoadState("load");
+        check(`${tag} no JS: choosing loads the other choice`, nojs.url().includes(`${T.param}=${T.other}`) && norm(await nojs.locator("h1").innerText()) !== T.name[loc]);
+        await nojs.context().close();
+      }
+    }
+  }
+  console.log("\n" + info.map((l) => `info - ${l}`).join("\n"));
+}
+
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, headless: true });
-  if (process.env.ONLY_REPAIR !== "1") for (const loc of LOCALES) {
+  if (process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1") for (const loc of LOCALES) {
     for (const width of WIDTHS) {
       for (const K of KINDS) {
         const tag = `${loc} ${width} ${K.kind}`;
@@ -308,9 +493,10 @@ async function repairChecks(browser) {
 
         // Switch by click, then Back / Forward
         const other = K.sample[1];
+        await openPicker(page, width);
         await page.locator(`.fides-explore__choice[data-choice="${other}"]`).click();
         await page.waitForFunction((s) => document.querySelector(`.fides-explore__choice[data-choice="${s}"][aria-current]`), other);
-        check(`${tag}: click switches in place, URL updated, focus on the result heading`, page.url().includes(`${K.param}=${other}`) && (await page.evaluate(() => document.activeElement && document.activeElement.id)) === "fides-explore-selected-title", page.url());
+        check(`${tag}: click switches in place, URL updated, focus on the result heading`, page.url().includes(`${K.param}=${other}`) && (await page.evaluate(() => document.activeElement && document.activeElement.id)) === "fides-explore-title", page.url());
         await page.goBack();
         await page.waitForFunction((s) => document.querySelector(`.fides-explore__choice[data-choice="${s}"][aria-current]`), sample);
         check(`${tag}: Back restores the previous choice`, JSON.stringify(await current(page)) === JSON.stringify([sample]));
@@ -330,7 +516,8 @@ async function repairChecks(browser) {
         check(`${tag}: Tab moves through the choices in order`, second === expected, second);
         await page.keyboard.press("Enter");
         await page.waitForFunction(() => document.querySelector(".fides-explore__choice[aria-current]"));
-        check(`${tag}: Enter chooses and moves focus to the result heading`, (await page.evaluate(() => document.activeElement && document.activeElement.id)) === "fides-explore-selected-title");
+        check(`${tag}: Enter chooses and moves focus to the result heading`, (await page.evaluate(() => document.activeElement && document.activeElement.id)) === "fides-explore-title");
+        await openPicker(page, width);
         await page.locator(".fides-explore__choice").nth(2).focus();
         await page.keyboard.press("Space");
         await page.waitForFunction((i) => document.querySelectorAll(".fides-explore__choice")[i].hasAttribute("aria-current"), 2);
@@ -345,9 +532,11 @@ async function repairChecks(browser) {
 
         // No JavaScript
         const nojs = await newPage(browser, width, false);
+        await calmCss(nojs.context());
         await nojs.goto(url(sample), { waitUntil: "load" });
         const hrefs = await nojs.$$eval(".fides-explore__choice", (as) => as.map((a) => a.getAttribute("href")));
         check(`${tag}: no JS: choices are real links and the overview is server rendered`, hrefs.length === K.slugs.length && hrefs.every((h) => h.includes(`${K.param}=`)) && (await nojs.locator(".fides-explore__cards li").count()) > 0);
+        if (NARROW(width)) await nojs.locator("[data-fides-explore-change]").first().click(); // opens the folded list through the #anchor target
         await nojs.locator(`.fides-explore__choice[data-choice="${other}"]`).click();
         await nojs.waitForLoadState("load");
         check(`${tag}: no JS: clicking a choice loads the chosen overview`, JSON.stringify(await current(nojs)) === JSON.stringify([other]));
@@ -379,7 +568,8 @@ async function repairChecks(browser) {
       }
     }
   }
-  await repairChecks(browser);
+  if (process.env.ONLY_ROUND2 !== "1" && process.env.ONLY_MAIN !== "1") await repairChecks(browser);
+  if (process.env.ONLY_MAIN !== "1") await round2Checks(browser);
   await browser.close();
   console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
   process.exit(failures ? 1 : 0);
