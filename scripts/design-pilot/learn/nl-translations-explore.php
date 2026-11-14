@@ -26,8 +26,8 @@ $nl = array(
     'Sectors'                     => 'Sectoren',
     'Explore / Themes'            => 'Explore / Thema’s',
     'Explore / Sectors'           => 'Explore / Sectoren',
-    'Explore by theme'            => 'Verken per thema',
-    'Explore by sector'           => 'Verken per sector',
+    'Explore by theme'            => 'Ontdek per thema',
+    'Explore by sector'           => 'Ontdek per sector',
     'Choose a theme to explore use cases, credential types and organisations across sectors.' => 'Kies een thema om usecases, credentialtypen en organisaties uit verschillende sectoren te verkennen.',
     'Choose a sector to see how digital trust is used, with examples and related organisations.' => 'Kies een sector om te zien hoe digitaal vertrouwen wordt gebruikt, met voorbeelden en gerelateerde organisaties.',
     'Choose a theme'              => 'Kies een thema',
@@ -43,16 +43,19 @@ $nl = array(
     'Wallets'                     => 'Wallets',
     'Selected use cases'          => 'Geselecteerde usecases',
     'See all matching use cases'  => 'Bekijk alle passende usecases',
-    'Credential types in these examples'  => 'Credentialtypen in deze voorbeelden',
-    'Organisations in these examples'     => 'Organisaties in deze voorbeelden',
-    'Wallets in these examples'           => 'Wallets in deze voorbeelden',
     'Personal wallet'             => 'Persoonlijke wallet',
-    'Business wallet'             => 'Zakelijke wallet',
+    'Business wallet'             => 'Business wallet',
     'No examples yet'             => 'Nog geen voorbeelden',
+    // Repair round 2026-11-14: status, catalog language, detail versus listing only
+    'In production'               => 'In productie',
+    'Not in production'           => 'Niet in productie',
+    'Listing only'                => 'Alleen vermeld',
+    'Catalog content is shown in English.' => 'Catalogusinhoud wordt in het Engels getoond.',
+    'Names with an arrow open a page in this catalog. “Listing only” means an example names it, but the catalog has no page for it.' => 'Namen met een pijl openen een pagina in deze catalogus. “Alleen vermeld” betekent dat een voorbeeld de naam noemt, maar de catalogus er geen pagina voor heeft.',
     'Browse all use cases'        => 'Bekijk alle usecases',
     // Theme titles and sector names
     'Identity &amp; Access'                => 'Identiteit en toegang',
-    'Business &amp; Mandates'              => 'Bedrijven en machtigingen',
+    'Business &amp; Mandates'              => 'Bedrijven en mandaten',
     'Payments &amp; Commerce'              => 'Betalen en handel',
     'Work &amp; Qualifications'            => 'Werk en kwalificaties',
     'Products, Trade &amp; Supply Chains'  => 'Producten, handel en toeleveringsketens',
@@ -93,11 +96,11 @@ $nl = array(
     'Retailers and their customers may need to check information such as age or identity at the moment of sale. The examples show what information is exchanged and who checks it.' => 'Winkels en hun klanten moeten bij een verkoop mogelijk informatie controleren, zoals leeftijd of identiteit. De voorbeelden laten zien welke informatie wordt uitgewisseld en wie die controleert.',
     'Supply chains involve many organisations that may need to share verified information about goods and who handled them. The examples show what information is exchanged and who checks it.' => 'In toeleveringsketens zijn veel organisaties betrokken die mogelijk geverifieerde informatie over goederen en over wie ze heeft behandeld moeten delen. De voorbeelden laten zien welke informatie wordt uitgewisseld en wie die controleert.',
     'Trade between companies, also across borders, may need verified information about the parties and the documents involved. The examples show what information is exchanged and who checks it.' => 'Handel tussen bedrijven, ook over grenzen heen, vraagt mogelijk om geverifieerde informatie over de partijen en de documenten. De voorbeelden laten zien welke informatie wordt uitgewisseld en wie die controleert.',
-    // Learn links (the target page titles already have Dutch rows; "Learn" is not translated site-wide yet)
-    'Sharing information from a wallet · Learn →'                                  => 'Informatie delen vanuit een wallet · Leren →',
-    'How can someone act for an organisation? · Learn →'                          => 'Hoe kan iemand namens een organisatie handelen? · Leren →',
-    'Digital wallets and public services · Learn →'                                => 'Digitale wallets en publieke dienstverlening · Leren →',
-    'What should a service check when receiving a credential? · Learn →'          => 'Wat moet een dienst controleren bij ontvangst van een credential? · Leren →',
+    // Learn links (the target page titles already have Dutch rows; "Learn" stays "Learn" in Dutch like the menu and the Learn bar)
+    'Sharing information from a wallet · Learn →'                                  => 'Informatie delen vanuit een wallet · Learn →',
+    'How can someone act for an organisation? · Learn →'                          => 'Hoe kan iemand namens een organisatie handelen? · Learn →',
+    'Digital wallets and public services · Learn →'                                => 'Digitale wallets en publieke dienstverlening · Learn →',
+    'What should a service check when receiving a credential? · Learn →'          => 'Wat moet een dienst controleren bij ontvangst van een credential? · Learn →',
 );
 
 /** Gettext format strings (domain fides-use-case-catalog); %-placeholders stay as they are. */
@@ -108,9 +111,33 @@ $gettext = array(
     array('fides-use-case-catalog', 'One use case in the catalog.', 'Eén usecase in de catalogus.'),
     array('fides-use-case-catalog', '%d use cases in the catalog.', '%d usecases in de catalogus.'),
     array('fides-use-case-catalog', 'The catalog has no published use case here yet.', 'De catalogus bevat hier nog geen gepubliceerde usecase.'),
-    array('fides-use-case-catalog', 'In “%s”', 'In “%s”'),
+    array('fides-use-case-catalog', 'In the example shown', 'In het getoonde voorbeeld'),
+    array('fides-use-case-catalog', 'Credential types in this example', 'Credentialtypen in dit voorbeeld'),
+    array('fides-use-case-catalog', 'Credential types in these %d examples', 'Credentialtypen in deze %d voorbeelden'),
+    array('fides-use-case-catalog', 'Organisations in this example', 'Organisaties in dit voorbeeld'),
+    array('fides-use-case-catalog', 'Organisations in these %d examples', 'Organisaties in deze %d voorbeelden'),
+    array('fides-use-case-catalog', 'Wallets in this example', 'Wallets in dit voorbeeld'),
+    array('fides-use-case-catalog', 'Wallets in these %d examples', 'Wallets in deze %d voorbeelden'),
+    array('fides-use-case-catalog', 'Showing %1$d of %2$d. Each is listed once, even when it appears in several examples.', 'Toont %1$d van %2$d. Elk item staat één keer in de lijst, ook als het in meerdere voorbeelden voorkomt.'),
+    array('fides-use-case-catalog', '%d in total. Each is listed once, even when it appears in several examples.', '%d in totaal. Elk item staat één keer in de lijst, ook als het in meerdere voorbeelden voorkomt.'),
     array('fides-use-case-catalog', 'In %1$d of these %2$d examples', 'In %1$d van deze %2$d voorbeelden'),
     array('fides-use-case-catalog', '%d more listed in these examples. Open a use case to see them.', 'Nog %d genoemd in deze voorbeelden. Open een usecase om ze te zien.'),
+);
+
+/**
+ * Corrections of rows this script (or its first version) filled: old Dutch => new Dutch. A row is only rewritten while it still
+ * holds exactly the expected old Dutch, so a text an editor changed in the meantime is never touched. Source, old and new text:
+ * learn/nl-translation-changes-themes-sectors-repair-2026-11-14.md.
+ */
+$corrections = array(
+    array('Business &amp; Mandates', 'Bedrijven en machtigingen', 'Bedrijven en mandaten'),
+    array('Explore by theme', 'Verken per thema', 'Ontdek per thema'),
+    array('Explore by sector', 'Verken per sector', 'Ontdek per sector'),
+    array('Business wallet', 'Zakelijke wallet', 'Business wallet'),
+    array('Sharing information from a wallet · Learn →', 'Informatie delen vanuit een wallet · Leren →', 'Informatie delen vanuit een wallet · Learn →'),
+    array('How can someone act for an organisation? · Learn →', 'Hoe kan iemand namens een organisatie handelen? · Leren →', 'Hoe kan iemand namens een organisatie handelen? · Learn →'),
+    array('Digital wallets and public services · Learn →', 'Digitale wallets en publieke dienstverlening · Leren →', 'Digitale wallets en publieke dienstverlening · Learn →'),
+    array('What should a service check when receiving a credential? · Learn →', 'Wat moet een dienst controleren bij ontvangst van een credential? · Leren →', 'Wat moet een dienst controleren bij ontvangst van een credential? · Learn →'),
 );
 
 $forms = array(
@@ -120,6 +147,23 @@ $forms = array(
 );
 
 global $wpdb;
+$corrected = 0;
+$corrected_ids = array();
+foreach ($corrections as $c) {
+    foreach ($forms as $form) {
+        foreach (array($c[0], html_entity_decode($c[0], ENT_QUOTES)) as $variant) {
+            $row = $wpdb->get_row($wpdb->prepare("SELECT id, translated FROM $table WHERE BINARY original = %s LIMIT 1", $form($variant))); // phpcs:ignore
+            if ($row && ! isset($corrected_ids[ (int) $row->id ]) && (string) $row->translated === $form(html_entity_decode($c[1], ENT_QUOTES))) {
+                $corrected_ids[ (int) $row->id ] = true;
+                if ($mode === 'apply') {
+                    $wpdb->update($table, array('translated' => $form(html_entity_decode($c[2], ENT_QUOTES)), 'status' => 2), array('id' => (int) $row->id));
+                }
+                $corrected++;
+            }
+        }
+    }
+}
+echo ($mode === 'apply' ? 'corrected' : 'to correct') . ": $corrected\n";
 $filled = 0;
 $kept   = 0;
 $absent = array();

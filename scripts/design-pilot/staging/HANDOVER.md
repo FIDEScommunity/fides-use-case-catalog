@@ -404,3 +404,5 @@ The request route (Services -> enquiry/request form) was checked up to the form,
 ## Explore by theme and sector (14 November 2026, local only)
 
 The local pages `themes/` and `sectors/` are **not yet in the package** (see `explore/README.md`).
+
+Repair round (14 November 2026, local only): the Explore pages now use the shared catalog row card with image and status badge, one row per organisation/wallet/credential (details lists the examples), "Listing only" for records without a pilot page, and marked English catalog content on `/nl/`. Eight shared Dutch rows were corrected and about 23 added (`learn/nl-translation-changes-themes-sectors-repair-2026-11-14.md`; "Business wallet" and the Learn link rows also appear on Learn pages). Still not in the package; after a new package run `status` and `import-apply`. Tiles is unchanged.

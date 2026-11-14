@@ -42,6 +42,10 @@ $raw_links = static function (array $item): array {
         foreach ((array) ($item['links'][ $key ] ?? array()) as $link) {
             if (is_array($link)) {
                 $out[ $key ][] = strtolower(trim((string) ($link['labelRaw'] ?? $link['refId'] ?? '')));
+                if (trim((string) ($link['refId'] ?? '')) !== '') {
+                    $ref = trim((string) $link['refId']);
+                    $out[ $key ][] = 'ref:' . strtolower($key === 'credentials' ? Fides_Use_Case_Design::credential_canonical_id($ref) : $ref);
+                }
             }
         }
     }
@@ -76,11 +80,48 @@ foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {
                     $check(in_array($uc_id, $shown, true), "{$kind}:{$slug} {$bucket} '{$row['label']}' comes from a shown use case");
                     $found = false;
                     foreach ($by_id[ $uc_id ] ?? array() as $labels) {
-                        if (in_array(strtolower($row['label']), $labels, true)) {
+                        // The row name is the link name, or the name of the catalog record the link's id points to.
+                        if (in_array(strtolower($row['label']), $labels, true) || ($row['ref'] !== '' && in_array('ref:' . strtolower($row['ref']), $labels, true))) {
                             $found = true;
                         }
                     }
                     $check($found, "{$kind}:{$slug} {$bucket} '{$row['label']}' is an explicit link of {$uc_id}");
+                }
+            }
+        }
+
+        // Each record once per overview; detail page or listing only is decided by the catalog data.
+        $stats = array('withImage' => 0, 'status' => array('yes' => 0, 'no' => 0, 'other' => 0), 'logos' => 0, 'detail' => array(), 'listingOnly' => array(), 'roles' => 0);
+        foreach ($sel['shown'] as $item) {
+            $stats['withImage'] += Fides_Use_Case_Design::image_url($item) !== '' ? 1 : 0;
+            $pd = strtolower(trim((string) ($item['productionDeployment'] ?? '')));
+            $stats['status'][ $pd === 'yes' || $pd === 'no' ? $pd : 'other' ]++;
+        }
+        foreach ($sel['relations'] as $bucket => $rows) {
+            $refs  = array();
+            $names = array();
+            $stats['detail'][ $bucket ]      = 0;
+            $stats['listingOnly'][ $bucket ] = 0;
+            foreach ($rows as $row) {
+                if ($row['ref'] !== '') {
+                    $check(! isset($refs[ $row['kind'] . '|' . $row['ref'] ]), "{$kind}:{$slug} {$bucket} '{$row['label']}' (id {$row['ref']}) is listed once");
+                    $refs[ $row['kind'] . '|' . $row['ref'] ] = true;
+                }
+                $name_key = $row['kind'] . '|' . strtolower(trim($row['label']));
+                $check(! isset($names[ $name_key ]), "{$kind}:{$slug} {$bucket} name '{$row['label']}' is listed once");
+                $names[ $name_key ] = true;
+                $exists = false;
+                if ($row['ref'] !== '') {
+                    $class  = $bucket === 'organizations' ? 'Fides_Organization_Design' : ($bucket === 'credentials' ? 'Fides_Credential_Design' : 'Fides_Wallet_Design');
+                    $exists = class_exists($class) && $class::find($row['ref']) !== null;
+                }
+                $check($row['detail'] === $exists && ($row['detail'] ? $row['href'] !== '' : $row['href'] === ''), "{$kind}:{$slug} {$bucket} '{$row['label']}': detail page only when the catalog record exists");
+                $check(! $row['detail'] || strpos($row['href'], '/fides-design-pilot/') !== false, "{$kind}:{$slug} {$bucket} '{$row['label']}' links to the pilot detail page, not to a catalog route outside the pilot");
+                $stats[ $row['detail'] ? 'detail' : 'listingOnly' ][ $bucket ]++;
+                $stats['logos'] += ($bucket === 'organizations' && $row['logo'] !== '') ? 1 : 0;
+                $stats['roles'] += count($row['roles']);
+                foreach ($row['roles'] as $role) {
+                    $check($bucket === 'organizations' && in_array($role, array('Issuer', 'Relying Party'), true), "{$kind}:{$slug} role '{$role}' is one of the two roles that follow from the issuers / rps links");
                 }
             }
         }
@@ -94,9 +135,137 @@ foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {
             'organizations' => count($sel['relations']['organizations']),
             'wallets'       => count($sel['relations']['wallets']),
             'firstTitle'    => $sel['shown'] ? (string) $sel['shown'][0]['title'] : '',
+            'withImage'     => $stats['withImage'],
+            'status'        => $stats['status'],
+            'orgLogos'      => $stats['logos'],
+            'detail'        => $stats['detail'],
+            'listingOnly'   => $stats['listingOnly'],
+            'roleChips'     => $stats['roles'],
         );
     }
 }
+
+
+// Rendering: statuses, headings and counts, listing only versus link, anchors, language marks (all choices).
+$locale_filter = static function () {
+    return 'nl_NL';
+};
+foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {
+    foreach ($choices as $slug => $label) {
+        $row = $table[ $kind . ':' . $slug ];
+        if ($row['useCases'] === 0) {
+            continue;
+        }
+        $_GET = array($kind => $slug);
+        $html = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => $kind, 'overview_url' => '/fides-design-pilot/overview/', 'detail_url' => '/fides-design-pilot/use-case/'));
+        $n    = $row['shown'];
+        $check(substr_count($html, 'fides-ds-card--row') === $n, "{$kind}:{$slug} renders {$n} compact catalog row cards");
+        $check(substr_count($html, 'fides-explore__status--production') === $row['status']['yes'] && substr_count($html, 'fides-explore__status--not-production') === $row['status']['no'], "{$kind}:{$slug} status badges equal the productionDeployment values (" . $row['status']['yes'] . ' yes, ' . $row['status']['no'] . ' no)');
+        $check(substr_count($html, 'class="fides-ds-card__media fides-ds-card__media--contain"><img') === $row['withImage'], "{$kind}:{$slug} shows the catalog image of exactly the use cases that have one (" . $row['withImage'] . ')');
+        foreach (array('credentials' => 'Credential types', 'organizations' => 'Organisations', 'wallets' => 'Wallets') as $bucket => $noun) {
+            $total = $row[ $bucket ];
+            if ($total === 0) {
+                $check(strpos($html, 'data-relation="' . $bucket . '"') === false, "{$kind}:{$slug} no {$bucket} section without data");
+                continue;
+            }
+            $expected = $n === 1 ? $noun . ' in this example' : $noun . ' in these ' . $n . ' examples';
+            $check(strpos($html, '>' . $expected . '</h2>') !== false, "{$kind}:{$slug} heading is exactly '{$expected}'");
+            $check(strpos($html, 'data-relation="' . $bucket . '" data-total="' . $total . '"') !== false, "{$kind}:{$slug} {$bucket} total is the number of unique records ({$total})");
+            $shown_rows = min($total, Fides_Use_Case_Explore_Choice::LIST_LIMIT);
+            $sentence   = $total > $shown_rows ? 'Showing ' . $shown_rows . ' of ' . $total . '. Each is listed once' : $total . ' in total. Each is listed once';
+            $check(strpos($html, $sentence) !== false, "{$kind}:{$slug} {$bucket} count sentence is honest ('{$sentence}')");
+        }
+        // Anchors of the "In N of these examples" lists exist.
+        preg_match_all('/<details class="fides-explore__from">.*?<\/details>/s', $html, $lists);
+        $anchors_ok = true;
+        foreach ($lists[0] as $block) {
+            preg_match_all('/href="#(explore-example-\d+)"/', $block, $hrefs);
+            foreach ($hrefs[1] as $anchor) {
+                $anchors_ok = $anchors_ok && strpos($html, 'id="' . $anchor . '"') !== false;
+            }
+            $anchors_ok = $anchors_ok && ! empty($hrefs[1]);
+        }
+        $check($anchors_ok, "{$kind}:{$slug} every example list links to an example card on the page");
+        // Without a catalog page: plain name with the "Listing only" label, no link.
+        $check(substr_count($html, '<span class="fides-explore__badge">Listing only</span>') === (int) preg_match_all('/data-detail="no"/', $html), "{$kind}:{$slug} every listing only row has the label and only those");
+        $check(preg_match_all('/data-detail="no"[^>]*>(?:(?!<\/li>).)*<a class="fides-explore__link"/s', $html) === 0, "{$kind}:{$slug} a listing only row never links");
+        $check(strpos($html, 'lang="en" data-no-translation') === false && strpos($html, 'data-fides-explore-lang-note') === false, "{$kind}:{$slug} English page: no language marks");
+        add_filter('locale', $locale_filter, PHP_INT_MAX);
+        $nl = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => $kind, 'overview_url' => '/fides-design-pilot/overview/', 'detail_url' => '/fides-design-pilot/use-case/'));
+        remove_filter('locale', $locale_filter, PHP_INT_MAX);
+        $check(substr_count($nl, '<a class="fides-ds-card__link" lang="en" data-no-translation') === $n, "{$kind}:{$slug} non-English page: every use case title is marked lang=en");
+        $check(substr_count($nl, '<p class="fides-ds-card__summary" lang="en" data-no-translation>') === $n, "{$kind}:{$slug} non-English page: every summary is marked lang=en");
+        $check(strpos($nl, 'data-fides-explore-lang-note>Catalog content is shown in English.') !== false, "{$kind}:{$slug} non-English page: states that catalog content is English");
+        $check(strpos($nl, '<span lang="en" data-no-translation>') !== false || ($row['organizations'] + $row['credentials'] + $row['wallets']) === 0, "{$kind}:{$slug} non-English page: record names are marked lang=en");
+    }
+}
+$_GET = array();
+
+// Fixture: one record once, roles per example only from the issuers / rps links, detail versus listing only, single example.
+$org_ids  = array_column(Fides_Organization_Design::items(), 'id');
+$org_ref  = (string) $org_ids[0];
+$org_name = (string) Fides_Organization_Design::find($org_ref)['name'];
+$mk = static function (string $id, string $title, array $links): array {
+    return array('id' => $id, 'title' => $title, 'sector' => 'retail', 'status' => 'published', 'productionDeployment' => 'yes', 'publishedAt' => '2026-02-01T00:00:00+00:00', 'links' => $links);
+};
+$ghost = array('refId' => 'org:does-not-exist-xyz', 'labelRaw' => 'Ghost Org', 'url' => 'https://example.invalid', 'source' => 'catalog', 'walletType' => null);
+$real  = array('refId' => $org_ref, 'labelRaw' => $org_name, 'url' => null, 'source' => 'catalog', 'walletType' => null);
+$man   = array('refId' => null, 'labelRaw' => '  ' . strtoupper($org_name) . ' ', 'url' => null, 'source' => 'manual', 'walletType' => null);
+$only_issuer = array('refId' => null, 'labelRaw' => 'Issuer Only Ltd', 'url' => null, 'source' => 'manual', 'walletType' => null);
+$dups = array(
+    $mk('dx-1', 'Dup one', array('organizations' => array($real, $ghost), 'issuers' => array($man, $only_issuer))),
+    $mk('dx-2', 'Dup two', array('organizations' => array($man), 'rps' => array($real))),
+    $mk('dx-3', 'Dup three', array('organizations' => array($real))),
+);
+$d = Fides_Use_Case_Explore_Choice::selection('sector', 'retail', $dups);
+$orgs = $d['relations']['organizations'];
+$by_ref = array();
+foreach ($orgs as $o) {
+    $by_ref[ $o['ref'] !== '' ? $o['ref'] : $o['label'] ] = $o;
+}
+$check(count($orgs) === 2 && isset($by_ref[ $org_ref ], $by_ref['org:does-not-exist-xyz']), 'fixture: the same organisation (id, and the same name without id) is one row; an issuer-only name is no organisation row (got ' . count($orgs) . ')');
+$check(count($by_ref[ $org_ref ]['use_cases']) === 3, 'fixture: the one row names all three examples');
+$check($by_ref[ $org_ref ]['roles'] === array('Issuer', 'Relying Party') && array_keys($by_ref[ $org_ref ]['case_roles']) === array('dx-1', 'dx-2'), 'fixture: roles per example only from the issuers / rps links of that example');
+$check($by_ref[ $org_ref ]['detail'] === true && $by_ref['org:does-not-exist-xyz']['detail'] === false && $by_ref['org:does-not-exist-xyz']['href'] === '', 'fixture: existing record has a detail page, an unknown id is listing only without a destination');
+$_GET = array('sector' => 'retail');
+add_filter('fides_use_case_design_items', static function () use ($dups) {
+    return $dups;
+}, 99);
+Fides_Use_Case_Design::flush_cache();
+$dhtml = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => 'sector', 'overview_url' => '/fides-design-pilot/overview/'));
+$check(strpos($dhtml, 'Organisations in these 3 examples') !== false && strpos($dhtml, 'data-relation="organizations" data-total="2"') !== false && strpos($dhtml, '2 in total.') !== false, 'fixture: heading counts examples (3), the sentence counts unique organisations (2)');
+$check(substr_count($dhtml, '<span class="fides-explore__badge">Listing only</span>') === 1 && strpos($dhtml, 'Ghost Org</span> <span class="fides-explore__badge">') !== false && strpos($dhtml, 'href="https://example.invalid') === false, 'fixture: the unknown organisation is plain text, labelled Listing only, its own website is not linked');
+$check(strpos($dhtml, '· Issuer</span>') !== false && strpos($dhtml, '· Relying Party</span>') !== false, 'fixture: per-example role shown in the example list');
+remove_all_filters('fides_use_case_design_items');
+$single = array($mk('sx-1', 'Single example', array('organizations' => array($real), 'credentials' => array(array('refId' => null, 'labelRaw' => 'Unlisted credential', 'url' => null, 'source' => 'manual', 'walletType' => null)))));
+add_filter('fides_use_case_design_items', static function () use ($single) {
+    return $single;
+}, 99);
+Fides_Use_Case_Design::flush_cache();
+$shtml = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => 'sector', 'overview_url' => '/fides-design-pilot/overview/'));
+$check(strpos($shtml, 'Organisations in this example') !== false && strpos($shtml, 'In the example shown') !== false && strpos($shtml, 'these 1 examples') === false, 'fixture: one example gives singular wording');
+remove_all_filters('fides_use_case_design_items');
+Fides_Use_Case_Design::flush_cache();
+$_GET = array();
+
+// Dutch rows: every new string has a human-readable Dutch row (dictionary or gettext), none empty.
+global $wpdb;
+$dict = $wpdb->prefix . 'trp_dictionary_en_us_nl_nl';
+$get  = $wpdb->prefix . 'trp_gettext_nl_nl';
+foreach (array('Listing only', 'Catalog content is shown in English.', 'In production', 'Not in production', 'No examples yet', 'Browse all use cases') as $en) {
+    $t = (string) $wpdb->get_var($wpdb->prepare("SELECT translated FROM $dict WHERE BINARY original = %s LIMIT 1", $en)); // phpcs:ignore
+    $check($t !== '', "Dutch dictionary row for '{$en}'" . ($t !== '' ? " ({$t})" : ''));
+}
+foreach (array('In the example shown', 'Organisations in these %d examples', 'Credential types in these %d examples', 'Wallets in these %d examples', 'The catalog has no published use case here yet.', '“%s” is not a theme we know. Choose one of the options below.', '“%s” is not a sector we know. Choose one of the options below.') as $en) {
+    $t = (string) $wpdb->get_var($wpdb->prepare("SELECT translated FROM $get WHERE domain = 'fides-use-case-catalog' AND BINARY original = %s LIMIT 1", $en)); // phpcs:ignore
+    $check($t !== '', "Dutch gettext row for '{$en}'");
+}
+foreach (array('Sharing information from a wallet · Learn →', 'How can someone act for an organisation? · Learn →', 'Digital wallets and public services · Learn →', 'What should a service check when receiving a credential? · Learn →') as $en) {
+    $t = (string) $wpdb->get_var($wpdb->prepare("SELECT translated FROM $dict WHERE BINARY original = %s LIMIT 1", $en)); // phpcs:ignore
+    $check($t !== '' && substr($t, -9) === 'Learn →', "Learn link keeps the site name 'Learn' in Dutch ({$t})");
+}
+$bm = (string) $wpdb->get_var("SELECT translated FROM $dict WHERE BINARY original = 'Business &amp; Mandates' LIMIT 1"); // phpcs:ignore
+$check($bm === 'Bedrijven en mandaten', "business_authority title uses 'mandaten' ({$bm})");
 
 // Empty selection: a fixture without any matching item shows no cards and no relations.
 $empty = Fides_Use_Case_Explore_Choice::selection('theme', 'identity_access', array());
@@ -187,7 +356,26 @@ if (! is_dir($out_dir)) {
 file_put_contents($out_dir . '/explore-themes-sectors-counts.json', wp_json_encode(array_values($table), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 echo "kind:slug                                   use cases  shown  credentials  organisations  wallets\n";
 foreach ($table as $key => $row) {
-    printf("%-43s %9d %6d %12d %14d %8d\n", $key, $row['useCases'], $row['shown'], $row['credentials'], $row['organizations'], $row['wallets']);
+    printf(
+        "%-43s %9d %6d %12d %14d %8d   img %d, status %d/%d, logos %d/%d orgs, detail %d+%d+%d, listing only %d+%d+%d\n",
+        $key,
+        $row['useCases'],
+        $row['shown'],
+        $row['credentials'],
+        $row['organizations'],
+        $row['wallets'],
+        $row['withImage'],
+        $row['status']['yes'],
+        $row['status']['no'],
+        $row['orgLogos'],
+        $row['organizations'],
+        $row['detail']['credentials'],
+        $row['detail']['organizations'],
+        $row['detail']['wallets'],
+        $row['listingOnly']['credentials'],
+        $row['listingOnly']['organizations'],
+        $row['listingOnly']['wallets']
+    );
 }
 echo "\n" . $results['pass'] . " passed, " . count($results['fail']) . " failed\n";
 foreach ($results['fail'] as $failure) {

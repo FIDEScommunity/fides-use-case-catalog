@@ -36,6 +36,12 @@ final class Fides_Use_Case_Explore_Choice {
     /** @var array<string, array<string, int>>|null kind => slug => page id */
     private static ?array $pages = null;
 
+    /** @var array<string, array<string, true>> record type => ids present in the catalog data of the pilot */
+    private static array $record_ids = array();
+
+    /** @var array<string, array<string, mixed>>|null organisation records by id (logo) */
+    private static ?array $org_rows = null;
+
     public static function bootstrap(): void {
         add_shortcode('fides_explore_choice', array(__CLASS__, 'shortcode'));
         add_action('wp_enqueue_scripts', array(__CLASS__, 'register_assets'), 22);
@@ -108,38 +114,204 @@ final class Fides_Use_Case_Explore_Choice {
     }
 
     /**
-     * Relations of the shown use cases only. Every row keeps the ids and titles of the use cases it comes from.
+     * Whether a catalog record exists in the data of the pilot, by type. This is how "has a catalog page" is decided:
+     * the detail pages of the pilot (organization, wallet, credential) render the record that `find()` returns for the
+     * same data, so an id that is in the set has a page and an id that is not in the set has none.
+     *
+     * @return array<string, true> ids of one record type
+     */
+    private static function record_ids(string $type): array {
+        if (isset(self::$record_ids[ $type ])) {
+            return self::$record_ids[ $type ];
+        }
+        $classes = array('organization' => 'Fides_Organization_Design', 'wallet' => 'Fides_Wallet_Design', 'credential' => 'Fides_Credential_Design');
+        $ids     = array();
+        $class   = $classes[ $type ] ?? '';
+        if ($class !== '' && class_exists($class) && method_exists($class, 'items')) {
+            foreach ((array) $class::items() as $row) {
+                if (is_array($row) && ! empty($row['id'])) {
+                    $ids[ (string) $row['id'] ] = true;
+                }
+            }
+        }
+        self::$record_ids[ $type ] = $ids;
+        return $ids;
+    }
+
+    /** Organisation record (for the logo) by id, or null. */
+    private static function organization_record(string $ref): ?array {
+        if ($ref === '' || ! class_exists('Fides_Organization_Design') || ! isset(self::record_ids('organization')[ $ref ])) {
+            return null;
+        }
+        if (self::$org_rows === null) {
+            self::$org_rows = array();
+            foreach ((array) Fides_Organization_Design::items() as $row) {
+                if (is_array($row) && ! empty($row['id'])) {
+                    self::$org_rows[ (string) $row['id'] ] = $row;
+                }
+            }
+        }
+        return self::$org_rows[ $ref ] ?? null;
+    }
+
+    /**
+     * Detail page of a linked record, or '' when the pilot has no page for it ("listing only").
+     * Only ids that exist in the catalog data of the pilot get a destination; names without a catalog id never link.
+     */
+    private static function detail_href(string $bucket, string $ref): string {
+        if ($ref === '') {
+            return '';
+        }
+        if ($bucket === 'organizations') {
+            return isset(self::record_ids('organization')[ $ref ]) ? Fides_Use_Case_Design::organization_profile_href($ref) : '';
+        }
+        if ($bucket === 'credentials') {
+            return isset(self::record_ids('credential')[ $ref ]) && class_exists('Fides_Credential_Design') ? Fides_Credential_Design::detail_url($ref) : '';
+        }
+        return isset(self::record_ids('wallet')[ $ref ]) && class_exists('Fides_Wallet_Design') ? Fides_Wallet_Design::detail_url($ref, Fides_Wallet_Design::pilot_detail_base()) : '';
+    }
+
+    private static function norm_name(string $name): string {
+        $name = (string) preg_replace('/\s+/u', ' ', trim($name));
+        return function_exists('mb_strtolower') ? mb_strtolower($name) : strtolower($name);
+    }
+
+    /**
+     * Roles of organisations in one use case, only from its explicit links: listed under `issuers` = Issuer,
+     * listed under `rps` = Relying Party. Matched to an organisation link of the SAME use case by catalog id or by the
+     * same name; nothing is read from the organisation record and nothing is inferred.
+     *
+     * @param array<string, mixed> $links
+     * @return array<string, list<string>> normalised name or "ref:<id>" => role labels
+     */
+    private static function case_roles(array $links): array {
+        $labels = array('issuers' => 'Issuer', 'rps' => 'Relying Party');
+        if (class_exists('Fides_Organization_Design')) {
+            $labels['issuers'] = Fides_Organization_Design::ROLE_LABELS['issuer'] ?? $labels['issuers'];
+            $labels['rps']     = Fides_Organization_Design::ROLE_LABELS['relying_party'] ?? $labels['rps'];
+        }
+        $out = array();
+        foreach ($labels as $link_key => $role) {
+            foreach ((array) ($links[ $link_key ] ?? array()) as $link) {
+                if (! is_array($link)) {
+                    continue;
+                }
+                $keys = array();
+                if (trim((string) ($link['refId'] ?? '')) !== '') {
+                    $keys[] = 'ref:' . trim((string) $link['refId']);
+                }
+                if (trim((string) ($link['labelRaw'] ?? '')) !== '') {
+                    $keys[] = self::norm_name((string) $link['labelRaw']);
+                }
+                foreach ($keys as $key) {
+                    if (! isset($out[ $key ]) || ! in_array($role, $out[ $key ], true)) {
+                        $out[ $key ][] = $role;
+                    }
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Relations of the shown use cases only, each record ONCE per overview.
+     *
+     * A record is the same record when its catalog id is the same, or (when one of the links has no id) when the name is
+     * the same after trimming and lower-casing. Every row keeps the use cases it comes from (id => title), the roles per
+     * use case (organisations: Issuer / Relying Party from the `issuers` / `rps` links of that use case) and whether the pilot
+     * has a detail page for it (`href` is '' for a listing only mention). Nothing else is added.
      *
      * @param list<array<string, mixed>> $shown
      * @return array{credentials: list<array<string, mixed>>, organizations: list<array<string, mixed>>, wallets: list<array<string, mixed>>}
      */
     public static function relations(array $shown): array {
-        $keys = array(
+        $map     = array(
             'credentials'     => 'credentials',
             'organizations'   => 'organizations',
             'personalWallets' => 'wallets',
             'businessWallets' => 'wallets',
         );
-        $out  = array('credentials' => array(), 'organizations' => array(), 'wallets' => array());
-        $seen = array('credentials' => array(), 'organizations' => array(), 'wallets' => array());
+        $entries = array('credentials' => array(), 'organizations' => array(), 'wallets' => array());
         foreach ($shown as $item) {
-            $groups = Fides_Use_Case_Detail_Page::relation_groups($item);
-            foreach ($keys as $link_key => $bucket) {
-                foreach ($groups[ $link_key ]['items'] ?? array() as $row) {
-                    $id = strtolower($row['label']) . '|' . $row['href'] . '|' . ($bucket === 'wallets' ? $link_key : '');
-                    if (! isset($seen[ $bucket ][ $id ])) {
-                        $seen[ $bucket ][ $id ] = count($out[ $bucket ]);
-                        $out[ $bucket ][]       = $row + array(
-                            'kind'      => $link_key,
-                            'use_cases' => array(),
-                        );
+            $links = isset($item['links']) && is_array($item['links']) ? $item['links'] : array();
+            $roles = self::case_roles($links);
+            foreach ($map as $link_key => $bucket) {
+                foreach ((array) ($links[ $link_key ] ?? array()) as $link) {
+                    if (! is_array($link)) {
+                        continue;
                     }
-                    $index = $seen[ $bucket ][ $id ];
-                    $out[ $bucket ][ $index ]['use_cases'][ (string) $item['id'] ] = (string) $item['title'];
+                    $ref   = trim((string) ($link['refId'] ?? ''));
+                    $ref   = ($ref !== '' && $bucket === 'credentials') ? Fides_Use_Case_Design::credential_canonical_id($ref) : $ref;
+                    $label = trim((string) ($link['labelRaw'] ?? ''));
+                    $label = $label !== '' ? $label : $ref;
+                    if ($label === '') {
+                        continue;
+                    }
+                    $found = array();
+                    if ($bucket === 'organizations') {
+                        foreach (array('ref:' . $ref, self::norm_name($label)) as $key) {
+                            foreach ($roles[ $key ] ?? array() as $role) {
+                                $found[ $role ] = true;
+                            }
+                        }
+                    }
+                    $entries[ $bucket ][] = array(
+                        'link_key' => $link_key,
+                        'ref'      => $ref,
+                        'label'    => $label,
+                        'case_id'  => (string) $item['id'],
+                        'case'     => (string) $item['title'],
+                        'roles'    => array_keys($found),
+                    );
                 }
             }
         }
-        foreach ($out as $bucket => $rows) {
+
+        $out = array('credentials' => array(), 'organizations' => array(), 'wallets' => array());
+        foreach ($entries as $bucket => $list) {
+            // Names that belong to an entry with a catalog id join that id (same name, same use-case data set).
+            $by_name = array();
+            foreach ($list as $entry) {
+                if ($entry['ref'] !== '' && ! isset($by_name[ $entry['link_key'] . '|' . self::norm_name($entry['label']) ])) {
+                    $by_name[ $entry['link_key'] . '|' . self::norm_name($entry['label']) ] = $entry['ref'];
+                }
+            }
+            $rows = array();
+            foreach ($list as $entry) {
+                $ref  = $entry['ref'] !== '' ? $entry['ref'] : (string) ($by_name[ $entry['link_key'] . '|' . self::norm_name($entry['label']) ] ?? '');
+                $key  = $entry['link_key'] . '|' . ($ref !== '' ? 'ref:' . $ref : 'name:' . self::norm_name($entry['label']));
+                if (! isset($rows[ $key ])) {
+                    $href         = self::detail_href($bucket, $ref);
+                    $rows[ $key ] = array(
+                        'label'     => $entry['label'],
+                        'ref'       => $ref,
+                        'kind'      => $entry['link_key'],
+                        'href'      => $href,
+                        'detail'    => $href !== '',
+                        'logo'      => '',
+                        'roles'     => array(),
+                        'use_cases' => array(),
+                        'case_roles' => array(),
+                    );
+                    if ($bucket === 'organizations' && $href !== '') {
+                        $record = self::organization_record($ref);
+                        if ($record !== null && class_exists('Fides_Organization_Overview')) {
+                            $rows[ $key ]['logo']  = Fides_Organization_Overview::logo_url($record);
+                            $rows[ $key ]['label'] = (string) $record['name'] !== '' ? (string) $record['name'] : $entry['label'];
+                        }
+                    }
+                }
+                $rows[ $key ]['use_cases'][ $entry['case_id'] ] = $entry['case'];
+                foreach ($entry['roles'] as $role) {
+                    if (! in_array($role, $rows[ $key ]['roles'], true)) {
+                        $rows[ $key ]['roles'][] = $role;
+                    }
+                    if (! in_array($role, $rows[ $key ]['case_roles'][ $entry['case_id'] ] ?? array(), true)) {
+                        $rows[ $key ]['case_roles'][ $entry['case_id'] ][] = $role;
+                    }
+                }
+            }
+            $rows = array_values($rows);
             // Rows that appear in most examples first, then by name.
             usort(
                 $rows,
@@ -450,70 +622,162 @@ final class Fides_Use_Case_Explore_Choice {
             $count_text = sprintf(__('%d use cases in the catalog.', 'fides-use-case-catalog'), $matching);
         }
         $html .= '<p class="fides-explore__count">' . esc_html($count_text) . '</p>';
-        $html .= '<ul class="fides-explore__cards">';
-        foreach ($shown as $item) {
-            $html .= '<li>' . self::card_html($item, $detail_base) . '</li>';
+        if (! self::is_english()) {
+            $html .= '<p class="fides-explore__lang-note" data-fides-explore-lang-note>Catalog content is shown in English.</p>';
+        }
+        $anchors = array();
+        $html   .= '<ul class="fides-ds-cards fides-explore__cards" data-fides-explore-cards>';
+        foreach ($shown as $index => $item) {
+            $anchors[ (string) $item['id'] ] = 'explore-example-' . ($index + 1);
+            $html .= '<li class="fides-explore__card-item" id="' . esc_attr($anchors[ (string) $item['id'] ]) . '">' . self::card_html($item, $detail_base) . '</li>';
         }
         $html .= '</ul></section>';
 
-        // Credential types and organisations side by side.
+        // Credential types, organisations and wallets: each record once, from the shown examples only.
+        $n = count($shown);
+        $html .= '<p class="fides-explore__legend" data-fides-explore-legend>Names with an arrow open a page in this catalog. “Listing only” means an example names it, but the catalog has no page for it.</p>';
         if ($rel['credentials'] || $rel['organizations']) {
             $html .= '<div class="fides-explore__columns">';
             if ($rel['credentials']) {
-                $html .= self::relation_section('explore-credentials', 'Credential types in these examples', $rel['credentials'], count($shown));
+                $html .= self::relation_section('explore-credentials', 'credentials', $rel['credentials'], $n, $anchors);
             }
             if ($rel['organizations']) {
-                $html .= self::relation_section('explore-organisations', 'Organisations in these examples', $rel['organizations'], count($shown));
+                $html .= self::relation_section('explore-organisations', 'organizations', $rel['organizations'], $n, $anchors);
             }
             $html .= '</div>';
         }
         if ($rel['wallets']) {
-            $html .= '<div class="fides-explore__columns fides-explore__columns--single">' . self::relation_section('explore-wallets', 'Wallets in these examples', $rel['wallets'], count($shown)) . '</div>';
+            $html .= '<div class="fides-explore__columns fides-explore__columns--single">' . self::relation_section('explore-wallets', 'wallets', $rel['wallets'], $n, $anchors) . '</div>';
         }
 
         $html .= '<p class="fides-explore__again"><a class="fides-ds-action-link" href="#fides-explore-choices-label"><span>' . esc_html($words['again']) . '</span> <span aria-hidden="true">↑</span></a></p>';
         return $html . '</section>';
     }
 
-    /** @param array<string, mixed> $item */
-    private static function card_html(array $item, string $detail_base): string {
-        $id      = (string) $item['id'];
-        $kicker  = Fides_Use_Case_Design::card_props($item, 'tile', $detail_base)['kicker'] ?? '';
-        $summary = trim((string) preg_replace('/\s+/u', ' ', (string) ($item['summary'] ?? '')));
-        if (function_exists('mb_strlen') && mb_strlen($summary) > 170) {
-            $summary = rtrim((string) mb_substr($summary, 0, 170), " ,.;:") . '…';
+    /** True on an English page; the catalog texts are English, so other languages mark and announce them. */
+    private static function is_english(): bool {
+        // Either source naming another language is enough (TranslatePress switches the page language on /nl/).
+        foreach (array(function_exists('determine_locale') ? (string) determine_locale() : '', (string) get_locale()) as $locale) {
+            if ($locale !== '' && strpos(strtolower($locale), 'en') !== 0) {
+                return false;
+            }
         }
-        return '<article class="fides-explore__card" data-use-case-id="' . esc_attr($id) . '">'
-            . ($kicker !== '' ? '<p class="fides-explore__card-meta">' . esc_html((string) $kicker) . '</p>' : '')
-            . '<h3 class="fides-explore__card-title"><a href="' . esc_url(Fides_Use_Case_Design::detail_url($id, $detail_base)) . '">' . esc_html((string) $item['title']) . ' <span aria-hidden="true">→</span></a></h3>'
-            . ($summary !== '' ? '<p class="fides-explore__card-summary">' . esc_html($summary) . '</p>' : '')
-            . '</article>';
+        return true;
+    }
+
+    /** Attributes for text that comes from the catalog and is not translated: lang="en" and out of the TranslatePress dictionary. */
+    private static function catalog_text_attrs(): string {
+        return self::is_english() ? '' : ' lang="en" data-no-translation';
     }
 
     /**
-     * @param list<array<string, mixed>> $rows
+     * One use case as the compact variant of the catalog row card (same component, image, status badge and owner as
+     * the use case overview; the engagement line and the arrow-only layout are left to the shared CSS).
+     *
+     * @param array<string, mixed> $item
      */
-    private static function relation_section(string $anchor, string $heading, array $rows, int $shown_cases): string {
+    private static function card_html(array $item, string $detail_base): string {
+        $status = Fides_Use_Case_Design::status_label($item);
+        $html   = Fides_Use_Case_Design::render_card($item, 'row', $detail_base, array('meta' => '', 'image_loading' => 'lazy'));
+        if ($status !== '') {
+            $modifier = strtolower(trim((string) ($item['productionDeployment'] ?? ''))) === 'yes' ? 'production' : 'not-production';
+            $html     = str_replace(
+                '<span class="fides-ds-card__status">',
+                '<span class="fides-ds-card__status fides-explore__status fides-explore__status--' . $modifier . '" data-status="' . esc_attr($modifier) . '">',
+                $html
+            );
+        }
+        if (! self::is_english()) {
+            // Titles, descriptions and owner names are catalog records in English: say so, and never translate them.
+            $attrs = self::catalog_text_attrs();
+            $html  = str_replace(
+                array('<a class="fides-ds-card__link"', '<p class="fides-ds-card__summary">', '<a class="fides-ds-card__owner-link"', '<li class="fides-ds-card__fact fides-ds-card__fact--owner">'),
+                array('<a class="fides-ds-card__link"' . $attrs, '<p class="fides-ds-card__summary"' . $attrs . '>', '<a class="fides-ds-card__owner-link"' . $attrs, '<li class="fides-ds-card__fact fides-ds-card__fact--owner"' . $attrs . '>'),
+                $html
+            );
+        }
+        return $html;
+    }
+
+    /** Two letters for the placeholder of a missing logo (first letters of the first two words). */
+    private static function initials(string $name): string {
+        $words = preg_split('/[^\p{L}\p{N}]+/u', trim($name), -1, PREG_SPLIT_NO_EMPTY) ?: array();
+        $out   = '';
+        foreach (array_slice($words, 0, 2) as $word) {
+            $out .= function_exists('mb_substr') ? mb_substr($word, 0, 1) : substr($word, 0, 1);
+        }
+        $out = function_exists('mb_strtoupper') ? mb_strtoupper($out) : strtoupper($out);
+        return $out !== '' ? $out : '•';
+    }
+
+    /**
+     * Logo of an organisation in a fixed 40×40 box: the catalog logo (lazy, contain) when there is one, a quiet initials
+     * placeholder when there is none or when it fails to load (the shared script swaps the image for the placeholder).
+     */
+    private static function logo_html(string $name, string $logo): string {
+        $initials = '<span class="fides-ds-card__fallback" aria-hidden="true"' . ($logo !== '' ? ' hidden' : '') . '>' . esc_html(self::initials($name)) . '</span>';
+        $img      = $logo !== ''
+            ? '<img class="fides-ds-card__img" src="' . esc_url($logo) . '" alt="" width="40" height="40" loading="lazy" decoding="async" referrerpolicy="no-referrer">'
+            : '';
+        return '<span class="fides-ds-card__media fides-ds-card__media--contain fides-explore__logo" data-logo="' . ($logo !== '' ? 'image' : 'placeholder') . '">' . $img . $initials . '</span>';
+    }
+
+    /** Heading and count sentences per relation type, honest about what is counted (unique records of the shown examples). */
+    private static function relation_texts(string $type, int $examples, int $total, int $shown_rows): array {
+        $names = array(
+            'credentials'   => array(__('Credential types in this example', 'fides-use-case-catalog'), __('Credential types in these %d examples', 'fides-use-case-catalog')),
+            'organizations' => array(__('Organisations in this example', 'fides-use-case-catalog'), __('Organisations in these %d examples', 'fides-use-case-catalog')),
+            'wallets'       => array(__('Wallets in this example', 'fides-use-case-catalog'), __('Wallets in these %d examples', 'fides-use-case-catalog')),
+        );
+        $heading = $examples === 1 ? $names[ $type ][0] : sprintf($names[ $type ][1], $examples);
+        $count   = $total > $shown_rows
+            ? sprintf(__('Showing %1$d of %2$d. Each is listed once, even when it appears in several examples.', 'fides-use-case-catalog'), $shown_rows, $total)
+            : sprintf(__('%d in total. Each is listed once, even when it appears in several examples.', 'fides-use-case-catalog'), $total);
+        return array($heading, $count);
+    }
+
+    /**
+     * @param list<array<string, mixed>>  $rows
+     * @param array<string, string>       $anchors use case id => anchor id of its card on this page
+     */
+    private static function relation_section(string $anchor, string $type, array $rows, int $shown_cases, array $anchors): string {
         $total = count($rows);
         $rows  = array_slice($rows, 0, (int) apply_filters('fides_explore_choice_list_limit', self::LIST_LIMIT));
-        $html  = '<section class="fides-explore__section fides-explore__relations" id="' . esc_attr($anchor) . '" aria-labelledby="' . esc_attr($anchor . '-title') . '">'
-            . '<h2 class="fides-explore__h2 fides-explore__h2--small" id="' . esc_attr($anchor . '-title') . '">' . esc_html($heading) . '</h2><ul class="fides-explore__list">';
+        list($heading, $count) = self::relation_texts($type, $shown_cases, $total, count($rows));
+        $attrs = self::catalog_text_attrs();
+        $html  = '<section class="fides-explore__section fides-explore__relations" id="' . esc_attr($anchor) . '" data-relation="' . esc_attr($type) . '" data-total="' . esc_attr((string) $total) . '" aria-labelledby="' . esc_attr($anchor . '-title') . '">'
+            . '<h2 class="fides-explore__h2 fides-explore__h2--small" id="' . esc_attr($anchor . '-title') . '">' . esc_html($heading) . '</h2>'
+            . '<p class="fides-explore__count">' . esc_html($count) . '</p><ul class="fides-explore__list">';
         foreach ($rows as $row) {
-            $name = $row['href'] !== ''
-                ? '<a href="' . esc_url((string) $row['href']) . '"' . (! empty($row['external']) ? ' rel="noopener" target="_blank"' : '') . '>' . esc_html((string) $row['label'])
-                    . (! empty($row['external']) ? ' <span aria-hidden="true">↗</span><span class="fides-ds-visually-hidden"> (external site, opens in a new tab)</span>' : ' <span aria-hidden="true">→</span>') . '</a>'
-                : '<span class="fides-explore__plain-name">' . esc_html((string) $row['label']) . '</span>';
-            $cases = array_values($row['use_cases']);
-            $from  = count($cases) === 1
-                ? sprintf(__('In “%s”', 'fides-use-case-catalog'), $cases[0])
-                : sprintf(__('In %1$d of these %2$d examples', 'fides-use-case-catalog'), count($cases), $shown_cases);
-            $type  = '';
+            $label = (string) $row['label'];
+            $name  = $row['detail']
+                ? '<a class="fides-explore__link" href="' . esc_url((string) $row['href']) . '"><span' . $attrs . '>' . esc_html($label) . '</span> <span aria-hidden="true">→</span></a>'
+                : '<span class="fides-explore__plain-name"' . $attrs . '>' . esc_html($label) . '</span> <span class="fides-explore__badge">Listing only</span>';
+            $chips = '';
+            $types = array();
             if ($row['kind'] === 'personalWallets') {
-                $type = '<span class="fides-explore__row-type">Personal wallet</span> · ';
+                $types[] = 'Personal wallet';
             } elseif ($row['kind'] === 'businessWallets') {
-                $type = '<span class="fides-explore__row-type">Business wallet</span> · ';
+                $types[] = 'Business wallet';
             }
-            $html .= '<li class="fides-explore__row"><span class="fides-explore__row-name">' . $name . '</span><span class="fides-explore__row-from">' . $type . esc_html($from) . '</span></li>';
+            foreach (array_merge($types, $row['roles']) as $chip) {
+                $chips .= '<li class="fides-explore__chip">' . esc_html((string) $chip) . '</li>';
+            }
+            $cases = $row['use_cases'];
+            $text  = $shown_cases === 1
+                ? __('In the example shown', 'fides-use-case-catalog')
+                : sprintf(__('In %1$d of these %2$d examples', 'fides-use-case-catalog'), count($cases), $shown_cases);
+            $list  = '';
+            foreach ($cases as $case_id => $case_title) {
+                $roles = $row['case_roles'][ $case_id ] ?? array();
+                $list .= '<li><a href="#' . esc_attr($anchors[ $case_id ] ?? '') . '"' . $attrs . '>' . esc_html((string) $case_title) . '</a>'
+                    . ($roles ? ' <span class="fides-explore__case-role">· ' . esc_html(implode(', ', $roles)) . '</span>' : '') . '</li>';
+            }
+            $html .= '<li class="fides-explore__row' . ($row['logo'] !== '' || $type === 'organizations' ? ' fides-explore__row--logo' : '') . '" data-detail="' . ($row['detail'] ? 'yes' : 'no') . '">'
+                . ($type === 'organizations' ? self::logo_html($label, (string) $row['logo']) : '')
+                . '<div class="fides-explore__row-main"><span class="fides-explore__row-name">' . $name . '</span>'
+                . ($chips !== '' ? '<ul class="fides-explore__chips">' . $chips . '</ul>' : '')
+                . '<details class="fides-explore__from"><summary>' . esc_html($text) . '</summary><ul class="fides-explore__from-list">' . $list . '</ul></details></div></li>';
         }
         $html .= '</ul>';
         if ($total > count($rows)) {

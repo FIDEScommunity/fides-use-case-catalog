@@ -133,6 +133,10 @@
 }
 
 /* Chosen overview */
+.fides-ds .fides-explore__hero--no-image .fides-explore__intro {
+  max-width: none;
+}
+
 .fides-ds .fides-explore__hero {
   display: grid;
   gap: 24px;
@@ -269,56 +273,85 @@
   line-height: 22px;
 }
 
+/* Use cases: the catalog row card (Fides_DS_Card, variant row) in a compact size. */
 .fides-ds .fides-explore__cards {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
-  margin: 16px 0 0;
+  margin: 12px 0 0;
   padding: 0;
   list-style: none;
 }
 
-.fides-ds .fides-explore__cards > li {
-  display: flex;
+.fides-ds .fides-explore__card-item {
   margin: 0;
+  padding: 0;
+  scroll-margin-top: 16px;
 }
 
-.fides-ds .fides-explore__card {
-  display: grid;
-  align-content: start;
-  gap: 8px;
-  width: 100%;
-  padding: 20px 24px;
-  box-sizing: border-box;
-  border-top: 2px solid var(--fides-ds-brand, #0a6ef3);
-  background: var(--fides-ds-soft, #f2f7ff);
+.fides-ds .fides-explore__cards .fides-ds-card--row {
+  padding-block: 14px;
 }
 
-.fides-ds .fides-explore__card-meta {
-  margin: 0;
-  color: var(--fides-ds-muted, #4a4a4a);
-  font-size: 14px;
-  line-height: 21px;
-  font-weight: 500;
-}
-
-.fides-ds .fides-explore__card-title {
-  margin: 0;
+.fides-ds .fides-explore__cards .fides-ds-card--row .fides-ds-card__title {
   font-size: 20px;
   line-height: 26px;
+}
+
+.fides-ds .fides-explore__cards .fides-ds-card--row .fides-ds-card__body {
+  gap: 6px;
+}
+
+.fides-ds .fides-explore__cards .fides-ds-card--row .fides-ds-card__summary {
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.fides-ds .fides-explore__cards .fides-ds-card--row .fides-ds-card__media {
+  width: 128px;
+  height: 80px;
+}
+
+@container fides-ds-cards (min-width: 600px) {
+  .fides-ds .fides-explore__cards .fides-ds-card--row:not(.fides-ds-card--no-media) {
+    grid-template-columns: 128px minmax(0, 1fr);
+    column-gap: 20px;
+  }
+}
+
+/* Status stays visible and is never toned down: first fact of the card, own colour per value. */
+.fides-ds .fides-explore__cards .fides-ds-card__fact:has(.fides-explore__status) {
+  order: -1;
+}
+
+.fides-ds .fides-explore__cards .fides-ds-card--row .fides-explore__status {
+  padding: 3px 10px;
+  border: 1px solid var(--fides-ds-ink, #0e0e0e);
+  font-size: 13px;
+  line-height: 20px;
   font-weight: 700;
+  color: var(--fides-ds-ink, #0e0e0e);
+  background: #ffffff;
 }
 
-.fides-ds .fides-explore__card-title a {
-  color: var(--fides-ds-link, #0848a3);
-  text-decoration: none;
+.fides-ds .fides-explore__cards .fides-ds-card--row .fides-explore__status--production {
+  border-color: var(--fides-ds-link, #0848a3);
+  background: var(--fides-ds-link, #0848a3);
+  color: #ffffff;
 }
 
-.fides-ds .fides-explore__card-summary {
-  margin: 0;
+.fides-ds .fides-explore__lang-note {
+  margin: 4px 0 0;
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 15px;
+  line-height: 22px;
+}
+
+.fides-ds .fides-explore__legend {
+  margin: 24px 0 0;
+  padding: 10px 16px;
+  border-left: 3px solid var(--fides-ds-brand, #0a6ef3);
+  background: var(--fides-ds-soft, #f2f7ff);
   color: var(--fides-ds-body, #2a2a2a);
-  font-size: 16px;
-  line-height: 24px;
+  font-size: 15px;
+  line-height: 22px;
 }
 
 .fides-ds .fides-explore__columns {
@@ -336,10 +369,43 @@
 
 .fides-ds .fides-explore__row {
   display: grid;
-  gap: 2px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
   margin: 0;
-  padding: 12px 0;
+  padding: 10px 0;
   border-top: 1px solid var(--fides-ds-line, #e4e4e4);
+}
+
+.fides-ds .fides-explore__row--logo {
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: start;
+}
+
+.fides-ds .fides-explore__row-main {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+/* Logo: fixed 40x40 box, so a missing or failing logo never moves the list. */
+.fides-ds .fides-explore__logo {
+  width: 40px;
+  height: 40px;
+  aspect-ratio: auto;
+  flex: none;
+  padding: 3px;
+  box-sizing: border-box;
+}
+
+.fides-ds .fides-explore__logo .fides-ds-card__fallback {
+  padding: 0;
+  border: 0;
+  background: var(--fides-ds-soft, #f2f7ff);
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: 0;
 }
 
 .fides-ds .fides-explore__row-name,
@@ -348,24 +414,114 @@
   font-size: 16px;
   line-height: 24px;
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 .fides-ds .fides-explore__plain-name {
   color: var(--fides-ds-ink, #0e0e0e);
+  font-weight: 500;
 }
 
-.fides-ds .fides-explore__row-name a {
-  display: inline-block;
-  min-height: 24px;
+.fides-ds .fides-explore__link {
   color: var(--fides-ds-link, #0848a3);
   text-decoration: none;
-  overflow-wrap: anywhere;
 }
 
-.fides-ds .fides-explore__row-from {
+.fides-ds .fides-explore__link:hover {
+  text-decoration: underline;
+}
+
+.fides-ds .fides-explore__badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 8px;
+  border: 1px dashed var(--fides-ds-muted, #4a4a4a);
+  color: var(--fides-ds-muted, #4a4a4a);
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+  vertical-align: 2px;
+}
+
+.fides-ds .fides-explore__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fides-ds .fides-explore__chip {
+  margin: 0;
+  padding: 0 8px;
+  border: 1px solid var(--fides-ds-soft-line, #c9d8ee);
+  background: var(--fides-ds-soft, #f2f7ff);
+  color: var(--fides-ds-ink, #0e0e0e);
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.fides-ds .fides-explore__from {
   color: var(--fides-ds-body, #2a2a2a);
   font-size: 15px;
   line-height: 22px;
+}
+
+.fides-ds .fides-explore__from summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--fides-ds-muted, #4a4a4a);
+  cursor: pointer;
+}
+
+.fides-ds .fides-explore__from summary {
+  list-style: none;
+}
+
+.fides-ds .fides-explore__from summary::-webkit-details-marker {
+  display: none;
+}
+
+.fides-ds .fides-explore__from summary::before {
+  content: "▸";
+  display: inline-block;
+  width: 16px;
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 13px;
+}
+
+.fides-ds .fides-explore__from[open] summary::before {
+  content: "▾";
+}
+
+.fides-ds .fides-explore__from summary:focus-visible,
+.fides-ds .fides-explore__link:focus-visible,
+.fides-ds .fides-explore__from-list a:focus-visible {
+  outline: 3px solid var(--fides-ds-link, #0848a3);
+  outline-offset: 2px;
+}
+
+.fides-ds .fides-explore__from-list {
+  margin: 2px 0 6px;
+  padding: 0 0 0 18px;
+}
+
+.fides-ds .fides-explore__from-list li {
+  margin: 0;
+  padding: 2px 0;
+  overflow-wrap: anywhere;
+}
+
+.fides-ds .fides-explore__from-list a {
+  color: var(--fides-ds-link, #0848a3);
+}
+
+.fides-ds .fides-explore__case-role {
+  color: var(--fides-ds-muted, #4a4a4a);
 }
 
 .fides-ds .fides-explore__check {
@@ -411,10 +567,6 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .fides-ds .fides-explore__cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-  }
 }
 
 @media (min-width: 1100px) {
@@ -444,6 +596,10 @@
 
   .fides-ds .fides-explore__hero--no-image {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fides-ds .fides-explore__hero--no-image .fides-explore__intro {
+    max-width: none;
   }
 
   .fides-ds .fides-explore__h2 {
