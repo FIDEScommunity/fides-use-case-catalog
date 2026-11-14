@@ -389,7 +389,7 @@ The request route (Services -> enquiry/request form) was checked up to the form,
 
 ## Learn article template (Paper 24.21 / 24.22, 13 November 2026, local only)
 
-- **Tiles 1.13.54 first** (renderer, `learn.css`, `learn.js`); then the seed. A new staging package is needed and was NOT built.
-- **Seed:** one changed page, `how-credentials-connect` (3 + 2 links). A staging page that was edited by hand reports `skipped-edited` and keeps its own links; that page then still shows the old five-plus links (the layout still works). Run the seed dry run first; never `LEARN_FORCE`.
-- No new Dutch UI labels: "Continue learning", "Learn more" and "Explore in the catalogs" already have rows. Nothing to export.
-- Editors keep managing the links in the page editor (see `learn/README.md`). Articles that still exceed 3 + 2: `learn/continue-learning-selection.md`.
+- **Tiles 1.13.55 first** (renderer with the DOM-based Continue learning lift, `learn.css` restyled per Paper 24.25/24.24, `learn.js`); then the seed. A new staging package is needed and was NOT built.
+- **Seed:** 34 Learn articles change (Continue learning reduced to 3 + 2, country articles 3 + 3 country filters; `what-is-a-digital-wallet` also gets one Formats paragraph). Local dry run: 34 would-updated, 24 unchanged, 0 skipped. A staging page that was edited by hand reports `skipped-edited` and keeps its own links; the layout still works. Run the seed dry run first; never `LEARN_FORCE`.
+- **One new Dutch row:** "For what these formats and protocols do, see" (route `learn/topics/the-big-picture/what-is-a-digital-wallet`), exported to `learn/nl-translations.json` (1450 entries; four stale rows of removed link texts left the file). Open the NL page once on staging, then `import-apply`.
+- Editors keep managing the links in the page editor (see `learn/README.md`). Open editorial decisions: `learn/continue-learning-selection.md` and `learn/continue-learning-pending.json`.

@@ -25,21 +25,21 @@ const PAGES = [
       ["European Parliament", "Legislative procedure file 2025/0358(COD)", "https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0358(COD)"],
       ["EU Digital Identity Wallet", "Architecture and Reference Framework", "https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework"]],
     headings: ["Identity and authority are different questions", "Identity, authority and mandate", "Where can evidence of authority come from?", "What do European sources say today?", "Questions to ask", "Continue learning"],
-    links: ["business-wallets-where-to-start", "how-credentials-connect", "accepting-information-from-a-wallet", "what-should-a-service-check-when-receiving-a-credential", "european-business-wallet", "business-wallets"], terms: 1, learnMore: 5, cta: false },
+    links: ["business-wallets-where-to-start", "accepting-information-from-a-wallet", "european-business-wallet", "business-wallets"], terms: 1, learnMore: 3, cta: false },
   { slug: "how-can-an-organisation-prepare-a-wallet-use-case", title: "How can an organisation prepare a wallet use case?", intro: /^Before choosing a product, describe one concrete exchange/,
     sources: [W3C, REG, ["FIDES", "Verifiable Credentials", "https://fides.community/topics/verifiable-credentials/"]],
     headings: ["Describe one exchange", "Who is involved?", "Which information is exchanged, and where does it come from?", "How does the receiving service check it?", "What happens if something goes wrong?", "Agree the practical arrangements", "Plan the first test", "Continue learning"],
-    links: ["how-credentials-connect", "issuing-credentials-for-wallets", "accepting-information-from-a-wallet", "business-wallets-where-to-start", "what-should-a-service-check-when-receiving-a-credential", "formats-and-protocols", "wallet-readiness-workshop", "/overview/"], terms: 0, learnMore: 6, cta: true },
+    links: ["issuing-credentials-for-wallets", "accepting-information-from-a-wallet", "business-wallets-where-to-start", "/overview/"], terms: 0, learnMore: 3, cta: true },
   { slug: "what-should-a-service-check-when-receiving-a-credential", title: "What should a service check when receiving a credential?", intro: /^When a service receives information from a wallet, a technical check can help establish whether it can rely on the credential\./,
     sources: [W3C, REG, SD],
     headings: ["Check the credential", "Decide whether the information is enough", "Make the request clear", "Continue learning"],
-    links: ["accepting-information-from-a-wallet", "the-relying-party", "trust-and-interoperability", "how-can-someone-act-for-an-organisation", "/credentials/"], terms: 1, learnMore: 4, cta: false },
+    links: ["accepting-information-from-a-wallet", "the-relying-party", "trust-and-interoperability", "/credentials/"], terms: 1, learnMore: 3, cta: false },
 ];
+// Continue learning is limited to three Learn links: "Business wallets: where to start" and "Issuing credentials for wallets"
+// no longer link to the practice articles (learn/continue-learning-selection.md); the For businesses hub and the accepting article do.
 const BACKLINKS = [
   ["topics/for-businesses/", ["how-can-an-organisation-prepare-a-wallet-use-case", "what-should-a-service-check-when-receiving-a-credential", "how-can-someone-act-for-an-organisation"]],
-  ["topics/for-businesses/business-wallets-where-to-start/", ["how-can-someone-act-for-an-organisation"]],
   ["topics/for-businesses/accepting-information-from-a-wallet/", ["what-should-a-service-check-when-receiving-a-credential"]],
-  ["topics/for-businesses/issuing-credentials-for-wallets/", ["how-can-an-organisation-prepare-a-wallet-use-case"]],
 ];
 const UNAVAILABLE = /issuer-catalog|relying-party-websites|interop-profiles|interop-matrix|\/matrix/;
 const linkCache = new Map();
@@ -127,7 +127,7 @@ async function focusOk(page, tag, locators) {
       check(`${tag}: groups "Learn more" and "Explore in the catalogs"`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
       const noSeries = await page.locator("nav.fides-learn-series").count();
       check(`${tag}: no series navigation (not part of a series)`, noSeries === 0, noSeries);
-      if (a.cta) check(`${tag}: call to action links to the Readiness Workshop`, (await page.locator("main a[href*='/sessions/wallet-readiness-workshop/']").count()) >= 2);
+      if (a.cta) check(`${tag}: call to action links to the Readiness Workshop`, (await page.locator("main a[href*='/sessions/wallet-readiness-workshop/']").count()) >= 1); // one call to action: Continue learning no longer repeats it
 
       const src = await page.locator(".fides-learn-sources__link").evaluateAll((as) => as.map((x) => ({ href: x.getAttribute("href"), name: x.querySelector(".fides-learn-sources__name")?.textContent.trim(), text: x.textContent.replace(/\s+/g, " ").trim(), target: x.target })));
       check(`${tag}: ${a.sources.length} sources listed`, src.length === a.sources.length, JSON.stringify(src.map((s) => s.href)));

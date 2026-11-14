@@ -35,14 +35,14 @@ const MANIFEST = JSON.parse(fs.readFileSync(path.join(__dirname, "../learn/manif
 const titleOf = (route) => (MANIFEST.find((p) => p.path === route) || {}).title;
 /** Links added from, or changed in, existing articles (round 2). `has` must be in the Learn more list, `not` must be gone. */
 const ARTICLES = [
-  { route: "topics/for-governments/digital-wallets-and-public-services", n: 4, has: ["topics/around-the-world"], not: ["what-is-a-digital-wallet"] },
-  { route: "topics/for-governments/issuing-public-information-to-wallets", n: 4, has: ["topics/around-the-world/honduras"], not: ["issuing-credentials-for-wallets"] },
-  { route: "topics/for-governments/accepting-information-from-wallets-in-public-services", n: 4, has: ["topics/around-the-world/united-states"], not: ["the-relying-party"] },
-  { route: "topics/for-businesses/what-should-a-service-check-when-receiving-a-credential", n: 4, has: ["topics/around-the-world/india"], not: [] },
-  { route: "topics/for-you/receiving-information-in-a-wallet", n: 4, has: ["topics/around-the-world/honduras"], not: [] },
+  { route: "topics/for-governments/digital-wallets-and-public-services", n: 3, has: ["topics/around-the-world"], not: ["what-is-a-digital-wallet"] },
+  { route: "topics/for-governments/issuing-public-information-to-wallets", n: 3, has: ["topics/around-the-world/honduras"], not: ["issuing-credentials-for-wallets"] },
+  { route: "topics/for-governments/accepting-information-from-wallets-in-public-services", n: 3, has: [], not: ["the-relying-party"] },
+  { route: "topics/for-businesses/what-should-a-service-check-when-receiving-a-credential", n: 3, has: [], not: [] },
+  { route: "topics/for-you/receiving-information-in-a-wallet", n: 3, has: [], not: [] },
   { route: "topics/around-the-world/un-transparency-protocol", n: 3, has: ["topics/around-the-world/canada"], not: [] },
-  { route: "topics/for-governments/the-eudi-wallet-and-national-implementation", n: 4, has: ["topics/for-governments/accepting-information-from-wallets-in-public-services", "topics/the-big-picture/european-digital-identity-wallet", "topics/around-the-world", "topics/around-the-world/the-netherlands"], not: [] },
-  { route: "topics/the-big-picture/what-is-a-digital-wallet", n: 4, has: [], not: [], bodyHas: ["topics/ecosystem-roles/the-holder"] },
+  { route: "topics/for-governments/the-eudi-wallet-and-national-implementation", n: 3, has: ["topics/for-governments/accepting-information-from-wallets-in-public-services", "topics/the-big-picture/european-digital-identity-wallet", "topics/around-the-world/the-netherlands"], not: [] },
+  { route: "topics/the-big-picture/what-is-a-digital-wallet", n: 3, has: [], not: [], bodyHas: ["topics/ecosystem-roles/the-holder"] },
 ];
 /** The five /nl/ routes: Dutch title, sentences that must be present, card sentence and link label. */
 const NL = {
@@ -185,12 +185,12 @@ async function crumbCheck(page, tag, names, parents) {
       await focusOk(page, tag, page.locator(`.fides-learn__content ul.fides-learn-rows a[href$="/ethiopia/"]`), "the Ethiopia row link");
     }
 
-    // Credential formats: the added United States link, still at most four Learn more links.
+    // Credential formats: at most three Learn more links (the United States link moved to the country article, see learn/continue-learning-selection.md).
     {
       const tag = `credential formats @${width}`;
       await open(page, `${L}/topics/technology/credential-formats-and-interoperability/`);
       const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((a) => new URL(a.href).pathname) : []; });
-      check(`${tag}: "Learn more" has 4 links including the United States page`, lm.length === 4 && lm.includes(`${WORLD}united-states/`), lm.join(","));
+      check(`${tag}: "Learn more" has at most 3 links`, lm.length === 3, lm.join(","));
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
     }
 
@@ -213,7 +213,7 @@ async function crumbCheck(page, tag, names, parents) {
       const r = await open(page, `${L}/${art.route}/`);
       check(`${tag}: article answers 200`, r && r.status() === 200);
       const lm = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? [...ul.querySelectorAll("a")].map((x) => ({ text: x.textContent.replace(/\s+/g, " ").trim(), path: new URL(x.href).pathname })) : []; });
-      check(`${tag}: "Learn more" has ${art.n} links (at most 4)`, lm.length === art.n && lm.length <= 4, lm.map((x) => x.path).join(","));
+      check(`${tag}: "Learn more" has ${art.n} links (at most 3)`, lm.length === art.n && lm.length <= 3, lm.map((x) => x.path).join(","));
       for (const h of art.has) check(`${tag}: Learn more links to ${h}`, lm.some((x) => x.path === `${L}/${h}/`), lm.map((x) => x.path).join(","));
       for (const h of art.not) check(`${tag}: replaced link to ${h} is gone`, !lm.some((x) => x.path.includes(h)));
       for (const x of lm) {

@@ -2332,8 +2332,7 @@
                 "learn/topics/around-the-world/the-netherlands",
                 "learn/topics/around-the-world/un-transparency-protocol",
                 "learn/topics/around-the-world/united-states",
-                "learn/topics/for-governments/digital-wallets-and-public-services",
-                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation"
+                "learn/topics/for-governments/digital-wallets-and-public-services"
             ],
             "group": "learn"
         },
@@ -4475,7 +4474,6 @@
                 "learn"
             ],
             "routes": [
-                "learn/topics/technology/credential-formats-and-interoperability",
                 "learn/topics/technology/how-do-wallets-and-services-exchange-information"
             ],
             "group": "learn"
@@ -5153,6 +5151,19 @@
             "group": "learn"
         },
         {
+            "original": "For what these formats and protocols do, see",
+            "translation": "Wat deze formaten en protocollen doen, leest u in",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "For you",
             "translation": "Voor u",
             "html": false,
@@ -5543,8 +5554,7 @@
             "routes": [
                 "learn/topics/around-the-world",
                 "learn/topics/around-the-world/honduras",
-                "learn/topics/for-governments/issuing-public-information-to-wallets",
-                "learn/topics/for-you/receiving-information-in-a-wallet"
+                "learn/topics/for-governments/issuing-public-information-to-wallets"
             ],
             "group": "learn"
         },
@@ -5572,8 +5582,7 @@
             "routes": [
                 "learn/topics/for-businesses",
                 "learn/topics/for-businesses/business-wallets-where-to-start",
-                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
-                "learn/topics/for-businesses/issuing-credentials-for-wallets"
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case"
             ],
             "group": "learn"
         },
@@ -6101,8 +6110,7 @@
             ],
             "routes": [
                 "learn/topics/around-the-world",
-                "learn/topics/around-the-world/india",
-                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
+                "learn/topics/around-the-world/india"
             ],
             "group": "learn"
         },
@@ -11092,9 +11100,7 @@
             ],
             "routes": [
                 "learn/topics/around-the-world",
-                "learn/topics/around-the-world/united-states",
-                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
-                "learn/topics/technology/credential-formats-and-interoperability"
+                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -13672,19 +13678,6 @@
         {
             "original": "for issuance",
             "translation": "voor uitgifte",
-            "html": false,
-            "fragment": true,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "for presentation",
-            "translation": "voor presentatie",
             "html": false,
             "fragment": true,
             "groups": [

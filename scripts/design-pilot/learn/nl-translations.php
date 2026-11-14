@@ -739,6 +739,7 @@ $nl = array(
     'The catalog lists Reeco as the organisation. The catalog does not mark this use case as in production.' => 'De catalogus noemt Reeco als betrokken organisatie. Volgens de catalogus is deze usecase niet in productie.',
     'Explore the Reeco use case' => 'Bekijk de Reeco-usecase',
     'For more on the role of the holder, see' => 'Meer over de rol van de houder leest u in',
+    'For what these formats and protocols do, see' => 'Wat deze formaten en protocollen doen, leest u in',
     // Round 2026-11-13 (Around the world, five country pages): see learn/nl-translation-changes-around-world-countries-final-2026-11-13.md.
     'Explore Aadhaar, India’s identification system, and an example of identity checks in a service.' => 'Ontdek Aadhaar, het identificatiesysteem van India, en een voorbeeld van identiteitscontroles in een dienst.',
     'Explore federal and provincial work on digital credentials and a cross-border trade example.' => 'Ontdek het federale en provinciale werk aan digitale credentials en een voorbeeld uit de grensoverschrijdende handel.',

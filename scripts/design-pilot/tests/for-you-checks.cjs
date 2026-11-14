@@ -17,18 +17,19 @@ const EW = ["European Commission", "European Digital Identity Wallet", "https://
 const PAGES = [
   { slug: "receiving-information-in-a-wallet", title: "Receiving information in a wallet", intro: /^How does information get into a wallet, and who provides it\?/, sources: [W3C],
     headings: ["An example", "Before you add something", "What happens if information changes?", "Continue learning"],
-    links: ["sharing-information-from-a-wallet", "what-is-a-credential", "how-credentials-connect", "personal-wallets"], terms: 1, learnMore: 4 },
+    links: ["sharing-information-from-a-wallet", "what-is-a-credential", "how-credentials-connect", "personal-wallets"], terms: 1, learnMore: 3 },
   { slug: "sharing-information-from-a-wallet", title: "Sharing information from a wallet", intro: /^What should you look at when a service asks you to share information\?/, sources: [W3C, SD, EW],
     headings: ["Check the request", "What can you choose to share?", "What happens afterwards?", "Continue learning"],
-    links: ["receiving-information-in-a-wallet", "the-holder", "the-relying-party", "european-digital-identity-wallet", "personal-wallets"], terms: 1, learnMore: 4 },
+    links: ["receiving-information-in-a-wallet", "the-holder", "the-relying-party", "personal-wallets"], terms: 1, learnMore: 3 },
   { slug: "choosing-and-managing-a-wallet", title: "Choosing and managing a wallet", intro: /^What can you check when choosing a wallet, and where can you find help\?/, sources: [EW],
     headings: ["Questions to ask", "If your device is lost or replaced", "Compare available wallets", "Continue learning"],
     links: ["what-is-a-digital-wallet", "european-digital-identity-wallet", "personal-wallets"], terms: 0, learnMore: 2 },
 ];
+// Continue learning is limited to three Learn links: "What is a digital wallet?" and "What is a credential?" no longer
+// link to the For you articles (editorial decision pending, see learn/continue-learning-selection.md); the For you hub
+// and the holder article still do.
 const BACKLINKS = [
   ["topics/", "for-you/"],
-  ["topics/the-big-picture/what-is-a-digital-wallet/", "for-you/choosing-and-managing-a-wallet/"],
-  ["topics/the-big-picture/what-is-a-credential/", "for-you/receiving-information-in-a-wallet/"],
   ["topics/ecosystem-roles/the-holder/", "for-you/sharing-information-from-a-wallet/"],
 ];
 const UNAVAILABLE = /issuer-catalog|relying-party-websites|interop-profiles|interop-matrix|\/matrix/;

@@ -199,12 +199,14 @@ const ringVisible = (r) => r.found && r.visible && r.outlineStyle !== "none" && 
     }
 
     // 6. Filter links used by Technology and Around the world: chip and count > 0 on the catalog.
+    // `unlinked`: Continue learning is limited to two catalog links, so the page keeps the SD-JWT VC credential filter only
+    // (editorial decision pending, learn/continue-learning-selection.md). The filter itself is still checked on the catalog.
     const filters = [
       { from: "technology/credential-formats-and-interoperability", href: "/credentials/?format=sd_jwt_vc", chip: /Format: SD-JWT VC/i },
-      { from: "technology/credential-formats-and-interoperability", href: "/credentials/?format=mdoc", chip: /Format: ISO mDoc/i },
-      { from: "technology/credential-formats-and-interoperability", href: "/personal-wallets/?format=sd_jwt_vc", chip: /VC format: SD-JWT VC/i },
+      { from: "technology/credential-formats-and-interoperability", href: "/credentials/?format=mdoc", chip: /Format: ISO mDoc/i, unlinked: true },
+      { from: "technology/credential-formats-and-interoperability", href: "/personal-wallets/?format=sd_jwt_vc", chip: /VC format: SD-JWT VC/i, unlinked: true },
       { from: "technology/how-do-wallets-and-services-exchange-information", href: "/personal-wallets/?issuance=OpenID4VCI", chip: /Issuance protocol: OpenID4VCI/i },
-      { from: "technology/how-do-wallets-and-services-exchange-information", href: "/personal-wallets/?presentation=OpenID4VP", chip: /Presentation protocol: OpenID4VP/i },
+      { from: "technology/how-do-wallets-and-services-exchange-information", href: "/personal-wallets/?presentation=OpenID4VP", chip: /Presentation protocol: OpenID4VP/i, unlinked: true },
       { from: "around-the-world/the-netherlands", href: "/overview/?country=NL", chip: /Country: Netherlands/i },
       { from: "around-the-world/the-netherlands", href: "/organizations/?country=NL", chip: /Country: Netherlands/i },
       { from: "around-the-world/the-netherlands", href: "/personal-wallets/?country=NL", chip: /Country: Netherlands/i },
@@ -215,7 +217,7 @@ const ringVisible = (r) => r.found && r.visible && r.outlineStyle !== "none" && 
     for (const f of filters) {
       const tag = `${f.href} @${width}`;
       // The link exists on the Learn page (English and Dutch route), and the catalog shows chip and results.
-      for (const lang of ["en", "nl"]) {
+      for (const lang of f.unlinked ? [] : ["en", "nl"]) {
         const pre = lang === "nl" ? "/nl" : "";
         await open(page, `${pre}${LEARN}/${f.from}/`, "h1");
         const hrefs = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href], main a[href]").evaluateAll((as) => as.map((a) => a.getAttribute("href")));

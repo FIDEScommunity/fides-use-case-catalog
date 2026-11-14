@@ -17,7 +17,11 @@ const GLOSSARY = JSON.parse(fs.readFileSync(path.join(ROOT, "wordpress/wp-conten
 const BYNAME = Object.fromEntries(GLOSSARY.map((t) => [t.name, t]));
 // Since 5f7f6f8 the article is part of the chip text ("A wallet", "The EUDI Wallet"), so it is optional in the patterns.
 const TERMS = { "Credential Format": /^(?:(?:a|an|the) )?credential format \(definition\)$/i, "mDL/mDoc": /^(?:(?:a|an|the) )?mDoc \(definition\)$/i, "SD-JWT-VC": /^(?:(?:a|an|the) )?SD-JWT VC \(definition\)$/i, OpenID4VCI: /^(?:(?:a|an|the) )?OpenID4VCI \(definition\)$/i, OpenID4VP: /^(?:(?:a|an|the) )?OpenID4VP \(definition\)$/i, "Interop Profile": /^(?:(?:a|an|the) )?interoperability profile \(definition\)$/i };
-const BACKLINKS = ["the-big-picture", "the-big-picture/what-is-a-credential", "the-big-picture/what-is-a-digital-wallet", "for-businesses/accepting-information-from-a-wallet", "for-businesses/issuing-credentials-for-wallets"];
+// Pages that must link to Formats and protocols. Continue learning is now limited to 3 Learn links + 2 catalog links, so
+// the Formats link was dropped from "What is a credential?", "Accepting information from a wallet" and "Issuing
+// credentials for wallets" (see learn/continue-learning-selection.md). "What is a digital wallet?" links to it once in
+// the body (section "Are all wallets compatible?"); the big picture hub keeps its link.
+const BACKLINKS = ["the-big-picture", "the-big-picture/what-is-a-digital-wallet"];
 let failures = 0;
 function check(name, ok, detail) {
   if (!ok) failures += 1;
@@ -53,7 +57,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     const bad = [];
     for (const h of internal) { const x = await page.request.get(`${BASE}${h}`); if (x.status() !== 200) bad.push(`${h} ${x.status()}`); }
     check(`${tag}: ${internal.length} internal links answer 200`, bad.length === 0, bad.join(", "));
-    for (const dest of ["what-is-a-credential", "how-credentials-connect", "what-is-a-digital-wallet", "accepting-information-from-a-wallet", "issuing-credentials-for-wallets", "credentials", "personal-wallets", "business-wallets"]) {
+    for (const dest of ["what-is-a-credential", "how-credentials-connect", "what-is-a-digital-wallet", "accepting-information-from-a-wallet", "issuing-credentials-for-wallets", "credentials", "personal-wallets"]) {
       check(`${tag}: links to ${dest}`, internal.some((h) => h.includes(`/${dest}/`)));
     }
     const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();

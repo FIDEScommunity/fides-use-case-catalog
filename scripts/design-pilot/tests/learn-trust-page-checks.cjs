@@ -17,7 +17,8 @@ const GLOSSARY = JSON.parse(fs.readFileSync(path.join(ROOT, "wordpress/wp-conten
 const BYNAME = Object.fromEntries(GLOSSARY.map((t) => [t.name, t]));
 // Since 5f7f6f8 the article is part of the chip text ("A wallet", "The EUDI Wallet"), so it is optional in the patterns.
 const TERMS = { "Attestation Rulebook": /^(?:(?:a|an|the) )?rulebook \(definition\)$/i };
-const BACKLINKS = ["the-big-picture", "the-big-picture/formats-and-protocols", "the-big-picture/what-is-a-credential"];
+// "What is a credential?" no longer links to Trust and interoperability: Continue learning is limited to three Learn links.
+const BACKLINKS = ["the-big-picture", "the-big-picture/formats-and-protocols"];
 let failures = 0;
 function check(name, ok, detail) {
   if (!ok) failures += 1;
@@ -53,7 +54,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
     const bad = [];
     for (const h of internal) { const x = await page.request.get(`${BASE}${h}`); if (x.status() !== 200) bad.push(`${h} ${x.status()}`); }
     check(`${tag}: ${internal.length} internal links answer 200`, bad.length === 0, bad.join(", "));
-    for (const dest of ["formats-and-protocols", "what-is-a-credential", "issuing-credentials-for-wallets", "accepting-information-from-a-wallet", "credentials"]) {
+    for (const dest of ["formats-and-protocols", "what-is-a-credential", "credentials"]) {
       check(`${tag}: links to ${dest}`, internal.some((h) => h.includes(`/${dest}/`)));
     }
     const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();

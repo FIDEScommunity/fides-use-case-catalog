@@ -443,7 +443,7 @@ pages are published, run `LEARN_DRY_RUN=1` and read `skipped-edited` / `skipped-
 
 ## Learn article template (13 November 2026, local only)
 
-- Install **tiles 1.13.54** before anything else (step 3); the layout change is CSS/PHP/JS only, no database write.
-- Seed: one page changes (`how-credentials-connect`, from five to three article links plus two catalog links). Pages edited on staging are skipped (`skipped-edited`), a known and accepted risk: the page keeps working with its old list.
-- No translation rows are added; the Dutch import is unchanged. Internal links in Dutch stay under `/nl/`.
+- Install **tiles 1.13.55** before anything else (step 3); the layout change is CSS/PHP/JS only, no database write.
+- Seed: 34 article pages change (Continue learning to 3 + 2; `what-is-a-digital-wallet` gets one extra paragraph with the Formats link). Pages edited on staging are skipped (`skipped-edited`), a known and accepted risk: the page keeps working with its old list (and, for the wallet page, without the Formats paragraph). Run the dry run first.
+- One Dutch row is added ("For what these formats and protocols do, see"); in `learn/nl-translations.json` (1450 entries). Run `status`, open the NL wallet page once, then `import-apply`. Internal links in Dutch stay under `/nl/`.
 - A new staging package is needed; none was built here.

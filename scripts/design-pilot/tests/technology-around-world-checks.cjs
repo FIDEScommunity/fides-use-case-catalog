@@ -41,19 +41,21 @@ const HUBS = [
     rows: [`${WORLD}the-netherlands/`, `${WORLD}germany/`, `${WORLD}india/`, `${WORLD}canada/`, `${WORLD}united-states/`, `${WORLD}honduras/`, `${WORLD}ethiopia/`, `${L}/topics/the-big-picture/european-digital-identity-wallet/`, `${L}/topics/for-governments/the-eudi-wallet-and-national-implementation/`, `${WORLD}un-transparency-protocol/`],
     links: ["overview/", "organizations/", "personal-wallets/", "business-wallets/"] },
 ];
+// Continue learning is limited to 3 Learn links + 2 catalog links (learn/continue-learning-selection.md); the EU trusted lists
+// link is a Source on the trust frameworks page, not a Continue learning link.
 const PAGES = [
   { group: "technology", parent: "Technology", series: ["how-do-wallets-and-services-exchange-information", "credential-formats-and-interoperability", "trust-frameworks-and-registries"], slug: "how-do-wallets-and-services-exchange-information", title: "How do wallets and services exchange information?",
     eyebrow: /Explainer\s*·\s*Technology/i, intro: /^Follow a credential from issuance to presentation/, sources: [S.vci, S.vp],
     headings: ["Start with an example", "Receiving a credential", "Presenting information", "What should organisations check?", "Continue learning"],
-    links: ["formats-and-protocols", "credential-formats-and-interoperability", "accepting-information-from-a-wallet", "how-credentials-connect", "personal-wallets", "business-wallets"], terms: 2, learnMore: 4, note: /Content last checked: 13 November 2026/, must: [/final OpenID Foundation specifications/] },
+    links: ["formats-and-protocols", "credential-formats-and-interoperability", "accepting-information-from-a-wallet", "personal-wallets"], terms: 2, learnMore: 3, note: /Content last checked: 13 November 2026/, must: [/final OpenID Foundation specifications/] },
   { group: "technology", parent: "Technology", slug: "credential-formats-and-interoperability", title: "Credential formats and interoperability",
     eyebrow: /Explainer\s*·\s*Technology/i, intro: /^See what a format describes and what else affects compatibility/, sources: [S.vcdm, S.sd, S.iso],
     headings: ["What does a format describe?", "More than a format", "Comparing products", "Continue learning"],
-    links: ["formats-and-protocols", "how-do-wallets-and-services-exchange-information", "trust-and-interoperability", "credentials/", "personal-wallets", "business-wallets"], terms: 4, learnMore: 4, note: /Content last checked: 13 November 2026/, must: [/Internet-Draft/, /version 26/, /ISO\/IEC 18013-5/, /Recommendation \(May 2025\)/] },
+    links: ["formats-and-protocols", "how-do-wallets-and-services-exchange-information", "trust-and-interoperability", "credentials/"], terms: 4, learnMore: 3, note: /Content last checked: 13 November 2026/, must: [/Internet-Draft/, /version 26/, /ISO\/IEC 18013-5/, /Recommendation \(May 2025\)/] },
   { group: "technology", parent: "Technology", slug: "trust-frameworks-and-registries", title: "Trust frameworks and registries",
     eyebrow: /Explainer\s*·\s*Technology/i, intro: /^How do participants agree on rules/, sources: [S.tl, S.arf, S.vcdm],
     headings: ["What is a trust framework?", "What can a registry provide?", "Trusted lists and qualified trust services", "Questions to ask", "Continue learning"],
-    links: ["trust-and-interoperability", "trust-service-providers-and-trust-frameworks", "what-should-a-service-check-when-receiving-a-credential", "cert=qtsp", "credentials/", "eu-trusted-lists"], terms: 2, learnMore: 4, note: /Content last checked: 13 November 2026/, qtsp: true, must: [/Use the official trusted lists for an authoritative check/] },
+    links: ["trust-and-interoperability", "trust-service-providers-and-trust-frameworks", "what-should-a-service-check-when-receiving-a-credential", "cert=qtsp", "credentials/"], terms: 2, learnMore: 3, note: /Content last checked: 13 November 2026/, qtsp: true, must: [/Use the official trusted lists for an authoritative check/] },
   { group: "around-the-world", parent: "Around the world", slug: "the-netherlands", title: "The Netherlands — digital identity and public data",
     eyebrow: /Country\s*·\s*Around the world/i, intro: /^How is the Netherlands working on the European Digital Identity Wallet/, sources: [S.edi, S.ictu, S.go],
     headings: ["The Dutch EDI system", "Access to public-source data", "Where the information comes from", "Continue learning"],

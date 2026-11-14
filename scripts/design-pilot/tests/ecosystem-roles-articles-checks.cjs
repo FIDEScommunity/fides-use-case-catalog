@@ -19,17 +19,19 @@ const TL = ["European Commission", "EU trusted lists", "https://digital-strategy
 const QA = ["European Commission", "Questions and answers on trust services under the European digital identity regulation", "https://digital-strategy.ec.europa.eu/en/faqs/questions-answers-trust-services-under-european-digital-identity-regulation"];
 const PAGES = [
   { slug: "the-holder", title: "The holder", intro: /^A holder receives a credential and can present information from it to another party\./, sources: [W3C, SD], headings: ["From receiving to sharing", "Choosing what to share", "Acting for an organisation", "Continue learning"], terms: ["Holder", "Issuer", "Mandate"],
-    links: ["how-credentials-connect", "what-is-a-digital-wallet", "what-is-a-credential", "personal-wallets", "business-wallets", "topics/ecosystem-roles/"] },
+    links: ["what-is-a-digital-wallet", "what-is-a-credential", "sharing-information-from-a-wallet", "personal-wallets", "business-wallets"] },
   { slug: "the-issuer", title: "The issuer", intro: /^An issuer provides a credential containing information about a person/, sources: [W3C], headings: ["From information to a credential", "After issuance", "One organisation, different roles", "Continue learning"], terms: [],
-    links: ["issuing-credentials-for-wallets", "what-is-a-credential", "how-credentials-connect", "credentials/", "topics/ecosystem-roles/"] },
+    links: ["issuing-credentials-for-wallets", "what-is-a-credential", "how-credentials-connect", "credentials/"] },
   { slug: "the-relying-party", title: "The relying party", intro: /^A relying party is an organisation or service that requests and uses information from a wallet\./, sources: [W3C, SD], headings: ["Making a request", "Checking the information", "Relying party and verifier", "Continue learning"], terms: ["Verifier"],
-    links: ["accepting-information-from-a-wallet", "trust-and-interoperability", "formats-and-protocols", "overview/", "topics/ecosystem-roles/"] },
+    links: ["accepting-information-from-a-wallet", "trust-and-interoperability", "overview/"] },
   { slug: "wallet-providers-and-other-service-providers", title: "Wallet providers and other service providers", intro: /^A wallet provider makes a wallet available to people or organisations\./, sources: [W3C], headings: ["What does a wallet provider do?", "How does a wallet connect to other parties?", "Other providers in the interaction", "Choosing a wallet or provider", "Continue learning"], terms: [],
-    links: ["what-is-a-digital-wallet", "formats-and-protocols", "business-wallets-where-to-start", "personal-wallets", "business-wallets", "organizations/", "topics/ecosystem-roles/"] },
+    links: ["what-is-a-digital-wallet", "business-wallets-where-to-start", "personal-wallets", "business-wallets"] },
   { slug: "trust-service-providers-and-trust-frameworks", title: "Trust service providers and trust frameworks", intro: /^Digital interactions often involve several organisations\./, sources: [TL, QA], headings: ["What is a trust service?", "What does qualified mean?", "What is a trust framework?", "Finding providers", "Continue learning"], terms: [],
-    links: ["trust-and-interoperability", "how-credentials-connect", "formats-and-protocols", "organizations/?role=eidas_trust_service_provider", "organizations/?cert=qtsp", "credentials/", "topics/ecosystem-roles/"] },
+    links: ["trust-and-interoperability", "how-credentials-connect", "organizations/?role=eidas_trust_service_provider", "organizations/?cert=qtsp"] },
 ];
-const BACK = { "topics/the-big-picture/what-is-a-digital-wallet": "the-holder", "topics/for-businesses/issuing-credentials-for-wallets": "the-issuer", "topics/for-businesses/accepting-information-from-a-wallet": "the-relying-party", "topics/the-big-picture/trust-and-interoperability": "trust-service-providers-and-trust-frameworks" };
+const BACK = { "topics/the-big-picture/what-is-a-digital-wallet": "the-holder", "topics/for-businesses/issuing-credentials-for-wallets": "the-issuer", "topics/for-businesses/accepting-information-from-a-wallet": "the-relying-party" };
+// "Trust and interoperability" no longer links to the TSP article from Continue learning (3 Learn links, learn/continue-learning-selection.md);
+// the article stays reachable through the roles hub and "Trust frameworks and registries".
 const linkCache = new Map(); // one request per URL and run (internal and external)
 let failures = 0;
 function check(name, ok, detail) {
@@ -95,7 +97,7 @@ const overflow = (page) => page.evaluate(() => document.documentElement.scrollWi
       const internal = [...new Set(hrefs.filter((h) => h.startsWith("/")))];
       const bad = [];
       for (const h of internal) { if (!linkCache.has(h)) linkCache.set(h, (await page.request.get(`${BASE}${h}`)).status()); if (linkCache.get(h) !== 200) bad.push(`${h} ${linkCache.get(h)}`); }
-      check(`${tag}: ${internal.length} internal links answer 200`, internal.length >= 5 && bad.length === 0, bad.join(", "));
+      check(`${tag}: ${internal.length} internal links answer 200`, internal.length >= 3 && bad.length === 0, bad.join(", "));
       const external = [...new Set([...hrefs, ...src.map((s) => s.href)].filter((h) => /^https?:/.test(h)))];
       for (const h of external) {
         let status = 0;

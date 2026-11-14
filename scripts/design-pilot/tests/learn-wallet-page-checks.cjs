@@ -17,7 +17,9 @@ const GLOSSARY = JSON.parse(fs.readFileSync(path.join(ROOT, "wordpress/wp-conten
 const BYNAME = Object.fromEntries(GLOSSARY.map((t) => [t.name, t]));
 // Since 5f7f6f8 the article is part of the chip text ("A wallet", "The EUDI Wallet"), so it is optional in the patterns.
 const TERMS = { Wallet: /^(?:(?:a|an|the) )?wallet \(definition\)$/i, Credential: /^(?:(?:a|an|the) )?credential \(definition\)$/i, Holder: /^(?:(?:a|an|the) )?holder \(definition\)$/i, "Selective Disclosure": /^(?:(?:a|an|the) )?selective disclosure \(definition\)$/i, "Relying Party": /^(?:(?:a|an|the) )?relying party \(definition\)$/i, "European Digital Identity Wallet": /^(?:(?:a|an|the) )?EUDI Wallet \(definition\)$/i, "European Business Wallet": /^(?:(?:a|an|the) )?European Business Wallet \(definition\)$/i };
-const BACKLINKS = ["the-big-picture", "the-big-picture/what-is-a-credential", "the-big-picture/how-credentials-connect", "the-big-picture/european-digital-identity-wallet", "the-big-picture/eudi-wallet-and-european-business-wallet", "for-businesses/european-business-wallet", "for-businesses/business-wallets-where-to-start", "for-businesses/accepting-information-from-a-wallet", "for-businesses/issuing-credentials-for-wallets"];
+// "Accepting information from a wallet" and "Issuing credentials for wallets" no longer link here: Continue learning is limited
+// to three Learn links (learn/continue-learning-selection.md).
+const BACKLINKS = ["the-big-picture", "the-big-picture/what-is-a-credential", "the-big-picture/how-credentials-connect", "the-big-picture/european-digital-identity-wallet", "the-big-picture/eudi-wallet-and-european-business-wallet", "for-businesses/european-business-wallet", "for-businesses/business-wallets-where-to-start"];
 let failures = 0;
 function check(name, ok, detail) {
   if (!ok) failures += 1;

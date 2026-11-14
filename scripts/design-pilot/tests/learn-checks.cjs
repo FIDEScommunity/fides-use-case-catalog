@@ -96,7 +96,9 @@ async function targets(page, key, width) {
         const r = el.getBoundingClientRect();
         return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== "hidden";
       })
-      .map((el) => ({ n: (el.className || el.tagName) + ":" + (el.textContent || "").trim().slice(0, 24), h: Math.round(el.getBoundingClientRect().height) }))
+      .map((el) => ({ n: (el.className || el.tagName) + ":" + (el.textContent || "").trim().slice(0, 24), h: Math.round(el.getBoundingClientRect().height), aside: !!el.closest(".fides-learn-toc, .fides-learn-continue") }))
+      // Article side column (Paper 24.25): from 900px the contents and Continue learning rows are 32px high (target size above the 24px minimum of WCAG 2.5.8); touch widths keep 44px.
+      .filter((x) => !(x.aside && vw >= 900 && x.h >= 32))
       // Sources rows are deliberately compact (32px) from 768px up; below that they keep the 44px touch target.
       .filter((x) => x.h < (/fides-learn-sources/.test(x.n) || x.n.startsWith("fides-learn-sources") ? (vw >= 768 ? 32 : minSize) : minSize));
   }, [min, width]);
