@@ -367,7 +367,7 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
   `what-is-a-credential` (Learn more: "Receiving information in a wallet") and `the-holder` (Learn more: "Sharing information from a wallet").
   Never use `LEARN_FORCE`. Local result on 12 November 2026: created 4, updated 4, nothing skipped.
 - **Behaviour test:** `tests/for-you-seed.sh` (throwaway tree). Deviations and gaps: `learn/for-you-editorial-gaps.md`.
-- **Dutch:** proposals only, in `learn/nl-translation-changes-for-you.md`; nothing is in `nl-translations.json`.
+- **Dutch:** proposals in `learn/nl-translation-changes-for-you.md`; status at the time (12 November 2026): nothing was in `nl-translations.json` yet. Check the current state of the For you rows in the transfer file before staging.
 
 ## Practice questions for organisations (12 November 2026, local only)
 
@@ -381,7 +381,7 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
   `issuing-credentials-for-wallets` (Learn more: "How can an organisation prepare a wallet use case?").
   Never use `LEARN_FORCE`. Local result on 12 November 2026: created 3, updated 4, nothing skipped.
 - **Behaviour test:** `tests/practice-questions-seed.sh` (throwaway tree). Sources, deviations, overlap and gaps: `learn/practice-questions-editorial-gaps.md`.
-- **Dutch:** proposals only, in `learn/nl-translation-changes-practice-questions.md`; nothing is in `nl-translations.json`. The English row title "Company identity and representation" is gone (its Dutch row is unused; the description row stays valid).
+- **Dutch:** proposals in `learn/nl-translation-changes-practice-questions.md`; status at the time (12 November 2026): nothing was in `nl-translations.json` yet. Check the current state before staging. The English row title "Company identity and representation" is gone (its Dutch row is unused; the description row stays valid).
 - **Second pass (12 November 2026):** the practice article on preparing a wallet use case now describes one concrete exchange, "Business wallets: where to start" is sharpened on role and choice (heading "Check the whole interaction" is now "Compare wallets and providers"), the checking article is shorter, and the legal passages were checked (`learn/practice-questions-legal-check-2026-11-12.md`). Pages that changed and are skipped by the seed when edited on staging: the three practice articles, `business-wallets-where-to-start` and `european-business-wallet` (one Parliament sentence). Dutch proposals for the changed sentences: `learn/nl-translation-changes-practice-questions.md`, section "Second pass".
 
 ## Technology and Around the world (13 November 2026, local only)
