@@ -26,7 +26,7 @@ The overview `topics/for-governments/` and four articles exist (series `for-gove
 - Re-check the GBO version and status before staging and update the date in the four articles, the overview, the manifest sources and `for-governments-checks.cjs`/`for-governments-seed.sh` (constants `version 0.9.5 (September 2026)`).
 - The two use case cards (Honduras BIEN, Nijmegen municipal login) and the smart government card come live from the catalog; recheck the sentence above each card when a record changes.
 - Country examples beyond the Netherlands are not included (outline: only after checking the responsible source). Germany and the Netherlands (EDI-Stelsel) appear only as sources in the national implementation article.
-- Not available in the pilot and not linked: Browse issuers, Browse relying parties, interop profiles and matrix.
+- Browse issuers and Browse relying parties are linked since 15 November 2026 (issuing: Browse issuers; accepting: Browse relying parties). Not available in the pilot and not linked: interop profiles and matrix.
 - "For you" and "Around the world" on Topics stay unlinked.
 - A staging page an editor changed is skipped by the seed (also in dry-run). That applies to Topics, "Issuing credentials for wallets", "Accepting information from a wallet" and "European Digital Identity Wallet": add the For governments links by hand (see `staging/UPDATE-PLAN-NL-LEARN.md`).
 - Dutch proposals: `learn/nl-translation-changes-for-governments.md` (not seeded).

@@ -135,7 +135,7 @@ Role and choice: the intro now says the page helps to choose a business wallet; 
 ## Links and destinations
 
 - Existing destinations used: Learn articles (business wallets, European Business Wallet, how credentials connect, accepting, issuing, formats and protocols, trust and interoperability, what is a credential, the relying party), Wallet Readiness Workshop session page, catalogs `/fides-design-pilot/overview/` (use cases), `/credentials/`, `/business-wallets/`. All answer 200 (checked in `tests/practice-questions-checks.cjs`).
-- Not linked, no destination in the pilot: Browse issuers, Browse relying parties (`/issuer-catalog/`, `/relying-party-websites/` exist only on the full site), interop profiles and matrix (404 in the pilot). The concept names none of them except "Browse business wallets" and "Browse credential types", which exist.
+- Browse relying parties is linked on "What should a service check…" since 15 November 2026 (pilot catalog `/relying-parties/`). Not linked, no destination in the pilot: interop profiles and matrix (404 in the pilot). The concept names none of them except "Browse business wallets" and "Browse credential types", which exist.
 - Organisation catalog: the concept names none; no link added.
 - The article "Browse business wallets" is only on article 1; articles 2 and 3 use "Explore use cases" and "Browse credential types" as in the concept.
 

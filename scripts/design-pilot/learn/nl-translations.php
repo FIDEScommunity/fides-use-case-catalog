@@ -955,6 +955,26 @@ $nl = array(
     'Wallets named by this relying party.' => 'Wallets die deze vertrouwende partij noemt.',
     'Add or update' => 'Toevoegen of bijwerken',
     'Help keep the ecosystem visible and useful.' => 'Help mee om het ecosysteem zichtbaar en bruikbaar te houden.',
+    // Round 2026-11-15 (Issuers and Relying parties repair round): fixed texts of the shared record top row, the page titles, the
+    // Production/Test and readiness explanations and the new section texts. Numbers, dates and names (counts, the row meta line, the
+    // section bar entries, pills, pager) are translated in the plugins (Fides_Issuer_Design::t, Fides_RP_Design::t); see
+    // nl-translation-changes-issuers-rp-repair-2026-11-15.md.
+    'Share' => 'Delen',
+    'Share on LinkedIn' => 'Delen via LinkedIn',
+    'on LinkedIn (opens in a new tab)' => 'via LinkedIn (opent in een nieuw tabblad)',
+    'Issuers (design pilot)' => 'Uitgevers (designpilot)',
+    'Issuer detail (design pilot)' => 'Detail uitgever (designpilot)',
+    'Relying parties (design pilot)' => 'Vertrouwende partijen (designpilot)',
+    'Relying party detail (design pilot)' => 'Detail vertrouwende partij (designpilot)',
+    'Production marks an issuer that is live. Test marks every other issuer: pilots, sandboxes, demos and quality assurance.' => 'Productie betekent dat een uitgever live is. Test geldt voor elke andere uitgever: pilots, sandboxes, demo’s en kwaliteitstests.',
+    'Readiness shows how far a service has come: technical demo, use case demo, production pilot or production. The operational status (live, beta, development or deprecated) is a separate field on the record.' => 'Gereedheid laat zien hoe ver een dienst is: technische demo, usecasedemo, productiepilot of productie. De operationele status (live, beta, in ontwikkeling of uitgefaseerd) is een apart veld in het record.',
+    'Readiness is how mature the service is. Operational status is its current state. The two fields are recorded separately and can differ.' => 'Gereedheid zegt hoe ver de dienst is. De operationele status is de huidige toestand. Beide velden worden apart vastgelegd en kunnen verschillen.',
+    'Operational status' => 'Operationele status',
+    'Production first' => 'Productie eerst',
+    'Most credential configurations' => 'Meeste credentialconfiguraties',
+    'A type name opens the credential type when the catalog links it. Each configuration is listed under its type.' => 'De naam van een type opent het credentialtype wanneer de catalogus dit koppelt. Elke configuratie staat onder haar type.',
+    'Browse issuers' => 'Bekijk uitgevers',
+    'Browse relying parties' => 'Bekijk vertrouwende partijen',
 );
 
 /**

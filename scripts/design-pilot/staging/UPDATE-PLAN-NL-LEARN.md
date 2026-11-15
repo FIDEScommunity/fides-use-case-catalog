@@ -3,6 +3,8 @@
 For Codex. Written 12 November 2026. **Nothing in this plan was run on staging by the author**; the package and this plan were
 prepared locally. Do not skip the dry-run decision point (step 6). Nothing is forced, nothing is overwritten.
 
+**Current transfer file:** inspect `learn/nl-translations.json` (`total`, `counts`, `entries` and `gettext`) and run the transfer-tool `status` against the actual target. Counts and hashes below in dated sections are historical snapshots, not expectations for a new package. A no-HTTP status cannot verify stale or new English source text. Check the current English pages separately before staging.
+
 Package: the newest folder under the local `staging-package/` (`latest` points to it; name `<yyyymmdd-hhmmss>-<hash8>`), checked
 with `SHA256SUMS` and `verify-package.sh`. Replace `<wp>` with the WordPress path of the standalone staging site and `<pkg>` with the
 unpacked package. Real mail and form submissions stay blocked on staging (the config mu-plugin disables external actions); do
@@ -52,7 +54,7 @@ Replace in the unpacked package (the tool and, since the workshop-language row, 
 | File (repository) | In the package | Needed |
 |---|---|---|
 | `scripts/design-pilot/learn/nl-translations-transfer.php` | `<pkg>/seed/learn/nl-translations-transfer.php` | yes, **replace** (new version) |
-| `scripts/design-pilot/learn/nl-translations.json` | `<pkg>/seed/learn/nl-translations.json` | yes, **replace** (936 entries; sha256 `026c802d...6331`; the two workshop-language rows are new) |
+| `scripts/design-pilot/learn/nl-translations.json` | `<pkg>/seed/learn/nl-translations.json` | yes, **replace** with the file from the package being verified; obtain its current count and checksum from that package (936 entries and sha256 `026c802d...6331` described the 12 November snapshot) |
 | `scripts/design-pilot/learn/nl-translations.php` | `<pkg>/seed/learn/nl-translations.php` | no (local authoring helper, do not run on staging) |
 
 ### Steps
@@ -73,10 +75,10 @@ wp --path=<wp> eval-file <pkg>/seed/learn/nl-translations-transfer.php import-ap
 wp --path=<wp> cache flush ; purge page cache/CDN ; then the GET checks of section 8
 ```
 
-The 27 routes of the file include `learn/sessions/request-wpforms` and the other form pages; the GET only renders them. If a route
+The routes listed in the current file include `learn/sessions/request-wpforms` and the other form pages; the GET only renders them. If a route
 answers 404 the page does not exist on staging; its sources then stay untouched. If the `/nl/` URL form differs, take it from the
-language switcher link of the site. If step 1 cannot be run from the server (blocked loopback), open the 27 URLs in a browser.
-Expected `status` after step 1: `scope: 936 sources ...`, rows in scope about 937, `pending` 0, `add` = all rows without a translation,
+language switcher link of the site. If step 1 cannot be run from the server (blocked loopback), open the listed URLs in a browser.
+Expected `status` after step 1: compare `scope` with the actual transfer file and published target routes; `pending` 0, `add` = rows in scope without a translation,
 `differs` = rows that hold other Dutch (see the lists in the sections above), `stale/new check skipped`, gettext `add`/`same`/`differs`.
 
 Example of the `differs` output (the existing translation is kept):
@@ -117,7 +119,7 @@ domain + exact original only. An empty or missing-translation row is filled with
   Dutch proposals for the articles: `learn/nl-translation-changes-ecosystem-roles-articles.md` (not seeded).
 - **Dutch (entered 12-13 Nov 2026, local pilot):** see the section "Dutch for Ecosystem roles and For governments" below. (Earlier status: proposals only.)
 - Links: the overview links only to destinations that exist in the pilot (use cases, credential types, personal and business wallets,
-  organisations, existing Learn articles). `/issuer-catalog/` and `/relying-party-websites/` are not linked.
+  organisations, issuers, relying parties, existing Learn articles). The pilot catalogs `/issuers/` and `/relying-parties/` are linked from seven Learn articles since 15 November 2026 (`staging/issuers-rp-destinations-2026-11-15.md`).
 
 ## For governments (12 November 2026, local only)
 
@@ -141,10 +143,10 @@ domain + exact original only. An empty or missing-translation row is filled with
 
 - **What is entered:** 195 new dictionary rows (first round; see the second round below) (100 from the edited document, 81 exact matches from the proposal files, 7 agent completions and 7 interface labels; list with tags: `learn/nl-translation-changes-roles-governments-2026-11-12.md`) for the 11 pages `topics/ecosystem-roles` (+5 articles) and `topics/for-governments` (+4 articles). No existing translation was changed.
 - **Second round (13 Nov 2026):** 26 more rows, written by Cursor strictly following the English and marked for review (tag C in the changes file): the For governments overview intro, the Dutch example (GBO) texts, the five Article 5f points and closing sentence, the catalog card lines and the link titles. Together 221 rows; no English sentence is left on these 11 pages except sources, glossary definitions, chips and catalog titles. `learn/nl-translation-open-for-governments-roles.md` is now history. Review these rows before staging.
-- **Transfer file:** `learn/nl-translations.json` now has 1167 entries (see the counts block in the file) + 4 gettext (was 936). `status` locally: add 0, same 1145, differs 0, new 0, stale 0. 12 old source-line rows ("Organisation · Title", no longer rendered as one string) dropped out of the export: they were stale already before this change. sha256 of the file: (hash changes with every export). Replace the file in the package at step "Files for a translations-only update".
+- **Transfer file:** `learn/nl-translations.json` had 1167 entries on 13 November (see the counts block in the file) + 4 gettext (was 936). `status` locally: add 0, same 1145, differs 0, new 0, stale 0. 12 old source-line rows ("Organisation · Title", no longer rendered as one string) dropped out of the export: they were stale already before this change. sha256 of the file: (hash changes with every export). Replace the file in the package at step "Files for a translations-only update".
 - **Seed change:** `learn/content/the-relying-party.html` (one sentence: the article "A" is now part of the verifier term, so it is no longer a lone fragment). On a site where nobody edited the page: one `would-updated`; an edited page is `skipped-edited` and keeps its text, and then the lone English fragment "A" before the term stays untranslated (harmless, the row "A verifier" simply does not match).
 - **Repair round 13 Nov 2026:** 11 Tag C rows were replaced locally and new rows added (role chips, terminology labels, route strings, practice titles); change list in `learn/nl-translation-changes-repair-round-2026-11-13.md`. Staging rows that already hold the old Tag C Dutch will show as `differs` and are NOT overwritten by the import; correct them in the TranslatePress editor from the change list. Local status: add 0, differs 0.
-- **Import on staging:** as in the steps above (GET each route once under /nl/, dry run, apply twice). The 11 new routes are in the file, so `scope` grows to 1167 sources; `add` should equal the rows that exist on staging and are still empty; a row already translated differently on staging is kept and reported as `differs`. Nothing was run on staging.
+- **Import on staging:** as in the steps above (GET each route once under /nl/, dry run, apply twice). The 11 new routes are in the file, so `scope` depends on the actual transfer file and published target routes (1167 sources in the historical snapshot); `add` should equal the rows that exist on staging and are still empty; a row already translated differently on staging is kept and reported as `differs`. Nothing was run on staging.
 - Links go only to destinations that exist in the pilot (use cases, credential types, wallets, organisations, existing Learn articles).
 
 ## Changes since package `20261112-083503-34b753ab` (third package, same day)
@@ -204,7 +206,7 @@ partij?") is kept and shown as `differs` in `status`; the new Dutch from the fil
   what runs on staging (compare in step 3).
 - `seed/learn/content/*.html` (26 files), `seed/learn/manifest.json`: eight Learn articles got the article inside the term, link
   or bold text (17 sentence openers; wording unchanged).
-- `seed/learn/nl-translations.json` (936 entries + 4 gettext), `seed/learn/nl-translations-transfer.php`,
+- `seed/learn/nl-translations.json` (use the current package count and gettext list; 936 + 4 was the earlier snapshot), `seed/learn/nl-translations-transfer.php`,
   `seed/learn/nl-translations.php`, `seed/create-learn-pages.php`.
 - The glossary plugin and its bundled data stay as pinned (`glossary 1.12.2`, `a52a684`, plugin 1.1.16). No change.
 
@@ -286,7 +288,7 @@ strings, and writes nothing in these modes. See "Standalone review site" above f
 
 | Line | Meaning | Acceptable |
 |---|---|---|
-| `scope: 936 sources ...` | sources in the file, rows in scope | 936 sources |
+| `scope: ... sources ...` | sources in the file and dictionary rows in scope | compare with the actual package and target routes |
 | `add` | empty rows in scope that would be filled | any number |
 | `same` | already identical | any number |
 | `differs` | existing other translation, **kept** | list them in the report; no action needed |
@@ -367,7 +369,7 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
   `what-is-a-credential` (Learn more: "Receiving information in a wallet") and `the-holder` (Learn more: "Sharing information from a wallet").
   Never use `LEARN_FORCE`. Local result on 12 November 2026: created 4, updated 4, nothing skipped.
 - **Behaviour test:** `tests/for-you-seed.sh` (throwaway tree). Deviations and gaps: `learn/for-you-editorial-gaps.md`.
-- **Dutch:** proposals in `learn/nl-translation-changes-for-you.md`; status at the time (12 November 2026): nothing was in `nl-translations.json` yet. Check the current state of the For you rows in the transfer file before staging.
+- **Dutch (checked 14 November 2026):** `learn/nl-translations.json` contains non-empty translations associated with all four For you routes (65, 82, 76 and 69 entries including shared strings). On the local dry-run, existing dictionary rows in scope matched the export; the optional HTTP check warned that some pages could not be read, so it did not reliably establish `new` or `stale`. Verify current rendered English source sentences and Dutch output before staging. Historical proposals: `learn/nl-translation-changes-for-you.md`.
 
 ## Practice questions for organisations (12 November 2026, local only)
 
@@ -381,7 +383,7 @@ Use the backup folder `$B` from step 2. Decide by what went wrong:
   `issuing-credentials-for-wallets` (Learn more: "How can an organisation prepare a wallet use case?").
   Never use `LEARN_FORCE`. Local result on 12 November 2026: created 3, updated 4, nothing skipped.
 - **Behaviour test:** `tests/practice-questions-seed.sh` (throwaway tree). Sources, deviations, overlap and gaps: `learn/practice-questions-editorial-gaps.md`.
-- **Dutch:** proposals in `learn/nl-translation-changes-practice-questions.md`; status at the time (12 November 2026): nothing was in `nl-translations.json` yet. Check the current state before staging. The English row title "Company identity and representation" is gone (its Dutch row is unused; the description row stays valid).
+- **Dutch (checked 14 November 2026):** `learn/nl-translations.json` contains non-empty translations associated with all three article routes (73, 76 and 89 entries including shared strings). The local dry-run found no different existing translations in scope, but its HTTP check was incomplete: verify current rendered English source sentences and Dutch output before staging. Historical proposals: `learn/nl-translation-changes-practice-questions.md`. The English row title "Company identity and representation" is gone (its Dutch row is unused; the description row stays valid).
 - **Second pass (12 November 2026):** the practice article on preparing a wallet use case now describes one concrete exchange, "Business wallets: where to start" is sharpened on role and choice (heading "Check the whole interaction" is now "Compare wallets and providers"), the checking article is shorter, and the legal passages were checked (`learn/practice-questions-legal-check-2026-11-12.md`). Pages that changed and are skipped by the seed when edited on staging: the three practice articles, `business-wallets-where-to-start` and `european-business-wallet` (one Parliament sentence). Dutch proposals for the changed sentences: `learn/nl-translation-changes-practice-questions.md`, section "Second pass".
 
 ## Technology and Around the world (13 November 2026, local only)
@@ -445,12 +447,12 @@ pages are published, run `LEARN_DRY_RUN=1` and read `skipped-edited` / `skipped-
 
 - Install **tiles 1.13.55** before anything else (step 3); the layout change is CSS/PHP/JS only, no database write.
 - Seed: 34 article pages change (Continue learning to 3 + 2; `what-is-a-digital-wallet` gets one extra paragraph with the Formats link). Pages edited on staging are skipped (`skipped-edited`), a known and accepted risk: the page keeps working with its old list (and, for the wallet page, without the Formats paragraph). Run the dry run first.
-- One Dutch row is added ("For what these formats and protocols do, see"); in `learn/nl-translations.json` (1450 entries). Run `status`, open the NL wallet page once, then `import-apply`. Internal links in Dutch stay under `/nl/`.
+- One Dutch row was added ("For what these formats and protocols do, see"); the export then had 1450 entries (historical snapshot). Run `status`, open the NL wallet page once, then `import-apply`. Internal links in Dutch stay under `/nl/`.
 - A new staging package is needed; none was built here.
 
 ## Learn repair round (14 November 2026, local only)
 
 - Seed: seven Learn pages (`the-relying-party`, `what-is-a-credential`, `accepting-information-from-a-wallet`, `issuing-credentials-for-wallets`, `trust-and-interoperability`, `how-do-wallets-and-services-exchange-information`, `credential-formats-and-interoperability`); dry run first, nothing skipped locally, a page edited on staging is `skipped-edited` (add the links by hand), never `LEARN_FORCE`.
-- Dutch: six new rows (transfer file 1454 -> 1458 entries); run `status`, open the changed Technology articles once under `/nl/`, then `import-apply`. Status add 0 / differs 0 locally.
+- Dutch: six new rows (transfer file 1454 -> 1458 entries at that time; historical snapshot); run `status`, open the changed Technology articles once under `/nl/`, then `import-apply`. Status add 0 / differs 0 locally.
 - Before the next staging update: re-check the filter links (`tests/learn-filter-links-checks.cjs`), see the checklist in `staging/HANDOVER.md` (section "Learn repair round"). English glossary definitions and catalog titles on `/nl/` are known and parked (`learn/nl-known-english-remains.md`).
 - Details: `learn/continue-learning-selection.md`, `staging/HANDOVER.md` (section "Learn repair round"). No new staging package was built; tiles stays 1.13.55.

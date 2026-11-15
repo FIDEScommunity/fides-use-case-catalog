@@ -11,8 +11,8 @@ draft "Learn, Ecosystem roles". The articles describe general roles and set out 
 | For you | The page does not exist. The holder article should link to it when it does (it is a "Design preview"/"In preparation" row on Topics). |
 | For governments | The page does not exist. The issuer article should link to it (public issuers) when it does. |
 | A mandate article | None exists. The holder article mentions mandates in one sentence (glossary term only) and points nowhere. |
-| Issuer catalog | `Browse issuers` (`/issuer-catalog/`) exists only on the full site. Add it to "Explore in the catalogs" on the issuer article when the destination exists in the target environment. |
-| Relying party catalog | `Browse relying parties` (`/relying-party-websites/`) exists only on the full site. Add it to the relying party article when it exists. |
+| Issuer catalog | Done 15 November 2026: `Browse issuers` links to the pilot catalog (`{{pilot}}/issuers/`) on the issuer article. Check that the page exists in the target environment. |
+| Relying party catalog | Done 15 November 2026: `Browse relying parties` links to the pilot catalog (`{{pilot}}/relying-parties/`) on the relying party article. |
 | Interop profiles and matrix | No pilot page; the trust article does not link to them. |
 | Sources for "Wallet providers and other service providers" | The draft names no source for this article. None was added. |
 | "Trust framework" and "Trust service provider" | No glossary entry exists, so these terms are plain text on the trust article. Glossary content is out of scope here. |

@@ -10,7 +10,9 @@
  *  - relation links: an accepted/offered credential opens the credential type pilot page and back returns to the record;
  *  - limited record: renders without empty sections or placeholder text;
  *  - deeplink (?issuer= / ?rp=) on the overview opens the pilot record;
- *  - add route: the add link opens the existing form page or its sign-in gate (nothing is submitted).
+ *  - add route: the add link opens the existing form page or its sign-in gate (nothing is submitted);
+ *  - language: legend, document title, count, Share, section navigation (NL), default sort, no broken logo;
+ *  - record content: section bar names match headings, issuer credentials grouped per type, RP readiness and status separate.
  * Route (EN, once per width): Explorer -> catalog -> record -> credential type -> back.
  * Nothing is submitted: GET navigation only.
  *
@@ -30,6 +32,8 @@ const KINDS = [
     search: "wallet", filterName: "country[]", emptyQuery: "zzzzqqqq",
     relation: "#credentials a.fides-issuer-eco__row", sections: { limitedAbsent: ["credentials", "use-cases"] },
     add: "Add issuer",
+    legend: { EN: /Production marks an issuer that is live/, NL: /Productie betekent dat een uitgever live is/ },
+    defaultSort: "status", titleNL: /^Uitgevers/, detailTitleNL: /^Detail uitgever/, countNL: /\buitgevers?\b/,
   },
   {
     key: "relying-parties", path: "relying-parties/", param: "rp", detailPath: "relying-party/", prefix: "rp", noun: "relying parties",
@@ -37,6 +41,8 @@ const KINDS = [
     search: "wallet", filterName: "country[]", emptyQuery: "zzzzqqqq",
     relation: "#credentials a.fides-rp-eco__row", sections: { limitedAbsent: ["credentials", "use-cases", "features"] },
     add: "Add relying party",
+    legend: { EN: /Readiness shows how far a service has come/, NL: /Gereedheid laat zien hoe ver/ },
+    titleNL: /^Vertrouwende partijen/, detailTitleNL: /^Detail vertrouwende partij/, countNL: /\bvertrouwende partij(en)?\b/,
   },
 ].filter((k) => !ONLY || ONLY.includes(k.key));
 
@@ -199,6 +205,92 @@ async function applyFilter(page, kind) {
           const reached = await page.evaluate(() => document.querySelectorAll("form").length > 0 || /signed in|sign in|ingelogd|inloggen/i.test(document.body.innerText));
           check(`${tag}: the add route opens the form or its sign-in gate (nothing submitted)`, reached, page.url());
         }
+        // Update route: the update link (a separate form) opens in the same way, still without submitting.
+        await page.goto(listUrl, { waitUntil: "load" });
+        const upd = page.locator("a[href*='-update/']").first();
+        const updHref = (await upd.count()) ? await upd.getAttribute("href") : "";
+        check(`${tag}: the update link is offered on the ${loc} route`, updHref !== "" && onRoute(updHref, loc), updHref);
+        if (updHref) {
+          const resp = await page.goto(new URL(updHref, BASE).toString(), { waitUntil: "load" });
+          const ok = resp && resp.status() < 400 && (await page.evaluate(() => document.querySelectorAll("form").length > 0 || /signed in|sign in|ingelogd|inloggen/i.test(document.body.innerText)));
+          check(`${tag}: the update route opens the form or its sign-in gate (nothing submitted)`, !!ok, page.url());
+        }
+        // Breadcrumb: "Ecosystem Explorer" stays on the language route and resolves.
+        await page.goto(richUrl, { waitUntil: "load" });
+        const crumb = page.locator(".fides-ds-detail-top a", { hasText: /Ecosystem Explorer/ }).first();
+        const crumbHref = (await crumb.count()) ? await crumb.getAttribute("href") : "";
+        check(`${tag}: the Ecosystem Explorer breadcrumb is on the ${loc} route`, crumbHref !== "" && onRoute(crumbHref, loc), crumbHref);
+        if (crumbHref) {
+          const r = await page.goto(new URL(crumbHref, BASE).toString(), { waitUntil: "load" });
+          check(`${tag}: the Ecosystem Explorer breadcrumb resolves (${r && r.status()})`, r && r.status() < 400);
+        }
+
+
+        // 9. Language: fixed interface texts, document title, Share, section navigation (NL has no English UI text left).
+        await openList(page, listUrl);
+        const title = await page.title();
+        const countText = (await page.locator("[data-pilot-count]").first().textContent()).trim();
+        const legendText = (await page.locator(".fides-uc-pilot__legend").first().textContent().catch(() => "")) || "";
+        check(`${tag}: the Production/Test or readiness legend is shown in ${loc}`, kind.legend[loc].test(legendText), legendText.slice(0, 80));
+        if (loc === "NL") {
+          check(`${tag}: document title is Dutch (${title})`, kind.titleNL.test(title), title);
+          check(`${tag}: result count is Dutch (${countText})`, kind.countNL.test(countText), countText);
+          const sortLabel = await page.locator("select").first().evaluate((el) => el.selectedOptions[0].textContent.trim()).catch(() => "");
+          check(`${tag}: sort option is Dutch (${sortLabel})`, !/^(Production first|Most credential|Name|Country|Recently|Updated)/.test(sortLabel), sortLabel);
+        } else {
+          check(`${tag}: document title is English (${title})`, /^(Issuers|Relying parties)/.test(title), title);
+        }
+        if (kind.defaultSort) {
+          const sortValue = await page.locator("select").first().inputValue().catch(() => "");
+          check(`${tag}: default sort is "${kind.defaultSort}" (${sortValue})`, sortValue === kind.defaultSort, sortValue);
+        }
+        // Logos: every shown card image is loaded; a broken one has been swapped for the name fallback.
+        const broken = await page.$$eval(`${CARD} img.fides-ds-card__img`, (imgs) => imgs.filter((i) => i.offsetParent !== null && i.complete && i.naturalWidth === 0).length);
+        check(`${tag}: no visible broken logo on the overview (${broken})`, broken === 0, broken);
+
+        await page.goto(richUrl, { waitUntil: "load" });
+        await page.waitForSelector(`[data-${kind.prefix}-id]`, { timeout: 30000 });
+        const dTitle = await page.title();
+        const shareText = await page.locator(".fides-ds-detail-top").first().innerText();
+        const navText = (await page.locator(".fides-ds-section-nav nav").evaluateAll((n) => n.map((x) => x.textContent).join(" | "))).replace(/\s+/g, " ");
+        if (loc === "NL") {
+          check(`${tag}: record title is Dutch (${dTitle})`, kind.detailTitleNL.test(dTitle), dTitle);
+          check(`${tag}: Share is Dutch`, /Delen/.test(shareText) && !/\bShare\b/.test(shareText), shareText.slice(0, 120));
+          check(`${tag}: section navigation is Dutch`, /Op deze pagina|Overzicht/.test(navText) && !/\b(Overview|Technical metadata|Supported wallets|Credentials offered)\b/.test(navText), navText.slice(0, 200));
+        } else {
+          check(`${tag}: Share is English`, /Share/.test(shareText), shareText.slice(0, 120));
+        }
+        // Section navigation entries match their headings and counts (Credentials offered / Supported wallets).
+        const mismatches = await page.evaluate(() => {
+          const out = [];
+          document.querySelectorAll(".fides-ds-section-nav nav a[href^='#']").forEach((a) => {
+            const t = document.querySelector(a.getAttribute("href"));
+            if (!t) { out.push(`${a.getAttribute("href")} missing`); return; }
+            const h = (t.querySelector("h2") || t).textContent.replace(/\s+/g, " ").trim().toLowerCase();
+            const label = a.textContent.replace(/\s*[·•].*$/, "").replace(/[→\s]+$/, "").trim().toLowerCase();
+            if (label && !h.startsWith(label)) out.push(`${label} != ${h.slice(0, 40)}`);
+          });
+          return out;
+        });
+        check(`${tag}: section bar names match the section headings`, mismatches.length === 0, mismatches.join("; "));
+
+        if (kind.key === "issuers") {
+          // Credentials grouped per type: every configuration listed once under its type, none lost.
+          const g = await page.evaluate(() => ({
+            groups: document.querySelectorAll(".fides-issuer-group").length,
+            configs: document.querySelectorAll(".fides-issuer-config").length,
+            ids: document.querySelectorAll(".fides-issuer-config__id").length,
+            badge: (document.querySelector("#credentials .fides-ds-count, #credentials [class*=count]") || {}).textContent || "",
+          }));
+          check(`${tag}: credential configurations are grouped per type (${g.groups} types, ${g.configs} configurations)`, g.groups > 0 && g.configs >= g.groups && g.ids === g.configs, JSON.stringify(g));
+        } else {
+          // KSID Verifier: readiness and operational status are two labelled, separate facts.
+          await page.goto(`${root}/${kind.detailPath}?${kind.param}=ksid-verifier`, { waitUntil: "load" });
+          await page.waitForSelector(`[data-${kind.prefix}-id]`, { timeout: 30000 });
+          const states = await page.$$eval(".fides-rp-detail__state", (els) => els.map((e) => e.textContent.replace(/\s+/g, " ").trim()));
+          const want = loc === "NL" ? [/^Gereedheid\s*Productie/, /^Operationele status\s*Beta/] : [/^Readiness\s*Production/, /^Operational status\s*Beta/];
+          check(`${tag}: KSID Verifier shows readiness and operational status separately (${states.join(" / ")})`, states.length === 2 && want.every((r, i) => r.test(states[i])), states.join(" / "));
+        }
 
         if (sent.length) allSent = allSent.concat(sent);
         await ctx.close();
@@ -229,8 +321,8 @@ async function applyFilter(page, kind) {
           if (await reverse.count()) {
             // On small screens the relation list sits in a closed disclosure: follow the link address then.
             const shown = page.locator(`a[href*="/${kind.detailPath}?${kind.param}="]:visible, a[href*="/${kind.path}?"]:visible`).first();
-            if (await shown.count()) await shown.click();
-            else await page.goto(new URL(await reverse.getAttribute("href"), BASE).toString(), { waitUntil: "load" });
+            const clicked = (await shown.count()) ? await shown.click({ timeout: 5000 }).then(() => true, () => false) : false;
+            if (!clicked) await page.goto(new URL(await reverse.getAttribute("href"), BASE).toString(), { waitUntil: "load" });
             await page.waitForSelector(`[data-${kind.prefix}-id], ${CARD}`, { timeout: 30000 });
             check(`${tag}: that link opens the pilot ${kind.key} page`, page.url().includes(`/fides-design-pilot/${kind.detailPath}`) || page.url().includes(`/fides-design-pilot/${kind.path}`), page.url());
           }

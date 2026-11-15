@@ -18,6 +18,22 @@ Guideline (not absolute): at most three links to other articles ("Learn more") a
 - **Why a re-check is needed:** results depend on catalog data, which can change between now and the next staging update. The counts above are a snapshot of 14 November 2026.
 - **Before every staging update:** run the check again and replace or remove any link that now returns 0 results. The step is in `staging/HANDOVER.md` (section "Learn repair round", item "Before the next staging update"); that is the only checklist, do not copy it elsewhere.
 
+## Issuers and relying parties round (15 November 2026)
+
+The pilot catalogs `{{pilot}}/issuers/` and `{{pilot}}/relying-parties/` exist, so the two catalog slots can point to them. The limit stays two catalog links; where both slots were full, the weaker link was replaced and the reason is given. Seven pages changed in `learn/content`.
+
+| Article | Catalogs before | Catalogs after | Reason |
+|---|---|---|---|
+| `ecosystem-roles/the-issuer` | Browse credential types | + **Browse issuers** | Free slot; the role page names the issuers catalog. |
+| `ecosystem-roles/the-relying-party` | Explore use cases | + **Browse relying parties** | Free slot. |
+| `for-businesses/issuing-credentials-for-wallets` | Explore use cases; Browse personal wallets | Explore use cases; **Browse issuers** | Issuing is about issuers; the personal wallet catalog is reachable from the holder side. |
+| `for-businesses/accepting-information-from-a-wallet` | Explore use cases; Browse credential types | **Browse relying parties**; Browse credential types | Accepting is about relying parties; Explore use cases is the practice-band call to action. |
+| `for-businesses/what-should-a-service-check-when-receiving-a-credential` | Browse credential types | + **Browse relying parties** | Free slot. |
+| `for-governments/issuing-public-information-to-wallets` | Browse credential types; Browse organisations | Browse credential types; **Browse issuers** | Public issuers are issuers; organisations stay reachable from the catalogs. |
+| `for-governments/accepting-information-from-wallets-in-public-services` | Explore use cases; Browse personal wallets | Explore use cases; **Browse relying parties** | The public service is the relying party. |
+
+Dutch labels: "Bekijk uitgevers", "Bekijk vertrouwende partijen" (`learn/nl-translations.php`). Staging: the seed skips a page that an editor changed (`skipped-edited`, `skipped-unmarked`, also in the dry run); add the link by hand there. Never `LEARN_FORCE`. Local dry run: 7 `would-updated`, 51 unchanged, no skipped.
+
 ## Repair round 14 November 2026 (before → after)
 
 | Article | Before (Learn more) | After (Learn more) | Catalogs | Reason |

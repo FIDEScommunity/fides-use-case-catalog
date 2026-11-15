@@ -20,7 +20,7 @@ The overview `topics/for-you/` and three articles exist (series `for-you`, Previ
 ## Destinations
 
 - Linked: What is a digital wallet?, What is a credential? And what is an attestation?, How credentials connect issuers, wallets and services, European Digital Identity Wallet, The holder, The relying party, the personal wallet catalog.
-- Not linked and not named in the concepts: Browse issuers, Browse relying parties, interop profiles and matrix (not available in the pilot).
+- Not linked and not named in the concepts: Browse issuers, Browse relying parties (the For you articles have no link to them; the catalogs exist since 15 November 2026), interop profiles and matrix (not available in the pilot).
 - Missing as dedicated pages: nothing the concepts name is missing. Proposal for later: a page on wallet recovery and backup per provider, and a short page for the person who acts for someone else; the concept deliberately names no wallet products.
 
 ## To do
