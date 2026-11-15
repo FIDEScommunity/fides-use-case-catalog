@@ -38,6 +38,7 @@ require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-detail
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-featured.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-spotlight.php';
 require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-explore-choice.php';
+require_once FIDES_USE_CASE_CATALOG_PATH . 'includes/class-fides-use-case-explore-catalog.php';
 Fides_Use_Case_Design::bootstrap();
 Fides_Use_Case_Detail_Page::bootstrap();
 Fides_Use_Case_Featured::bootstrap();

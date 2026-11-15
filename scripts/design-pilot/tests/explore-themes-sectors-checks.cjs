@@ -19,7 +19,7 @@
  *  - NL: catalog content is lang="en" and not translated, the catalog-content note, Learn stays "Learn", Dutch notice/empty state;
  *  - no featured image: the introduction uses the full width; Explore menu entries on desktop and in the mobile menu.
  * Nothing is submitted: GET navigation only. The empty-data state needs the fixture: tests/run-explore-themes-sectors-empty.sh.
- * ONLY_MAIN=1 runs only the general checks above; ONLY_ROUND2=1 only the UX round checks; ONLY_ROUND3=1 only round 3 (section anchors with Back/Forward and final scroll, listener clean-up after repeated switches, mobile picker with #fides-explore-choices with and without JavaScript, translated status message; TILES_JS_OVERRIDE=<file> serves another design-system.js as a negative control). Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/explore-themes-sectors-checks.cjs   (env: PILOT_URL, WIDTHS, LOCALES, SAMPLE=all)
+ * ONLY_MAIN=1 runs only the general checks above; ONLY_ROUND2=1 only the UX round checks; ONLY_ROUND4=1 only round 4 ("More from the catalog": parts per catalog type, basis, links with counts, follow-and-back, dedupe, low data, no use cases, EN/NL, 1440/390; needs output/explore-catalog-block.json from the behaviour test run with ONLY_ROUND4=1); ONLY_ROUND3=1 only round 3 (section anchors with Back/Forward and final scroll, listener clean-up after repeated switches, mobile picker with #fides-explore-choices with and without JavaScript, translated status message; TILES_JS_OVERRIDE=<file> serves another design-system.js as a negative control). Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/explore-themes-sectors-checks.cjs   (env: PILOT_URL, WIDTHS, LOCALES, SAMPLE=all)
  */
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const fs = require("fs");
@@ -701,9 +701,129 @@ async function round3Checks(browser) {
   console.log("\n" + info.map((l) => `info - ${l}`).join("\n"));
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Round 4 (2026-11-15): "More from the catalog" (ONLY_ROUND4=1; env EMPTY_FIXTURE=1 with tests/run-explore-themes-sectors-empty.sh)
+// ---------------------------------------------------------------------------------------------------------------------
+const BLOCK_FILE = path.join(__dirname, "output", "explore-catalog-block.json");
+const R4_TARGETS = [
+  { kind: "sector", param: "sector", path: "sectors/", slug: "education", name: { EN: "Education", NL: "Onderwijs" } },
+  { kind: "theme", param: "theme", path: "themes/", slug: "business_authority", name: { EN: "Business & Mandates", NL: "Bedrijven en mandaten" }, catalogTheme: "Organizational identity" }, // the credential catalog names its own theme in the filter pill
+  { kind: "sector", param: "sector", path: "sectors/", slug: "agriculture", name: { EN: "Agriculture", NL: "Landbouw" } }, // low-data: only credential types
+];
+const R4_WORDS = {
+  EN: { h2: "More from the catalog", titles: { credentials: "Credential types", organizations: "Organisations", issuers: "Issuers", rps: "Relying parties" }, direct: "Classified directly", derived: "Derived from related records", all: { credentials: "View all credential types", organizations: "View all organisations", issuers: "View all issuers", rps: "View all relying parties" }, showing: /^Showing \d+ of \d+\.$/, also: "Also linked to a use case above:" },
+  NL: { h2: "Meer uit de catalogus", titles: { credentials: "Credentialtypen", organizations: "Organisaties", issuers: "Uitgevers", rps: "Vertrouwende partijen" }, direct: "Rechtstreeks ingedeeld", derived: "Afgeleid van gerelateerde records", all: { credentials: "Bekijk alle credentialtypen", organizations: "Bekijk alle organisaties", issuers: "Bekijk alle uitgevers", rps: "Bekijk alle vertrouwende partijen" }, showing: /^Toont \d+ van \d+\.$/, also: "Ook gekoppeld aan een usecase hierboven:" },
+};
+const PARAM_OF = { credentials: null, organizations: "sector" };
+
+async function round4Checks(browser) {
+  if (!fs.existsSync(BLOCK_FILE)) {
+    check("block file exists (run ONLY_ROUND4=1 explore-themes-sectors-behaviour.php first)", false, BLOCK_FILE);
+    return;
+  }
+  const expected = JSON.parse(fs.readFileSync(BLOCK_FILE, "utf8"));
+  const fixture = process.env.EMPTY_FIXTURE === "1";
+  const info = [];
+  for (const loc of LOCALES) {
+    const W = R4_WORDS[loc];
+    for (const width of WIDTHS) {
+      for (const T of R4_TARGETS) {
+        const tag = `r4 ${loc} ${width} ${T.slug}${fixture ? " (no use cases)" : ""}`;
+        const exp = expected[`${T.kind}:${T.slug}`];
+        const url = `${BASE}${prefix(loc)}${T.path}?${T.param}=${T.slug}${fixture ? "&fides_explore_fixture=empty" : ""}`;
+        const page = await newPage(browser, width);
+        await page.goto(url, { waitUntil: "networkidle" });
+        const block = page.locator("#explore-catalog");
+        check(`${tag}: block present`, (await block.count()) === 1);
+        const parts = await page.$$eval("[data-catalog-type]", (els) => els.map((el) => ({
+          type: el.dataset.catalogType, basis: el.dataset.basis, total: Number(el.dataset.total), shown: Number(el.dataset.shown), hasLink: el.dataset.hasLink === "yes",
+          cards: el.querySelectorAll(".fides-ds-card").length, ids: Array.from(el.querySelectorAll("[data-record-id]")).map((n) => n.dataset.recordId),
+          h3: (el.querySelector("h3") || {}).textContent, chip: (el.querySelector(".fides-explore__basis") || {}).textContent,
+          basisText: (el.querySelector(".fides-explore__basis-text") || {}).textContent, link: el.querySelector("[data-fides-explore-all]") ? { href: el.querySelector("[data-fides-explore-all]").getAttribute("href"), text: el.querySelector("[data-fides-explore-all]").textContent.replace(/\s+/g, " ").trim() } : null,
+          foot: (el.querySelector(".fides-explore__catalog-foot") || {}).textContent, also: el.querySelectorAll("[data-fides-explore-also]").length, anchors: Array.from(el.querySelectorAll("[data-fides-explore-also] a")).map((a) => a.getAttribute("href")),
+        })));
+        check(`${tag}: parts equal the data (${exp.types.map((t) => t.type).join(", ")})`, JSON.stringify(parts.map((p) => p.type)) === JSON.stringify(exp.types.map((t) => t.type)), parts.map((p) => p.type).join(","));
+        check(`${tag}: heading "${W.h2}", wallets never offered`, ((await block.locator("h2").first().textContent()) || "").trim() === W.h2 && !parts.some((p) => p.type === "wallets"));
+        for (const part of parts) {
+          const e = exp.types.find((t) => t.type === part.type) || {};
+          const pt = `${tag}/${part.type}`;
+          check(`${pt}: ${part.cards} cards = min(4, ${part.total}), none empty`, part.cards === Math.min(4, part.total) && part.cards >= 1 && part.cards === part.shown);
+          check(`${pt}: heading and basis label are ${loc}`, (part.h3 || "").trim() === W.titles[part.type] && (part.chip || "").trim() === (part.basis === "direct" ? W.direct : W.derived), `${part.h3}/${part.chip}`);
+          check(`${pt}: basis (${part.basis}) matches the data and a sentence says what it is based on`, part.basis === e.basis && (part.basisText || "").trim().length > 25 && (part.basisText || "").includes(T.name[loc]), part.basisText);
+          check(`${pt}: unique record ids`, new Set(part.ids).size === part.ids.length);
+          if (part.hasLink) {
+            const countOk = part.type === "organizations" ? !/\(\d+\)/.test(part.link.text) : part.link.text.includes(`(${part.total})`);
+            check(`${pt}: link "${W.all[part.type]}"${part.type === "organizations" ? " without a number" : ` with (${part.total})`}`, part.link.text.startsWith(W.all[part.type]) && countOk, part.link.text);
+            check(`${pt}: link stays on the same language site`, loc === "EN" || part.link.href.includes("/nl/"), part.link.href);
+          } else {
+            check(`${pt}: no link, the count line says "Showing N of M"`, part.link === null && W.showing.test((part.foot || "").trim()), part.foot);
+          }
+          check(`${pt}: "also linked" notes point to an example card on this page`, (await Promise.all(part.anchors.map((a) => page.locator(a).count()))).every((n) => n === 1) || fixture);
+        }
+        check(`${tag}: no horizontal overflow`, await noOverflow(page));
+        if (loc === "NL") {
+          const english = await block.evaluate((el) => Array.from(el.querySelectorAll("h2,h3,.fides-explore__basis,.fides-explore__basis-text,.fides-explore__catalog-foot,.fides-explore__relations-note")).map((n) => n.textContent.replace(/\s+/g, " ").trim()).filter((t) => /\b(View all|Showing|Classified|Derived|Records the catalogs|Credential types|Relying parties|Issuers have)\b/.test(t)));
+          check(`${tag}: interface text is Dutch`, english.length === 0, english.join(" | "));
+          const lang = await block.locator(".fides-explore__catalog-card").first().getAttribute("lang");
+          check(`${tag}: catalog card content is marked as English`, lang === "en");
+        }
+        if (!fixture) {
+          const dedupe = parts.reduce((n, p) => n + p.also, 0);
+          check(`${tag}: ${dedupe} record(s) marked as also linked, as the data says (${exp.also})`, dedupe === exp.also, `${dedupe}`);
+        } else {
+          check(`${tag}: no use cases but the classified records stay (state "empty" + block)`, (await page.locator("[data-fides-explore-state=empty]").count()) === 1 && parts.length > 0);
+        }
+        info.push(`${tag}: ${parts.map((p) => `${p.type} ${p.cards}/${p.total}${p.hasLink ? " link" : ""}`).join(", ")}`);
+
+        // Follow every link to the catalog and back (EN and NL, 1440 and 390).
+        for (const part of parts.filter((p) => p.hasLink)) {
+          await page.goto(url, { waitUntil: "networkidle" });
+          const before = page.url();
+          await page.locator(`[data-fides-explore-all="${part.type}"]`).click();
+          await page.waitForLoadState("networkidle");
+          await page.waitForTimeout(600);
+          const dest = await page.evaluate(() => {
+            const body = document.body.innerText.replace(/\s+/g, " ");
+            const m = body.match(/(\d+)\s+(?:of|van)\s+\d+\s+[\p{L} ]+?(?=[ .]|$)|(\d+)\s+(?:credential types?|credentialtypen|organi[sz]ations?|organisaties|issuers?|uitgevers|relying parties|vertrouwende partijen)/iu);
+            return { pills: Array.from(new Set(Array.from(document.querySelectorAll("[class*=pill]")).map((e) => e.textContent.replace(/\s+/g, " ").trim()))).filter(Boolean), count: m ? Number(m[1] || m[2]) : null, url: location.pathname + location.search };
+          });
+          const pt = `${tag}/${part.type}`;
+          const label = part.type === "credentials" || part.type === "organizations" ? (T.catalogTheme || T.name[loc]) : null;
+          const pillOk = label ? dest.pills.some((p) => p.includes(label) || p.includes(T.name.EN)) : dest.pills.some((p) => /×|remove|verwijder/i.test(p));
+          if (part.type === "credentials" && T.catalogTheme) check(`${pt}: the basis sentence names the catalog theme "${T.catalogTheme}" that the filter pill shows`, (part.basisText || "").includes(T.catalogTheme), part.basisText);
+          check(`${pt}: catalog opens with the choice as a visible filter (${dest.pills.length} filter pill(s))`, pillOk, dest.pills.slice(0, 2).join(" | "));
+          if (part.type !== "organizations" && loc === "EN") check(`${pt}: the catalog lists exactly ${part.total}`, dest.count === part.total, `${dest.count}`);
+          info.push(`${pt}: destination ${dest.url.slice(0, 70)} shows ${dest.count}, ${dest.pills.length} filter pill(s)`);
+          await page.goBack({ waitUntil: "networkidle" });
+          const back = await page.evaluate(() => ({ url: location.href, active: (document.querySelector(".fides-explore__choice[aria-current]") || {}).dataset?.choice, block: !!document.querySelector("#explore-catalog") }));
+          check(`${pt}: Back returns to the ${T.kind} page with the choice and the block`, back.url === before && back.active === T.slug && back.block, JSON.stringify(back));
+        }
+        await page.context().close();
+      }
+    }
+  }
+  // The block disappears completely without any record (fixture: emptyall) and the use cases state stays honest.
+  if (process.env.EMPTY_FIXTURE === "1") {
+    for (const loc of LOCALES) {
+      const page = await newPage(browser, 1440);
+      await page.goto(`${BASE}${prefix(loc)}sectors/?sector=education&fides_explore_fixture=emptyall`, { waitUntil: "networkidle" });
+      check(`r4 ${loc}: neither use cases nor records: no block, no empty part, the empty message stays`, (await page.locator("#explore-catalog, [data-catalog-type]").count()) === 0 && (await page.locator("[data-fides-explore-state=empty]").count()) === 1);
+      await page.context().close();
+    }
+  }
+  console.log("\n" + info.map((l) => `info - ${l}`).join("\n"));
+}
+
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, headless: true });
+  const only4 = process.env.ONLY_ROUND4 === "1";
   const only3 = process.env.ONLY_ROUND3 === "1";
+  if (only4) {
+    await round4Checks(browser);
+    await browser.close();
+    console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
+    process.exit(failures ? 1 : 0);
+  }
   if (process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1" && !only3) for (const loc of LOCALES) {
     for (const width of WIDTHS) {
       for (const K of KINDS) {
@@ -804,6 +924,7 @@ async function round3Checks(browser) {
   if (process.env.ONLY_ROUND2 !== "1" && process.env.ONLY_MAIN !== "1" && !only3) await repairChecks(browser);
   if (process.env.ONLY_MAIN !== "1" && !only3) await round2Checks(browser);
   if (only3 || (process.env.ONLY_MAIN !== "1" && process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1")) await round3Checks(browser);
+  if (process.env.ONLY_MAIN !== "1" && process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1" && !only3) await round4Checks(browser);
   await browser.close();
   console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
   process.exit(failures ? 1 : 0);

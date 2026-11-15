@@ -630,6 +630,9 @@ final class Fides_Use_Case_Explore_Choice {
         $matching  = $selection['matching'];
         $shown     = $selection['shown'];
 
+        // The records the catalogs classify under this choice themselves (compact block below the use case relations).
+        $catalog_html = self::catalog_block_html($kind, $slug, self::translate_text((string) $editorial['title']), $overview, $rel, $shown);
+
         $sections = array();
         if ($shown) {
             $sections['explore-use-cases'] = 'Use cases';
@@ -641,6 +644,9 @@ final class Fides_Use_Case_Explore_Choice {
             }
             if ($rel['wallets']) {
                 $sections['explore-wallets'] = 'Wallets';
+            }
+            if ($catalog_html !== '') {
+                $sections['explore-catalog'] = 'More from the catalog';
             }
         }
 
@@ -663,7 +669,7 @@ final class Fides_Use_Case_Explore_Choice {
             $html .= '<div class="fides-explore__empty" data-fides-explore-state="empty"><h3 class="fides-explore__empty-title">No examples yet</h3>'
                 . '<p>' . esc_html__('The catalog has no published use case here yet.', 'fides-use-case-catalog') . '</p>'
                 . '<p><a class="fides-ds-action-link" href="' . esc_url($overview) . '"><span>Browse all use cases</span> <span aria-hidden="true">→</span></a></p></div>';
-            return $html . '</section>';
+            return $html . $catalog_html . '</section>';
         }
 
         // The shared "On this page" bar (as on the use case detail page): tabs from 1100px, folded below; sticky on every width.
@@ -717,6 +723,8 @@ final class Fides_Use_Case_Explore_Choice {
         if ($rel['wallets']) {
             $html .= '<div class="fides-explore__columns fides-explore__columns--single">' . self::relation_section('explore-wallets', 'wallets', $rel['wallets'], $n, $anchors) . '</div>';
         }
+
+        $html .= $catalog_html;
 
         $html .= '<p class="fides-explore__again"><a class="fides-ds-action-link" href="#fides-explore-choices" data-fides-explore-change><span>' . esc_html($words['again']) . '</span> <span aria-hidden="true">↑</span></a></p>';
         return $html . '</section>';
@@ -800,6 +808,135 @@ final class Fides_Use_Case_Explore_Choice {
             ? '<img class="fides-ds-card__img" src="' . esc_url($logo) . '" alt="" width="40" height="40" loading="lazy" decoding="async" referrerpolicy="no-referrer">'
             : '';
         return '<span class="fides-ds-card__media fides-ds-card__media--contain fides-explore__logo" data-logo="' . ($logo !== '' ? 'image' : 'placeholder') . '">' . $img . $initials . '</span>';
+    }
+
+    /** Plain-language basis sentence per selection kind (`%s` = the chosen name). */
+    private static function catalog_basis_text(string $how, string $name, string $slug = ''): string {
+        switch ($how) {
+            case 'credentials-sector':
+                /* translators: %s: sector name */
+                return sprintf(__('Credential types classified in the %s sector.', 'fides-use-case-catalog'), $name);
+            case 'credentials-theme':
+                // The catalog's own theme names are what the credential catalog shows as the filter, so they are named here.
+                $labels = array();
+                foreach (Fides_Use_Case_Explore_Catalog::bundle_theme_codes($slug) as $code) {
+                    $labels[] = Fides_Credential_Design::THEME_LABELS[ $code ] ?? $code;
+                }
+                if (count($labels) === 1) {
+                    /* translators: 1: theme name of the page, 2: theme name in the credential catalog */
+                    return sprintf(__('Credential types classified under “%2$s”, the catalog theme behind %1$s.', 'fides-use-case-catalog'), $name, $labels[0]);
+                }
+                /* translators: 1: theme name of the page, 2: list of theme names in the credential catalog */
+                return sprintf(__('Credential types classified under any of these catalog themes, which together make up %1$s: %2$s.', 'fides-use-case-catalog'), $name, implode(', ', $labels));
+            case 'organizations-sector':
+                /* translators: %s: sector name */
+                return sprintf(__('Organisations that list %s as a sector.', 'fides-use-case-catalog'), $name);
+            case 'rps-sector':
+                /* translators: %s: sector name */
+                return sprintf(__('Relying parties that list %s as a sector.', 'fides-use-case-catalog'), $name);
+            case 'issuers-org-sector':
+                /* translators: %s: sector name */
+                return sprintf(__('Issuers have no sector of their own. These are run by an organisation that lists %s as a sector.', 'fides-use-case-catalog'), $name);
+            case 'issuers-credentials-theme':
+                /* translators: %s: theme name */
+                return sprintf(__('Issuers have no theme of their own. These issue credential types classified under the theme %s.', 'fides-use-case-catalog'), $name);
+            case 'rps-credentials-theme':
+                /* translators: %s: theme name */
+                return sprintf(__('Relying parties have no theme of their own. These accept credential types classified under the theme %s.', 'fides-use-case-catalog'), $name);
+        }
+        return '';
+    }
+
+    /**
+     * "More from the catalog": per catalog type at most four records that the catalogs classify under this choice (or reach
+     * through a related record), the basis in plain words, and a link to the filtered catalog when that filter exists.
+     * Records that are also a relation of a shown use case say so (with the use case) instead of being listed twice unmarked.
+     * Empty types are left out; no record at all returns ''.
+     *
+     * @param array<string, list<array<string, mixed>>> $rel   relations of the shown use cases
+     * @param list<array<string, mixed>>                $shown shown use cases
+     */
+    private static function catalog_block_html(string $kind, string $slug, string $name, string $overview, array $rel, array $shown): string {
+        if (! class_exists('Fides_Use_Case_Explore_Catalog')) {
+            return '';
+        }
+        $selection = Fides_Use_Case_Explore_Catalog::selection($kind, $slug, $overview);
+        if (! $selection) {
+            return '';
+        }
+        $titles = array(
+            'credentials'   => 'Credential types',
+            'organizations' => 'Organisations',
+            'issuers'       => 'Issuers',
+            'rps'           => 'Relying parties',
+        );
+        $all_text = array(
+            'credentials'   => 'View all credential types',
+            'organizations' => 'View all organisations',
+            'issuers'       => 'View all issuers',
+            'rps'           => 'View all relying parties',
+        );
+        // Records that are a relation of a shown use case: record id => use case id => title.
+        $linked = array('credentials' => array(), 'organizations' => array());
+        foreach (array('credentials', 'organizations') as $bucket) {
+            foreach ($rel[ $bucket ] as $row) {
+                if ($row['ref'] !== '') {
+                    $linked[ $bucket ][ (string) $row['ref'] ] = $row['use_cases'];
+                }
+            }
+        }
+        $anchors = array();
+        foreach ($shown as $index => $item) {
+            $anchors[ (string) $item['id'] ] = 'explore-example-' . ($index + 1);
+        }
+        $attrs = self::catalog_text_attrs();
+        $html  = '<section class="fides-explore__section fides-explore__catalog" id="explore-catalog" aria-labelledby="explore-catalog-title" data-fides-explore-catalog>'
+            . '<h2 class="fides-explore__h2" id="explore-catalog-title">More from the catalog</h2>'
+            . '<p class="fides-explore__relations-note" data-fides-explore-catalog-note>' . esc_html(sprintf(__('Records the catalogs classify under %s themselves, or reach through a related record. Each part says which.', 'fides-use-case-catalog'), $name)) . '</p>';
+        $count = 0;
+        foreach (Fides_Use_Case_Explore_Catalog::TYPES as $type) {
+            if (empty($selection[ $type ])) {
+                continue;
+            }
+            $entry   = $selection[ $type ];
+            $records = array_slice($entry['records'], 0, Fides_Use_Case_Explore_Catalog::LIMIT);
+            $cards   = '';
+            foreach ($records as $record) {
+                $props = Fides_Use_Case_Explore_Catalog::card_props($type, $record);
+                $id    = Fides_Use_Case_Explore_Catalog::record_id($type, $record);
+                $also  = '';
+                if (isset($linked[ $type ][ $id ])) {
+                    $links = array();
+                    foreach ($linked[ $type ][ $id ] as $case_id => $case_title) {
+                        $links[] = '<a href="#' . esc_attr($anchors[ $case_id ] ?? '') . '"' . $attrs . '>' . esc_html((string) $case_title) . '</a>';
+                    }
+                    $also = '<p class="fides-explore__also" data-fides-explore-also>' . esc_html__('Also linked to a use case above:', 'fides-use-case-catalog') . ' ' . implode(', ', $links) . '</p>';
+                }
+                $cards .= '<li class="fides-explore__card-item" data-record-id="' . esc_attr($id) . '"><div class="fides-explore__catalog-card"' . $attrs . '>' . Fides_DS_Card::render($props) . '</div>' . $also . '</li>';
+                $count++;
+            }
+            $direct = $entry['basis'] === 'direct';
+            $total  = (int) $entry['total'];
+            $shown_n = count($records);
+            $foot   = '';
+            if ($entry['url'] !== '') {
+                // The number is only given where the destination shows exactly this many records (credential types, issuers,
+                // relying parties); the organisation overview loads its own, larger data snapshot in the browser.
+                $number = $type === 'organizations' ? '' : ' <span class="fides-explore__all-count">(' . $total . ')</span>';
+                $foot  .= '<a class="fides-ds-action-link" href="' . esc_url($entry['url']) . '" data-fides-explore-all="' . esc_attr($type) . '"><span>' . esc_html($all_text[ $type ]) . '</span>' . $number . ' <span aria-hidden="true">→</span></a>';
+            }
+            if ($type !== 'organizations' || $entry['url'] === '') {
+                $foot .= '<span class="fides-explore__shown-count">' . esc_html(sprintf(__('Showing %1$d of %2$d.', 'fides-use-case-catalog'), $shown_n, $total)) . '</span>';
+            }
+            $html .= '<section class="fides-explore__catalog-type" data-catalog-type="' . esc_attr($type) . '" data-basis="' . ($direct ? 'direct' : 'derived') . '" data-total="' . esc_attr((string) $total) . '" data-shown="' . esc_attr((string) $shown_n) . '" data-has-link="' . ($entry['url'] !== '' ? 'yes' : 'no') . '" aria-labelledby="explore-catalog-' . esc_attr($type) . '-title">'
+                . '<div class="fides-explore__catalog-head"><h3 class="fides-explore__h3" id="explore-catalog-' . esc_attr($type) . '-title">' . esc_html($titles[ $type ]) . '</h3>'
+                . '<span class="fides-explore__basis fides-explore__basis--' . ($direct ? 'direct' : 'derived') . '">' . esc_html($direct ? 'Classified directly' : 'Derived from related records') . '</span></div>'
+                . '<p class="fides-explore__basis-text">' . esc_html(self::catalog_basis_text((string) $entry['how'], $name, $slug)) . '</p>'
+                . '<ul class="fides-ds-cards fides-explore__cards" data-fides-explore-catalog-cards>' . $cards . '</ul>'
+                . '<p class="fides-explore__catalog-foot">' . $foot . '</p>'
+                . '</section>';
+        }
+        return $html . '</section>';
     }
 
     /** Plain heading per relation type. Which examples they belong to is said once above the lists, not in every heading. */

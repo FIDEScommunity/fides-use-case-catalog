@@ -99,6 +99,17 @@ $nl = array(
     'Retailers and their customers may need to check information such as age or identity at the moment of sale. The examples show what information is exchanged and who checks it.' => 'Winkels en hun klanten moeten bij een verkoop mogelijk informatie controleren, zoals leeftijd of identiteit. De voorbeelden laten zien welke informatie wordt uitgewisseld en wie die controleert.',
     'Supply chains involve many organisations that may need to share verified information about goods and who handled them. The examples show what information is exchanged and who checks it.' => 'In toeleveringsketens zijn veel organisaties betrokken die mogelijk geverifieerde informatie over goederen en over wie ze heeft behandeld moeten delen. De voorbeelden laten zien welke informatie wordt uitgewisseld en wie die controleert.',
     'Trade between companies, also across borders, may need verified information about the parties and the documents involved. The examples show what information is exchanged and who checks it.' => 'Handel tussen bedrijven, ook over grenzen heen, vraagt mogelijk om geverifieerde informatie over de partijen en de documenten. De voorbeelden laten zien welke informatie wordt uitgewisseld en wie die controleert.',
+    // Round 4 (2026-11-15): "More from the catalog"
+    'More from the catalog'       => 'Meer uit de catalogus',
+    'Credential types'            => 'Credentialtypen',
+    'Issuers'                     => 'Uitgevers',
+    'Relying parties'             => 'Vertrouwende partijen',
+    'Classified directly'         => 'Rechtstreeks ingedeeld',
+    'Derived from related records' => 'Afgeleid van gerelateerde records',
+    'View all credential types'   => 'Bekijk alle credentialtypen',
+    'View all organisations'      => 'Bekijk alle organisaties',
+    'View all issuers'            => 'Bekijk alle uitgevers',
+    'View all relying parties'    => 'Bekijk alle vertrouwende partijen',
     // Learn links (the target page titles already have Dutch rows; "Learn" stays "Learn" in Dutch like the menu and the Learn bar)
     'Sharing information from a wallet · Learn →'                                  => 'Informatie delen vanuit een wallet · Learn →',
     'How can someone act for an organisation? · Learn →'                          => 'Hoe kan iemand namens een organisatie handelen? · Learn →',
@@ -133,6 +144,18 @@ $gettext = array(
     array('fides-use-case-catalog', 'These credential types, organisations and wallets belong to the use case shown above.', 'Deze credentialtypen, organisaties en wallets horen bij de hierboven getoonde usecase.'),
     array('fides-use-case-catalog', 'These credential types, organisations and wallets belong to the use cases shown above.', 'Deze credentialtypen, organisaties en wallets horen bij de hierboven getoonde usecases.'),
     array('fides-use-case-catalog', '%d more listed in these examples. Open a use case to see them.', 'Nog %d genoemd in deze voorbeelden. Open een usecase om ze te zien.'),
+    // Round 4 (2026-11-15): "More from the catalog" (u-vorm not needed: no direct address; terms follow learn/nl-terminology.md)
+    array('fides-use-case-catalog', 'Records the catalogs classify under %s themselves, or reach through a related record. Each part says which.', 'Records die de catalogi zelf onder %s indelen, of die via een gerelateerd record bereikbaar zijn. Elk onderdeel zegt welke.'),
+    array('fides-use-case-catalog', 'Credential types classified in the %s sector.', 'Credentialtypen die zijn ingedeeld in de sector %s.'),
+    array('fides-use-case-catalog', 'Credential types classified under “%2$s”, the catalog theme behind %1$s.', 'Credentialtypen die zijn ingedeeld bij “%2$s”, het catalogusthema achter %1$s.'),
+    array('fides-use-case-catalog', 'Credential types classified under any of these catalog themes, which together make up %1$s: %2$s.', 'Credentialtypen die zijn ingedeeld bij een van deze catalogusthema’s, die samen %1$s vormen: %2$s.'),
+    array('fides-use-case-catalog', 'Organisations that list %s as a sector.', 'Organisaties die %s als sector hebben opgegeven.'),
+    array('fides-use-case-catalog', 'Relying parties that list %s as a sector.', 'Vertrouwende partijen (relying parties) die %s als sector hebben opgegeven.'),
+    array('fides-use-case-catalog', 'Issuers have no sector of their own. These are run by an organisation that lists %s as a sector.', 'Uitgevers (issuers) hebben geen eigen sector. Deze worden beheerd door een organisatie die %s als sector heeft opgegeven.'),
+    array('fides-use-case-catalog', 'Issuers have no theme of their own. These issue credential types classified under the theme %s.', 'Uitgevers (issuers) hebben geen eigen thema. Deze geven credentialtypen uit die zijn ingedeeld bij het thema %s.'),
+    array('fides-use-case-catalog', 'Relying parties have no theme of their own. These accept credential types classified under the theme %s.', 'Vertrouwende partijen (relying parties) hebben geen eigen thema. Deze accepteren credentialtypen die zijn ingedeeld bij het thema %s.'),
+    array('fides-use-case-catalog', 'Also linked to a use case above:', 'Ook gekoppeld aan een usecase hierboven:'),
+    array('fides-use-case-catalog', 'Showing %1$d of %2$d.', 'Toont %1$d van %2$d.'),
 );
 
 /**
