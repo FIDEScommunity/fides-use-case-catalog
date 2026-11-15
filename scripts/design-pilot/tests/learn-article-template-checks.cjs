@@ -16,6 +16,10 @@
  * Run (pilot running):
  *   CHROME_PATH='/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' PLAYWRIGHT_MODULE=... node tests/learn-article-template-checks.cjs
  *   WIDTHS=1440,390 LANGS=en,nl SAMPLE=0 (skip the sample pass) SCREENS=1 (screenshots of the two detailed articles)
+ * Subset (a full run takes about ten minutes: 37 articles x 2 widths x 2 languages, a Tab walk and every contents link on the
+ * two detailed articles, and fixture pages created through WP-CLI): ARTICLES=the-issuer,the-relying-party (last path segment or
+ * full path, comma separated) runs only those articles, DETAILED=0 skips the two detailed articles, FIXTURES=0 skips the
+ * fixture pages. A subset of 7 articles at one width and one language takes a few seconds.
  * Nothing is submitted; the page only reads.
  */
 const fs = require("node:fs");
@@ -35,7 +39,9 @@ const DETAILED = [
   "topics/for-governments/the-eudi-wallet-and-national-implementation",
 ];
 const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, "manifest.json"), "utf8")).pages;
-const ARTICLES = manifest.filter((p) => p.kind === "article" && p.content).map((p) => p.path);
+const SUBSET = process.env.ARTICLES ? process.env.ARTICLES.split(",").map((x) => x.trim()).filter(Boolean) : null;
+const RUN_DETAILED = process.env.DETAILED !== "0";
+const ARTICLES = manifest.filter((p) => p.kind === "article" && p.content).map((p) => p.path).filter((p) => !SUBSET || SUBSET.some((x) => p === x || p.endsWith("/" + x)));
 const PENDING = JSON.parse(fs.readFileSync(path.join(ROOT, "continue-learning-pending.json"), "utf8"));
 // Documented exceptions to the 3 Learn more guideline: a fourth link the client asked for explicitly.
 const FOUR_LEARN_LINKS = ["for-businesses/issuing-credentials-for-wallets", "the-big-picture/trust-and-interoperability"];
@@ -328,7 +334,7 @@ async function tocBehaviour(page, tag, width, all) {
 
 // ---------- Fixture pages for the Continue learning split (group block, empty group, paragraph after the links, ...) ----------
 const { execFileSync } = require("node:child_process");
-const FIXTURES = process.env.FIXTURES !== "0";
+const FIXTURES = process.env.FIXTURES !== "0" && !SUBSET;
 const here = path.join(__dirname, "..");
 function fixtureAction(action) {
   const out = execFileSync("bash", ["-c", 'source "$0/env.sh" && FIDES_FIXTURE_ACTION=' + action + ' pilot_wp eval-file "$0/tests/learn-continue-fixtures.php"', here], { encoding: "utf8", env: process.env });
@@ -418,6 +424,8 @@ async function toggleBehaviour(page, tag, width) {
   if (FIXTURES) {
     fixtures = fixtureAction("create");
     note(`fixture pages created: ${Object.keys(fixtures).join(", ")} (removed at the end)`);
+    // A run that is stopped (Ctrl+C, kill) skips the finally block below and would leave the fixture pages in the pilot.
+    for (const sig of ["SIGINT", "SIGTERM"]) process.on(sig, () => { try { fixtureAction("delete"); } finally { process.exit(130); } });
   }
   try {
   for (const width of WIDTHS) {
@@ -425,7 +433,7 @@ async function toggleBehaviour(page, tag, width) {
       const ctx = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
       const page = await ctx.newPage();
       await page.route("**/*", (r) => (["GET", "HEAD"].includes(r.request().method()) || /action=trp_get_translations/.test(r.request().postData() || "") ? r.continue() : r.abort()));
-      for (const p of DETAILED) {
+      for (const p of RUN_DETAILED && !SUBSET ? DETAILED : []) {
         const tag = `${slugOf(p)} ${lang} @${width}`;
         await open(page, lang, p);
         const s = await page.evaluate(snapshot);
@@ -442,7 +450,7 @@ async function toggleBehaviour(page, tag, width) {
       }
       if (SAMPLE) {
         for (const p of ARTICLES) {
-          if (DETAILED.includes(p)) continue;
+          if (!SUBSET && DETAILED.includes(p)) continue;
           const tag = `${slugOf(p)} ${lang} @${width}`;
           await open(page, lang, p);
           const s = await page.evaluate(snapshot);

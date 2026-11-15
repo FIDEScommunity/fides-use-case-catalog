@@ -3,6 +3,7 @@
 # deeplinks, add route) at 1440 and 390 px in EN and NL.
 # Needs the pilot server running and an existing Playwright install; override PLAYWRIGHT_MODULE and
 # CHROME_PATH when they live elsewhere. KINDS=issuers or KINDS=relying-parties limits the run.
+# CHECKS=main runs only the overview/record checks, CHECKS=env only the environment and dynamic Dutch checks (default: both).
 set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -16,4 +17,10 @@ if [ ! -d "$PLAYWRIGHT_MODULE" ]; then
   exit 1
 fi
 
-node "$HERE/issuer-rp-checks.cjs"
+CHECKS="${CHECKS:-all}"
+if [ "$CHECKS" = "main" ] || [ "$CHECKS" = "all" ]; then
+  node "$HERE/issuer-rp-checks.cjs"
+fi
+if [ "$CHECKS" = "env" ] || [ "$CHECKS" = "all" ]; then
+  node "$HERE/issuer-rp-env-nl-checks.cjs"
+fi

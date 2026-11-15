@@ -5,14 +5,330 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "learn": 1101,
+        "issuers": 24,
+        "learn": 1094,
+        "relying-parties": 38,
         "services": 61,
-        "shared": 111,
+        "shared": 149,
         "start-receive": 35,
         "training": 153
     },
-    "total": 1461,
+    "total": 1554,
     "entries": [
+        {
+            "original": "A type name opens the credential type when the catalog links it. Each configuration is listed under its type.",
+            "translation": "De naam van een type opent het credentialtype wanneer de catalogus dit koppelt. Elke configuratie staat onder haar type.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Add issuer",
+            "translation": "Uitgever toevoegen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "All environments",
+            "translation": "Alle omgevingen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "All issuers",
+            "translation": "Alle uitgevers",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Credential configurations this issuer lists. A name opens the credential type when the catalog links it.",
+            "translation": "Credentialconfiguraties die deze uitgever vermeldt. Een naam opent het credentialtype wanneer de catalogus dit koppelt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Credential issuer URL",
+            "translation": "URL van de credentialuitgever",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Credential type",
+            "translation": "Credentialtype",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Credentials offered",
+            "translation": "Aangeboden credentials",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer",
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Environment",
+            "translation": "Omgeving",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer",
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Find services that issue verifiable credentials to wallets and see which credentials they offer.",
+            "translation": "Vind diensten die verifieerbare credentials aan wallets uitgeven en zie welke credentials zij aanbieden.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Help keep this issuer current.",
+            "translation": "Help ons deze uitgever actueel te houden.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "In production",
+            "translation": "In productie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Issuance protocol",
+            "translation": "Uitgifteprotocol",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Issuer details",
+            "translation": "Gegevens van de uitgever",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Most credential configurations",
+            "translation": "Meeste credentialconfiguraties",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "OID4VCI metadata",
+            "translation": "OID4VCI-metadata",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Production first",
+            "translation": "Productie eerst",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Production marks an issuer that is live. Test marks every other issuer: pilots, sandboxes, demos and quality assurance.",
+            "translation": "Productie betekent dat een uitgever live is. Test geldt voor elke andere uitgever: pilots, sandboxes, demo’s en kwaliteitstests.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Search issuers",
+            "translation": "Uitgevers zoeken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Search issuers, credentials…",
+            "translation": "Zoek uitgevers, credentials…",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Technical metadata",
+            "translation": "Technische metadata",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Update issuer",
+            "translation": "Uitgever bijwerken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Use the FIDES forms to submit an issuer or request an update. A FIDES account is required. Submissions are reviewed before publication.",
+            "translation": "Gebruik de FIDES-formulieren om een uitgever aan te melden of een wijziging aan te vragen. Een FIDES-account is vereist. Inzendingen worden gecontroleerd vóór publicatie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Visit issuer website",
+            "translation": "Website van de uitgever bezoeken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuer"
+            ],
+            "group": "issuers"
+        },
         {
             "original": "(OOTS) and for sharing data with private service providers on the basis of consent. ICTU says GBO is not meant to become a new, separate system but is to be anchored in existing national agreement frameworks.",
             "translation": "(OOTS) en voor het delen van gegevens met private dienstverleners op basis van toestemming. ICTU zegt dat GBO geen nieuw, losstaand stelsel moet worden, maar moet worden geborgd in bestaande nationale afsprakenstelsels.",
@@ -2636,6 +2952,21 @@
             "group": "learn"
         },
         {
+            "original": "Browse issuers",
+            "translation": "Bekijk uitgevers",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-issuer",
+                "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-governments/issuing-public-information-to-wallets"
+            ],
+            "group": "learn"
+        },
+        {
             "original": "Browse organisations",
             "translation": "Bekijk organisaties",
             "html": false,
@@ -2696,6 +3027,22 @@
                 "learn/topics/the-big-picture/formats-and-protocols",
                 "learn/topics/the-big-picture/how-credentials-connect",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet"
+            ],
+            "group": "learn"
+        },
+        {
+            "original": "Browse relying parties",
+            "translation": "Bekijk vertrouwende partijen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn"
+            ],
+            "routes": [
+                "learn/topics/ecosystem-roles/the-relying-party",
+                "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services"
             ],
             "group": "learn"
         },
@@ -5437,21 +5784,6 @@
             "group": "learn"
         },
         {
-            "original": "Germany",
-            "translation": "Duitsland",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/around-the-world/germany",
-                "learn/topics/for-businesses/accepting-information-from-a-wallet",
-                "learn/topics/for-businesses/issuing-credentials-for-wallets"
-            ],
-            "group": "learn"
-        },
-        {
             "original": "Germany is developing a state EUDI Wallet and an ecosystem in which organisations can issue credentials or offer services that use wallet information. The programme publishes information for the public on its official website, and its FAQ explains how organisations can test use cases in a sandbox.",
             "translation": "Duitsland ontwikkelt een EUDI Wallet van de staat en een ecosysteem waarin organisaties credentials kunnen uitgeven of diensten kunnen aanbieden die informatie uit de wallet gebruiken. Het programma publiceert informatie voor het publiek op de officiële website en in de veelgestelde vragen staat hoe organisaties usecases in een sandbox kunnen testen.",
             "html": false,
@@ -6847,19 +7179,6 @@
             "group": "learn"
         },
         {
-            "original": "Netherlands",
-            "translation": "Nederland",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/around-the-world/the-netherlands"
-            ],
-            "group": "learn"
-        },
-        {
             "original": "New here?",
             "translation": "Nieuw hier?",
             "html": false,
@@ -6869,25 +7188,6 @@
             ],
             "routes": [
                 "learn"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "Next",
-            "translation": "Volgende",
-            "html": false,
-            "fragment": true,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
-                "learn/topics/for-governments/digital-wallets-and-public-services",
-                "learn/topics/for-governments/issuing-public-information-to-wallets",
-                "learn/topics/for-you/receiving-information-in-a-wallet",
-                "learn/topics/for-you/sharing-information-from-a-wallet",
-                "learn/topics/technology/credential-formats-and-interoperability",
-                "learn/topics/technology/how-do-wallets-and-services-exchange-information"
             ],
             "group": "learn"
         },
@@ -6927,55 +7227,6 @@
             ],
             "routes": [
                 "learn/topics/around-the-world/germany"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "On this page",
-            "translation": "Op deze pagina",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/around-the-world/canada",
-                "learn/topics/around-the-world/ethiopia",
-                "learn/topics/around-the-world/germany",
-                "learn/topics/around-the-world/honduras",
-                "learn/topics/around-the-world/india",
-                "learn/topics/around-the-world/the-netherlands",
-                "learn/topics/around-the-world/un-transparency-protocol",
-                "learn/topics/around-the-world/united-states",
-                "learn/topics/ecosystem-roles/the-holder",
-                "learn/topics/ecosystem-roles/the-issuer",
-                "learn/topics/ecosystem-roles/the-relying-party",
-                "learn/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks",
-                "learn/topics/ecosystem-roles/wallet-providers-and-other-service-providers",
-                "learn/topics/for-businesses/accepting-information-from-a-wallet",
-                "learn/topics/for-businesses/business-wallets-where-to-start",
-                "learn/topics/for-businesses/european-business-wallet",
-                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
-                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
-                "learn/topics/for-businesses/issuing-credentials-for-wallets",
-                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
-                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
-                "learn/topics/for-governments/digital-wallets-and-public-services",
-                "learn/topics/for-governments/issuing-public-information-to-wallets",
-                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation",
-                "learn/topics/for-you/choosing-and-managing-a-wallet",
-                "learn/topics/for-you/receiving-information-in-a-wallet",
-                "learn/topics/for-you/sharing-information-from-a-wallet",
-                "learn/topics/technology/credential-formats-and-interoperability",
-                "learn/topics/technology/how-do-wallets-and-services-exchange-information",
-                "learn/topics/technology/trust-frameworks-and-registries",
-                "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet",
-                "learn/topics/the-big-picture/european-digital-identity-wallet",
-                "learn/topics/the-big-picture/formats-and-protocols",
-                "learn/topics/the-big-picture/how-credentials-connect",
-                "learn/topics/the-big-picture/trust-and-interoperability",
-                "learn/topics/the-big-picture/what-is-a-credential",
-                "learn/topics/the-big-picture/what-is-a-digital-wallet"
             ],
             "group": "learn"
         },
@@ -7406,25 +7657,6 @@
             ],
             "routes": [
                 "learn/topics/technology/how-do-wallets-and-services-exchange-information"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "Previous",
-            "translation": "Vorige",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
-                "learn/topics/for-governments/issuing-public-information-to-wallets",
-                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation",
-                "learn/topics/for-you/choosing-and-managing-a-wallet",
-                "learn/topics/for-you/sharing-information-from-a-wallet",
-                "learn/topics/technology/credential-formats-and-interoperability",
-                "learn/topics/technology/trust-frameworks-and-registries"
             ],
             "group": "learn"
         },
@@ -8655,19 +8887,6 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/accepting-information-from-a-wallet"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "Status",
-            "translation": "Status",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/around-the-world/un-transparency-protocol"
             ],
             "group": "learn"
         },
@@ -11114,19 +11333,6 @@
             ],
             "routes": [
                 "learn/topics/technology"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "United States",
-            "translation": "de Verenigde Staten",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/around-the-world/united-states"
             ],
             "group": "learn"
         },
@@ -14410,20 +14616,6 @@
             "group": "learn"
         },
         {
-            "original": "selective disclosure",
-            "translation": "selectief gegevens delen",
-            "html": false,
-            "fragment": true,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
-                "learn/topics/the-big-picture/what-is-a-digital-wallet"
-            ],
-            "group": "learn"
-        },
-        {
             "original": "share a permit, certificate or other business document;",
             "translation": "een vergunning, certificaat of ander bedrijfsdocument kunnen delen;",
             "html": false,
@@ -14446,19 +14638,6 @@
             ],
             "routes": [
                 "learn/topics/for-businesses/european-business-wallet"
-            ],
-            "group": "learn"
-        },
-        {
-            "original": "status",
-            "translation": "statusgegevens",
-            "html": false,
-            "fragment": true,
-            "groups": [
-                "learn"
-            ],
-            "routes": [
-                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "learn"
         },
@@ -15130,6 +15309,503 @@
                 "learn/topics/around-the-world/germany"
             ],
             "group": "learn"
+        },
+        {
+            "original": "Accepted credential",
+            "translation": "Geaccepteerd credential",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Accepted credentials",
+            "translation": "Geaccepteerde credentials",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Add relying party",
+            "translation": "Vertrouwende partij toevoegen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "All interaction modes",
+            "translation": "Alle interactievormen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "All readiness levels",
+            "translation": "Alle gereedheidsniveaus",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "All relying parties",
+            "translation": "Alle vertrouwende partijen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "All wallets",
+            "translation": "Alle wallets",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Credentials this relying party accepts, as recorded. A name opens the credential type when the catalog links it.",
+            "translation": "Credentials die deze vertrouwende partij accepteert, zoals vastgelegd. Een naam opent het credentialtype wanneer de catalogus dit koppelt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Development",
+            "translation": "In ontwikkeling",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Digital",
+            "translation": "Digitaal",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Documentation",
+            "translation": "Documentatie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Features",
+            "translation": "Functies",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Find services that ask for or accept verifiable credentials and see which credentials and wallets they support.",
+            "translation": "Vind diensten die verifieerbare credentials vragen of accepteren en zie welke credentials en wallets zij ondersteunen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Help keep this relying party current.",
+            "translation": "Help ons deze vertrouwende partij actueel te houden.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Interaction",
+            "translation": "Interactie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties",
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Interoperability profiles",
+            "translation": "Interoperabiliteitsprofielen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Not in production",
+            "translation": "Niet in productie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Operational status",
+            "translation": "Operationele status",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Presentation protocols",
+            "translation": "Presentatieprotocollen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Production pilot",
+            "translation": "Productiepilot",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Proximity and remote",
+            "translation": "Proximity en remote",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Readiness",
+            "translation": "Gereedheid",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties",
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Readiness is how mature the service is. Operational status is its current state. The two fields are recorded separately and can differ.",
+            "translation": "Gereedheid zegt hoe ver de dienst is. De operationele status is de huidige toestand. Beide velden worden apart vastgelegd en kunnen verschillen.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Readiness shows how far a service has come: technical demo, use case demo, production pilot or production. The operational status (live, beta, development or deprecated) is a separate field on the record.",
+            "translation": "Gereedheid laat zien hoe ver een dienst is: technische demo, usecasedemo, productiepilot of productie. De operationele status (live, beta, in ontwikkeling of uitgefaseerd) is een apart veld in het record.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Relying Parties",
+            "translation": "Vertrouwende partijen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Relying party details",
+            "translation": "Gegevens van de vertrouwende partij",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Search relying parties",
+            "translation": "Vertrouwende partijen zoeken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Search relying parties, credentials, wallets…",
+            "translation": "Zoek vertrouwende partijen, credentials, wallets…",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Supported wallet",
+            "translation": "Ondersteunde wallet",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Supported wallets",
+            "translation": "Ondersteunde wallets",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Technical demo",
+            "translation": "Technische demo",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Technical details",
+            "translation": "Technische gegevens",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Test credentials",
+            "translation": "Testcredentials",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Update relying party",
+            "translation": "Vertrouwende partij bijwerken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Use case demo",
+            "translation": "Usecasedemo",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties",
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Use the FIDES forms to submit a relying party or request an update. A FIDES account is required. Submissions are reviewed before publication.",
+            "translation": "Gebruik de FIDES-formulieren om een vertrouwende partij aan te melden of een wijziging aan te vragen. Een FIDES-account is vereist. Inzendingen worden gecontroleerd vóór publicatie.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Visit website",
+            "translation": "Website bezoeken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Wallets named by this relying party.",
+            "translation": "Wallets die deze vertrouwende partij noemt.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-party"
+            ],
+            "group": "relying-parties"
         },
         {
             "original": "(Discuss your options)",
@@ -15978,10 +16654,14 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "start-receive"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/topics/around-the-world",
                 "learn/topics/around-the-world/canada",
@@ -16026,6 +16706,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "start/receive"
             ],
             "group": "shared"
@@ -16092,12 +16774,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16151,6 +16837,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -16165,12 +16853,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16224,6 +16916,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -16262,17 +16956,96 @@
             "group": "shared"
         },
         {
+            "original": "Add or update",
+            "translation": "Toevoegen of bijwerken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "All countries",
+            "translation": "Alle landen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "All credential types",
+            "translation": "Alle credentialtypen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "All formats",
+            "translation": "Alle formaten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Apply filters",
+            "translation": "Filters toepassen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Ask & learn",
             "translation": "Vragen en leren",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16326,6 +17099,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -16340,12 +17115,15 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16399,6 +17177,7 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -16440,17 +17219,35 @@
             "group": "shared"
         },
         {
+            "original": "Back to results",
+            "translation": "Terug naar resultaten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Breadcrumb",
             "translation": "Kruimelpad",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16502,6 +17299,7 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-party",
                 "services",
                 "services/wallet-readiness-assessment",
                 "start",
@@ -16515,12 +17313,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16574,6 +17376,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -16588,12 +17392,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16647,11 +17455,73 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Cancel",
+            "translation": "Annuleren",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Catalog data is available on GitHub",
+            "translation": "Cataloggegevens zijn beschikbaar op GitHub",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Catalog data on GitHub",
+            "translation": "Cataloggegevens op GitHub",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Catalog pages",
+            "translation": "Catalogusnavigatie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
             ],
             "group": "shared"
         },
@@ -16709,12 +17579,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16768,6 +17642,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -16777,17 +17653,36 @@
             "group": "shared"
         },
         {
+            "original": "Close filters",
+            "translation": "Filters sluiten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Community tracks",
             "translation": "Community-tracks",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16841,6 +17736,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -16855,12 +17752,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16914,6 +17815,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -16923,17 +17826,69 @@
             "group": "shared"
         },
         {
+            "original": "Country",
+            "translation": "Land",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "issuers",
+                "relying-parties",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Credential format",
+            "translation": "Credentialformaat",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Credential formats",
+            "translation": "Credentialformaten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Credential types",
             "translation": "Credentialtypen",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -16987,6 +17942,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17001,12 +17958,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17060,6 +18021,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17074,12 +18037,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17133,6 +18100,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17147,12 +18116,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17206,6 +18179,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17252,12 +18227,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17311,6 +18290,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17340,12 +18321,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17399,6 +18384,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17413,12 +18400,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17472,6 +18463,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17486,12 +18479,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17545,6 +18542,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17571,6 +18570,21 @@
             "group": "shared"
         },
         {
+            "original": "Formats",
+            "translation": "Formaten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "General service question",
             "translation": "Algemene vraag over diensten",
             "html": false,
@@ -17587,17 +18601,38 @@
             "group": "shared"
         },
         {
+            "original": "Germany",
+            "translation": "Duitsland",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn",
+                "relying-parties"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/germany",
+                "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Global map",
             "translation": "Wereldkaart",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17651,6 +18686,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17665,12 +18702,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17724,11 +18765,28 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Help keep the ecosystem visible and useful.",
+            "translation": "Help mee om het ecosysteem zichtbaar en bruikbaar te houden.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
             ],
             "group": "shared"
         },
@@ -17819,12 +18877,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17878,6 +18940,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17892,12 +18956,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -17951,6 +19019,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -17960,17 +19030,36 @@
             "group": "shared"
         },
         {
+            "original": "Last updated",
+            "translation": "Laatst bijgewerkt",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Learn & connect",
             "translation": "Leren en verbinden",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18024,6 +19113,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18118,12 +19209,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18177,6 +19272,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18191,12 +19288,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18250,6 +19351,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18264,12 +19367,16 @@
             "html": false,
             "fragment": true,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18323,6 +19430,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18337,12 +19446,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18396,6 +19509,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18437,17 +19552,39 @@
             "group": "shared"
         },
         {
+            "original": "Netherlands",
+            "translation": "Nederland",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "learn",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "issuers",
+                "learn/topics/around-the-world/the-netherlands",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "New to wallets?",
             "translation": "Nieuw met wallets?",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18501,6 +19638,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18515,12 +19654,16 @@
             "html": false,
             "fragment": true,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18574,11 +19717,36 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Next",
+            "translation": "Volgende",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "issuers",
+                "learn",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
+                "learn/topics/for-governments/digital-wallets-and-public-services",
+                "learn/topics/for-governments/issuing-public-information-to-wallets",
+                "learn/topics/for-you/receiving-information-in-a-wallet",
+                "learn/topics/for-you/sharing-information-from-a-wallet",
+                "learn/topics/technology/credential-formats-and-interoperability",
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information",
+                "relying-parties"
             ],
             "group": "shared"
         },
@@ -18631,6 +19799,59 @@
             "group": "shared"
         },
         {
+            "original": "On this page",
+            "translation": "Op deze pagina",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "learn",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
+                "learn/topics/around-the-world/the-netherlands",
+                "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
+                "learn/topics/ecosystem-roles/the-holder",
+                "learn/topics/ecosystem-roles/the-issuer",
+                "learn/topics/ecosystem-roles/the-relying-party",
+                "learn/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks",
+                "learn/topics/ecosystem-roles/wallet-providers-and-other-service-providers",
+                "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
+                "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
+                "learn/topics/for-governments/digital-wallets-and-public-services",
+                "learn/topics/for-governments/issuing-public-information-to-wallets",
+                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation",
+                "learn/topics/for-you/choosing-and-managing-a-wallet",
+                "learn/topics/for-you/receiving-information-in-a-wallet",
+                "learn/topics/for-you/sharing-information-from-a-wallet",
+                "learn/topics/technology/credential-formats-and-interoperability",
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information",
+                "learn/topics/technology/trust-frameworks-and-registries",
+                "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet",
+                "learn/topics/the-big-picture/european-digital-identity-wallet",
+                "learn/topics/the-big-picture/formats-and-protocols",
+                "learn/topics/the-big-picture/how-credentials-connect",
+                "learn/topics/the-big-picture/trust-and-interoperability",
+                "learn/topics/the-big-picture/what-is-a-credential",
+                "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Open training",
             "translation": "Open training",
             "html": false,
@@ -18662,17 +19883,36 @@
             "group": "shared"
         },
         {
+            "original": "Organization",
+            "translation": "Organisatie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Organizations",
             "translation": "Organisaties",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18726,6 +19966,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18740,12 +19982,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18799,6 +20045,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18813,10 +20061,13 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "training"
             ],
             "routes": [
+                "issuer",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18867,7 +20118,8 @@
                 "learn/topics/the-big-picture/how-credentials-connect",
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
-                "learn/topics/the-big-picture/what-is-a-digital-wallet"
+                "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-party"
             ],
             "group": "shared"
         },
@@ -18877,12 +20129,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -18936,6 +20192,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -18950,12 +20208,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19009,6 +20271,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -19050,6 +20314,29 @@
             "group": "shared"
         },
         {
+            "original": "Previous",
+            "translation": "Vorige",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "learn",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
+                "learn/topics/for-governments/issuing-public-information-to-wallets",
+                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation",
+                "learn/topics/for-you/choosing-and-managing-a-wallet",
+                "learn/topics/for-you/sharing-information-from-a-wallet",
+                "learn/topics/technology/credential-formats-and-interoperability",
+                "learn/topics/technology/trust-frameworks-and-registries",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Primarily available in the Netherlands. Contact us to discuss your requirements and location.",
             "translation": "Vooral beschikbaar in Nederland. Neem contact met ons op om uw wensen en locatie te bespreken.",
             "html": false,
@@ -19078,6 +20365,22 @@
                 "learn/sessions/request",
                 "learn/sessions/request-wpforms",
                 "services/enquiry"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Production",
+            "translation": "Productie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties",
+                "relying-party"
             ],
             "group": "shared"
         },
@@ -19118,17 +20421,21 @@
             "group": "shared"
         },
         {
-            "original": "Search",
-            "translation": "Zoeken",
+            "original": "Relying parties",
+            "translation": "Vertrouwende partijen",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19182,6 +20489,87 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
+                "services",
+                "services/enquiry",
+                "services/wallet-readiness-assessment",
+                "start",
+                "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Search",
+            "translation": "Zoeken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "learn",
+                "relying-parties",
+                "services",
+                "start-receive",
+                "training"
+            ],
+            "routes": [
+                "issuer",
+                "issuers",
+                "learn",
+                "learn/sessions",
+                "learn/sessions/eudi-business-wallets-in-practice",
+                "learn/sessions/request",
+                "learn/sessions/request-wpforms",
+                "learn/sessions/training-partnerships",
+                "learn/sessions/wallet-introduction",
+                "learn/sessions/wallet-readiness-workshop",
+                "learn/topics",
+                "learn/topics/around-the-world",
+                "learn/topics/around-the-world/canada",
+                "learn/topics/around-the-world/ethiopia",
+                "learn/topics/around-the-world/germany",
+                "learn/topics/around-the-world/honduras",
+                "learn/topics/around-the-world/india",
+                "learn/topics/around-the-world/the-netherlands",
+                "learn/topics/around-the-world/un-transparency-protocol",
+                "learn/topics/around-the-world/united-states",
+                "learn/topics/ecosystem-roles",
+                "learn/topics/ecosystem-roles/the-holder",
+                "learn/topics/ecosystem-roles/the-issuer",
+                "learn/topics/ecosystem-roles/the-relying-party",
+                "learn/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks",
+                "learn/topics/ecosystem-roles/wallet-providers-and-other-service-providers",
+                "learn/topics/for-businesses",
+                "learn/topics/for-businesses/accepting-information-from-a-wallet",
+                "learn/topics/for-businesses/business-wallets-where-to-start",
+                "learn/topics/for-businesses/european-business-wallet",
+                "learn/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
+                "learn/topics/for-businesses/how-can-someone-act-for-an-organisation",
+                "learn/topics/for-businesses/issuing-credentials-for-wallets",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
+                "learn/topics/for-governments",
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
+                "learn/topics/for-governments/digital-wallets-and-public-services",
+                "learn/topics/for-governments/issuing-public-information-to-wallets",
+                "learn/topics/for-governments/the-eudi-wallet-and-national-implementation",
+                "learn/topics/for-you",
+                "learn/topics/for-you/choosing-and-managing-a-wallet",
+                "learn/topics/for-you/receiving-information-in-a-wallet",
+                "learn/topics/for-you/sharing-information-from-a-wallet",
+                "learn/topics/technology",
+                "learn/topics/technology/credential-formats-and-interoperability",
+                "learn/topics/technology/how-do-wallets-and-services-exchange-information",
+                "learn/topics/technology/trust-frameworks-and-registries",
+                "learn/topics/the-big-picture",
+                "learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet",
+                "learn/topics/the-big-picture/european-digital-identity-wallet",
+                "learn/topics/the-big-picture/formats-and-protocols",
+                "learn/topics/the-big-picture/how-credentials-connect",
+                "learn/topics/the-big-picture/trust-and-interoperability",
+                "learn/topics/the-big-picture/what-is-a-credential",
+                "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -19196,12 +20584,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19255,6 +20647,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -19269,12 +20663,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19328,6 +20726,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -19381,12 +20781,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19440,11 +20844,43 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Share",
+            "translation": "Delen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Share on LinkedIn",
+            "translation": "Delen via LinkedIn",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
             ],
             "group": "shared"
         },
@@ -19454,12 +20890,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19513,11 +20953,28 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Sign in to suggest an update",
+            "translation": "Log in om een wijziging voor te stellen",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
             ],
             "group": "shared"
         },
@@ -19527,12 +20984,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19586,6 +21047,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -19595,17 +21058,51 @@
             "group": "shared"
         },
         {
+            "original": "Sort",
+            "translation": "Sorteren",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Sort by",
+            "translation": "Sorteer op",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Start with what your organization wants to achieve.",
             "translation": "Begin bij wat uw organisatie wil bereiken.",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19659,11 +21156,28 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Status",
+            "translation": "Status",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "learn",
+                "relying-parties"
+            ],
+            "routes": [
+                "learn/topics/around-the-world/un-transparency-protocol",
+                "relying-party"
             ],
             "group": "shared"
         },
@@ -19689,12 +21203,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19748,11 +21266,28 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Suggest a correction using the existing update form.",
+            "translation": "Stel een correctie voor via het bestaande wijzigingsformulier.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
             ],
             "group": "shared"
         },
@@ -19794,12 +21329,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19853,6 +21392,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -19882,12 +21423,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -19941,6 +21486,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -19955,12 +21502,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -20014,6 +21565,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -20108,12 +21661,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -20167,6 +21724,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -20245,12 +21804,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -20304,6 +21867,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -20395,17 +21960,38 @@
             "group": "shared"
         },
         {
+            "original": "United States",
+            "translation": "de Verenigde Staten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "learn",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "learn/topics/around-the-world/united-states",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Update a listing",
             "translation": "Een vermelding bijwerken",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -20459,6 +22045,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -20468,17 +22056,36 @@
             "group": "shared"
         },
         {
+            "original": "Updated",
+            "translation": "Bijgewerkt",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Use FIDES with AI",
             "translation": "FIDES gebruiken met AI",
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -20532,6 +22139,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -20564,12 +22173,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -20623,11 +22236,28 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "View organization",
+            "translation": "Organisatie bekijken",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
             ],
             "group": "shared"
         },
@@ -20657,12 +22287,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -20716,6 +22350,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -20810,12 +22446,16 @@
             "html": false,
             "fragment": false,
             "groups": [
+                "issuers",
                 "learn",
+                "relying-parties",
                 "services",
                 "start-receive",
                 "training"
             ],
             "routes": [
+                "issuer",
+                "issuers",
                 "learn",
                 "learn/sessions",
                 "learn/sessions/eudi-business-wallets-in-practice",
@@ -20869,6 +22509,8 @@
                 "learn/topics/the-big-picture/trust-and-interoperability",
                 "learn/topics/the-big-picture/what-is-a-credential",
                 "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-parties",
+                "relying-party",
                 "services",
                 "services/enquiry",
                 "services/wallet-readiness-assessment",
@@ -20905,6 +22547,52 @@
             "routes": [
                 "learn/sessions/wallet-readiness-workshop",
                 "learn/topics/the-big-picture/how-credentials-connect"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "on LinkedIn (opens in a new tab)",
+            "translation": "via LinkedIn (opent in een nieuw tabblad)",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuer",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "selective disclosure",
+            "translation": "selectief gegevens delen",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "learn",
+                "relying-parties"
+            ],
+            "routes": [
+                "learn/topics/for-governments/accepting-information-from-wallets-in-public-services",
+                "learn/topics/the-big-picture/what-is-a-digital-wallet",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "status",
+            "translation": "statusgegevens",
+            "html": false,
+            "fragment": true,
+            "groups": [
+                "issuers",
+                "learn"
+            ],
+            "routes": [
+                "issuers",
+                "learn/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential"
             ],
             "group": "shared"
         },

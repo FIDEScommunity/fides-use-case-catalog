@@ -1,6 +1,6 @@
 <?php
 /**
- * Portable Dutch (nl_NL) TranslatePress strings for the Learn, Training & workshops (Services) and start/receive routes.
+ * Portable Dutch (nl_NL) TranslatePress strings for the Learn, Training & workshops (Services), start/receive, Issuers and Relying parties routes.
  *
  * Run with WP-CLI:
  *   wp eval-file learn/nl-translations-transfer.php export [file]          write the transfer file (default: learn/nl-translations.json)
@@ -80,7 +80,8 @@ $gettext_allow = array(
 $lone_fragments = array('A', 'An', 'The');
 $home_url  = untrailingslashit((string) get_option('home'));
 $home_tok  = '{{home}}';
-$roots     = array('learn' => 'learn', 'services' => 'services', 'start' => 'start-receive');
+// Issuer and relying party catalog pages (list and record) travel as their own groups; the record pages join the list group.
+$roots     = array('learn' => 'learn', 'services' => 'services', 'start' => 'start-receive', 'issuers' => 'issuers', 'issuer' => 'issuers', 'relying-parties' => 'relying-parties', 'relying-party' => 'relying-parties');
 $out       = static function (string $s): void { echo $s . "\n"; };
 
 /** Normalise a text for comparison: decode entities, squash whitespace. */
@@ -127,7 +128,7 @@ $fetch_by_text = static function (array $texts) use ($wpdb, $table, $select_cols
     return $rows;
 };
 
-/** Route pages: published descendants of the top-level pages learn (groups learn and training = learn/sessions), services and start. */
+/** Route pages: published descendants of the top-level pages learn (groups learn and training = learn/sessions), services, start, issuers, issuer, relying-parties and relying-party. */
 $page_rows = $wpdb->get_results("SELECT ID, post_name, post_parent FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'publish'"); // phpcs:ignore
 $by_id = array();
 foreach ($page_rows as $p) {

@@ -44,6 +44,9 @@ foreach ($entries as $e) { $groups[ $e['group'] ] = ($groups[ $e['group'] ] ?? 0
 ksort($groups); ksort($doc['counts']);
 $check($groups === $doc['counts'] && array_sum($groups) === $doc['total'], 'counts per group match the entries: ' . json_encode($groups));
 
+$check(($groups['issuers'] ?? 0) > 0 && ($groups['relying-parties'] ?? 0) > 0, 'the issuer and relying party routes are in the transfer file');
+$check(in_array('Uitgever toevoegen', array_column($entries, 'translation'), true) && in_array('Vertrouwende partij toevoegen', array_column($entries, 'translation'), true), 'the add issuer / add relying party rows travel (translations are exported, never changed)');
+
 // Scratch copy of the dictionary.
 $greal = $wpdb->prefix . 'trp_gettext_nl_nl';
 $gcopy = $wpdb->prefix . 'trp_test_gettext_nl_copy';

@@ -647,6 +647,16 @@ symlinks `fides-issuer-catalog` and `fides-rp-catalog` point to the worktrees li
   The credential pilot links back to issuer and RP records (`?issuers=a,b` / `?rps=a,b` open the pilot overview).
 - **Tests**: `tests/run-issuer-rp-checks.sh` (1440 and 390 px, EN and NL; overview, filter, empty state, record, back, keyboard, relation, limited
   record, deeplink, add route, Explorer route). `KINDS=issuers|relying-parties`, `WIDTHS`, `LOCALES` limit a run.
+  `CHECKS=main|env` runs one half: `tests/issuer-rp-env-nl-checks.cjs` (environment values, legend, filter, pills and badges with the
+  counts of the data; dynamic Dutch text). Also: `tests/issuer-environment-behaviour.php` (`pilot_wp eval-file`, fixture issuers, no
+  writes), `tests/issuer-rp-logo-checks.cjs` (logo fallbacks of the France Identité issuers, Swiss E-ID and Maenada),
+  `tests/learn-issuer-rp-links-checks.cjs` (the seven Learn articles with an issuer or relying party link; no browser, about 3 s).
+- **Environment (issuers)**: `production` and `test` as in the source schema (`sandbox` and `pilot` count as `test`); a missing or unknown
+  value is `unspecified` and shows as "Not specified" / "Niet opgegeven" in the badge, the filter and the pills. The legend names that value
+  only when an issuer has it. Data of 15 November 2026: 75 issuers, 11 production, 64 test, 0 not specified.
+- **Dutch transfer**: the issuer and relying party pages (`issuers`, `issuer`, `relying-parties`, `relying-party`) are route groups of
+  `learn/nl-translations-transfer.php`; their rows are in `learn/nl-translations.json` (groups `issuers` 24, `relying-parties` 38, plus
+  shared rows). Test: `tests/nl-translations-transfer-behaviour.php` on a scratch copy. Details: `learn/nl-translation-changes-issuers-rp-followup-2026-11-15.md`.
 - **Dutch**: the fixed interface texts are in `learn/nl-translations.php` (block of 2026-11-14, list in
   `learn/nl-translation-changes-issuers-rp-2026-11-14.md`). Catalog content and the generated row meta line stay English.
 

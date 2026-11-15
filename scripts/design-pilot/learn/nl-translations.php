@@ -975,6 +975,10 @@ $nl = array(
     'A type name opens the credential type when the catalog links it. Each configuration is listed under its type.' => 'De naam van een type opent het credentialtype wanneer de catalogus dit koppelt. Elke configuratie staat onder haar type.',
     'Browse issuers' => 'Bekijk uitgevers',
     'Browse relying parties' => 'Bekijk vertrouwende partijen',
+    // Round 2026-11-15 (follow-up): technical metadata labels on the issuer record.
+    'Credential issuer URL' => 'URL van de credentialuitgever',
+    'OID4VCI metadata' => 'OID4VCI-metadata',
+    'Last metadata check' => 'Laatste metadatacontrole',
 );
 
 /**
