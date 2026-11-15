@@ -538,7 +538,7 @@ final class Fides_Use_Case_Explore_Choice {
 
         ob_start();
         ?>
-<div class="fides-ds fides-explore" data-fides-explore="<?php echo esc_attr($kind); ?>" data-param="<?php echo esc_attr($param); ?>" data-selected="<?php echo esc_attr($slug); ?>">
+<div class="fides-ds fides-explore" data-fides-explore="<?php echo esc_attr($kind); ?>" data-param="<?php echo esc_attr($param); ?>" data-selected="<?php echo esc_attr($slug); ?>" data-live-selected="<?php echo esc_attr(__('%s selected', 'fides-use-case-catalog')); ?>" data-live-none="<?php echo esc_attr(__('No selection', 'fides-use-case-catalog')); ?>">
   <div class="fides-ds-page fides-explore__page">
     <header class="fides-explore__head" data-fides-explore-head>
       <p class="fides-explore__crumb"><?php echo esc_html('Explore / ' . $words['plural']); ?></p>

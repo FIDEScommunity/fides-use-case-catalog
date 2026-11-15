@@ -71,7 +71,8 @@
     display: inline-flex;
   }
 
-  .fides-ds .fides-explore:not([data-selected=""]) .fides-explore__choices:not(.is-open):not(:target) {
+  .fides-ds .fides-explore:not([data-selected=""]):not(.is-js) .fides-explore__choices:not(.is-open):not(:target),
+  .fides-ds .fides-explore.is-js:not([data-selected=""]) .fides-explore__choices:not(.is-open) {
     display: none;
   }
 }

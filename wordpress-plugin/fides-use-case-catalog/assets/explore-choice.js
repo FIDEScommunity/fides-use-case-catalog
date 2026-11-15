@@ -10,6 +10,10 @@
   var root = document.querySelector("[data-fides-explore]");
   if (!root || !window.fetch || !window.history || !window.DOMParser) return;
 
+  // Marks the script as active: the CSS then lets the picker follow is-open / aria-expanded alone (without JavaScript the
+  // #fides-explore-choices :target rule opens it, and nothing could close it again).
+  root.classList.add("is-js");
+  var CHOICES_HASH = "#fides-explore-choices";
   var param = root.getAttribute("data-param") || "theme";
   var cache = {};
   var token = 0;
@@ -51,7 +55,7 @@
       });
   }
 
-  function apply(data, focus) {
+  function apply(data, focus, keepPosition) {
     var next = data.root;
     var result = root.querySelector("[data-fides-explore-result]");
     var nextResult = next.querySelector("[data-fides-explore-result]");
@@ -70,15 +74,18 @@
     var newNotice = head.querySelector("[data-fides-explore-notice]");
     var message = "";
     if (state) {
-      message = heading.textContent + " selected";
+      // The sentence templates come from the server (gettext), so the status message follows the page language.
+      message = (next.getAttribute("data-live-selected") || "%s selected").replace("%s", heading.textContent.trim());
     } else if (newNotice) {
       message = newNotice.textContent;
     } else {
-      message = "No selection";
+      message = next.getAttribute("data-live-none") || "No selection";
     }
     live().textContent = message;
     setExpanded(false);
-    if (focus && heading) heading.focus({ preventScroll: false });
+    // A choice switch brings the reader to the new heading. Back / Forward to an address with a section anchor keeps that
+    // section in view instead (the anchor target exists again only after the swap).
+    if (focus && heading) heading.focus({ preventScroll: !!keepPosition });
     return true;
   }
 
@@ -101,13 +108,25 @@
     openChoices();
   }
 
-  function openChoices() {
+  function openChoices(quiet) {
     var choices = root.querySelector("[data-fides-explore-choices]");
     if (!choices) return;
     choices.classList.add("is-open");
     setExpanded(true);
+    if (quiet) return;
     var target = choices.querySelector(".fides-explore__choice[aria-current]") || choices.querySelector(".fides-explore__choice");
     if (target) target.focus();
+  }
+
+  // A page opened with #fides-explore-choices shows the picker (the CSS :target rule does that without JavaScript); the
+  // script mirrors it into is-open and aria-expanded so the "Change" action can close it again.
+  function syncPickerFromHash() {
+    if (window.location.hash === CHOICES_HASH && root.getAttribute("data-selected")) openChoices(true);
+  }
+
+  function sectionTarget() {
+    var id = window.location.hash.length > 1 ? decodeURIComponent(window.location.hash.slice(1)) : "";
+    return id && id !== CHOICES_HASH.slice(1) ? document.getElementById(id) : null;
   }
 
   function go(url, push) {
@@ -115,11 +134,14 @@
     load(url)
       .then(function (data) {
         if (mine !== token) return;
-        if (!apply(data, true)) {
+        var hashed = !push && window.location.hash.length > 1;
+        if (!apply(data, true, hashed)) {
           window.location.assign(url);
           return;
         }
         if (push) window.history.pushState({ fidesExplore: slugOf(url) }, "", url);
+        else if (sectionTarget()) sectionTarget().scrollIntoView();
+        else if (window.location.hash === CHOICES_HASH) syncPickerFromHash();
       })
       .catch(function () {
         if (mine === token) window.location.assign(url);
@@ -155,8 +177,16 @@
   });
 
   setExpanded(false);
+  syncPickerFromHash();
   window.history.replaceState({ fidesExplore: root.getAttribute("data-selected") || "" }, "", window.location.href);
   window.addEventListener("popstate", function () {
+    // Browsers also fire popstate for a plain #anchor step (a section link, Back / Forward between anchors). When the
+    // chosen theme / sector did not change there is nothing to fetch or swap; swapping would pull focus (and the scroll
+    // position) back to the heading, so the reader would lose the section they clicked.
+    if (slugOf(window.location.href) === (root.getAttribute("data-selected") || "")) {
+      syncPickerFromHash();
+      return;
+    }
     go(window.location.href, false);
   });
 })();

@@ -19,7 +19,7 @@
  *  - NL: catalog content is lang="en" and not translated, the catalog-content note, Learn stays "Learn", Dutch notice/empty state;
  *  - no featured image: the introduction uses the full width; Explore menu entries on desktop and in the mobile menu.
  * Nothing is submitted: GET navigation only. The empty-data state needs the fixture: tests/run-explore-themes-sectors-empty.sh.
- * ONLY_MAIN=1 runs only the general checks above; ONLY_ROUND2=1 only the UX round checks. Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/explore-themes-sectors-checks.cjs   (env: PILOT_URL, WIDTHS, LOCALES, SAMPLE=all)
+ * ONLY_MAIN=1 runs only the general checks above; ONLY_ROUND2=1 only the UX round checks; ONLY_ROUND3=1 only round 3 (section anchors with Back/Forward and final scroll, listener clean-up after repeated switches, mobile picker with #fides-explore-choices with and without JavaScript, translated status message; TILES_JS_OVERRIDE=<file> serves another design-system.js as a negative control). Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/explore-themes-sectors-checks.cjs   (env: PILOT_URL, WIDTHS, LOCALES, SAMPLE=all)
  */
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const fs = require("fs");
@@ -295,7 +295,7 @@ async function repairChecks(browser) {
 // Targets: sectors/?sector=education and themes/?theme=business_authority, direct link and no-choice state, 1440 and 390, EN and NL.
 // ---------------------------------------------------------------------------------------------------------------------
 const R2 = [
-  { kind: "theme", param: "theme", path: "themes/", slug: "business_authority", other: "identity_access", name: { EN: "Business & Mandates", NL: "Bedrijven en mandaten" }, page: { EN: "Explore by theme", NL: "Ontdek per theme".replace("theme", "thema") }, first: [/^Hypersign KYB/, /^Mandator/] },
+  { kind: "theme", param: "theme", path: "themes/", slug: "business_authority", other: "identity_access", name: { EN: "Business & Mandates", NL: "Bedrijven en mandaten" }, page: { EN: "Explore by theme", NL: "Ontdek per theme".replace("theme", "thema") }, first: [/^Business Wallet-Based KYB/, /^From Document Trust/] },
   { kind: "sector", param: "sector", path: "sectors/", slug: "education", other: "healthcare", name: { EN: "Education", NL: "Onderwijs" }, page: { EN: "Explore by sector", NL: "Ontdek per sector" }, first: [/Verification of Education Credentials/, /Academic Credential/] },
 ];
 
@@ -469,9 +469,242 @@ async function round2Checks(browser) {
   console.log("\n" + info.map((l) => `info - ${l}`).join("\n"));
 }
 
+// ---------------------------------------------------------------------------------------------------------------------
+// Repair round 3 (2026-11-15): section anchors, Back / Forward, listener clean-up, mobile picker, status message
+// ---------------------------------------------------------------------------------------------------------------------
+// Final scroll position: resolves once scrollY did not change for 10 frames (no timers).
+const settled = (page) =>
+  page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        let last = -1;
+        let same = 0;
+        const frame = () => {
+          if (window.scrollY === last) same += 1;
+          else {
+            same = 0;
+            last = window.scrollY;
+          }
+          if (same >= 10) resolve(window.scrollY);
+          else requestAnimationFrame(frame);
+        };
+        frame();
+      }),
+  );
+// history.back() / forward() resolved after popstate (or hashchange) and two frames.
+const historyStep = (page, dir) =>
+  page.evaluate(
+    (d) =>
+      new Promise((resolve) => {
+        const done = () => requestAnimationFrame(() => requestAnimationFrame(resolve));
+        window.addEventListener("popstate", done, { once: true });
+        window.history[d]();
+      }),
+    dir,
+  );
+// The section is where the reader wants it: its top is in the upper part of the viewport (below the sticky bar), or the page cannot scroll further.
+const sectionState = (page, id) =>
+  page.evaluate((anchor) => {
+    const el = document.getElementById(anchor);
+    const top = el ? el.getBoundingClientRect().top : NaN;
+    const atEnd = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+    const heading = document.querySelector(".fides-explore__title");
+    return { top, y: window.scrollY, atEnd, h1Focus: document.activeElement === heading, hash: window.location.hash, inView: !!el && ((top >= -2 && top <= 300) || (atEnd && top > -2 && top < window.innerHeight)) };
+  }, id);
+async function openSectionBar(page) {
+  await page.evaluate(() => {
+    const nav = document.querySelector("[data-fides-ds-section-nav]");
+    if (nav && !nav.open) nav.querySelector("summary").click();
+  });
+}
+const LISTENER_PROBE = () => {
+  const live = { scroll: new Set(), resize: new Set(), hashchange: new Set(), popstate: new Set(), mediaquery: new Set() };
+  const add = EventTarget.prototype.addEventListener;
+  const remove = EventTarget.prototype.removeEventListener;
+  const bucket = (target, type) => (target === window && live[type] ? live[type] : typeof MediaQueryList !== "undefined" && target instanceof MediaQueryList && type === "change" ? live.mediaquery : null);
+  EventTarget.prototype.addEventListener = function (type, listener, options) {
+    const set = bucket(this, type);
+    if (set && listener) set.add(listener);
+    return add.call(this, type, listener, options);
+  };
+  EventTarget.prototype.removeEventListener = function (type, listener, options) {
+    const set = bucket(this, type);
+    if (set && listener) set.delete(listener);
+    return remove.call(this, type, listener, options);
+  };
+  window.__liveListeners = () => Object.fromEntries(Object.entries(live).map(([key, set]) => [key, set.size]));
+};
+
+async function round3Checks(browser) {
+  const info = [];
+  for (const loc of LOCALES) {
+    const W = WORDS[loc];
+    for (const width of WIDTHS) {
+      for (const T of R2) {
+        const tag = `${loc} ${width} ${T.kind}`;
+        const url = (slug) => `${BASE}${prefix(loc)}${T.path}?${T.param}=${slug}`;
+        const wide = !NARROW(width);
+
+        // 1. Section anchors: every link of the section bar leaves the reader at that section (final scroll position).
+        const ctx = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
+        await ctx.addCookies(COOKIES);
+        await calmCss(ctx);
+        const page = await ctx.newPage();
+        await page.goto(url(T.slug), { waitUntil: "networkidle" });
+        const ids = await page.$$eval("[data-fides-ds-section-nav] a[href^='#']", (as) => as.filter((a) => !a.closest("li").hidden).map((a) => a.getAttribute("href").slice(1)));
+        check(`${tag}: section bar offers at least 3 links`, ids.length >= 3, ids.join(","));
+        await page.evaluate(() => { document.querySelector("[data-fides-explore-result]").__mark = "kept"; });
+        const posted = [];
+        for (const id of ids) {
+          await openSectionBar(page);
+          await page.locator(`[data-fides-ds-section-nav] a[href="#${id}"]`).click();
+          await settled(page);
+          const st = await sectionState(page, id);
+          posted.push(st.y);
+          info.push(`${tag} click #${id}: scrollY ${Math.round(st.y)}, section top ${Math.round(st.top)}${st.atEnd ? " (page end)" : ""}`);
+          check(`${tag}: click "#${id}" keeps the reader at the section (final scroll)`, st.inView && st.y > 0 && !st.h1Focus && st.hash === `#${id}`, JSON.stringify(st));
+        }
+        check(`${tag}: the result region was not swapped by anchor clicks`, (await page.evaluate(() => document.querySelector("[data-fides-explore-result]").__mark)) === "kept");
+        check(`${tag}: current section is marked after the last click`, (await page.locator("[data-fides-ds-section-nav] a[aria-current='location']").count()) === 1);
+
+        // Back and Forward between the anchors.
+        const last = ids.length - 1;
+        await historyStep(page, "back");
+        await settled(page);
+        let st = await sectionState(page, ids[last - 1]);
+        check(`${tag}: Back goes to "#${ids[last - 1]}" and stays there`, st.inView && !st.h1Focus && st.hash === `#${ids[last - 1]}`, JSON.stringify(st));
+        await historyStep(page, "back");
+        await settled(page);
+        st = await sectionState(page, ids[last - 2]);
+        check(`${tag}: Back again goes to "#${ids[last - 2]}"`, st.inView && !st.h1Focus && st.hash === `#${ids[last - 2]}`, JSON.stringify(st));
+        await historyStep(page, "forward");
+        await settled(page);
+        st = await sectionState(page, ids[last - 1]);
+        check(`${tag}: Forward returns to "#${ids[last - 1]}"`, st.inView && !st.h1Focus && st.hash === `#${ids[last - 1]}`, JSON.stringify(st));
+        await historyStep(page, "forward");
+        await settled(page);
+        st = await sectionState(page, ids[last]);
+        check(`${tag}: Forward returns to "#${ids[last]}"`, st.inView && !st.h1Focus && st.hash === `#${ids[last]}`, JSON.stringify(st));
+        check(`${tag}: Back / Forward between anchors did not swap the result region`, (await page.evaluate(() => document.querySelector("[data-fides-explore-result]").__mark)) === "kept");
+
+        // 2. Switching keeps working with an anchor in the history: switch, Back returns to the anchored section, Forward to the other choice.
+        const nameBefore = norm(await page.locator("h1").innerText());
+        await openPicker(page, width);
+        await page.locator(`.fides-explore__choice[data-choice="${T.other}"]`).click();
+        await page.waitForFunction((slug) => document.querySelector("[data-fides-explore]").getAttribute("data-selected") === slug, T.other);
+        // Wait for the settled state: heading and status region both filled (TranslatePress may touch the region on /nl/).
+        await page.waitForFunction(() => document.querySelector("h1").innerText.trim() !== "" && (document.getElementById("fides-explore-live") || {}).textContent);
+        const nameOther = norm(await page.locator("h1").innerText());
+        check(`${tag}: switching to ${T.other} changes heading and address`, nameOther !== nameBefore && page.url().includes(`${T.param}=${T.other}`) && !page.url().includes("#"), `${nameBefore} -> ${nameOther} ${page.url()}`);
+        // 4. Status message of the live region, in the page language.
+        const live = norm(await page.locator("#fides-explore-live").textContent());
+        const expectedLive = loc === "NL" ? `${nameOther} geselecteerd` : `${nameOther} selected`;
+        check(`${tag}: status message after switching is "${expectedLive}"`, live === expectedLive, live);
+        check(`${tag}: status message is a polite status region`, (await page.locator("#fides-explore-live[role='status'][aria-live='polite']").count()) === 1);
+        await historyStep(page, "back");
+        await page.waitForFunction((slug) => document.querySelector("[data-fides-explore]").getAttribute("data-selected") === slug && document.querySelector("h1").innerText.trim() !== "", T.slug);
+        await settled(page);
+        st = await sectionState(page, ids[last]);
+        check(`${tag}: Back after switching returns to ${T.slug} at "#${ids[last]}" (section in view; the heading may hold focus)`, norm(await page.locator("h1").innerText()) === nameBefore && st.inView && st.hash === `#${ids[last]}`, JSON.stringify(st));
+        const liveBack = norm(await page.locator("#fides-explore-live").textContent());
+        check(`${tag}: status message after Back names the restored choice`, liveBack === (loc === "NL" ? `${nameBefore} geselecteerd` : `${nameBefore} selected`), liveBack);
+        await historyStep(page, "forward");
+        await page.waitForFunction((slug) => document.querySelector("[data-fides-explore]").getAttribute("data-selected") === slug && document.querySelector("h1").innerText.trim() !== "", T.other);
+        check(`${tag}: Forward returns to ${T.other}`, norm(await page.locator("h1").innerText()) === nameOther && page.url().includes(`${T.param}=${T.other}`));
+        await ctx.close();
+
+        // Direct open with an anchor in the address: the section is reached and kept.
+        const direct = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
+        await direct.addCookies(COOKIES);
+        await calmCss(direct);
+        const dp = await direct.newPage();
+        await dp.goto(`${url(T.slug)}#${ids[last - 1]}`, { waitUntil: "networkidle" });
+        await settled(dp);
+        st = await sectionState(dp, ids[last - 1]);
+        check(`${tag}: opening the address with #${ids[last - 1]} lands on that section`, st.inView && st.y > 0 && !st.h1Focus, JSON.stringify(st));
+        await direct.close();
+
+        // 3. Listeners: repeated switching must not pile up window / media-query listeners (instrumented addEventListener).
+        const lctx = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
+        await lctx.addCookies(COOKIES);
+        if (process.env.TILES_JS_OVERRIDE) {
+          // Negative control: serve another design-system.js (for example the 1.13.57 copy) to show the test catches the leak.
+          await lctx.route(/design-system\.js/, (route) => route.fulfill({ contentType: "application/javascript", body: fs.readFileSync(process.env.TILES_JS_OVERRIDE, "utf8") }));
+        }
+        await lctx.addInitScript(LISTENER_PROBE);
+        const lp = await lctx.newPage();
+        await lp.goto(url(T.slug), { waitUntil: "networkidle" });
+        const base = await lp.evaluate(() => window.__liveListeners());
+        const N = 8;
+        for (let i = 1; i <= N; i += 1) {
+          const slug = i % 2 ? T.other : T.slug;
+          await openPicker(lp, width);
+          await lp.locator(`.fides-explore__choice[data-choice="${slug}"]`).click();
+          await lp.waitForFunction((value) => document.querySelector("[data-fides-explore]").getAttribute("data-selected") === value, slug);
+        }
+        const after = await lp.evaluate(() => window.__liveListeners());
+        check(`${tag}: ${N} switches add no listeners (before ${JSON.stringify(base)}, after ${JSON.stringify(after)})`, Object.keys(base).every((key) => after[key] <= base[key]), JSON.stringify({ base, after }));
+        check(`${tag}: after ${N} switches exactly one section bar is on the page and one scroll measuring listener per bar is live`, (await lp.locator("[data-fides-ds-section-nav]").count()) === 1 && after.scroll <= base.scroll);
+        // Scroll handler calls: one scroll event after the switches must reach one section bar handler only.
+        const calls = await lp.evaluate(() => {
+          let frames = 0;
+          const originalRaf = window.requestAnimationFrame;
+          window.requestAnimationFrame = function (cb) { frames += 1; return originalRaf.call(window, cb); };
+          window.dispatchEvent(new Event("scroll"));
+          window.requestAnimationFrame = originalRaf;
+          return frames;
+        });
+        check(`${tag}: one scroll event schedules one section measuring frame after ${N} switches`, calls <= 1, String(calls));
+        info.push(`${tag} listeners before ${JSON.stringify(base)} after ${N} switches ${JSON.stringify(after)}; frames per scroll event ${calls}`);
+        await lctx.close();
+
+        // 5. Mobile picker: open with #fides-explore-choices; list visibility and aria-expanded agree, and it can be closed and opened again.
+        const pctx = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
+        await pctx.addCookies(COOKIES);
+        await calmCss(pctx);
+        const pp = await pctx.newPage();
+        await pp.goto(`${url(T.slug)}#fides-explore-choices`, { waitUntil: "networkidle" });
+        const pickerState = async () => ({ visible: await pp.locator(".fides-explore__choices").isVisible(), expanded: await pp.locator("[data-fides-explore-change]").first().getAttribute("aria-expanded") });
+        let ps = await pickerState();
+        if (wide) {
+          check(`${tag}: wide: the picker is visible with #fides-explore-choices`, ps.visible);
+        } else {
+          check(`${tag}: #fides-explore-choices opens the picker and aria-expanded is true`, ps.visible && ps.expanded === "true", JSON.stringify(ps));
+          await pp.locator("[data-fides-explore-change]").first().click();
+          ps = await pickerState();
+          check(`${tag}: the Change action closes the picker (hidden, aria-expanded false)`, !ps.visible && ps.expanded === "false", JSON.stringify(ps));
+          await pp.locator("[data-fides-explore-change]").first().click();
+          ps = await pickerState();
+          check(`${tag}: the Change action opens it again (visible, aria-expanded true)`, ps.visible && ps.expanded === "true", JSON.stringify(ps));
+          await pp.locator("[data-fides-explore-change]").first().click();
+          ps = await pickerState();
+          check(`${tag}: and closes it once more`, !ps.visible && ps.expanded === "false", JSON.stringify(ps));
+          // Choosing from an opened picker still works and leaves it folded.
+          await pp.locator("[data-fides-explore-change]").first().click();
+          await pp.locator(`.fides-explore__choice[data-choice="${T.other}"]`).click();
+          await pp.waitForFunction((slug) => document.querySelector("[data-fides-explore]").getAttribute("data-selected") === slug, T.other);
+          ps = await pickerState();
+          check(`${tag}: after choosing the picker is folded and aria-expanded is false`, !ps.visible && ps.expanded === "false", JSON.stringify(ps));
+        }
+        await pctx.close();
+
+        // Without JavaScript: the anchor opens the picker (CSS :target); without the anchor it is folded below 1100px.
+        const njs = await newPage(browser, width, false);
+        await njs.goto(`${url(T.slug)}#fides-explore-choices`, { waitUntil: "load" });
+        check(`${tag}: no JS: #fides-explore-choices shows the picker`, await njs.locator(".fides-explore__choices").isVisible());
+        await njs.goto(url(T.slug), { waitUntil: "load" });
+        check(`${tag}: no JS: without the anchor the picker is ${wide ? "visible" : "folded"}`, (await njs.locator(".fides-explore__choices").isVisible()) === wide);
+        await njs.context().close();
+      }
+    }
+  }
+  console.log("\n" + info.map((l) => `info - ${l}`).join("\n"));
+}
+
 (async () => {
   const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, headless: true });
-  if (process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1") for (const loc of LOCALES) {
+  const only3 = process.env.ONLY_ROUND3 === "1";
+  if (process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1" && !only3) for (const loc of LOCALES) {
     for (const width of WIDTHS) {
       for (const K of KINDS) {
         const tag = `${loc} ${width} ${K.kind}`;
@@ -568,8 +801,9 @@ async function round2Checks(browser) {
       }
     }
   }
-  if (process.env.ONLY_ROUND2 !== "1" && process.env.ONLY_MAIN !== "1") await repairChecks(browser);
-  if (process.env.ONLY_MAIN !== "1") await round2Checks(browser);
+  if (process.env.ONLY_ROUND2 !== "1" && process.env.ONLY_MAIN !== "1" && !only3) await repairChecks(browser);
+  if (process.env.ONLY_MAIN !== "1" && !only3) await round2Checks(browser);
+  if (only3 || (process.env.ONLY_MAIN !== "1" && process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1")) await round3Checks(browser);
   await browser.close();
   console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
   process.exit(failures ? 1 : 0);

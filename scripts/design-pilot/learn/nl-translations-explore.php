@@ -110,6 +110,9 @@ $nl = array(
 $gettext = array(
     array('fides-use-case-catalog', '“%s” is not a theme we know. Choose one of the options below.', '“%s” is geen thema dat we kennen. Kies een van de opties hieronder.'),
     array('fides-use-case-catalog', '“%s” is not a sector we know. Choose one of the options below.', '“%s” is geen sector die we kennen. Kies een van de opties hieronder.'),
+    // Round 3 (2026-11-15): screen reader status message after choosing a theme / sector (aria-live), template with the chosen name
+    array('fides-use-case-catalog', '%s selected', '%s geselecteerd'),
+    array('fides-use-case-catalog', 'No selection', 'Geen selectie'),
     array('fides-use-case-catalog', 'Showing %1$d of %2$d use cases in the catalog.', '%1$d van de %2$d usecases in de catalogus.'),
     array('fides-use-case-catalog', 'One use case in the catalog.', 'Eén usecase in de catalogus.'),
     array('fides-use-case-catalog', '%d use cases in the catalog.', '%d usecases in de catalogus.'),

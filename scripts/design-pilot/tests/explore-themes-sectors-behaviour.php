@@ -197,6 +197,8 @@ foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {
         remove_filter('locale', $locale_filter, PHP_INT_MAX);
         $check(substr_count($nl, '<a class="fides-ds-card__link" lang="en" data-no-translation') === $n, "{$kind}:{$slug} non-English page: every use case title is marked lang=en");
         $check(substr_count($nl, '<p class="fides-ds-card__summary" lang="en" data-no-translation>') === $n, "{$kind}:{$slug} non-English page: every summary is marked lang=en");
+        // Status message templates for the aria-live region come from gettext: English here; the Dutch template is verified in the browser test (TranslatePress gettext rows only apply on a real /nl/ request).
+        $check(strpos($html, 'data-live-selected="%s selected"') !== false && strpos($html, 'data-live-none="No selection"') !== false, "{$kind}:{$slug} English page: live status templates are English");
         $check(strpos($nl, 'data-fides-explore-lang-note>Catalog content is shown in English.') !== false, "{$kind}:{$slug} non-English page: states that catalog content is English");
         $check(strpos($nl, '<span lang="en" data-no-translation>') !== false || ($row['organizations'] + $row['credentials'] + $row['wallets']) === 0, "{$kind}:{$slug} non-English page: record names are marked lang=en");
     }
@@ -357,8 +359,8 @@ $front = static function (string $kind, string $slug) use ($items): array {
 $check($front('sector', 'education') === Fides_Use_Case_Explore_Choice::featured_ids('sector', 'education') && count($front('sector', 'education')) === 4, 'editorial order: Education starts with the four featured use cases, in the order of the data file');
 $edu_titles = array_column(array_slice(Fides_Use_Case_Explore_Choice::matching_items('sector', 'education', $items), 0, 2), 'title');
 $check(strpos((string) $edu_titles[0], 'Verification of Education Credentials') !== false && strpos((string) $edu_titles[1], 'Academic Credential') !== false, 'editorial order: Education leads with diploma / academic credential verification');
-$biz = array_column(array_slice(Fides_Use_Case_Explore_Choice::matching_items('theme', 'business_authority', $items), 0, 2), 'title');
-$check(strpos((string) $biz[0], 'Hypersign KYB') === 0 && strpos((string) $biz[1], 'Mandator') === 0, 'editorial order: Business & Mandates leads with Hypersign KYB and Mandator');
+$biz = array_column(array_slice(Fides_Use_Case_Explore_Choice::matching_items('theme', 'business_authority', $items), 0, 4), 'title');
+$check(strpos((string) $biz[0], 'Business Wallet-Based KYB') === 0 && strpos((string) $biz[1], 'From Document Trust') === 0 && strpos((string) $biz[2], 'Hypersign KYB') === 0 && strpos((string) $biz[3], 'Mandator') === 0, 'editorial order: Business & Mandates leads with Business Wallet-Based KYB, From Document Trust, Hypersign KYB and Mandator');
 $stale = static function ($ids, $k, $s) { return $k === 'sector' && $s === 'education' ? array_merge(array('does-not-exist', 'faster-onboarding-not-matching'), $ids) : $ids; };
 add_filter('fides_explore_choice_featured', $stale, 10, 3);
 $check(Fides_Use_Case_Explore_Choice::matching_items('sector', 'education', $items)[0]['id'] === $front('sector', 'education')[0], 'editorial order: an unknown id in the data is skipped, a stale entry changes nothing');
