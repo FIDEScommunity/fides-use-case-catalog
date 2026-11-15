@@ -157,8 +157,10 @@ refresh.
 
 ## UX round 16 (Paper 16.1 / 16.2)
 
-- Overview: catalog title role `fides-ds-heading-1--catalog` (38/44 from
-  1100 px, not a global H1 change), Add a use case link, intro from the
+- Overview: catalog title role `fides-ds-heading-1--catalog` (32/38 below
+  600 px, 30/36 from 600 px since tiles 1.13.59, not a global H1 change; the H1
+  agreement for overview, detail and editorial titles is in the tiles readme
+  changelog 1.13.59), Add a use case link, intro from the
   enclosed shortcode content, one search row with Ask FIDES, Theme / Sector /
   Country / More filters (Status inside More filters), removable active
   filters, one results counter next to Sort.

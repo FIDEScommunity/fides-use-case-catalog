@@ -1,7 +1,7 @@
 /**
  * Page-header checks against the FIDES page-header styleguide for the five pilot pages:
  * Training & workshops (Learn), Updates, Global Digital Trust Awards, Personal wallets (overview) and the wallet
- * record detail (MATTR Go | Hold). Two H1 roles (standard / compact), intro, context label, breadcrumb and spacing,
+ * record detail (MATTR Go | Hold). Three H1 roles (standard / catalog overview / compact record detail), intro, context label, breadcrumb and spacing,
  * at 1440 / 768 / 390 px in EN and NL. Also: one H1, left alignment, no horizontal scroll, long titles wrap,
  * keyboard focus on breadcrumb and actions, breadcrumb destinations, a header without intro, a record with logo
  * and status, and "Back to results" returning to a filtered search.
@@ -19,7 +19,7 @@ const OUT = path.join(__dirname, "output", "page-headers");
 fs.mkdirSync(OUT, { recursive: true });
 
 // Styleguide values: [size, line-height] per band (<600, 600-1099, >=1100).
-const H1 = { standard: [[36, 40], [44, 48], [48, 52]], compact: [[30, 34], [34, 40], [36, 42]] };
+const H1 = { standard: [[36, 40], [44, 48], [48, 52]], compact: [[30, 34], [34, 40], [36, 42]], catalog: [[32, 38], [30, 36], [30, 36]] };
 const INTRO = [[16, 24], [18, 28], [18, 28]];
 const GAP = { start: [24, 32], crumbs: [16, 24], label: 8, intro: [12, 16], end: [24, 32] };
 const band = (w) => (w < 600 ? 0 : w < 1100 ? 1 : 2);
@@ -29,7 +29,7 @@ const PAGES = {
   learn: { path: "learn/sessions/", role: "standard", crumbs: { EN: ["Learn", "Training & workshops"] }, hasIntro: true },
   updates: { path: "updates/", role: "standard", crumbs: null, hasIntro: true },
   awards: { path: "global-digital-trust-awards/", role: "standard", crumbs: null, hasIntro: true },
-  wallets: { path: "personal-wallets/", role: "compact", crumbs: { EN: ["Ecosystem Explorer", "Personal wallets"] }, hasIntro: true },
+  wallets: { path: "personal-wallets/", role: "catalog", crumbs: { EN: ["Ecosystem Explorer", "Personal wallets"] }, hasIntro: true },
   detail: { path: "wallet/?wallet=mattr-go-hold", role: "compact", crumbs: { EN: ["Ecosystem Explorer", "Personal wallets", "MATTR Go | Hold"] }, hasIntro: false },
 };
 
