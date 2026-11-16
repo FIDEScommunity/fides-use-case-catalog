@@ -80,7 +80,7 @@ run_seed() {
   err="$(mktemp)"
   set +e
   STUB_HOME="$home" STUB_PILOT="$pilot" WP_STUB_LOG="$log" \
-    WP_PATH="$site" WP_CLI="$stub/wp" \
+    WP_PATH="$site" WP_CLI="$stub/wp" WP_PHP= WP_PHP_INI= \
     LEARN_TARGET="$target" \
     LEARN_REPORT_DIR="$(mktemp -d)" \
     bash "$PKG/seed/learn-trial/seed-trial.sh" >"$out" 2>"$err"
@@ -137,7 +137,7 @@ run_rollback() {
   err="$(mktemp)"
   set +e
   STUB_HOME="$home" WP_STUB_LOG="$log" \
-    WP_PATH="$site" WP_CLI="$stub/wp" \
+    WP_PATH="$site" WP_CLI="$stub/wp" WP_PHP= WP_PHP_INI= \
     LEARN_TARGET="$target" \
     LEARN_LEDGER="$ledger" \
     bash "$PKG/seed/learn-trial/rollback-trial.sh" >"$(mktemp)" 2>"$err"
