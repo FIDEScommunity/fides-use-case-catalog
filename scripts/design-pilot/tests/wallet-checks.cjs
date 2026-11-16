@@ -281,8 +281,8 @@ async function overviewMobile(browser, type, width) {
     await page.click("[data-pilot-open]");
     await page.click(`${first} >> .fides-ds-popover__toggle`);
     await page.click(`${first} >> input[type=checkbox] >> nth=0`);
-    const applyText = await page.textContent("[data-pilot-count-inline]");
-    check(`${tag}: apply button reads Show N wallets`, /^Show \d+ wallets?$/.test(applyText.trim()), applyText);
+    const applyText = ((await page.textContent("[data-pilot-apply]")) || "").replace(/\s+/g, " ").trim();
+    check(`${tag}: apply button reads Apply filters, without a count`, applyText === "Apply filters" && !/\d/.test(applyText), applyText);
     await page.click("[data-pilot-apply]");
     await page.waitForTimeout(200);
     check(`${tag}: Apply commits`, page.url() !== before, page.url());

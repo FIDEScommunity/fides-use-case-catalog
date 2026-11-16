@@ -80,12 +80,13 @@ async function overflow(page) {
 }
 
 /**
- * Filter alignment only (1440 and 390, EN and NL): Subject and Format in the bar,
- * Ecosystem and Authority in More filters, one-line fields, Cancel / Apply filters
- * without a count, direct links, chips, and Escape / Cancel discarding a draft.
+ * Filter alignment only (1440, 768 and 390, EN and NL): Subject and Format in the bar
+ * when the bar fits, Ecosystem and Authority in More filters, fields that wrap a
+ * long value instead of cutting it off, Cancel / Apply filters without a count,
+ * direct links, chips, and Escape / Cancel discarding a draft.
  */
 async function credentialFilterAlign(browser, errors) {
-  const widths = [1440, 390];
+  const widths = [1440, 768, 390];
   const locales = ["EN", "NL"];
   const text = {
     EN: { more: "More filters", technical: "Technical filters", apply: "Apply filters", cancel: "Cancel", closeMore: "Close more filters" },
@@ -101,9 +102,29 @@ async function credentialFilterAlign(browser, errors) {
       if (!label || !value) return null;
       const lr = label.getBoundingClientRect();
       const vr = value.getBoundingClientRect();
+      const br = el.getBoundingClientRect();
       const after = getComputedStyle(label, "::after").content || "";
-      return { sameRow: vr.top < lr.bottom - 1 && lr.top < vr.bottom - 1, dot: after.includes("·") };
+      const overflows = (node) => node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 1;
+      const line = parseFloat(getComputedStyle(value).lineHeight) || 20;
+      const probe = document.createElement("span");
+      probe.style.cssText = "position:absolute;left:0;top:0;visibility:hidden;white-space:nowrap;font:inherit";
+      probe.textContent = (value.textContent || "").trim();
+      el.appendChild(probe);
+      const valueNeedsWrap = probe.getBoundingClientRect().width > vr.width + 1;
+      probe.remove();
+      return {
+        sameRow: vr.top < lr.bottom - 1 && lr.top < vr.bottom - 1,
+        dot: after.includes("·"),
+        clipped: overflows(label) || overflows(value),
+        wrapped: vr.height > line * 1.6,
+        valueNeedsWrap,
+        inside: lr.left >= br.left - 1 && Math.ceil(lr.right) <= br.right + 1 && Math.ceil(vr.right) <= br.right + 1 && vr.bottom <= br.bottom + 1,
+      };
     });
+  }
+
+  function readable(fit) {
+    return !!(fit && fit.dot && !fit.clipped && fit.inside && (fit.sameRow || fit.wrapped) && (!fit.valueNeedsWrap || fit.wrapped));
   }
 
   for (const width of widths) {
@@ -131,14 +152,14 @@ async function credentialFilterAlign(browser, errors) {
         return el.closest("#fides-credential-pilot-more") ? "more" : "row";
       }, key);
 
-      if (width >= 600) {
-        check(`${tag}: layout full`, (await page.getAttribute("#fides-credential-catalog-root", "data-pilot-layout")) === "full");
+      const desktop = (await page.getAttribute("#fides-credential-catalog-root", "data-pilot-layout")) === "full";
+      if (desktop) {
         check(`${tag}: the bar shows Subject, Format and More filters`, (await barKeys()).join(",") === "subjectType,vcFormat,more", (await barKeys()).join(","));
         check(`${tag}: Ecosystem and Authority are not in the bar`, (await where("ecosystem")) === "more" && (await where("authority")) === "more" && !(await page.locator(".fides-uc-pilot__filter-row [data-pilot-key='ecosystem']").isVisible()));
         const moreToggle = page.locator("[data-pilot-more-toggle]");
         check(`${tag}: More filters is closed (${T.more})`, (await moreToggle.isVisible()) && (await moreToggle.getAttribute("aria-expanded")) === "false" && (await moreToggle.textContent()).includes(T.more), await moreToggle.textContent());
         const subjectLine = await fieldLine(page.locator("[data-pilot-key='subjectType'] .fides-ds-popover__toggle"));
-        check(`${tag}: Subject keeps label and value on one line`, !!(subjectLine && subjectLine.sameRow && subjectLine.dot), JSON.stringify(subjectLine));
+        check(`${tag}: Subject keeps label and value fully visible`, readable(subjectLine), JSON.stringify(subjectLine));
         await moreToggle.click();
         await page.locator("#fides-credential-pilot-more").waitFor({ state: "visible" });
         const chrome = await page.locator("#fides-credential-pilot-more").evaluate((el) => {
@@ -154,7 +175,7 @@ async function credentialFilterAlign(browser, errors) {
         check(`${tag}: More filters is a white panel with a 2px top line, title and close`, /rgb\(255,\s*255,\s*255\)/.test(chrome.bg) && chrome.top === "2px" && chrome.topColor !== chrome.bg && chrome.title.includes(T.more) && chrome.close, JSON.stringify(chrome));
         const ecoLine = await fieldLine(page.locator("#fides-credential-pilot-more [data-pilot-key='ecosystem'] .fides-ds-popover__toggle"));
         const authLine = await fieldLine(page.locator("#fides-credential-pilot-more [data-pilot-key='authority'] .fides-ds-popover__toggle"));
-        check(`${tag}: Ecosystem and Authority are one-line fields inside More filters`, !!(ecoLine && ecoLine.sameRow && ecoLine.dot && authLine && authLine.sameRow && authLine.dot), JSON.stringify({ ecoLine, authLine }));
+        check(`${tag}: Ecosystem and Authority stay fully visible inside More filters`, readable(ecoLine) && readable(authLine), JSON.stringify({ ecoLine, authLine }));
         check(`${tag}: Sector, Theme and Listing stay in More filters`, (await page.locator("#fides-credential-pilot-more [data-pilot-key='sector']").isVisible()) && (await page.locator("#fides-credential-pilot-more [data-pilot-key='theme']").isVisible()) && (await page.locator("#fides-credential-pilot-more [data-pilot-quick]").isVisible()));
         const tech = page.locator("[data-pilot-tech-toggle]");
         check(`${tag}: Technical filters is closed (${T.technical})`, (await tech.isVisible()) && !(await page.locator("#fides-credential-pilot-technical").isVisible()) && (await tech.textContent()).includes(T.technical));
@@ -194,7 +215,7 @@ async function credentialFilterAlign(browser, errors) {
           .join(","));
         check(`${tag}: the dialog lists Subject, Format, then More filters groups`, order === "subjectType,vcFormat,ecosystem,authority,sector,theme,listing,technical", order);
         const dialogLine = await fieldLine(page.locator("#fides-credential-pilot-filter-panel [data-pilot-key='subjectType'] .fides-ds-popover__toggle"));
-        check(`${tag}: the dialog field keeps label and value on one line`, !!(dialogLine && dialogLine.sameRow && dialogLine.dot), JSON.stringify(dialogLine));
+        check(`${tag}: the dialog field keeps label and value fully visible`, readable(dialogLine), JSON.stringify(dialogLine));
         const apply = page.locator("#fides-credential-pilot-filter-panel [data-pilot-apply]");
         const cancel = page.locator("#fides-credential-pilot-filter-panel [data-pilot-cancel]").last();
         const applyText = ((await apply.textContent()) || "").replace(/\s+/g, " ").trim();
@@ -231,13 +252,39 @@ async function credentialFilterAlign(browser, errors) {
       await open(page, `${listUrl}?ecosystem=eudi_wallet`);
       await overviewReady(page);
       check(`${tag}: direct ?ecosystem= selects Ecosystem`, new URL(page.url()).searchParams.get("ecosystem") === "eudi_wallet" && (await page.locator("[data-pilot-remove-group='ecosystem']").count()) === 1 && (await count(page)) < total);
-      if (width >= 600) check(`${tag}: direct ?ecosystem= marks More filters`, ((await page.locator("[data-pilot-more-badge]").textContent()) || "").trim() === "1");
+      if (desktop) check(`${tag}: direct ?ecosystem= marks More filters`, ((await page.locator("[data-pilot-more-badge]").textContent()) || "").trim() === "1");
       await open(page, `${listUrl}?sector=education`);
       await overviewReady(page);
       check(`${tag}: direct ?sector=education selects Sector`, new URL(page.url()).searchParams.get("sector") === "education" && (await page.locator("[data-pilot-remove-group='sector']").count()) === 1 && (await count(page)) < total);
       await page.locator("[data-pilot-clear-filters]").click();
       await page.waitForFunction(() => !new URL(location.href).searchParams.get("sector"));
       check(`${tag}: Clear filters removes the sector choice`, (await page.locator(".fides-uc-pilot__pill").count()) === 0 && (await count(page)) === total);
+      const longAuthority = "Unique Identification Authority of India";
+      if (desktop) {
+        await page.locator("[data-pilot-more-toggle]").click();
+        await page.locator("#fides-credential-pilot-more [data-pilot-key='authority'] .fides-ds-popover__toggle").click();
+        const authority = page.locator(`[data-pilot-key='authority'] input[value='${longAuthority}']`);
+        check(`${tag}: long authority option present`, (await authority.count()) === 1);
+        if (await authority.count()) {
+          await authority.check();
+          await page.waitForFunction((value) => new URL(location.href).searchParams.get("authority") === value, longAuthority);
+          await page.keyboard.press("Escape");
+          const chosen = await fieldLine(page.locator("[data-pilot-key='authority'] .fides-ds-popover__toggle"));
+          check(`${tag}: a long authority wraps inside the field and stays fully visible`, readable(chosen), JSON.stringify(chosen));
+          check(`${tag}: no horizontal overflow with the long authority`, (await overflow(page)) <= 0);
+        }
+      } else {
+        await page.locator("[data-pilot-open]").click();
+        await page.locator("#fides-credential-pilot-filter-panel.is-open").waitFor();
+        await page.locator("#fides-credential-pilot-filter-panel [data-pilot-key='authority'] .fides-ds-popover__toggle").click();
+        const authority = page.locator(`#fides-credential-pilot-filter-panel [data-pilot-key='authority'] input[value='${longAuthority}']`);
+        if (await authority.count()) {
+          await authority.check();
+          const chosen = await fieldLine(page.locator("#fides-credential-pilot-filter-panel [data-pilot-key='authority'] .fides-ds-popover__toggle"));
+          check(`${tag}: a long authority stays fully visible inside the dialog`, readable(chosen) && new URL(page.url()).searchParams.get("authority") === null, JSON.stringify(chosen));
+          await page.keyboard.press("Escape");
+        }
+      }
       check(`${tag}: nothing was submitted (GET only)`, sent.length === 0, sent.slice(0, 2).join(" "));
       await context.close();
     }
@@ -705,15 +752,23 @@ async function smallTargets(page, selector) {
           await page.waitForTimeout(300);
           const chosen = await page.evaluate(() => {
             const el = document.querySelector("[data-pilot-key='authority'] .fides-ds-popover__toggle");
-            const label = el.querySelector(".fides-ds-popover__label").getBoundingClientRect();
-            const value = el.querySelector(".fides-ds-popover__value").getBoundingClientRect();
+            const label = el.querySelector(".fides-ds-popover__label");
+            const value = el.querySelector(".fides-ds-popover__value");
+            const lr = label.getBoundingClientRect();
+            const vr = value.getBoundingClientRect();
+            const br = el.getBoundingClientRect();
+            const line = parseFloat(getComputedStyle(value).lineHeight) || 20;
+            const overflows = (node) => node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 1;
             return {
-              sameRow: value.top < label.bottom - 1 && label.top < value.bottom - 1,
+              sameRow: vr.top < lr.bottom - 1 && lr.top < vr.bottom - 1,
+              wrapped: vr.height > line * 1.6,
+              clipped: overflows(label) || overflows(value),
+              inside: Math.ceil(vr.right) <= br.right + 1 && vr.bottom <= br.bottom + 1,
               name: el.textContent.replace(/\s+/g, " ").trim(),
               title: el.title || "",
             };
           });
-          check(`${tag}: long authority stays on one line and the button names it`, chosen.sameRow && chosen.name.includes(LONG_AUTHORITY) && chosen.title.includes(LONG_AUTHORITY), JSON.stringify(chosen));
+          check(`${tag}: long authority stays fully visible inside the field and the button names it`, !chosen.clipped && chosen.inside && (chosen.wrapped || chosen.sameRow) && chosen.name.includes(LONG_AUTHORITY) && chosen.title.includes(LONG_AUTHORITY), JSON.stringify(chosen));
           check(`${tag}: long selection keeps the desktop bar`, (await page.getAttribute("#fides-credential-catalog-root", "data-pilot-layout")) !== "compact" && (await overflow(page)) <= 0);
         } else {
           check(`${tag}: long authority option present`, false);

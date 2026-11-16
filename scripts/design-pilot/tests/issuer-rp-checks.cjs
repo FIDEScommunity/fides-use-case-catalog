@@ -97,7 +97,8 @@ async function applyFilter(page, kind) {
   await pop.locator(".fides-ds-popover__toggle").click();
   const label = (await box.locator("xpath=following-sibling::*[contains(@class,'fides-ds-option__label')]").textContent()).trim();
   await box.check();
-  await page.locator(`[data-${kind.prefix}-pilot-form] .fides-uc-pilot__panel-actions button[type=submit]`).click();
+  const apply = page.locator(`[data-${kind.prefix}-pilot-form] .fides-uc-pilot__panel-actions button[type=submit]`);
+  if (await apply.isVisible()) await apply.click();
   await page.waitForFunction((n) => [...new URL(location.href).searchParams.keys()].includes(n), kind.filterName.replace("[]", "") + "[]", { timeout: 15000 });
   await page.waitForSelector(".fides-uc-pilot__count", { timeout: 15000 });
   return label;

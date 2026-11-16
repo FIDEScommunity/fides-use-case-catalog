@@ -7,12 +7,12 @@
  *  - every available filter list is still offered (primary, More filters, Technical filters);
  *  - More filters (desktop): opens and closes (button, close, Escape) with focus back on the button; Technical filters row
  *    is closed by default and opens on its own button;
- *  - several choices at once (a primary list and a More list): Apply shows only while there are unapplied choices outside the
- *    dialog, the URL carries both, one removable chip per choice, the More badge counts the More choices, a chip removes only
+ *  - several choices at once (a primary list and a More list): on the desktop bar each choice applies at once (no Apply button),
+ *    the URL carries both, one removable chip per choice, the More badge counts the More choices, a chip removes only
  *    its own choice, Back returns to the previous filtered view;
  *  - Filters dialog (compact): Cancel discards draft choices and returns focus to the Filters button; Escape closes; Tab stays inside;
- *  - direct filtered links (theme, sector, technical format): chip, badge, checked box, the Technical row opens for a technical choice;
- *  - labels: More filters and the dialog keep label and value on one line (like the bar); the full text stays in the button title and the chip;
+ *  - direct filtered links (theme, sector, technical format, including ?theme= and ?sector=): chip, badge, checked box, the Technical row opens for a technical choice;
+ *  - labels: a long name or value wraps inside the field (it is not cut off); fields in the same row stay the same height; the full text stays in the button title and the chip;
  *  - the phone dialog ends with Cancel and Apply filters, with no result count in the button;
  *  - relying parties: no readiness paragraph above the results; the explanation sits in the Readiness list and, while a readiness
  *    filter is active, as a short note under the chips (operational status stays a separate field);
@@ -24,7 +24,7 @@
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 
 const BASE = process.env.PILOT_URL || "http://localhost:10088";
-const WIDTHS = (process.env.WIDTHS || "1440,390").split(",").map(Number);
+const WIDTHS = (process.env.WIDTHS || "1440,768,390").split(",").map(Number);
 const LOCALES = (process.env.LOCALES || "EN,NL").split(",");
 const ONLY = process.env.KINDS ? process.env.KINDS.split(",") : null;
 
@@ -82,19 +82,53 @@ const optionsOf = (page, group) => page.$$eval(`input[name="${group}[]"]`, (els)
 const popoverOf = (page, group) => page.locator(`input[name="${group}[]"]`).first().locator("xpath=ancestor::*[@data-fides-ds-popover][1]");
 const activeIs = (page, selector) => page.evaluate((s) => { const el = document.querySelector(s); return !!el && document.activeElement === el; }, selector);
 
-/** Label and value share one row, with the bar's " · " separator. */
-async function oneLineField(toggle) {
+/** Label, separator and value stay inside the field. A value that does not fit wraps; it is not clipped. */
+async function fieldFit(toggle) {
   return toggle.evaluate((el) => {
     const label = el.querySelector(".fides-ds-popover__label");
     const value = el.querySelector(".fides-ds-popover__value");
     if (!label || !value) return null;
     const lr = label.getBoundingClientRect();
     const vr = value.getBoundingClientRect();
+    const br = el.getBoundingClientRect();
     const after = getComputedStyle(label, "::after").content || "";
+    const overflows = (node) => node.scrollWidth > node.clientWidth + 1 || node.scrollHeight > node.clientHeight + 1;
+    const line = parseFloat(getComputedStyle(value).lineHeight) || 20;
+    const probe = document.createElement("span");
+    probe.style.cssText = "position:absolute;left:0;top:0;visibility:hidden;white-space:nowrap;font:inherit";
+    probe.textContent = (value.textContent || "").trim();
+    el.appendChild(probe);
+    const valueNeedsWrap = probe.getBoundingClientRect().width > vr.width + 1;
+    probe.remove();
     return {
       sameRow: vr.top < lr.bottom - 1 && lr.top < vr.bottom - 1,
       dot: after.includes("·"),
+      clipped: overflows(label) || overflows(value),
+      wrapped: vr.height > line * 1.6,
+      valueNeedsWrap,
+      inside: lr.left >= br.left - 1 && Math.ceil(lr.right) <= br.right + 1 && Math.ceil(vr.right) <= br.right + 1 && vr.bottom <= br.bottom + 1,
     };
+  });
+}
+
+function readable(fit) {
+  return !!(fit && fit.dot && !fit.clipped && fit.inside && (fit.sameRow || fit.wrapped) && (!fit.valueNeedsWrap || fit.wrapped));
+}
+
+async function sameRowHeight(page) {
+  return page.evaluate(() => {
+    const items = [...document.querySelectorAll(".fides-uc-pilot__more-grid > .fides-uc-pilot__popover, .fides-uc-pilot__filter-row > .fides-uc-pilot__popover, .fides-uc-pilot__filter-row > .fides-uc-pilot__more-toggle, .fides-uc-pilot__technical-grid > .fides-uc-pilot__popover")].filter((el) => el.offsetParent);
+    const groups = [];
+    items.forEach((el) => {
+      const top = el.getBoundingClientRect().top;
+      let row = groups.find((g) => Math.abs(g.top - top) < 8);
+      if (!row) {
+        row = { top, heights: [] };
+        groups.push(row);
+      }
+      row.heights.push(Math.round(el.getBoundingClientRect().height));
+    });
+    return groups.length > 0 && groups.every((g) => g.heights.every((h) => Math.abs(h - g.heights[0]) <= 1));
   });
 }
 
@@ -115,9 +149,17 @@ async function pick(page, kind, w, group, index) {
   await popover.locator(".fides-ds-popover__toggle").click();
   const box = page.locator(`input[name="${group}[]"]`).nth(index);
   const label = ((await box.locator("xpath=following-sibling::*[contains(@class,'fides-ds-option__label')]").textContent()) || "").trim();
-  await box.check();
-  // Close the option list (in-flow in the dialog) so the next list does not shift under the pointer.
-  await page.keyboard.press("Escape");
+  if (compactOf(w)) {
+    await box.check();
+    // Close the option list (in-flow in the dialog) so the next list does not shift under the pointer.
+    await page.keyboard.press("Escape");
+    return label;
+  }
+  await Promise.all([
+    page.waitForURL((url) => keyIn(url.href, `${group}[]`), { timeout: 20000 }),
+    box.check(),
+  ]);
+  await page.waitForSelector(".fides-uc-pilot__count", { timeout: 20000 });
   return label;
 }
 
@@ -182,9 +224,10 @@ async function openDialog(page, kind) {
           });
           const white = /rgb\(255,\s*255,\s*255\)/.test(chrome.bg);
           check(`${tag}: More filters is a white panel with a 2px top line, title and close`, white && chrome.top === "2px" && chrome.topColor !== chrome.bg && chrome.title && chrome.close, JSON.stringify(chrome));
-          const primaryLine = await oneLineField(popoverOf(page, kind.primary[0]).locator(".fides-ds-popover__toggle"));
-          const moreLine = await oneLineField(popoverOf(page, kind.more[0]).locator(".fides-ds-popover__toggle"));
-          check(`${tag}: the bar and More filters keep label and value on one line`, !!(primaryLine && primaryLine.sameRow && primaryLine.dot && moreLine && moreLine.sameRow && moreLine.dot), JSON.stringify({ primaryLine, moreLine }));
+          const primaryLine = await fieldFit(popoverOf(page, kind.primary[0]).locator(".fides-ds-popover__toggle"));
+          const moreLine = await fieldFit(popoverOf(page, kind.more[0]).locator(".fides-ds-popover__toggle"));
+          check(`${tag}: the bar and More filters keep label and value fully visible`, readable(primaryLine) && readable(moreLine), JSON.stringify({ primaryLine, moreLine }));
+          check(`${tag}: fields in the same row are the same height`, await sameRowHeight(page));
           for (const g of kind.more) check(`${tag}: More filters shows "${g}"`, await popoverOf(page, g).isVisible());
           const techGrid = page.locator(`#fides-${kind.prefix}-pilot-technical`);
           const techToggle = page.locator(sel("tech-toggle"));
@@ -220,8 +263,9 @@ async function openDialog(page, kind) {
           const names = [];
           for (const g of [...kind.primary, ...kind.more]) if (await popoverOf(page, g).isVisible()) names.push(g);
           check(`${tag}: the dialog lists every general filter (${names.length} of ${kind.primary.length + kind.more.length})`, names.length === kind.primary.length + kind.more.length);
-          const dialogLine = await oneLineField(popoverOf(page, kind.primary[0]).locator(".fides-ds-popover__toggle"));
-          check(`${tag}: the dialog field keeps label and value on one line`, !!(dialogLine && dialogLine.sameRow && dialogLine.dot), JSON.stringify(dialogLine));
+          const dialogLine = await fieldFit(popoverOf(page, kind.primary[0]).locator(".fides-ds-popover__toggle"));
+          check(`${tag}: the dialog field keeps label and value fully visible`, readable(dialogLine), JSON.stringify(dialogLine));
+          check(`${tag}: dialog fields in the same row are the same height`, await sameRowHeight(page));
           const applyLabel = ((await page.locator(`${sel("panel")} button[type=submit]`).textContent()) || "").replace(/\s+/g, " ").trim();
           const cancelLabel = ((await page.locator(`${sel("panel")} .fides-ds-button--secondary`).first().textContent()) || "").replace(/\s+/g, " ").trim();
           const expectedApply = loc === "NL" ? "Filters toepassen" : "Apply filters";
@@ -244,19 +288,19 @@ async function openDialog(page, kind) {
           check(`${tag}: Cancel closes the dialog, discards the draft and returns focus to the Filters button`, !(await page.locator(`${sel("panel")}.is-open`).count()) && (await page.locator(`input[name="${kind.pickPrimary}[]"]:checked`).count()) === 0 && (await activeIs(page, sel("open"))));
         }
 
-        // 3. Several choices at once: a primary list and a More list, Apply, chips, badge, remove, Back.
+        // 3. Several choices at once: a primary list and a More list. Desktop applies each one; the dialog waits for Apply filters.
         const baseUrl = page.url();
         if (compact) await openDialog(page, kind);
         const primaryLabel = await pick(page, kind, w, kind.pickPrimary, 0);
+        if (!compact) {
+          check(`${tag}: a primary choice applies at once and Apply stays hidden`, keyIn(page.url(), `${kind.pickPrimary}[]`) && !(await page.locator(`${sel("panel")} .fides-uc-pilot__panel-actions`).isVisible()) && (await page.locator(".fides-uc-pilot__pill").count()) === 1, page.url());
+        }
         const moreOptions = await optionsOf(page, kind.pickMore);
         const moreLabel = await pick(page, kind, w, kind.pickMore, 0);
-        if (!compact) {
-          check(`${tag}: Apply appears once a choice is unapplied`, await page.locator(`${sel("panel")} .fides-uc-pilot__panel-actions`).isVisible());
-          const badge = await page.locator(sel("more-badge")).textContent();
-          check(`${tag}: the More filters badge counts the More choice live (${badge})`, badge.trim() === "1", badge);
+        if (compact) {
+          await page.locator(`${sel("form")} .fides-uc-pilot__panel-actions button[type=submit]`).click();
+          await hasParam(page, `${kind.pickMore}[]`);
         }
-        await page.locator(`${sel("form")} .fides-uc-pilot__panel-actions button[type=submit]`).click();
-        await hasParam(page, `${kind.pickMore}[]`);
         await page.waitForSelector(".fides-uc-pilot__count", { timeout: 20000 });
         const bothUrl = page.url();
         check(`${tag}: the URL carries both choices and keeps the language route`, keyIn(bothUrl, `${kind.pickPrimary}[]`) && keyIn(bothUrl, `${kind.pickMore}[]`) && onRoute(bothUrl, loc), bothUrl);
@@ -304,13 +348,22 @@ async function openDialog(page, kind) {
           await openDialog(page, kind);
           check(`${tag}: a technical choice shows the Technical filters row open in the dialog`, await page.locator(`#fides-${kind.prefix}-pilot-technical`).isVisible());
         }
+        const sharedLinks = kind.key === "issuers"
+          ? [["theme", "business_authority"], ["sector", "education"]]
+          : [["sector", "public_sector"]];
+        for (const [group, value] of sharedLinks) {
+          await openList(page, `${listUrl}?${group}=${encodeURIComponent(value)}`);
+          const marked = await page.locator(`input[name="${group}[]"][value="${value}"]`).isChecked().catch(() => false);
+          check(`${tag}: direct link ?${group}=${value} keeps a chip and a checked box`, new URL(page.url()).searchParams.get(group) === value && (await page.locator(".fides-uc-pilot__pill").count()) === 1 && marked, page.url());
+        }
 
         // 5. Labels: the full list name and chosen value stay readable.
         await openList(page, `${listUrl}?${encodeURIComponent(kind.pickMore + "[]")}=${encodeURIComponent(longest.value)}`);
         if (compact) await openDialog(page, kind); else await page.locator(sel("more-toggle")).click();
         const toggle = popoverOf(page, kind.pickMore).locator(".fides-ds-popover__toggle");
-        const chosenLine = await oneLineField(toggle);
-        check(`${tag}: a long chosen value stays on one line with its label (${longest.label.trim()})`, !!(chosenLine && chosenLine.sameRow && chosenLine.dot), JSON.stringify(chosenLine));
+        const chosenLine = await fieldFit(toggle);
+        check(`${tag}: a long chosen value stays fully visible inside the field (${longest.label.trim()})`, readable(chosenLine), JSON.stringify(chosenLine));
+        check(`${tag}: fields in that row stay the same height`, await sameRowHeight(page));
         const title = (await toggle.getAttribute("title")) || "";
         check(`${tag}: the list button title names list and value`, title.includes(longest.label.trim()) && title.includes(":"), title);
         const chipText = ((await page.locator(".fides-uc-pilot__pill").first().textContent()) || "").replace(/\s+/g, " ");

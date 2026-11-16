@@ -3697,11 +3697,19 @@
     </section>`;
   }
 
+  /**
+   * Catalog names stay English. TranslatePress blanks newly inserted text while it
+   * looks up a translation, so the visible label is marked to be left alone.
+   */
+  function pilotCatalogLabelAttr() {
+    return (document.documentElement.lang || "").toLowerCase().startsWith("nl") ? ' lang="en" data-no-translation' : "";
+  }
+
   function renderPilotActivePills() {
     const active = pilotActiveFilters();
     if (!active.length) return "";
     return `<ul class="fides-uc-pilot__pills" aria-label="Active filters">${active
-      .map((pill) => `<li><button type="button" class="fides-uc-pilot__pill" data-pilot-remove-group="${escapeHtml(pill.group)}" data-pilot-remove-value="${escapeHtml(pill.value)}">${escapeHtml(pilotFilterTitle(pill.group))}: ${escapeHtml(pill.label)}<span aria-hidden="true"> ×</span><span class="fides-ds-visually-hidden"> (remove filter)</span></button></li>`)
+      .map((pill) => `<li><button type="button" class="fides-uc-pilot__pill" data-pilot-remove-group="${escapeHtml(pill.group)}" data-pilot-remove-value="${escapeHtml(pill.value)}"><span${pilotCatalogLabelAttr()}>${escapeHtml(pilotFilterTitle(pill.group))}: ${escapeHtml(pill.label)}</span><span aria-hidden="true"> ×</span><span class="fides-ds-visually-hidden"> (remove filter)</span></button></li>`)
       .join("")}</ul><button id="fides-clear" class="fides-ds-text-button fides-uc-pilot__clear" type="button" data-pilot-clear-filters>Clear filters</button>`;
   }
 
@@ -3779,7 +3787,7 @@
               ${renderPilotMore()}
               <div class="fides-uc-pilot__panel-actions">
                 <button type="button" class="fides-ds-button fides-ds-button--secondary" data-pilot-cancel>Cancel</button>
-                <button type="button" class="fides-ds-button" data-pilot-apply>Apply filters <span class="fides-uc-pilot__apply-count">(<span data-pilot-count-inline>${filtered.length}</span>)</span></button>
+                <button type="button" class="fides-ds-button" data-pilot-apply>Apply filters</button>
               </div>
             </div>
           </div>
@@ -3833,8 +3841,6 @@
     const label = pilotCountLabel(filtered.length);
     const count = root.querySelector("[data-pilot-count]");
     if (count) count.textContent = label;
-    const inline = root.querySelector("[data-pilot-count-inline]");
-    if (inline) inline.textContent = String(filtered.length);
     root.querySelectorAll("[data-fides-ds-popover][data-pilot-keys]").forEach((popover) => {
       const keys = String(popover.dataset.pilotKeys || "").split(",").filter(Boolean);
       const summary = popover.querySelector("[data-pilot-summary]");
