@@ -12,7 +12,8 @@
  *    its own choice, Back returns to the previous filtered view;
  *  - Filters dialog (compact): Cancel discards draft choices and returns focus to the Filters button; Escape closes; Tab stays inside;
  *  - direct filtered links (theme, sector, technical format): chip, badge, checked box, the Technical row opens for a technical choice;
- *  - labels: the full list name and chosen value are readable in More filters / the dialog (no clipped text) and in the chip and tooltip;
+ *  - labels: More filters and the dialog keep label and value on one line (like the bar); the full text stays in the button title and the chip;
+ *  - the phone dialog ends with Cancel and Apply filters, with no result count in the button;
  *  - relying parties: no readiness paragraph above the results; the explanation sits in the Readiness list and, while a readiness
  *    filter is active, as a short note under the chips (operational status stays a separate field);
  *  - NL: the new labels are Dutch.
@@ -80,6 +81,22 @@ const compactOf = (w) => w < 600;
 const optionsOf = (page, group) => page.$$eval(`input[name="${group}[]"]`, (els) => els.map((e) => ({ value: e.value, label: (e.parentElement.querySelector(".fides-ds-option__label") || {}).textContent || "" })));
 const popoverOf = (page, group) => page.locator(`input[name="${group}[]"]`).first().locator("xpath=ancestor::*[@data-fides-ds-popover][1]");
 const activeIs = (page, selector) => page.evaluate((s) => { const el = document.querySelector(s); return !!el && document.activeElement === el; }, selector);
+
+/** Label and value share one row, with the bar's " · " separator. */
+async function oneLineField(toggle) {
+  return toggle.evaluate((el) => {
+    const label = el.querySelector(".fides-ds-popover__label");
+    const value = el.querySelector(".fides-ds-popover__value");
+    if (!label || !value) return null;
+    const lr = label.getBoundingClientRect();
+    const vr = value.getBoundingClientRect();
+    const after = getComputedStyle(label, "::after").content || "";
+    return {
+      sameRow: vr.top < lr.bottom - 1 && lr.top < vr.bottom - 1,
+      dot: after.includes("·"),
+    };
+  });
+}
 
 /** Open the list of a group (More filters first when it lives there and is closed) and tick one option. */
 async function pick(page, kind, w, group, index) {
@@ -153,6 +170,21 @@ async function openDialog(page, kind) {
           const moreToggle = page.locator(sel("more-toggle"));
           await moreToggle.click();
           check(`${tag}: More filters opens (aria-expanded, panel visible)`, (await moreToggle.getAttribute("aria-expanded")) === "true" && (await moreSection.isVisible()));
+          const chrome = await moreSection.evaluate((el) => {
+            const s = getComputedStyle(el);
+            return {
+              bg: s.backgroundColor,
+              top: s.borderTopWidth,
+              topColor: s.borderTopColor,
+              title: !!(el.querySelector(".fides-uc-pilot__more-title") && el.querySelector(".fides-uc-pilot__more-title").offsetParent),
+              close: !!(el.querySelector(".fides-uc-pilot__more-close") && el.querySelector(".fides-uc-pilot__more-close").offsetParent),
+            };
+          });
+          const white = /rgb\(255,\s*255,\s*255\)/.test(chrome.bg);
+          check(`${tag}: More filters is a white panel with a 2px top line, title and close`, white && chrome.top === "2px" && chrome.topColor !== chrome.bg && chrome.title && chrome.close, JSON.stringify(chrome));
+          const primaryLine = await oneLineField(popoverOf(page, kind.primary[0]).locator(".fides-ds-popover__toggle"));
+          const moreLine = await oneLineField(popoverOf(page, kind.more[0]).locator(".fides-ds-popover__toggle"));
+          check(`${tag}: the bar and More filters keep label and value on one line`, !!(primaryLine && primaryLine.sameRow && primaryLine.dot && moreLine && moreLine.sameRow && moreLine.dot), JSON.stringify({ primaryLine, moreLine }));
           for (const g of kind.more) check(`${tag}: More filters shows "${g}"`, await popoverOf(page, g).isVisible());
           const techGrid = page.locator(`#fides-${kind.prefix}-pilot-technical`);
           const techToggle = page.locator(sel("tech-toggle"));
@@ -188,6 +220,13 @@ async function openDialog(page, kind) {
           const names = [];
           for (const g of [...kind.primary, ...kind.more]) if (await popoverOf(page, g).isVisible()) names.push(g);
           check(`${tag}: the dialog lists every general filter (${names.length} of ${kind.primary.length + kind.more.length})`, names.length === kind.primary.length + kind.more.length);
+          const dialogLine = await oneLineField(popoverOf(page, kind.primary[0]).locator(".fides-ds-popover__toggle"));
+          check(`${tag}: the dialog field keeps label and value on one line`, !!(dialogLine && dialogLine.sameRow && dialogLine.dot), JSON.stringify(dialogLine));
+          const applyLabel = ((await page.locator(`${sel("panel")} button[type=submit]`).textContent()) || "").replace(/\s+/g, " ").trim();
+          const cancelLabel = ((await page.locator(`${sel("panel")} .fides-ds-button--secondary`).first().textContent()) || "").replace(/\s+/g, " ").trim();
+          const expectedApply = loc === "NL" ? "Filters toepassen" : "Apply filters";
+          const expectedCancel = loc === "NL" ? "Annuleren" : "Cancel";
+          check(`${tag}: the dialog ends with Cancel and Apply filters, without a result count`, cancelLabel === expectedCancel && applyLabel === expectedApply && !/\d/.test(applyLabel), `${cancelLabel} | ${applyLabel}`);
           check(`${tag}: the dialog shows the More filters heading (${T.more})`, ((await page.locator(`#fides-${kind.prefix}-pilot-more-title`).textContent()) || "").includes(T.more));
           check(`${tag}: the dialog is focus-trapped (role=dialog, close button focused)`, (await page.locator(`${sel("panel")}`).getAttribute("role")) === "dialog" && (await page.evaluate(() => document.activeElement && document.activeElement.className.includes("panel-close"))));
           // Tab stays inside: Shift+Tab from the first control wraps to Apply.
@@ -270,8 +309,8 @@ async function openDialog(page, kind) {
         await openList(page, `${listUrl}?${encodeURIComponent(kind.pickMore + "[]")}=${encodeURIComponent(longest.value)}`);
         if (compact) await openDialog(page, kind); else await page.locator(sel("more-toggle")).click();
         const toggle = popoverOf(page, kind.pickMore).locator(".fides-ds-popover__toggle");
-        const clipped = await toggle.evaluate((el) => [...el.querySelectorAll(".fides-ds-popover__label, .fides-ds-popover__value")].filter((n) => n.scrollWidth > n.clientWidth + 1).map((n) => n.className));
-        check(`${tag}: the list name and chosen value are not clipped (${longest.label.trim()})`, clipped.length === 0, clipped.join(","));
+        const chosenLine = await oneLineField(toggle);
+        check(`${tag}: a long chosen value stays on one line with its label (${longest.label.trim()})`, !!(chosenLine && chosenLine.sameRow && chosenLine.dot), JSON.stringify(chosenLine));
         const title = (await toggle.getAttribute("title")) || "";
         check(`${tag}: the list button title names list and value`, title.includes(longest.label.trim()) && title.includes(":"), title);
         const chipText = ((await page.locator(".fides-uc-pilot__pill").first().textContent()) || "").replace(/\s+/g, " ");

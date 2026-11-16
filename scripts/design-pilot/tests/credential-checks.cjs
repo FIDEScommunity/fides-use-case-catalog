@@ -10,7 +10,8 @@
  * list / grid, pager, zero results, old ?credential= deeplinks, Back with
  * filters and focus, More filters (Listing, TS11 Explain dialog with scroll
  * lock, Escape and focus return, Technical filters row), the compact bar per
- * width (full / reduced / compact, one Ecosystem control kept on resize),
+ * width (full / compact; Subject and Format in the bar, Ecosystem and Authority
+ * in More filters, one control kept on resize),
  * Filters dialog (groups, Apply / Cancel, scroll lock, only the body scrolls).
  * Detail: EHIC, EUCC, Open Badge, vLEI and mDL at every width without
  * horizontal overflow; format tabs (click and arrow keys); attributes
@@ -67,6 +68,8 @@ async function overviewReady(page) {
 }
 
 async function count(page) {
+  // On /nl/, TranslatePress clears a just-updated count for a moment, then puts the text back.
+  await page.waitForFunction(() => /\d/.test(document.querySelector("[data-pilot-count]")?.textContent || ""), null, { timeout: 8000 });
   const text = await page.textContent("[data-pilot-count]");
   const match = String(text || "").match(/(\d+)/);
   return match ? Number(match[1]) : -1;
@@ -74,6 +77,171 @@ async function count(page) {
 
 async function overflow(page) {
   return page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+}
+
+/**
+ * Filter alignment only (1440 and 390, EN and NL): Subject and Format in the bar,
+ * Ecosystem and Authority in More filters, one-line fields, Cancel / Apply filters
+ * without a count, direct links, chips, and Escape / Cancel discarding a draft.
+ */
+async function credentialFilterAlign(browser, errors) {
+  const widths = [1440, 390];
+  const locales = ["EN", "NL"];
+  const text = {
+    EN: { more: "More filters", technical: "Technical filters", apply: "Apply filters", cancel: "Cancel", closeMore: "Close more filters" },
+    NL: { more: "Meer filters", technical: "Technische filters", apply: "Filters toepassen", cancel: "Annuleren", closeMore: "Meer filters sluiten" },
+  };
+  const rootFor = (loc) => `${BASE}${loc === "NL" ? "/nl" : ""}/fides-design-pilot/credentials/`;
+  const onRoute = (url, loc) => (loc === "NL" ? new URL(url).pathname.startsWith("/nl/") : !new URL(url).pathname.startsWith("/nl/"));
+
+  async function fieldLine(toggle) {
+    return toggle.evaluate((el) => {
+      const label = el.querySelector(".fides-ds-popover__label");
+      const value = el.querySelector(".fides-ds-popover__value");
+      if (!label || !value) return null;
+      const lr = label.getBoundingClientRect();
+      const vr = value.getBoundingClientRect();
+      const after = getComputedStyle(label, "::after").content || "";
+      return { sameRow: vr.top < lr.bottom - 1 && lr.top < vr.bottom - 1, dot: after.includes("·") };
+    });
+  }
+
+  for (const width of widths) {
+    for (const loc of locales) {
+      const T = text[loc];
+      const tag = `credentials ${loc} @${width}`;
+      const context = await newContext(browser, width);
+      const page = await context.newPage();
+      const sent = [];
+      page.on("request", (r) => { if (!["GET", "HEAD", "OPTIONS"].includes(r.method()) && r.url().startsWith(BASE) && !/trp-ajax\.php/.test(r.url())) sent.push(`${r.method()} ${r.url()}`); });
+      page.on("pageerror", (e) => errors.push(`${tag}: ${e.message}`));
+      const listUrl = rootFor(loc);
+      await open(page, listUrl);
+      await overviewReady(page);
+      const total = await count(page);
+      check(`${tag}: stays on the language route`, onRoute(page.url(), loc), page.url());
+      check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
+
+      const barKeys = () => page.evaluate(() => [...document.querySelectorAll(".fides-uc-pilot__filter-row > *")]
+        .filter((el) => el.offsetParent !== null)
+        .map((el) => el.dataset.pilotKey || (el.hasAttribute("data-pilot-more-toggle") ? "more" : el.tagName)));
+      const where = (key) => page.evaluate((name) => {
+        const el = document.querySelector(`[data-pilot-key="${name}"]`);
+        if (!el) return "missing";
+        return el.closest("#fides-credential-pilot-more") ? "more" : "row";
+      }, key);
+
+      if (width >= 600) {
+        check(`${tag}: layout full`, (await page.getAttribute("#fides-credential-catalog-root", "data-pilot-layout")) === "full");
+        check(`${tag}: the bar shows Subject, Format and More filters`, (await barKeys()).join(",") === "subjectType,vcFormat,more", (await barKeys()).join(","));
+        check(`${tag}: Ecosystem and Authority are not in the bar`, (await where("ecosystem")) === "more" && (await where("authority")) === "more" && !(await page.locator(".fides-uc-pilot__filter-row [data-pilot-key='ecosystem']").isVisible()));
+        const moreToggle = page.locator("[data-pilot-more-toggle]");
+        check(`${tag}: More filters is closed (${T.more})`, (await moreToggle.isVisible()) && (await moreToggle.getAttribute("aria-expanded")) === "false" && (await moreToggle.textContent()).includes(T.more), await moreToggle.textContent());
+        const subjectLine = await fieldLine(page.locator("[data-pilot-key='subjectType'] .fides-ds-popover__toggle"));
+        check(`${tag}: Subject keeps label and value on one line`, !!(subjectLine && subjectLine.sameRow && subjectLine.dot), JSON.stringify(subjectLine));
+        await moreToggle.click();
+        await page.locator("#fides-credential-pilot-more").waitFor({ state: "visible" });
+        const chrome = await page.locator("#fides-credential-pilot-more").evaluate((el) => {
+          const s = getComputedStyle(el);
+          return {
+            bg: s.backgroundColor,
+            top: s.borderTopWidth,
+            topColor: s.borderTopColor,
+            title: (el.querySelector(".fides-uc-pilot__more-title") || {}).textContent || "",
+            close: !!(el.querySelector(".fides-uc-pilot__more-close") && el.querySelector(".fides-uc-pilot__more-close").offsetParent),
+          };
+        });
+        check(`${tag}: More filters is a white panel with a 2px top line, title and close`, /rgb\(255,\s*255,\s*255\)/.test(chrome.bg) && chrome.top === "2px" && chrome.topColor !== chrome.bg && chrome.title.includes(T.more) && chrome.close, JSON.stringify(chrome));
+        const ecoLine = await fieldLine(page.locator("#fides-credential-pilot-more [data-pilot-key='ecosystem'] .fides-ds-popover__toggle"));
+        const authLine = await fieldLine(page.locator("#fides-credential-pilot-more [data-pilot-key='authority'] .fides-ds-popover__toggle"));
+        check(`${tag}: Ecosystem and Authority are one-line fields inside More filters`, !!(ecoLine && ecoLine.sameRow && ecoLine.dot && authLine && authLine.sameRow && authLine.dot), JSON.stringify({ ecoLine, authLine }));
+        check(`${tag}: Sector, Theme and Listing stay in More filters`, (await page.locator("#fides-credential-pilot-more [data-pilot-key='sector']").isVisible()) && (await page.locator("#fides-credential-pilot-more [data-pilot-key='theme']").isVisible()) && (await page.locator("#fides-credential-pilot-more [data-pilot-quick]").isVisible()));
+        const tech = page.locator("[data-pilot-tech-toggle]");
+        check(`${tag}: Technical filters is closed (${T.technical})`, (await tech.isVisible()) && !(await page.locator("#fides-credential-pilot-technical").isVisible()) && (await tech.textContent()).includes(T.technical));
+        await tech.click();
+        check(`${tag}: Technical filters opens Schema type`, (await page.locator("#fides-credential-pilot-technical [data-pilot-key='schemaType']").isVisible()));
+        await tech.click();
+        check(`${tag}: Technical filters closes again`, !(await page.locator("#fides-credential-pilot-technical").isVisible()));
+        await page.locator("[data-pilot-key='ecosystem'] .fides-ds-popover__toggle").click();
+        const eco = page.locator("[data-pilot-key='ecosystem'] input[type='checkbox']").first();
+        const ecoValue = await eco.getAttribute("value");
+        await eco.check();
+        await page.waitForFunction((value) => new URL(location.href).searchParams.get("ecosystem") === value, ecoValue);
+        check(`${tag}: choosing Ecosystem applies it (URL, pill, More badge)`, new URL(page.url()).searchParams.get("ecosystem") === ecoValue && (await page.locator("[data-pilot-remove-group='ecosystem']").count()) === 1 && ((await page.locator("[data-pilot-more-badge]").textContent()) || "").trim() === "1");
+        await page.keyboard.press("Escape");
+        check(`${tag}: Escape closes the option list and leaves More filters open`, (await page.locator("#fides-credential-pilot-more").isVisible()) && (await page.locator("[data-fides-ds-popover].is-open").count()) === 0);
+        await page.keyboard.press("Escape");
+        check(`${tag}: a second Escape closes More filters`, !(await page.locator("#fides-credential-pilot-more").isVisible()));
+        await page.locator("[data-pilot-remove-group='ecosystem']").click();
+        await page.waitForFunction(() => !new URL(location.href).searchParams.get("ecosystem"));
+        check(`${tag}: removing the chip clears Ecosystem`, (await page.locator(".fides-uc-pilot__pill").count()) === 0 && (await count(page)) === total);
+        await page.locator("#fides-search-input").focus();
+        let reached = false;
+        for (let i = 0; i < 8 && !reached; i += 1) {
+          await page.keyboard.press("Tab");
+          reached = await page.evaluate(() => document.activeElement && document.activeElement.hasAttribute("data-pilot-more-toggle"));
+        }
+        check(`${tag}: Tab from search reaches More filters`, reached);
+      } else {
+        check(`${tag}: layout compact`, (await page.getAttribute("#fides-credential-catalog-root", "data-pilot-layout")) === "compact");
+        const opener = page.locator("[data-pilot-open]");
+        check(`${tag}: one Filters button, no More filters button`, (await opener.isVisible()) && !(await page.locator("[data-pilot-more-toggle]").isVisible()));
+        await opener.click();
+        await page.locator("#fides-credential-pilot-filter-panel.is-open").waitFor();
+        const order = await page.evaluate(() => [...document.querySelectorAll("#fides-credential-pilot-filter-panel [data-pilot-key], #fides-credential-pilot-filter-panel [data-pilot-quick], #fides-credential-pilot-filter-panel [data-pilot-tech-toggle]")]
+          .filter((el) => el.offsetParent !== null)
+          .map((el) => el.dataset.pilotKey || (el.hasAttribute("data-pilot-quick") ? "listing" : "technical"))
+          .join(","));
+        check(`${tag}: the dialog lists Subject, Format, then More filters groups`, order === "subjectType,vcFormat,ecosystem,authority,sector,theme,listing,technical", order);
+        const dialogLine = await fieldLine(page.locator("#fides-credential-pilot-filter-panel [data-pilot-key='subjectType'] .fides-ds-popover__toggle"));
+        check(`${tag}: the dialog field keeps label and value on one line`, !!(dialogLine && dialogLine.sameRow && dialogLine.dot), JSON.stringify(dialogLine));
+        const apply = page.locator("#fides-credential-pilot-filter-panel [data-pilot-apply]");
+        const cancel = page.locator("#fides-credential-pilot-filter-panel [data-pilot-cancel]").last();
+        const applyText = ((await apply.textContent()) || "").replace(/\s+/g, " ").trim();
+        const cancelText = ((await cancel.textContent()) || "").replace(/\s+/g, " ").trim();
+        check(`${tag}: Cancel and Apply filters, without a result count`, cancelText === T.cancel && applyText === T.apply && !/\d/.test(applyText), `${cancelText} | ${applyText}`);
+        check(`${tag}: the result count stays on the results line`, /\d/.test((await page.locator("[data-pilot-count]").textContent()) || ""));
+        await page.locator("#fides-credential-pilot-filter-panel [data-pilot-key='vcFormat'] .fides-ds-popover__toggle").click();
+        const format = page.locator("[data-pilot-key='vcFormat'] input[type='checkbox']").first();
+        const formatValue = await format.getAttribute("value");
+        await format.check();
+        check(`${tag}: a dialog choice stays draft`, new URL(page.url()).searchParams.get("format") === null);
+        await page.keyboard.press("Escape");
+        await page.keyboard.press("Escape");
+        check(`${tag}: Escape closes the dialog and discards the draft`, !(await page.locator("#fides-credential-pilot-filter-panel.is-open").count()) && new URL(page.url()).searchParams.get("format") === null && (await page.evaluate(() => document.activeElement && document.activeElement.hasAttribute("data-pilot-open"))));
+        await opener.click();
+        await page.locator("#fides-credential-pilot-filter-panel.is-open").waitFor();
+        await page.locator("#fides-credential-pilot-filter-panel [data-pilot-key='vcFormat'] .fides-ds-popover__toggle").click();
+        await page.locator(`[data-pilot-key='vcFormat'] input[value='${formatValue}']`).check();
+        await page.locator("#fides-credential-pilot-filter-panel [data-pilot-cancel]").filter({ hasText: T.cancel }).click();
+        check(`${tag}: Cancel discards the draft and returns focus to Filters`, new URL(page.url()).searchParams.get("format") === null && (await page.evaluate(() => document.activeElement && document.activeElement.hasAttribute("data-pilot-open"))));
+        await opener.click();
+        await page.locator("#fides-credential-pilot-filter-panel.is-open").waitFor();
+        await page.keyboard.press("Shift+Tab");
+        check(`${tag}: Shift+Tab stays inside the dialog`, await page.evaluate((label) => {
+          const el = document.activeElement;
+          return !!el && !!el.closest(".fides-uc-pilot__filter-panel.is-open") && (el.textContent || "").includes(label);
+        }, T.apply));
+        await page.keyboard.press("Escape");
+      }
+
+      await open(page, `${listUrl}?format=sd_jwt_vc`);
+      await overviewReady(page);
+      check(`${tag}: direct ?format= keeps the route, a chip and a narrower list`, onRoute(page.url(), loc) && new URL(page.url()).searchParams.get("format") === "sd_jwt_vc" && (await page.locator("[data-pilot-remove-group='vcFormat']").count()) === 1 && (await count(page)) < total && (await count(page)) > 0);
+      await open(page, `${listUrl}?ecosystem=eudi_wallet`);
+      await overviewReady(page);
+      check(`${tag}: direct ?ecosystem= selects Ecosystem`, new URL(page.url()).searchParams.get("ecosystem") === "eudi_wallet" && (await page.locator("[data-pilot-remove-group='ecosystem']").count()) === 1 && (await count(page)) < total);
+      if (width >= 600) check(`${tag}: direct ?ecosystem= marks More filters`, ((await page.locator("[data-pilot-more-badge]").textContent()) || "").trim() === "1");
+      await open(page, `${listUrl}?sector=education`);
+      await overviewReady(page);
+      check(`${tag}: direct ?sector=education selects Sector`, new URL(page.url()).searchParams.get("sector") === "education" && (await page.locator("[data-pilot-remove-group='sector']").count()) === 1 && (await count(page)) < total);
+      await page.locator("[data-pilot-clear-filters]").click();
+      await page.waitForFunction(() => !new URL(location.href).searchParams.get("sector"));
+      check(`${tag}: Clear filters removes the sector choice`, (await page.locator(".fides-uc-pilot__pill").count()) === 0 && (await count(page)) === total);
+      check(`${tag}: nothing was submitted (GET only)`, sent.length === 0, sent.slice(0, 2).join(" "));
+      await context.close();
+    }
+  }
 }
 
 async function smallTargets(page, selector) {
@@ -165,8 +333,17 @@ async function smallTargets(page, selector) {
     }
   }
 
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH || undefined });
   const errors = [];
+
+  if (process.env.CREDENTIAL_ONLY === "filters") {
+    await credentialFilterAlign(browser, errors);
+    check("no page errors", errors.length === 0, errors.slice(0, 3).join(" | "));
+    await browser.close();
+    const failed = results.filter((r) => !r.ok).length;
+    console.log(`# pass ${results.length - failed}\n# fail ${failed}`);
+    process.exit(failed ? 1 : 0);
+  }
 
   // ---------- Overview, desktop ----------
   {
@@ -467,9 +644,8 @@ async function smallTargets(page, selector) {
     await context.close();
   }
 
-  // ---------- Overview bar (Paper 20.42): one line while it fits, then Ecosystem in More filters, then the Filters dialog ----------
+  // ---------- Overview bar: Subject and Format beside search; Ecosystem and Authority in More filters ----------
   const LONG_AUTHORITY = "Unique Identification Authority of India";
-  const EXPECTED_LAYOUT = { 1440: "full", 1320: "reduced", 1280: "reduced", 1200: "reduced", 1100: "reduced", 1024: "reduced", 768: "compact", 390: "compact", 320: "compact" };
   for (const width of [1440, 1320, 1280, 1200, 1100, 1024, 768, 390, 320]) {
     const context = await newContext(browser, width);
     const page = await context.newPage();
@@ -500,8 +676,8 @@ async function smallTargets(page, selector) {
     });
     const m = await measure();
     check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
-    check(`${tag}: layout ${EXPECTED_LAYOUT[width]}`, m.layout === EXPECTED_LAYOUT[width], m.layout);
-    check(`${tag}: exactly one Ecosystem control`, m.ecoCount === 1 && m.ecoIn === (m.layout === "reduced" ? "more" : "row"), `${m.ecoCount} in ${m.ecoIn}`);
+    check(`${tag}: layout is full on a wide desktop and compact on a phone`, (width >= 1100 ? m.layout === "full" : width < 600 ? m.layout === "compact" : m.layout === "full" || m.layout === "compact"), m.layout);
+    check(`${tag}: exactly one Ecosystem control, in More filters`, m.ecoCount === 1 && m.ecoIn === "more", `${m.ecoCount} in ${m.ecoIn}`);
     check(`${tag}: no Listing row outside More filters`, !m.listingVisible);
     check(`${tag}: input and Search stay one pair`, m.input && m.submit && Math.abs(m.input.top - m.submit.top) <= 6 && m.submit.left > m.input.left, JSON.stringify([m.input, m.submit]));
     if (m.ask) check(`${tag}: Ask FIDES beside the search label`, Math.abs(m.ask.top + m.ask.height / 2 - (m.label.top + m.label.height / 2)) <= 4 && m.ask.left > m.label.right, JSON.stringify([m.label, m.ask]));
@@ -509,15 +685,17 @@ async function smallTargets(page, selector) {
     if (m.layout !== "compact") {
       const visible = m.controls.filter((c) => c.box);
       const keys = visible.map((c) => c.key).join(",");
-      check(`${tag}: ${m.layout === "full" ? "four lists" : "three lists"} and More filters`, keys === (m.layout === "full" ? "subjectType,vcFormat,ecosystem,authority,more" : "subjectType,vcFormat,authority,more"), keys);
+      check(`${tag}: Subject, Format and More filters`, keys === "subjectType,vcFormat,more", keys);
       check(`${tag}: search, Search and filters on one line`, visible.every((c) => Math.abs(c.box.top + c.box.height / 2 - (m.submit.top + m.submit.height / 2)) <= 3), JSON.stringify(visible.map((c) => c.box.top)));
       check(`${tag}: search input at least 280px`, m.search.width >= 280, String(m.search.width));
-      if (width >= 1440) check(`${tag}: search input about 350-400px on wide desktop`, m.search.width >= 340 && m.search.width <= 420, String(m.search.width));
+      if (width >= 1440) check(`${tag}: search takes the room the two lists leave`, m.search.width >= 280, String(m.search.width));
       check(`${tag}: no Filters dialog button`, !m.toggle);
       check(`${tag}: controls ${minTarget}px or more`, visible.every((c) => c.target.height >= minTarget) && m.submit.height >= minTarget && m.input.height >= minTarget, visible.map((c) => c.target.height).concat(m.submit.height).join("/"));
       if (width >= 1100) check(`${tag}: controls 40px with a fine pointer`, visible.every((c) => c.target.height === 40) && m.submit.height === 40, visible.map((c) => c.target.height).join("/"));
       if ([1440, 1200, 1100].includes(width)) {
-        await page.click("[data-pilot-key='authority'] .fides-ds-popover__toggle");
+        await page.click("[data-pilot-more-toggle]");
+        await page.waitForTimeout(200);
+        await page.click("#fides-credential-pilot-more [data-pilot-key='authority'] .fides-ds-popover__toggle");
         await page.waitForTimeout(200);
         const option = page.locator(`[data-pilot-key='authority'] input[value='${LONG_AUTHORITY}']`);
         if (await option.count()) {
@@ -525,12 +703,18 @@ async function smallTargets(page, selector) {
           await page.waitForTimeout(400);
           await page.keyboard.press("Escape");
           await page.waitForTimeout(300);
-          const after = await measure();
-          const authority = after.controls.find((c) => c.key === "authority");
-          const name = await page.evaluate(() => document.querySelector("[data-pilot-key='authority'] .fides-ds-popover__toggle").textContent.replace(/\s+/g, " ").trim());
-          const tops = new Set(after.controls.filter((c) => c.box).map((c) => c.box.top));
-          check(`${tag}: long selected value truncated visually, full accessible name`, authority.box.width <= 220 && name.includes(LONG_AUTHORITY), `${authority.box.width}px ${name}`);
-          check(`${tag}: long selection keeps one line without overflow`, tops.size === 1 && (await overflow(page)) <= 0 && after.layout !== "compact" && after.search.width >= 280, `${after.layout} ${after.search.width}`);
+          const chosen = await page.evaluate(() => {
+            const el = document.querySelector("[data-pilot-key='authority'] .fides-ds-popover__toggle");
+            const label = el.querySelector(".fides-ds-popover__label").getBoundingClientRect();
+            const value = el.querySelector(".fides-ds-popover__value").getBoundingClientRect();
+            return {
+              sameRow: value.top < label.bottom - 1 && label.top < value.bottom - 1,
+              name: el.textContent.replace(/\s+/g, " ").trim(),
+              title: el.title || "",
+            };
+          });
+          check(`${tag}: long authority stays on one line and the button names it`, chosen.sameRow && chosen.name.includes(LONG_AUTHORITY) && chosen.title.includes(LONG_AUTHORITY), JSON.stringify(chosen));
+          check(`${tag}: long selection keeps the desktop bar`, (await page.getAttribute("#fides-credential-catalog-root", "data-pilot-layout")) !== "compact" && (await overflow(page)) <= 0);
         } else {
           check(`${tag}: long authority option present`, false);
         }
@@ -543,7 +727,7 @@ async function smallTargets(page, selector) {
     await context.close();
   }
 
-  // ---------- Ecosystem keeps one value across resizes (full, reduced, compact) ----------
+  // ---------- Ecosystem keeps one value across resizes (full and compact; it stays in More filters) ----------
   {
     const context = await newContext(browser, 1280);
     const page = await context.newPage();
@@ -565,7 +749,7 @@ async function smallTargets(page, selector) {
     await page.click("[data-pilot-more-toggle]");
     await page.waitForTimeout(200);
     let s = await where();
-    check("ecosystem 1280: first list in More filters", s.layout === "reduced" && s.inMore && (await page.evaluate(() => document.querySelector("[data-pilot-more-grid] > *").dataset.pilotKey)) === "ecosystem", JSON.stringify(s));
+    check("ecosystem 1280: first list in More filters", s.layout === "full" && s.inMore && (await page.evaluate(() => document.querySelector("[data-pilot-more-grid] > *").dataset.pilotKey)) === "ecosystem", JSON.stringify(s));
     await page.click("#fides-credential-pilot-more [data-pilot-key='ecosystem'] .fides-ds-popover__toggle");
     await page.waitForTimeout(200);
     const ecoOption = page.locator("[data-pilot-key='ecosystem'] input[type='checkbox']").first();
@@ -580,15 +764,15 @@ async function smallTargets(page, selector) {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.waitForTimeout(500);
     s = await where();
-    check("ecosystem 1440: back in the bar, same value, no reset", s.layout === "full" && !s.inMore && s.count === 1 && s.checked.join() === ecoValue && page.url() === urlReduced && s.badge !== "1", JSON.stringify(s));
+    check("ecosystem 1440: stays in More filters, same value, no reset", s.layout === "full" && s.inMore && s.count === 1 && s.checked.join() === ecoValue && page.url() === urlReduced && s.badge === "1", JSON.stringify(s));
     await page.setViewportSize({ width: 768, height: 900 });
     await page.waitForTimeout(500);
     s = await where();
-    check("ecosystem 768: compact keeps the value and the pill", s.layout === "compact" && s.count === 1 && s.checked.join() === ecoValue && s.pills === 1 && page.url() === urlReduced, JSON.stringify(s));
+    check("ecosystem 768: the value and the pill stay", s.count === 1 && s.checked.join() === ecoValue && s.pills === 1 && page.url() === urlReduced, JSON.stringify(s));
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.waitForTimeout(500);
     s = await where();
-    check("ecosystem 1280 again: one control in More filters, value kept", s.layout === "reduced" && s.inMore && s.count === 1 && s.checked.join() === ecoValue && (await overflow(page)) <= 0, JSON.stringify(s));
+    check("ecosystem 1280 again: one control in More filters, value kept", s.layout === "full" && s.inMore && s.count === 1 && s.checked.join() === ecoValue && (await overflow(page)) <= 0, JSON.stringify(s));
     await context.close();
   }
 
@@ -647,7 +831,7 @@ async function smallTargets(page, selector) {
       await page.waitForTimeout(200);
       check(`filters ${width}: change stays pending until Apply`, new URL(page.url()).searchParams.get("ts11") === null);
       const applyText = (await apply.textContent()) || "";
-      check(`filters ${width}: Apply shows the pending count`, /Show 19 credential types/.test(applyText), applyText);
+      check(`filters ${width}: Apply filters has no result count`, applyText.replace(/\s+/g, " ").trim() === "Apply filters", applyText);
       await page.click("#fides-credential-pilot-filter-panel [data-pilot-cancel] >> nth=0");
       await page.waitForTimeout(300);
       check(`filters ${width}: Cancel discards and unlocks`, new URL(page.url()).searchParams.get("ts11") === null
@@ -660,7 +844,7 @@ async function smallTargets(page, selector) {
       check(`filters ${width}: Apply commits to the URL`, new URL(page.url()).searchParams.get("ts11") === "1" && (await count(page)) === 19);
       check(`filters ${width}: focus back on Filters`, await page.evaluate(() => document.activeElement && document.activeElement.hasAttribute("data-pilot-open")));
     } else {
-      check(`filters ${width}: inline filters and TS11 flag visible`, (await page.isVisible("[data-pilot-key='vcFormat']")) && (await page.isVisible("[data-pilot-flag='ts11CompliantOnly']")));
+      check(`filters ${width}: Subject and Format stay in the bar`, (await page.isVisible("[data-pilot-key='subjectType']")) && (await page.isVisible("[data-pilot-key='vcFormat']")) && !(await page.locator(".fides-uc-pilot__filter-row [data-pilot-key='ecosystem']").isVisible()));
     }
     await page.waitForFunction(() => {
       const el = document.querySelector("[data-pilot-flag-count='usedByRPsOnly']");
