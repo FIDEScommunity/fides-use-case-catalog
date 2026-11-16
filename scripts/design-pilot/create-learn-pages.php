@@ -345,6 +345,12 @@ foreach ($manifest['pages'] as $page) {
     update_post_meta($id, 'blocksy_post_meta_options', LEARN_LAYOUT_META);
     update_post_meta($id, '_fides_design_pilot', '1');
     update_post_meta($id, LEARN_SEED_META, $full);
+    // Set only for a page this trial install created. An update of an existing page does not get it,
+    // so rollback can tell a new page from one that was already there.
+    $trial_install = trim((string) getenv('LEARN_TRIAL_INSTALL'));
+    if ($action === 'created' && $trial_install !== '') {
+        update_post_meta($id, '_fides_learn_trial_install', sanitize_text_field($trial_install));
+    }
     // The stored state is read back from the database, so later comparisons ignore WordPress normalisation.
     $stored = learn_state_of((int) $id);
     update_post_meta($id, LEARN_HASH_META, learn_hash($stored));

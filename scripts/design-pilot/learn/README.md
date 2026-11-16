@@ -154,7 +154,7 @@ LEARN_FORCE="topics" bash create-learn-pages.sh  # replace one named page explic
 LEARN_BASE=fides-design-pilot/learn bash create-learn-pages.sh   # route base (adjustable)
 ```
 
-`LEARN_IDS` limits a run to those seed ids (`.` is the Learn root). Unset, the whole manifest is seeded, which is what the design pilot uses. A limited list does not write editorial links unless it contains `editorial-links`. The five-page theme trial and its install notes are in `learn-trial/`.
+`LEARN_IDS` limits a run to those seed ids (`.` is the Learn root). Unset, the whole manifest is seeded, which is what the design pilot uses. A limited list does not write editorial links unless it contains `editorial-links`. The theme trial for the existing site (every Learn page except the preview enquiry form) and its install notes are in `learn-trial/`.
 
 - Every seeded page carries `_fides_learn_seed` (the full route), a hash and a copy of
   its seeded state. Marked pages are only updated while their hash still matches.

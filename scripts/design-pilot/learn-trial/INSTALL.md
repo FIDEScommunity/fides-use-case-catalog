@@ -1,141 +1,187 @@
-# Learn-proef op de bestaande site
+# Learn op de bestaande site
 
-Lokale proef met vijf Learn-pagina’s. De designpilot blijft op de blauwe site-shell. Niets hiervan gaat naar staging of productie.
+**Credential en Credential Type ontbreken in de huidige Learn-glossary.** Learn leest alleen de bundel van glossary 1.1.15 (335 termen). Die twee termen staan wel in de gepubliceerde glossary 1.12.2. Deze proef wijzigt de glossary niet. De woorden blijven platte tekst, zonder popup.
 
-De proef draait op de lokale kopie `http://utrecht-demo.local`. Het actieve thema daar is `blocksy-child` (ouder Blocksy). `FIDES-child` staat geïnstalleerd en is niet geactiveerd. WPML is op deze kopie niet geïnstalleerd; er is geen taalwissel aangezet.
+**De trainingsaanvraagknoppen zijn in deze proef verborgen.** Register your interest, Discuss an introduction session, Discuss a workshop, Discuss a partnership, See the services overview en View readiness assessment wijzen naar pagina’s die dit pakket niet aanmaakt. In de themaweergave verdwijnen die knoppen. In de design-shell blijven ze staan.
 
-## Pagina’s
+Volledige Learn-route in de themaweergave: de header en footer van het actieve thema, Engelse inhoud, geen taalwissel. Dezelfde pagina’s blijven later bruikbaar in de design-shell. De designpilot zelf blijft op die shell.
 
-| Pad | Paginatype |
+Dit pakket is bedoeld voor de bestaande site, eerst de lokale kopie `http://utrecht-demo.local` en daarna `https://staging.fides.community`. Het weigert `fides.community`, `www.fides.community` en elke site waarvan het pad `/design-review` of `/fides-design-pilot` is. Er is niets op staging of productie geïnstalleerd. Er is niets gepusht.
+
+## Wat er mee gaat
+
+51 Learn-pagina’s: het overzicht, Topics, alle secties en artikelen, en Training & workshops met de vier aanbiedingen. De URL-structuur is die van de pilot, met basis `/learn/`.
+
+Niet aangemaakt:
+
+| Route | Reden |
 | --- | --- |
-| `/learn/` | overzicht |
-| `/learn/topics/` | Topics |
-| `/learn/topics/the-big-picture/` | sectie |
-| `/learn/topics/the-big-picture/what-is-a-digital-wallet/` | artikel |
-| `/learn/topics/the-big-picture/how-credentials-connect/` | artikel |
+| `/learn/sessions/request/` | Previewformulier. Het verstuurt niets en mag niet als aanvraag live staan. |
+| `/start/` en `/start/receive/` | Explorer-start, geen Learn-pagina. |
+| `/services/` en `/services/wallet-readiness-assessment/` | Diensten, inclusief een tweede previewformulier. |
+| Editorial links op cataloguskaarten | Die optie wijzigt bestaande cataloguspagina’s. Die blijven onaangeroerd. |
 
-Dezelfde template `fides-learn` en dezelfde opgeslagen inhoud. De weergave is een site-instelling:
+`LEARN_FORCE` wordt geweigerd. Een pagina die een redacteur heeft gewijzigd, of een bestaande pagina zonder seedmarkering, wordt overgeslagen.
 
-- `shell` is de standaard in de plugin. De designpilot gebruikt die en is niet gewijzigd (dry-run: 58 pagina’s `unchanged`, live pagina toont de site-shell).
-- `theme` staat alleen aan door `mu-plugins/fides-learn-trial.php`. Dat bestand zit niet op de designpilot.
+## Weergave
 
-Wisselen op de proefkopie: `wp option update fides_learn_trial_chrome shell` en terug met `wp option delete fides_learn_trial_chrome` (de standaard van het mu-plugin is `theme`).
+De template blijft `fides-learn`. De standaard in de plugin is de design-shell. Het mu-plugin zet de themaweergave alleen aan op `utrecht-demo.local` en `staging.fides.community`. Op andere hosts, inclusief productie en de designpilot, laat het de shell en de opgeslagen paden staan.
+
+Wisselen, alleen op die twee hosts: `wp option update fides_learn_trial_chrome shell` en terug met `wp option delete fides_learn_trial_chrome`.
 
 ## Versies
 
-| Onderdeel | Voor | Proef |
+| Onderdeel | Bestaande site | Dit pakket |
 | --- | --- | --- |
-| Tiles | 1.13.32 | 1.13.60 |
+| Tiles | 1.13.32 | 1.13.61 |
 | Glossaryplugin | 1.1.15 | 1.1.15 |
 | Catalogusplugins | ongewijzigd | ongewijzigd |
-| Thema | blocksy-child | blocksy-child |
+| WPML | op staging actief, hier niet aanwezig | niet gewijzigd, niet geactiveerd |
 
-1.13.60 is 1.13.59 plus de chrome-instelling. Zonder filter of constante blijft de shell staan en worden cataloguspaden niet herschreven.
+1.13.61 is 1.13.60 plus twee filters die alleen de themaweergave gebruikt als het mu-plugin ze vult: ontbrekende bestemmingen verbergen, en catalogusquery’s die deze site niet toepast vervangen door een gewone cataloguslink. Zonder die filters, en in de design-shell, blijven de opgeslagen knoppen en de opgeslagen filterlinks staan.
 
-### Tiles 1.13.32 tegenover 1.13.59, buiten Learn
+Buiten Learn verandert een gewone cataloguspagina daardoor niet, behalve een grotere sluitknop op de melding dat catalogusdata verouderd is, en een doorverwijzing van een oud item-id alleen als de data `legacyIds` bevat. De nieuwe glossarypagina blijft uit.
 
-Bestanden die op elk verzoek meeliften:
+Op de lokale kopie waren homepage, glossary, use cases, walletcatalogus, credentialcatalogus, organizations, issuers, business wallets en relying-party websites na deze uitbreiding gelijk aan ervoor. De designpilot-seed meldt 58 pagina’s `unchanged`. `http://localhost:10088/fides-design-pilot/learn/` toont de site-shell.
 
-- `class-fides-catalog-source.php` en `class-fides-catalog-detail-seo.php`: een oud catalogus-id wordt alleen doorgestuurd als de geladen data een `legacyIds`-lijst heeft. Een gewone overzichtspagina zonder item-id verandert daardoor niet.
-- `lib/fides-catalog-ui/fides-catalog-ui.css`: alleen de sluitknop van de melding dat catalogusdata verouderd is (groter aanraakvlak). De melding zelf verschijnt alleen als de catalogusbron te laat antwoordt.
-- De nieuwe design-system-classes registreren shortcodes en templates. Ze schrijven geen header op pagina’s zonder die template. De nieuwe glossarypagina staat uit tot een site haar aanzet.
+## Cataloguspaden
 
-Na het vervangen van 1.13.32 door 1.13.60, en vóór de seed, waren homepage, glossary, use cases, walletcatalogus, credentialcatalogus, organizations, issuers en business wallets byte-voor-byte gelijk aan ervoor (na het weghalen van `?ver=`). Na de seed ook, doordat de proefpagina’s uit de automatische paginalijst in de header blijven.
+Het mu-plugin herschrijft de opgeslagen pilotpaden alleen in de themaweergave.
 
-## Installeren op een lokale kopie
+Lokaal, gecontroleerd op deze kopie:
 
-1. Bewaar de map `wp-content/plugins/fides-community-tools-tiles`. Op deze kopie staat die kopie in `pilot-backup/learn-trial-utrecht-tiles-1.13.32`.
-2. Zet tiles 1.13.60 uit de worktree `fides-community-tools-tiles` ervoor in de plaats. Maak geen symlink naar de designpilot.
-3. Kopieer `learn-trial/mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Pas de cataloguskaart daarin aan als de site andere paden heeft. Op een site met de fides.community-paden:
-
-   | Opgeslagen pad | Bestemming |
-   | --- | --- |
-   | `/personal-wallets/` | `/ecosystem-explorer/personal-wallets/` |
-   | `/business-wallets/` | `/ecosystem-explorer/organizational-wallets/` |
-   | `/credentials/` | `/ecosystem-explorer/credential-catalog/` |
-   | `/overview/` en `/use-case/` | `/ecosystem-explorer/use-cases/` |
-   | `/issuers/` | `/ecosystem-explorer/issuer-catalog/` |
-   | `/relying-parties/` | `/ecosystem-explorer/relying-party-catalog/` |
-   | `/organizations/` | `/organizations/` |
-   | glossary in de Leerbalk | `/community-tools/glossary/` |
-
-4. Dry-run, daarna toepassen. Het script weigert de designpilot, `fides.community`, `www.fides.community` en `staging.fides.community`.
-
-```bash
-bash learn-trial/seed-trial.sh
-LEARN_APPLY=1 bash learn-trial/seed-trial.sh
-```
-
-`LEARN_IDS` is de vijf paden. `LEARN_FORCE` blijft leeg. Editorial links worden niet geschreven. Een tweede run meldt de vijf pagina’s als `unchanged`.
-
-## Terugzetten
-
-1. Verwijder de pagina’s met meta `_fides_learn_seed` (op deze kopie de id’s 1699 tot en met 1703).
-2. Verwijder `wp-content/mu-plugins/fides-learn-trial.php`.
-3. Verwijder de optie `fides_learn_trial_chrome` als die bestaat.
-4. Zet de bewaarde tiles 1.13.32 terug over de pluginmap.
-5. `wp rewrite flush`.
-
-Glossary, thema, catalogusplugins en vertaalinstellingen zijn niet gewijzigd.
-
-## Cataloguslinks op deze kopie
-
-In de themamodus wijst de opgeslagen inhoud naar de pagina’s die hier bestaan:
-
-| Opgeslagen pad | Deze kopie |
+| Opgeslagen pad | Bestemming |
 | --- | --- |
 | `/personal-wallets/` | `/wallet-catalog/` |
 | `/business-wallets/` | `/business-wallets/` |
 | `/credentials/` | `/credential-catalog/` |
-| `/overview/` en `/use-case/?usecase=` | `/use-cases/` en `/use-cases/?usecase=` |
+| `/overview/` en `/use-case/` | `/use-cases/` |
 | `/issuers/` | `/issuer-catalog/` |
-| glossary | `/glossary/` |
+| `/relying-parties/` | `/relying-party-websites/` |
+| `/organizations/` | `/organizations/` |
+| glossary in de leerbalk | `/glossary/` |
 
-In de shellmodus blijven de opgeslagen paden staan (`/personal-wallets/`, `/use-case/?usecase=`). De shellheader wijst naar de designroutes, zoals `/ecosystem-explorer/use-cases/`. Die bestaan op deze kopie niet. De themamodus is de proef; de shellmodus is de controle dat dezelfde pagina’s de designheader kunnen tonen.
+Voor `staging.fides.community` gebruikt hetzelfde bestand de paden van de live site. Die paden geven op `https://fides.community` een 200. Staging zelf antwoordde met 401 en is niet geopend.
 
-Er is hier geen relying-party-cataloguspagina. Deze vijf pagina’s linken daar niet naartoe.
+| Opgeslagen pad | Bestemming |
+| --- | --- |
+| `/personal-wallets/` | `/ecosystem-explorer/personal-wallets/` |
+| `/business-wallets/` | `/ecosystem-explorer/organizational-wallets/` |
+| `/credentials/` | `/ecosystem-explorer/credential-catalog/` |
+| `/overview/` en `/use-case/` | `/ecosystem-explorer/use-cases/` |
+| `/issuers/` | `/ecosystem-explorer/issuer-catalog/` |
+| `/relying-parties/` | `/ecosystem-explorer/relying-party-catalog/` |
+| `/organizations/` | `/organizations/` |
+| glossary | `/community-tools/glossary/` |
 
-Het begrip Credential heeft in glossary 1.1.15 geen entry. In het artikel blijft het gewone tekst. De andere begrippen openen het bestaande dialoog.
+## Filters, kaarten en glossary
 
-## Ontbrekende Learn-bestemmingen
+Een filter telt alleen mee als de selectie én de resultaten kloppen. Dat is nagekeken in de catalogusscripts van deze kopie, dezelfde versies als de live site:
 
-Deze links blijven in de tekst staan. Ze geven 404 tot de rest van Learn wordt geseed.
+| Catalogus | Leest uit de URL |
+| --- | --- |
+| Personal en business wallets | `country`, `profile`, `wallets`, `wallet` |
+| Organizations | `country`, `sector`, `org` |
+| Use cases | `theme`, `usecase` |
+| Credential types | `credential`, `credentials`, `sector`, `theme` |
+| Issuers | `issuer`, `issuers`, `country`, `sector`, `theme` |
+| Relying parties | `rp`, `rps`, `country`, `sector`, `profile`, `theme` |
 
-- `/learn/sessions/`
-- `/learn/sessions/eudi-business-wallets-in-practice/`
-- `/learn/sessions/wallet-introduction/`
-- `/learn/sessions/wallet-readiness-workshop/`
-- `/learn/topics/for-you/`
-- `/learn/topics/for-businesses/`
-- `/learn/topics/for-governments/`
-- `/learn/topics/ecosystem-roles/`
-- `/learn/topics/ecosystem-roles/the-holder/`
-- `/learn/topics/technology/`
-- `/learn/topics/technology/how-do-wallets-and-services-exchange-information/`
-- `/learn/topics/around-the-world/`
-- `/learn/topics/the-big-picture/what-is-a-credential/`
-- `/learn/topics/the-big-picture/formats-and-protocols/`
-- `/learn/topics/the-big-picture/trust-and-interoperability/`
-- `/learn/topics/the-big-picture/european-digital-identity-wallet/`
-- `/learn/topics/the-big-picture/eudi-wallet-and-european-business-wallet/`
-- `/learn/topics/for-businesses/accepting-information-from-a-wallet/`
-- `/learn/topics/for-businesses/issuing-credentials-for-wallets/`
-- `/learn/topics/for-businesses/business-wallets-where-to-start/`
-- `/learn/topics/for-businesses/european-business-wallet/`
+`format`, `issuance`, `presentation`, `role` en `cert` leest geen van deze catalogi. `country` op use cases ook niet.
 
-Het aanvraagformulier is niet geseed.
+In de themaweergave blijft een link staan als de catalogus die query toepast. Dat zijn `?country=` op wallets en organizations, en `?usecase=` op een voorbeeldkaart. De VOG-kaart opent nog steeds die case.
 
-## Later naar het volledige design
+Een query die de catalogus niet toepast wordt een link naar de catalogus zonder die query. Het label wordt algemeen: “Browse personal wallets”, “Browse business wallets”, “Browse credential types”, “Browse use cases” of “Browse organisations”. De zin die een format of protocol als al geselecteerd beschreef, wordt dezelfde algemene verwijzing. De opgeslagen pilotlink blijft in de pagina staan en komt terug in de design-shell.
 
-1. Het mu-plugin weghalen, of `fides_learn_trial_chrome` op `shell` zetten. De vijf pagina’s, de template en de opgeslagen tekst blijven.
-2. De cataloguskaart vervalt dan. De opgeslagen paden (`/personal-wallets/`, `/use-case/`, …) horen bij de designpagina’s. Die pagina’s moeten bestaan voordat de shell de proefvervanging is.
-3. De overige Learn-pagina’s seeden met de gewone seed, dry-run eerst, zonder `LEARN_FORCE`. Pagina’s die een redacteur heeft gewijzigd worden overgeslagen.
-4. Daarna elke interne link controleren. De lijst hierboven is de wachtrij.
+Glossary, niet gewijzigd in deze ronde. Learn leest alleen het meebundelde bestand `data/glossary-aggregated.json`. Op deze kopie is dat de bundel van plugin 1.1.15: 335 termen, zonder **Credential** en zonder **Credential Type**. Wel aanwezig is **Verifiable Credential Type**. De gepubliceerde glossary op GitHub `main` (`glossary-aggregated.json`, versie 1.12.2, 344 termen) heeft beide termen wel, met id `credential` en `credential-type`. De glossarypagina zelf haalt GitHub eerst op en valt daarna terug op de bundel, dus de pagina kan de termen al tonen terwijl een Learn-artikel ze als platte tekst laat staan.
 
-## Getest op 16 november 2026
+Oplossing, later: de bundel van de glossaryplugin gelijk trekken met de gepubliceerde 1.12.2, of Learn dezelfde bron laten lezen als de glossarypagina. Geen nieuwe definitie schrijven. De designpilot gebruikt al een lokale kopie van die 344 termen; die blijft daar.
 
-- Designpilot: `learn-behaviour.php` 116 geslaagd, 0 gefaald. Volledige Learn-seed dry-run: 58× `unchanged`. `http://localhost:10088/fides-design-pilot/learn/` toont de site-shell en niet de themacontainer.
-- Lokale kopie, vóór en na tiles 1.13.60: homepage, glossary, use cases, walletcatalogus, credentialcatalogus, organizations, issuers en business wallets gelijk.
-- Themavariant: de vijf pagina’s 200, Blocksy-header (`ct-header`, `main-container`), geen site-shell, geen taalwissel. Begrippoknoppen en bronnen op de twee artikelen. Use-casekaart wijst naar `/use-cases/?usecase=digital-certificate-of-good-conduct-vog-as-a-verifiable-credential-yjw4BC`.
-- Dezelfde pagina’s in de shell: site-shell, geen themacontainer, cataloguslinks blijven de opgeslagen pilotpaden, geen taalwissel.
-- Tweede seed: vijf pagina’s `unchanged`.
+## Trainingen en contact
+
+De trainingspagina’s blijven staan: overzicht, EUDI & Business Wallets in Practice, Wallet Introduction, Wallet Readiness Workshop en Training partnerships. Er staat geen formulier op die pagina’s, en er is geen formulier toegevoegd dat niets verstuurt.
+
+In de themaweergave verdwijnen de knoppen naar pagina’s die er niet zijn:
+
+- `/learn/sessions/request/` (Register your interest, Discuss an introduction session, Discuss a workshop, Discuss a partnership)
+- `/services/` en `/services/wallet-readiness-assessment/` (See the services overview, View readiness assessment)
+- `/start/receive/` (de gewone link “Receive information from wallets” blijft als tekst staan, zonder link)
+
+Een knop naar een bestaande Learn-pagina, zoals Explore the knowledge topics, blijft. De opgeslagen bestemmingen blijven in de pagina. In de design-shell zijn de knoppen er weer.
+
+Het algemene contactformulier op `https://fides.community/about-fides/contact/` past hier niet: het kiest geen training en geen datum. Op de lokale kopie is er geen zo’n pagina. De footer noemt `info@fides.community`. Dat is geen aanvraagroute.
+
+De dubbele slash naar Ecosystem roles in “Digital wallets and public services” is in de bron hersteld naar `/learn/topics/ecosystem-roles/`.
+
+## Installeren
+
+De scripts gebruiken de `wp` van de server en `WP_PATH`. Ze lezen geen checkoutpad, geen Local-PHP en geen `env.sh`. Zet `wp` op `PATH`, of geef `WP_CLI` (en `WP_PHP` als dat een phar is).
+
+1. Bewaar de huidige tilesmap. Op de lokale kopie is 1.13.32 bewaard buiten git.
+2. Controleer `shasum -a 256 -c SHA256SUMS` in de pakketmap.
+3. Pak `plugins/fides-community-tools-tiles-1.13.61.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
+4. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`.
+5. Laat glossary op 1.1.15. Wijzig geen WPML-instelling en activeer geen taalwissel.
+6. Dry-run. Daarna pas toepassen.
+
+Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.61.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`.
+
+Dry-run, vanaf de uitgepakte pakketmap. Op staging weigert het script tot `LEARN_TARGET=staging` gezet is:
+
+```bash
+WP_PATH=/pad/naar/wordpress bash seed/learn-trial/seed-trial.sh
+WP_PATH=/pad/naar/wordpress LEARN_TARGET=staging bash seed/learn-trial/seed-trial.sh
+```
+
+Toepassen, alleen nadat de dry-run klopt:
+
+```bash
+WP_PATH=/pad/naar/wordpress LEARN_TARGET=staging LEARN_APPLY=1 bash seed/learn-trial/seed-trial.sh
+```
+
+`fides.community` en `www.fides.community` worden geweigerd, ook met `LEARN_TARGET=staging`. Een site onder `/design-review` of `/fides-design-pilot` wordt ook geweigerd.
+
+De dry-run op deze kopie, vóór het aanmaken: 5 `unchanged`, 46 `would-created`, 6 pagina’s buiten de set, geen `skipped-edited` en geen `skipped-unmarked`. Na het aanmaken: 46 `created`, 5 `unchanged`.
+
+Het rapport staat in `seed/learn-trial/reports/` in de pakketmap (of in `LEARN_REPORT_DIR` als die gezet is). Een apply schrijft daarnaast `installs/<host>-<tijdstip>.tsv`. Elke regel daarin is een pagina die déze run heeft aangemaakt: pagina-ID, route, seedmarker `_fides_learn_seed`, installatiemarker `_fides_learn_trial_install` en de hash van de pagina op dat moment. `created-routes.txt` is alleen een routelijst en is geen grond om pagina’s te verwijderen.
+
+Op deze kopie hoort het bestand van de eerdere apply bij de 46 pagina’s die toen nieuw waren. De vijf pagina’s van de eerste proef stonden er al en staan niet in dat bestand: `learn`, `learn/topics`, `learn/topics/the-big-picture`, `learn/topics/the-big-picture/what-is-a-digital-wallet`, `learn/topics/the-big-picture/how-credentials-connect`.
+
+Op staging eerst de dry-run lezen. Een `skipped-edited` of `skipped-unmarked` pagina niet forceren. Die komt ook niet in het installatiebestand. WPML-instellingen blijven zoals ze zijn. Nieuwe pagina’s niet aan een taal koppelen via een WPML-wijziging; controleer in de editor dat ze Engels zijn voordat de route opengaat.
+
+## Terugzetten
+
+Gebruik het installatiebestand van díe installatie. Eerst dry-run:
+
+```bash
+WP_PATH=/pad/naar/wordpress LEARN_LEDGER=/pad/naar/installs/host-tijdstip.tsv bash seed/learn-trial/rollback-trial.sh
+```
+
+Op staging hetzelfde, met `WP_PATH` en `LEARN_TARGET=staging`. Het script weigert `fides.community`, `www.fides.community` en de designpilot.
+
+Een pagina wordt alleen verwijderd als het ID, de route, `_fides_learn_seed`, `_fides_learn_trial_install` én de hash nog gelijk zijn aan de regel. Een pagina die er al was, blijft staan en verschijnt als `kept-existing`. Een pagina die na de installatie is bewerkt, blijft staan en verschijnt als `kept-edited`. Een ID dat niet meer bij deze marker hoort, blijft staan als `kept-marker` of `kept-missing`.
+
+Pas daarna, als de dry-run klopt:
+
+```bash
+WP_PATH=/pad/naar/wordpress LEARN_TARGET=staging LEARN_LEDGER=/pad/naar/installs/host-tijdstip.tsv LEARN_ROLLBACK=1 bash seed/learn-trial/rollback-trial.sh
+```
+
+Daarna het mu-plugin weghalen, de optie `fides_learn_trial_chrome` verwijderen als die bestaat, tiles 1.13.32 terugzetten en `wp rewrite flush`.
+
+Glossary, thema, catalogusplugins en vertaalinstellingen zijn niet gewijzigd.
+
+## Later naar de design-shell
+
+Het mu-plugin weghalen, of de chrome-optie op `shell` zetten. Dezelfde pagina’s gebruiken dan de design-shell, de opgeslagen pilotpaden, de aanvraagknoppen en de gefilterde cataloguslinks. Die paden verwachten de design-catalogi en de diensten- en startroute. Die route daarna seeden, met een dry-run en zonder `LEARN_FORCE`.
+
+## Gecontroleerd op 16 november 2026
+
+- 51 Learn-pagina’s geven 200, met themaheader en zonder site-shell en zonder taalwissel.
+- In de Learn-inhoud van die 51 pagina’s staat geen link meer naar `/learn/sessions/request/`, `/services/`, `/start/receive/`, en geen `format`, `issuance`, `presentation`, `role` of `cert` in een cataloguslink. 86 interne links uit die inhoud geven geen 404.
+- `?country=` blijft staan op wallets en organizations. `?usecase=` blijft staan op voorbeeldkaarten. Een landlink naar use cases is “Browse use cases” zonder `country`.
+- Wallet Readiness Workshop toont alleen “Explore the knowledge topics”. De details blijven een kolom van 320 px naast de tekst. De aanvraagknop en “View readiness assessment” zijn weg.
+- De dubbele slash is weg. De pagina “Digital wallets and public services” is de enige die deze apply heeft bijgewerkt. Dry-run daarvoor: 50 unchanged, 1 would-updated.
+- Terugzet-dry-run op `installs/utrecht-demo.local-20261116-161037.tsv`: 46 would-delete, 5 kept-existing (de eerdere proefpagina’s). Er is niets verwijderd.
+- De designpilot op `http://localhost:10088/fides-design-pilot/learn/` houdt de site-shell. Het format-artikel houdt `format=sd_jwt_vc`. De workshop houdt “Discuss a workshop” en de aanvraaglink. Die seed is niet gedraaid.
+- Glossary is niet gewijzigd. Credential en Credential Type blijven platte tekst in Learn.

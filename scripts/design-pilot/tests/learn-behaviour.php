@@ -172,6 +172,50 @@ remove_filter('fides_ds_learn_chrome', $theme_chrome);
 $check(Fides_DS_Learn::chrome() === 'shell', 'removing the filter returns the design shell');
 $check(Fides_DS_Learn::rewrite_catalog_html('<a href="/personal-wallets/">Browse</a>') === '<a href="/personal-wallets/">Browse</a>', 'shell chrome leaves stored catalog links unchanged');
 
+// A theme site hides missing destinations and unsupported catalog filters only when it asks for that.
+$stored = '<a class="fides-ds-button" href="/learn/sessions/request/?offering=wallet-readiness-workshop">Discuss a workshop <span aria-hidden="true">→</span></a>'
+    . '<a class="fides-ds-button fides-ds-button--secondary" href="/learn/topics/">Explore the knowledge topics <span aria-hidden="true">→</span></a>'
+    . '<p>see <a href="/start/receive/">Receive information from wallets</a>.</p>'
+    . '<p><a href="/services/">See the services overview →</a></p>'
+    . '<li><a href="/organizations/?country=NL">Explore organisations in the <strong>Netherlands</strong></a></li>'
+    . '<li><a href="/use-cases/?country=NL">Explore use cases from the <strong>Netherlands</strong></a></li>'
+    . '<li><a href="/organizations/?role=eidas_trust_service_provider">Browse organisations — filter for <strong>eIDAS Trust Service Provider</strong></a></li>'
+    . '<a href="/use-cases/?usecase=vog">Explore the VOG use case</a>'
+    . '<p>For the two formats named above, the catalogs show what is reported: credential types that report <a href="/credential-catalog/?format=sd_jwt_vc">SD-JWT VC</a> or <a href="/credential-catalog/?format=mdoc">mdoc</a>, and personal wallets that report <a href="/wallet-catalog/?format=sd_jwt_vc">SD-JWT VC</a>.</p>'
+    . '<p>To see which wallets report OpenID4VCI for issuance, explore the <a href="/wallet-catalog/?issuance=OpenID4VCI">personal wallets</a> or the <a href="/business-wallets/?issuance=OpenID4VCI">business wallets</a> in the catalogs.</p>';
+$check(Fides_DS_Learn::adjust_trial_links($stored) === $stored, 'shell chrome keeps request buttons and filtered catalog links');
+add_filter('fides_ds_learn_chrome', $theme_chrome);
+$check(Fides_DS_Learn::adjust_trial_links($stored) === $stored, 'theme chrome without a site list keeps the stored links');
+$unavailable = static function (): array {
+    return array('/learn/sessions/request/', '/services/', '/start/receive/');
+};
+$supported = static function (): array {
+    return array(
+        '/wallet-catalog/'     => array('keys' => array('country', 'profile', 'wallets', 'wallet'), 'label' => 'Browse personal wallets'),
+        '/business-wallets/'   => array('keys' => array('country', 'profile', 'wallets', 'wallet'), 'label' => 'Browse business wallets'),
+        '/credential-catalog/' => array('keys' => array('credential', 'credentials', 'sector', 'theme'), 'label' => 'Browse credential types'),
+        '/use-cases/'          => array('keys' => array('theme', 'usecase'), 'label' => 'Browse use cases'),
+        '/organizations/'      => array('keys' => array('country', 'sector', 'org'), 'label' => 'Browse organisations'),
+    );
+};
+add_filter('fides_ds_learn_unavailable_paths', $unavailable);
+add_filter('fides_ds_learn_supported_filters', $supported);
+$adjusted = Fides_DS_Learn::adjust_trial_links($stored);
+$check(strpos($adjusted, '/learn/sessions/request/') === false && strpos($adjusted, 'Discuss a workshop') === false, 'a request button is removed');
+$check(strpos($adjusted, 'Explore the knowledge topics') !== false, 'a button to an existing Learn page stays');
+$check(strpos($adjusted, 'href="/start/receive/"') === false && strpos($adjusted, 'Receive information from wallets') !== false, 'a prose link to a missing page becomes text');
+$check(strpos($adjusted, '/services/') === false && strpos($adjusted, 'See the services overview') === false, 'a services call to action is removed');
+$check(strpos($adjusted, '/organizations/?country=NL') !== false && strpos($adjusted, 'Netherlands') !== false, 'a country link the organisation catalog applies stays');
+$check(strpos($adjusted, 'usecase=vog') !== false, 'a use-case card link stays');
+$check(strpos($adjusted, '?country=NL">Explore use cases') === false && strpos($adjusted, 'Browse use cases') !== false, 'a use-case country link becomes an unfiltered catalog link');
+$check(strpos($adjusted, 'role=') === false && strpos($adjusted, 'eIDAS Trust Service Provider') === false && substr_count($adjusted, 'Browse organisations') === 1, 'an organisation role link no longer claims a role filter');
+$check(strpos($adjusted, 'format=') === false && strpos($adjusted, 'that report') === false && strpos($adjusted, 'SD-JWT') === false && strpos($adjusted, 'Browse credential types') !== false && strpos($adjusted, 'Browse personal wallets') !== false, 'a format sentence no longer says the catalog is filtered');
+$check(strpos($adjusted, 'issuance=') === false && strpos($adjusted, 'To see which') === false && strpos($adjusted, 'Browse business wallets') !== false, 'a protocol sentence no longer says the wallets are filtered');
+remove_filter('fides_ds_learn_supported_filters', $supported);
+remove_filter('fides_ds_learn_unavailable_paths', $unavailable);
+remove_filter('fides_ds_learn_chrome', $theme_chrome);
+$check(Fides_DS_Learn::adjust_trial_links($stored) === $stored, 'the design shell keeps the original links after the filters are removed');
+
 foreach ($results['fail'] as $message) {
     echo "not ok - {$message}\n";
 }
