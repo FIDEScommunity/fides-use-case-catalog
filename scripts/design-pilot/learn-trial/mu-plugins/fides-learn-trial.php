@@ -139,6 +139,34 @@ add_filter('fides_ds_learn_contact_buttons', static function ($spec): array {
 });
 
 /**
+ * Country above the training offer. The Netherlands shows the open sessions.
+ * Another country shows an empty state. Training partnerships stays visible.
+ *
+ * @param mixed $spec
+ * @return array<string,mixed>
+ */
+add_filter('fides_ds_learn_country_picker', static function ($spec): array {
+    unset($spec);
+    if (fides_learn_trial_profile() === '') {
+        return array();
+    }
+    return array(
+        'default' => 'NL',
+        'options' => array(
+            'NL'    => 'The Netherlands',
+            'BE'    => 'Belgium',
+            'DE'    => 'Germany',
+            'FR'    => 'France',
+            'LU'    => 'Luxembourg',
+            'IE'    => 'Ireland',
+            'ES'    => 'Spain',
+            'IT'    => 'Italy',
+            'OTHER' => 'Other',
+        ),
+    );
+});
+
+/**
  * Query keys the existing catalogs actually apply. A link whose query is not in
  * this list is shown as a plain catalog link. ?usecase= and ?country= stay where
  * the catalog reads them.

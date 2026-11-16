@@ -4,6 +4,8 @@
 
 **De trainings- en workshopknoppen wijzen in de themaweergave naar `/about-fides/contact/`.** De tekst hangt van de pagina af: “Contact us about this training”, “Contact us about this introduction session”, “Contact us about this workshop” of “Contact us about this partnership”. De knop neemt geen training en geen datum mee. De opgeslagen aanvraaglink blijft in de pagina voor de design-shell. See the services overview en View readiness assessment blijven verborgen.
 
+**Training & workshops vraagt “Where would you like to attend?”.** The Netherlands is standaard en toont het bestaande aanbod. Een ander land verbergt dat lokale aanbod en toont “No scheduled trainings in {land} yet”, met “Contact us” naar `/about-fides/contact/`. Bij Other is de landnaam “your country”. Training partnerships blijft bij elke keuze zichtbaar. De design-shell houdt de opgeslagen intro en het volledige aanbod.
+
 Volledige Learn-route in de themaweergave: de header en footer van het actieve thema, Engelse inhoud, geen taalwissel. Dezelfde pagina’s blijven later bruikbaar in de design-shell. De designpilot zelf blijft op die shell.
 
 Dit pakket is bedoeld voor de bestaande site, eerst de lokale kopie `http://utrecht-demo.local` en daarna `https://staging.fides.community`. Het weigert `fides.community`, `www.fides.community` en elke site waarvan het pad `/design-review` of `/fides-design-pilot` is. Er is niets op staging of productie geïnstalleerd. Er is niets gepusht.
@@ -33,12 +35,12 @@ Wisselen, alleen op die twee hosts: `wp option update fides_learn_trial_chrome s
 
 | Onderdeel | Bestaande site | Dit pakket |
 | --- | --- | --- |
-| Tiles | 1.13.32 | 1.13.62 |
+| Tiles | 1.13.32 | 1.13.63 |
 | Glossaryplugin | 1.1.15 | 1.1.15 |
 | Catalogusplugins | ongewijzigd | ongewijzigd |
 | WPML | op staging actief, hier niet aanwezig | niet gewijzigd, niet geactiveerd |
 
-1.13.62 laat de themaweergave een trainings- of workshopknop naar `/about-fides/contact/` zetten wanneer het mu-plugin `fides_ds_learn_contact_buttons` vult. Zonder dat filter, en in de design-shell, blijft de opgeslagen aanvraagknop staan. 1.13.61 verbergt ontbrekende bestemmingen en vervangt catalogusquery’s die deze site niet toepast, alleen als het mu-plugin die filters vult.
+1.13.63 zet op de trainingspagina de landkeuze uit Paper 24.28 en 24.27, alleen wanneer het mu-plugin `fides_ds_learn_country_picker` vult. 1.13.62 laat de themaweergave een trainings- of workshopknop naar `/about-fides/contact/` zetten wanneer het mu-plugin `fides_ds_learn_contact_buttons` vult. Zonder die filters, en in de design-shell, blijft de opgeslagen aanvraagknop en de opgeslagen intro staan. 1.13.61 verbergt ontbrekende bestemmingen en vervangt catalogusquery’s die deze site niet toepast, alleen als het mu-plugin die filters vult.
 
 Buiten Learn verandert een gewone cataloguspagina daardoor niet, behalve een grotere sluitknop op de melding dat catalogusdata verouderd is, en een doorverwijzing van een oud item-id alleen als de data `legacyIds` bevat. De nieuwe glossarypagina blijft uit.
 
@@ -115,6 +117,8 @@ In de themaweergave wordt een knop naar `/learn/sessions/request/` zo:
 
 De query `offering` en `date` gaat niet mee. Een afsluiting die om een registratie of een datum vraagt, toont in de themaweergave dezelfde contacttekst en de zin “Send a message. This does not register you and it does not reserve a date.”
 
+Op het overzicht staat in de themaweergave de intro “Explore training and workshops on digital wallets and credentials, for individuals and teams.” Daaronder de landkeuze, standaard The Netherlands. België, Duitsland, Frankrijk, Luxemburg, Ierland, Spanje, Italië en Other blijven de keuzes. Bij The Netherlands blijven de drie aanbiedingen, Webinars & roundtables, Architecture assessment, Use case and business case en Training partnerships staan. Bij een ander land verdwijnt dat lokale aanbod. In de plaats komt “No scheduled trainings in Germany yet” (of de gekozen landnaam) en “Interested in a session in Germany? Contact us to discuss the options.” De link “Contact us” gaat naar `/about-fides/contact/`. Bij Other luidt de melding “your country”. Training partnerships blijft daaronder staan en vervangt die melding niet. De vier datums op de EUDI-pagina blijven links naar `/about-fides/contact/`, zonder datum in de URL.
+
 Deze knoppen blijven verborgen, omdat die pagina’s niet in deze proef zitten:
 
 - `/services/` en `/services/wallet-readiness-assessment/` (See the services overview, View readiness assessment)
@@ -130,12 +134,12 @@ De scripts gebruiken de `wp` van de server en `WP_PATH`. Ze lezen geen checkoutp
 
 1. Bewaar de huidige tilesmap. Op de lokale kopie is 1.13.32 bewaard buiten git.
 2. Controleer `shasum -a 256 -c SHA256SUMS` in de pakketmap.
-3. Pak `plugins/fides-community-tools-tiles-1.13.62.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
+3. Pak `plugins/fides-community-tools-tiles-1.13.63.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
 4. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`.
 5. Laat glossary op 1.1.15. Wijzig geen WPML-instelling en activeer geen taalwissel.
 6. Dry-run. Daarna pas toepassen.
 
-Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.62.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`.
+Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.63.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`.
 
 Dry-run, vanaf de uitgepakte pakketmap. Op staging weigert het script tot `LEARN_TARGET=staging` gezet is:
 
@@ -192,7 +196,8 @@ Het mu-plugin weghalen, of de chrome-optie op `shell` zetten. Dezelfde pagina’
 - In de Learn-inhoud van die 51 pagina’s staat geen link meer naar `/learn/sessions/request/`, `/services/`, `/start/receive/`, en geen `format`, `issuance`, `presentation`, `role` of `cert` in een cataloguslink. 86 interne links uit die inhoud geven geen 404.
 - `?country=` blijft staan op wallets en organizations. `?usecase=` blijft staan op voorbeeldkaarten. Een landlink naar use cases is “Browse use cases” zonder `country`.
 - Wallet Readiness Workshop toont “Contact us about this workshop” naar `/about-fides/contact/`, naast “Explore the knowledge topics”. De details blijven een kolom van 320 px. “View readiness assessment” blijft weg.
-- EUDI & Business Wallets in Practice toont “Contact us about this training” naar `/about-fides/contact/`. Op utrecht-demo.local geeft dat pad 404; het formulier is niet verstuurd. Op staging is dit het pad van de bestaande contactpagina.
+- EUDI & Business Wallets in Practice toont “Contact us about this training” naar `/about-fides/contact/`. De vier datums linken naar hetzelfde pad, zonder datum in de URL. Op utrecht-demo.local geeft dat pad 404; het formulier is niet verstuurd. Op staging is dit het pad van de bestaande contactpagina.
+- Training & workshops opent op The Netherlands met het bestaande aanbod. Germany en Other verbergen dat aanbod, tonen “No scheduled trainings in Germany yet” of “No scheduled trainings in your country yet”, en houden Training partnerships zichtbaar. “Contact us” gaat naar `/about-fides/contact/`. De designpilot houdt “Join an open training in Utrecht” en heeft geen landkeuze.
 - De dubbele slash is weg. De pagina “Digital wallets and public services” is de enige die deze apply heeft bijgewerkt. Dry-run daarvoor: 50 unchanged, 1 would-updated.
 - Terugzet-dry-run op `installs/utrecht-demo.local-20261116-161037.tsv`: 46 would-delete, 5 kept-existing (de eerdere proefpagina’s). Er is niets verwijderd.
 - De designpilot op `http://localhost:10088/fides-design-pilot/learn/` houdt de site-shell. Het format-artikel houdt `format=sd_jwt_vc`. De workshop houdt “Discuss a workshop” en de aanvraaglink. Die seed is niet gedraaid.

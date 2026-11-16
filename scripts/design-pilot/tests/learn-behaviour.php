@@ -237,6 +237,47 @@ remove_filter('fides_ds_learn_unavailable_paths', $unavailable);
 remove_filter('fides_ds_learn_chrome', $theme_chrome);
 $check(Fides_DS_Learn::adjust_trial_links($stored) === $stored, 'the design shell keeps the original links after the filters are removed');
 
+$training = get_page_by_path('fides-design-pilot/learn/sessions/eudi-business-wallets-in-practice', OBJECT, 'page');
+$overview = get_page_by_path('fides-design-pilot/learn/sessions', OBJECT, 'page');
+$country = static function (): array {
+    return array(
+        'default' => 'NL',
+        'options' => array('NL' => 'The Netherlands', 'DE' => 'Germany', 'OTHER' => 'Other'),
+    );
+};
+if ($training) {
+    $shell_dates = Fides_DS_Learn::render_page((int) $training->ID);
+    $check(strpos($shell_dates, 'date=') !== false && strpos($shell_dates, 'request') !== false, 'shell chrome keeps a date link to the enquiry');
+    add_filter('fides_ds_learn_chrome', $theme_chrome);
+    add_filter('fides_ds_learn_contact_buttons', $contact);
+    $theme_dates = Fides_DS_Learn::render_page((int) $training->ID);
+    $check(strpos($theme_dates, 'href="/about-fides/contact/"') !== false && strpos($theme_dates, 'Thursday 10 December 2026') !== false, 'a training date links to the contact page');
+    $check(strpos($theme_dates, 'date=') === false && strpos($theme_dates, 'Register interest') === false, 'a training date does not carry a date or a registration label');
+    add_filter('fides_ds_learn_country_picker', $country);
+    $offering = Fides_DS_Learn::render_page((int) $training->ID);
+    $check(strpos($offering, 'fides-learn-country') === false && substr_count($offering, 'Thursday') === 4 && strpos($offering, 'href="/about-fides/contact/"') !== false, 'an offering page keeps its date links and has no country selector');
+    remove_filter('fides_ds_learn_country_picker', $country);
+    remove_filter('fides_ds_learn_contact_buttons', $contact);
+    remove_filter('fides_ds_learn_chrome', $theme_chrome);
+}
+if ($overview) {
+    $shell_overview = Fides_DS_Learn::render_page((int) $overview->ID);
+    $check(strpos($shell_overview, 'Join an open training in Utrecht') !== false && strpos($shell_overview, 'fides-learn-country') === false, 'shell chrome keeps the stored training intro and has no country selector');
+    add_filter('fides_ds_learn_chrome', $theme_chrome);
+    add_filter('fides_ds_learn_contact_buttons', $contact);
+    add_filter('fides_ds_learn_country_picker', $country);
+    $theme_overview = Fides_DS_Learn::render_page((int) $overview->ID);
+    $check(strpos($theme_overview, 'Explore training and workshops on digital wallets and credentials, for individuals and teams.') !== false && strpos($theme_overview, 'Join an open training in Utrecht') === false, 'theme chrome uses the training intro from the country frames');
+    $check(strpos($theme_overview, 'Where would you like to attend?') !== false && strpos($theme_overview, 'selected') !== false && strpos($theme_overview, '>The Netherlands<') !== false, 'the country selector defaults to the Netherlands');
+    $check(strpos($theme_overview, 'No scheduled trainings in %s yet') !== false && strpos($theme_overview, 'your country') !== false && strpos($theme_overview, '>Contact us <span') !== false && strpos($theme_overview, 'href="/about-fides/contact/"') !== false, 'another country can show the empty-state contact link');
+    $empty_at = strpos($theme_overview, 'data-fides-learn-country-empty');
+    $partners_at = strpos($theme_overview, 'Training partnerships');
+    $check($empty_at !== false && $partners_at !== false && $empty_at < $partners_at && strpos($theme_overview, 'data-fides-learn-region="nl"') !== false && strpos($theme_overview, 'data-fides-learn-region="partners"') !== false, 'the empty state sits above the partnership block and the Netherlands offer stays in the page');
+    remove_filter('fides_ds_learn_country_picker', $country);
+    remove_filter('fides_ds_learn_contact_buttons', $contact);
+    remove_filter('fides_ds_learn_chrome', $theme_chrome);
+}
+
 foreach ($results['fail'] as $message) {
     echo "not ok - {$message}\n";
 }
