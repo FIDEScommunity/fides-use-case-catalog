@@ -139,7 +139,7 @@ Toepassen, alleen nadat de dry-run klopt:
 WP_PATH=/pad/naar/wordpress LEARN_TARGET=staging LEARN_APPLY=1 bash seed/learn-trial/seed-trial.sh
 ```
 
-`fides.community` en `www.fides.community` worden geweigerd, ook met `LEARN_TARGET=staging`. Een site onder `/design-review` of `/fides-design-pilot` wordt ook geweigerd.
+`fides.community` en `www.fides.community` worden geweigerd, ook met `LEARN_TARGET=staging`. Een site onder `/design-review` of `/fides-design-pilot` wordt ook geweigerd, net als een site waarin `FIDES_DESIGN_PILOT` aan staat.
 
 De dry-run op deze kopie, vóór het aanmaken: 5 `unchanged`, 46 `would-created`, 6 pagina’s buiten de set, geen `skipped-edited` en geen `skipped-unmarked`. Na het aanmaken: 46 `created`, 5 `unchanged`.
 

@@ -32,6 +32,7 @@ trial_wp() {
 HOME_URL="$(trial_wp option get home)"
 HOST="$(printf '%s' "$HOME_URL" | sed -E 's#^[a-z]+://([^/:]+).*#\1#' | tr '[:upper:]' '[:lower:]')"
 HOME_PATH="$(printf '%s' "$HOME_URL" | sed -E 's#^[a-z]+://[^/]+##' | tr '[:upper:]' '[:lower:]')"
+HOME_PATH="${HOME_PATH%/}"
 case "$HOME_PATH" in
   /design-review|/design-review/*|/fides-design-pilot|/fides-design-pilot/*)
     echo "Refusing: ${HOME_URL} is a design-pilot site." >&2
@@ -56,6 +57,12 @@ case "$HOST" in
     fi
     ;;
 esac
+
+pilot_flag="$(trial_wp eval 'echo defined("FIDES_DESIGN_PILOT") && FIDES_DESIGN_PILOT ? "yes" : "no";' | tr -d '[:space:]')"
+if [[ "$pilot_flag" == "yes" ]]; then
+  echo "Refusing: ${HOME_URL} is the design pilot (FIDES_DESIGN_PILOT)." >&2
+  exit 1
+fi
 
 export LEARN_LEDGER="$LEDGER"
 echo "Learn trial rollback on ${HOME_URL}"

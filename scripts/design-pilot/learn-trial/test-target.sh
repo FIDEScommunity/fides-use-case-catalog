@@ -44,10 +44,18 @@ site="$(mktemp -d)"
 echo '<?php // target-guard fixture' > "$site/wp-config.php"
 cat > "$stub/wp" <<'EOF'
 #!/bin/sh
-shift 2
+if [ "$1" = "--path" ]; then
+  shift 2
+elif [ "${1#--path=}" != "$1" ]; then
+  shift
+fi
 printf '%s\n' "$*" >> "$WP_STUB_LOG"
 if [ "$1" = "option" ]; then
   printf '%s\n' "$STUB_HOME"
+  exit 0
+fi
+if [ "$1" = "eval" ]; then
+  printf '%s\n' "${STUB_PILOT:-no}"
   exit 0
 fi
 if [ "$1" = "eval-file" ]; then
@@ -62,16 +70,17 @@ chmod +x "$stub/wp"
 
 run_seed() {
   local home="$1"
-  shift
+  local target="${2:-}"
+  local pilot="${3:-no}"
   local log out err
   log="$(mktemp)"
   out="$(mktemp)"
   err="$(mktemp)"
   set +e
-  STUB_HOME="$home" WP_STUB_LOG="$log" \
+  STUB_HOME="$home" STUB_PILOT="$pilot" WP_STUB_LOG="$log" \
     WP_PATH="$site" WP_CLI="$stub/wp" \
+    LEARN_TARGET="$target" \
     LEARN_REPORT_DIR="$(mktemp -d)" \
-    "$@" \
     bash "$PKG/seed/learn-trial/seed-trial.sh" >"$out" 2>"$err"
   local code=$?
   set -e
@@ -96,16 +105,18 @@ expect_refuse() {
 
 run_seed "https://fides.community"
 expect_refuse "production host refused"
-run_seed "https://www.fides.community" LEARN_TARGET=staging
+run_seed "https://www.fides.community" staging
 expect_refuse "www production refused even with LEARN_TARGET=staging"
 run_seed "https://staging.fides.community"
 expect_refuse "staging refused without LEARN_TARGET=staging"
-run_seed "https://staging.fides.community/design-review/" LEARN_TARGET=staging
+run_seed "https://staging.fides.community/design-review/" staging
 expect_refuse "design-review path refused"
-run_seed "https://staging.fides.community/fides-design-pilot/" LEARN_TARGET=staging
+run_seed "https://staging.fides.community/fides-design-pilot/" staging
 expect_refuse "design-pilot path refused"
+run_seed "http://localhost:10088" "" yes
+expect_refuse "design pilot constant refused"
 
-run_seed "https://staging.fides.community" LEARN_TARGET=staging
+run_seed "https://staging.fides.community" staging
 if [[ "$RUN_CODE" -eq 0 && "$RUN_EVAL" -eq 1 ]] && printf '%s' "$RUN_OUT" | grep -q 'mode: dry-run'; then
   ok "staging dry-run passes the host gate and does not apply"
 else
@@ -118,22 +129,22 @@ ledger="$(mktemp)"
 printf 'host\texample\ninstall\ttest\n' > "$ledger"
 run_rollback() {
   local home="$1"
-  shift
+  local target="${2:-}"
   local log err
   log="$(mktemp)"
   err="$(mktemp)"
   set +e
   STUB_HOME="$home" WP_STUB_LOG="$log" \
     WP_PATH="$site" WP_CLI="$stub/wp" \
+    LEARN_TARGET="$target" \
     LEARN_LEDGER="$ledger" \
-    "$@" \
     bash "$PKG/seed/learn-trial/rollback-trial.sh" >"$(mktemp)" 2>"$err"
   RUN_CODE=$?
   set -e
   RUN_ERR="$(cat "$err")"
   if grep -q REACHED_EVAL "$log"; then RUN_EVAL=1; else RUN_EVAL=0; fi
 }
-run_rollback "https://fides.community" LEARN_TARGET=staging
+run_rollback "https://fides.community" staging
 expect_refuse "rollback refuses production"
 run_rollback "https://www.fides.community"
 expect_refuse "rollback refuses www"
