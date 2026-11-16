@@ -2,7 +2,7 @@
 
 **Credential en Credential Type ontbreken in de huidige Learn-glossary.** Learn leest alleen de bundel van glossary 1.1.15 (335 termen). Die twee termen staan wel in de gepubliceerde glossary 1.12.2. Deze proef wijzigt de glossary niet. De woorden blijven platte tekst, zonder popup.
 
-**De trainingsaanvraagknoppen zijn in deze proef verborgen.** Register your interest, Discuss an introduction session, Discuss a workshop, Discuss a partnership, See the services overview en View readiness assessment wijzen naar pagina’s die dit pakket niet aanmaakt. In de themaweergave verdwijnen die knoppen. In de design-shell blijven ze staan.
+**De trainingsaanvraagknoppen zijn in deze proef verborgen.** De productiekopie heeft geen werkende contactpagina, dus die knoppen wijzen daar niet naartoe. Register your interest, Discuss an introduction session, Discuss a workshop, Discuss a partnership, See the services overview en View readiness assessment blijven weg in de themaweergave. In de opgeslagen inhoud en in de design-shell blijven de oorspronkelijke aanvraaglinks staan.
 
 Volledige Learn-route in de themaweergave: de header en footer van het actieve thema, Engelse inhoud, geen taalwissel. Dezelfde pagina’s blijven later bruikbaar in de design-shell. De designpilot zelf blijft op die shell.
 
@@ -101,15 +101,24 @@ Oplossing, later: de bundel van de glossaryplugin gelijk trekken met de gepublic
 
 De trainingspagina’s blijven staan: overzicht, EUDI & Business Wallets in Practice, Wallet Introduction, Wallet Readiness Workshop en Training partnerships. Er staat geen formulier op die pagina’s, en er is geen formulier toegevoegd dat niets verstuurt.
 
+Gecontroleerd op de productiekopie `http://utrecht-demo.local` op 16 november 2026:
+
+- `/contact/`, `/contact-us/`, `/about-fides/` en `/about-fides/contact/` geven 404.
+- Er is geen gepubliceerde pagina met “contact” in de titel of de slug, en geen menu-item naar een contactpagina.
+- WPForms Lite 1.9.5.2 is actief. Het bericht “Simple Contact Form” (id 298) heeft naam, e-mail, onderwerp en bericht, met een bevestiging “Thanks for contacting us”. Het staat op geen enkele pagina of widget. De melding gaat naar `{admin_email}`, en dat adres is `dev-email@wpengine.local`.
+- De footer heeft de kop “Contact us” en de zin “mail us at info@fides.community”. Dat is tekst, geen link en geen formulier.
+
+Die pagina is daarom geen bestemming voor de trainingsknoppen. De knoppen blijven in de themaweergave verborgen. Er zijn geen teksten als “Contact us about this workshop” geplaatst, omdat daar geen werkende route onder staat.
+
+Ter vergelijking, alleen gelezen en niet gebruikt: `https://fides.community/about-fides/contact/` geeft 200 en toont een algemeen WPForms-formulier (naam, e-mail, bericht, Submit). Dat formulier kiest geen training en geen datum. Die route staat niet op de productiekopie. `https://staging.fides.community/about-fides/contact/` gaf 401 en is niet geopend.
+
 In de themaweergave verdwijnen de knoppen naar pagina’s die er niet zijn:
 
 - `/learn/sessions/request/` (Register your interest, Discuss an introduction session, Discuss a workshop, Discuss a partnership)
 - `/services/` en `/services/wallet-readiness-assessment/` (See the services overview, View readiness assessment)
 - `/start/receive/` (de gewone link “Receive information from wallets” blijft als tekst staan, zonder link)
 
-Een knop naar een bestaande Learn-pagina, zoals Explore the knowledge topics, blijft. De opgeslagen bestemmingen blijven in de pagina. In de design-shell zijn de knoppen er weer.
-
-Het algemene contactformulier op `https://fides.community/about-fides/contact/` past hier niet: het kiest geen training en geen datum. Op de lokale kopie is er geen zo’n pagina. De footer noemt `info@fides.community`. Dat is geen aanvraagroute.
+Een knop naar een bestaande Learn-pagina, zoals Explore the knowledge topics, blijft. De opgeslagen bestemmingen blijven in de pagina. In de design-shell zijn de knoppen er weer. Op de workshoppagina blijft alleen “Explore the knowledge topics”. Op het trainingsoverzicht blijven de kaarten naar de bestaande training, introductie en workshop.
 
 De dubbele slash naar Ecosystem roles in “Digital wallets and public services” is in de bron hersteld naar `/learn/topics/ecosystem-roles/`.
 
@@ -181,6 +190,7 @@ Het mu-plugin weghalen, of de chrome-optie op `shell` zetten. Dezelfde pagina’
 - In de Learn-inhoud van die 51 pagina’s staat geen link meer naar `/learn/sessions/request/`, `/services/`, `/start/receive/`, en geen `format`, `issuance`, `presentation`, `role` of `cert` in een cataloguslink. 86 interne links uit die inhoud geven geen 404.
 - `?country=` blijft staan op wallets en organizations. `?usecase=` blijft staan op voorbeeldkaarten. Een landlink naar use cases is “Browse use cases” zonder `country`.
 - Wallet Readiness Workshop toont alleen “Explore the knowledge topics”. De details blijven een kolom van 320 px naast de tekst. De aanvraagknop en “View readiness assessment” zijn weg.
+- De contactpagina op de productiekopie werkt niet. `/about-fides/contact/` is 404, formulier 298 hangt nergens, en de footer is alleen het adres `info@fides.community`. De trainingsknoppen zijn daarom niet naar een contactroute gezet.
 - De dubbele slash is weg. De pagina “Digital wallets and public services” is de enige die deze apply heeft bijgewerkt. Dry-run daarvoor: 50 unchanged, 1 would-updated.
 - Terugzet-dry-run op `installs/utrecht-demo.local-20261116-161037.tsv`: 46 would-delete, 5 kept-existing (de eerdere proefpagina’s). Er is niets verwijderd.
 - De designpilot op `http://localhost:10088/fides-design-pilot/learn/` houdt de site-shell. Het format-artikel houdt `format=sd_jwt_vc`. De workshop houdt “Discuss a workshop” en de aanvraaglink. Die seed is niet gedraaid.

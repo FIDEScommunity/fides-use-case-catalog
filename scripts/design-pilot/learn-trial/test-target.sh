@@ -34,6 +34,8 @@ doc = json.load(open(sys.argv[1], encoding="utf-8"))
 assert doc["tiles_version"] == "1.13.61"
 assert "Credential" in doc["glossary"] and "Credential Type" in doc["glossary"]
 assert "Hidden" in doc["request_buttons"]
+assert "404" in doc["contact"]
+assert "not pointed" in doc["contact"]
 assert doc["installed"] is False
 assert "fides.community" in doc["refuses"]
 PY

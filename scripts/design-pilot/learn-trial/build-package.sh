@@ -114,6 +114,7 @@ doc = {
     "refuses": ["fides.community", "www.fides.community", "/design-review", "/fides-design-pilot", "LEARN_FORCE"],
     "glossary": "Leave fides-vocabulary-glossary at 1.1.15. Credential and Credential Type are missing from the bundle Learn reads.",
     "request_buttons": "Hidden in this trial's theme chrome. The stored destinations stay in the page.",
+    "contact": "The production copy has no working contact page. /contact/ and /about-fides/contact/ return 404, and WPForms post 298 is not embedded. Training buttons were not pointed at a contact URL.",
     "installed": False,
 }
 with open(dest, "w", encoding="utf-8") as handle:
