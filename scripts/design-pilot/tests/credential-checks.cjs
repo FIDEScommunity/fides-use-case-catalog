@@ -256,6 +256,20 @@ async function credentialFilterAlign(browser, errors) {
       await open(page, `${listUrl}?sector=education`);
       await overviewReady(page);
       check(`${tag}: direct ?sector=education selects Sector`, new URL(page.url()).searchParams.get("sector") === "education" && (await page.locator("[data-pilot-remove-group='sector']").count()) === 1 && (await count(page)) < total);
+      if (loc === "NL") {
+        const chipReady = await page.waitForFunction(() => {
+          const slot = document.querySelector("[data-pilot-remove-group='sector'] [data-pilot-chip-label]");
+          const input = document.querySelector("input[data-pilot-group='sector'][value='education']");
+          const name = (input && input.closest("label") && input.closest("label").querySelector(".fides-ds-option__label") || {}).textContent || "";
+          const text = ((slot && slot.textContent) || "").replace(/\s+/g, " ").trim();
+          return text.length > 0 && name.trim().length > 0 && text.includes(name.trim()) && slot.getAttribute("lang") !== "en";
+        }, null, { timeout: 8000 }).then(() => true).catch(() => false);
+        const chip = await page.evaluate(() => {
+          const slot = document.querySelector("[data-pilot-remove-group='sector'] [data-pilot-chip-label]");
+          return { text: ((slot && slot.textContent) || "").replace(/\s+/g, " ").trim(), lang: slot && slot.getAttribute("lang") };
+        });
+        check(`${tag}: sector chip stays readable and follows the translated control`, chipReady, JSON.stringify(chip));
+      }
       await page.locator("[data-pilot-clear-filters]").click();
       await page.waitForFunction(() => !new URL(location.href).searchParams.get("sector"));
       check(`${tag}: Clear filters removes the sector choice`, (await page.locator(".fides-uc-pilot__pill").count()) === 0 && (await count(page)) === total);

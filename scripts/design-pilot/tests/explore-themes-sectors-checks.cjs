@@ -1002,7 +1002,13 @@ async function round6Checks(browser) {
             page.locator(`[data-fides-explore-all="${link.type}"]`).click(),
           ]);
           await page.locator(".fides-uc-pilot__pill").first().waitFor({ state: "visible" });
-          const pills = await page.$$eval(".fides-uc-pilot__pill", (els) => els.map((e) => e.textContent.replace(/\s+/g, " ").trim()).filter(Boolean));
+          // The hidden "(remove filter)" stays in the chip even when the visible label is blank, so the check reads the label.
+          const pills = await page.$$eval(".fides-uc-pilot__pill", (els) => els.map((e) => {
+            const slot = e.querySelector("[data-pilot-chip-label]") || e;
+            const clone = slot.cloneNode(true);
+            clone.querySelectorAll(".fides-ds-visually-hidden").forEach((n) => n.remove());
+            return (clone.textContent || "").replace(/\s+/g, " ").trim();
+          }).filter(Boolean));
           check(`${tag}: View all ${link.type} shows an active filter`, pills.length > 0 && (loc === "EN" || page.url().includes("/nl/")), pills.slice(0, 2).join(" | ") || page.url());
         }
         await page.goto(url, { waitUntil: "networkidle" });

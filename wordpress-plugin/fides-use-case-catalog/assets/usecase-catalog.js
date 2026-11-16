@@ -3289,6 +3289,7 @@
   const PILOT_MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const PILOT_MORE_FILTER_KEYS = ["productionDeployment", "awardRecognition", ...TAXONOMY_FILTER_GROUPS.map((group) => group.key)];
   let pilotEventsBound = false;
+  let pilotChipWatch = false;
 
   function pilotStatusLabel(item) {
     const value = normalizeProductionDeployment(item.productionDeployment || "");
@@ -3698,18 +3699,60 @@
   }
 
   /**
-   * Catalog names stay English. TranslatePress blanks newly inserted text while it
-   * looks up a translation, so the visible label is marked to be left alone.
+   * The chip repeats the words already shown on the filter control. On a Dutch
+   * page TranslatePress translates that control, and the chip copies the result.
+   * data-no-translation keeps a newly inserted chip from going blank during the
+   * lookup. Names TranslatePress leaves in English stay English. The hidden
+   * "(remove filter)" text stays outside the mark so it can be translated.
    */
-  function pilotCatalogLabelAttr() {
-    return (document.documentElement.lang || "").toLowerCase().startsWith("nl") ? ' lang="en" data-no-translation' : "";
+  function pilotChipLabelSpan(text) {
+    const dutch = (document.documentElement.lang || "").toLowerCase().startsWith("nl");
+    return `<span data-pilot-chip-label${dutch ? " data-no-translation" : ""}>${text}</span>`;
+  }
+
+  function pilotChipInput(group, value) {
+    const a = window.CSS && CSS.escape ? CSS.escape(group) : group.replace(/"/g, '\\"');
+    const v = window.CSS && CSS.escape ? CSS.escape(value) : value.replace(/"/g, '\\"');
+    return root.querySelector(
+      `input[data-pilot-group="${a}"][value="${v}"], input[data-filter-group="${a}"][value="${v}"], input[data-pilot-flag="${a}"], input[data-pilot-theme="${v}"]`
+    ) || (group === "officialOnly" ? root.querySelector("input[data-pilot-official]") : null);
+  }
+
+  function pilotSyncChipLabels() {
+    root.querySelectorAll(".fides-uc-pilot__pill[data-pilot-remove-group]").forEach((pill) => {
+      const slot = pill.querySelector("[data-pilot-chip-label]");
+      if (!slot) return;
+      const input = pilotChipInput(pill.dataset.pilotRemoveGroup || "", pill.dataset.pilotRemoveValue || "");
+      if (!input) return;
+      const name = (input.closest("label")?.querySelector(".fides-ds-option__label")?.textContent || "").replace(/\s+/g, " ").trim();
+      const field = input.closest(".fides-uc-pilot__popover, .fides-uc-pilot__more-field");
+      const title = (field?.querySelector(".fides-ds-popover__label, .fides-uc-pilot__more-label")?.textContent || "").replace(/\s+/g, " ").trim();
+      if (!title || !name) return;
+      const next = `${title}: ${name}`;
+      if (slot.textContent !== next) slot.textContent = next;
+    });
+  }
+
+  function pilotWatchChipLabels() {
+    if (pilotChipWatch) return;
+    pilotChipWatch = true;
+    let queued = false;
+    const observer = new MutationObserver(() => {
+      if (queued) return;
+      queued = true;
+      queueMicrotask(() => {
+        queued = false;
+        pilotSyncChipLabels();
+      });
+    });
+    observer.observe(root, { subtree: true, childList: true, characterData: true });
   }
 
   function renderPilotActivePills() {
     const active = pilotActiveFilters();
     if (!active.length) return "";
     return `<ul class="fides-uc-pilot__pills" aria-label="Active filters">${active
-      .map((pill) => `<li><button type="button" class="fides-uc-pilot__pill" data-pilot-remove-group="${escapeHtml(pill.group)}" data-pilot-remove-value="${escapeHtml(pill.value)}"><span${pilotCatalogLabelAttr()}>${escapeHtml(pilotFilterTitle(pill.group))}: ${escapeHtml(pill.label)}</span><span aria-hidden="true"> ×</span><span class="fides-ds-visually-hidden"> (remove filter)</span></button></li>`)
+      .map((pill) => `<li><button type="button" class="fides-uc-pilot__pill" data-pilot-remove-group="${escapeHtml(pill.group)}" data-pilot-remove-value="${escapeHtml(pill.value)}">${pilotChipLabelSpan(`${escapeHtml(pilotFilterTitle(pill.group))}: ${escapeHtml(pill.label)}`)}<span aria-hidden="true"> ×</span><span class="fides-ds-visually-hidden"> (remove filter)</span></button></li>`)
       .join("")}</ul><button id="fides-clear" class="fides-ds-text-button fides-uc-pilot__clear" type="button" data-pilot-clear-filters>Clear filters</button>`;
   }
 
@@ -3866,6 +3909,7 @@
     pilotSyncInputs();
     const active = root.querySelector("[data-pilot-active]");
     if (active) active.innerHTML = renderPilotActivePills();
+    pilotSyncChipLabels();
     updateFilterChrome();
   }
 
@@ -3958,6 +4002,7 @@
   function bindPilotEvents() {
     if (pilotEventsBound) return;
     pilotEventsBound = true;
+    pilotWatchChipLabels();
 
     root.addEventListener("submit", (event) => {
       if (!event.target.matches("[data-pilot-search-form]")) return;

@@ -389,7 +389,12 @@ async function overviewMobile(browser, width) {
     check(`overview ${width}: Cancel discards`, !/role=/.test(page.url()), page.url());
     await page.click("[data-pilot-open]");
     await page.click("#fides-org-pilot-filter-panel .fides-uc-pilot__popover:nth-of-type(1) .fides-ds-popover__toggle");
+    const beforeApply = ((await page.textContent("[data-pilot-apply]")) || "").replace(/\s+/g, " ").trim();
     await page.click("#fides-org-pilot-filter-panel .fides-uc-pilot__popover:nth-of-type(1) input[type=checkbox] >> nth=0");
+    const applyText = ((await page.textContent("[data-pilot-apply]")) || "").replace(/\s+/g, " ").trim();
+    const beforeN = Number((beforeApply.match(/\d+/) || [])[0]);
+    const afterN = Number((applyText.match(/\d+/) || [])[0]);
+    check(`overview ${width}: Apply filters shows the draft count`, /^Apply filters \(\d+\)$/.test(beforeApply) && /^Apply filters \(\d+\)$/.test(applyText) && afterN !== beforeN, `${beforeApply} -> ${applyText}`);
     await page.click("[data-pilot-apply]");
     await page.waitForTimeout(200);
     check(`overview ${width}: Apply commits`, /role=/.test(page.url()), page.url());
@@ -643,16 +648,89 @@ async function ecosystemInteractions(browser) {
   await classic.close();
 }
 
+/** Compact bar and Apply filters (N), after the shared wrap style was limited to three catalogs. */
+async function filterBarRestore(browser) {
+  for (const loc of ["EN", "NL"]) {
+    for (const width of [1440, 768, 390]) {
+      const prefix = loc === "NL" ? "/nl" : "";
+      const context = await newContext(browser, width, 900);
+      const page = await context.newPage();
+      const tag = `bar org ${loc} @${width}`;
+      await open(page, `${BASE}${prefix}/fides-design-pilot/organizations/`);
+      await waitForRows(page);
+      if (width >= 600) {
+        const fields = await page.evaluate(() => [...document.querySelectorAll(".fides-uc-pilot__filter-row .fides-ds-popover__toggle")]
+          .filter((el) => el.offsetParent)
+          .map((el) => {
+            const label = el.querySelector(".fides-ds-popover__label");
+            const value = el.querySelector(".fides-ds-popover__value");
+            const chevron = el.querySelector(".fides-ds-popover__chevron");
+            const br = el.getBoundingClientRect();
+            const lr = label.getBoundingClientRect();
+            const vr = value.getBoundingClientRect();
+            const cr = chevron.getBoundingClientRect();
+            return {
+              h: Math.round(br.height),
+              sameRow: vr.top < lr.bottom - 1 && lr.top < vr.bottom - 1,
+              arrow: Math.abs((cr.top + cr.bottom) / 2 - (br.top + br.bottom) / 2) < 8,
+            };
+          }));
+        check(`${tag}: labels and arrows stay on one line`, fields.length >= 3 && fields.every((f) => f.h <= 56 && f.sameRow && f.arrow), JSON.stringify(fields));
+        check(`${tag}: no horizontal overflow`, (await overflowX(page)) <= 0);
+        if (loc === "NL" && width === 1440) {
+          await open(page, `${BASE}${prefix}/fides-design-pilot/organizations/?sector=education`);
+          await waitForRows(page);
+          const chipReady = await page.waitForFunction(() => {
+            const slot = document.querySelector(".fides-uc-pilot__pill [data-pilot-chip-label]");
+            const hidden = document.querySelector(".fides-uc-pilot__pill .fides-ds-visually-hidden");
+            return !!(slot && slot.textContent.trim() && slot.getAttribute("lang") !== "en" && hidden && hidden.textContent.trim());
+          }, null, { timeout: 8000 }).then(() => true).catch(() => false);
+          const chip = await page.evaluate(() => {
+            const slot = document.querySelector(".fides-uc-pilot__pill [data-pilot-chip-label]");
+            const hidden = document.querySelector(".fides-uc-pilot__pill .fides-ds-visually-hidden");
+            return { text: ((slot && slot.textContent) || "").replace(/\s+/g, " ").trim(), lang: slot && slot.getAttribute("lang"), remove: ((hidden && hidden.textContent) || "").trim() };
+          });
+          check(`${tag}: chip stays readable and the remove text stays available`, chipReady && chip.text.length > 0 && chip.lang !== "en" && chip.remove.length > 0, JSON.stringify(chip));
+        }
+      } else {
+        await page.click("[data-pilot-open]");
+        await page.waitForSelector("#fides-org-pilot-filter-panel[role=dialog]");
+        await page.click("#fides-org-pilot-filter-panel .fides-uc-pilot__popover:nth-of-type(1) .fides-ds-popover__toggle");
+        await page.waitForFunction(() => /\d/.test(document.querySelector("[data-pilot-apply]")?.textContent || ""), null, { timeout: 8000 });
+        const beforeApply = ((await page.textContent("[data-pilot-apply]")) || "").replace(/\s+/g, " ").trim();
+        await page.click("#fides-org-pilot-filter-panel .fides-uc-pilot__popover:nth-of-type(1) input[type=checkbox] >> nth=0");
+        await page.waitForFunction(() => /\(\d+\)/.test(document.querySelector("[data-pilot-apply]")?.textContent || ""), null, { timeout: 8000 });
+        const applyText = ((await page.textContent("[data-pilot-apply]")) || "").replace(/\s+/g, " ").trim();
+        const beforeN = Number((beforeApply.match(/\d+/) || [])[0]);
+        const afterN = Number((applyText.match(/\d+/) || [])[0]);
+        const shape = loc === "NL" ? (t) => /\(\d+\)/.test(t) : (t) => /^Apply filters \(\d+\)$/.test(t);
+        check(`${tag}: Apply filters (N) follows the draft`, shape(beforeApply) && shape(applyText) && afterN !== beforeN, `${beforeApply} -> ${applyText}`);
+        const urlBefore = page.url();
+        // The open option list takes the first Escape. The second Escape discards the dialog draft.
+        await page.keyboard.press("Escape");
+        await page.waitForFunction(() => !document.querySelector("#fides-org-pilot-filter-panel .fides-ds-popover.is-open"), null, { timeout: 4000 });
+        await page.keyboard.press("Escape");
+        await page.waitForFunction(() => !document.querySelector("#fides-org-pilot-filter-panel[role=dialog]"), null, { timeout: 4000 }).catch(() => false);
+        check(`${tag}: Escape discards the draft`, page.url() === urlBefore && !(await page.$("#fides-org-pilot-filter-panel[role=dialog]")));
+      }
+      await context.close();
+    }
+  }
+}
+
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
-  const browser = await chromium.launch();
+  const browser = await chromium.launch(process.env.CHROME_PATH ? { executablePath: process.env.CHROME_PATH } : {});
   try {
-    await ecosystemInteractions(browser);
-    await overviewServerRender(browser);
-    await overviewDesktop(browser);
-    for (const width of [390, 320]) await overviewMobile(browser, width);
-    for (const width of WIDTHS) {
-      for (const id of RECORDS) await detail(browser, width, id);
+    await filterBarRestore(browser);
+    if (process.env.ONLY_FILTER_BAR !== "1") {
+      await ecosystemInteractions(browser);
+      await overviewServerRender(browser);
+      await overviewDesktop(browser);
+      for (const width of [390, 320]) await overviewMobile(browser, width);
+      for (const width of WIDTHS) {
+        for (const id of RECORDS) await detail(browser, width, id);
+      }
     }
   } finally {
     await browser.close();

@@ -198,11 +198,14 @@
 }
 
 /*
- * A long list name or chosen value wraps onto a second line inside the field.
- * The field grows with the text (nothing is cut off) and stretches to the
- * height of the tallest field in the same row.
+ * Issuers, relying parties and credential types: a long list name or chosen
+ * value wraps onto a second line inside the field. The field grows with the
+ * text and stretches to the height of the tallest field in the same row.
+ * Wallet and organization bars keep the compact one-line field.
  */
-.fides-ds .fides-uc-pilot__popover {
+.fides-ds.fides-issuer-pilot .fides-uc-pilot__popover,
+.fides-ds.fides-rp-pilot .fides-uc-pilot__popover,
+.fides-ds.fides-credential-pilot .fides-uc-pilot__popover {
   display: flex;
   flex-direction: column;
   align-self: stretch;
@@ -210,7 +213,9 @@
   max-width: 100%;
 }
 
-.fides-ds .fides-uc-pilot__popover > .fides-ds-popover__toggle {
+.fides-ds.fides-issuer-pilot .fides-uc-pilot__popover > .fides-ds-popover__toggle,
+.fides-ds.fides-rp-pilot .fides-uc-pilot__popover > .fides-ds-popover__toggle,
+.fides-ds.fides-credential-pilot .fides-uc-pilot__popover > .fides-ds-popover__toggle {
   display: block;
   flex: 1 0 auto;
   width: 100%;
@@ -220,8 +225,12 @@
   text-align: left;
 }
 
-.fides-ds .fides-uc-pilot__popover .fides-ds-popover__label,
-.fides-ds .fides-uc-pilot__popover .fides-ds-popover__value {
+.fides-ds.fides-issuer-pilot .fides-uc-pilot__popover .fides-ds-popover__label,
+.fides-ds.fides-issuer-pilot .fides-uc-pilot__popover .fides-ds-popover__value,
+.fides-ds.fides-rp-pilot .fides-uc-pilot__popover .fides-ds-popover__label,
+.fides-ds.fides-rp-pilot .fides-uc-pilot__popover .fides-ds-popover__value,
+.fides-ds.fides-credential-pilot .fides-uc-pilot__popover .fides-ds-popover__label,
+.fides-ds.fides-credential-pilot .fides-uc-pilot__popover .fides-ds-popover__value {
   display: inline;
   min-width: 0;
   overflow: visible;
@@ -230,12 +239,16 @@
   text-overflow: unset;
 }
 
-.fides-ds .fides-uc-pilot__popover .fides-ds-popover__chevron {
+.fides-ds.fides-issuer-pilot .fides-uc-pilot__popover .fides-ds-popover__chevron,
+.fides-ds.fides-rp-pilot .fides-uc-pilot__popover .fides-ds-popover__chevron,
+.fides-ds.fides-credential-pilot .fides-uc-pilot__popover .fides-ds-popover__chevron {
   float: right;
   margin-left: var(--fides-ds-space-2);
 }
 
-.fides-ds .fides-uc-pilot__filter-row > .fides-uc-pilot__more-toggle {
+.fides-ds.fides-issuer-pilot .fides-uc-pilot__filter-row > .fides-uc-pilot__more-toggle,
+.fides-ds.fides-rp-pilot .fides-uc-pilot__filter-row > .fides-uc-pilot__more-toggle,
+.fides-ds.fides-credential-pilot .fides-uc-pilot__filter-row > .fides-uc-pilot__more-toggle {
   align-self: stretch;
   height: auto;
   min-width: 0;
@@ -361,8 +374,14 @@
 .fides-ds .fides-uc-pilot__more-grid {
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
+  align-items: flex-start;
   gap: var(--fides-ds-space-4) var(--fides-ds-space-5);
+}
+
+.fides-ds.fides-issuer-pilot .fides-uc-pilot__more-grid,
+.fides-ds.fides-rp-pilot .fides-uc-pilot__more-grid,
+.fides-ds.fides-credential-pilot .fides-uc-pilot__more-grid {
+  align-items: stretch;
 }
 
 .fides-ds .fides-uc-pilot__more-grid > .fides-uc-pilot__popover,
@@ -480,11 +499,17 @@
 .fides-ds .fides-uc-pilot__technical-grid {
   display: flex;
   flex-wrap: wrap;
-  align-items: stretch;
+  align-items: flex-start;
   gap: var(--fides-ds-space-4) var(--fides-ds-space-5);
   margin-top: calc(-1 * var(--fides-ds-space-4));
   padding-top: var(--fides-ds-space-4);
   border-top: 1px solid var(--fides-ds-line);
+}
+
+.fides-ds.fides-issuer-pilot .fides-uc-pilot__technical-grid,
+.fides-ds.fides-rp-pilot .fides-uc-pilot__technical-grid,
+.fides-ds.fides-credential-pilot .fides-uc-pilot__technical-grid {
+  align-items: stretch;
 }
 
 .fides-ds .fides-uc-pilot__technical-grid[hidden] {
@@ -1806,14 +1831,23 @@ html.fides-uc-pilot-panel-open {
   .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-row {
     grid-column: 2;
     grid-row: 1;
-    grid-template-columns: repeat(4, fit-content(220px));
-    min-width: 0;
-    max-width: 100%;
+    grid-template-columns: repeat(4, max-content);
     gap: var(--fides-ds-space-2);
   }
   .fides-ds.fides-uc-pilot .fides-uc-pilot__filter-row > * {
-    min-width: 0;
     max-width: 220px;
+  }
+  .fides-ds.fides-issuer-pilot .fides-uc-pilot__filter-row,
+  .fides-ds.fides-rp-pilot .fides-uc-pilot__filter-row,
+  .fides-ds.fides-credential-pilot .fides-uc-pilot__filter-row {
+    grid-template-columns: repeat(4, fit-content(220px));
+    min-width: 0;
+    max-width: 100%;
+  }
+  .fides-ds.fides-issuer-pilot .fides-uc-pilot__filter-row > *,
+  .fides-ds.fides-rp-pilot .fides-uc-pilot__filter-row > *,
+  .fides-ds.fides-credential-pilot .fides-uc-pilot__filter-row > * {
+    min-width: 0;
   }
   .fides-ds.fides-uc-pilot .fides-uc-pilot__more,
   .fides-ds.fides-uc-pilot .fides-uc-pilot__active {
