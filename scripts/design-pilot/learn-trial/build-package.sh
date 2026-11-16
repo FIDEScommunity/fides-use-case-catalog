@@ -47,11 +47,15 @@ trap 'rm -rf "$stage"' EXIT
 mkdir -p "$stage/pkg/plugins" "$stage/pkg/mu-plugins" "$stage/pkg/seed/learn-trial" "$stage/extract"
 git -C "$TILES_ROOT" archive --format=zip --prefix=fides-community-tools-tiles/ HEAD \
   -o "$stage/pkg/plugins/fides-community-tools-tiles-1.13.61.zip"
-if ! unzip -p "$stage/pkg/plugins/fides-community-tools-tiles-1.13.61.zip" \
-  fides-community-tools-tiles/fides-community-tools-tiles.php | grep -q 'Version: 1.13.61'; then
-  echo "Tiles zip does not contain version 1.13.61." >&2
-  exit 1
-fi
+header="$(unzip -p "$stage/pkg/plugins/fides-community-tools-tiles-1.13.61.zip" \
+  fides-community-tools-tiles/fides-community-tools-tiles.php | head -n 20 || true)"
+case "$header" in
+  *"Version: 1.13.61"*) ;;
+  *)
+    echo "Tiles zip does not contain version 1.13.61." >&2
+    exit 1
+    ;;
+esac
 
 git -C "$UC_ROOT" archive HEAD \
   scripts/design-pilot/create-learn-pages.php \
