@@ -31,8 +31,8 @@ if [[ -n "$tiles_dirty$content_dirty" ]]; then
 fi
 
 version="$(grep -m 1 -E '^ \* Version:' "$TILES_ROOT/fides-community-tools-tiles.php" | awk '{print $3}')"
-if [[ "$version" != "1.13.65" ]]; then
-  echo "Refusing: tiles version is $version, expected 1.13.65." >&2
+if [[ "$version" != "1.13.66" ]]; then
+  echo "Refusing: tiles version is $version, expected 1.13.66." >&2
   exit 1
 fi
 
@@ -116,7 +116,7 @@ doc = {
     "request_buttons": "Training and workshop buttons in theme chrome go to /about-fides/contact/. Services buttons stay hidden. The design shell keeps the stored request links.",
     "contact": "Theme chrome uses /about-fides/contact/ with labels such as Contact us about this workshop. No offering and no date is added. The local copy returns 404 for that path; staging uses the same path.",
     "country": "The country field is a dropdown in theme chrome and in the design shell. The Netherlands shows the existing offer. Another country shows No scheduled trainings in that country. Theme chrome sends Contact us to /about-fides/contact/. The design shell uses the stored enquiry path. Other says your country. Training partnerships stays visible. The line under the field is gone. The design shell keeps the stored intro.",
-    "header": "Theme chrome gives the transparent theme header its own space above the Learn bar and paints it with the theme color. Remove /var/www/html/app/mu-plugins/fides-learn-header-fix.php once this package is installed. Other pages and the design shell stay unchanged.",
+    "header": "On a transparent theme header, theme chrome reserves 100px of theme color above the Learn bar, matching the visible Awards bar. Logo, menu and Sign in stay on the theme positions. Remove /var/www/html/app/mu-plugins/fides-learn-header-fix.php once this package is installed. Other pages and the design shell stay unchanged.",
     "menu": "Do not overwrite the staging menu. Learn is first, with Overview, Topics, Training & workshops and Glossary as its submenu. Organizations sits under Ecosystem Explorer, directly above Issuers.",
     "installed": False,
 }

@@ -31,7 +31,7 @@ fi
 python3 - "$PKG/manifest.json" <<'PY'
 import json, sys
 doc = json.load(open(sys.argv[1], encoding="utf-8"))
-assert doc["tiles_version"] == "1.13.65"
+assert doc["tiles_version"] == "1.13.66"
 assert "Credential" in doc["glossary"] and "Credential Type" in doc["glossary"]
 assert "Contact us about this workshop" in doc["contact"]
 assert "/about-fides/contact/" in doc["contact"]
