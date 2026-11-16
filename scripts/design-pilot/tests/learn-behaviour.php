@@ -148,6 +148,30 @@ $check($overview && strpos((string) $overview->post_content, 'fides-learn-proces
 
 Fides_DS_Glossary::reset();
 
+// Chrome stays on the design shell unless a site opts into the theme header.
+$check(Fides_DS_Learn::chrome() === 'shell', 'Learn chrome defaults to the design shell');
+$theme_chrome = static function (): string {
+    return 'theme';
+};
+add_filter('fides_ds_learn_chrome', $theme_chrome);
+$check(Fides_DS_Learn::chrome() === 'theme', 'the chrome filter can select the theme header');
+$catalog_map = static function (): array {
+    return array('/personal-wallets/' => '/wallet-catalog/', '/use-case/' => '/use-cases/');
+};
+add_filter('fides_ds_learn_catalog_bases', $catalog_map);
+$mapped = Fides_DS_Learn::map_catalog_url('/use-case/?usecase=vog', array('/use-case/' => '/use-cases/', '/personal-wallets/' => '/wallet-catalog/'));
+$check($mapped === '/use-cases/?usecase=vog', 'a catalog path keeps its query string');
+$absolute = Fides_DS_Learn::map_catalog_url(home_url('/use-case/?usecase=vog'), array('/use-case/' => '/use-cases/'));
+$check(strpos($absolute, '/use-cases/?usecase=vog') !== false && strpos($absolute, '/use-case/?') === false, 'a same-site absolute catalog URL is rewritten');
+$check(Fides_DS_Learn::map_catalog_url('https://fides.community/topics/personal-wallets/', array('/personal-wallets/' => '/wallet-catalog/')) === 'https://fides.community/topics/personal-wallets/', 'another host is not rewritten');
+$check(Fides_DS_Learn::map_catalog_url('/fides-design-pilot/personal-wallets/', array('/personal-wallets/' => '/wallet-catalog/')) === '/fides-design-pilot/personal-wallets/', 'a pilot-prefixed path is not rewritten by a root map');
+$rewritten = Fides_DS_Learn::rewrite_catalog_html('<a href="/personal-wallets/">Browse</a>');
+$check(strpos($rewritten, 'href="http://') !== false || strpos($rewritten, '/wallet-catalog/') !== false, 'theme chrome rewrites a mapped catalog link');
+remove_filter('fides_ds_learn_catalog_bases', $catalog_map);
+remove_filter('fides_ds_learn_chrome', $theme_chrome);
+$check(Fides_DS_Learn::chrome() === 'shell', 'removing the filter returns the design shell');
+$check(Fides_DS_Learn::rewrite_catalog_html('<a href="/personal-wallets/">Browse</a>') === '<a href="/personal-wallets/">Browse</a>', 'shell chrome leaves stored catalog links unchanged');
+
 foreach ($results['fail'] as $message) {
     echo "not ok - {$message}\n";
 }

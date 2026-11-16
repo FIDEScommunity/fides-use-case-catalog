@@ -100,7 +100,7 @@ Routes to existing pilot parts: closing bands and article links go to
 
 | Part | Where | Notes |
 |---|---|---|
-| Page template "FIDES Learn (inside site shell)" | `fides-community-tools-tiles/includes/class-fides-ds-learn.php`, `templates/learn.php` | Uses `Fides_DS_Site_Shell::render_header()/render_footer()`. One header, one footer. No new plugin. |
+| Page template "FIDES Learn" | `fides-community-tools-tiles/includes/class-fides-ds-learn.php`, `templates/learn.php` | Same template slug `fides-learn`. Chrome defaults to the site shell (`Fides_DS_Site_Shell`). Filter `fides_ds_learn_chrome` = `theme` uses the active theme header and footer instead. One header, one footer. |
 | Styles / script | tiles `assets/learn.css`, `assets/learn.js` | Loaded only on Learn pages, on top of `design-system.css`. |
 | Editorial fields | metabox "FIDES Learn page" on every page | page kind, headline, article label, sources, closing band, series. Excerpt = intro. |
 | Glossary | shortcodes `[fides_learn_term]`, `[fides_learn_terms]` | Look up the existing vocabulary (`fides-vocabulary-glossary` data) and render the shared `Fides_DS_Glossary` dialog. Definitions are never typed. A term without entry is plain text and reported by the seed script. |
@@ -153,6 +153,8 @@ LEARN_DRY_RUN=1 bash create-learn-pages.sh       # report only
 LEARN_FORCE="topics" bash create-learn-pages.sh  # replace one named page explicitly
 LEARN_BASE=fides-design-pilot/learn bash create-learn-pages.sh   # route base (adjustable)
 ```
+
+`LEARN_IDS` limits a run to those seed ids (`.` is the Learn root). Unset, the whole manifest is seeded, which is what the design pilot uses. A limited list does not write editorial links unless it contains `editorial-links`. The five-page theme trial and its install notes are in `learn-trial/`.
 
 - Every seeded page carries `_fides_learn_seed` (the full route), a hash and a copy of
   its seeded state. Marked pages are only updated while their hash still matches.

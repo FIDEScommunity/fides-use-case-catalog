@@ -18,8 +18,11 @@
  *  LEARN_BASE            route base without slashes at the ends   (fides-design-pilot/learn)
  *  LEARN_START_BASE      route base of the Explorer starting point (fides-design-pilot/start)
  *  LEARN_SERVICES_BASE   route base of the Services section        (fides-design-pilot/services)
- *  LEARN_PILOT_BASE      base for links to the other pilot pages   (fides-design-pilot)
+ *  LEARN_PILOT_BASE      base for links to the other pilot pages   (fides-design-pilot; set empty for site-root paths)
  *  LEARN_GLOSSARY_PATH   existing glossary page                    (/glossary/)
+ *  LEARN_IDS             comma separated seed ids to touch; unset means the whole manifest.
+ *                        "." is the Learn root. Pages outside the list are reported and not written.
+ *                        Editorial links are included only when the list contains "editorial-links".
  *  LEARN_FORCE           comma separated seed ids to replace
  *  LEARN_DRY_RUN=1       report only, write nothing
  *  LEARN_BACKUP_DIR      where forced replacements are saved first
@@ -77,7 +80,10 @@ $mount   = $pctx['mount']; // path of home_url(): '' at the domain root, '/desig
 $base    = trim((string) (getenv('LEARN_BASE') ?: ($sa ? 'learn' : 'fides-design-pilot/learn')), '/');
 $start   = trim((string) (getenv('LEARN_START_BASE') ?: ($sa ? 'start' : 'fides-design-pilot/start')), '/');
 $services = trim((string) (getenv('LEARN_SERVICES_BASE') ?: ($sa ? 'services' : 'fides-design-pilot/services')), '/');
-$pilot   = $sa ? '' : trim((string) (getenv('LEARN_PILOT_BASE') ?: 'fides-design-pilot'), '/');
+// An explicit empty LEARN_PILOT_BASE stores site-root catalog paths (/personal-wallets/). Unset keeps the pilot base.
+$pilot_env = getenv('LEARN_PILOT_BASE');
+$pilot     = $sa ? '' : trim((string) ($pilot_env === false ? 'fides-design-pilot' : $pilot_env), '/');
+$only      = learn_only_ids();
 $gloss   = $pctx['origin'] . $mount . '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/';
 $force   = array_filter(array_map('trim', explode(',', (string) getenv('LEARN_FORCE'))), 'strlen');
 $dry     = getenv('LEARN_DRY_RUN') === '1';
@@ -152,7 +158,21 @@ function learn_diff(array $a, array $b): array {
 
 /** Route base and parent page of every tree in the manifest. */
 $trees = array('learn' => array('base' => $base, 'parent' => 0), 'start' => array('base' => $start, 'parent' => 0), 'services' => array('base' => $services, 'parent' => 0));
+$tree_needed = array('learn' => true, 'start' => $only === null, 'services' => $only === null);
+if (is_array($only)) {
+    foreach (array_keys($only) as $seed_id_needed) {
+        if (str_starts_with((string) $seed_id_needed, '@start')) {
+            $tree_needed['start'] = true;
+        }
+        if (str_starts_with((string) $seed_id_needed, '@services')) {
+            $tree_needed['services'] = true;
+        }
+    }
+}
 foreach ($trees as $name => $tree) {
+    if (empty($tree_needed[ $name ])) {
+        continue;
+    }
     $parent_path = dirname($tree['base']) === '.' ? '' : dirname($tree['base']);
     if ($parent_path !== '') {
         $parent_page = get_page_by_path($parent_path, OBJECT, 'page');
@@ -169,8 +189,32 @@ function learn_seed_id(string $tree, string $path): string {
     return $tree === 'learn' ? $path : '@' . $tree . ($path === '' ? '' : '/' . $path);
 }
 
-$report = array();
-$ids    = array();
+/**
+ * Null means every manifest page. "." is the Learn root.
+ *
+ * @return array<string,true>|null
+ */
+function learn_only_ids(): ?array {
+    $raw = getenv('LEARN_IDS');
+    if ($raw === false || trim($raw) === '') {
+        return null;
+    }
+    $ids = array();
+    foreach (explode(',', $raw) as $item) {
+        $item = trim($item);
+        if ($item === '.' || $item === '(root)') {
+            $ids[''] = true;
+        } elseif ($item !== '') {
+            $ids[ $item ] = true;
+        }
+    }
+    return $ids;
+}
+
+$report    = array();
+$ids       = array();
+$outside   = 0;
+$href_from = array();
 foreach ($manifest['pages'] as $page) {
     $tree    = (string) ($page['tree'] ?? 'learn');
     if (! isset($trees[ $tree ])) {
@@ -181,6 +225,10 @@ foreach ($manifest['pages'] as $page) {
     $tbase   = $trees[ $tree ]['base'];
     $seed_id = learn_seed_id($tree, $path);
     $label   = $path === '' ? '(' . $tree . ' root)' : ($tree === 'learn' ? $path : $tree . ': ' . $path);
+    if (is_array($only) && ! isset($only[ $seed_id ])) {
+        $outside++;
+        continue;
+    }
     $full    = $path === '' ? $tbase : $tbase . '/' . $path;
     $slug    = basename($full);
     $parent  = $path === '' ? $trees[ $tree ]['parent'] : (int) ($ids[ learn_seed_id($tree, dirname($path) === '.' ? '' : dirname($path)) ] ?? 0);
@@ -189,6 +237,11 @@ foreach ($manifest['pages'] as $page) {
         continue;
     }
     $content = strtr((string) file_get_contents($here . '/content/' . $page['content']), $tokens);
+    if (preg_match_all('/href="([^"]+)"/', $content, $href_matches)) {
+        foreach ($href_matches[1] as $href) {
+            $href_from[ html_entity_decode($href, ENT_QUOTES) ][] = $label;
+        }
+    }
     $desired = array(
         'title'      => (string) $page['title'],
         'excerpt'    => (string) ($page['excerpt'] ?? ''),
@@ -302,8 +355,11 @@ foreach ($manifest['pages'] as $page) {
 
 // Editorial links (learn/editorial-links.json -> option fides_ds_editorial_links), with the same
 // protection as pages: an option changed by an editor is skipped unless LEARN_FORCE contains "editorial-links".
+// A bounded LEARN_IDS list leaves the option alone unless it names "editorial-links".
 $el_file = $here . '/editorial-links.json';
-if (is_readable($el_file) && class_exists('Fides_DS_Editorial_Links')) {
+if (is_array($only) && ! isset($only['editorial-links'])) {
+    $report[] = array('editorial links', 'outside-set', 'not in LEARN_IDS; option not touched');
+} elseif (is_readable($el_file) && class_exists('Fides_DS_Editorial_Links')) {
     $el_json    = json_decode(strtr((string) file_get_contents($el_file), $tokens_site), true);
     $el_desired = array('entries' => is_array($el_json['entries'] ?? null) ? $el_json['entries'] : array());
     $el_current = get_option(Fides_DS_Editorial_Links::OPTION, null);
@@ -355,6 +411,51 @@ if (! $dry) {
         }
     }
     $missing = array_values(array_unique(Fides_DS_Learn::$missing));
+}
+
+if ($outside > 0) {
+    $report[] = array('other manifest pages', 'outside-set', $outside . ' pages not in LEARN_IDS; not touched');
+}
+
+// Links in the selected pages. A Learn path outside the set is missing when that page does not exist.
+// Catalog paths are the stored pilot paths; theme mode rewrites them only through fides_ds_learn_catalog_bases.
+if (is_array($only) && $href_from) {
+    $learn_root = $mount . '/' . trim($base, '/') . '/';
+    $selected_paths = array();
+    foreach (array_keys($only) as $seed_id) {
+        if ($seed_id === 'editorial-links' || str_starts_with((string) $seed_id, '@')) {
+            continue;
+        }
+        $selected_paths[ $mount . '/' . $base . ($seed_id === '' ? '' : '/' . $seed_id) . '/' ] = true;
+    }
+    $home_host = strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST));
+    foreach ($href_from as $url => $from_pages) {
+        $parts = wp_parse_url($url);
+        if (! is_array($parts)) {
+            continue;
+        }
+        $host = strtolower((string) ($parts['host'] ?? ''));
+        if ($host !== '' && $host !== $home_host) {
+            continue;
+        }
+        $path = (string) ($parts['path'] ?? '');
+        if ($path === '' || $path[0] !== '/') {
+            continue;
+        }
+        if (substr($path, -1) !== '/') {
+            $path .= '/';
+        }
+        $from = implode(', ', array_unique($from_pages));
+        if (str_starts_with($path, $learn_root)) {
+            $exists = (bool) get_page_by_path(trim($path, '/'), OBJECT, 'page');
+            if (! isset($selected_paths[ $path ]) && ! $exists) {
+                $report[] = array($path, 'missing-learn', 'linked from ' . $from);
+            }
+            continue;
+        }
+        $exists = (bool) get_page_by_path(trim($path, '/'), OBJECT, 'page');
+        $report[] = array($path, 'site-link', ($exists ? 'page-exists' : 'no-page') . '; linked from ' . $from);
+    }
 }
 
 foreach ($report as $row) {
