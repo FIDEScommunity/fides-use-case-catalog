@@ -6,7 +6,7 @@
 
 **Training & workshops vraagt “Where would you like to attend?”.** Het veld is een dropdown met een neerwaarts pijltje, ook in de design-shell. The Netherlands is standaard en toont het bestaande aanbod. Een ander land verbergt dat lokale aanbod en toont “No scheduled trainings in {land} yet”, met “Contact us”. In de themaweergave gaat die link naar `/about-fides/contact/`. In de design-shell gaat die naar de opgeslagen aanvraagpagina, zonder training of datum. Bij Other is de landnaam “your country”. Training partnerships blijft bij elke keuze zichtbaar. De design-shell houdt de opgeslagen intro en de oorspronkelijke aanvraagknoppen.
 
-**De zichtbare blauwe balk op Learn is gelijk aan Awards.** Op Awards is de header 120 px en transparant. De witte inhoud begint na een spacer van 100 px, dus 100 px blauw is zichtbaar. Logo, hoofdmenu en Sign in blijven op de positie die het thema zelf zet. `learn.css` reserveert diezelfde 100 px boven de Learn-balk, in `var(--theme-palette-color-1)`, alleen voor `body.fides-learn-theme` en alleen wanneer de header transparant is. Tijdens scrollen blijft het krimpen van de header aan het thema. Andere pagina’s en de design-shell blijven zoals ze zijn.
+**De zichtbare blauwe balk op Learn is gelijk aan Awards, en de inhoud blijft wit.** Op Awards is de header 120 px en transparant. De witte inhoud begint na een spacer van 100 px, dus 100 px blauw is zichtbaar. Logo, hoofdmenu en Sign in blijven op de positie die het thema zelf zet. `learn.css` reserveert diezelfde 100 px als een aparte strook in `var(--theme-palette-color-1)`, alleen voor `body.fides-learn-theme` en alleen wanneer de header transparant is. De Learn-pagina houdt zijn witte achtergrond. Tijdens scrollen blijft het krimpen van de header aan het thema; de dichte header dekt de Learn-balk af. Andere pagina’s en de design-shell blijven zoals ze zijn.
 
 **Verwijder `fides-learn-header-fix.php` zodra dit duurzame herstel is geïnstalleerd.** Het bestand staat op staging in `/var/www/html/app/mu-plugins/fides-learn-header-fix.php`. Die tijdelijke regel is niet meer nodig. Blijft hij staan naast deze padding, dan schuift de Learn-balk een tweede keer naar beneden.
 
@@ -39,12 +39,12 @@ Wisselen, alleen op die twee hosts: `wp option update fides_learn_trial_chrome s
 
 | Onderdeel | Bestaande site | Dit pakket |
 | --- | --- | --- |
-| Tiles | 1.13.32 | 1.13.66 |
+| Tiles | 1.13.32 | 1.13.67 |
 | Glossaryplugin | 1.1.15 | 1.1.15 |
 | Catalogusplugins | ongewijzigd | ongewijzigd |
 | WPML | op staging actief, hier niet aanwezig | niet gewijzigd, niet geactiveerd |
 
-1.13.66 maakt de zichtbare blauwe balk op Learn 100 px, gelijk aan Awards, zonder logo of menu te verplaatsen. 1.13.65 toont de landkeuze ook in de design-shell. De zin onder het veld is weg. Op Learn in de themaweergave neemt de themaheader zijn eigen hoogte in boven de Learn-balk, in de bestaande themakleur. 1.13.64 toont het landveld als een dropdown met een neerwaarts pijltje. 1.13.63 zet op de trainingspagina de landkeuze uit Paper 24.28 en 24.27, alleen wanneer het mu-plugin `fides_ds_learn_country_picker` vult. 1.13.62 laat de themaweergave een trainings- of workshopknop naar `/about-fides/contact/` zetten wanneer het mu-plugin `fides_ds_learn_contact_buttons` vult. Zonder die filters, en in de design-shell, blijft de opgeslagen aanvraagknop en de opgeslagen intro staan. 1.13.61 verbergt ontbrekende bestemmingen en vervangt catalogusquery’s die deze site niet toepast, alleen als het mu-plugin die filters vult.
+1.13.67 houdt de Learn-inhoud wit; de blauwe strook blijft 100 px. 1.13.66 maakte die strook, maar de `background`-verkorting zette de witte paginagrond op transparant, zodat de blauwe bodykleur door de inhoud scheen. 1.13.65 toont de landkeuze ook in de design-shell. De zin onder het veld is weg. Op Learn in de themaweergave neemt de themaheader zijn eigen hoogte in boven de Learn-balk, in de bestaande themakleur. 1.13.64 toont het landveld als een dropdown met een neerwaarts pijltje. 1.13.63 zet op de trainingspagina de landkeuze uit Paper 24.28 en 24.27, alleen wanneer het mu-plugin `fides_ds_learn_country_picker` vult. 1.13.62 laat de themaweergave een trainings- of workshopknop naar `/about-fides/contact/` zetten wanneer het mu-plugin `fides_ds_learn_contact_buttons` vult. Zonder die filters, en in de design-shell, blijft de opgeslagen aanvraagknop en de opgeslagen intro staan. 1.13.61 verbergt ontbrekende bestemmingen en vervangt catalogusquery’s die deze site niet toepast, alleen als het mu-plugin die filters vult.
 
 Buiten Learn verandert een gewone cataloguspagina daardoor niet, behalve een grotere sluitknop op de melding dat catalogusdata verouderd is, en een doorverwijzing van een oud item-id alleen als de data `legacyIds` bevat. De nieuwe glossarypagina blijft uit.
 
@@ -138,12 +138,12 @@ De scripts gebruiken de `wp` van de server en `WP_PATH`. Ze lezen geen checkoutp
 
 1. Bewaar de huidige tilesmap. Op de lokale kopie is 1.13.32 bewaard buiten git.
 2. Controleer `shasum -a 256 -c SHA256SUMS` in de pakketmap.
-3. Pak `plugins/fides-community-tools-tiles-1.13.66.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
-4. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`. Zodra tiles 1.13.66 staat, verwijder `/var/www/html/app/mu-plugins/fides-learn-header-fix.php`. Wijzig het stagingmenu niet.
+3. Pak `plugins/fides-community-tools-tiles-1.13.67.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
+4. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`. Zodra tiles 1.13.67 staat, verwijder `/var/www/html/app/mu-plugins/fides-learn-header-fix.php`. Wijzig het stagingmenu niet.
 5. Laat glossary op 1.1.15. Wijzig geen WPML-instelling en activeer geen taalwissel.
 6. Dry-run. Daarna pas toepassen.
 
-Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.66.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Verwijder daarna `/var/www/html/app/mu-plugins/fides-learn-header-fix.php`. Het stagingmenu niet aanpassen.
+Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.67.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Verwijder daarna `/var/www/html/app/mu-plugins/fides-learn-header-fix.php`. Het stagingmenu niet aanpassen.
 
 ## Stagingmenu
 
