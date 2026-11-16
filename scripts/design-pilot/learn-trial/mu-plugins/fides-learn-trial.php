@@ -106,9 +106,35 @@ add_filter('fides_ds_learn_unavailable_paths', static function ($paths): array {
         return is_array($paths) ? $paths : array();
     }
     return array(
-        '/learn/sessions/request/',
         '/services/',
         '/start/receive/',
+    );
+});
+
+/**
+ * Training and workshop buttons open the existing contact page. The stored
+ * enquiry link is left in the page for the design shell. No offering and no date
+ * is added, so the button does not look like a registration.
+ *
+ * @param mixed $spec
+ * @return array<string,mixed>
+ */
+add_filter('fides_ds_learn_contact_buttons', static function ($spec): array {
+    unset($spec);
+    if (fides_learn_trial_profile() === '') {
+        return array();
+    }
+    return array(
+        'from'    => '/learn/sessions/request/',
+        'url'     => '/about-fides/contact/',
+        'default' => 'Contact us about this training',
+        'labels'  => array(
+            'eudi-business-wallets-in-practice' => 'Contact us about this training',
+            'interest'                          => 'Contact us about this training',
+            'wallet-introduction'               => 'Contact us about this introduction session',
+            'wallet-readiness-workshop'         => 'Contact us about this workshop',
+            'training-partnerships'             => 'Contact us about this partnership',
+        ),
     );
 });
 

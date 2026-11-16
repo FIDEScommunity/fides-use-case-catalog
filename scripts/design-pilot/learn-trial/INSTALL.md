@@ -2,7 +2,7 @@
 
 **Credential en Credential Type ontbreken in de huidige Learn-glossary.** Learn leest alleen de bundel van glossary 1.1.15 (335 termen). Die twee termen staan wel in de gepubliceerde glossary 1.12.2. Deze proef wijzigt de glossary niet. De woorden blijven platte tekst, zonder popup.
 
-**De trainingsaanvraagknoppen zijn in deze proef verborgen.** De productiekopie heeft geen werkende contactpagina, dus die knoppen wijzen daar niet naartoe. Register your interest, Discuss an introduction session, Discuss a workshop, Discuss a partnership, See the services overview en View readiness assessment blijven weg in de themaweergave. In de opgeslagen inhoud en in de design-shell blijven de oorspronkelijke aanvraaglinks staan.
+**De trainings- en workshopknoppen wijzen in de themaweergave naar `/about-fides/contact/`.** De tekst hangt van de pagina af: “Contact us about this training”, “Contact us about this introduction session”, “Contact us about this workshop” of “Contact us about this partnership”. De knop neemt geen training en geen datum mee. De opgeslagen aanvraaglink blijft in de pagina voor de design-shell. See the services overview en View readiness assessment blijven verborgen.
 
 Volledige Learn-route in de themaweergave: de header en footer van het actieve thema, Engelse inhoud, geen taalwissel. Dezelfde pagina’s blijven later bruikbaar in de design-shell. De designpilot zelf blijft op die shell.
 
@@ -33,12 +33,12 @@ Wisselen, alleen op die twee hosts: `wp option update fides_learn_trial_chrome s
 
 | Onderdeel | Bestaande site | Dit pakket |
 | --- | --- | --- |
-| Tiles | 1.13.32 | 1.13.61 |
+| Tiles | 1.13.32 | 1.13.62 |
 | Glossaryplugin | 1.1.15 | 1.1.15 |
 | Catalogusplugins | ongewijzigd | ongewijzigd |
 | WPML | op staging actief, hier niet aanwezig | niet gewijzigd, niet geactiveerd |
 
-1.13.61 is 1.13.60 plus twee filters die alleen de themaweergave gebruikt als het mu-plugin ze vult: ontbrekende bestemmingen verbergen, en catalogusquery’s die deze site niet toepast vervangen door een gewone cataloguslink. Zonder die filters, en in de design-shell, blijven de opgeslagen knoppen en de opgeslagen filterlinks staan.
+1.13.62 laat de themaweergave een trainings- of workshopknop naar `/about-fides/contact/` zetten wanneer het mu-plugin `fides_ds_learn_contact_buttons` vult. Zonder dat filter, en in de design-shell, blijft de opgeslagen aanvraagknop staan. 1.13.61 verbergt ontbrekende bestemmingen en vervangt catalogusquery’s die deze site niet toepast, alleen als het mu-plugin die filters vult.
 
 Buiten Learn verandert een gewone cataloguspagina daardoor niet, behalve een grotere sluitknop op de melding dat catalogusdata verouderd is, en een doorverwijzing van een oud item-id alleen als de data `legacyIds` bevat. De nieuwe glossarypagina blijft uit.
 
@@ -101,24 +101,26 @@ Oplossing, later: de bundel van de glossaryplugin gelijk trekken met de gepublic
 
 De trainingspagina’s blijven staan: overzicht, EUDI & Business Wallets in Practice, Wallet Introduction, Wallet Readiness Workshop en Training partnerships. Er staat geen formulier op die pagina’s, en er is geen formulier toegevoegd dat niets verstuurt.
 
-Gecontroleerd op de productiekopie `http://utrecht-demo.local` op 16 november 2026:
+De bestemming is `/about-fides/contact/`, het pad van de gepubliceerde contactpagina. Op `http://utrecht-demo.local` geeft dat pad 404: de pagina staat niet in deze kopie, en formulier 298 hangt nergens. De knoppen krijgen dat pad toch, zodat staging dezelfde route gebruikt. Het formulier is hier niet verstuurd. Op staging controleert iemand het formulier zelf.
 
-- `/contact/`, `/contact-us/`, `/about-fides/` en `/about-fides/contact/` geven 404.
-- Er is geen gepubliceerde pagina met “contact” in de titel of de slug, en geen menu-item naar een contactpagina.
-- WPForms Lite 1.9.5.2 is actief. Het bericht “Simple Contact Form” (id 298) heeft naam, e-mail, onderwerp en bericht, met een bevestiging “Thanks for contacting us”. Het staat op geen enkele pagina of widget. De melding gaat naar `{admin_email}`, en dat adres is `dev-email@wpengine.local`.
-- De footer heeft de kop “Contact us” en de zin “mail us at info@fides.community”. Dat is tekst, geen link en geen formulier.
+In de themaweergave wordt een knop naar `/learn/sessions/request/` zo:
 
-Die pagina is daarom geen bestemming voor de trainingsknoppen. De knoppen blijven in de themaweergave verborgen. Er zijn geen teksten als “Contact us about this workshop” geplaatst, omdat daar geen werkende route onder staat.
+| Pagina | Zichtbare tekst | Bestemming |
+| --- | --- | --- |
+| EUDI & Business Wallets in Practice | Contact us about this training | `/about-fides/contact/` |
+| Trainingsoverzicht, webinars | Contact us about this training | `/about-fides/contact/` |
+| Wallet Introduction | Contact us about this introduction session | `/about-fides/contact/` |
+| Wallet Readiness Workshop | Contact us about this workshop | `/about-fides/contact/` |
+| Training partnerships | Contact us about this partnership | `/about-fides/contact/` |
 
-Ter vergelijking, alleen gelezen en niet gebruikt: `https://fides.community/about-fides/contact/` geeft 200 en toont een algemeen WPForms-formulier (naam, e-mail, bericht, Submit). Dat formulier kiest geen training en geen datum. Die route staat niet op de productiekopie. `https://staging.fides.community/about-fides/contact/` gaf 401 en is niet geopend.
+De query `offering` en `date` gaat niet mee. Een afsluiting die om een registratie of een datum vraagt, toont in de themaweergave dezelfde contacttekst en de zin “Send a message. This does not register you and it does not reserve a date.”
 
-In de themaweergave verdwijnen de knoppen naar pagina’s die er niet zijn:
+Deze knoppen blijven verborgen, omdat die pagina’s niet in deze proef zitten:
 
-- `/learn/sessions/request/` (Register your interest, Discuss an introduction session, Discuss a workshop, Discuss a partnership)
 - `/services/` en `/services/wallet-readiness-assessment/` (See the services overview, View readiness assessment)
 - `/start/receive/` (de gewone link “Receive information from wallets” blijft als tekst staan, zonder link)
 
-Een knop naar een bestaande Learn-pagina, zoals Explore the knowledge topics, blijft. De opgeslagen bestemmingen blijven in de pagina. In de design-shell zijn de knoppen er weer. Op de workshoppagina blijft alleen “Explore the knowledge topics”. Op het trainingsoverzicht blijven de kaarten naar de bestaande training, introductie en workshop.
+Een knop naar een bestaande Learn-pagina, zoals Explore the knowledge topics, blijft. De opgeslagen aanvraaglink blijft in de pagina. In de design-shell staan Register your interest, Discuss a workshop en de andere aanvraagknoppen weer op `/learn/sessions/request/`.
 
 De dubbele slash naar Ecosystem roles in “Digital wallets and public services” is in de bron hersteld naar `/learn/topics/ecosystem-roles/`.
 
@@ -128,12 +130,12 @@ De scripts gebruiken de `wp` van de server en `WP_PATH`. Ze lezen geen checkoutp
 
 1. Bewaar de huidige tilesmap. Op de lokale kopie is 1.13.32 bewaard buiten git.
 2. Controleer `shasum -a 256 -c SHA256SUMS` in de pakketmap.
-3. Pak `plugins/fides-community-tools-tiles-1.13.61.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
+3. Pak `plugins/fides-community-tools-tiles-1.13.62.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
 4. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`.
 5. Laat glossary op 1.1.15. Wijzig geen WPML-instelling en activeer geen taalwissel.
 6. Dry-run. Daarna pas toepassen.
 
-Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.61.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`.
+Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.62.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`.
 
 Dry-run, vanaf de uitgepakte pakketmap. Op staging weigert het script tot `LEARN_TARGET=staging` gezet is:
 
@@ -189,8 +191,8 @@ Het mu-plugin weghalen, of de chrome-optie op `shell` zetten. Dezelfde pagina’
 - 51 Learn-pagina’s geven 200, met themaheader en zonder site-shell en zonder taalwissel.
 - In de Learn-inhoud van die 51 pagina’s staat geen link meer naar `/learn/sessions/request/`, `/services/`, `/start/receive/`, en geen `format`, `issuance`, `presentation`, `role` of `cert` in een cataloguslink. 86 interne links uit die inhoud geven geen 404.
 - `?country=` blijft staan op wallets en organizations. `?usecase=` blijft staan op voorbeeldkaarten. Een landlink naar use cases is “Browse use cases” zonder `country`.
-- Wallet Readiness Workshop toont alleen “Explore the knowledge topics”. De details blijven een kolom van 320 px naast de tekst. De aanvraagknop en “View readiness assessment” zijn weg.
-- De contactpagina op de productiekopie werkt niet. `/about-fides/contact/` is 404, formulier 298 hangt nergens, en de footer is alleen het adres `info@fides.community`. De trainingsknoppen zijn daarom niet naar een contactroute gezet.
+- Wallet Readiness Workshop toont “Contact us about this workshop” naar `/about-fides/contact/`, naast “Explore the knowledge topics”. De details blijven een kolom van 320 px. “View readiness assessment” blijft weg.
+- EUDI & Business Wallets in Practice toont “Contact us about this training” naar `/about-fides/contact/`. Op utrecht-demo.local geeft dat pad 404; het formulier is niet verstuurd. Op staging is dit het pad van de bestaande contactpagina.
 - De dubbele slash is weg. De pagina “Digital wallets and public services” is de enige die deze apply heeft bijgewerkt. Dry-run daarvoor: 50 unchanged, 1 would-updated.
 - Terugzet-dry-run op `installs/utrecht-demo.local-20261116-161037.tsv`: 46 would-delete, 5 kept-existing (de eerdere proefpagina’s). Er is niets verwijderd.
 - De designpilot op `http://localhost:10088/fides-design-pilot/learn/` houdt de site-shell. Het format-artikel houdt `format=sd_jwt_vc`. De workshop houdt “Discuss a workshop” en de aanvraaglink. Die seed is niet gedraaid.

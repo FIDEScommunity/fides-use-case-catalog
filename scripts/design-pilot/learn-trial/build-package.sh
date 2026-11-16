@@ -31,8 +31,8 @@ if [[ -n "$tiles_dirty$content_dirty" ]]; then
 fi
 
 version="$(grep -m 1 -E '^ \* Version:' "$TILES_ROOT/fides-community-tools-tiles.php" | awk '{print $3}')"
-if [[ "$version" != "1.13.61" ]]; then
-  echo "Refusing: tiles version is $version, expected 1.13.61." >&2
+if [[ "$version" != "1.13.62" ]]; then
+  echo "Refusing: tiles version is $version, expected 1.13.62." >&2
   exit 1
 fi
 
@@ -46,13 +46,13 @@ trap 'rm -rf "$stage"' EXIT
 
 mkdir -p "$stage/pkg/plugins" "$stage/pkg/mu-plugins" "$stage/pkg/seed/learn-trial" "$stage/extract"
 git -C "$TILES_ROOT" archive --format=zip --prefix=fides-community-tools-tiles/ HEAD \
-  -o "$stage/pkg/plugins/fides-community-tools-tiles-1.13.61.zip"
-header="$(unzip -p "$stage/pkg/plugins/fides-community-tools-tiles-1.13.61.zip" \
+  -o "$stage/pkg/plugins/fides-community-tools-tiles-${version}.zip"
+header="$(unzip -p "$stage/pkg/plugins/fides-community-tools-tiles-${version}.zip" \
   fides-community-tools-tiles/fides-community-tools-tiles.php | head -n 20 || true)"
 case "$header" in
-  *"Version: 1.13.61"*) ;;
+  *"Version: ${version}"*) ;;
   *)
-    echo "Tiles zip does not contain version 1.13.61." >&2
+    echo "Tiles zip does not contain version ${version}." >&2
     exit 1
     ;;
 esac
@@ -113,8 +113,8 @@ doc = {
     "staging": "https://staging.fides.community requires LEARN_TARGET=staging. Dry-run unless LEARN_APPLY=1.",
     "refuses": ["fides.community", "www.fides.community", "/design-review", "/fides-design-pilot", "LEARN_FORCE"],
     "glossary": "Leave fides-vocabulary-glossary at 1.1.15. Credential and Credential Type are missing from the bundle Learn reads.",
-    "request_buttons": "Hidden in this trial's theme chrome. The stored destinations stay in the page.",
-    "contact": "The production copy has no working contact page. /contact/ and /about-fides/contact/ return 404, and WPForms post 298 is not embedded. Training buttons were not pointed at a contact URL.",
+    "request_buttons": "Training and workshop buttons in theme chrome go to /about-fides/contact/. Services buttons stay hidden. The design shell keeps the stored request links.",
+    "contact": "Theme chrome uses /about-fides/contact/ with labels such as Contact us about this workshop. No offering and no date is added. The local copy returns 404 for that path; staging uses the same path.",
     "installed": False,
 }
 with open(dest, "w", encoding="utf-8") as handle:

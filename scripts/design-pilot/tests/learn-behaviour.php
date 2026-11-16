@@ -186,6 +186,27 @@ $stored = '<a class="fides-ds-button" href="/learn/sessions/request/?offering=wa
 $check(Fides_DS_Learn::adjust_trial_links($stored) === $stored, 'shell chrome keeps request buttons and filtered catalog links');
 add_filter('fides_ds_learn_chrome', $theme_chrome);
 $check(Fides_DS_Learn::adjust_trial_links($stored) === $stored, 'theme chrome without a site list keeps the stored links');
+$contact = static function (): array {
+    return array(
+        'from'    => '/learn/sessions/request/',
+        'url'     => '/about-fides/contact/',
+        'default' => 'Contact us about this training',
+        'labels'  => array(
+            'wallet-readiness-workshop'         => 'Contact us about this workshop',
+            'eudi-business-wallets-in-practice' => 'Contact us about this training',
+        ),
+    );
+};
+add_filter('fides_ds_learn_contact_buttons', $contact);
+$contacted = Fides_DS_Learn::adjust_trial_links($stored . '<section class="fides-learn-closing"><h2>Register your interest</h2><p>Choose a date and leave your details. This is an expression of interest, not a booking or payment.</p><a class="fides-ds-button" href="/learn/sessions/request/?offering=eudi-business-wallets-in-practice&amp;date=thursday-10-december-2026">Register your interest <span aria-hidden="true">→</span></a></section>');
+$check(strpos($contacted, 'href="/about-fides/contact/"') !== false && strpos($contacted, 'Contact us about this workshop') !== false, 'a workshop button opens the contact page');
+$check(strpos($contacted, 'sessions/request') === false && strpos($contacted, 'offering=') === false && strpos($contacted, 'date=') === false, 'the contact button drops the enquiry, the offering and the date');
+$check(strpos($contacted, 'Explore the knowledge topics') !== false, 'the topics button stays beside the contact button');
+$check(strpos($contacted, 'Register your interest') === false && strpos($contacted, 'Choose a date') === false && strpos($contacted, 'does not register you') !== false && substr_count($contacted, 'Contact us about this training') === 2, 'the closing block no longer asks for a registration or a date');
+remove_filter('fides_ds_learn_chrome', $theme_chrome);
+$check(Fides_DS_Learn::adjust_trial_links($stored) === $stored, 'shell chrome ignores the contact button filter');
+add_filter('fides_ds_learn_chrome', $theme_chrome);
+remove_filter('fides_ds_learn_contact_buttons', $contact);
 $unavailable = static function (): array {
     return array('/learn/sessions/request/', '/services/', '/start/receive/');
 };
