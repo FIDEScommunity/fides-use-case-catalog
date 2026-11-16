@@ -31,16 +31,24 @@ fi
 python3 - "$PKG/manifest.json" <<'PY'
 import json, sys
 doc = json.load(open(sys.argv[1], encoding="utf-8"))
-assert doc["tiles_version"] == "1.13.64"
+assert doc["tiles_version"] == "1.13.65"
 assert "Credential" in doc["glossary"] and "Credential Type" in doc["glossary"]
 assert "Contact us about this workshop" in doc["contact"]
 assert "/about-fides/contact/" in doc["contact"]
 assert "your country" in doc["country"]
+assert "fides-learn-header-fix.php" in doc["header"]
+assert "Overview" in doc["menu"] and "Issuers" in doc["menu"]
 assert "hidden" in doc["request_buttons"]
 assert doc["installed"] is False
 assert "fides.community" in doc["refuses"]
 PY
 ok "manifest names the glossary gap and hidden buttons"
+
+if ! grep -q 'fides-learn-header-fix.php' "$PKG/INSTALL.md"; then
+  bad "install instructions omit the temporary header rule"
+else
+  ok "install instructions remove the temporary header rule"
+fi
 
 stub="$(mktemp -d)"
 site="$(mktemp -d)"

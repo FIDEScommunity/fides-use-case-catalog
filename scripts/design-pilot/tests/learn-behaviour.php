@@ -262,13 +262,13 @@ if ($training) {
 }
 if ($overview) {
     $shell_overview = Fides_DS_Learn::render_page((int) $overview->ID);
-    $check(strpos($shell_overview, 'Join an open training in Utrecht') !== false && strpos($shell_overview, 'fides-learn-country') === false && strpos($shell_overview, 'Currently, scheduled training is available in the Netherlands.') === false, 'shell chrome keeps the stored training intro and has no country selector');
+    $check(strpos($shell_overview, 'Join an open training in Utrecht') !== false && strpos($shell_overview, 'Where would you like to attend?') !== false && strpos($shell_overview, 'Currently, scheduled training is available in the Netherlands.') === false && strpos($shell_overview, 'sessions/request') !== false, 'shell chrome keeps the stored intro and shows the country dropdown');
     add_filter('fides_ds_learn_chrome', $theme_chrome);
     add_filter('fides_ds_learn_contact_buttons', $contact);
     add_filter('fides_ds_learn_country_picker', $country);
     $theme_overview = Fides_DS_Learn::render_page((int) $overview->ID);
     $check(strpos($theme_overview, 'Explore training and workshops on digital wallets and credentials, for individuals and teams.') !== false && strpos($theme_overview, 'Join an open training in Utrecht') === false, 'theme chrome uses the training intro from the country frames');
-    $check(strpos($theme_overview, 'Where would you like to attend?') !== false && strpos($theme_overview, 'selected') !== false && strpos($theme_overview, '>The Netherlands<') !== false && strpos($theme_overview, 'Currently, scheduled training is available in the Netherlands.') !== false, 'the country selector defaults to the Netherlands and explains where training is scheduled');
+    $check(strpos($theme_overview, 'Where would you like to attend?') !== false && strpos($theme_overview, 'selected') !== false && strpos($theme_overview, '>The Netherlands<') !== false && strpos($theme_overview, 'Currently, scheduled training is available in the Netherlands.') === false, 'the country selector defaults to the Netherlands');
     $check(strpos($theme_overview, 'No scheduled trainings in %s yet') !== false && strpos($theme_overview, 'your country') !== false && strpos($theme_overview, '>Contact us <span') !== false && strpos($theme_overview, 'href="/about-fides/contact/"') !== false, 'another country can show the empty-state contact link');
     $empty_at = strpos($theme_overview, 'data-fides-learn-country-empty');
     $partners_at = strpos($theme_overview, 'Training partnerships');
