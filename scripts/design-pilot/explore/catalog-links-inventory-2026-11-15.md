@@ -85,19 +85,20 @@ Catalog theme codes without a bundle: {"agentic_ai": 7} (agentic_ai: no bundle o
 | `organizations/?sector=…` | works, visible pill |
 | `organizations/?theme=…` | not supported (ignored) |
 | `issuers/?country[]=NL` | works (16 of 75) |
-| `issuers/?credential[]=<id>` | works, pill per credential; used for derived issuer links |
+| `issuers/?credential[]=<id>` | works, pill per credential; used for derived issuer links (before round 5) |
+| `issuers/?sector=<code>` / `?theme=<bundle>` | **round 5**: organisation sector / credential types; see `issuer-rp-filters-2026-11-15.md` |
 | `relying-parties/?country[]=NL` | works (20 of 102) |
 | `relying-parties/?credential[]=<id>` | works; used for derived RP links |
-| `relying-parties/?sector[]=education` | not supported (ignored, 102 shown) |
+| `relying-parties/?sector[]=education` | not supported before round 5; now `?sector=` (own sectors) and `?theme=` (accepted credential types) work |
 | `personal-wallets/` and `business-wallets/` `?country=NL` | works, but no sector or theme filter exists |
 
 ## 5. Gaps and ambiguities
-1. No sector or theme filter on issuers, relying parties or wallets. Report to the Issuers/RP track; not built here.
+1. Wallets have no sector or theme filter. Issuers and relying parties got `?sector=` / `?theme=` in round 5 (`issuer-rp-filters-2026-11-15.md`).
 2. Organisations have no theme data; no theme link for organisations.
 3. 12 generic credential types carry all 14 sectors; they would crowd every sector. Ranking puts specific types first and the "view all" count stays exact.
 4. Organisation counts differ between the local file (826) and the browser snapshot (832): organisations link without a count.
 5. The credentials theme filter uses the narrow catalog theme (e.g. "Organizational identity"), not the bundle name "Business & Mandates". The basis sentence names the catalog theme so the visible pill is explained.
-6. Derived issuer and RP links carry one `credential[]` parameter per credential type (long URLs, up to 36 pills). The filter works but is long; a theme filter on those catalogs would be cleaner.
+6. (Solved in round 5) Derived issuer and RP links carried one `credential[]` parameter per credential type (up to 36 pills); they now use `?sector=` / `?theme=`.
 7. Use case issuer and RP links mostly carry no reference id, so they cannot be matched to records with certainty; only linked records with an id are used.
 8. `agentic_ai` has no bundle.
 

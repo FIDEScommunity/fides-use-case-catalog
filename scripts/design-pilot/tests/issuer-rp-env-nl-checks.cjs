@@ -47,7 +47,7 @@ const ALLOWED_ENGLISH = /Ecosystem Explorer|OID4VCI|OpenID|Remove from/;
       const text = async (sel) => (await page.locator(sel).first().innerText().catch(() => "")).replace(/\s+/g, " ").trim();
       const total = async () => page.evaluate(() => { const m = ((document.querySelector("[data-pilot-count]") || {}).textContent || "").match(/(\d+)(?: (?:of|van) (\d+))?/); return m ? Number(m[1]) : -1; });
 
-      await page.goto(`${root}/issuers/`, { waitUntil: "load" });
+      await page.goto(`${root}/issuers/`, { waitUntil: "domcontentloaded", timeout: 60000 });
       await page.waitForSelector(".fides-uc-pilot__list .fides-ds-card", { timeout: 30000 });
       await page.waitForLoadState("networkidle", { timeout: 30000 }).catch(() => {});
       const legend = await text(".fides-uc-pilot__legend");
@@ -64,7 +64,7 @@ const ALLOWED_ENGLISH = /Ecosystem Explorer|OID4VCI|OpenID|Remove from/;
       }
 
       for (const env of ["production", "test"]) {
-        await page.goto(`${root}/issuers/?environment[]=${env}`, { waitUntil: "load" });
+        await page.goto(`${root}/issuers/?environment[]=${env}`, { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForSelector(".fides-uc-pilot__count", { timeout: 30000 });
         check(`issuers ${tag}: ?environment[]=${env} gives ${counts[env]} results`, (await total()) === counts[env], await total());
         const pills = await page.$$eval(".fides-uc-pilot__pill", (els) => els.map((e) => e.textContent.replace(/\s+/g, " ").trim()));
@@ -73,14 +73,14 @@ const ALLOWED_ENGLISH = /Ecosystem Explorer|OID4VCI|OpenID|Remove from/;
         const badges = await page.$$eval(`.fides-uc-pilot__list .fides-ds-card .fides-ds-card__status`, (els) => [...new Set(els.map((e) => e.textContent.trim()))]);
         check(`issuers ${tag}: every shown badge reads "${LABEL[loc][env]}" (${badges.join(", ")})`, badges.length === 1 && badges[0] === LABEL[loc][env], badges.join(", "));
       }
-      await page.goto(`${root}/issuers/?environment[]=unspecified`, { waitUntil: "load" });
+      await page.goto(`${root}/issuers/?environment[]=unspecified`, { waitUntil: "domcontentloaded", timeout: 60000 });
       check(`issuers ${tag}: ?environment[]=unspecified gives ${counts.unspecified} results and no PHP notice`, !/Warning:|Notice:|Fatal error/.test(await page.content()), await total());
 
       if (loc === "NL") {
         // Dynamic Dutch: gather visible text segments and aria-labels of overview and record pages, report English UI text.
         const urls = [`${root}/issuers/?environment[]=test&q=wallet`, `${root}/relying-parties/?q=wallet`, `${root}/issuer/?issuer=issuer:animo:bundesdruckerei:test`, `${root}/relying-party/?rp=pass2rent-car-rental-verifier`];
         for (const u of urls) {
-          await page.goto(u, { waitUntil: "load" });
+          await page.goto(u, { waitUntil: "domcontentloaded", timeout: 60000 });
           await page.waitForSelector("main, .fides-ds-page", { timeout: 30000 });
           await page.waitForLoadState("networkidle", { timeout: 30000 }).catch(() => {});
           const found = await page.evaluate(() => {

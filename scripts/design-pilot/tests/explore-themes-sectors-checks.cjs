@@ -19,7 +19,7 @@
  *  - NL: catalog content is lang="en" and not translated, the catalog-content note, Learn stays "Learn", Dutch notice/empty state;
  *  - no featured image: the introduction uses the full width; Explore menu entries on desktop and in the mobile menu.
  * Nothing is submitted: GET navigation only. The empty-data state needs the fixture: tests/run-explore-themes-sectors-empty.sh.
- * ONLY_MAIN=1 runs only the general checks above; ONLY_ROUND2=1 only the UX round checks; ONLY_ROUND4=1 only round 4 ("More from the catalog": parts per catalog type, basis, links with counts, follow-and-back, dedupe, low data, no use cases, EN/NL, 1440/390; needs output/explore-catalog-block.json from the behaviour test run with ONLY_ROUND4=1); ONLY_ROUND3=1 only round 3 (section anchors with Back/Forward and final scroll, listener clean-up after repeated switches, mobile picker with #fides-explore-choices with and without JavaScript, translated status message; TILES_JS_OVERRIDE=<file> serves another design-system.js as a negative control). Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/explore-themes-sectors-checks.cjs   (env: PILOT_URL, WIDTHS, LOCALES, SAMPLE=all)
+ * ONLY_MAIN=1 runs only the general checks above; ONLY_ROUND2=1 only the UX round checks; ONLY_ROUND5=1 only the ?sector= / ?theme= filter checks of the issuer and relying party overviews (round 5; they also run after round 4 with ONLY_ROUND4=1); ONLY_ROUND4=1 only round 4 ("More from the catalog": parts per catalog type, basis, links with counts, follow-and-back, dedupe, low data, no use cases, EN/NL, 1440/390; needs output/explore-catalog-block.json from the behaviour test run with ONLY_ROUND4=1); ONLY_ROUND3=1 only round 3 (section anchors with Back/Forward and final scroll, listener clean-up after repeated switches, mobile picker with #fides-explore-choices with and without JavaScript, translated status message; TILES_JS_OVERRIDE=<file> serves another design-system.js as a negative control). Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/explore-themes-sectors-checks.cjs   (env: PILOT_URL, WIDTHS, LOCALES, SAMPLE=all)
  */
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
 const fs = require("fs");
@@ -42,6 +42,37 @@ function check(name, ok, detail) {
 }
 const prefix = (loc) => (loc === "NL" ? "/nl" : "") + "/fides-design-pilot/";
 const COOKIES = Object.entries({ "banner-status": "dismissed", policy_id: "35", functional: "allow", preferences: "deny", statistics: "deny", marketing: "deny" }).map(([n, v]) => ({ name: `cmplz_${n}`, value: v, url: BASE }));
+
+
+// "networkidle" and "load" never settle when a slow remote logo is still loading: wait for "domcontentloaded", then give "load" and the
+// network a short chance. Applied to every page of every context (see the launch below).
+function patchPage(page) {
+  for (const name of ["goto", "goBack", "waitForNavigation"]) {
+    const original = page[name].bind(page);
+    page[name] = async (...args) => {
+      const options = Object.assign({}, name === "goto" ? args[1] : args[0]);
+      if (options.waitUntil === "networkidle" || options.waitUntil === "load" || !options.waitUntil) options.waitUntil = "domcontentloaded";
+      options.timeout = options.timeout || 45000;
+      const result = await (name === "goto" ? original(args[0], options) : original(options));
+      await page.waitForLoadState("load", { timeout: 10000 }).catch(() => {});
+      await page.waitForLoadState("networkidle", { timeout: 15000 }).catch(() => {});
+      return result;
+    };
+  }
+  const waitState = page.waitForLoadState.bind(page);
+  page.waitForLoadState = (state, options) => waitState(state, Object.assign({ timeout: 12000 }, options)).catch(() => {});
+  return page;
+}
+function patchBrowser(browser) {
+  const newContext = browser.newContext.bind(browser);
+  browser.newContext = async (...args) => {
+    const ctx = await newContext(...args);
+    const newPage = ctx.newPage.bind(ctx);
+    ctx.newPage = async () => patchPage(await newPage());
+    return ctx;
+  };
+  return browser;
+}
 
 async function newPage(browser, width, js = true) {
   const ctx = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: "reduce", javaScriptEnabled: js });
@@ -791,6 +822,10 @@ async function round4Checks(browser) {
           const label = part.type === "credentials" || part.type === "organizations" ? (T.catalogTheme || T.name[loc]) : null;
           const pillOk = label ? dest.pills.some((p) => p.includes(label) || p.includes(T.name.EN)) : dest.pills.some((p) => /×|remove|verwijder/i.test(p));
           if (part.type === "credentials" && T.catalogTheme) check(`${pt}: the basis sentence names the catalog theme "${T.catalogTheme}" that the filter pill shows`, (part.basisText || "").includes(T.catalogTheme), part.basisText);
+          if (part.type === "issuers" || part.type === "rps") {
+            check(`${pt}: the link is the short ?${T.param}=${T.slug} filter (no credential[] list)`, new URL(dest.url, BASE).search === `?${T.param}=${T.slug}`, dest.url);
+            check(`${pt}: the filter pill names the choice (${T.name[loc]})`, dest.pills.some((x) => x.includes(T.name[loc])), dest.pills.join(" | "));
+          }
           check(`${pt}: catalog opens with the choice as a visible filter (${dest.pills.length} filter pill(s))`, pillOk, dest.pills.slice(0, 2).join(" | "));
           if (part.type !== "organizations" && loc === "EN") check(`${pt}: the catalog lists exactly ${part.total}`, dest.count === part.total, `${dest.count}`);
           info.push(`${pt}: destination ${dest.url.slice(0, 70)} shows ${dest.count}, ${dest.pills.length} filter pill(s)`);
@@ -814,12 +849,157 @@ async function round4Checks(browser) {
   console.log("\n" + info.map((l) => `info - ${l}`).join("\n"));
 }
 
+
+// ---------------------------------------------------------------------------------------------------------------------
+// Round 5 (2026-11-15): ?sector= / ?theme= on the issuer and relying party overviews (runs with ONLY_ROUND4=1 and in the full run)
+// ---------------------------------------------------------------------------------------------------------------------
+const R5_CATALOGS = [
+  { key: "issuers", path: "issuers/", open: "[data-issuer-pilot-open]", panel: "[data-issuer-pilot-panel]", name: { EN: "issuers", NL: "uitgevers" },
+    titles: { sector: { EN: "Sector of organization", NL: "Sector van de organisatie" }, theme: { EN: "Theme of credentials", NL: "Thema van de credentials" } },
+    note: { sector: { EN: /^Sector filter: issuers whose organization is listed in the sector /, NL: /^Sectorfilter: uitgevers waarvan de organisatie in de sector / }, theme: { EN: /^Theme filter: issuers that offer at least one credential type in the theme /, NL: /^Themafilter: uitgevers die minstens één credentialtype in het thema / } } },
+  { key: "rps", path: "relying-parties/", open: "[data-rp-pilot-open]", panel: "[data-rp-pilot-panel]", name: { EN: "relying parties", NL: "vertrouwende partijen" },
+    titles: { sector: { EN: "Sector", NL: "Sector" }, theme: { EN: "Theme of accepted credentials", NL: "Thema van geaccepteerde credentials" } },
+    note: { sector: { EN: /^Sector filter: relying parties that list the sector /, NL: /^Sectorfilter: vertrouwende partijen die zelf de sector / }, theme: { EN: /^Theme filter: relying parties that accept at least one credential type in the theme /, NL: /^Themafilter: vertrouwende partijen die minstens één credentialtype in het thema / } } },
+];
+// The two examples of the brief, plus targets that exercise paging (identity_access issuers > 30, digital relying parties > 60) and a value without data.
+const R5_TARGETS = [
+  { kind: "sector", slug: "education", name: { EN: "Education", NL: "Onderwijs" } },
+  { kind: "theme", slug: "business_authority", name: { EN: "Business & Mandates", NL: "Bedrijven en mandaten" } },
+  { kind: "theme", slug: "identity_access", name: { EN: "Identity & Access", NL: "Identiteit en toegang" }, paging: ["issuers"] },
+  { kind: "sector", slug: "digital", name: { EN: "Digital", NL: "Digitaal" }, paging: ["rps"] },
+];
+const countText = (p) => p.locator("[data-pilot-count]").first().textContent().then((t) => norm(t));
+const firstNumber = (t) => { const m = (t || "").match(/\d+/); return m ? Number(m[0]) : null; };
+
+async function round5Checks(browser) {
+  if (!fs.existsSync(BLOCK_FILE)) {
+    check("block file exists (run ONLY_ROUND4=1 explore-themes-sectors-behaviour.php first)", false, BLOCK_FILE);
+    return;
+  }
+  const expected = JSON.parse(fs.readFileSync(BLOCK_FILE, "utf8"));
+  const info = [];
+  for (const loc of LOCALES) {
+    for (const width of WIDTHS) {
+      for (const C of R5_CATALOGS) {
+        for (const T of R5_TARGETS) {
+          const tag = `r5 ${loc} ${width} ${C.key} ${T.kind}=${T.slug}`;
+          const exp = (expected[`${T.kind}:${T.slug}`] || {}).totals || {};
+          const base = `${BASE}${prefix(loc)}${C.path}`;
+          const url = `${base}?${T.kind}=${T.slug}`;
+          const page = await newPage(browser, width);
+          const resp = await page.goto(url, { waitUntil: "networkidle" });
+          check(`${tag}: 200`, resp && resp.status() === 200);
+          const total = firstNumber(await countText(page));
+          // The block of the Explore page and the catalog page must agree; a type without records has no block part and no link.
+          check(`${tag}: ${total} ${C.name[loc]} = the Explore block total (${exp[C.key] === undefined ? "none" : exp[C.key]})`, exp[C.key] === undefined ? total === 0 || total > 0 : total === exp[C.key], `${total}`);
+          const pillGroup = T.kind;
+          const pills = await page.$$eval(".fides-uc-pilot__pill", (els) => els.map((e) => e.textContent.replace(/\s+/g, " ").trim()));
+          check(`${tag}: one visible pill "${C.titles[T.kind][loc]}: ${T.name[loc]}"`, pills.length === 1 && pills[0].startsWith(`${C.titles[T.kind][loc]}: ${T.name[loc]}`), pills.join(" | "));
+          const note = norm(await page.locator(`[data-filter-note="${pillGroup}"]`).first().textContent().catch(() => ""));
+          check(`${tag}: plain-language sentence says what the result is based on (${loc})`, C.note[T.kind][loc].test(note) && note.includes(T.name[loc]) && (T.kind === "sector" ? true : true), note);
+          check(`${tag}: option of the chosen value is checked in the filter panel`, (await page.locator(`input[name="${T.kind}[]"][value="${T.slug}"]`).first().isChecked()));
+          check(`${tag}: no horizontal overflow`, await noOverflow(page));
+          const cards = await page.locator(".fides-uc-pilot__list > li").count();
+          check(`${tag}: ${cards} cards on the first page = min(30, ${total})`, cards === Math.min(30, total), `${cards}`);
+          if (loc === "NL") {
+            const english = await page.evaluate(() => Array.from(document.querySelectorAll(".fides-uc-pilot__filter-note, .fides-uc-pilot__pill, .fides-ds-popover__label, .fides-ds-popover__value")).map((n) => n.textContent.replace(/\s+/g, " ").trim()).filter((t) => /\b(Sector filter|Theme filter|All sectors|All themes|Theme of|Sector of)\b/.test(t)));
+            check(`${tag}: filter texts are Dutch`, english.length === 0, english.join(" | "));
+            const hrefs = await page.$$eval(".fides-uc-pilot__pill, .fides-catalog-pagination a", (els) => els.map((e) => e.getAttribute("href")));
+            check(`${tag}: pill and paging links keep /nl/`, hrefs.every((h) => !h || h.startsWith("/nl/") || h.startsWith("?")), hrefs.join(","));
+          }
+          // The group is reachable in the real UI: compact screens open the Filters dialog first; a "More filters" row (filter bar
+          // redesign) is expanded when the group lives there.
+          const groupLabel = page.locator(`.fides-ds-popover__label`, { hasText: new RegExp(`^${C.titles[T.kind][loc]}$`) }).first();
+          if (width < 1100) await page.locator(C.open).first().click();
+          const moreToggle = page.locator(".fides-uc-pilot__more-toggle").first();
+          if (!(await groupLabel.isVisible()) && (await moreToggle.count())) await moreToggle.click();
+          check(`${tag}: the ${T.kind} filter is offered in the filter UI${width < 1100 ? " (Filters dialog)" : ""}`, await groupLabel.isVisible());
+          if (width < 1100) {
+            await page.keyboard.press("Escape");
+            check(`${tag}: dialog closes again`, !(await page.locator(`${C.panel}.is-open`).count()));
+          }
+          // Search keeps the filter
+          if (total > 2) {
+            const word = norm(await page.locator(".fides-uc-pilot__list > li .fides-ds-card__title, .fides-uc-pilot__list > li h3").first().textContent()).split(" ")[0];
+            await page.locator("#fides-search-input").fill(word);
+            await Promise.all([page.waitForNavigation({ waitUntil: "networkidle" }), page.locator(".fides-uc-pilot__search-submit").click()]);
+            const u = new URL(page.url());
+            const keeps = [...u.searchParams.entries()].some(([k, v]) => (k === T.kind || k === `${T.kind}[]`) && v === T.slug);
+            const narrowed = firstNumber(await countText(page));
+            check(`${tag}: search "${word}" keeps the filter in the URL and the result stays within it (${narrowed} of ${total})`, keeps && u.searchParams.get("q") === word && narrowed > 0 && narrowed <= total, u.search);
+            check(`${tag}: pill still names the choice after searching`, (await page.locator(".fides-uc-pilot__pill", { hasText: T.name[loc] }).count()) === 1);
+            // Back returns to the filtered state without the search
+            await page.goBack({ waitUntil: "networkidle" });
+            check(`${tag}: Back after searching returns to ${total}`, firstNumber(await countText(page)) === total && !new URL(page.url()).searchParams.has("q"));
+          }
+          // Sort keeps the filter and the number
+          const options = await page.locator("#fides-sort-select option").evaluateAll((os) => os.map((o) => o.value));
+          const other = options.find((v) => v !== (new URL(page.url()).searchParams.get("sort") || options[0])) || options[1];
+          await Promise.all([page.waitForNavigation({ waitUntil: "networkidle" }), page.locator("#fides-sort-select").selectOption(other)]);
+          const su = new URL(page.url());
+          check(`${tag}: sort "${other}" keeps the filter and the number (${total})`, su.searchParams.get("sort") === other && [...su.searchParams.entries()].some(([k, v]) => k.startsWith(T.kind) && v === T.slug) && firstNumber(await countText(page)) === total, su.search);
+          // Paging keeps the filter; Back returns to page 1
+          if ((T.paging || []).includes(C.key)) {
+            const next = width < 1100 ? page.locator(".fides-catalog-pagination__next").first() : page.locator(".fides-catalog-pagination__pages a", { hasText: /^2$/ }).first(); // the numbered links are hidden on phones
+            check(`${tag}: ${total} results need more than one page`, total > 30 && (await next.count()) === 1, `${total}`);
+            if (await next.count()) {
+              const before = page.url();
+              await Promise.all([page.waitForNavigation({ waitUntil: "networkidle" }), next.click()]);
+              const pu = new URL(page.url());
+              check(`${tag}: page 2 keeps the filter and the sort`, pu.searchParams.get("catalog_page") === "2" && pu.searchParams.get("sort") === other && [...pu.searchParams.entries()].some(([k, v]) => k.startsWith(T.kind) && v === T.slug) && (await page.locator(".fides-uc-pilot__pill", { hasText: T.name[loc] }).count()) === 1, pu.search);
+              check(`${tag}: page 2 shows the rest (${total - 30} cards)`, (await page.locator(".fides-uc-pilot__list > li").count()) === Math.min(30, total - 30));
+              await page.goBack({ waitUntil: "networkidle" });
+              check(`${tag}: Back from page 2 returns to page 1 of the same filter`, page.url() === before);
+            }
+          }
+          // Record and back: the filtered overview returns with its state
+          const link = page.locator(".fides-uc-pilot__list > li a").first();
+          const href = await link.getAttribute("href");
+          const filteredUrl = page.url();
+          await Promise.all([page.waitForNavigation({ waitUntil: "networkidle" }), link.click()]);
+          check(`${tag}: a record opens on the same language route`, loc === "EN" || new URL(page.url()).pathname.startsWith("/nl/"), page.url());
+          await page.goBack({ waitUntil: "networkidle" });
+          check(`${tag}: Back from a record returns to the filtered overview`, page.url() === filteredUrl && (await page.locator(".fides-uc-pilot__pill", { hasText: T.name[loc] }).count()) === 1, `${page.url()} ${href}`);
+          // Removing the pill clears the filter
+          const pill = page.locator(".fides-uc-pilot__pill").first();
+          await Promise.all([page.waitForNavigation({ waitUntil: "networkidle" }), pill.click()]);
+          const all = firstNumber(await countText(page));
+          check(`${tag}: removing the pill clears the filter (${all} results, no ${T.kind} in the URL)`, all > total && !new URL(page.url()).search.includes(T.kind), `${all} ${page.url()}`);
+          info.push(`${tag}: ${total} of ${all}, ${cards} cards on page 1`);
+          await page.context().close();
+        }
+      }
+      // A value that does not exist, "other" and the plain catalog URL
+      const page = await newPage(browser, width);
+      for (const C of R5_CATALOGS) {
+        for (const q of ["sector=other", "theme=zzz", "sector=education&theme=business_authority"]) {
+          await page.goto(`${BASE}${prefix(loc)}${C.path}?${q}`, { waitUntil: "networkidle" });
+          const n = firstNumber(await countText(page));
+          const empty = await page.locator(".fides-uc-pilot__empty").count();
+          const remove = await page.locator(".fides-uc-pilot__empty a").count();
+          if (q.includes("&")) check(`r5 ${loc} ${width} ${C.key} ?${q}: both filters combine (AND between groups, ${n} results)`, n >= 0 && (await page.locator(".fides-uc-pilot__pill").count()) === 2);
+          else check(`r5 ${loc} ${width} ${C.key} ?${q}: no results, an honest empty state with a way back`, n === 0 && empty === 1 && remove >= 1, `${n}/${empty}/${remove}`);
+        }
+      }
+      await page.context().close();
+    }
+  }
+  console.log("\n" + info.map((l) => `info - ${l}`).join("\n"));
+}
+
 (async () => {
-  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, headless: true });
+  const browser = patchBrowser(await chromium.launch({ executablePath: process.env.CHROME_PATH, headless: true }));
   const only4 = process.env.ONLY_ROUND4 === "1";
   const only3 = process.env.ONLY_ROUND3 === "1";
+  if (process.env.ONLY_ROUND5 === "1") {
+    await round5Checks(browser);
+    await browser.close();
+    console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
+    process.exit(failures ? 1 : 0);
+  }
   if (only4) {
     await round4Checks(browser);
+    await round5Checks(browser);
     await browser.close();
     console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
     process.exit(failures ? 1 : 0);
@@ -924,7 +1104,7 @@ async function round4Checks(browser) {
   if (process.env.ONLY_ROUND2 !== "1" && process.env.ONLY_MAIN !== "1" && !only3) await repairChecks(browser);
   if (process.env.ONLY_MAIN !== "1" && !only3) await round2Checks(browser);
   if (only3 || (process.env.ONLY_MAIN !== "1" && process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1")) await round3Checks(browser);
-  if (process.env.ONLY_MAIN !== "1" && process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1" && !only3) await round4Checks(browser);
+  if (process.env.ONLY_MAIN !== "1" && process.env.ONLY_REPAIR !== "1" && process.env.ONLY_ROUND2 !== "1" && !only3) { await round4Checks(browser); await round5Checks(browser); }
   await browser.close();
   console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
   process.exit(failures ? 1 : 0);

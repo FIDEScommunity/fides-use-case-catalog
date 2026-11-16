@@ -13,8 +13,8 @@
  *  - wallets: no sector or theme, so no block (their only link is the use case relation list).
  *
  * Nothing is inferred from text. A "view all" link exists only where the destination catalog has a working filter for exactly
- * this selection (credential types: ?sector= / ?theme=, organisations: ?sector=, issuers and relying parties: ?credential[]=
- * for a selection derived from credential types); otherwise the block shows "Showing N of M" and no link.
+ * this selection (credential types: ?sector= / ?theme=, organisations: ?sector=, issuers and relying parties: ?sector= / ?theme=,
+ * with ?credential[]= as the fallback of an older issuer / relying party plugin); otherwise the block shows "Showing N of M" and no link.
  */
 
 if (! defined('ABSPATH')) {
@@ -156,7 +156,13 @@ final class Fides_Use_Case_Explore_Catalog {
             $issuers = array();
             $how     = '';
             $url     = '';
-            if ($kind === 'sector' && class_exists('Fides_Organization_Design')) {
+            if (self::overview_filters($kind, 'Fides_Issuer_Design')) {
+                // The issuer overview filters on exactly this selection (?sector= organisation sector, ?theme= credential types).
+                $group   = $kind === 'sector' ? 'sector' : 'theme';
+                $issuers = Fides_Issuer_Design::filter_items(Fides_Issuer_Design::items(), '', array($group => array($slug)), array());
+                $how     = $kind === 'sector' ? 'issuers-org-sector' : 'issuers-credentials-theme';
+                $url     = $issuers ? self::filter_url($base . self::PAGES['issuers'], $group, $slug) : '';
+            } elseif ($kind === 'sector' && class_exists('Fides_Organization_Design')) {
                 $org_ids = array();
                 foreach (Fides_Organization_Design::items() as $org) {
                     if (in_array($slug, Fides_Organization_Design::sector_codes($org), true)) {
@@ -199,7 +205,14 @@ final class Fides_Use_Case_Explore_Catalog {
         if (class_exists('Fides_RP_Design')) {
             $rps = array();
             $url = '';
-            if ($kind === 'sector') {
+            if (self::overview_filters($kind, 'Fides_RP_Design')) {
+                // The relying party overview filters on exactly this selection (?sector= own sectors, ?theme= accepted credential types).
+                $group = $kind === 'sector' ? 'sector' : 'theme';
+                $rps   = Fides_RP_Design::filter_items(Fides_RP_Design::items(), '', array($group => array($slug)), array());
+                $basis = $kind === 'sector' ? 'direct' : 'derived';
+                $how   = $kind === 'sector' ? 'rps-sector' : 'rps-credentials-theme';
+                $url   = $rps ? self::filter_url($base . self::PAGES['rps'], $group, $slug) : '';
+            } elseif ($kind === 'sector') {
                 foreach (Fides_RP_Design::items() as $rp) {
                     if (in_array($slug, self::sector_codes($rp['sectors'] ?? array()), true)) {
                         $rps[] = $rp;
@@ -230,6 +243,17 @@ final class Fides_Use_Case_Explore_Catalog {
         /** Filters the catalog selection of one choice (the tests use it for a choice without any record). */
         $out = apply_filters('fides_explore_catalog_selection', $out, $kind, $slug);
         return is_array($out) ? $out : array();
+    }
+
+    /** True when the issuer or relying party overview of this installation has a filter for the choice kind (?sector= / ?theme=). */
+    private static function overview_filters(string $kind, string $class): bool {
+        $group = $kind === 'sector' ? 'sector' : 'theme';
+        return class_exists($class) && method_exists($class, 'filter_available') && $class::filter_available($group);
+    }
+
+    /** Overview URL with one ?sector=<code> / ?theme=<bundle code> filter. */
+    private static function filter_url(string $page, string $group, string $slug): string {
+        return $page . '?' . $group . '=' . rawurlencode($slug);
     }
 
     /** Issuer / relying party overview filtered on credential types (?credential[]=…, one value per type, any of them). */

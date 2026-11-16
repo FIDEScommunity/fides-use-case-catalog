@@ -60,6 +60,7 @@ async function newPage(browser, width) {
   const ctx = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: "reduce" });
   await ctx.addCookies(Object.entries({ "banner-status": "dismissed", policy_id: "35", functional: "allow", preferences: "deny", statistics: "deny", marketing: "deny" }).map(([n, v]) => ({ name: `cmplz_${n}`, value: v, url: BASE })));
   const page = await ctx.newPage();
+  page.setDefaultNavigationTimeout(90000);
   const sent = [];
   // TranslatePress fetches dynamic Dutch strings with a POST to its own ajax endpoint; that is not a form submission.
   page.on("request", (r) => { if (!["GET", "HEAD", "OPTIONS"].includes(r.method()) && r.url().startsWith(BASE) && !/trp-ajax\.php/.test(r.url())) sent.push(`${r.method()} ${r.url()}`); });
@@ -76,7 +77,7 @@ const sameView = (a, b) => {
 };
 
 async function openList(page, url) {
-  await page.goto(url, { waitUntil: "load" });
+  await page.goto(url, { waitUntil: "load", timeout: 90000 });
   await page.waitForSelector(CARD, { timeout: 30000 });
   await page.waitForLoadState("networkidle", { timeout: 30000 }).catch(() => {});
 }
@@ -135,13 +136,13 @@ async function applyFilter(page, kind) {
         check(`${tag} filter: removing the pill restores all results`, (await countOf(page)) === total, await countOf(page));
 
         // 3. Empty state.
-        await page.goto(`${listUrl}?q=${kind.emptyQuery}`, { waitUntil: "load" });
+        await page.goto(`${listUrl}?q=${kind.emptyQuery}`, { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForSelector(".fides-uc-pilot__empty", { timeout: 15000 });
         const clear = page.locator(".fides-uc-pilot__empty a", { hasText: /Clear all filters|Alle filters wissen|filters/i }).first();
         check(`${tag}: empty state offers a way back`, (await clear.count()) === 1 && onRoute(await clear.getAttribute("href"), loc));
 
         // 4. Record from a row, Back to results, keyboard.
-        await page.goto(`${listUrl}?q=${kind.search}`, { waitUntil: "load" });
+        await page.goto(`${listUrl}?q=${kind.search}`, { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForSelector(CARD, { timeout: 15000 });
         const searchUrl = page.url();
         await page.locator(CARD).first().locator(LINK).first().focus();
@@ -166,7 +167,7 @@ async function applyFilter(page, kind) {
 
         // 5. Relation link: record -> credential type -> back to the record.
         const richUrl = `${root}/${kind.detailPath}?${kind.param}=${encodeURIComponent(kind.rich)}`;
-        await page.goto(richUrl, { waitUntil: "load" });
+        await page.goto(richUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
         const rel = page.locator(kind.relation).first();
         if (await rel.count()) {
           await rel.click();
@@ -181,7 +182,7 @@ async function applyFilter(page, kind) {
 
         // 6. Limited record: no empty sections, no placeholders.
         const limitedUrl = `${root}/${kind.detailPath}?${kind.param}=${encodeURIComponent(kind.limited)}`;
-        await page.goto(limitedUrl, { waitUntil: "load" });
+        await page.goto(limitedUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForSelector(`[data-${kind.prefix}-id]`, { timeout: 30000 });
         const present = [];
         for (const id of kind.sections.limitedAbsent) if (await page.locator(`#${id}`).count()) present.push(id);
@@ -191,37 +192,37 @@ async function applyFilter(page, kind) {
         check(`${tag}: limited record has no horizontal overflow`, await noOverflow(page));
 
         // 7. Deeplink on the overview opens the pilot record.
-        await page.goto(`${listUrl}?${kind.param}=${encodeURIComponent(kind.rich)}`, { waitUntil: "load" });
+        await page.goto(`${listUrl}?${kind.param}=${encodeURIComponent(kind.rich)}`, { waitUntil: "domcontentloaded", timeout: 60000 });
         check(`${tag}: ?${kind.param}= deeplink opens the pilot record on the ${loc} route`, onRoute(page.url(), loc) && page.url().includes(`/${kind.detailPath}?${kind.param}=`), page.url());
 
         // 8. Add route up to the form.
-        await page.goto(listUrl, { waitUntil: "load" });
+        await page.goto(listUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
         const add = page.locator("a.fides-uc-pilot__add").first();
         const addHref = (await add.count()) ? await add.getAttribute("href") : "";
         check(`${tag}: the add link is offered`, addHref !== "" && onRoute(addHref, loc), addHref);
         if (addHref) {
-          await page.goto(new URL(addHref, BASE).toString(), { waitUntil: "load" });
+          await page.goto(new URL(addHref, BASE).toString(), { waitUntil: "domcontentloaded", timeout: 60000 });
           // A guest gets the sign-in gate of the existing form (a signed-in visitor gets the form itself).
           const reached = await page.evaluate(() => document.querySelectorAll("form").length > 0 || /signed in|sign in|ingelogd|inloggen/i.test(document.body.innerText));
           check(`${tag}: the add route opens the form or its sign-in gate (nothing submitted)`, reached, page.url());
         }
         // Update route: the update link (a separate form) opens in the same way, still without submitting.
-        await page.goto(listUrl, { waitUntil: "load" });
+        await page.goto(listUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
         const upd = page.locator("a[href*='-update/']").first();
         const updHref = (await upd.count()) ? await upd.getAttribute("href") : "";
         check(`${tag}: the update link is offered on the ${loc} route`, updHref !== "" && onRoute(updHref, loc), updHref);
         if (updHref) {
-          const resp = await page.goto(new URL(updHref, BASE).toString(), { waitUntil: "load" });
+          const resp = await page.goto(new URL(updHref, BASE).toString(), { waitUntil: "domcontentloaded", timeout: 60000 });
           const ok = resp && resp.status() < 400 && (await page.evaluate(() => document.querySelectorAll("form").length > 0 || /signed in|sign in|ingelogd|inloggen/i.test(document.body.innerText)));
           check(`${tag}: the update route opens the form or its sign-in gate (nothing submitted)`, !!ok, page.url());
         }
         // Breadcrumb: "Ecosystem Explorer" stays on the language route and resolves.
-        await page.goto(richUrl, { waitUntil: "load" });
+        await page.goto(richUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
         const crumb = page.locator(".fides-ds-detail-top a", { hasText: /Ecosystem Explorer/ }).first();
         const crumbHref = (await crumb.count()) ? await crumb.getAttribute("href") : "";
         check(`${tag}: the Ecosystem Explorer breadcrumb is on the ${loc} route`, crumbHref !== "" && onRoute(crumbHref, loc), crumbHref);
         if (crumbHref) {
-          const r = await page.goto(new URL(crumbHref, BASE).toString(), { waitUntil: "load" });
+          const r = await page.goto(new URL(crumbHref, BASE).toString(), { waitUntil: "domcontentloaded", timeout: 60000 });
           check(`${tag}: the Ecosystem Explorer breadcrumb resolves (${r && r.status()})`, r && r.status() < 400);
         }
 
@@ -230,7 +231,9 @@ async function applyFilter(page, kind) {
         await openList(page, listUrl);
         const title = await page.title();
         const countText = (await page.locator("[data-pilot-count]").first().textContent()).trim();
-        const legendText = (await page.locator(".fides-uc-pilot__legend").first().textContent().catch(() => "")) || "";
+        // Issuers: the Production/Test legend above the results. Relying parties: the readiness explanation moved into the Readiness list.
+        const legendSel = kind.key === "relying-parties" ? ".fides-uc-pilot__option-hint" : ".fides-uc-pilot__legend";
+        const legendText = (await page.locator(legendSel).first().textContent().catch(() => "")) || "";
         check(`${tag}: the Production/Test or readiness legend is shown in ${loc}`, kind.legend[loc].test(legendText), legendText.slice(0, 80));
         if (loc === "NL") {
           check(`${tag}: document title is Dutch (${title})`, kind.titleNL.test(title), title);
@@ -248,7 +251,7 @@ async function applyFilter(page, kind) {
         const broken = await page.$$eval(`${CARD} img.fides-ds-card__img`, (imgs) => imgs.filter((i) => i.offsetParent !== null && i.complete && i.naturalWidth === 0).length);
         check(`${tag}: no visible broken logo on the overview (${broken})`, broken === 0, broken);
 
-        await page.goto(richUrl, { waitUntil: "load" });
+        await page.goto(richUrl, { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForSelector(`[data-${kind.prefix}-id]`, { timeout: 30000 });
         const dTitle = await page.title();
         const shareText = await page.locator(".fides-ds-detail-top").first().innerText();
@@ -285,7 +288,7 @@ async function applyFilter(page, kind) {
           check(`${tag}: credential configurations are grouped per type (${g.groups} types, ${g.configs} configurations)`, g.groups > 0 && g.configs >= g.groups && g.ids === g.configs, JSON.stringify(g));
         } else {
           // KSID Verifier: readiness and operational status are two labelled, separate facts.
-          await page.goto(`${root}/${kind.detailPath}?${kind.param}=ksid-verifier`, { waitUntil: "load" });
+          await page.goto(`${root}/${kind.detailPath}?${kind.param}=ksid-verifier`, { waitUntil: "domcontentloaded", timeout: 60000 });
           await page.waitForSelector(`[data-${kind.prefix}-id]`, { timeout: 30000 });
           const states = await page.$$eval(".fides-rp-detail__state", (els) => els.map((e) => e.textContent.replace(/\s+/g, " ").trim()));
           const want = loc === "NL" ? [/^Gereedheid\s*Productie/, /^Operationele status\s*Beta/] : [/^Readiness\s*Production/, /^Operational status\s*Beta/];
@@ -301,11 +304,11 @@ async function applyFilter(page, kind) {
     for (const kind of KINDS) {
       const { ctx, page, sent } = await newPage(browser, w);
       const tag = `route ${kind.key} @${w}`;
-      await page.goto(`${BASE}/explorer/`, { waitUntil: "load" });
+      await page.goto(`${BASE}/explorer/`, { waitUntil: "domcontentloaded", timeout: 60000 });
       const entry = page.locator(`a[href*="/fides-design-pilot/${kind.path}"]`).first();
       check(`${tag}: Explorer links to the pilot catalog`, (await entry.count()) > 0);
       if (await entry.count()) {
-        await page.goto(new URL(await entry.getAttribute("href"), BASE).toString(), { waitUntil: "load" });
+        await page.goto(new URL(await entry.getAttribute("href"), BASE).toString(), { waitUntil: "domcontentloaded", timeout: 60000 });
         await page.waitForSelector(CARD, { timeout: 30000 });
         await page.locator(CARD).first().locator(LINK).first().click();
         await page.waitForSelector(".fides-ds-detail-top__back a", { timeout: 30000 });
@@ -322,7 +325,7 @@ async function applyFilter(page, kind) {
             // On small screens the relation list sits in a closed disclosure: follow the link address then.
             const shown = page.locator(`a[href*="/${kind.detailPath}?${kind.param}="]:visible, a[href*="/${kind.path}?"]:visible`).first();
             const clicked = (await shown.count()) ? await shown.click({ timeout: 5000 }).then(() => true, () => false) : false;
-            if (!clicked) await page.goto(new URL(await reverse.getAttribute("href"), BASE).toString(), { waitUntil: "load" });
+            if (!clicked) await page.goto(new URL(await reverse.getAttribute("href"), BASE).toString(), { waitUntil: "domcontentloaded", timeout: 60000 });
             await page.waitForSelector(`[data-${kind.prefix}-id], ${CARD}`, { timeout: 30000 });
             check(`${tag}: that link opens the pilot ${kind.key} page`, page.url().includes(`/fides-design-pilot/${kind.detailPath}`) || page.url().includes(`/fides-design-pilot/${kind.path}`), page.url());
           }

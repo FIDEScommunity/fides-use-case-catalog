@@ -94,14 +94,19 @@ $round4 = static function () use ($check, $items, $themes, $sectors, &$results):
                 }
                 // A view-all link exists only where the destination has a working filter for exactly this selection.
                 $filterable = $entry['how'] === 'credentials-sector' || $entry['how'] === 'credentials-theme' || $entry['how'] === 'organizations-sector'
-                    || $entry['how'] === 'issuers-credentials-theme' || $entry['how'] === 'rps-credentials-theme';
+                    || $entry['how'] === 'issuers-credentials-theme' || $entry['how'] === 'rps-credentials-theme'
+                    || $entry['how'] === 'issuers-org-sector' || $entry['how'] === 'rps-sector';
                 $check(($entry['url'] !== '') === $filterable, "{$tag}/{$type}: view-all link only with a working destination filter ({$entry['how']})");
                 if ($entry['how'] === 'credentials-theme') {
                     $check(strpos($entry['url'], 'theme=' . implode(',', $codes)) !== false, "{$tag}/credentials: the link carries the theme codes of the bundle");
                 }
-                if ($entry['how'] === 'issuers-credentials-theme' || $entry['how'] === 'rps-credentials-theme') {
+                if ($type === 'issuers' || $type === 'rps') {
+                    // Round 5: one short ?sector= / ?theme= parameter instead of one credential[] per type (up to 36 pills).
                     parse_str((string) parse_url($entry['url'], PHP_URL_QUERY), $q);
-                    $check(isset($q['credential']) && count($q['credential']) === count($direct_cred), "{$tag}/{$type}: the link names every credential type of the selection (" . count($direct_cred) . ')');
+                    $check(($q[ $kind ] ?? null) === $slug && count($q) === 1, "{$tag}/{$type}: the link is the short ?{$kind}={$slug} filter and nothing else");
+                    $class = $type === 'issuers' ? 'Fides_Issuer_Design' : 'Fides_RP_Design';
+                    $again = $class::filter_items($class::items(), '', array($kind => array($slug)), array());
+                    $check(count($again) === (int) $entry['total'], "{$tag}/{$type}: the overview filter returns exactly the {$entry['total']} records of the block");
                 }
             }
 
@@ -142,7 +147,7 @@ $round4 = static function () use ($check, $items, $themes, $sectors, &$results):
                 }
             }
             $check(substr_count($html, 'data-fides-explore-also') === $expected_also, "{$tag}: {$expected_also} record(s) marked as also linked to a shown use case");
-            $report[ $kind . ':' . $slug ] = array('types' => $types, 'also' => $expected_also, 'urls' => array_map(static fn ($e) => $e['url'], $sel));
+            $report[ $kind . ':' . $slug ] = array('types' => $types, 'also' => $expected_also, 'urls' => array_map(static fn ($e) => $e['url'], $sel), 'totals' => array_map(static fn ($e) => (int) $e['total'], $sel));
         }
     }
     // A choice without any record: the block is left out completely.

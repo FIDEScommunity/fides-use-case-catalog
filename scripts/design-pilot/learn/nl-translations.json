@@ -5,15 +5,15 @@
     "domain": "trp_dictionary",
     "note": "Key = English source text (original). No database ids. {{home}} is replaced by the target site home URL on import. Entries are only filled into EMPTY dictionary rows that belong to the listed routes; existing translations are never overwritten. The lone fragments A, An and The are never part of this file.",
     "counts": {
-        "issuers": 24,
+        "issuers": 28,
         "learn": 1094,
-        "relying-parties": 38,
+        "relying-parties": 39,
         "services": 61,
-        "shared": 149,
+        "shared": 160,
         "start-receive": 35,
         "training": 153
     },
-    "total": 1554,
+    "total": 1570,
     "entries": [
         {
             "original": "A type name opens the credential type when the catalog links it. Each configuration is listed under its type.",
@@ -130,6 +130,19 @@
             ],
             "routes": [
                 "issuer",
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Finance",
+            "translation": "Financiën",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
                 "issuers"
             ],
             "group": "issuers"
@@ -252,6 +265,19 @@
             "group": "issuers"
         },
         {
+            "original": "Public Sector",
+            "translation": "Publieke sector",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
             "original": "Search issuers",
             "translation": "Uitgevers zoeken",
             "html": false,
@@ -278,6 +304,19 @@
             "group": "issuers"
         },
         {
+            "original": "Sector of organization",
+            "translation": "Sector van de organisatie",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
+            ],
+            "group": "issuers"
+        },
+        {
             "original": "Technical metadata",
             "translation": "Technische metadata",
             "html": false,
@@ -287,6 +326,19 @@
             ],
             "routes": [
                 "issuer"
+            ],
+            "group": "issuers"
+        },
+        {
+            "original": "Theme of credentials",
+            "translation": "Thema van de credentials",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers"
+            ],
+            "routes": [
+                "issuers"
             ],
             "group": "issuers"
         },
@@ -15428,19 +15480,6 @@
             "group": "relying-parties"
         },
         {
-            "original": "Digital",
-            "translation": "Digitaal",
-            "html": false,
-            "fragment": false,
-            "groups": [
-                "relying-parties"
-            ],
-            "routes": [
-                "relying-party"
-            ],
-            "group": "relying-parties"
-        },
-        {
             "original": "Documentation",
             "translation": "Documentatie",
             "html": false,
@@ -15738,6 +15777,32 @@
             ],
             "routes": [
                 "relying-party"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Theme of accepted credentials",
+            "translation": "Thema van geaccepteerde credentials",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
+            ],
+            "group": "relying-parties"
+        },
+        {
+            "original": "Trade",
+            "translation": "Handel",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "relying-parties"
+            ],
+            "routes": [
+                "relying-parties"
             ],
             "group": "relying-parties"
         },
@@ -17016,6 +17081,36 @@
             "group": "shared"
         },
         {
+            "original": "All sectors",
+            "translation": "Alle sectoren",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "All themes",
+            "translation": "Alle thema’s",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Apply filters",
             "translation": "Filters toepassen",
             "html": false,
@@ -17462,6 +17557,21 @@
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Business & Mandates",
+            "translation": "Bedrijven en mandaten",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
             ],
             "group": "shared"
         },
@@ -18032,6 +18142,22 @@
             "group": "shared"
         },
         {
+            "original": "Digital",
+            "translation": "Digitaal",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties",
+                "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Discover",
             "translation": "Ontdekken",
             "html": false,
@@ -18186,6 +18312,21 @@
                 "services/wallet-readiness-assessment",
                 "start",
                 "start/receive"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Education",
+            "translation": "Onderwijs",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
             ],
             "group": "shared"
         },
@@ -18776,8 +18917,38 @@
             "group": "shared"
         },
         {
+            "original": "Government & Compliance",
+            "translation": "Overheid en naleving",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Help keep the ecosystem visible and useful.",
             "translation": "Help mee om het ecosysteem zichtbaar en bruikbaar te houden.",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Identity & Access",
+            "translation": "Identiteit en toegang",
             "html": false,
             "fragment": false,
             "groups": [
@@ -19520,6 +19691,21 @@
             "group": "shared"
         },
         {
+            "original": "Mobility",
+            "translation": "Mobiliteit",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Name",
             "translation": "Naam",
             "html": false,
@@ -20124,6 +20310,21 @@
             "group": "shared"
         },
         {
+            "original": "Payments & Commerce",
+            "translation": "Betalen en handel",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
+            ],
+            "group": "shared"
+        },
+        {
             "original": "Personal wallets",
             "translation": "Persoonlijke wallets",
             "html": false,
@@ -20381,6 +20582,21 @@
                 "issuers",
                 "relying-parties",
                 "relying-party"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Products, Trade & Supply Chains",
+            "translation": "Producten, handel en toeleveringsketens",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
             ],
             "group": "shared"
         },
@@ -22437,6 +22653,21 @@
                 "learn/sessions/request",
                 "learn/sessions/request-wpforms",
                 "services/enquiry"
+            ],
+            "group": "shared"
+        },
+        {
+            "original": "Work & Qualifications",
+            "translation": "Werk en kwalificaties",
+            "html": false,
+            "fragment": false,
+            "groups": [
+                "issuers",
+                "relying-parties"
+            ],
+            "routes": [
+                "issuers",
+                "relying-parties"
             ],
             "group": "shared"
         },
