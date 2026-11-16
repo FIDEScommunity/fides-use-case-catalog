@@ -232,7 +232,7 @@ async function applyFilter(page, kind) {
         const title = await page.title();
         const countText = (await page.locator("[data-pilot-count]").first().textContent()).trim();
         // Issuers: the Production/Test legend above the results. Relying parties: the readiness explanation moved into the Readiness list.
-        const legendSel = kind.key === "relying-parties" ? ".fides-uc-pilot__option-hint" : ".fides-uc-pilot__legend";
+        const legendSel = kind.key === "relying-parties" ? ".fides-uc-pilot__option-hint" : "#fides-issuer-environment-legend";
         const legendText = (await page.locator(legendSel).first().textContent().catch(() => "")) || "";
         check(`${tag}: the Production/Test or readiness legend is shown in ${loc}`, kind.legend[loc].test(legendText), legendText.slice(0, 80));
         if (loc === "NL") {

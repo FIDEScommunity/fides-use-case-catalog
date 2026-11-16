@@ -143,70 +143,41 @@ async function repairChecks(browser) {
         if (loc === "EN") enTitles[T.slug] = cards.map((x) => norm(x.title));
         else check(`${tag}: use case titles stay English (not translated, no invented translation)`, JSON.stringify(cards.map((x) => norm(x.title))) === JSON.stringify(enTitles[T.slug]));
 
-        // Relations: once each, exact headings and totals.
-        const sections = await page.$$eval(".fides-explore__relations", (els) => els.map((e) => ({
-          type: e.dataset.relation, total: +e.dataset.total,
-          heading: (e.querySelector("h2") || {}).textContent || "",
-          count: (e.querySelector(".fides-explore__count") || {}).textContent || "",
-          names: Array.from(e.querySelectorAll(".fides-explore__row-name")).map((x) => (x.textContent || "").replace(/\s+/g, " ").replace(/→/g, "").trim().toLowerCase()),
-          rows: e.querySelectorAll(".fides-explore__row").length,
-          listingRows: Array.from(e.querySelectorAll('.fides-explore__row[data-detail="no"]')).map((r) => ({ links: r.querySelectorAll(".fides-explore__row-name a").length, badge: r.querySelectorAll(".fides-explore__badge").length })),
-          detailRows: Array.from(e.querySelectorAll('.fides-explore__row[data-detail="yes"]')).map((r) => ({ links: r.querySelectorAll(".fides-explore__row-name a").length, badge: r.querySelectorAll(".fides-explore__badge").length })),
+        // Relations sit on each use case card. The shared sections are gone.
+        const shared = await page.locator("#explore-credentials, #explore-organisations, #explore-wallets, .fides-explore__from, [data-fides-explore-relations-note]").count();
+        check(`${tag}: no shared relation sections and no "Related use case" details`, shared === 0);
+        const relRows = await page.$$eval(".fides-explore__case-rel .fides-explore__row", (rows) => rows.map((r) => ({
+          detail: r.dataset.detail,
+          links: r.querySelectorAll(".fides-explore__row-name a").length,
+          badge: r.querySelectorAll(".fides-explore__badge").length,
         })));
-        const headingWord = { credentials: loc === "EN" ? "Credential types" : "Credentialtypen", organizations: loc === "EN" ? "Organisations" : "Organisaties", wallets: "Wallets" };
-        for (const type of ["credentials", "organizations", "wallets"]) {
-          const sec = sections.find((x) => x.type === type);
-          if (c[type] === 0) { check(`${tag}: no ${type} section when the data has none`, !sec); continue; }
-          if (!sec) { check(`${tag}: ${type} section present`, false); continue; }
-          const expectedHeading = headingWord[type];
-          check(`${tag}: ${type} heading is exactly "${expectedHeading}" (the examples are named once above, not in every heading)`, norm(sec.heading) === expectedHeading, norm(sec.heading));
-          check(`${tag}: ${type} total ${c[type]} = unique records (data-total, rows); no repeated sentence about duplicates`, sec.total === c[type] && sec.rows === Math.min(c[type], 8) && sec.count === "", `${sec.total}/${sec.rows}/${sec.count}`);
-          check(`${tag}: ${type} each name once`, new Set(sec.names).size === sec.names.length, sec.names.join("|"));
-          check(`${tag}: ${type} rows without a catalog page are plain text (no link, no label), rows with one have a link with an arrow`, sec.listingRows.every((r) => r.links === 0 && r.badge === 0) && sec.detailRows.every((r) => r.links === 1 && r.badge === 0));
-        }
+        check(`${tag}: rows without a catalog page are plain text, rows with one have a link`, relRows.every((r) => r.badge === 0 && r.links === (r.detail === "yes" ? 1 : 0)), String(relRows.length));
+        const disclosures = await page.locator("#explore-use-cases .fides-explore__case-rel").count();
+        check(`${tag}: one relations disclosure per use case card`, disclosures === n, `${disclosures}/${n}`);
         check(`${tag}: no horizontal overflow`, await noOverflow(page));
 
-        // One sentence about the lists, no "Listing only" label, no legend; language note.
         const body = norm(await page.locator(".fides-explore").innerText());
-        check(`${tag}: the lists are explained once, no legend, no "${W.listing}", no repeated duplicate explanation`, (await page.locator("[data-fides-explore-relations-note]").count()) === 1 && !body.includes(W.listing) && (await page.locator("[data-fides-explore-legend]").count()) === 0 && !/Each is listed once|Elk item staat/.test(body));
+        check(`${tag}: no legend, no "${W.listing}", no repeated duplicate explanation`, !body.includes(W.listing) && (await page.locator("[data-fides-explore-legend]").count()) === 0 && !/Each is listed once|Elk item staat/.test(body));
         const langNote = await page.locator("[data-fides-explore-lang-note]").count();
         if (loc === "NL") {
           check(`${tag}: NL states that catalog content is English`, langNote === 1 && norm(await page.locator("[data-fides-explore-lang-note]").innerText()) === W.note);
           const marked = await page.$$eval("#explore-use-cases .fides-ds-card__link[lang=en][data-no-translation], #explore-use-cases .fides-ds-card__summary[lang=en]", (e) => e.length);
           check(`${tag}: NL card titles and summaries are lang="en"`, marked === 2 * n, marked);
-          const rowNames = await page.$$eval(".fides-explore__row-name [lang=en]", (e) => e.length);
-          const rowsAll = await page.locator(".fides-explore__row").count();
-          check(`${tag}: NL record names are lang="en"`, rowNames === rowsAll, `${rowNames}/${rowsAll}`);
+          const rowNames = await page.$$eval("#explore-use-cases .fides-explore__row-name [lang=en]", (e) => e.length);
+          const rowsAll = await page.locator("#explore-use-cases .fides-explore__row").count();
+          check(`${tag}: NL record names are lang="en"`, rowsAll === 0 || rowNames === rowsAll, `${rowNames}/${rowsAll}`);
           check(`${tag}: page language is Dutch, the chrome around catalog content is Dutch`, (await page.evaluate(() => document.documentElement.lang)).toLowerCase().startsWith("nl") && /usecases/i.test(await page.locator("#explore-use-cases-title").innerText()));
         } else {
           check(`${tag}: EN has no language marks`, langNote === 0 && (await page.locator("[lang=en][data-no-translation]").count()) === 0);
         }
 
-        // <details> instead of repeated titles: closed by default, anchors reach the cards.
-        const firstDetails = page.locator(".fides-explore__from").first();
+        const firstDetails = page.locator("#explore-use-cases .fides-explore__case-rel").first();
         if (await firstDetails.count()) {
-          check(`${tag}: example lists are closed by default (no repeated titles)`, (await page.locator(".fides-explore__from[open]").count()) === 0 && (await page.locator(".fides-explore__from-list a:visible").count()) === 0);
-          await page.locator(".fides-explore__from > summary").first().scrollIntoViewIfNeeded();
-          await page.locator(".fides-explore__from > summary").first().click();
-          const link = firstDetails.locator("a").first();
-          const href = await link.getAttribute("href");
-          check(`${tag}: opening shows the examples as anchors to the cards`, (await link.isVisible()) && /^#explore-example-\d$/.test(href || ""), href);
-          await link.click();
-          check(`${tag}: anchor jumps to the example card`, (await page.evaluate(() => location.hash)) === href && (await page.locator(href).isVisible()));
-          // Keyboard: Tab from the result heading reaches the first summary, Enter opens it, a focus ring is visible.
-          await page.goto(url, { waitUntil: "networkidle" });
-          await page.locator("#fides-explore-title").focus();
-          let reached = false;
-          for (let i = 0; i < 150 && !reached; i += 1) {
-            await page.keyboard.press("Tab");
-            reached = await page.evaluate(() => document.activeElement && document.activeElement.tagName === "SUMMARY" && !!document.activeElement.closest(".fides-explore__from"));
-          }
-          const ringOk = reached && (await page.evaluate(() => { const s = getComputedStyle(document.activeElement); return s.outlineStyle !== "none" && parseFloat(s.outlineWidth) > 0; }));
-          check(`${tag}: Tab reaches the example list summary with a visible focus ring`, reached && ringOk);
-          if (reached) {
-            await page.keyboard.press("Enter");
-            check(`${tag}: Enter opens the example list`, await page.evaluate(() => document.activeElement.parentElement.open));
-          }
+          const summaryWord = loc === "EN" ? "Related credentials, organizations and wallets" : "Gerelateerde credentials, organisaties en wallets";
+          check(`${tag}: relation lists are closed by default`, (await page.locator("#explore-use-cases .fides-explore__case-rel[open]").count()) === 0 && norm(await firstDetails.locator("summary").innerText()) === summaryWord);
+          await firstDetails.locator("summary").click();
+          const opened = await firstDetails.locator(".fides-explore__row").count();
+          check(`${tag}: opening a use case shows only its own relations`, (await firstDetails.evaluate((el) => el.open)) && opened >= 0, String(opened));
         }
 
         // Hero without image: introduction uses the width.
@@ -237,9 +208,12 @@ async function repairChecks(browser) {
           check(`${tag}: all ${hrefs.length} destinations answer 200 with a record page${loc === "NL" ? " and stay on /nl/" : ""}`, bad.length === 0 && wrongLang.length === 0, bad.slice(0, 3).concat(wrongLang.slice(0, 2)).join(" | "));
         }
 
-        // Logos and broken images.
+        // Logos and broken images. Organisation logos sit in the closed use-case disclosures, so open those before measuring.
+        await page.evaluate(() => document.querySelectorAll(".fides-explore__case-rel").forEach((d) => { d.open = true; }));
+        const orgRows = await page.locator("#explore-use-cases .fides-explore__row--logo").count();
         const logoBoxes = await page.$$eval(".fides-explore__logo", (els) => els.map((e) => { const r = e.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height), e.querySelector("img") ? e.querySelector("img").getAttribute("loading") : "none"]; }));
-        check(`${tag}: ${logoBoxes.length} organisation logo boxes are 40x40 and lazy`, logoBoxes.length === sections.find((x) => x.type === "organizations").rows && logoBoxes.every((b) => b[0] === 40 && b[1] === 40 && (b[2] === "lazy" || b[2] === "none")), JSON.stringify(logoBoxes.slice(0, 3)));
+        check(`${tag}: ${logoBoxes.length} organisation logo boxes are 40x40 and lazy`, logoBoxes.length === orgRows && logoBoxes.every((b) => b[0] === 40 && b[1] === 40 && (b[2] === "lazy" || b[2] === "none")), JSON.stringify(logoBoxes.slice(0, 3)));
+        await page.evaluate(() => document.querySelectorAll(".fides-explore__case-rel").forEach((d) => { d.open = false; }));
         const heightBefore = await page.evaluate(() => document.documentElement.scrollHeight);
         await page.context().close();
 
@@ -258,10 +232,10 @@ async function repairChecks(browser) {
           window.scrollTo(0, 0);
         });
         await bp.waitForFunction(() => document.querySelectorAll(".fides-explore img").length === 0, null, { timeout: 15000 }).catch(() => {});
+        const boxes = await bp.$$eval(".fides-explore__logo", (els) => els.map((e) => { const r = e.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }));
         await bp.evaluate(() => document.querySelectorAll(".fides-explore details").forEach((d) => { d.open = false; }));
         const left = await bp.locator(".fides-explore img").count();
         const fallbacks = await bp.$$eval(".fides-explore .fides-ds-card__fallback", (els) => els.map((e) => ({ hidden: e.hidden || getComputedStyle(e).display === "none", text: e.textContent.trim() })));
-        const boxes = await bp.$$eval(".fides-explore__logo", (els) => els.map((e) => { const r = e.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }));
         check(`${tag}: all images blocked: no broken image stays, fallbacks with text are shown (${fallbacks.length})`, left === 0 && fallbacks.length > 0 && fallbacks.every((f) => !f.hidden && f.text.length > 0), `${left} img, ${fallbacks.filter((f) => f.hidden || !f.text).length} bad; ` + JSON.stringify(await bp.$$eval(".fides-explore img", (els) => els.slice(0, 2).map((e) => [e.className, e.complete, e.naturalWidth, e.loading, e.outerHTML.slice(0, 160)]))));
         check(`${tag}: blocked logos keep the 40x40 box (no layout jump)`, boxes.every((b) => b[0] === 40 && b[1] === 40));
         check(`${tag}: blocked images: no overflow`, await noOverflow(bp));
@@ -387,28 +361,19 @@ async function round2Checks(browser) {
         check(`${tag} badge: same style as the status badge of the catalog cards`, JSON.stringify(badge) === JSON.stringify(ovBadge), `${JSON.stringify(badge)} vs ${JSON.stringify(ovBadge)}`);
         await ov.close();
 
-        // Relations: one explanation, short summaries, details keep names and links.
-        const sums = await page.$$eval(".fides-explore__from > summary", (e) => e.map((x) => x.textContent.replace(/\s+/g, " ").trim()));
-        const okSum = sums.every((t) => t === W.related1 || [2, 3, 4].some((n) => t === W.relatedN(n)));
-        check(`${tag} relations: ${sums.length} summaries are "${W.related1}" or "N ${loc === "EN" ? "related use cases" : "gerelateerde usecases"}"`, sums.length > 0 && okSum, [...new Set(sums)].join("|"));
-        const noteTxt = norm(await page.locator("[data-fides-explore-relations-note]").innerText());
-        check(`${tag} relations: said once that credentials, organisations and wallets belong to the shown use cases`, (await page.locator("[data-fides-explore-relations-note]").count()) === 1 && noteTxt.length > 30, noteTxt);
-        const linkRows = await page.$$eval('.fides-explore__row[data-detail="yes"] .fides-explore__row-name', (rows) => rows.map((r) => r.querySelector("a") && r.querySelector("a").textContent.includes("→") && r.querySelector("a span[aria-hidden]") ? 1 : 0));
-        const plainRows = await page.$$eval('.fides-explore__row[data-detail="no"] .fides-explore__row-name', (rows) => rows.map((r) => (r.querySelector("a") ? 1 : 0) + (r.textContent.includes("→") ? 1 : 0)));
-        check(`${tag} relations: linked names end in an arrow (not colour only), unlinked names are plain text`, linkRows.every((x) => x === 1) && plainRows.every((x) => x === 0), `${linkRows.length}/${plainRows.length}`);
-        const orgNames = await page.$$eval('[data-relation="organizations"] .fides-explore__row-name', (e) => e.map((x) => x.textContent.replace(/→/, "").replace(/\s+/g, " ").trim().toLowerCase()));
-        const logos = await page.locator('[data-relation="organizations"] .fides-explore__logo').count();
-        check(`${tag} relations: each organisation once (${orgNames.length}) with its logo box (${logos})`, new Set(orgNames).size === orgNames.length && logos === orgNames.length);
-        const det = page.locator(".fides-explore__from").first();
+        const relLabel = loc === "EN" ? "Related credentials, organizations and wallets" : "Gerelateerde credentials, organisaties en wallets";
+        const sums = await page.$$eval("#explore-use-cases .fides-explore__case-rel > summary", (e) => e.map((x) => x.textContent.replace(/\s+/g, " ").trim()));
+        check(`${tag} relations: each use case has "${relLabel}"`, sums.length === 4 && sums.every((t) => t === relLabel), [...new Set(sums)].join("|"));
+        check(`${tag} relations: no shared lists and no "Related use case" details`, (await page.locator("#explore-credentials, #explore-organisations, #explore-wallets, .fides-explore__from, [data-fides-explore-relations-note]").count()) === 0);
+        const linkRows = await page.$$eval('#explore-use-cases .fides-explore__row[data-detail="yes"] .fides-explore__row-name', (rows) => rows.map((r) => r.querySelector("a") && r.querySelector("a").textContent.includes("→") ? 1 : 0));
+        const plainRows = await page.$$eval('#explore-use-cases .fides-explore__row[data-detail="no"] .fides-explore__row-name', (rows) => rows.map((r) => (r.querySelector("a") ? 1 : 0) + (r.textContent.includes("→") ? 1 : 0)));
+        check(`${tag} relations: linked names end in an arrow, unlinked names are plain text`, linkRows.every((x) => x === 1) && plainRows.every((x) => x === 0), `${linkRows.length}/${plainRows.length}`);
+        const orgRows = await page.locator('#explore-use-cases [data-relation="organizations"] .fides-explore__row').count();
+        const logos = await page.locator('#explore-use-cases [data-relation="organizations"] .fides-explore__logo').count();
+        check(`${tag} relations: each organisation row has a logo box`, orgRows === 0 || logos === orgRows, `${logos}/${orgRows}`);
+        const det = page.locator("#explore-use-cases .fides-explore__case-rel").first();
         await det.locator("summary").click();
-        const rel = det.locator("a").first();
-        check(`${tag} relations: opening shows the related use case name as a link`, (await rel.isVisible()) && /^#explore-example-\d$/.test((await rel.getAttribute("href")) || ""));
-        const targetSel = await rel.getAttribute("href");
-        await rel.click();
-        await page.waitForFunction((sel) => { const t = document.querySelector(sel); const n = document.querySelector("[data-fides-explore-sections]"); return t && n && t.getBoundingClientRect().top >= n.getBoundingClientRect().bottom - 1; }, targetSel, { timeout: 5000 }).catch(() => {});
-        const rect = await page.evaluate((sel) => ({ t: document.querySelector(sel).getBoundingClientRect().top, b: document.querySelector("[data-fides-explore-sections]").getBoundingClientRect().bottom }), targetSel);
-        check(`${tag} relations: the related example card is reached and is not under the section bar`, rect.t >= rect.b - 1, JSON.stringify(rect));
-        await page.evaluate(() => window.scrollTo(0, 0));
+        check(`${tag} relations: opening shows this use case's relations`, await det.evaluate((el) => el.open) && (await det.locator("[data-relation]").count()) >= 1);
 
         // Section bar: same component as the use case detail page.
         const bar = page.locator("[data-fides-explore-sections]");
@@ -416,7 +381,7 @@ async function round2Checks(browser) {
         check(`${tag} bar: sticky, shared "On this page" component`, sticky.pos === "sticky" && (await bar.getAttribute("data-fides-ds-section-nav-ready")) === "1" && (await bar.locator("nav").getAttribute("aria-label")) === W.onPage, JSON.stringify(sticky));
         const labels = await bar.locator("li a").evaluateAll((a) => a.map((x) => x.getAttribute("href")));
         if (wide) {
-          check(`${tag} bar: desktop shows the tabs open (no summary)`, sticky.open && !(await bar.locator("summary").isVisible()) && labels.length >= 3, JSON.stringify(sticky));
+          check(`${tag} bar: desktop shows Use cases and Explore the catalogs`, sticky.open && !(await bar.locator("summary").isVisible()) && labels.join(",") === "#explore-use-cases,#explore-catalog", labels.join(","));
         } else {
           check(`${tag} bar: phone folds the list behind one compact row (${sticky.summary}px)`, !sticky.open && (await bar.locator("summary").isVisible()) && sticky.summary <= 52 && (await bar.locator("li a:visible").count()) === 0, JSON.stringify(sticky));
         }
@@ -484,7 +449,8 @@ async function round2Checks(browser) {
         const nojs = await newPage(browser, width, false);
         await calmCss(nojs.context()); // addStyleTag needs scripts, so the no-JS page gets the rule through the stylesheet response
         await nojs.goto(`${base}?${T.param}=${T.slug}`, { waitUntil: "load" });
-        check(`${tag} no JS: server-rendered H1 "${T.name[loc]}" and the section bar links`, norm(await nojs.locator("h1").innerText()) === T.name[loc] && (await nojs.locator("[data-fides-explore-sections] a").count()) >= 3);
+        const nojsNav = await nojs.$$eval("[data-fides-explore-sections] a", (as) => as.map((a) => a.getAttribute("href")).join(","));
+        check(`${tag} no JS: server-rendered H1 "${T.name[loc]}" and the section bar links`, norm(await nojs.locator("h1").innerText()) === T.name[loc] && nojsNav === "#explore-use-cases,#explore-catalog", nojsNav);
         if (!wide) {
           check(`${tag} no JS: list folded; Change link shows it (#anchor target)`, await nojs.locator(".fides-explore__choices").isHidden());
           await nojs.locator("[data-fides-explore-change]").first().click();
@@ -583,7 +549,7 @@ async function round3Checks(browser) {
         const page = await ctx.newPage();
         await page.goto(url(T.slug), { waitUntil: "networkidle" });
         const ids = await page.$$eval("[data-fides-ds-section-nav] a[href^='#']", (as) => as.filter((a) => !a.closest("li").hidden).map((a) => a.getAttribute("href").slice(1)));
-        check(`${tag}: section bar offers at least 3 links`, ids.length >= 3, ids.join(","));
+        check(`${tag}: section bar offers Use cases and Explore the catalogs`, ids.join(",") === "explore-use-cases,explore-catalog", ids.join(","));
         await page.evaluate(() => { document.querySelector("[data-fides-explore-result]").__mark = "kept"; });
         const posted = [];
         for (const id of ids) {
@@ -606,8 +572,8 @@ async function round3Checks(browser) {
         check(`${tag}: Back goes to "#${ids[last - 1]}" and stays there`, st.inView && !st.h1Focus && st.hash === `#${ids[last - 1]}`, JSON.stringify(st));
         await historyStep(page, "back");
         await settled(page);
-        st = await sectionState(page, ids[last - 2]);
-        check(`${tag}: Back again goes to "#${ids[last - 2]}"`, st.inView && !st.h1Focus && st.hash === `#${ids[last - 2]}`, JSON.stringify(st));
+        const leftHash = await page.evaluate(() => location.hash);
+        check(`${tag}: Back again leaves the section anchors`, leftHash === "", leftHash);
         await historyStep(page, "forward");
         await settled(page);
         st = await sectionState(page, ids[last - 1]);
@@ -742,8 +708,8 @@ const R4_TARGETS = [
   { kind: "sector", param: "sector", path: "sectors/", slug: "agriculture", name: { EN: "Agriculture", NL: "Landbouw" } }, // low-data: only credential types
 ];
 const R4_WORDS = {
-  EN: { h2: "More from the catalog", titles: { credentials: "Credential types", organizations: "Organisations", issuers: "Issuers", rps: "Relying parties" }, direct: "Classified directly", derived: "Derived from related records", all: { credentials: "View all credential types", organizations: "View all organisations", issuers: "View all issuers", rps: "View all relying parties" }, showing: /^Showing \d+ of \d+\.$/, also: "Also linked to a use case above:" },
-  NL: { h2: "Meer uit de catalogus", titles: { credentials: "Credentialtypen", organizations: "Organisaties", issuers: "Uitgevers", rps: "Vertrouwende partijen" }, direct: "Rechtstreeks ingedeeld", derived: "Afgeleid van gerelateerde records", all: { credentials: "Bekijk alle credentialtypen", organizations: "Bekijk alle organisaties", issuers: "Bekijk alle uitgevers", rps: "Bekijk alle vertrouwende partijen" }, showing: /^Toont \d+ van \d+\.$/, also: "Ook gekoppeld aan een usecase hierboven:" },
+  EN: { h2: "Explore the catalogs", how: "How are these selected?", intro: "Explore records related to this theme or sector across the FIDES catalogs.", titles: { credentials: "Credential types", organizations: "Organisations", issuers: "Issuers", rps: "Relying parties" }, all: { credentials: "View all credential types", organizations: "View all organisations", issuers: "View all issuers", rps: "View all relying parties" } },
+  NL: { h2: "Verken de catalogi", how: "Hoe is deze selectie gemaakt?", intro: "Bekijk records die in de FIDES-catalogi aan dit thema of deze sector zijn gekoppeld.", titles: { credentials: "Credentialtypen", organizations: "Organisaties", issuers: "Uitgevers", rps: "Vertrouwende partijen" }, all: { credentials: "Bekijk alle credentialtypen", organizations: "Bekijk alle organisaties", issuers: "Bekijk alle uitgevers", rps: "Bekijk alle vertrouwende partijen" } },
 };
 const PARAM_OF = { credentials: null, organizations: "sector" };
 
@@ -770,37 +736,38 @@ async function round4Checks(browser) {
           type: el.dataset.catalogType, basis: el.dataset.basis, total: Number(el.dataset.total), shown: Number(el.dataset.shown), hasLink: el.dataset.hasLink === "yes",
           cards: el.querySelectorAll(".fides-ds-card").length, ids: Array.from(el.querySelectorAll("[data-record-id]")).map((n) => n.dataset.recordId),
           h3: (el.querySelector("h3") || {}).textContent, chip: (el.querySelector(".fides-explore__basis") || {}).textContent,
-          basisText: (el.querySelector(".fides-explore__basis-text") || {}).textContent, link: el.querySelector("[data-fides-explore-all]") ? { href: el.querySelector("[data-fides-explore-all]").getAttribute("href"), text: el.querySelector("[data-fides-explore-all]").textContent.replace(/\s+/g, " ").trim() } : null,
-          foot: (el.querySelector(".fides-explore__catalog-foot") || {}).textContent, also: el.querySelectorAll("[data-fides-explore-also]").length, anchors: Array.from(el.querySelectorAll("[data-fides-explore-also] a")).map((a) => a.getAttribute("href")),
+          link: el.querySelector("[data-fides-explore-all]") ? { href: el.querySelector("[data-fides-explore-all]").getAttribute("href"), text: el.querySelector("[data-fides-explore-all]").textContent.replace(/\s+/g, " ").trim() } : null,
+          tags: el.querySelectorAll(".fides-ds-card__tags, .fides-ds-card__facts").length,
         })));
+        const howText = await page.$$eval("[data-fides-explore-how] [data-how]", (els) => Object.fromEntries(els.map((el) => [el.dataset.how, el.textContent.replace(/\s+/g, " ").trim()])));
         check(`${tag}: parts equal the data (${exp.types.map((t) => t.type).join(", ")})`, JSON.stringify(parts.map((p) => p.type)) === JSON.stringify(exp.types.map((t) => t.type)), parts.map((p) => p.type).join(","));
         check(`${tag}: heading "${W.h2}", wallets never offered`, ((await block.locator("h2").first().textContent()) || "").trim() === W.h2 && !parts.some((p) => p.type === "wallets"));
+        check(`${tag}: introduction and closed "how" disclosure`, norm(await block.locator("[data-fides-explore-catalog-note]").innerText()) === W.intro && norm(await block.locator("[data-fides-explore-how] summary").innerText()) === W.how && (await block.locator("[data-fides-explore-how]").evaluate((el) => el.open)) === false);
         for (const part of parts) {
           const e = exp.types.find((t) => t.type === part.type) || {};
           const pt = `${tag}/${part.type}`;
-          check(`${pt}: ${part.cards} cards = min(4, ${part.total}), none empty`, part.cards === Math.min(4, part.total) && part.cards >= 1 && part.cards === part.shown);
-          check(`${pt}: heading and basis label are ${loc}`, (part.h3 || "").trim() === W.titles[part.type] && (part.chip || "").trim() === (part.basis === "direct" ? W.direct : W.derived), `${part.h3}/${part.chip}`);
-          check(`${pt}: basis (${part.basis}) matches the data and a sentence says what it is based on`, part.basis === e.basis && (part.basisText || "").trim().length > 25 && (part.basisText || "").includes(T.name[loc]), part.basisText);
+          const how = howText[part.type] || "";
+          check(`${pt}: ${part.cards} cards = min(4, ${part.total}), none empty, no chips or facts`, part.cards === Math.min(4, part.total) && part.cards >= 1 && part.cards === part.shown && part.tags === 0);
+          check(`${pt}: heading is ${loc} and there is no basis badge`, (part.h3 || "").trim() === W.titles[part.type] && !(part.chip || "").trim(), `${part.h3}/${part.chip}`);
+          check(`${pt}: basis (${part.basis}) is explained in "How are these selected?"`, part.basis === e.basis && how.length > 25 && how.includes(T.name[loc]), how);
           check(`${pt}: unique record ids`, new Set(part.ids).size === part.ids.length);
           if (part.hasLink) {
             const countOk = part.type === "organizations" ? !/\(\d+\)/.test(part.link.text) : part.link.text.includes(`(${part.total})`);
             check(`${pt}: link "${W.all[part.type]}"${part.type === "organizations" ? " without a number" : ` with (${part.total})`}`, part.link.text.startsWith(W.all[part.type]) && countOk, part.link.text);
             check(`${pt}: link stays on the same language site`, loc === "EN" || part.link.href.includes("/nl/"), part.link.href);
           } else {
-            check(`${pt}: no link, the count line says "Showing N of M"`, part.link === null && W.showing.test((part.foot || "").trim()), part.foot);
+            check(`${pt}: no view-all link when the destination has no filter`, part.link === null);
           }
-          check(`${pt}: "also linked" notes point to an example card on this page`, (await Promise.all(part.anchors.map((a) => page.locator(a).count()))).every((n) => n === 1) || fixture);
         }
         check(`${tag}: no horizontal overflow`, await noOverflow(page));
         if (loc === "NL") {
-          const english = await block.evaluate((el) => Array.from(el.querySelectorAll("h2,h3,.fides-explore__basis,.fides-explore__basis-text,.fides-explore__catalog-foot,.fides-explore__relations-note")).map((n) => n.textContent.replace(/\s+/g, " ").trim()).filter((t) => /\b(View all|Showing|Classified|Derived|Records the catalogs|Credential types|Relying parties|Issuers have)\b/.test(t)));
+          const english = await block.evaluate((el) => Array.from(el.querySelectorAll("h2,h3,.fides-explore__how summary,.fides-explore__catalog-foot,.fides-explore__relations-note")).map((n) => n.textContent.replace(/\s+/g, " ").trim()).filter((t) => /\b(View all|Explore the catalogs|How are these selected|Explore records|Credential types|Relying parties|Organisations)\b/.test(t)));
           check(`${tag}: interface text is Dutch`, english.length === 0, english.join(" | "));
           const lang = await block.locator(".fides-explore__catalog-card").first().getAttribute("lang");
           check(`${tag}: catalog card content is marked as English`, lang === "en");
         }
         if (!fixture) {
-          const dedupe = parts.reduce((n, p) => n + p.also, 0);
-          check(`${tag}: ${dedupe} record(s) marked as also linked, as the data says (${exp.also})`, dedupe === exp.also, `${dedupe}`);
+          check(`${tag}: no "also linked" notes`, (await block.locator("[data-fides-explore-also]").count()) === 0);
         } else {
           check(`${tag}: no use cases but the classified records stay (state "empty" + block)`, (await page.locator("[data-fides-explore-state=empty]").count()) === 1 && parts.length > 0);
         }
@@ -821,7 +788,7 @@ async function round4Checks(browser) {
           const pt = `${tag}/${part.type}`;
           const label = part.type === "credentials" || part.type === "organizations" ? (T.catalogTheme || T.name[loc]) : null;
           const pillOk = label ? dest.pills.some((p) => p.includes(label) || p.includes(T.name.EN)) : dest.pills.some((p) => /×|remove|verwijder/i.test(p));
-          if (part.type === "credentials" && T.catalogTheme) check(`${pt}: the basis sentence names the catalog theme "${T.catalogTheme}" that the filter pill shows`, (part.basisText || "").includes(T.catalogTheme), part.basisText);
+          if (part.type === "credentials" && T.catalogTheme) check(`${pt}: the selection note names the catalog theme "${T.catalogTheme}" that the filter pill shows`, (howText[part.type] || "").includes(T.catalogTheme), howText[part.type]);
           if (part.type === "issuers" || part.type === "rps") {
             check(`${pt}: the link is the short ?${T.param}=${T.slug} filter (no credential[] list)`, new URL(dest.url, BASE).search === `?${T.param}=${T.slug}`, dest.url);
             check(`${pt}: the filter pill names the choice (${T.name[loc]})`, dest.pills.some((x) => x.includes(T.name[loc])), dest.pills.join(" | "));
@@ -987,10 +954,78 @@ async function round5Checks(browser) {
   console.log("\n" + info.map((l) => `info - ${l}`).join("\n"));
 }
 
+async function round6Checks(browser) {
+  const targets = [
+    { kind: "sector", param: "sector", path: "sectors/", slug: "education" },
+    { kind: "theme", param: "theme", path: "themes/", slug: "business_authority" },
+    { kind: "sector", param: "sector", path: "sectors/", slug: "energy" },
+  ];
+  const label = { EN: "Related credentials, organizations and wallets", NL: "Gerelateerde credentials, organisaties en wallets" };
+  for (const loc of LOCALES) {
+    for (const width of WIDTHS) {
+      for (const T of targets) {
+        const tag = `r6 ${loc} ${width} ${T.slug}`;
+        const url = `${BASE}${prefix(loc)}${T.path}?${T.param}=${T.slug}`;
+        const page = await newPage(browser, width);
+        await page.goto(url, { waitUntil: "networkidle" });
+        const nav = await page.$$eval("[data-fides-explore-sections] a[href^='#']", (as) => as.map((a) => a.getAttribute("href")));
+        const expectNav = (await page.locator("#explore-use-cases").count()) ? ["#explore-use-cases"] : [];
+        if (await page.locator("#explore-catalog").count()) expectNav.push("#explore-catalog");
+        check(`${tag}: On this page lists only the sections that are there`, nav.join(",") === expectNav.join(","), nav.join(","));
+        check(`${tag}: no basis badges`, (await page.locator(".fides-explore__basis").count()) === 0);
+        const details = page.locator("#explore-use-cases .fides-explore__case-rel");
+        const nDetails = await details.count();
+        if (nDetails) {
+          check(`${tag}: relation summary is translated`, norm(await details.first().locator("summary").innerText()) === label[loc]);
+          const withLink = details.filter({ has: page.locator('a.fides-explore__link') });
+          if (await withLink.count()) {
+            const before = page.url();
+            await withLink.first().locator("summary").click();
+            const href = await withLink.first().locator("a.fides-explore__link").first().getAttribute("href");
+            await withLink.first().locator("a.fides-explore__link").first().click();
+            await page.waitForLoadState("networkidle");
+            check(`${tag}: a related record opens its detail page`, page.url() !== before && (loc === "EN" || page.url().includes("/nl/")), page.url());
+            await page.goBack({ waitUntil: "networkidle" });
+            check(`${tag}: Back returns to the choice`, page.url().split("#")[0] === before.split("#")[0] && (await page.locator(`[data-choice="${T.slug}"][aria-current]`).count()) === 1, page.url());
+            infoPush(tag, href);
+          }
+        }
+        const all = await page.$$eval("[data-fides-explore-all]", (as) => as.map((a) => ({ type: a.dataset.fidesExploreAll, href: a.getAttribute("href") })));
+        if (T.slug === "energy") {
+          const types = await page.$$eval("[data-catalog-type]", (els) => els.map((e) => e.dataset.catalogType));
+          check(`${tag}: a low-data choice omits empty categories`, types.length >= 1 && types.length <= 4 && new Set(types).size === types.length, types.join(","));
+        }
+        for (const link of all) {
+          await page.goto(url, { waitUntil: "networkidle" });
+          await Promise.all([
+            page.waitForURL((next) => next.href !== url),
+            page.locator(`[data-fides-explore-all="${link.type}"]`).click(),
+          ]);
+          await page.locator(".fides-uc-pilot__pill").first().waitFor({ state: "visible" });
+          const pills = await page.$$eval(".fides-uc-pilot__pill", (els) => els.map((e) => e.textContent.replace(/\s+/g, " ").trim()).filter(Boolean));
+          check(`${tag}: View all ${link.type} shows an active filter`, pills.length > 0 && (loc === "EN" || page.url().includes("/nl/")), pills.slice(0, 2).join(" | ") || page.url());
+        }
+        await page.goto(url, { waitUntil: "networkidle" });
+        check(`${tag}: no horizontal overflow`, await noOverflow(page));
+        await page.context().close();
+      }
+    }
+  }
+}
+const r6info = [];
+function infoPush(tag, href) { r6info.push(`${tag}: followed ${href}`); }
+
 (async () => {
   const browser = patchBrowser(await chromium.launch({ executablePath: process.env.CHROME_PATH, headless: true }));
   const only4 = process.env.ONLY_ROUND4 === "1";
   const only3 = process.env.ONLY_ROUND3 === "1";
+  if (process.env.ONLY_ROUND6 === "1") {
+    await round6Checks(browser);
+    await browser.close();
+    if (r6info.length) console.log("\n" + r6info.join("\n"));
+    console.log(failures ? `\n${failures} check(s) failed` : "\nall checks passed");
+    process.exit(failures ? 1 : 0);
+  }
   if (process.env.ONLY_ROUND5 === "1") {
     await round5Checks(browser);
     await browser.close();

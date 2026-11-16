@@ -279,6 +279,19 @@ async function openDialog(page, kind) {
         check(`${tag}: the chip names the list ("${listName}") and the full value`, chipText.includes(listName) && chipText.includes(longest.label.trim()), chipText);
         check(`${tag}: no horizontal overflow with the filter open`, await noOverflow(page));
 
+        if (kind.key === "issuers") {
+          await openList(page, listUrl);
+          check(`${tag}: no environment paragraph above the results`, (await page.locator(".fides-uc-pilot__legend").count()) === 0);
+          const help = page.locator("#fides-issuer-environment-legend");
+          const summary = ((await help.locator("summary").textContent()) || "").replace(/\s+/g, " ").trim();
+          check(`${tag}: Environment explains itself as "${loc === "NL" ? "Wat betekenen deze waarden?" : "What do these mean?"}"`, summary === (loc === "NL" ? "Wat betekenen deze waarden?" : "What do these mean?"), summary);
+          const helpText = ((await help.locator("p").textContent()) || "").replace(/\s+/g, " ").trim();
+          check(`${tag}: Production is live and Test is every other issuer`, loc === "NL" ? /Productie betekent dat een uitgever live is/.test(helpText) && /Test geldt/.test(helpText) : /Production marks an issuer that is live/.test(helpText) && /Test marks every other issuer/.test(helpText), helpText.slice(0, 80));
+          const envLabels = (await optionsOf(page, "environment")).map((o) => o.label);
+          const unspecified = loc === "NL" ? "Niet opgegeven" : "Not specified";
+          check(`${tag}: "Not specified" is explained only when that value is offered`, envLabels.includes(unspecified) === /Not specified|Niet opgegeven/.test(helpText), envLabels.join(","));
+        }
+
         // 6. Relying parties: the readiness explanation sits with the filter.
         if (kind.key === "relying-parties") {
           await openList(page, listUrl);

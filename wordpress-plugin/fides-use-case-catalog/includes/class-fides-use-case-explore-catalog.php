@@ -14,7 +14,15 @@
  *
  * Nothing is inferred from text. A "view all" link exists only where the destination catalog has a working filter for exactly
  * this selection (credential types: ?sector= / ?theme=, organisations: ?sector=, issuers and relying parties: ?sector= / ?theme=,
- * with ?credential[]= as the fallback of an older issuer / relying party plugin); otherwise the block shows "Showing N of M" and no link.
+ * with ?credential[]= as the fallback of an older issuer / relying party plugin). The number on that link is shown only when the
+ * destination lists exactly this many records (not for organisations: the browser loads a newer snapshot).
+ *
+ * Order of credential types: fewer sectors first, then fewer themes, then the name (a type that lists every sector says little
+ * about one sector). On the Business & Mandates theme (`business_authority`) only, types about organisational identity or
+ * representation come before the others, and only when they are already in that filtered set. A type qualifies when its themes
+ * include `organizational_identity` and either the subject is an organisation with category business or identity, or the subject
+ * is a person with category business (someone acting for an organisation). No record name is used. The specificity order above
+ * is kept inside each of those two groups.
  */
 
 if (! defined('ABSPATH')) {
@@ -69,6 +77,28 @@ final class Fides_Use_Case_Explore_Catalog {
         return array();
     }
 
+    /**
+     * Organisational identity or representation, from fields already on the credential type.
+     *
+     * True only when `themes` contains `organizational_identity` and either the subject is an organisation in category
+     * business or identity, or the subject is a person in category business. Callers apply this only to types that the
+     * theme filter already selected, so a type outside that set is never pulled in. Display names are not consulted.
+     *
+     * @param array<string, mixed> $item
+     */
+    public static function is_identity_or_representation(array $item): bool {
+        $themes = array_map('strval', (array) ($item['themes'] ?? array()));
+        if (! in_array('organizational_identity', $themes, true)) {
+            return false;
+        }
+        $subject  = strtolower(trim((string) ($item['subjectType'] ?? '')));
+        $category = strtolower(trim((string) ($item['category'] ?? '')));
+        if ($subject === 'organization' && in_array($category, array('business', 'identity'), true)) {
+            return true;
+        }
+        return $subject === 'person' && $category === 'business';
+    }
+
     /** Canonical credential type ids of a list of refs (aliases and per-format ids resolve to the type). */
     private static function canonical_refs(array $refs): array {
         $out = array();
@@ -106,9 +136,17 @@ final class Fides_Use_Case_Explore_Catalog {
                 }
             }
             // Most specific first: a type that lists every sector says little about this one.
+            // Business & Mandates also puts organisational identity and representation first (see is_identity_or_representation()).
+            $boost = $kind === 'theme' && $slug === 'business_authority';
             usort(
                 $credentials,
-                static function (array $a, array $b): int {
+                static function (array $a, array $b) use ($boost): int {
+                    if ($boost) {
+                        $c = (self::is_identity_or_representation($a) ? 0 : 1) <=> (self::is_identity_or_representation($b) ? 0 : 1);
+                        if ($c !== 0) {
+                            return $c;
+                        }
+                    }
                     $c = count(self::sector_codes($a['sectors'] ?? array())) <=> count(self::sector_codes($b['sectors'] ?? array()));
                     $c = $c !== 0 ? $c : count((array) ($a['themes'] ?? array())) <=> count((array) ($b['themes'] ?? array()));
                     return $c !== 0 ? $c : strcasecmp((string) $a['displayName'], (string) $b['displayName']);

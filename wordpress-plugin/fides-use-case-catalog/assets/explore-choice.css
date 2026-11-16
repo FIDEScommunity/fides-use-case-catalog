@@ -643,7 +643,68 @@
   }
 }
 
-/* More from the catalog (round 4): compact record rows per catalog type, with the basis said in words. */
+/* Relations of one use case, closed under its card. */
+.fides-ds .fides-explore__case-rel {
+  margin: 4px 0 8px;
+}
+.fides-ds .fides-explore__case-rel > summary {
+  display: inline-block;
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 15px;
+  line-height: 22px;
+  cursor: pointer;
+}
+.fides-ds .fides-explore__case-rel > summary:focus-visible {
+  outline: 2px solid var(--fides-ds-brand, #0a6ef3);
+  outline-offset: 2px;
+}
+.fides-ds .fides-explore__case-group {
+  margin-top: 12px;
+}
+.fides-ds .fides-explore__case-group .fides-explore__h3 {
+  font-size: 16px;
+  line-height: 22px;
+}
+.fides-ds .fides-explore__case-group .fides-explore__list {
+  margin-top: 8px;
+}
+
+/* Explore the catalogs: compact rows (image, name, one description line). */
+.fides-ds .fides-explore__how {
+  margin: 8px 0 0;
+}
+.fides-ds .fides-explore__how > summary {
+  display: inline-block;
+  color: var(--fides-ds-link, #0848a3);
+  font-size: 15px;
+  line-height: 22px;
+  cursor: pointer;
+}
+.fides-ds .fides-explore__how > summary:focus-visible {
+  outline: 2px solid var(--fides-ds-brand, #0a6ef3);
+  outline-offset: 2px;
+}
+.fides-ds .fides-explore__how-list {
+  margin: 8px 0 0;
+  padding-left: 1.2em;
+}
+.fides-ds .fides-explore__how-list li {
+  margin: 4px 0;
+  font-size: 15px;
+  line-height: 22px;
+}
+.fides-ds .fides-explore__catalog .fides-ds-card__summary {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.fides-ds .fides-explore__catalog .fides-ds-card__tags,
+.fides-ds .fides-explore__catalog .fides-ds-card__facts {
+  display: none;
+}
+
+/* Explore the catalogs: compact record rows per catalog type. The basis is in "How are these selected?". */
 .fides-ds .fides-explore__catalog {
   margin-top: 40px;
 }

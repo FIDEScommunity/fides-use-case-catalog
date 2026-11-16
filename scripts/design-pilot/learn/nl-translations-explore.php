@@ -101,6 +101,10 @@ $nl = array(
     'Trade between companies, also across borders, may need verified information about the parties and the documents involved. The examples show what information is exchanged and who checks it.' => 'Handel tussen bedrijven, ook over grenzen heen, vraagt mogelijk om geverifieerde informatie over de partijen en de documenten. De voorbeelden laten zien welke informatie wordt uitgewisseld en wie die controleert.',
     // Round 4 (2026-11-15): "More from the catalog"
     'More from the catalog'       => 'Meer uit de catalogus',
+    // Round 6 (2026-11-16): simplified Themes and Sectors
+    'Explore the catalogs'        => 'Verken de catalogi',
+    'How are these selected?'     => 'Hoe is deze selectie gemaakt?',
+    'Related credentials, organizations and wallets' => 'Gerelateerde credentials, organisaties en wallets',
     'Credential types'            => 'Credentialtypen',
     'Issuers'                     => 'Uitgevers',
     'Relying parties'             => 'Vertrouwende partijen',
@@ -156,6 +160,8 @@ $gettext = array(
     array('fides-use-case-catalog', 'Relying parties have no theme of their own. These accept credential types classified under the theme %s.', 'Vertrouwende partijen (relying parties) hebben geen eigen thema. Deze accepteren credentialtypen die zijn ingedeeld bij het thema %s.'),
     array('fides-use-case-catalog', 'Also linked to a use case above:', 'Ook gekoppeld aan een usecase hierboven:'),
     array('fides-use-case-catalog', 'Showing %1$d of %2$d.', 'Toont %1$d van %2$d.'),
+    // Round 6 (2026-11-16): one introduction above the catalog selection
+    array('fides-use-case-catalog', 'Explore records related to this theme or sector across the FIDES catalogs.', 'Bekijk records die in de FIDES-catalogi aan dit thema of deze sector zijn gekoppeld.'),
 );
 
 /**

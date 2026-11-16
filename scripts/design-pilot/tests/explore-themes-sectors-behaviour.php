@@ -100,6 +100,24 @@ $round4 = static function () use ($check, $items, $themes, $sectors, &$results):
                 if ($entry['how'] === 'credentials-theme') {
                     $check(strpos($entry['url'], 'theme=' . implode(',', $codes)) !== false, "{$tag}/credentials: the link carries the theme codes of the bundle");
                 }
+                if ($type === 'credentials') {
+                    $last_rank = -1;
+                    $last_sectors = -1;
+                    $identity = 0;
+                    foreach ($entry['records'] as $credential) {
+                        $rank = ($kind === 'theme' && $slug === 'business_authority' && Fides_Use_Case_Explore_Catalog::is_identity_or_representation($credential)) ? 0 : ($kind === 'theme' && $slug === 'business_authority' ? 1 : 0);
+                        $sectors = count(Fides_Use_Case_Explore_Catalog::sector_codes($credential['sectors'] ?? array()));
+                        if ($last_rank >= 0) {
+                            $check($rank > $last_rank || ($rank === $last_rank && $sectors >= $last_sectors), "{$tag}/credentials: specific types stay ahead of generic ones, and on Business & Mandates identity and representation come first");
+                        }
+                        $identity += $rank === 0 && $kind === 'theme' && $slug === 'business_authority' ? 1 : 0;
+                        $last_rank = $rank;
+                        $last_sectors = $sectors;
+                    }
+                    if ($kind === 'theme' && $slug === 'business_authority') {
+                        $check($identity > 0 && $identity < count($entry['records']), "{$tag}/credentials: the filtered set contains both identity/representation types and other types ({$identity})");
+                    }
+                }
                 if ($type === 'issuers' || $type === 'rps') {
                     // Round 5: one short ?sector= / ?theme= parameter instead of one credential[] per type (up to 36 pills).
                     parse_str((string) parse_url($entry['url'], PHP_URL_QUERY), $q);
@@ -146,8 +164,9 @@ $round4 = static function () use ($check, $items, $themes, $sectors, &$results):
                     $expected_also += in_array(Fides_Use_Case_Explore_Catalog::record_id($bucket, $r), $rel_refs[ $bucket ], true) ? 1 : 0;
                 }
             }
-            $check(substr_count($html, 'data-fides-explore-also') === $expected_also, "{$tag}: {$expected_also} record(s) marked as also linked to a shown use case");
-            $report[ $kind . ':' . $slug ] = array('types' => $types, 'also' => $expected_also, 'urls' => array_map(static fn ($e) => $e['url'], $sel), 'totals' => array_map(static fn ($e) => (int) $e['total'], $sel));
+            $check(substr_count($html, 'data-fides-explore-also') === 0 && strpos($html, 'Classified directly') === false && strpos($html, 'Derived from related records') === false, "{$tag}: no basis badge and no 'also linked' note");
+            $check(strpos($html, 'Explore the catalogs') !== false && strpos($html, 'How are these selected?') !== false, "{$tag}: the catalog section and the selection disclosure are present");
+            $report[ $kind . ':' . $slug ] = array('types' => $types, 'also' => 0, 'urls' => array_map(static fn ($e) => $e['url'], $sel), 'totals' => array_map(static fn ($e) => (int) $e['total'], $sel));
         }
     }
     // A choice without any record: the block is left out completely.
@@ -157,10 +176,40 @@ $round4 = static function () use ($check, $items, $themes, $sectors, &$results):
     $html = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => 'sector', 'overview_url' => '/fides-design-pilot/overview/'));
     $_GET = array();
     remove_filter('fides_explore_catalog_selection', $none);
-    $check(strpos($html, 'explore-catalog') === false && strpos($html, 'More from the catalog') === false, 'round4: without any record the block and the "On this page" entry are left out');
+    $check(strpos($html, 'explore-catalog') === false && strpos($html, 'Explore the catalogs') === false, 'round4: without any record the block and the "On this page" entry are left out');
     $check(strpos($html, 'id="explore-use-cases"') !== false, 'round4: without catalog records the use cases stay');
     return $report;
 };
+$round6 = static function () use ($check, $items): void {
+    foreach (array(array('sector', 'education'), array('theme', 'business_authority')) as $pair) {
+        list($kind, $slug) = $pair;
+        $_GET = array($kind => $slug);
+        $html = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => $kind, 'overview_url' => '/fides-design-pilot/overview/', 'detail_url' => '/fides-design-pilot/use-case/'));
+        $_GET = array();
+        $tag = "round6 {$kind}:{$slug}";
+        $check(strpos($html, 'id="explore-credentials"') === false && strpos($html, 'Related use case') === false, "{$tag}: shared relation sections are gone");
+        $check(strpos($html, 'href="#explore-use-cases"') !== false && strpos($html, 'href="#explore-catalog"') !== false && strpos($html, '>Explore the catalogs</a>') !== false, "{$tag}: On this page lists Use cases and Explore the catalogs");
+        $check(strpos($html, 'How are these selected?') !== false && strpos($html, 'Classified directly') === false, "{$tag}: selection basis is in the disclosure, not a badge");
+        $check(preg_match_all('/data-fides-explore-all="(credentials|organizations|issuers|rps)"/', $html, $alls) >= 1, "{$tag}: at least one View all link");
+        foreach ($alls[1] as $type) {
+            $check(strpos($html, 'data-fides-explore-all="' . $type . '"') !== false, "{$tag}: View all for {$type}");
+        }
+        $sel = Fides_Use_Case_Explore_Choice::selection($kind, $slug, $items);
+        $check(substr_count($html, 'Related credentials, organizations and wallets') === count($sel['shown']), "{$tag}: one relations disclosure per shown use case");
+    }
+    $overview = home_url('/fides-design-pilot/overview/');
+    $biz = Fides_Use_Case_Explore_Catalog::selection('theme', 'business_authority', $overview);
+    $first = array_slice($biz['credentials']['records'], 0, 4);
+    $check(count($first) === 4 && Fides_Use_Case_Explore_Catalog::is_identity_or_representation($first[0]) && Fides_Use_Case_Explore_Catalog::is_identity_or_representation($first[3]), 'round6: the four Business & Mandates credential types shown are identity or representation');
+};
+if (getenv('ONLY_ROUND6') === '1') {
+    $round6();
+    echo $results['pass'] . " passed, " . count($results['fail']) . " failed\n";
+    foreach ($results['fail'] as $failure) {
+        echo "FAIL: {$failure}\n";
+    }
+    exit(count($results['fail']) ? 1 : 0);
+}
 if (getenv('ONLY_ROUND4') === '1') {
     $report = $round4();
     $dir    = __DIR__ . '/output';
@@ -302,31 +351,13 @@ foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {
         $check(substr_count($html, 'fides-ds-card--row') === $n, "{$kind}:{$slug} renders {$n} compact catalog row cards");
         $check(substr_count($html, 'fides-explore__status--production') === $row['status']['yes'] && substr_count($html, 'fides-explore__status--not-production') === $row['status']['no'], "{$kind}:{$slug} status badges equal the productionDeployment values (" . $row['status']['yes'] . ' yes, ' . $row['status']['no'] . ' no)');
         $check(substr_count($html, 'class="fides-ds-card__media fides-ds-card__media--contain"><img') === $row['withImage'], "{$kind}:{$slug} shows the catalog image of exactly the use cases that have one (" . $row['withImage'] . ')');
-        foreach (array('credentials' => 'Credential types', 'organizations' => 'Organisations', 'wallets' => 'Wallets') as $bucket => $noun) {
-            $total = $row[ $bucket ];
-            if ($total === 0) {
-                $check(strpos($html, 'data-relation="' . $bucket . '"') === false, "{$kind}:{$slug} no {$bucket} section without data");
-                continue;
-            }
-            $check(strpos($html, '>' . $noun . '</h2>') !== false, "{$kind}:{$slug} heading is exactly '{$noun}' (the examples are named once, not in every heading)");
-            $check(strpos($html, 'data-relation="' . $bucket . '" data-total="' . $total . '"') !== false, "{$kind}:{$slug} {$bucket} total is the number of unique records ({$total})");
-        }
-        $check(substr_count($html, 'data-fides-explore-relations-note') === (($row['credentials'] + $row['organizations'] + $row['wallets']) > 0 ? 1 : 0), "{$kind}:{$slug} the sentence that the lists belong to the shown use cases appears exactly once");
+        $check(strpos($html, 'id="explore-credentials"') === false && strpos($html, 'id="explore-organisations"') === false && strpos($html, 'id="explore-wallets"') === false, "{$kind}:{$slug} no shared Credential types / Organisations / Wallets sections");
+        $check(strpos($html, 'fides-explore__from') === false && strpos($html, 'data-fides-explore-relations-note') === false && strpos($html, 'Related use case') === false, "{$kind}:{$slug} no shared relation note and no 'Related use case' details");
         $check(strpos($html, 'Each is listed once') === false && strpos($html, 'In 1 of these') === false && strpos($html, 'of these') === false && strpos($html, 'Listing only') === false && strpos($html, 'fides-explore__legend') === false, "{$kind}:{$slug} no repeated duplicate explanation, no 'In N of these examples', no 'Listing only'");
-        $check(preg_match_all('/<details class="fides-explore__from"><summary>(Related use case|[2-4] related use cases)<\/summary>/', $html) === substr_count($html, '<details class="fides-explore__from">'), "{$kind}:{$slug} every row summary is 'Related use case' or 'N related use cases'");
+        $check(substr_count($html, 'Related credentials, organizations and wallets') === $n, "{$kind}:{$slug} every use case card has the relations disclosure");
+        $check(strpos($html, 'href="#explore-use-cases"') !== false && strpos($html, '>Use cases</a>') !== false && strpos($html, 'href="#explore-credentials"') === false && strpos($html, 'href="#explore-organisations"') === false && strpos($html, 'href="#explore-wallets"') === false, "{$kind}:{$slug} 'On this page' lists Use cases and not the removed relation sections");
         $check(strpos($html, '<h1 class="fides-ds-heading-1 fides-explore__title" id="fides-explore-title" tabindex="-1">') !== false && substr_count($html, '<h1') === 1 && strpos($html, 'data-fides-explore-change>' . ($kind === 'sector' ? 'Change sector' : 'Change theme')) !== false, "{$kind}:{$slug} one H1 (the chosen name) and the phone action Change {$kind}");
         $check(strpos($html, 'class="fides-ds-section-nav fides-explore__sections" data-fides-ds-section-nav') !== false && strpos($html, '<summary>On this page') !== false && strpos($html, 'class="fides-explore__onpage"') === false, "{$kind}:{$slug} uses the shared 'On this page' section bar");
-        // Anchors of the "In N of these examples" lists exist.
-        preg_match_all('/<details class="fides-explore__from">.*?<\/details>/s', $html, $lists);
-        $anchors_ok = true;
-        foreach ($lists[0] as $block) {
-            preg_match_all('/href="#(explore-example-\d+)"/', $block, $hrefs);
-            foreach ($hrefs[1] as $anchor) {
-                $anchors_ok = $anchors_ok && strpos($html, 'id="' . $anchor . '"') !== false;
-            }
-            $anchors_ok = $anchors_ok && ! empty($hrefs[1]);
-        }
-        $check($anchors_ok, "{$kind}:{$slug} every example list links to an example card on the page");
         // Without a catalog page: plain name, no link, no label (linked rows have an arrow).
         $check(substr_count($html, 'fides-explore__badge') === 0 && substr_count($html, 'fides-explore__link"') === (int) preg_match_all('/data-detail="yes"/', $html), "{$kind}:{$slug} only rows with a catalog page have a link, none has a label");
         $check(preg_match_all('/data-detail="no"[^>]*>(?:(?!<\/li>).)*<a class="fides-explore__link"/s', $html) === 0, "{$kind}:{$slug} a row without a catalog page never links");
@@ -377,9 +408,9 @@ add_filter('fides_use_case_design_items', static function () use ($dups) {
 }, 99);
 Fides_Use_Case_Design::flush_cache();
 $dhtml = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => 'sector', 'overview_url' => '/fides-design-pilot/overview/'));
-$check(strpos($dhtml, '>Organisations</h2>') !== false && strpos($dhtml, 'data-relation="organizations" data-total="2"') !== false && strpos($dhtml, '<summary>3 related use cases</summary>') !== false && strpos($dhtml, '<summary>Related use case</summary>') !== false, 'fixture: plain heading, two unique organisations, the summaries count related use cases (3 and 1)');
-$check(strpos($dhtml, 'Listing only') === false && strpos($dhtml, 'Ghost Org</span></span>') !== false && strpos($dhtml, 'href="https://example.invalid') === false, 'fixture: the unknown organisation is plain text without a label, its own website is not linked');
-$check(strpos($dhtml, '· Issuer</span>') !== false && strpos($dhtml, '· Relying Party</span>') !== false, 'fixture: per-example role shown in the example list');
+$check(strpos($dhtml, 'id="explore-organisations"') === false && strpos($dhtml, 'Related use case') === false && substr_count($dhtml, 'Related credentials, organizations and wallets') === 3, 'fixture: each use case has its own relations disclosure, no shared organisation section');
+$check(strpos($dhtml, 'Listing only') === false && strpos($dhtml, 'Ghost Org</span>') !== false && strpos($dhtml, 'href="https://example.invalid') === false, 'fixture: the unknown organisation is plain text without a label, its own website is not linked');
+$check(substr_count($dhtml, 'id="explore-example-1"') === 1 && strpos($dhtml, 'Ghost Org') !== false, 'fixture: the unknown organisation stays on the use case that links it');
 remove_all_filters('fides_use_case_design_items');
 $single = array($mk('sx-1', 'Single example', array('organizations' => array($real), 'credentials' => array(array('refId' => null, 'labelRaw' => 'Unlisted credential', 'url' => null, 'source' => 'manual', 'walletType' => null)))));
 add_filter('fides_use_case_design_items', static function () use ($single) {
@@ -387,7 +418,7 @@ add_filter('fides_use_case_design_items', static function () use ($single) {
 }, 99);
 Fides_Use_Case_Design::flush_cache();
 $shtml = Fides_Use_Case_Explore_Choice::shortcode(array('kind' => 'sector', 'overview_url' => '/fides-design-pilot/overview/'));
-$check(strpos($shtml, '>Organisations</h2>') !== false && strpos($shtml, '<summary>Related use case</summary>') !== false && strpos($shtml, 'belong to the use case shown above.') !== false && strpos($shtml, 'related use cases') === false, 'fixture: one example gives singular wording');
+$check(substr_count($shtml, 'Related credentials, organizations and wallets') === 1 && strpos($shtml, 'belong to the use case shown above.') === false && strpos($shtml, 'id="explore-organisations"') === false, 'fixture: one example keeps its relations on the card');
 remove_all_filters('fides_use_case_design_items');
 Fides_Use_Case_Design::flush_cache();
 $_GET = array();
@@ -442,7 +473,8 @@ remove_filter('fides_use_case_design_items', '__return_empty_array', 99);
 Fides_Use_Case_Design::flush_cache();
 $_GET = array();
 $check(strpos($empty_html, 'No examples yet') !== false && strpos($empty_html, 'Browse all use cases') !== false, 'empty data: message and link to all use cases');
-$check(preg_match_all('/<a class="fides-explore__choice[ "]/', $empty_html) === 6 && strpos($empty_html, 'data-fides-explore-cards') === false && strpos($empty_html, 'On this page') === false, 'empty data: the six choices stay, no use case cards and no on-page navigation (classified catalog records may stay)');
+$check(preg_match_all('/<a class="fides-explore__choice[ "]/', $empty_html) === 6 && strpos($empty_html, 'data-fides-explore-cards') === false && strpos($empty_html, 'href="#explore-use-cases"') === false, 'empty data: the six choices stay and Use cases is not on the page');
+$check((strpos($empty_html, 'id="explore-catalog"') !== false) === (strpos($empty_html, '>Explore the catalogs</a>') !== false), 'empty data: the section bar names Explore the catalogs only when that section is present');
 
 // Shortcode output: every choice renders the choices as links, one marked as current, the overview link carries the filter.
 $wrong_page = get_page_by_path('fides-design-pilot/themes');
@@ -522,6 +554,7 @@ foreach (array('theme' => $themes, 'sector' => $sectors) as $kind => $choices) {
     }
 }
 
+$round6();
 $report4 = $round4();
 $out_dir = __DIR__ . '/output';
 if (! is_dir($out_dir)) {

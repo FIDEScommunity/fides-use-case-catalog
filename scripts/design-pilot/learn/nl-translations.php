@@ -978,6 +978,7 @@ $nl = array(
     'Relying parties (design pilot)' => 'Vertrouwende partijen (designpilot)',
     'Relying party detail (design pilot)' => 'Detail vertrouwende partij (designpilot)',
     'Production marks an issuer that is live. Test marks every other issuer: pilots, sandboxes, demos and quality assurance.' => 'Productie betekent dat een uitgever live is. Test geldt voor elke andere uitgever: pilots, sandboxes, demo’s en kwaliteitstests.',
+    'What do these mean?' => 'Wat betekenen deze waarden?',
     'Readiness shows how far a service has come: technical demo, use case demo, production pilot or production. The operational status (live, beta, development or deprecated) is a separate field on the record.' => 'Gereedheid laat zien hoe ver een dienst is: technische demo, usecasedemo, productiepilot of productie. De operationele status (live, beta, in ontwikkeling of uitgefaseerd) is een apart veld in het record.',
     'Readiness is how mature the service is. Operational status is its current state. The two fields are recorded separately and can differ.' => 'Gereedheid zegt hoe ver de dienst is. De operationele status is de huidige toestand. Beide velden worden apart vastgelegd en kunnen verschillen.',
     'Operational status' => 'Operationele status',
