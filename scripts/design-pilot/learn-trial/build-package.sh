@@ -31,8 +31,8 @@ if [[ -n "$tiles_dirty$content_dirty" ]]; then
 fi
 
 version="$(grep -m 1 -E '^ \* Version:' "$TILES_ROOT/fides-community-tools-tiles.php" | awk '{print $3}')"
-if [[ "$version" != "1.13.63" ]]; then
-  echo "Refusing: tiles version is $version, expected 1.13.63." >&2
+if [[ "$version" != "1.13.64" ]]; then
+  echo "Refusing: tiles version is $version, expected 1.13.64." >&2
   exit 1
 fi
 
