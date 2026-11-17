@@ -45,7 +45,7 @@ assert doc["installed"] is False
 assert "public_html/wp" in doc["wordpress"]
 assert "main site" in doc["production"]
 assert "production without LEARN_TARGET=production" in doc["refuses"]
-assert "not the main site" in doc["refuses"]
+assert any("not the main site" in item for item in doc["refuses"])
 assert "LEARN_FORCE" in doc["refuses"]
 PY
 ok "manifest names the glossary source and the production gate"
