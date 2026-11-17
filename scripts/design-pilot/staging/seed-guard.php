@@ -11,6 +11,9 @@
  *  PILOT_ALLOWED_HOSTS  comma separated hosts that may be seeded  (localhost,127.0.0.1,staging.fides.community)
  *
  * The production hosts below are refused whatever PILOT_ALLOWED_HOSTS says.
+ * fides_pilot_seed_context() keeps that refusal. The bounded Learn trial is the
+ * only caller that may pass true, and only together with LEARN_TARGET=production
+ * and LEARN_TRIAL_BOUNDED=1 on the main site. Other seeds must not pass true.
  */
 
 if (! defined('ABSPATH')) {
@@ -69,17 +72,45 @@ function fides_pilot_normalize(string $text): string {
     return $home === '' ? $text : str_replace(array($home, str_replace('/', '\\/', $home)), '{{home}}', $text);
 }
 
+/** True only for the bounded Learn package, and only when that package names production. */
+function fides_learn_trial_bounded_production(): bool {
+    return getenv('LEARN_TRIAL_BOUNDED') === '1' && getenv('LEARN_TARGET') === 'production';
+}
+
+/** Production Learn install: multisite main site at https://fides.community/. */
+function fides_learn_trial_assert_main_site(): void {
+    if (! is_multisite() || ! is_main_site() || (int) get_current_blog_id() !== 1) {
+        $blog = function_exists('get_current_blog_id') ? (int) get_current_blog_id() : 0;
+        fwrite(STDERR, "Refusing: the production Learn install runs only on the main site (blog {$blog}).\n");
+        exit(1);
+    }
+    $home = untrailingslashit(home_url());
+    if (! in_array($home, array('https://fides.community', 'https://www.fides.community'), true)) {
+        fwrite(STDERR, "Refusing: production home_url is {$home}.\n");
+        exit(1);
+    }
+    if (fides_pilot_mount() !== '') {
+        fwrite(STDERR, "Refusing: the main site must live at the domain root.\n");
+        exit(1);
+    }
+}
+
 /**
  * @return array{base:string,host:string,local:bool,standalone:bool,mount:string,origin:string}
  */
-function fides_pilot_seed_context(): array {
+function fides_pilot_seed_context(bool $allow_bounded_learn = false): array {
     $host = fides_pilot_host();
-    if (in_array($host, array('fides.community', 'www.fides.community'), true)) {
+    $bounded_production = $allow_bounded_learn && fides_learn_trial_bounded_production()
+        && in_array($host, array('fides.community', 'www.fides.community'), true);
+    if (in_array($host, array('fides.community', 'www.fides.community'), true) && ! $bounded_production) {
         fwrite(STDERR, "Refusing to seed the production host {$host}.\n");
         exit(1);
     }
+    if ($bounded_production) {
+        fides_learn_trial_assert_main_site();
+    }
     $local = defined('FIDES_DESIGN_PILOT');
-    if (! $local && ! fides_pilot_host_allowed()) {
+    if (! $bounded_production && ! $local && ! fides_pilot_host_allowed()) {
         fwrite(STDERR, "Refusing to seed host {$host}: not in PILOT_ALLOWED_HOSTS (" . implode(',', fides_pilot_allowed_hosts()) . ").\n");
         exit(1);
     }

@@ -26,7 +26,10 @@
  *  LEARN_FORCE           comma separated seed ids to replace
  *  LEARN_DRY_RUN=1       report only, write nothing
  *  LEARN_BACKUP_DIR      where forced replacements are saved first
- *  LEARN_ALLOW_NON_PILOT=1  allow a non-pilot site (never on production)
+ *  LEARN_ALLOW_NON_PILOT=1  allow a non-pilot site. Production still needs the bounded trial below.
+ *  LEARN_TRIAL_BOUNDED=1 together with LEARN_TARGET=production allows only this
+ *                        package's 52 Learn routes on the production main site.
+ *                        Other seed scripts do not set it and still refuse production.
  *  PILOT_ALLOWED_HOSTS   hosts treated as pilot sites (default localhost,127.0.0.1,staging.fides.community)
  */
 
@@ -35,16 +38,22 @@ if (! defined('ABSPATH')) {
     exit(1);
 }
 require __DIR__ . '/staging/seed-guard.php';
-if (in_array(fides_pilot_host(), array('fides.community', 'www.fides.community'), true)) {
+$learn_bounded_production = fides_learn_trial_bounded_production()
+    && in_array(fides_pilot_host(), array('fides.community', 'www.fides.community'), true);
+if (getenv('LEARN_TRIAL_BOUNDED') === '1' && trim((string) getenv('LEARN_FORCE')) !== '') {
+    fwrite(STDERR, "Refusing: LEARN_FORCE is set. Edited pages are skipped, never replaced.\n");
+    exit(1);
+}
+if (in_array(fides_pilot_host(), array('fides.community', 'www.fides.community'), true) && ! $learn_bounded_production) {
     fwrite(STDERR, "Refusing to seed the production host.\n");
     exit(1);
 }
 // An allow-listed host (staging) counts as a pilot site; the same list protects create-pages.php.
-if (! defined('FIDES_DESIGN_PILOT') && ! fides_pilot_host_allowed() && getenv('LEARN_ALLOW_NON_PILOT') !== '1') {
+if (! $learn_bounded_production && ! defined('FIDES_DESIGN_PILOT') && ! fides_pilot_host_allowed() && getenv('LEARN_ALLOW_NON_PILOT') !== '1') {
     fwrite(STDERR, "Refusing to run outside the design pilot site (set LEARN_ALLOW_NON_PILOT=1 for a test environment).\n");
     exit(1);
 }
-if (function_exists('wp_get_environment_type') && wp_get_environment_type() === 'production' && ! fides_pilot_host_allowed()) {
+if (! $learn_bounded_production && function_exists('wp_get_environment_type') && wp_get_environment_type() === 'production' && ! fides_pilot_host_allowed()) {
     fwrite(STDERR, "Refusing to seed on a production environment type.\n");
     exit(1);
 }
@@ -74,7 +83,7 @@ const LEARN_LAYOUT_META = array(
 );
 
 $here    = getenv('LEARN_SEED_DIR') ?: __DIR__ . '/learn';
-$pctx    = fides_pilot_seed_context(); // also checks that a standalone site has the expected home path
+$pctx    = fides_pilot_seed_context($learn_bounded_production); // also checks that a standalone site has the expected home path
 $sa      = $pctx['standalone'];
 $mount   = $pctx['mount']; // path of home_url(): '' at the domain root, '/design-review' for the standalone site
 $base    = trim((string) (getenv('LEARN_BASE') ?: ($sa ? 'learn' : 'fides-design-pilot/learn')), '/');
@@ -100,6 +109,35 @@ $manifest = json_decode((string) file_get_contents($here . '/manifest.json'), tr
 if (! is_array($manifest) || empty($manifest['pages'])) {
     fwrite(STDERR, "Invalid manifest.\n");
     exit(1);
+}
+if (getenv('LEARN_TRIAL_BOUNDED') === '1') {
+    $learn_allowed = array('' => true);
+    foreach ($manifest['pages'] as $learn_page) {
+        if (($learn_page['tree'] ?? 'learn') !== 'learn' || ($learn_page['path'] ?? '') === 'sessions/request') {
+            continue;
+        }
+        $learn_allowed[ (string) $learn_page['path'] ] = true;
+    }
+    if (count($learn_allowed) !== 52) {
+        fwrite(STDERR, "Refusing: the Learn manifest does not contain 52 package routes.\n");
+        exit(1);
+    }
+    $learn_ids_raw = getenv('LEARN_IDS');
+    if ($learn_ids_raw === false || trim((string) $learn_ids_raw) === '') {
+        fwrite(STDERR, "Refusing: the bounded Learn install requires LEARN_IDS for the 52 package routes.\n");
+        exit(1);
+    }
+    foreach (explode(',', (string) $learn_ids_raw) as $learn_id_item) {
+        $learn_id_item = trim($learn_id_item);
+        if ($learn_id_item === '') {
+            continue;
+        }
+        $learn_id = ($learn_id_item === '.' || $learn_id_item === '(root)') ? '' : $learn_id_item;
+        if (! isset($learn_allowed[ $learn_id ])) {
+            fwrite(STDERR, "Refusing: {$learn_id_item} is outside the 52 Learn routes.\n");
+            exit(1);
+        }
+    }
 }
 kses_remove_filters(); // trusted, version-controlled content
 

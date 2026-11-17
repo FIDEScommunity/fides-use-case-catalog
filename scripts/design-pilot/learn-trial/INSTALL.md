@@ -39,7 +39,7 @@ Wisselen, op de lokale kopie, staging en productie: `wp option update fides_lear
 
 | Onderdeel | Bestaande site | Dit pakket |
 | --- | --- | --- |
-| Tiles | 1.13.32 | 1.13.68 |
+| Tiles | staging 1.13.32; productie 1.13.33 | 1.13.68 |
 | Glossaryplugin | 1.1.15 | 1.1.15 |
 | Catalogusplugins | ongewijzigd | ongewijzigd |
 | WPML | op staging actief, hier niet aanwezig | niet gewijzigd, niet geactiveerd |
@@ -134,10 +134,12 @@ De dubbele slash naar Ecosystem roles in “Digital wallets and public services�
 
 De scripts gebruiken de `wp` van de server en `WP_PATH`. Ze lezen geen checkoutpad, geen Local-PHP en geen `env.sh`. Zet `wp` op `PATH`, of geef `WP_CLI` (en `WP_PHP` als dat een phar is).
 
-1. Bewaar de huidige tilesmap. Op de lokale kopie is 1.13.32 bewaard buiten git.
+`WP_PATH` mag de map zijn waarin `wp-config.php` staat. Op de FIDES-multisite staat de core in `public_html/wp/` en `wp-config.php` één map hoger, in `public_html/`. Zet `WP_PATH` dan op `public_html/wp`. Plugins staan in `public_html/app/plugins/` en mu-plugins in `public_html/app/mu-plugins/`.
+
+1. Bewaar de huidige tilesmap. Op productie staat tiles 1.13.33, alleen actief op de hoofdsite, niet netwerkbreed.
 2. Controleer `shasum -a 256 -c SHA256SUMS` in de pakketmap.
-3. Pak `plugins/fides-community-tools-tiles-1.13.68.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
-4. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`. Zodra tiles 1.13.68 staat, verwijder `/var/www/html/app/mu-plugins/fides-learn-header-fix.php` als dat bestand er nog is. Wijzig het stagingmenu niet.
+3. Pak `plugins/fides-community-tools-tiles-1.13.68.zip` uit naar `public_html/app/plugins/fides-community-tools-tiles`. Geen symlink. Activeer de plugin op de hoofdsite, niet netwerkbreed.
+4. Kopieer `mu-plugins/fides-learn-trial.php` naar `public_html/app/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`. Zodra tiles 1.13.68 staat, verwijder `/var/www/html/app/mu-plugins/fides-learn-header-fix.php` als dat bestand er nog is. Wijzig het hoofdmenu niet, op staging noch op productie.
 5. Laat glossary op 1.1.15. Wijzig geen WPML-instelling en activeer geen taalwissel.
 6. Dry-run. Daarna pas toepassen.
 
@@ -169,11 +171,11 @@ WP_PATH=/pad/naar/wordpress LEARN_TARGET=staging LEARN_APPLY=1 bash seed/learn-t
 
 `fides.community` en `www.fides.community` worden geweigerd tot `LEARN_TARGET=production` gezet is. Ook dan is het een dry-run, tot `LEARN_APPLY=1`. `LEARN_TARGET=staging` op die hosts wordt geweigerd. Een site onder `/design-review` of `/fides-design-pilot` wordt ook geweigerd, net als een site waarin `FIDES_DESIGN_PILOT` aan staat.
 
-Productie, pas nadat de stagingproef klopt. Het mu-plugin nog niet kopiëren tot deze dry-run is gelezen: dat bestand zet de themaheader aan.
+Productie is een multisite. `https://fides.community/` is site ID 1. Het script zet zelf `--url=https://fides.community/` en weigert een andere site, ook als `LEARN_TARGET=production` gezet is. De algemene pilot-seed blijft productie weigeren; alleen deze 52 Learn-routes mogen daarop. Het hoofdmenu wordt niet gewijzigd.
 
 ```bash
-WP_PATH=/pad/naar/wordpress LEARN_TARGET=production bash seed/learn-trial/seed-trial.sh
-WP_PATH=/pad/naar/wordpress LEARN_TARGET=production LEARN_APPLY=1 bash seed/learn-trial/seed-trial.sh
+WP_PATH=/pad/naar/public_html/wp LEARN_TARGET=production bash seed/learn-trial/seed-trial.sh
+WP_PATH=/pad/naar/public_html/wp LEARN_TARGET=production LEARN_APPLY=1 bash seed/learn-trial/seed-trial.sh
 ```
 
 De productie-dry-run gebruikt `/community-tools/glossary/` in de opgeslagen glossarylinks. Op de lokale kopie blijft dat `/glossary/`.
@@ -194,17 +196,18 @@ Gebruik het installatiebestand van díe installatie. Eerst dry-run:
 WP_PATH=/pad/naar/wordpress LEARN_LEDGER=/pad/naar/installs/host-tijdstip.tsv bash seed/learn-trial/rollback-trial.sh
 ```
 
-Op staging hetzelfde, met `WP_PATH` en `LEARN_TARGET=staging`. Op productie hetzelfde, met `LEARN_TARGET=production`. Zonder dat doel weigert het script die hosts. De designpilot wordt altijd geweigerd.
+Op staging hetzelfde, met `WP_PATH` en `LEARN_TARGET=staging`. Op productie hetzelfde, met `WP_PATH` naar `public_html/wp` en `LEARN_TARGET=production`. Het script kiest dan de hoofdsite `https://fides.community/` en weigert een andere site. Zonder dat doel weigert het script die hosts. De designpilot wordt altijd geweigerd. `LEARN_FORCE` blijft geweigerd.
 
-Een pagina wordt alleen verwijderd als het ID, de route, `_fides_learn_seed`, `_fides_learn_trial_install` én de hash nog gelijk zijn aan de regel. Een pagina die er al was, blijft staan en verschijnt als `kept-existing`. Een pagina die na de installatie is bewerkt, blijft staan en verschijnt als `kept-edited`. Een ID dat niet meer bij deze marker hoort, blijft staan als `kept-marker` of `kept-missing`.
+Een pagina wordt alleen verwijderd als het ID, de route, `_fides_learn_seed`, `_fides_learn_trial_install` én de hash nog gelijk zijn aan de regel. Die vergelijking gebeurt voor alle regels voordat er iets wordt verwijderd. Daarna gaan de diepste routes eerst, zodat het pad van een onderliggende pagina geldig blijft tot die zelf aan de beurt is. Een pagina die er al was, blijft staan en verschijnt als `kept-existing`. Een pagina die na de installatie is bewerkt, blijft staan en verschijnt als `kept-edited`. Een ID dat niet meer bij deze marker hoort, blijft staan als `kept-marker` of `kept-missing`.
 
 Pas daarna, als de dry-run klopt:
 
 ```bash
 WP_PATH=/pad/naar/wordpress LEARN_TARGET=staging LEARN_LEDGER=/pad/naar/installs/host-tijdstip.tsv LEARN_ROLLBACK=1 bash seed/learn-trial/rollback-trial.sh
+WP_PATH=/pad/naar/public_html/wp LEARN_TARGET=production LEARN_LEDGER=/pad/naar/installs/host-tijdstip.tsv LEARN_ROLLBACK=1 bash seed/learn-trial/rollback-trial.sh
 ```
 
-Daarna het mu-plugin weghalen, de optie `fides_learn_trial_chrome` verwijderen als die bestaat, tiles 1.13.32 terugzetten en `wp rewrite flush`.
+Daarna het mu-plugin weghalen, de optie `fides_learn_trial_chrome` verwijderen als die bestaat, op productie tiles 1.13.33 terugzetten (de versie die daar nu actief is) en `wp rewrite flush`.
 
 Glossary, thema, catalogusplugins en vertaalinstellingen zijn niet gewijzigd.
 

@@ -22,9 +22,15 @@ if ($ledger === '' || ! is_readable($ledger)) {
     exit(1);
 }
 $host = strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST));
-if (in_array($host, array('fides.community', 'www.fides.community'), true) && getenv('LEARN_TARGET') !== 'production') {
-    fwrite(STDERR, "Refusing to roll back on {$host} without LEARN_TARGET=production.\n");
-    exit(1);
+if (in_array($host, array('fides.community', 'www.fides.community'), true)) {
+    if (getenv('LEARN_TARGET') !== 'production') {
+        fwrite(STDERR, "Refusing to roll back on {$host} without LEARN_TARGET=production.\n");
+        exit(1);
+    }
+    if (! is_multisite() || ! is_main_site() || (int) get_current_blog_id() !== 1) {
+        fwrite(STDERR, "Refusing to roll back outside the production main site.\n");
+        exit(1);
+    }
 }
 
 $recorded_host = '';
@@ -53,7 +59,8 @@ if ($recorded_host === '' || $recorded_host !== $host || $install === '' || $row
     exit(1);
 }
 
-$ids = array();
+$ids    = array();
+$delete = array();
 foreach ($rows as $row) {
     $ids[ $row['id'] ] = true;
     $post = get_post($row['id']);
@@ -73,6 +80,16 @@ foreach ($rows as $row) {
         echo str_pad('kept-' . $why, 16) . $row['id'] . "\t" . $row['route'] . "\n";
         continue;
     }
+    $delete[] = $row;
+}
+
+// Decide every page before deleting any. A parent deleted first changes the
+// permalink of its children, and the route check would then keep pages that
+// still match the ledger. Deepest routes go first for the same reason.
+usort($delete, static function (array $a, array $b): int {
+    return substr_count($b['route'], '/') <=> substr_count($a['route'], '/');
+});
+foreach ($delete as $row) {
     if (! $apply) {
         echo str_pad('would-delete', 16) . $row['id'] . "\t" . $row['route'] . "\n";
         continue;

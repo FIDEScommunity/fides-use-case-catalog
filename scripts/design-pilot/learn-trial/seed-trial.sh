@@ -23,6 +23,7 @@ if [[ -n "${LEARN_FORCE:-}" ]]; then
   echo "Refusing: LEARN_FORCE is set. Edited pages are skipped, never replaced." >&2
   exit 1
 fi
+unset LEARN_WP_URL || true
 
 python3 - "$HERE/routes.txt" "$PILOT_SCRIPTS/learn/manifest.json" <<'PY'
 import json, sys
@@ -75,6 +76,7 @@ case "$HOST" in
       echo "Refusing to seed production host ${HOST}. Set LEARN_TARGET=production for an explicit production dry-run. LEARN_APPLY=1 is a separate install step. LEARN_TARGET=staging does not apply here." >&2
       exit 1
     fi
+    learn_trial_use_production_site
     ;;
   staging.fides.community)
     if [[ "${LEARN_TARGET:-}" != "staging" ]]; then
@@ -115,6 +117,7 @@ fi
 export LEARN_IDS
 export PILOT_ALLOWED_HOSTS="$HOST"
 export LEARN_ALLOW_NON_PILOT=1
+export LEARN_TRIAL_BOUNDED=1
 export LEARN_BASE=learn
 export LEARN_START_BASE=start
 export LEARN_SERVICES_BASE=services

@@ -17,6 +17,7 @@ if [[ -z "$LEDGER" || ! -f "$LEDGER" ]]; then
   echo "Set LEARN_LEDGER to the install ledger (host, install id, and one row per created page)." >&2
   exit 1
 fi
+unset LEARN_WP_URL || true
 TARGET_REAL="$WP_PATH"
 if [[ -n "${PILOT_SITE:-}" ]]; then
   PILOT_REAL="$(cd "$PILOT_SITE" && pwd)"
@@ -46,6 +47,7 @@ case "$HOST" in
       echo "Refusing to roll back production host ${HOST}. Set LEARN_TARGET=production. LEARN_ROLLBACK=1 is a separate step. LEARN_TARGET=staging does not apply here." >&2
       exit 1
     fi
+    learn_trial_use_production_site
     ;;
   staging.fides.community)
     if [[ "${LEARN_TARGET:-}" != "staging" ]]; then

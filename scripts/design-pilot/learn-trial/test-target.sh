@@ -42,7 +42,10 @@ assert "fides-learn-header-fix.php" in doc["header"]
 assert "Overview" in doc["menu"] and "Issuers" in doc["menu"]
 assert "hidden" in doc["request_buttons"]
 assert doc["installed"] is False
+assert "public_html/wp" in doc["wordpress"]
+assert "main site" in doc["production"]
 assert "production without LEARN_TARGET=production" in doc["refuses"]
+assert "not the main site" in doc["refuses"]
 assert "LEARN_FORCE" in doc["refuses"]
 PY
 ok "manifest names the glossary source and the production gate"
@@ -60,18 +63,31 @@ site="$(mktemp -d)"
 echo '<?php // target-guard fixture' > "$site/wp-config.php"
 cat > "$stub/wp" <<'EOF'
 #!/bin/sh
-if [ "$1" = "--path" ]; then
-  shift 2
-elif [ "${1#--path=}" != "$1" ]; then
-  shift
-fi
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --path|--url) shift 2 ;;
+    --path=*|--url=*) shift ;;
+    *) break ;;
+  esac
+done
 printf '%s\n' "$*" >> "$WP_STUB_LOG"
 if [ "$1" = "option" ]; then
   printf '%s\n' "$STUB_HOME"
   exit 0
 fi
 if [ "$1" = "eval" ]; then
-  printf '%s\n' "${STUB_PILOT:-no}"
+  case "$2" in
+    *FIDES_DESIGN_PILOT*) printf '%s\n' "${STUB_PILOT:-no}" ;;
+    *is_main_site*)
+      home=$(printf '%s' "$STUB_HOME" | sed 's#/*$##')
+      if [ "${STUB_BLOG:-1}" = "1" ]; then
+        printf 'ms|1|main|%s\n' "$home"
+      else
+        printf 'ms|%s|other|%s\n' "$STUB_BLOG" "$home"
+      fi
+      ;;
+    *) printf '%s\n' "${STUB_PILOT:-no}" ;;
+  esac
   exit 0
 fi
 if [ "$1" = "eval-file" ]; then
@@ -151,6 +167,23 @@ else
   note "$RUN_ERR"
   note "$RUN_OUT"
 fi
+
+STUB_BLOG=2 run_seed "https://fides.community" production
+unset STUB_BLOG
+expect_refuse "production refuses a site that is not the main site"
+
+force_err="$(mktemp)"
+set +e
+WP_PATH="$site" WP_CLI="$stub/wp" WP_PHP= WP_PHP_INI= \
+  LEARN_TARGET=production LEARN_FORCE=topics \
+  LEARN_REPORT_DIR="$(mktemp -d)" \
+  bash "$PKG/seed/learn-trial/seed-trial.sh" >"$(mktemp)" 2>"$force_err"
+force_code=$?
+set -e
+RUN_CODE="$force_code"
+RUN_EVAL=0
+RUN_ERR="$(cat "$force_err")"
+expect_refuse "LEARN_FORCE is refused before a production seed"
 
 run_seed "https://www.fides.community" production
 if [[ "$RUN_CODE" -eq 0 && "$RUN_EVAL" -eq 1 ]] && printf '%s' "$RUN_OUT" | grep -q 'mode: dry-run'; then
@@ -235,7 +268,29 @@ else
   ok "design pilot path refused"
 fi
 
-rm -rf "$stub" "$site"
+path_root="$(mktemp -d)"
+mkdir -p "$path_root/wp"
+echo '<?php' > "$path_root/wp-config.php"
+echo '<?php' > "$path_root/wp/wp-load.php"
+if WP_PATH="$path_root/wp" bash -c "source '$PKG/seed/learn-trial/wp.sh'; learn_trial_require_wp_path"; then
+  ok "core directory with parent wp-config.php is accepted"
+else
+  bad "parent wp-config layout refused"
+fi
+classic="$(mktemp -d)"
+echo '<?php' > "$classic/wp-config.php"
+if WP_PATH="$classic" bash -c "source '$PKG/seed/learn-trial/wp.sh'; learn_trial_require_wp_path"; then
+  ok "wp-config.php inside WP_PATH is still accepted"
+else
+  bad "classic WP_PATH refused"
+fi
+empty="$(mktemp -d)"
+if WP_PATH="$empty" bash -c "source '$PKG/seed/learn-trial/wp.sh'; learn_trial_require_wp_path"; then
+  bad "empty WP_PATH was accepted"
+else
+  ok "WP_PATH without wp-config.php or parent config is refused"
+fi
+rm -rf "$stub" "$site" "$path_root" "$classic" "$empty"
 if [[ "$fail" -ne 0 ]]; then
   exit 1
 fi

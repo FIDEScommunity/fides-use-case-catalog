@@ -22,9 +22,15 @@ if ($report === '' || ! is_readable($report) || $install === '' || $dir === '') 
     exit(1);
 }
 $host = strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST));
-if (in_array($host, array('fides.community', 'www.fides.community'), true) && getenv('LEARN_TARGET') !== 'production') {
-    fwrite(STDERR, "Refusing to record an install on {$host} without LEARN_TARGET=production.\n");
-    exit(1);
+if (in_array($host, array('fides.community', 'www.fides.community'), true)) {
+    if (getenv('LEARN_TARGET') !== 'production') {
+        fwrite(STDERR, "Refusing to record an install on {$host} without LEARN_TARGET=production.\n");
+        exit(1);
+    }
+    if (! is_multisite() || ! is_main_site() || (int) get_current_blog_id() !== 1) {
+        fwrite(STDERR, "Refusing to record an install outside the production main site.\n");
+        exit(1);
+    }
 }
 
 $pages = array();
