@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the 51 Learn SEO titles and descriptions in the manifest."""
+"""Check the 52 Learn SEO titles and descriptions in the manifest."""
 import json
 import sys
 from pathlib import Path
@@ -11,8 +11,8 @@ pages = [
     if page.get("tree", "learn") == "learn" and page.get("path") != "sessions/request"
 ]
 errors = []
-if len(pages) != 51:
-    errors.append(f"expected 51 Learn pages, found {len(pages)}")
+if len(pages) != 52:
+    errors.append(f"expected 52 Learn pages, found {len(pages)}")
 titles = []
 descriptions = []
 old = "Join an open training in Utrecht"

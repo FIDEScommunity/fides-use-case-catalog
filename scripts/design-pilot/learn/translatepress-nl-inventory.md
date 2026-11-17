@@ -52,7 +52,7 @@ Not in this inventory: the EUDI/EBW articles, Business wallets: where to start, 
 - Buttons: Training & workshops →
 - Links (tokens, resolved per site): `{{learn}}/sessions/`, `{{learn}}/topics/for-businesses/`, `{{learn}}/topics/the-big-picture/`, `{{learn}}/topics/the-big-picture/formats-and-protocols/`, `{{learn}}/topics/the-big-picture/how-credentials-connect/`, `{{learn}}/topics/the-big-picture/trust-and-interoperability/`, `{{learn}}/topics/the-big-picture/what-is-a-credential/`, `{{learn}}/topics/the-big-picture/what-is-a-digital-wallet/`
 - Glossary terms: none
-- Notes: Rows without a landing page (For you, For governments, Around the world) are plain text on purpose, not links; Wallets & credentials, Ecosystem roles and Technology rows contain direct article links in the description. Keep the 'Start with' sentence pattern when translating.
+- Notes: Wallets & credentials, Ecosystem roles and Technology rows link to their overviews and contain direct article links in the description. Keep the 'Start with' sentence pattern when translating.
 
 ### The big picture (hub)
 

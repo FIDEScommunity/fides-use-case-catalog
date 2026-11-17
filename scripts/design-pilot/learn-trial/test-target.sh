@@ -47,7 +47,7 @@ assert "LEARN_FORCE" in doc["refuses"]
 PY
 ok "manifest names the glossary source and the production gate"
 python3 "$PKG/seed/learn-trial/check-seo.py" "$PKG/seed/learn/manifest.json"
-ok "51 Learn pages have unique SEO titles and descriptions"
+ok "52 Learn pages have unique SEO titles and descriptions"
 
 if ! grep -q 'fides-learn-header-fix.php' "$PKG/INSTALL.md"; then
   bad "install instructions omit the temporary header rule"

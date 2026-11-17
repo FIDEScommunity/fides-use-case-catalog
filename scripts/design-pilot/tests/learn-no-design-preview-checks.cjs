@@ -2,7 +2,7 @@
  * "Design preview" must not appear anywhere in Learn (text or generated label), EN and NL.
  *  - Every manifest page at 1440 px: the visible text and the ::after content of every row title carry no "Design preview"
  *    (nor its Dutch label "Ontwerpvoorbeeld").
- *  - Topics at 1440 and 390 px: the "Wallets & credentials" row is a plain compact row: no label, its two deepening links
+ *  - Topics at 1440 and 390 px: the "Wallets & credentials" title links to its overview: no label, its two deepening links
  *    are present, and the row is not taller than the other text rows by more than one extra text line.
  * Run: CHROME_PATH=... PLAYWRIGHT_MODULE=... node tests/learn-no-design-preview-checks.cjs   (env: PILOT_URL, LOCALES, ALL_WIDTH)
  */

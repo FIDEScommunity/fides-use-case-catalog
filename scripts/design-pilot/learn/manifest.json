@@ -584,6 +584,17 @@
    "menu_order": 1
   },
   {
+   "path": "topics/wallets-and-credentials",
+   "title": "Wallets & credentials",
+   "kind": "section",
+   "headline": "Wallets & credentials",
+   "excerpt": "A wallet can manage and share information, while a credential contains information a party has provided.",
+   "seo_title": "Wallets & credentials | FIDES Community",
+   "seo_description": "A wallet can manage and share information, while a credential contains information a party has provided. The articles and catalogs below show how the two fit together.",
+   "content": "wallets-and-credentials.html",
+   "menu_order": 4
+  },
+  {
    "path": "sessions",
    "title": "Training & workshops",
    "kind": "sessions",

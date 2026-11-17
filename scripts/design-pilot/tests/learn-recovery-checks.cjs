@@ -43,7 +43,8 @@ async function links(page, tag) {
     const hrefs = await links(page, tag);
     for (const slug of ORDER.filter((s) => ["what-is-a-digital-wallet", "what-is-a-credential", "how-credentials-connect", "formats-and-protocols", "trust-and-interoperability"].includes(s))) check(`${tag}: links to ${slug}`, hrefs.some((h) => h.includes(`/${slug}/`)));
     const titles = await page.locator(".fides-learn-rows__title").allInnerTexts();
-    check(`${tag}: rows without a landing page stay plain text (no dead link)`, titles.some((t) => /Wallets & credentials/.test(t)) && !hrefs.some((h) => /\/topics\/wallets-credentials\//.test(h || "")));
+    check(`${tag}: Wallets & credentials links to its overview`, hrefs.some((h) => /\/topics\/wallets-and-credentials\/?$/.test(h || "")));
+    check(`${tag}: no dead wallets-credentials path`, !hrefs.some((h) => /\/topics\/wallets-credentials\//.test(h || "")));
     check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
 
     tag = `big picture @${width}`;

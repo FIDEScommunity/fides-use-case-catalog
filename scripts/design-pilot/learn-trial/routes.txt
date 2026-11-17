@@ -46,6 +46,7 @@ topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case
 topics/for-businesses/what-should-a-service-check-when-receiving-a-credential
 topics/for-businesses/how-can-someone-act-for-an-organisation
 topics/for-businesses/european-business-wallet
+topics/wallets-and-credentials
 sessions
 sessions/eudi-business-wallets-in-practice
 sessions/wallet-introduction

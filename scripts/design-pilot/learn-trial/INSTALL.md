@@ -16,7 +16,7 @@ Dit pakket is bedoeld voor de bestaande site. Eerst een dry-run op `https://stag
 
 ## Wat er mee gaat
 
-51 Learn-pagina’s: het overzicht, Topics, alle secties en artikelen, en Training & workshops met de vier aanbiedingen. De URL-structuur is die van de pilot, met basis `/learn/`.
+52 Learn-pagina’s: het overzicht, Topics, alle secties en artikelen, en Training & workshops met de vier aanbiedingen. Nieuw in dit pakket is het overzicht `/learn/topics/wallets-and-credentials/`. De titel op Topics verwijst daarnaartoe. De URL-structuur is die van de pilot, met basis `/learn/`.
 
 Niet aangemaakt:
 

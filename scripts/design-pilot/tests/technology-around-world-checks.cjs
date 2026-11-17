@@ -295,8 +295,10 @@ async function crumbCheck(page, tag, names, parents) {
       await open(page, `${L}/topics/`);
       const others = await page.locator(".fides-learn__content ul.fides-learn-rows > li > a").evaluateAll((as) => as.map((x) => x.textContent.trim()));
       for (const n of ["The big picture", "For you", "For businesses", "For governments", "Ecosystem roles"]) check(`${tag}: existing link "${n}" is unchanged`, others.includes(n), others.join("|"));
+      const wallets = await page.locator(".fides-learn__content ul.fides-learn-rows > li > a", { hasText: /^Wallets & credentials$/ }).count();
+      check(`${tag}: Wallets & credentials is a link to its overview`, wallets === 1);
       const plain = await page.locator(".fides-learn__content ul.fides-learn-rows > li > strong").allInnerTexts();
-      check(`${tag}: the only row without a link is Wallets & credentials`, plain.length === 1 && /Wallets & credentials/.test(plain[0]), plain.join("|"));
+      check(`${tag}: Topics has no plain title row`, plain.length === 0, plain.join("|"));
       const lone = await loneArticles(page, ".fides-learn__content");
       check(`${tag}: no lone article before a link or term`, lone.length === 0, lone.join(" | "));
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0);
