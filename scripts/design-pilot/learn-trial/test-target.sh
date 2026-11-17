@@ -31,8 +31,10 @@ fi
 python3 - "$PKG/manifest.json" <<'PY'
 import json, sys
 doc = json.load(open(sys.argv[1], encoding="utf-8"))
-assert doc["tiles_version"] == "1.13.67"
-assert "Credential" in doc["glossary"] and "Credential Type" in doc["glossary"]
+assert doc["tiles_version"] == "1.13.68"
+assert "1.12.2" in doc["glossary"] and "Credential Type" in doc["glossary"]
+assert "355524646ac41171a31c9759c0f2702e1027c88f8e65ac4dc526d7b9238d18a6" in doc["glossary"]
+assert "LEARN_TARGET=production" in doc["production"]
 assert "Contact us about this workshop" in doc["contact"]
 assert "/about-fides/contact/" in doc["contact"]
 assert "your country" in doc["country"]
@@ -40,9 +42,12 @@ assert "fides-learn-header-fix.php" in doc["header"]
 assert "Overview" in doc["menu"] and "Issuers" in doc["menu"]
 assert "hidden" in doc["request_buttons"]
 assert doc["installed"] is False
-assert "fides.community" in doc["refuses"]
+assert "production without LEARN_TARGET=production" in doc["refuses"]
+assert "LEARN_FORCE" in doc["refuses"]
 PY
-ok "manifest names the glossary gap and hidden buttons"
+ok "manifest names the glossary source and the production gate"
+python3 "$PKG/seed/learn-trial/check-seo.py" "$PKG/seed/learn/manifest.json"
+ok "51 Learn pages have unique SEO titles and descriptions"
 
 if ! grep -q 'fides-learn-header-fix.php' "$PKG/INSTALL.md"; then
   bad "install instructions omit the temporary header rule"
@@ -115,9 +120,11 @@ expect_refuse() {
 }
 
 run_seed "https://fides.community"
-expect_refuse "production host refused"
+expect_refuse "production host refused without LEARN_TARGET=production"
 run_seed "https://www.fides.community" staging
 expect_refuse "www production refused even with LEARN_TARGET=staging"
+run_seed "https://utrecht-demo.local" production
+expect_refuse "production target refused on the local host"
 run_seed "https://staging.fides.community"
 expect_refuse "staging refused without LEARN_TARGET=staging"
 run_seed "https://staging.fides.community/design-review/" staging
@@ -132,6 +139,24 @@ if [[ "$RUN_CODE" -eq 0 && "$RUN_EVAL" -eq 1 ]] && printf '%s' "$RUN_OUT" | grep
   ok "staging dry-run passes the host gate and does not apply"
 else
   bad "staging gate (exit $RUN_CODE eval $RUN_EVAL)"
+  note "$RUN_ERR"
+  note "$RUN_OUT"
+fi
+
+run_seed "https://fides.community" production
+if [[ "$RUN_CODE" -eq 0 && "$RUN_EVAL" -eq 1 ]] && printf '%s' "$RUN_OUT" | grep -q 'mode: dry-run'; then
+  ok "production dry-run passes the host gate and does not apply"
+else
+  bad "production gate (exit $RUN_CODE eval $RUN_EVAL)"
+  note "$RUN_ERR"
+  note "$RUN_OUT"
+fi
+
+run_seed "https://www.fides.community" production
+if [[ "$RUN_CODE" -eq 0 && "$RUN_EVAL" -eq 1 ]] && printf '%s' "$RUN_OUT" | grep -q 'mode: dry-run'; then
+  ok "www production dry-run passes the host gate and does not apply"
+else
+  bad "www production gate (exit $RUN_CODE eval $RUN_EVAL)"
   note "$RUN_ERR"
   note "$RUN_OUT"
 fi
@@ -156,9 +181,16 @@ run_rollback() {
   if grep -q REACHED_EVAL "$log"; then RUN_EVAL=1; else RUN_EVAL=0; fi
 }
 run_rollback "https://fides.community" staging
-expect_refuse "rollback refuses production"
+expect_refuse "rollback refuses production when the target is staging"
 run_rollback "https://www.fides.community"
-expect_refuse "rollback refuses www"
+expect_refuse "rollback refuses www without LEARN_TARGET=production"
+run_rollback "https://fides.community" production
+if [[ "$RUN_CODE" -eq 0 && "$RUN_EVAL" -eq 1 ]]; then
+  ok "production rollback dry-run passes the host gate"
+else
+  bad "production rollback gate (exit $RUN_CODE eval $RUN_EVAL)"
+  note "$RUN_ERR"
+fi
 run_rollback "https://staging.fides.community"
 expect_refuse "rollback refuses staging without LEARN_TARGET"
 

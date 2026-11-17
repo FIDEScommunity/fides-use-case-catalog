@@ -278,6 +278,45 @@ if ($overview) {
     remove_filter('fides_ds_learn_chrome', $theme_chrome);
 }
 
+$glossary_url = 'https://raw.githubusercontent.com/FIDEScommunity/fides-interop-profiles/main/data/glossary-aggregated.json';
+if (class_exists('Fides_DS_Glossary_Page')) {
+    foreach ((array) (Fides_DS_Glossary_Page::config()['sources'] ?? array()) as $source) {
+        if (is_string($source) && preg_match('~^https?://~', $source) === 1 && ! str_contains($source, 'glossary-aggregated.json?') && ! str_contains($source, '/wp-content/plugins/')) {
+            $glossary_url = $source;
+            break;
+        }
+    }
+}
+$glossary_cache = 'fides_learn_glossary_' . md5($glossary_url);
+delete_transient($glossary_cache);
+Fides_DS_Learn::reset_vocabulary();
+add_filter('pre_http_request', static function () {
+    return new WP_Error('http_request_failed', 'offline');
+});
+$offline = Fides_DS_Learn::find_term('Issuer');
+$offline_status = Fides_DS_Learn::vocabulary_status();
+$check(is_array($offline) && ($offline_status['origin'] ?? '') === 'bundle', 'an unreachable glossary URL falls back to the bundled file');
+remove_all_filters('pre_http_request');
+delete_transient($glossary_cache);
+Fides_DS_Learn::reset_vocabulary();
+add_filter('pre_http_request', static function () {
+    $body = wp_json_encode(array(
+        'version' => '9.9.9',
+        'terms'   => array(array(
+            'key'         => 'credential',
+            'name'        => 'Credential',
+            'description' => 'Remote definition for the vocabulary check.',
+        )),
+    ));
+    return array('headers' => array(), 'body' => $body, 'response' => array('code' => 200, 'message' => 'OK'), 'cookies' => array(), 'filename' => null);
+});
+$remote = Fides_DS_Learn::find_term('Credential');
+$remote_status = Fides_DS_Learn::vocabulary_status();
+$check(is_array($remote) && ($remote['description'] ?? '') === 'Remote definition for the vocabulary check.' && ($remote_status['origin'] ?? '') === 'published' && ($remote_status['version'] ?? '') === '9.9.9', 'Learn uses the published glossary response');
+remove_all_filters('pre_http_request');
+delete_transient($glossary_cache);
+Fides_DS_Learn::reset_vocabulary();
+
 foreach ($results['fail'] as $message) {
     echo "not ok - {$message}\n";
 }

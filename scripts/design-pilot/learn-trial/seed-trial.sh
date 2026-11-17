@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # Seed the Learn theme trial: every Learn overview and article, plus Training & workshops.
 # The preview enquiry page (sessions/request) is not seeded. Start and Services are not seeded.
-# Refuses the design pilot and the production hosts. Staging runs only with LEARN_TARGET=staging.
-# Dry-run unless LEARN_APPLY=1. LEARN_FORCE is refused.
+# Refuses the design pilot. Staging runs only with LEARN_TARGET=staging.
+# Production runs only with LEARN_TARGET=production. Dry-run unless LEARN_APPLY=1.
+# LEARN_FORCE is refused. A production dry-run does not install.
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PILOT_SCRIPTS="$(cd "$HERE/.." && pwd)"
@@ -38,6 +39,14 @@ for page in manifest["pages"]:
     if page["path"] == "sessions/request":
         continue
     learn.append(page["path"])
+    title = (page.get("seo_title") or "").strip()
+    description = (page.get("seo_description") or "").strip()
+    if not title.endswith(" | FIDES Community") or not description:
+        sys.stderr.write("Refusing: " + page["path"] + " has no SEO title or description.\n")
+        sys.exit(1)
+    if "Join an open training in Utrecht" in description or "staging.fides.community" in description or "staging.fides.community" in title:
+        sys.stderr.write("Refusing: " + page["path"] + " has a staging address or the old training description.\n")
+        sys.exit(1)
 if routes != learn:
     sys.stderr.write("Refusing: routes.txt does not match the Learn manifest minus sessions/request.\n")
     sys.exit(1)
@@ -62,8 +71,10 @@ case "$HOME_PATH" in
 esac
 case "$HOST" in
   fides.community|www.fides.community)
-    echo "Refusing to seed production host ${HOST}." >&2
-    exit 1
+    if [[ "${LEARN_TARGET:-}" != "production" ]]; then
+      echo "Refusing to seed production host ${HOST}. Set LEARN_TARGET=production for an explicit production dry-run. LEARN_APPLY=1 is a separate install step. LEARN_TARGET=staging does not apply here." >&2
+      exit 1
+    fi
     ;;
   staging.fides.community)
     if [[ "${LEARN_TARGET:-}" != "staging" ]]; then
@@ -72,12 +83,13 @@ case "$HOST" in
     fi
     ;;
   *)
-    if [[ "${LEARN_TARGET:-}" == "staging" ]]; then
-      echo "Refusing: LEARN_TARGET=staging but home_url is ${HOME_URL}." >&2
+    if [[ "${LEARN_TARGET:-}" == "staging" || "${LEARN_TARGET:-}" == "production" ]]; then
+      echo "Refusing: LEARN_TARGET=${LEARN_TARGET} but home_url is ${HOME_URL}." >&2
       exit 1
     fi
     ;;
 esac
+export LEARN_TARGET="${LEARN_TARGET:-}"
 if [[ -z "$HOST" || "$HOST" == "$HOME_URL" ]]; then
   echo "Refusing: could not read a host from home_url (${HOME_URL})." >&2
   exit 1
@@ -107,7 +119,14 @@ export LEARN_BASE=learn
 export LEARN_START_BASE=start
 export LEARN_SERVICES_BASE=services
 export LEARN_PILOT_BASE=
-export LEARN_GLOSSARY_PATH="${LEARN_GLOSSARY_PATH:-/glossary/}"
+if [[ -z "${LEARN_GLOSSARY_PATH:-}" ]]; then
+  case "$HOST" in
+    utrecht-demo.local) LEARN_GLOSSARY_PATH=/glossary/ ;;
+    *) LEARN_GLOSSARY_PATH=/community-tools/glossary/ ;;
+  esac
+fi
+export LEARN_GLOSSARY_PATH
+export LEARN_SEO=1
 export LEARN_FORCE=
 export LEARN_DRY_RUN=1
 if [[ "${LEARN_APPLY:-}" == "1" ]]; then

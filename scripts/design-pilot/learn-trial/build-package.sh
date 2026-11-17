@@ -31,8 +31,8 @@ if [[ -n "$tiles_dirty$content_dirty" ]]; then
 fi
 
 version="$(grep -m 1 -E '^ \* Version:' "$TILES_ROOT/fides-community-tools-tiles.php" | awk '{print $3}')"
-if [[ "$version" != "1.13.67" ]]; then
-  echo "Refusing: tiles version is $version, expected 1.13.67." >&2
+if [[ "$version" != "1.13.68" ]]; then
+  echo "Refusing: tiles version is $version, expected 1.13.68." >&2
   exit 1
 fi
 
@@ -71,6 +71,9 @@ git -C "$UC_ROOT" archive HEAD \
   scripts/design-pilot/learn-trial/routes.txt \
   scripts/design-pilot/learn-trial/seed-trial.sh \
   scripts/design-pilot/learn-trial/wp.sh \
+  scripts/design-pilot/learn-trial/check-seo.py \
+  scripts/design-pilot/learn-trial/glossary-pin.json \
+  scripts/design-pilot/learn-trial/seo-control.md \
   | tar -x -C "$stage/extract"
 
 cp "$stage/extract/scripts/design-pilot/create-learn-pages.php" "$stage/pkg/seed/create-learn-pages.php"
@@ -85,6 +88,10 @@ cp "$stage/extract/scripts/design-pilot/learn-trial/mu-plugins/fides-learn-trial
 cp "$stage/extract/scripts/design-pilot/learn-trial/"*.php "$stage/pkg/seed/learn-trial/"
 cp "$stage/extract/scripts/design-pilot/learn-trial/"*.sh "$stage/pkg/seed/learn-trial/"
 cp "$stage/extract/scripts/design-pilot/learn-trial/routes.txt" "$stage/pkg/seed/learn-trial/routes.txt"
+cp "$stage/extract/scripts/design-pilot/learn-trial/check-seo.py" "$stage/pkg/seed/learn-trial/check-seo.py"
+cp "$stage/extract/scripts/design-pilot/learn-trial/glossary-pin.json" "$stage/pkg/seed/learn-trial/glossary-pin.json"
+cp "$stage/extract/scripts/design-pilot/learn-trial/seo-control.md" "$stage/pkg/seed/learn-trial/seo-control.md"
+chmod +x "$stage/pkg/seed/learn-trial/check-seo.py"
 cp "$stage/extract/scripts/design-pilot/learn-trial/INSTALL.md" "$stage/pkg/seed/learn-trial/INSTALL.md"
 chmod +x "$stage/pkg/seed/learn-trial/"*.sh
 rm -f "$stage/pkg/seed/learn-trial/build-package.sh" "$stage/pkg/seed/learn-trial/test-target.sh"
@@ -110,9 +117,11 @@ doc = {
     "pages": 51,
     "excluded_routes": ["learn/sessions/request", "start", "start/receive", "services", "services/wallet-readiness-assessment", "services/enquiry"],
     "wordpress": "Use the server's wp on PATH, or set WP_CLI. Set WP_PATH to the directory that contains wp-config.php.",
-    "staging": "https://staging.fides.community requires LEARN_TARGET=staging. Dry-run unless LEARN_APPLY=1.",
-    "refuses": ["fides.community", "www.fides.community", "/design-review", "/fides-design-pilot", "LEARN_FORCE"],
-    "glossary": "Leave fides-vocabulary-glossary at 1.1.15. Credential and Credential Type are missing from the bundle Learn reads.",
+    "staging": "https://staging.fides.community requires LEARN_TARGET=staging. Dry-run unless LEARN_APPLY=1. Learn pages are noindex, nofollow. Canonicals point at https://fides.community and are not stored.",
+    "production": "https://fides.community and https://www.fides.community require LEARN_TARGET=production. Dry-run unless LEARN_APPLY=1. LEARN_TARGET=staging is refused. Indexing follows the existing site settings. Canonicals are the production permalinks.",
+    "refuses": ["/design-review", "/fides-design-pilot", "LEARN_FORCE", "production without LEARN_TARGET=production", "staging without LEARN_TARGET=staging"],
+    "glossary": "Learn reads the same URL as the glossary page: https://raw.githubusercontent.com/FIDEScommunity/fides-interop-profiles/main/data/glossary-aggregated.json. Checked for this package: version 1.12.2, 344 terms, sha256 355524646ac41171a31c9759c0f2702e1027c88f8e65ac4dc526d7b9238d18a6. European Business Wallet, Credential and Credential Type are in that file. A successful response is cached for 10 minutes. If the URL cannot be read and the cache is empty, Learn uses the bundled file of fides-vocabulary-glossary 1.1.15. On the local copy that file is version 1.10.1 with 335 terms, and a missing term stays plain text. The glossary plugin is not changed.",
+    "seo": "51 Learn pages have a unique Yoast title and meta description, plus matching Open Graph title and description. See seed/learn-trial/seo-control.md. An editor value that differs from the last seeded value is kept and reported. The Open Graph image is left empty so Yoast uses the page image or the site logo.",
     "request_buttons": "Training and workshop buttons in theme chrome go to /about-fides/contact/. Services buttons stay hidden. The design shell keeps the stored request links.",
     "contact": "Theme chrome uses /about-fides/contact/ with labels such as Contact us about this workshop. No offering and no date is added. The local copy returns 404 for that path; staging uses the same path.",
     "country": "The country field is a dropdown in theme chrome and in the design shell. The Netherlands shows the existing offer. Another country shows No scheduled trainings in that country. Theme chrome sends Contact us to /about-fides/contact/. The design shell uses the stored enquiry path. Other says your country. Training partnerships stays visible. The line under the field is gone. The design shell keeps the stored intro.",

@@ -22,8 +22,8 @@ if ($ledger === '' || ! is_readable($ledger)) {
     exit(1);
 }
 $host = strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST));
-if (in_array($host, array('fides.community', 'www.fides.community'), true)) {
-    fwrite(STDERR, "Refusing to roll back on {$host}.\n");
+if (in_array($host, array('fides.community', 'www.fides.community'), true) && getenv('LEARN_TARGET') !== 'production') {
+    fwrite(STDERR, "Refusing to roll back on {$host} without LEARN_TARGET=production.\n");
     exit(1);
 }
 

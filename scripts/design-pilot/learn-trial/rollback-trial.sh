@@ -3,7 +3,8 @@
 # Dry-run unless LEARN_ROLLBACK=1. Deletes only rows whose id, route, seed
 # marker, install marker and content hash still match. Existing and edited
 # pages are reported and left in place.
-# Refuses the design pilot and the production hosts. Staging needs LEARN_TARGET=staging.
+# Refuses the design pilot. Staging needs LEARN_TARGET=staging.
+# Production needs LEARN_TARGET=production. Dry-run unless LEARN_ROLLBACK=1.
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PILOT_SCRIPTS="$(cd "$HERE/.." && pwd)"
@@ -41,8 +42,10 @@ case "$HOME_PATH" in
 esac
 case "$HOST" in
   fides.community|www.fides.community)
-    echo "Refusing to roll back production host ${HOST}." >&2
-    exit 1
+    if [[ "${LEARN_TARGET:-}" != "production" ]]; then
+      echo "Refusing to roll back production host ${HOST}. Set LEARN_TARGET=production. LEARN_ROLLBACK=1 is a separate step. LEARN_TARGET=staging does not apply here." >&2
+      exit 1
+    fi
     ;;
   staging.fides.community)
     if [[ "${LEARN_TARGET:-}" != "staging" ]]; then
@@ -51,12 +54,13 @@ case "$HOST" in
     fi
     ;;
   *)
-    if [[ "${LEARN_TARGET:-}" == "staging" ]]; then
-      echo "Refusing: LEARN_TARGET=staging but home_url is ${HOME_URL}." >&2
+    if [[ "${LEARN_TARGET:-}" == "staging" || "${LEARN_TARGET:-}" == "production" ]]; then
+      echo "Refusing: LEARN_TARGET=${LEARN_TARGET} but home_url is ${HOME_URL}." >&2
       exit 1
     fi
     ;;
 esac
+export LEARN_TARGET="${LEARN_TARGET:-}"
 
 pilot_flag="$(trial_wp eval 'echo defined("FIDES_DESIGN_PILOT") && FIDES_DESIGN_PILOT ? "yes" : "no";' | tr -d '[:space:]')"
 if [[ "$pilot_flag" == "yes" ]]; then

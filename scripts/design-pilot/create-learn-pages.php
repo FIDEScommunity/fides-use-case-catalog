@@ -139,6 +139,86 @@ function learn_hash_legacy(array $state): string {
     return sha1(fides_pilot_normalize((string) wp_json_encode($state)));
 }
 
+/**
+ * Yoast title and description for one Learn page.
+ * Empty unless LEARN_SEO=1, so the design-pilot seed does not write a second metadata set.
+ *
+ * @param array<string,mixed> $page
+ * @return array{title:string,description:string}
+ */
+function learn_seo_of(array $page): array {
+    if (getenv('LEARN_SEO') !== '1') {
+        return array('title' => '', 'description' => '');
+    }
+    return array(
+        'title'       => trim((string) ($page['seo_title'] ?? '')),
+        'description' => trim((string) ($page['seo_description'] ?? '')),
+    );
+}
+
+/**
+ * Write Yoast fields when they are empty or still the value this seed last wrote.
+ * A different non-empty value is left in place and reported. Canonical and robots are not stored.
+ *
+ * @param array<string,mixed> $page
+ * @param array<int,array{0:string,1:string,2:string}> $report
+ */
+function learn_sync_seo(int $post_id, array $page, bool $dry, array &$report, string $label, bool $owned): void {
+    $seo = learn_seo_of($page);
+    if ($seo['title'] === '' && $seo['description'] === '') {
+        return;
+    }
+    if ($seo['title'] === '' || $seo['description'] === '') {
+        $report[] = array($label, 'seo-missing', 'page ' . $post_id);
+        return;
+    }
+    if (! $owned) {
+        $report[] = array($label, 'seo-left', 'page ' . $post_id . ' is not a seeded Learn page');
+        return;
+    }
+    if ($post_id <= 0) {
+        $report[] = array($label, 'seo-planned', $seo['title']);
+        return;
+    }
+    $fields  = array(
+        '_yoast_wpseo_title'                 => $seo['title'],
+        '_yoast_wpseo_metadesc'              => $seo['description'],
+        '_yoast_wpseo_opengraph-title'       => $seo['title'],
+        '_yoast_wpseo_opengraph-description' => $seo['description'],
+    );
+    $stored  = json_decode((string) get_post_meta($post_id, '_fides_learn_seo', true), true);
+    $stored  = is_array($stored) ? $stored : array();
+    $conflicts = array();
+    $writes    = array();
+    foreach ($fields as $key => $value) {
+        $current = trim((string) get_post_meta($post_id, $key, true));
+        $previous = trim((string) ($stored[ $key ] ?? ''));
+        if ($current !== '' && $current !== $value && $current !== $previous) {
+            $conflicts[] = $key;
+            continue;
+        }
+        $writes[ $key ] = $value;
+    }
+    if ($conflicts) {
+        $report[] = array($label, 'seo-conflict', 'page ' . $post_id . ' kept ' . implode(', ', $conflicts));
+    }
+    if ($writes === array()) {
+        return;
+    }
+    if ($dry) {
+        $report[] = array($label, 'seo-ready', 'page ' . $post_id);
+        return;
+    }
+    foreach ($writes as $key => $value) {
+        update_post_meta($post_id, $key, wp_slash($value));
+        $stored[ $key ] = $value;
+    }
+    update_post_meta($post_id, '_fides_learn_seo', wp_slash((string) wp_json_encode($stored)));
+    if (! $conflicts) {
+        $report[] = array($label, 'seo-updated', 'page ' . $post_id);
+    }
+}
+
 /** @return string[] names of top-level state keys (and meta fields) that differ. */
 function learn_diff(array $a, array $b): array {
     $out = array();
@@ -284,6 +364,7 @@ foreach ($manifest['pages'] as $page) {
                 $changed  = is_array($stored_state) ? learn_diff($current, $stored_state) : array('unknown');
                 $report[] = array($label, 'skipped-edited', 'page ' . $post->ID . ' changed since seed: ' . implode(', ', $changed));
                 $ids[ $seed_id ] = (int) $post->ID;
+                learn_sync_seo((int) $post->ID, $page, $dry, $report, $label, true);
                 continue;
             }
             if (! $edited && learn_hash($desired) === learn_hash($current)) {
@@ -293,6 +374,7 @@ foreach ($manifest['pages'] as $page) {
                 }
                 $report[] = array($label, 'unchanged', 'page ' . $post->ID);
                 $ids[ $seed_id ] = (int) $post->ID;
+                learn_sync_seo((int) $post->ID, $page, $dry, $report, $label, true);
                 continue;
             }
             $action = $edited ? 'forced' : 'updated';
@@ -300,6 +382,7 @@ foreach ($manifest['pages'] as $page) {
             if (! in_array($seed_id, $force, true)) {
                 $report[] = array($label, 'skipped-unmarked', 'page ' . $post->ID . ' exists at /' . $full . '/ without seed marker; not touched');
                 $ids[ $seed_id ] = (int) $post->ID;
+                learn_sync_seo((int) $post->ID, $page, true, $report, $label, false);
                 continue;
             }
             $action = 'forced';
@@ -315,6 +398,7 @@ foreach ($manifest['pages'] as $page) {
     if ($dry) {
         $report[] = array($label, 'would-' . $action, $post ? 'page ' . $post->ID : '');
         $ids[ $seed_id ] = $post ? (int) $post->ID : -1;
+        learn_sync_seo($post ? (int) $post->ID : 0, $page, true, $report, $label, $is_marked);
         continue;
     }
 
@@ -357,6 +441,7 @@ foreach ($manifest['pages'] as $page) {
     update_post_meta($id, LEARN_STATE_META, wp_slash((string) wp_json_encode($stored)));
     $ids[ $seed_id ] = (int) $id;
     $report[]        = array($label, $action, 'page ' . $id . ' ' . get_permalink($id) . ($note !== '' ? ' (' . $note . ')' : ''));
+    learn_sync_seo((int) $id, $page, false, $report, $label, true);
 }
 
 // Editorial links (learn/editorial-links.json -> option fides_ds_editorial_links), with the same

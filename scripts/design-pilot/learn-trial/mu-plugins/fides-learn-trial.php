@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: FIDES Learn trial
- * Description: Theme header and footer for Learn on the local production copy and on staging.fides.community. Catalog paths resolve to that site's existing pages. Production hosts are left unchanged. Remove this file to return Learn to the design-shell default.
+ * Description: Theme header and footer for Learn on the local production copy, staging.fides.community and fides.community. Catalog paths resolve to that site's existing pages. Remove this file to return Learn to the design-shell default. Copying this file is the chrome switch. The seed still dry-runs until LEARN_APPLY=1.
  *
  * Does not change WPML, TranslatePress, or any language switcher. The design shell's own switcher is not used while chrome is "theme".
  */
@@ -12,17 +12,33 @@ if (! defined('ABSPATH')) {
 
 /**
  * Which site this file may change. Empty means: do nothing to chrome or catalog links.
- * fides.community and www.fides.community stay empty on purpose.
+ * Production is explicit: fides.community and www.fides.community use the live catalog paths.
  */
 function fides_learn_trial_profile(): string {
     $host = strtolower((string) wp_parse_url(home_url(), PHP_URL_HOST));
     if ($host === 'staging.fides.community') {
         return 'staging';
     }
+    if ($host === 'fides.community' || $host === 'www.fides.community') {
+        return 'production';
+    }
     if ($host === 'utrecht-demo.local') {
         return 'local';
     }
     return '';
+}
+
+/** Staging and production share the live site's catalog, glossary and contact paths. */
+function fides_learn_trial_live_site(): bool {
+    $profile = fides_learn_trial_profile();
+    return $profile === 'staging' || $profile === 'production';
+}
+
+function fides_learn_trial_is_learn_page(): bool {
+    if (! is_singular('page') || ! class_exists('Fides_DS_Learn')) {
+        return false;
+    }
+    return get_page_template_slug() === Fides_DS_Learn::TEMPLATE;
 }
 
 /**
@@ -67,7 +83,7 @@ add_filter('fides_ds_learn_chrome', static function (string $chrome): string {
  */
 add_filter('fides_ds_learn_catalog_bases', static function ($map): array {
     unset($map);
-    if (fides_learn_trial_profile() === 'staging') {
+    if (fides_learn_trial_live_site()) {
         return array(
             '/personal-wallets/'  => '/ecosystem-explorer/personal-wallets/',
             '/business-wallets/'  => '/ecosystem-explorer/organizational-wallets/',
@@ -189,7 +205,7 @@ add_filter('fides_ds_learn_supported_filters', static function ($filters): array
     $spec   = static function (array $keys, string $label): array {
         return array('keys' => $keys, 'label' => $label);
     };
-    if ($profile === 'staging') {
+    if ($profile === 'staging' || $profile === 'production') {
         return array(
             '/ecosystem-explorer/personal-wallets/'       => $spec($wallet, 'Browse personal wallets'),
             '/ecosystem-explorer/organizational-wallets/' => $spec($wallet, 'Browse business wallets'),
@@ -209,4 +225,92 @@ add_filter('fides_ds_learn_supported_filters', static function ($filters): array
         '/relying-party-websites/' => $spec($rp, 'Browse relying parties'),
         '/organizations/'          => $spec($org, 'Browse organisations'),
     );
+});
+
+/**
+ * Staging Learn pages stay out of the index. Production keeps the site's own
+ * indexing settings and does not set a per-page robots value.
+ */
+add_filter('wpseo_robots', static function ($robots) {
+    if (fides_learn_trial_profile() !== 'staging' || ! fides_learn_trial_is_learn_page()) {
+        return $robots;
+    }
+    return 'noindex, nofollow';
+});
+
+add_filter('wp_robots', static function ($robots) {
+    if (fides_learn_trial_profile() !== 'staging' || ! fides_learn_trial_is_learn_page()) {
+        return is_array($robots) ? $robots : array();
+    }
+    $robots = is_array($robots) ? $robots : array();
+    $robots['noindex']  = true;
+    $robots['nofollow'] = true;
+    unset($robots['index'], $robots['follow']);
+    return $robots;
+});
+
+/**
+ * On staging, the canonical and Open Graph URL of a Learn page point at the
+ * production permalink. The value is not stored, so production does not inherit
+ * a staging address. Production uses the permalink Yoast already prints.
+ */
+function fides_learn_trial_public_url($url): string {
+    if (fides_learn_trial_profile() !== 'staging' || ! fides_learn_trial_is_learn_page()) {
+        return (string) $url;
+    }
+    $path  = (string) wp_parse_url((string) $url, PHP_URL_PATH);
+    $query = wp_parse_url((string) $url, PHP_URL_QUERY);
+    if ($path === '') {
+        $path = '/';
+    }
+    $public = 'https://fides.community' . $path;
+    if (is_string($query) && $query !== '') {
+        $public .= '?' . $query;
+    }
+    return $public;
+}
+
+add_filter('wpseo_canonical', 'fides_learn_trial_public_url');
+add_filter('wpseo_opengraph_url', 'fides_learn_trial_public_url');
+
+/**
+ * If Yoast has no image for this Learn page, use the site's FIDES logo attachment.
+ * The URL is resolved on the current site, so production does not store a staging address.
+ */
+add_filter('wpseo_opengraph_image', static function ($image) {
+    if (fides_learn_trial_profile() === '' || ! fides_learn_trial_is_learn_page()) {
+        return $image;
+    }
+    if (is_string($image) && $image !== '') {
+        return $image;
+    }
+    $found = get_posts(array(
+        'post_type'      => 'attachment',
+        'post_status'    => 'inherit',
+        'posts_per_page' => 1,
+        'meta_key'       => '_wp_attached_file',
+        'meta_value'     => '2025/03/FIDES_LOGO_BLUE_03.png',
+        'fields'         => 'ids',
+    ));
+    if (! $found) {
+        return $image;
+    }
+    $url = wp_get_attachment_url((int) $found[0]);
+    return is_string($url) && $url !== '' ? $url : $image;
+});
+
+/**
+ * The training meta description must not fall back to the stored design-shell intro.
+ */
+add_filter('wpseo_metadesc', static function ($description) {
+    if (fides_learn_trial_profile() === '' || ! fides_learn_trial_is_learn_page()) {
+        return $description;
+    }
+    $text = trim(wp_strip_all_tags((string) $description));
+    if ($text !== '' && ! str_contains($text, 'Join an open training in Utrecht')) {
+        return $description;
+    }
+    $stored = json_decode((string) get_post_meta(get_queried_object_id(), '_fides_learn_seo', true), true);
+    $seeded = is_array($stored) ? trim((string) ($stored['_yoast_wpseo_metadesc'] ?? '')) : '';
+    return $seeded !== '' ? $seeded : $description;
 });

@@ -1,6 +1,6 @@
 # Learn op de bestaande site
 
-**Credential en Credential Type ontbreken in de huidige Learn-glossary.** Learn leest alleen de bundel van glossary 1.1.15 (335 termen). Die twee termen staan wel in de gepubliceerde glossary 1.12.2. Deze proef wijzigt de glossary niet. De woorden blijven platte tekst, zonder popup.
+**Learn leest dezelfde gepubliceerde glossary als de glossarypagina.** De bron is de URL die de glossaryplugin al gebruikt, standaard `https://raw.githubusercontent.com/FIDEScommunity/fides-interop-profiles/main/data/glossary-aggregated.json`. Gecontroleerd bij dit pakket: versie 1.12.2, 344 termen, sha256 `355524646ac41171a31c9759c0f2702e1027c88f8e65ac4dc526d7b9238d18a6`. European Business Wallet, Credential en Credential Type zitten in die publicatie. Een geslaagde response blijft 10 minuten in de cache. Lukt de URL niet en is er geen verse cache, dan leest Learn het meebundelde bestand van glossaryplugin 1.1.15. Op deze kopie is dat bestand versie 1.10.1 met 335 termen. Een term die daar ook niet in staat, blijft platte tekst. De glossaryplugin zelf blijft 1.1.15.
 
 **De trainings- en workshopknoppen wijzen in de themaweergave naar `/about-fides/contact/`.** De tekst hangt van de pagina af: “Contact us about this training”, “Contact us about this introduction session”, “Contact us about this workshop” of “Contact us about this partnership”. De knop neemt geen training en geen datum mee. De opgeslagen aanvraaglink blijft in de pagina voor de design-shell. See the services overview en View readiness assessment blijven verborgen.
 
@@ -12,7 +12,7 @@
 
 Volledige Learn-route in de themaweergave: de header en footer van het actieve thema, Engelse inhoud, geen taalwissel. Dezelfde pagina’s blijven later bruikbaar in de design-shell. De designpilot zelf blijft op die shell.
 
-Dit pakket is bedoeld voor de bestaande site, eerst de lokale kopie `http://utrecht-demo.local` en daarna `https://staging.fides.community`. Het weigert `fides.community`, `www.fides.community` en elke site waarvan het pad `/design-review` of `/fides-design-pilot` is. Er is niets op staging of productie geïnstalleerd. Er is niets gepusht.
+Dit pakket is bedoeld voor de bestaande site. Eerst een dry-run op `https://staging.fides.community` met `LEARN_TARGET=staging`. Productie (`fides.community` en `www.fides.community`) heeft een eigen dry-run met `LEARN_TARGET=production` en installeert pas met `LEARN_APPLY=1`. `LEARN_TARGET=staging` op productie wordt geweigerd. Een site onder `/design-review` of `/fides-design-pilot`, en een site met `FIDES_DESIGN_PILOT`, wordt geweigerd. `LEARN_FORCE` blijft geweigerd. Er is niets op staging of productie geïnstalleerd. Er is niets gepusht.
 
 ## Wat er mee gaat
 
@@ -31,20 +31,20 @@ Niet aangemaakt:
 
 ## Weergave
 
-De template blijft `fides-learn`. De standaard in de plugin is de design-shell. Het mu-plugin zet de themaweergave alleen aan op `utrecht-demo.local` en `staging.fides.community`. Op andere hosts, inclusief productie en de designpilot, laat het de shell en de opgeslagen paden staan.
+De template blijft `fides-learn`. De standaard in de plugin is de design-shell. Het mu-plugin zet de themaweergave aan op `utrecht-demo.local`, `staging.fides.community`, `fides.community` en `www.fides.community`. Het bestand kopiëren is die schakelaar. Op de designpilot en op elke andere host laat het de shell en de opgeslagen paden staan. Productie gebruikt dezelfde cataloguspaden als staging: `/ecosystem-explorer/…`, `/organizations/`, `/community-tools/glossary/` en `/about-fides/contact/`. Er staat geen staging- of lokaal adres in de metadata. De canonical wordt niet opgeslagen. Op staging wijst het mu-plugin de canonical van een Learn-pagina naar `https://fides.community` plus het pad, en zet `noindex, nofollow`. Op productie blijven de indexering en de canonical de bestaande site-instelling en de permalink.
 
-Wisselen, alleen op die twee hosts: `wp option update fides_learn_trial_chrome shell` en terug met `wp option delete fides_learn_trial_chrome`.
+Wisselen, op de lokale kopie, staging en productie: `wp option update fides_learn_trial_chrome shell` en terug met `wp option delete fides_learn_trial_chrome`.
 
 ## Versies
 
 | Onderdeel | Bestaande site | Dit pakket |
 | --- | --- | --- |
-| Tiles | 1.13.32 | 1.13.67 |
+| Tiles | 1.13.32 | 1.13.68 |
 | Glossaryplugin | 1.1.15 | 1.1.15 |
 | Catalogusplugins | ongewijzigd | ongewijzigd |
 | WPML | op staging actief, hier niet aanwezig | niet gewijzigd, niet geactiveerd |
 
-1.13.67 houdt de Learn-inhoud wit; de blauwe strook blijft 100 px. 1.13.66 maakte die strook, maar de `background`-verkorting zette de witte paginagrond op transparant, zodat de blauwe bodykleur door de inhoud scheen. 1.13.65 toont de landkeuze ook in de design-shell. De zin onder het veld is weg. Op Learn in de themaweergave neemt de themaheader zijn eigen hoogte in boven de Learn-balk, in de bestaande themakleur. 1.13.64 toont het landveld als een dropdown met een neerwaarts pijltje. 1.13.63 zet op de trainingspagina de landkeuze uit Paper 24.28 en 24.27, alleen wanneer het mu-plugin `fides_ds_learn_country_picker` vult. 1.13.62 laat de themaweergave een trainings- of workshopknop naar `/about-fides/contact/` zetten wanneer het mu-plugin `fides_ds_learn_contact_buttons` vult. Zonder die filters, en in de design-shell, blijft de opgeslagen aanvraagknop en de opgeslagen intro staan. 1.13.61 verbergt ontbrekende bestemmingen en vervangt catalogusquery’s die deze site niet toepast, alleen als het mu-plugin die filters vult.
+1.13.68 laat Learn de gepubliceerde glossary lezen. 1.13.67 houdt de Learn-inhoud wit; de blauwe strook blijft 100 px. 1.13.66 maakte die strook, maar de `background`-verkorting zette de witte paginagrond op transparant, zodat de blauwe bodykleur door de inhoud scheen. 1.13.65 toont de landkeuze ook in de design-shell. De zin onder het veld is weg. Op Learn in de themaweergave neemt de themaheader zijn eigen hoogte in boven de Learn-balk, in de bestaande themakleur. 1.13.64 toont het landveld als een dropdown met een neerwaarts pijltje. 1.13.63 zet op de trainingspagina de landkeuze uit Paper 24.28 en 24.27, alleen wanneer het mu-plugin `fides_ds_learn_country_picker` vult. 1.13.62 laat de themaweergave een trainings- of workshopknop naar `/about-fides/contact/` zetten wanneer het mu-plugin `fides_ds_learn_contact_buttons` vult. Zonder die filters, en in de design-shell, blijft de opgeslagen aanvraagknop en de opgeslagen intro staan. 1.13.61 verbergt ontbrekende bestemmingen en vervangt catalogusquery’s die deze site niet toepast, alleen als het mu-plugin die filters vult.
 
 Buiten Learn verandert een gewone cataloguspagina daardoor niet, behalve een grotere sluitknop op de melding dat catalogusdata verouderd is, en een doorverwijzing van een oud item-id alleen als de data `legacyIds` bevat. De nieuwe glossarypagina blijft uit.
 
@@ -99,9 +99,7 @@ In de themaweergave blijft een link staan als de catalogus die query toepast. Da
 
 Een query die de catalogus niet toepast wordt een link naar de catalogus zonder die query. Het label wordt algemeen: “Browse personal wallets”, “Browse business wallets”, “Browse credential types”, “Browse use cases” of “Browse organisations”. De zin die een format of protocol als al geselecteerd beschreef, wordt dezelfde algemene verwijzing. De opgeslagen pilotlink blijft in de pagina staan en komt terug in de design-shell.
 
-Glossary, niet gewijzigd in deze ronde. Learn leest alleen het meebundelde bestand `data/glossary-aggregated.json`. Op deze kopie is dat de bundel van plugin 1.1.15: 335 termen, zonder **Credential** en zonder **Credential Type**. Wel aanwezig is **Verifiable Credential Type**. De gepubliceerde glossary op GitHub `main` (`glossary-aggregated.json`, versie 1.12.2, 344 termen) heeft beide termen wel, met id `credential` en `credential-type`. De glossarypagina zelf haalt GitHub eerst op en valt daarna terug op de bundel, dus de pagina kan de termen al tonen terwijl een Learn-artikel ze als platte tekst laat staan.
-
-Oplossing, later: de bundel van de glossaryplugin gelijk trekken met de gepubliceerde 1.12.2, of Learn dezelfde bron laten lezen als de glossarypagina. Geen nieuwe definitie schrijven. De designpilot gebruikt al een lokale kopie van die 344 termen; die blijft daar.
+Learn en de glossarypagina gebruiken dezelfde URL. Die staat in `glossary-pin.json`: versie 1.12.2, 344 termen, commit-onafhankelijk gecontroleerd op de inhoud van `main`. De glossaryplugin blijft 1.1.15 en de glossarypagina blijft zoals hij is. Is de URL tijdelijk niet bereikbaar en is de cache leeg, dan toont Learn de definities uit de bundel. European Business Wallet, Credential en Credential Type staan niet in de bundel van 1.1.15, dus die drie blijven dan platte tekst. Staat er nog een verse cache, dan blijven de laatst gepubliceerde definities 10 minuten zichtbaar. De designpilot blijft zijn eigen lokale glossary gebruiken.
 
 ## Trainingen en contact
 
@@ -138,12 +136,12 @@ De scripts gebruiken de `wp` van de server en `WP_PATH`. Ze lezen geen checkoutp
 
 1. Bewaar de huidige tilesmap. Op de lokale kopie is 1.13.32 bewaard buiten git.
 2. Controleer `shasum -a 256 -c SHA256SUMS` in de pakketmap.
-3. Pak `plugins/fides-community-tools-tiles-1.13.67.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
-4. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`. Zodra tiles 1.13.67 staat, verwijder `/var/www/html/app/mu-plugins/fides-learn-header-fix.php`. Wijzig het stagingmenu niet.
+3. Pak `plugins/fides-community-tools-tiles-1.13.68.zip` uit naar `wp-content/plugins/fides-community-tools-tiles`. Geen symlink.
+4. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Niet naar de designpilot en niet naar `/design-review`. Zodra tiles 1.13.68 staat, verwijder `/var/www/html/app/mu-plugins/fides-learn-header-fix.php` als dat bestand er nog is. Wijzig het stagingmenu niet.
 5. Laat glossary op 1.1.15. Wijzig geen WPML-instelling en activeer geen taalwissel.
 6. Dry-run. Daarna pas toepassen.
 
-Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.67.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Verwijder daarna `/var/www/html/app/mu-plugins/fides-learn-header-fix.php`. Het stagingmenu niet aanpassen.
+Controleer eerst de checksums in de pakketmap (`shasum -a 256 -c SHA256SUMS`). Pak daarna `plugins/fides-community-tools-tiles-1.13.68.zip` uit in `wp-content/plugins/` als een gewone map, geen symlink. Kopieer `mu-plugins/fides-learn-trial.php` naar `wp-content/mu-plugins/`. Verwijder daarna `/var/www/html/app/mu-plugins/fides-learn-header-fix.php` als dat bestand er nog is. Het stagingmenu niet aanpassen. SEO-titels en beschrijvingen staan in `seed/learn-trial/seo-control.md`. Het seed schrijft die naar de bestaande Yoast-velden en laat een afwijkende, niet-lege redacteurwaarde staan.
 
 ## Stagingmenu
 
@@ -169,7 +167,16 @@ Toepassen, alleen nadat de dry-run klopt:
 WP_PATH=/pad/naar/wordpress LEARN_TARGET=staging LEARN_APPLY=1 bash seed/learn-trial/seed-trial.sh
 ```
 
-`fides.community` en `www.fides.community` worden geweigerd, ook met `LEARN_TARGET=staging`. Een site onder `/design-review` of `/fides-design-pilot` wordt ook geweigerd, net als een site waarin `FIDES_DESIGN_PILOT` aan staat.
+`fides.community` en `www.fides.community` worden geweigerd tot `LEARN_TARGET=production` gezet is. Ook dan is het een dry-run, tot `LEARN_APPLY=1`. `LEARN_TARGET=staging` op die hosts wordt geweigerd. Een site onder `/design-review` of `/fides-design-pilot` wordt ook geweigerd, net als een site waarin `FIDES_DESIGN_PILOT` aan staat.
+
+Productie, pas nadat de stagingproef klopt. Het mu-plugin nog niet kopiëren tot deze dry-run is gelezen: dat bestand zet de themaheader aan.
+
+```bash
+WP_PATH=/pad/naar/wordpress LEARN_TARGET=production bash seed/learn-trial/seed-trial.sh
+WP_PATH=/pad/naar/wordpress LEARN_TARGET=production LEARN_APPLY=1 bash seed/learn-trial/seed-trial.sh
+```
+
+De productie-dry-run gebruikt `/community-tools/glossary/` in de opgeslagen glossarylinks. Op de lokale kopie blijft dat `/glossary/`.
 
 De dry-run op deze kopie, vóór het aanmaken: 5 `unchanged`, 46 `would-created`, 6 pagina’s buiten de set, geen `skipped-edited` en geen `skipped-unmarked`. Na het aanmaken: 46 `created`, 5 `unchanged`.
 
@@ -187,7 +194,7 @@ Gebruik het installatiebestand van díe installatie. Eerst dry-run:
 WP_PATH=/pad/naar/wordpress LEARN_LEDGER=/pad/naar/installs/host-tijdstip.tsv bash seed/learn-trial/rollback-trial.sh
 ```
 
-Op staging hetzelfde, met `WP_PATH` en `LEARN_TARGET=staging`. Het script weigert `fides.community`, `www.fides.community` en de designpilot.
+Op staging hetzelfde, met `WP_PATH` en `LEARN_TARGET=staging`. Op productie hetzelfde, met `LEARN_TARGET=production`. Zonder dat doel weigert het script die hosts. De designpilot wordt altijd geweigerd.
 
 Een pagina wordt alleen verwijderd als het ID, de route, `_fides_learn_seed`, `_fides_learn_trial_install` én de hash nog gelijk zijn aan de regel. Een pagina die er al was, blijft staan en verschijnt als `kept-existing`. Een pagina die na de installatie is bewerkt, blijft staan en verschijnt als `kept-edited`. Een ID dat niet meer bij deze marker hoort, blijft staan als `kept-marker` of `kept-missing`.
 
