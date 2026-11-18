@@ -105,6 +105,28 @@ $prefix  = static function (string $p) use ($mount, $origin): string {
 $tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{services}}' => $prefix($services), '{{glossary}}' => $gloss);
 $tokens_site = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => $pilot === '' ? '' : '/' . $pilot, '{{services}}' => '/' . $services, '{{glossary}}' => '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/');
 
+$media_src   = $here . '/media';
+$media_dir   = WP_CONTENT_DIR . '/uploads/fides-learn';
+if (is_dir($media_src)) {
+    if (! is_dir($media_dir) && ! wp_mkdir_p($media_dir)) {
+        fwrite(STDERR, "Could not create {$media_dir}\n");
+        exit(1);
+    }
+    foreach (glob($media_src . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE) ?: array() as $media_file) {
+        if (! is_file($media_file)) {
+            continue;
+        }
+        if (! copy($media_file, $media_dir . '/' . basename($media_file))) {
+            fwrite(STDERR, "Could not copy {$media_file}\n");
+            exit(1);
+        }
+    }
+}
+$media_path = (string) wp_parse_url(content_url('uploads/fides-learn'), PHP_URL_PATH);
+$tokens['{{media}}'] = rtrim($media_path, '/');
+$tokens_site['{{media}}'] = rtrim($media_path, '/');
+
+
 $manifest = json_decode((string) file_get_contents($here . '/manifest.json'), true);
 if (! is_array($manifest) || empty($manifest['pages'])) {
     fwrite(STDERR, "Invalid manifest.\n");

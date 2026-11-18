@@ -72,8 +72,13 @@ async function article(browser, key, width) {
   const srcWrap = await page.locator(".fides-learn-sources a").evaluateAll((els) => els.every((el) => el.scrollWidth <= el.clientWidth + 1 && getComputedStyle(el).textOverflow !== "ellipsis"));
   check(`${tag}: long source titles wrap and are not truncated`, srcWrap);
   check(`${tag}: no visible source URL`, (await page.locator(".fides-learn-sources__url").count()) === 0);
-  const checked = await page.locator(".fides-learn-note").last().innerText();
-  check(`${tag}: content last checked line is present`, /Content last checked: 1[12] November 2026/.test(checked), checked);
+  if (key === "compare") {
+    const body = await page.locator(".fides-learn-article__body").innerText();
+    check(`${tag}: comparison omits the dated proposal note`, !/Content last checked:|The status of the European Business Wallet proposal can change\./.test(body));
+  } else {
+    const checked = await page.locator(".fides-learn-note").last().innerText();
+    check(`${tag}: content last checked line is present`, /Content last checked: 1[12] November 2026/.test(checked), checked);
+  }
 
   // Terms box: whole sentences only; glossary dialog returns focus to its trigger (pages that use terms).
   const term = page.locator(".fides-learn-article__body .fides-ds-term").first();
