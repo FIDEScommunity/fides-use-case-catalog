@@ -1,9 +1,5 @@
 <!-- wp:paragraph -->
-<p>Suppose a supplier presents a digital credential to a customer. The customer's service may be able to read and check it, but the customer still needs to decide whether the issuer is appropriate and whether the information answers its business question.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>This distinction matters when organisations plan an interaction or compare products. Technical compatibility is part of the work; so are the agreements about the information and the organisations involved. For the technical side, see <a href="{{learn}}/topics/the-big-picture/formats-and-protocols/">Formats and protocols: what do they do?</a>.</p>
+<p>A supplier sends a digital permit to a new customer. The customer may be able to check who issued it and whether it has changed. It still needs to decide whether that authority can issue the required permit and whether the permit covers the work in the contract. For the technical side, see <a href="{{learn}}/topics/the-big-picture/formats-and-protocols/">Formats and protocols: what do they do?</a>.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -11,23 +7,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Trust is not a single yes-or-no property of a wallet or credential. For a particular interaction, the receiving party may need to establish:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:list -->
-<ul class="wp-block-list"><!-- wp:list-item -->
-<li>who issued the information and whether it has been altered;</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li>whether the issuer is recognised or acceptable for the purpose;</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li>what the information means and whether it is current;</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li>what rules apply when the information is issued, presented or checked.</li>
-<!-- /wp:list-item --></ul>
-<!-- /wp:list -->
-
-<!-- wp:paragraph -->
-<p>The holder may also need to understand who is requesting information and why. Different ecosystems use different rules and technical arrangements to support these checks. The roles are described in <a href="{{learn}}/topics/the-big-picture/how-credentials-connect/">How credentials connect issuers, wallets and services</a>.</p>
+<p>A verification check can establish whether evidence is authentic and, where the relevant checks are supported, whether it is still current. The customer interprets the result and applies its own requirements. For example, a permit may be authentic and valid but cover a different activity from the one being contracted. The supplier also needs to know who is asking for the information and why. The roles are described in <a href="{{learn}}/topics/the-big-picture/how-credentials-connect/">How credentials connect issuers, wallets and services</a>.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -71,15 +51,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>In the European Digital Identity Wallet work, <strong>EC TS11</strong> describes interfaces and data formats for catalogs containing information about attributes and attestation rulebooks. The information can help people and systems find specifications and understand how an attestation type is described.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>In the FIDES <a href="{{pilot}}/credentials/">Credential Catalog</a>, some listings show available <strong>TS11-related metadata</strong>. A listing can show which information is present and which is missing. The listing is not an official EU catalog entry merely because it contains that metadata, and its presence is not a certification of the credential, issuer or wallet.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>Metadata is a starting point for checking the underlying sources. The status and scope of TS11, the source of each field and the available information may change; consult the relevant specification and source documents for the intended use.</p>
+<p>TS11 describes how catalogs in the EUDI Wallet ecosystem represent and exchange information about attributes and the rules for attestations. Some FIDES <a href="{{pilot}}/credentials/">Credential Catalog</a> entries show TS11-related metadata when it is available. Use those details to find and read the underlying specifications. The metadata records what is known about the type. Official listing and certification require separate checks.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -88,6 +60,10 @@
 
 <!-- wp:paragraph -->
 <p>Choose one interaction and identify the parties who issue, hold and receive the information. Agree what needs to be checked and which sources and rules the parties will use. Then test the complete interaction, including what happens when information is missing, a check fails or a service is unavailable.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>A supplier may be able to present the same permit to several customers. Each customer checks whether it accepts the issuer and whether the permit is current and covers the work it needs. Agree in advance which status checks matter and what to do if the information is missing, out of date or temporarily unavailable.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -123,7 +99,3 @@
 <li><a href="{{pilot}}/credentials/">Browse credential types</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
-
-<!-- wp:paragraph {"className":"fides-learn-note"} -->
-<p class="fides-learn-note">The supplier example is illustrative. Content last checked: 11 November 2026. The status and scope of TS11 can change, and FIDES listings do not imply an official catalog entry or certification; check the current specification before relying on this page.</p>
-<!-- /wp:paragraph -->

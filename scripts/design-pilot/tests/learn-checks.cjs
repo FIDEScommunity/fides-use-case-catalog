@@ -188,8 +188,8 @@ async function article(page, width) {
   const toc = page.locator(".fides-learn-toc");
   const summary = toc.locator("summary");
   const links = (await toc.locator("a").allTextContents()).map((t) => t.trim());
-  // Since tiles 1.13.54 "Continue learning" lives in the side column (Paper 24.21) and is not a contents entry: six sections.
-  check(`article @${width}: contents menu lists the six sections`, links.length === 6 && links[0] === "Follow the information" && links[3] === "The receiving service checks it", links.join("|"));
+  // "Continue learning" lives in the side column and is not a contents entry. Signing in is the added section.
+  check(`article @${width}: contents menu lists the seven sections`, links.length === 7 && links[0] === "Follow the information" && links[3] === "The receiving service checks it" && links[4] === "Signing in and sharing evidence", links.join("|"));
   if (width >= 900) {
     check(`article @${width}: contents menu open beside the text`, (await toc.evaluate((el) => el.open)) && (await toc.boundingBox()).x > (await page.locator(".fides-learn-article__body").boundingBox()).x + 600);
   } else {
@@ -207,7 +207,7 @@ async function article(page, width) {
 
   // Role flow.
   const flow = await page.locator(".fides-learn-flow li").allInnerTexts();
-  check(`article @${width}: role flow Issuer, Holder + wallet, Relying party`, flow.length === 3 && /Issuer/.test(flow[0]) && /Holder \+ wallet/.test(flow[1]) && /Relying party/.test(flow[2]), flow.join("|"));
+  check(`article @${width}: role flow Licensing authority, Driver, Rental company`, flow.length === 3 && /Licensing authority/.test(flow[0]) && /Driver/.test(flow[1]) && /Rental company/.test(flow[2]) && /asks for licence details during booking/.test(flow[1]), flow.join("|"));
   // No series pagination on a single article.
   check(`article @${width}: no previous/next without a real series`, (await page.locator(".fides-learn-series").count()) === 0);
   // Glossary dialog from the existing mechanism.

@@ -1,21 +1,5 @@
 <!-- wp:paragraph -->
-<p>When comparing wallets or planning a service, you may encounter names such as [fides_learn_term term="mDL/mDoc"]mDoc[/fides_learn_term], [fides_learn_term term="SD-JWT-VC"]SD-JWT VC[/fides_learn_term], [fides_learn_term term="OpenID4VCI"]OpenID4VCI[/fides_learn_term] and [fides_learn_term term="OpenID4VP"]OpenID4VP[/fides_learn_term]. They answer different questions: what form does the credential take, and how does one party send or request it?</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading {"level":2} -->
-<h2 class="wp-block-heading">Start with the interaction</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Consider an education provider issuing proof of a qualification. The recipient receives it in a wallet and later presents information from it to an employer.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>In this example, the education provider and wallet need an agreed way to exchange the credential. The wallet and the employer's service also need an agreed way to handle the request and presentation. Each party needs to understand the relevant credential information.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>This is an illustrative example. The participants would need compatible software and agreements for the particular interaction. The roles are described in <a href="{{learn}}/topics/the-big-picture/how-credentials-connect/">How credentials connect issuers, wallets and services</a>.</p>
+<p>A licensing authority needs a way to send a mobile driving licence to a wallet. Later, a rental site needs a way to ask that wallet for licence details. The licence also needs a form that the systems can read. The roles are described in <a href="{{learn}}/topics/the-big-picture/how-credentials-connect/">How credentials connect issuers, wallets and services</a>.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -23,11 +7,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p><strong>[fides_learn_term term="Credential Format"]A credential format[/fides_learn_term]</strong> determines aspects of how a credential is represented and processed. It can affect what information software expects and how the credential is secured and checked.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>Examples listed in wallet ecosystems include <strong>mDoc</strong> and <strong>SD-JWT VC</strong>. They use different specifications and structures. Their capabilities and the features supported by individual implementations need to be checked for the intended use.</p>
+<p><strong>[fides_learn_term term="Credential Format"]A credential format[/fides_learn_term]</strong> describes how information is represented and secured. A mobile driving licence can use the [fides_learn_term term="mDL/mDoc"]mdoc[/fides_learn_term] format. [fides_learn_term term="SD-JWT-VC"]SD-JWT VC[/fides_learn_term] is another credential format, defined in an IETF Internet-Draft and not yet a final standard.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -39,23 +19,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p><strong>A protocol</strong> describes how systems communicate during an interaction. In the context of digital credentials, a protocol can specify how a wallet obtains a credential or how a service requests a presentation.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>For example:</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:list -->
-<ul class="wp-block-list"><!-- wp:list-item -->
-<li><strong>OpenID4VCI</strong> describes interactions for issuing credentials, including how a wallet can obtain one from an issuer.</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><strong>OpenID4VP</strong> describes interactions for requesting and presenting credentials to a verifier.</li>
-<!-- /wp:list-item --></ul>
-<!-- /wp:list -->
-
-<!-- wp:paragraph -->
-<p>These are not the only approaches in use. Support for a protocol, its version and the relevant options can differ between products. For the issuing and receiving sides, see <a href="{{learn}}/topics/for-businesses/issuing-credentials-for-wallets/">Issuing credentials for wallets</a> and <a href="{{learn}}/topics/for-businesses/accepting-information-from-a-wallet/">Accepting information from a wallet</a>.</p>
+<p><strong>A protocol</strong> describes how the systems exchange information. Issuance and presentation are two different exchanges. [fides_learn_term term="OpenID4VCI"]OpenID4VCI[/fides_learn_term] is one way for a wallet to obtain a credential from an issuer. [fides_learn_term term="OpenID4VP"]OpenID4VP[/fides_learn_term] is one way for a service to request a presentation from a wallet. The exchange used for a specific driving licence depends on the issuer, the wallet and the service. <a href="{{learn}}/topics/technology/how-do-wallets-and-services-exchange-information/#remote-and-proximity-presentation"><em>How do wallets and services exchange information?</em></a> explains how online presentation and presentation to a nearby reader can use different protocols. For the issuing and receiving sides, see <a href="{{learn}}/topics/for-businesses/issuing-credentials-for-wallets/">Issuing credentials for wallets</a> and <a href="{{learn}}/topics/for-businesses/accepting-information-from-a-wallet/">Accepting information from a wallet</a>.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -63,11 +27,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>It helps, but it is only one part of the interaction. The parties may also need compatible protocol versions, security settings and information about the credential type. They need to understand what the data means and how to check the issuer and credential status where applicable.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p>Some combinations also rely on an <strong>[fides_learn_term term="Interop Profile"]interoperability profile[/fides_learn_term]</strong>: a set of choices and requirements for using specifications together in a particular context. Supporting the individual specifications does not by itself establish that two implementations meet the same profile.</p>
+<p>Even if a wallet and a rental site can both read mdoc, they still need to agree on how to exchange the request and response. They also need to interpret the requested data in the same way. An <strong>[fides_learn_term term="Interop Profile"]interoperability profile[/fides_learn_term]</strong> can set out which options participating systems are expected to use together.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -132,10 +92,6 @@
 <ul class="wp-block-list"><!-- wp:list-item -->
 <li><a href="{{pilot}}/credentials/">Browse credential types</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{pilot}}/personal-wallets/">Browse personal wallets</a></li>
+<li><a href="{{pilot}}/personal-wallets/?presentation=OpenID4VP">Compare wallets that list OpenID4VP</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
-
-<!-- wp:paragraph {"className":"fides-learn-note"} -->
-<p class="fides-learn-note">The education example is illustrative. Content last checked: 11 November 2026. SD-JWT VC is an IETF Internet-Draft, not a final standard; protocol versions and listed catalog fields can change, so check current versions before relying on this page.</p>
-<!-- /wp:paragraph -->

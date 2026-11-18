@@ -104,7 +104,6 @@ $prefix  = static function (string $p) use ($mount, $origin): string {
 };
 $tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{services}}' => $prefix($services), '{{glossary}}' => $gloss);
 $tokens_site = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => $pilot === '' ? '' : '/' . $pilot, '{{services}}' => '/' . $services, '{{glossary}}' => '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/');
-
 $media_src   = $here . '/media';
 $media_dir   = WP_CONTENT_DIR . '/uploads/fides-learn';
 if (is_dir($media_src)) {
@@ -125,7 +124,6 @@ if (is_dir($media_src)) {
 $media_path = (string) wp_parse_url(content_url('uploads/fides-learn'), PHP_URL_PATH);
 $tokens['{{media}}'] = rtrim($media_path, '/');
 $tokens_site['{{media}}'] = rtrim($media_path, '/');
-
 
 $manifest = json_decode((string) file_get_contents($here . '/manifest.json'), true);
 if (! is_array($manifest) || empty($manifest['pages'])) {
@@ -371,7 +369,19 @@ foreach ($manifest['pages'] as $page) {
     }
     $full    = $path === '' ? $tbase : $tbase . '/' . $path;
     $slug    = basename($full);
-    $parent  = $path === '' ? $trees[ $tree ]['parent'] : (int) ($ids[ learn_seed_id($tree, dirname($path) === '.' ? '' : dirname($path)) ] ?? 0);
+    $parent_path = dirname($path) === '.' ? '' : dirname($path);
+    $parent_seed = learn_seed_id($tree, $parent_path);
+    $parent  = $path === '' ? $trees[ $tree ]['parent'] : (int) ($ids[ $parent_seed ] ?? 0);
+    // A limited LEARN_IDS list can update a page whose parent is outside the list.
+    // Use the existing parent page and do not write it.
+    if ($path !== '' && $parent === 0) {
+        $parent_full = $parent_path === '' ? $tbase : $tbase . '/' . $parent_path;
+        $existing_parent = get_page_by_path($parent_full, OBJECT, 'page');
+        if ($existing_parent instanceof WP_Post) {
+            $parent = (int) $existing_parent->ID;
+            $ids[ $parent_seed ] = $parent;
+        }
+    }
     if ($path !== '' && $parent === 0) {
         $report[] = array($label, 'error', 'parent page missing');
         continue;

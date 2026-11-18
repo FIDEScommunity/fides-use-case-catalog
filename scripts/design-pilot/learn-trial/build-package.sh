@@ -62,6 +62,7 @@ git -C "$UC_ROOT" archive HEAD \
   scripts/design-pilot/staging/seed-guard.php \
   scripts/design-pilot/learn/manifest.json \
   scripts/design-pilot/learn/content \
+  scripts/design-pilot/learn/media \
   scripts/design-pilot/learn-trial/INSTALL.md \
   scripts/design-pilot/learn-trial/mu-plugins/fides-learn-trial.php \
   scripts/design-pilot/learn-trial/page-state.php \
@@ -82,6 +83,8 @@ cp "$stage/extract/scripts/design-pilot/staging/seed-guard.php" "$stage/pkg/seed
 mkdir -p "$stage/pkg/seed/learn"
 cp "$stage/extract/scripts/design-pilot/learn/manifest.json" "$stage/pkg/seed/learn/manifest.json"
 cp -R "$stage/extract/scripts/design-pilot/learn/content" "$stage/pkg/seed/learn/content"
+mkdir -p "$stage/pkg/seed/learn/media"
+find "$stage/extract/scripts/design-pilot/learn/media" -type f \( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.webp' \) -exec cp {} "$stage/pkg/seed/learn/media/" \;
 cp "$stage/extract/scripts/design-pilot/learn-trial/INSTALL.md" "$stage/pkg/INSTALL.md"
 cp "$stage/extract/scripts/design-pilot/learn-trial/mu-plugins/fides-learn-trial.php" \
   "$stage/pkg/mu-plugins/fides-learn-trial.php"
