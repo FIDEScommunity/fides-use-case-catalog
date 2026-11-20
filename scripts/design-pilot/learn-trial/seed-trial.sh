@@ -23,6 +23,9 @@ if [[ -n "${LEARN_FORCE:-}" ]]; then
   echo "Refusing: LEARN_FORCE is set. Edited pages are skipped, never replaced." >&2
   exit 1
 fi
+if [[ -f "$HERE/content-update" ]]; then
+  export LEARN_CONTENT_UPDATE=1
+fi
 unset LEARN_WP_URL || true
 
 python3 - "$HERE/routes.txt" "$PILOT_SCRIPTS/learn/manifest.json" <<'PY'
@@ -102,6 +105,24 @@ if [[ "$pilot_flag" == "yes" ]]; then
   exit 1
 fi
 
+# A content-update package seeds only routes-update.txt. A direct run with any other
+# selection, including the full routes.txt list, stops before it writes.
+if [[ -f "$HERE/content-update" ]]; then
+  if [[ "$HOST" == "fides.community" || "$HOST" == "www.fides.community" || "${LEARN_TARGET:-}" == "production" ]]; then
+    echo "Refusing: this content update does not install on production." >&2
+    exit 1
+  fi
+  if [[ ! -f "$HERE/routes-update.txt" ]]; then
+    echo "Refusing: routes-update.txt is missing." >&2
+    exit 1
+  fi
+  package_ids="$(python3 "$HERE/validate-routes-update.py" "$HERE/routes-update.txt" "$PILOT_SCRIPTS/learn/manifest.json")"
+  if [[ -z "${LEARN_IDS:-}" || "$LEARN_IDS" != "$package_ids" ]]; then
+    echo "Refusing: LEARN_IDS is not the route list in routes-update.txt. Run seed-routes-update.sh." >&2
+    exit 1
+  fi
+fi
+
 if [[ -z "${LEARN_IDS+x}" ]]; then
   LEARN_IDS="$(python3 - "$HERE/routes.txt" <<'PY'
 import sys
@@ -153,6 +174,11 @@ fi
 echo "Learn trial seed on ${HOME_URL} (${TARGET_REAL})"
 echo "mode: ${MODE}"
 echo "routes: $(printf '%s' "$LEARN_IDS" | awk -F, '{print NF}') (sessions/request excluded)"
+# Read-only. A missing renderer or form coupling stops the seed. Nothing is installed.
+if ! LEARN_CHECK_REQUIREMENTS=1 trial_wp eval-file "$HERE/check-requirements.php"; then
+  echo "Refusing: this site is missing a Learn function this update needs. No plugin is installed." >&2
+  exit 1
+fi
 trial_wp eval-file "$PILOT_SCRIPTS/create-learn-pages.php" | tee "$REPORT"
 
 python3 - "$REPORT" "$REPORT_DIR/created-routes.txt" "$MODE" <<'PY'

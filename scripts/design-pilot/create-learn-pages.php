@@ -28,7 +28,7 @@
  *  LEARN_BACKUP_DIR      where forced replacements are saved first
  *  LEARN_ALLOW_NON_PILOT=1  allow a non-pilot site. Production still needs the bounded trial below.
  *  LEARN_TRIAL_BOUNDED=1 together with LEARN_TARGET=production allows only this
- *                        package's 52 Learn routes on the production main site.
+ *                        package's 53 Learn routes on the production main site.
  *                        Other seed scripts do not set it and still refuse production.
  *  PILOT_ALLOWED_HOSTS   hosts treated as pilot sites (default localhost,127.0.0.1,staging.fides.community)
  */
@@ -58,8 +58,20 @@ if (! $learn_bounded_production && function_exists('wp_get_environment_type') &&
     exit(1);
 }
 if (! class_exists('Fides_DS_Learn')) {
-    fwrite(STDERR, "Plugin fides-community-tools-tiles (with the Learn template) is not active.\n");
+    fwrite(STDERR, "Refusing: Fides_DS_Learn is not active. This seed does not install a plugin.\n");
     exit(1);
+}
+if (getenv('LEARN_TRIAL_BOUNDED') === '1') {
+    foreach (array('fides_learn_record', 'fides_learn_usecase') as $learn_shortcode) {
+        if (! shortcode_exists($learn_shortcode)) {
+            fwrite(STDERR, "Refusing: shortcode {$learn_shortcode} is missing. This seed does not install a plugin.\n");
+            exit(1);
+        }
+    }
+    if (! method_exists('Fides_DS_Learn', 'adjust_trial_links')) {
+        fwrite(STDERR, "Refusing: Fides_DS_Learn::adjust_trial_links is missing. This seed does not install a plugin.\n");
+        exit(1);
+    }
 }
 
 const LEARN_SEED_META  = '_fides_learn_seed';
@@ -104,23 +116,10 @@ $prefix  = static function (string $p) use ($mount, $origin): string {
 };
 $tokens      = array('{{learn}}' => $prefix($base), '{{start}}' => $prefix($start), '{{pilot}}' => $prefix($pilot), '{{services}}' => $prefix($services), '{{glossary}}' => $gloss);
 $tokens_site = array('{{learn}}' => '/' . $base, '{{start}}' => '/' . $start, '{{pilot}}' => $pilot === '' ? '' : '/' . $pilot, '{{services}}' => '/' . $services, '{{glossary}}' => '/' . trim((string) (getenv('LEARN_GLOSSARY_PATH') ?: '/glossary/'), '/') . '/');
-$media_src   = $here . '/media';
-$media_dir   = WP_CONTENT_DIR . '/uploads/fides-learn';
-if (is_dir($media_src)) {
-    if (! is_dir($media_dir) && ! wp_mkdir_p($media_dir)) {
-        fwrite(STDERR, "Could not create {$media_dir}\n");
-        exit(1);
-    }
-    foreach (glob($media_src . '/*.{jpg,jpeg,png,webp}', GLOB_BRACE) ?: array() as $media_file) {
-        if (! is_file($media_file)) {
-            continue;
-        }
-        if (! copy($media_file, $media_dir . '/' . basename($media_file))) {
-            fwrite(STDERR, "Could not copy {$media_file}\n");
-            exit(1);
-        }
-    }
-}
+$media_src = $here . '/media';
+$media_dir = WP_CONTENT_DIR . '/uploads/fides-learn';
+require_once __DIR__ . '/learn-trial/media.php';
+learn_install_media($media_src, $media_dir, $dry);
 $media_path = (string) wp_parse_url(content_url('uploads/fides-learn'), PHP_URL_PATH);
 $tokens['{{media}}'] = rtrim($media_path, '/');
 $tokens_site['{{media}}'] = rtrim($media_path, '/');
@@ -138,13 +137,13 @@ if (getenv('LEARN_TRIAL_BOUNDED') === '1') {
         }
         $learn_allowed[ (string) $learn_page['path'] ] = true;
     }
-    if (count($learn_allowed) !== 52) {
-        fwrite(STDERR, "Refusing: the Learn manifest does not contain 52 package routes.\n");
+    if (count($learn_allowed) !== 53) {
+        fwrite(STDERR, "Refusing: the Learn manifest does not contain 53 package routes.\n");
         exit(1);
     }
     $learn_ids_raw = getenv('LEARN_IDS');
     if ($learn_ids_raw === false || trim((string) $learn_ids_raw) === '') {
-        fwrite(STDERR, "Refusing: the bounded Learn install requires LEARN_IDS for the 52 package routes.\n");
+        fwrite(STDERR, "Refusing: the bounded Learn install requires LEARN_IDS for the 53 package routes.\n");
         exit(1);
     }
     foreach (explode(',', (string) $learn_ids_raw) as $learn_id_item) {
@@ -154,7 +153,7 @@ if (getenv('LEARN_TRIAL_BOUNDED') === '1') {
         }
         $learn_id = ($learn_id_item === '.' || $learn_id_item === '(root)') ? '' : $learn_id_item;
         if (! isset($learn_allowed[ $learn_id ])) {
-            fwrite(STDERR, "Refusing: {$learn_id_item} is outside the 52 Learn routes.\n");
+            fwrite(STDERR, "Refusing: {$learn_id_item} is outside the 53 Learn routes.\n");
             exit(1);
         }
     }
