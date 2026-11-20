@@ -60,8 +60,30 @@ mkdir -p "$stage/extract-tiles"
 git -C "$TILES_ROOT" archive "$TILES_COMMIT" assets/learn.js includes/class-fides-ds-learn.php | tar -x -C "$stage/extract-tiles"
 
 cp "$stage/extract/scripts/design-pilot/learn/manifest.json" "$stage/pkg/seed/learn/manifest.json"
+rm -rf "$stage/pkg/seed/learn/content"
 cp -R "$stage/extract/scripts/design-pilot/learn/content" "$stage/pkg/seed/learn/content"
 find "$stage/extract/scripts/design-pilot/learn/media" -type f \( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' -o -name '*.webp' \) -exec cp {} "$stage/pkg/seed/learn/media/" \;
+python3 - "$stage/pkg/seed/learn/content" "$stage/pkg/seed/learn/media" "$ROUTES_FILE" "$stage/pkg/seed/learn/manifest.json" <<'PY'
+import json, re, sys
+from pathlib import Path
+content, media, routes_file, manifest_file = map(Path, sys.argv[1:])
+manifest = json.loads(manifest_file.read_text())
+by_path = {page["path"]: page["content"] for page in manifest["pages"]}
+needed = set()
+for line in routes_file.read_text().splitlines():
+    route = line.split("#", 1)[0].strip()
+    if not route:
+        continue
+    html = content / by_path[route]
+    needed.update(re.findall(r"\{\{media\}\}/([^\"'\s]+)", html.read_text()))
+for image in media.iterdir():
+    if image.is_file() and image.name not in needed:
+        image.unlink()
+missing = needed - {image.name for image in media.iterdir() if image.is_file()}
+if missing:
+    sys.stderr.write("Refusing: missing media " + ", ".join(sorted(missing)) + "\n")
+    sys.exit(1)
+PY
 cp "$stage/extract/scripts/design-pilot/learn/nl-translations.json" "$stage/pkg/seed/learn/nl-translations.json"
 cp "$stage/extract/scripts/design-pilot/create-learn-pages.php" "$stage/pkg/seed/create-learn-pages.php"
 cp "$stage/extract/scripts/design-pilot/staging/seed-guard.php" "$stage/pkg/seed/staging/seed-guard.php"
