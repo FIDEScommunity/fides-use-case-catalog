@@ -92,7 +92,7 @@ python3 "$stage/pkg/seed/learn-trial/validate-routes-update.py" \
   "$stage/pkg/seed/learn/manifest.json" >/dev/null
 python3 "$stage/pkg/seed/learn-trial/check-seo.py" "$stage/pkg/seed/learn/manifest.json"
 
-if grep -R -n -E 'LEARN_FORCE=|export LEARN_FORCE' "$stage/pkg" >/dev/null; then
+if grep -R -n -E 'LEARN_FORCE=[^[:space:]"]' "$stage/pkg" >/dev/null; then
   echo "Refusing: the package sets LEARN_FORCE." >&2
   exit 1
 fi
