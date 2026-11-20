@@ -24,6 +24,22 @@
 <p>Information in a register or case system remains with the body that is responsible for it. A credential is a way to provide a statement from that source in a form a person can hold and share. It does not replace the register. The issuer remains responsible for what the credential confirms, including how errors are corrected and what happens when the underlying information changes.</p>
 <!-- /wp:paragraph -->
 <!-- wp:paragraph -->
+<p>The register that holds the data is the [fides_learn_term term="Authentic Source"]authentic source[/fides_learn_term].</p>
+<!-- /wp:paragraph -->
+<!-- wp:html -->
+<style>
+.fides-learn-steps{display:grid;gap:10px;margin:1.25rem 0;padding:0;list-style:none;counter-reset:fides-step}
+.fides-learn-steps li{counter-increment:fides-step;box-sizing:border-box;margin:0;padding:12px 14px;border:1px solid var(--fides-ds-line,#d7dde5);border-radius:12px;background:var(--fides-ds-soft,#f4f7fb);color:var(--fides-ds-ink,#142033);font-size:16px;line-height:22px}
+.fides-learn-steps li::before{content:counter(fides-step) ". ";font-weight:700}
+</style>
+<ol class="fides-learn-steps">
+<li>Data in the source register</li>
+<li>The authority confirms the data.</li>
+<li>The authority issues digital evidence.</li>
+<li>The resident receives the evidence in the wallet.</li>
+</ol>
+<!-- /wp:html -->
+<!-- wp:paragraph -->
 <p>The general questions for issuers are in <a href="{{learn}}/topics/for-businesses/issuing-credentials-for-wallets/">Issuing credentials for wallets</a> and <a href="{{learn}}/topics/ecosystem-roles/the-issuer/">The issuer</a>. A credential type, which describes a kind of credential, can help receiving parties find out what information is defined.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
@@ -36,20 +52,7 @@
 <h2 class="wp-block-heading">A Dutch example</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>The Dutch GBO draft design describes both routes for the wallet. In the first, a public body issues the attestation itself and may use a shared facility for the technical side of issuing. In the second, a qualified trust service provider issues a qualified attestation, and the draft describes two separate services it can use at the source through an authentic source interface:</p>
-<!-- /wp:paragraph -->
-<!-- wp:list -->
-<ul class="wp-block-list"><!-- wp:list-item -->
-<li><strong>Verify:</strong> the provider checks attribute values it has been given against the source before issuing.</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li><strong>Retrieve:</strong> the provider fetches the attributes from the source, on behalf of the public body, and qualifies them. The draft calls this service optional.</li>
-<!-- /wp:list-item --></ul>
-<!-- /wp:list -->
-<!-- wp:paragraph -->
-<p>The draft presents the verify service as one way to meet the obligation, which it places in Article 45e of the amended eIDAS Regulation, that qualified providers can verify attributes against authentic sources. According to the draft, the parties involved are still deciding which route is preferred. It also says that GBO itself would not be the issuer of public attestations and that using the shared facility is optional.</p>
-<!-- /wp:paragraph -->
-<!-- wp:paragraph -->
-<p>The issuing facility is described as still to be realised, so this is a plan and not a service that is available today. <a href="{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/#a-dutch-example">More on the Dutch example, its version and status</a>.</p>
+<p>The Dutch GBO draft considers both issuance by public bodies and issuance of qualified attestations by qualified trust service providers. See <a href="{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/">The EUDI Wallet and national implementation</a> for the Dutch arrangements and the status of the draft.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">What can differ between countries?</h2>
@@ -64,6 +67,18 @@
 <p>One use case in the catalog describes several authorities issuing into one wallet in Honduras, as reported by the organisation that submitted it.</p>
 <!-- /wp:paragraph -->
 <!-- wp:shortcode -->[fides_learn_usecase id="honduras-billetera-electronica-nacional-bien-4-gob-authorities-issuing-into-one-citizen-controlled-wallet-YVNSXc" url="{{pilot}}/use-case/" label="Explore the use case"]<!-- /wp:shortcode -->
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">Write it down</h2>
+<!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Which data do you want to make available?</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>Which authority can confirm it?</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>Who can use the evidence afterwards?</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">Continue learning</h2>
 <!-- /wp:heading -->
@@ -93,7 +108,3 @@
 <li><a href="{{pilot}}/issuers/">Browse issuers</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
-
-<!-- wp:paragraph {"className":"fides-learn-note"} -->
-<p class="fides-learn-note">The examples are illustrative. Content last checked: 12 November 2026. Legal and technical requirements can change; check the applicable rules for a specific use.</p>
-<!-- /wp:paragraph -->

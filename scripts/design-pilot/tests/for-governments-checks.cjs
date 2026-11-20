@@ -14,27 +14,31 @@ const L = "/fides-design-pilot/learn";
 const G = `${L}/topics/for-governments/`;
 const STATUS = /version 0\.9\.5 \(September 2026\), a draft design submitted for adoption/;
 const GBO_GO = ["ICTU", "Gemeenschappelijke Bronontsluiting, Globaal Ontwerp, version 0.9.5 (September 2026), consulted 12 November 2026", "https://ictu.github.io/GBO-GO/latest/"];
-const GBO_DOC = ["ICTU", "Gemeenschappelijke Bronontsluiting: documentation and review status, consulted 12 November 2026", "https://ictu.github.io/GBO/latest/"];
+const GBO_GO_20 = ["ICTU", "Gemeenschappelijke Bronontsluiting, Globaal Ontwerp, version 0.9.5 (September 2026), consulted 20 November 2026", "https://ictu.github.io/GBO-GO/latest/"];
+const GBO_DOC = ["ICTU", "Gemeenschappelijke Bronontsluiting: documentation and review status, consulted 20 November 2026", "https://ictu.github.io/GBO/latest/"];
 const ICTU = ["ICTU", "Joint approach to uniform sharing of data (GBO), consulted 12 November 2026", "https://www.ictu.nl/projecten/gezamenlijke-aanpak-voor-uniform-delen-van-gegevens/"];
+const ICTU_20 = ["ICTU", "Joint approach to uniform sharing of data (GBO), consulted 20 November 2026", "https://www.ictu.nl/projecten/gezamenlijke-aanpak-voor-uniform-delen-van-gegevens/"];
 const DO = ["Digitale Overheid", "Gemeenschappelijke Bronontsluiting (GBO), consulted 12 November 2026", "https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/data/gemeenschappelijke-bronontsluiting-gbo/"];
 const EC = ["European Commission", "EUDI Regulation", "https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation"];
 const EUR = ["Regulation (EU) 2024/1183 (EUR-Lex)", null, "https://eur-lex.europa.eu/eli/reg/2024/1183/oj"];
 const EUR5F = ["European Union", "Regulation (EU) 2024/1183 (eIDAS 2), Article 5f", "https://eur-lex.europa.eu/eli/reg/2024/1183/oj"];
 const A4 = "the-eudi-wallet-and-national-implementation/#a-dutch-example";
-const DE = ["German EUDI Wallet programme", "The EUDI Wallet ecosystem", "https://eudi-wallet.gov.de/en/ecosystem"];
-const NLEDI = ["EDI-Stelsel Nederland", "Background on European digital identity", "https://edi.pleio.nl/page/view/418945e3-ced5-42e2-aeb6-a799ad2f9bce/achtergrondinformatie-europese-digitale-identiteit-edi"];
+const DE = ["German EUDI Wallet programme", "The EUDI Wallet ecosystem, consulted 12 November 2026", "https://eudi-wallet.gov.de/en/ecosystem"];
+const NLEDI = ["EDI-Stelsel Nederland", "Background on European digital identity, consulted 12 November 2026", "https://edi.pleio.nl/page/view/418945e3-ced5-42e2-aeb6-a799ad2f9bce/achtergrondinformatie-europese-digitale-identiteit-edi"];
 const PAGES = [
   { slug: "digital-wallets-and-public-services", title: "Digital wallets and public services", intro: /^People regularly have to show public services information that a public body holds\./, sources: [ICTU, GBO_GO], status: false, dutchMax: 90,
+    dutchPointer: "The Dutch GBO draft describes wallet-based exchange alongside other routes for sharing public data. See The EUDI Wallet and national implementation for the Dutch example and its current status.",
     headings: ["Which question are you asking?", "Two sides of the same interaction", "Wallets are one route among several", "What can differ between countries?", "A Dutch example", "Continue learning"],
     links: ["what-is-a-digital-wallet", "topics/ecosystem-roles/", "issuing-public-information-to-wallets", "accepting-information-from-wallets-in-public-services", "personal-wallets", "overview/"], card: "smart-government-applications-powered-by-digital-wallets-HCB5DD" },
-  { slug: "issuing-public-information-to-wallets", title: "Issuing public information to wallets", intro: /^Which public information could people hold in a wallet\?/, sources: [GBO_GO, EC, EUR], status: false, dutchMax: 230, qtsp: true,
+  { slug: "issuing-public-information-to-wallets", title: "Issuing public information to wallets", intro: /^Which public information could people hold in a wallet\?/, sources: [GBO_GO, EC, EUR], status: false, dutchMax: 230, issuance: true,
+    dutchPointer: "The Dutch GBO draft considers both issuance by public bodies and issuance of qualified attestations by qualified trust service providers. See The EUDI Wallet and national implementation for the Dutch arrangements and the status of the draft.",
     headings: ["Questions to start with", "The register stays where it is", "Public bodies and the EUDI Wallet", "A Dutch example", "What can differ between countries?", "Continue learning"],
-    links: ["issuing-credentials-for-wallets", "ecosystem-roles/the-issuer", "european-digital-identity-wallet", "trust-service-providers-and-trust-frameworks", "credentials/", "organizations/"], card: "honduras-billetera-electronica-nacional-bien-4-gob-authorities-issuing-into-one-citizen-controlled-wallet-YVNSXc" },
-  { slug: "accepting-information-from-wallets-in-public-services", title: "Accepting information from wallets in public services", intro: /^What does a public service need to receive and check\?/, sources: [EUR5F, GBO_GO], status: false, dutchMax: 90, fiveF: true,
-    headings: ["Questions to start with", "Ask for what the service needs", "Checking is not deciding", "What does Article 5f say about accepting wallets?", "A Dutch example", "Continue learning"],
-    links: ["accepting-information-from-a-wallet", "ecosystem-roles/the-relying-party", "the-eudi-wallet-and-national-implementation", "issuing-public-information-to-wallets", "personal-wallets"], card: "nijmegen-attribute-based-municipal-login" },
-  { slug: "the-eudi-wallet-and-national-implementation", title: "The EUDI Wallet and national implementation", intro: /^What is set at European level, and what is decided nationally\?/, sources: [EC, EUR5F, DE, NLEDI, GBO_GO, GBO_DOC, ICTU], status: true, five: true,
-    headings: ["What is set at European level?", "What is decided nationally?", "Questions to ask in your own country", "A Dutch example", "Keep national information current", "Continue learning"],
+    links: ["issuing-credentials-for-wallets", "ecosystem-roles/the-issuer", "european-digital-identity-wallet", "trust-service-providers-and-trust-frameworks", "credentials/", "issuers/"], card: "honduras-billetera-electronica-nacional-bien-4-gob-authorities-issuing-into-one-citizen-controlled-wallet-YVNSXc" },
+  { slug: "accepting-information-from-wallets-in-public-services", title: "Accepting information from wallets in public services", intro: /^What does a public service need to receive and check\?/, sources: [EUR5F, GBO_GO], status: false, dutchMax: 90, fiveF: true, greenLane: true,
+    headings: ["Questions to start with", "Which evidence is needed", "What the service checks", "What happens with the result", "Checking is not deciding", "What does Article 5f say about accepting wallets?", "A Dutch example", "Continue learning"],
+    links: ["accepting-information-from-a-wallet", "ecosystem-roles/the-relying-party", "the-eudi-wallet-and-national-implementation", "issuing-public-information-to-wallets", "overview/", "relying-parties/"], card: "nijmegen-attribute-based-municipal-login" },
+  { slug: "the-eudi-wallet-and-national-implementation", title: "The EUDI Wallet and national implementation", intro: /^What is set at European level, and what is decided nationally\?/, sources: [EC, EUR5F, DE, NLEDI, GBO_GO_20, GBO_DOC, ICTU_20], status: true, five: true, gboConsulted: "consulted 20 November 2026",
+    headings: ["What is set at European level?", "What should you check in your country?", "A Dutch example", "Keep national information current", "Continue learning"],
     links: ["european-digital-identity-wallet", "around-the-world/", "around-the-world/the-netherlands", "accepting-information-from-wallets-in-public-services", "personal-wallets", "organizations/"], card: null },
 ];
 const UNAVAILABLE = /issuer-catalog|relying-party-websites|interop-profiles|interop-matrix|\/matrix/;
@@ -109,11 +113,21 @@ async function focusOk(page, tag, locators) {
       const intro = squash(await page.locator(".fides-learn__intro").first().innerText().catch(() => ""));
       check(`${tag}: intro text`, /^Public organisations meet wallets from two sides: they hold information people need to prove/.test(intro), intro);
       const heads = (await page.locator(".fides-learn__content h2").allInnerTexts()).map(squash);
-      for (const h of ["Start with a question", "Four articles", "A Dutch example, still in development", "Explore in the catalogs"]) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
+      for (const h of ["Start with a question", "A Dutch example, still in development", "Explore in the catalogs", "See public services in practice"]) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
       const text = squash(await page.locator(".fides-learn__content").innerText());
       check(`${tag}: one short intro: the manifest lead is not repeated in the body`, !/Public organisations meet wallets from two sides/.test(text) && !/How can public organisations work with wallets\?/.test(text), text.slice(0, 160));
       check(`${tag}: glossary terms panel kept (four terms, glossary link)`, (await page.locator(".fides-learn-panel__aside button.fides-ds-term").count()) === 4 && (await page.locator(".fides-learn-panel__aside a[href$='/glossary/']").count()) === 1 && (await page.locator(".fides-learn-panel__aside h3").allInnerTexts()).map(squash).includes("Terms you will meet"));
       check(`${tag}: four article rows`, (await page.locator(".fides-learn__content ul.fides-learn-rows > li").count()) === 4);
+      const rowGroups = await page.locator(".fides-learn__content ul.fides-learn-rows").evaluateAll((uls) => uls.map((ul) => [...ul.querySelectorAll(":scope > li")].map((li) => ({
+        title: (li.querySelector(":scope > a")?.textContent || "").replace(/\s+/g, " ").trim(),
+        text: (li.querySelector(".fides-learn-rows__text")?.textContent || "").replace(/\s+/g, " ").trim(),
+        href: li.querySelector(":scope > a")?.getAttribute("href") || "",
+      }))));
+      const start = rowGroups[0] && rowGroups[0][0];
+      check(`${tag}: start link is Digital wallets and public services`, !!start && start.title === "Digital wallets and public services" && /digital-wallets-and-public-services\/?$/.test(start.href) && start.text === "For readers who want the whole picture first.", JSON.stringify(start));
+      const tasks = rowGroups[1] || [];
+      check(`${tag}: three task rows`, tasks.length === 3 && tasks.map((t) => t.title).join("|") === ["Issue evidence to a wallet", "Receive and check evidence from a wallet", "Prepare for the EUDI Wallet in your country"].join("|"), JSON.stringify(tasks));
+      check(`${tag}: terms include Authentic Source`, (await page.locator(".fides-learn-panel__aside button.fides-ds-term", { hasText: "Authentic Source" }).count()) === 1);
       check(`${tag}: short Dutch-example section links to article 4 and carries no version or status text`, (await page.locator(`.fides-learn__content a[href$='${A4}']`).count()) === 1 && !STATUS.test(text) && !/0\.9\.5/.test(text) && /still in development/.test(text));
       const dutch = await page.evaluate(() => { const h = [...document.querySelectorAll(".fides-learn__content h2")].find((x) => /Dutch example/.test(x.textContent)); let n = h && h.closest(".wp-block-heading, h2"); const out = []; for (let e = h && h.nextElementSibling; e && e.tagName !== "H2"; e = e.nextElementSibling) out.push(e.textContent); return out.join(" ").split(/\s+/).filter(Boolean).length; });
       check(`${tag}: Dutch-example section is short (${dutch} words)`, dutch > 0 && dutch <= 60, dutch);
@@ -151,8 +165,14 @@ async function focusOk(page, tag, locators) {
       const body = squash(await page.locator(".fides-learn-article__body").innerText());
       check(`${tag}: ${a.status ? "states" : "does not repeat"} the GBO version and draft-for-adoption status`, a.status ? STATUS.test(body) && /0\.9\.5/.test(body) : !STATUS.test(body) && !/Version and status/.test(body), body.slice(0, 100));
       if (!a.status) {
-        const toA4 = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href")))).filter((h) => h.endsWith(A4));
-        check(`${tag}: one link to the Dutch example on article 4 (anchor)`, toA4.length === 1, toA4.join(","));
+        const dutchHrefs = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+        if (a.dutchPointer) {
+          const toNat = dutchHrefs.filter((h) => /the-eudi-wallet-and-national-implementation\/?$/.test(h));
+          check(`${tag}: short GBO pointer and one link to national implementation`, body.includes(a.dutchPointer) && toNat.length === 1 && !dutchHrefs.some((h) => h.endsWith(A4)), toNat.join(","));
+        } else {
+          const toA4 = dutchHrefs.filter((h) => h.endsWith(A4));
+          check(`${tag}: one link to the Dutch example on article 4 (anchor)`, toA4.length === 1, toA4.join(","));
+        }
         const words = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h2")].find((x) => x.textContent.trim() === "A Dutch example"); let n = 0; for (let e = h && h.nextElementSibling; e && e.tagName !== "H2"; e = e.nextElementSibling) { if (e.classList.contains("fides-learn-usecase") || e.querySelector(".fides-learn-usecase")) break; n += e.textContent.split(/\s+/).filter(Boolean).length; } return n; });
         check(`${tag}: Dutch example is short (${words} words, max ${a.dutchMax})`, words > 0 && words <= a.dutchMax, words);
       } else {
@@ -161,6 +181,16 @@ async function focusOk(page, tag, locators) {
       if (a.qtsp) {
         const strong = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) li strong").allInnerTexts()).map(squash);
         check(`${tag}: QTSP route separates verify from retrieve`, strong.includes("Verify:") && strong.includes("Retrieve:") && /optional/.test(body) && /checks? attribute values it has been given/.test(body), strong.join("|"));
+      }
+      if (a.issuance) {
+        check(`${tag}: general explanation keeps issuance by a public source holder and issuance of a qualified attestation`, /public sector body that is responsible for an authentic source/.test(body) && /qualified attestation/.test(body) && /qualified trust service provider/.test(body));
+        check(`${tag}: names the register as an Authentic Source`, /The register that holds the data is the/.test(body) && /authentic source/.test(body) && (await page.locator(".fides-learn-article__body button.fides-ds-term", { hasText: "Authentic Source" }).count()) >= 1);
+      }
+      if (a.greenLane) {
+        check(`${tag}: Green Lane card is marked Pre-pilot`, /pre-pilot/i.test(body) && /Green Lane explores how entrepreneurs can share verified data/.test(body));
+      }
+      if (a.slug === "the-eudi-wallet-and-national-implementation") {
+        check(`${tag}: consultation dates sit on the sources, not in one blanket sentence`, /Each source below gives its own consultation date/.test(body) && !/The pages cited here were checked on/.test(body) && /consulted on 20 November 2026/.test(body));
       }
       if (a.fiveF) {
         const eur = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href='https://eur-lex.europa.eu/eli/reg/2024/1183/oj']").count();
@@ -171,8 +201,7 @@ async function focusOk(page, tag, locators) {
         check(`${tag}: 5f wording is neutral (no "must" claims beyond the text, no "only wallets")`, /does not say that a service may accept only wallets/.test(body) && !/\byou must\b/i.test(body));
       }
       if (a.five) check(`${tag}: mentions Article 5f and points to article 3`, /Article 5f of the Regulation also sets rules on accepting wallets/.test(body) && (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href*='accepting-information-from-wallets-in-public-services']").count()) >= 1);
-      check(`${tag}: says the arrangements are still in development`, /still in development|still to be realised|still developing/.test(body));
-      check(`${tag}: content last checked 12 November 2026`, /Content last checked: 12 November 2026/.test(body));
+      check(`${tag}: ${a.dutchPointer ? "short pointer names the current status of the draft" : "says the arrangements are still in development"}`, a.dutchPointer ? /current status|status of the draft/.test(body) : /still in development|still to be realised|still developing/.test(body));
 
       // Sources: exactly the named ones, name in bold, external, new tab; the GBO source names the version and date.
       const src = await page.locator(".fides-learn-sources__link").evaluateAll((as) => as.map((x) => ({ href: x.getAttribute("href"), name: x.querySelector(".fides-learn-sources__name")?.textContent.trim(), text: x.textContent.replace(/\s+/g, " ").trim(), target: x.target })));
@@ -185,7 +214,8 @@ async function focusOk(page, tag, locators) {
       const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
       check(`${tag}: "Learn more" has 3-4 links (${learnMore})`, learnMore >= 3 && learnMore <= 4, learnMore);
       const go = src.find((s) => s.href === GBO_GO[2]);
-      check(`${tag}: GBO source states version 0.9.5, September 2026 and the consulted date`, !!go && /version 0\.9\.5 \(September 2026\)/.test(go.text) && /consulted 12 November 2026/.test(go.text), go && go.text);
+      const consulted = a.gboConsulted || "consulted 12 November 2026";
+      check(`${tag}: GBO source states version 0.9.5, September 2026 and the consulted date`, !!go && /version 0\.9\.5 \(September 2026\)/.test(go.text) && go.text.includes(consulted), go && go.text);
 
       // Links.
       const hrefs = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
@@ -199,6 +229,9 @@ async function focusOk(page, tag, locators) {
 
       // Use case card: a card (or none for the last article) that opens an existing use case.
       const cardLinks = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href*='/use-case/?usecase=']").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
+      if (a.greenLane) {
+        check(`${tag}: Green Lane card links to the catalog use case`, cardLinks.some((h) => h.includes("usecase=green-lane-verified-wallet-based-company-formation-and-registration-VUXbMJ")), cardLinks.join(","));
+      }
       if (a.card) {
         check(`${tag}: use case card for ${a.card.slice(0, 40)}`, cardLinks.some((h) => h.includes(`usecase=${a.card}`)), cardLinks.join(","));
         const bodyCard = await page.locator(".fides-learn-article__body").innerHTML();
@@ -210,6 +243,14 @@ async function focusOk(page, tag, locators) {
       const next = await page.locator("nav.fides-learn-series a[rel=next]").evaluateAll((as) => as.map((x) => new URL(x.href).pathname));
       check(`${tag}: Previous is ${i ? PAGES[i - 1].slug : "absent"}`, i ? prev.join() === `${G}${PAGES[i - 1].slug}/` : prev.length === 0, prev.join());
       check(`${tag}: Next is ${i < PAGES.length - 1 ? PAGES[i + 1].slug : "absent"}`, i < PAGES.length - 1 ? next.join() === `${G}${PAGES[i + 1].slug}/` : next.length === 0, next.join());
+      if (width === 1440 && i === 1) {
+        await page.locator("nav.fides-learn-series a[rel=next]").click();
+        await page.waitForLoadState("domcontentloaded");
+        check(`${tag}: Next opens ${PAGES[i + 1].title}`, new URL(page.url()).pathname === `${G}${PAGES[i + 1].slug}/`);
+        await page.locator("nav.fides-learn-series a[rel=prev]").click();
+        await page.waitForLoadState("domcontentloaded");
+        check(`${tag}: Previous returns to ${a.title}`, new URL(page.url()).pathname === `${G}${a.slug}/`);
+      }
 
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
       await focusOk(page, tag, [page.locator(":is(.fides-learn-article__body, .fides-learn-continue) ul a").first(), page.locator(".fides-learn-sources__link").first()]);

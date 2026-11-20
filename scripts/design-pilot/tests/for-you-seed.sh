@@ -24,7 +24,7 @@ slugs = ["receiving-information-in-a-wallet", "sharing-information-from-a-wallet
 hub = [p for p in m["pages"] if p["path"] == "topics/for-you"]
 assert len(hub) == 1, "exactly one manifest entry for topics/for-you"
 hub = hub[0]
-assert hub["kind"] == "section" and hub["content"] == "for-you.html" and hub["title"] == "For you" and hub["menu_order"] == 1, "overview: section kind, title, content file, order"
+assert hub["kind"] == "section" and hub["content"] == "for-you.html" and hub["title"] == "For you" and hub["menu_order"] == 1 and hub.get("series") == "for-you", "overview: section kind, title, content file, order, series"
 assert (here / "learn/content" / hub["content"]).is_file() and hub["excerpt"].strip(), "overview: content file and excerpt"
 entries = []
 for i, s in enumerate(slugs):
@@ -32,7 +32,7 @@ for i, s in enumerate(slugs):
     assert len(es) == 1, f"exactly one manifest entry for {s}"
     e = es[0]
     assert e["kind"] == "article" and e["eyebrow"] == "Explainer · For you", f"{s}: kind and eyebrow"
-    assert e["menu_order"] == i and e.get("series") == "for-you", f"{s}: menu_order {i} and series slug"
+    assert e["menu_order"] == i + 2 and e.get("series") == "for-you", f"{s}: menu_order {i + 2} and series slug"
     assert e["content"] == f"{s}.html" and (here / "learn/content" / e["content"]).is_file(), f"{s}: content file"
     assert e["excerpt"].strip(), f"{s}: excerpt"
     lines = e.get("sources", "").splitlines()
@@ -42,9 +42,10 @@ for i, s in enumerate(slugs):
     urls = [l.split("|")[-1].strip() for l in lines]
     assert len(urls) == len(set(urls)), f"{s}: no duplicate source URLs"
     body = (here / "learn/content" / e["content"]).read_text()
-    assert not re.search(r"localhost|127\.0\.0\.1|issuer-catalog|relying-party-websites|interop-profiles|interop-matrix", body), f"{s}: no local host/unavailable destination"
+    assert not re.search(r"localhost|127\.0\.0\.1|relying-party-websites|interop-profiles|interop-matrix", body), f"{s}: no local host/unavailable destination"
+    if "issuer-catalog" in body:
+        assert s == "receiving-information-in-a-wallet" and "digital-credentials-issuer" in body, f"{s}: issuer catalog only for the Digital Credentials Issuer exercise"
     assert "{{pilot}}/personal-wallets/" in body, f"{s}: links to the personal wallet catalog"
-    assert "Content last checked: 12 November 2026" in body, f"{s}: last checked date"
     ln = re.search(r"Learn more.*?<!-- /wp:list -->", body, re.S)
     assert ln and 2 <= ln.group(0).count("<li>") <= 4, f"{s}: Learn more has 2-4 links"
     entries.append((s, e))

@@ -1,0 +1,179 @@
+<!-- wp:html -->
+<style>.fides-learn-nl-only{display:none!important}html[lang^="nl"] p.fides-learn-nl-only{display:block!important}html[lang^="nl"] span.fides-learn-nl-only{display:inline!important}</style>
+<!-- /wp:html -->
+
+<!-- wp:paragraph -->
+<p>A cinema can ask for proof that a visitor meets a film’s age requirement during booking. The visitor reviews the request in their European Digital Identity Wallet (EUDI Wallet). If they share the proof and it passes verification, the booking can continue. The organisation that requests and relies on the information is the <strong>[fides_learn_term term="Relying Party"]relying party[/fides_learn_term]</strong><span class="fides-learn-nl-only" lang="nl" data-no-translation="1"> <em>(relying party)</em></span>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Want to see how a wallet request works before choosing an integration? <a href="#6-test-the-whole-flow-before-going-live">Explore the test environments</a>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Start with one decision in your own process. These six steps take you from that decision to a tested wallet flow.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading" id="1-decide-what-you-need-to-know">1. Decide what you need to know</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Choose the service, the point in the process and the decision the information will support. For an age check, request confirmation that the visitor meets the age requirement if a suitable attestation is available. Their name and date of birth are unnecessary for that check.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Write down why you need each item of data, which attestations and issuers you can accept, and what your service needs to keep after the check.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading" id="2-register-as-a-relying-party">2. Register as a relying party</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Before someone shares data from their EUDI Wallet, the wallet needs to check who is asking. The user also needs to understand why the organisation is asking and which data it wants. Registration makes that information available and gives the wallet something to check the request against.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Apply to the [fides_learn_term term="Registrar"]registrar[/fides_learn_term] designated by the EU Member State where your organisation is established. Follow that country’s registration process. Provide your organisation and contact details, describe each intended use and list the data you plan to request for it. The registrar checks the application and records your organisation and its intended uses in the national register. Update your registration if the information changes.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>If a provider makes wallet requests on your behalf, check whether it acts as an [fides_learn_term term="Intermediary"]intermediary[/fides_learn_term]. Under <a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">eIDAS</a>, an intermediary acting on behalf of a relying party is itself treated as a relying party and must not store data about the content of the transaction. Agree who handles registration and who does what in your service.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"fides-learn-nl-only"} -->
+<p class="fides-learn-nl-only" lang="nl" data-no-translation="1"><a href="https://www.digitaleoverheid.nl/overzicht-van-alle-onderwerpen/identiteit/edi-wallet/">Digitale Overheid · EDI-wallet</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading" id="3-set-up-the-certificates">3. Set up the certificates</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The wallet checks who is asking and whether the request matches the registered purpose and data.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"fides-learn-rows fides-learn-rows--static"} -->
+<ul class="wp-block-list fides-learn-rows fides-learn-rows--static"><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">[fides_learn_term term="Access Certificate"]Access certificate[/fides_learn_term]</strong><span class="fides-learn-rows__text">The wallet uses this certificate to check who is making the request. An authority authorised by the Member State issues it to registered relying parties. Follow the national process to obtain it.</span></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Registration certificate</strong><span class="fides-learn-rows__text">This certificate records why the organisation registered and which data it intends to request for that purpose. Once the registrar has registered the organisation, an authorised certificate provider issues it automatically. The wallet uses it to check the request against the registration.</span></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>See <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02025R0848-20260811">articles 7 and 8 of the consolidated Implementing Regulation (EU) 2025/848</a>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The wallet checks the request against the registration certificate. If the request goes beyond the registered data, the wallet must <a href="https://eur-lex.europa.eu/eli/reg_impl/2026/1731/oj">warn the user before any disclosure</a>. Keep the request aligned with the registered purpose and data.</p>
+
+<!-- wp:html -->
+<dl class="fides-learn-page-terms"><div><dt>Relying party register</dt><dd>Registration makes that information available and gives the wallet something to check the request against. The registrar checks the application and records your organisation and its intended uses in the national register.</dd></div><div><dt>Registration certificate</dt><dd>This certificate records why the organisation registered and which data it intends to request for that purpose. Once the registrar has registered the organisation, an authorised certificate provider issues it automatically.</dd></div></dl>
+<!-- /wp:html -->
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading" id="4-choose-how-to-connect">4. Choose how to connect</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Start with the service you want to connect. Will people use the wallet on your website, in your app or in person? Then decide who should handle the wallet request and how the result will reach your service.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"fides-learn-rows fides-learn-rows--static"} -->
+<ul class="wp-block-list fides-learn-rows fides-learn-rows--static"><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Use an existing provider.</strong><span class="fides-learn-rows__text">If you already work with an application provider or identity broker, ask whether it supports EUDI Wallet requests for your use case.</span></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Add a connector or use a verification service.</strong><span class="fides-learn-rows__text">A connector links your application to wallets. A verification service can handle requests and checks for you, depending on the service you choose.</span></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Build and manage the integration yourself.</strong><span class="fides-learn-rows__text">Your technical team can build the connection. Decide who will maintain it and implement changes to the European specifications.</span></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>See <a href="{{learn}}/topics/for-businesses/business-wallets-where-to-start/">Business wallets: where to start</a> for examples of solutions. For the difference between online and in-person sharing, see <a href="{{learn}}/topics/technology/how-do-wallets-and-services-exchange-information/">protocols, formats and ways to share</a>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"className":"fides-learn-nl-only"} -->
+<p class="fides-learn-nl-only" lang="nl" data-no-translation="1"><a href="https://id-wallets.nl/uitvoering/technisch-aansluiten">ID-wallets · Technisch aansluiten</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading" id="5-design-what-the-user-sees-and-what-your-service-checks">5. Design what the user sees and what your service checks</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Explain what you are asking the user to share and why. Decide what happens if they decline, lack a suitable wallet or cannot share the requested proof.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Agree who checks the proof and what result your service gets back. The check can be handled by your own software, a connector or a verification provider. Your organisation decides what to do with the result. For example, a cinema can let the booking continue when the age check passes and offer another route when it cannot confirm the visitor’s eligibility.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading" id="6-test-the-whole-flow-before-going-live">6. Test the whole flow before going live</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Start with a playground to see how a wallet request works, or use a sandbox to test your own service. Choose an environment that supports the type of proof you need and check how to get access. Use test data. Try a successful check, a declined request, a missing credential and a proof that fails verification. If your service needs to work across borders, include a test with a wallet from another Member State.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"fides-learn-rows fides-learn-rows--static"} -->
+<ul class="wp-block-list fides-learn-rows fides-learn-rows--static"><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Germany · EUDI Wallet Sandbox</strong><span class="fides-learn-rows__text">Germany’s official test environment for organisations preparing an integration with its EUDI Wallet. <a href="https://bmi.usercontent.opencode.de/eudi-wallet/developer-guide/sandbox/onboarding/joining/">See the onboarding information</a> for access.</span></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">France · France Identité Playground</strong><span class="fides-learn-rows__text">A test environment for partners and service providers working on interoperability with European digital wallets. See <a href="https://france-identite.gouv.fr/playground/">France Identité</a> for participation details.</span></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>For an optional European demo, use the <a href="https://fides.community/ecosystem-explorer/relying-party-catalog/?rp=eudi-test-relying-party">EUDI Test Relying Party</a>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Check whether <a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">Article 5f</a> of eIDAS applies to your service. It sets distinct rules for public online services that require electronic identification and authentication, certain private services that require strong user authentication for online identification, and very large online platforms that require user authentication. The requirement depends on the service and the conditions in the article.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:group {"className":"fides-learn-practice"} -->
+<div class="wp-block-group fides-learn-practice">
+<!-- wp:paragraph {"className":"fides-learn-practice__label"} -->
+<p class="fides-learn-practice__label">See it in practice</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:group {"className":"fides-learn-practice__body"} -->
+<div class="wp-block-group fides-learn-practice__body">
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading" id="design-an-age-check">Design an age check</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>You run an online cinema booking service. Some films have a minimum age.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>What would you ask the wallet to confirm?</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>What would your booking system need to keep after the check?</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>What would you do if the visitor could not share the proof?</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Compare your request with the <a href="https://fides.community/ecosystem-explorer/relying-party-catalog/?rp=eideasy-afterhours-cinema-demo">Afterhours Cinema</a> record in the FIDES Relying Party Catalog.</p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
+</div>
+<!-- /wp:group -->

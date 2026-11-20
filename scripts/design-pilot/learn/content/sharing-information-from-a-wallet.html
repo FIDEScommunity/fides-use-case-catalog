@@ -1,3 +1,7 @@
+<!-- wp:html -->
+<style>.fides-learn-nl-only{display:none}html[lang^="nl"] p.fides-learn-nl-only{display:block}html[lang^="nl"] span.fides-learn-nl-only{display:inline}html:not([lang|="nl"]) .fides-learn-alt-nl{display:none!important}html[lang|="nl"] .fides-learn-alt-en{display:none!important}</style>
+<!-- /wp:html -->
+
 <!-- wp:paragraph -->
 <p>A car rental company might ask for licence details before you pick up the vehicle. A service that asks for information from your wallet is called a [fides_learn_term term="Relying Party"]relying party[/fides_learn_term].</p>
 <!-- /wp:paragraph -->
@@ -6,6 +10,12 @@
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
 <p>Before you respond, look at who is asking, what information is requested and why it is needed. If the request is unexpected or you do not recognise the service, check with the organisation through a channel you already trust.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>If you cannot confirm who is asking, or the request asks for more information than you expected, pause before approving it. Ask the service why it needs the extra details or whether there is another way to continue.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>In an EUDI Wallet, the service’s <a href="{{learn}}/topics/for-businesses/requesting-data-from-an-eudi-wallet/">access certificate</a> helps the wallet check who is asking. <a href="{{learn}}/topics/for-businesses/requesting-data-from-an-eudi-wallet/">The registration certificate</a> tells the wallet why the service registered and which data it registered to request.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading" id="sharing-online-or-with-a-nearby-reader">Sharing online or with a nearby reader</h2>
@@ -20,16 +30,25 @@
 <h2 class="wp-block-heading">What can you choose to share?</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>Some wallets and credentials let you share particular details without sharing every detail in the credential. The options depend on the wallet, the credential and the service. Your wallet should show the information you are about to share.</p>
-<!-- /wp:paragraph -->
-<!-- wp:paragraph -->
-<p>In an EU Digital Identity Wallet, review the request before you decide whether to share. The details you can share depend on the credential and the options your wallet offers.</p>
+<p><span class="fides-learn-nl-only" lang="nl" data-no-translation="1">Met </span>[fides_learn_term term="Selective Disclosure"]Selective disclosure[/fides_learn_term] lets you share only the details needed for a particular check. With a supported credential, you can confirm you are 18 or over while keeping your date of birth private. When you send a copy of an ID, you may have to cover up details the service does not need. With selective disclosure, the wallet sends the selected details in a form the service can verify.</p>
 <!-- /wp:paragraph -->
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">What happens afterwards?</h2>
 <!-- /wp:heading -->
 <!-- wp:paragraph -->
-<p>The receiving service can check the information it receives. It then decides how to use it for its own process. If you have a question about that use, contact the organisation that received the information. Its privacy information should explain how it handles personal data.</p>
+<p>The receiving service will check the proof you share. It then decides how to use it for its own process. If you have a question about that use, contact the organisation that received the information. Its privacy information should explain how it handles personal data.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">Review what you shared</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>After the wallet has checked the request, you can review the interaction in your EUDI Wallet dashboard.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>An EUDI Wallet has a dashboard where you can see which services you connected to and, where applicable, what data you exchanged. A deletion request goes through the dashboard to the receiving service, which handles the request. <a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">Article 5a(4)(d)</a> describes the functions for viewing, deletion requests, and reporting a relying party in case of a suspected unlawful or suspicious request.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:group {"className":"fides-learn-practice"} -->
@@ -45,32 +64,34 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>A film has a minimum age. What does the cinema need to know before you can book? Look at the example request below.</p>
+<p>A film has a minimum age. Look at the request pictured below from Afterhours Cinema. What does it ask you to share?</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:group {"className":"fides-learn-idea__panel"} -->
-<div class="wp-block-group fides-learn-idea__panel" style="max-width:18rem">
-<!-- wp:paragraph {"className":"fides-learn-record__kicker"} -->
-<p class="fides-learn-record__kicker">Afterhours Cinema</p>
+<!-- wp:html -->
+<img class="fides-learn-alt-en" src="{{media}}/afterhours-age-check-request.png" alt="Afterhours Cinema asks you to confirm that you are 18 or over." width="851" height="539" style="display:block;width:100%;max-width:100%;height:auto;margin:0 0 8px">
+<img class="fides-learn-alt-nl" src="{{media}}/afterhours-age-check-request.png" alt="Afterhours Cinema vraagt u te bevestigen dat u 18 jaar of ouder bent." width="851" height="539" style="display:block;width:100%;max-width:100%;height:auto;margin:0 0 8px">
+<!-- /wp:html -->
+
+<!-- wp:paragraph -->
+<p>Afterhours Cinema asks you to confirm that you are 18 or over.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p><strong>Meets the film’s age requirement</strong></p>
+<p><a class="fides-ds-action-link" href="https://eudiw-playground.eideasy.com/demos/cinema/">Explore the cinema demo <span aria-hidden="true">→</span></a></p>
 <!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><a class="fides-ds-action-link" href="https://fides.community/ecosystem-explorer/relying-party-catalog/?rp=eideasy-afterhours-cinema-demo">See Afterhours Cinema in the Relying Party Catalog <span aria-hidden="true">→</span></a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:html -->
+<div class="fides-learn-practice__answer">
+<button type="button" class="fides-learn-practice__answer-toggle" aria-expanded="false" aria-controls="practice-answer-afterhours">Show answer</button>
+<div id="practice-answer-afterhours" class="fides-learn-practice__answer-panel" hidden>
+<p>Afterhours Cinema asks whether you are 18 or over. It does not need your name or date of birth. You can see that on the cinema’s age check on this page, before a wallet opens.</p>
 </div>
-<!-- /wp:group -->
-
-<!-- wp:paragraph -->
-<p>The Afterhours Cinema demo asks whether you meet the film’s age requirement. The request does not ask for your name or date of birth. You can review this example without a wallet.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><a href="https://eudiw-playground.eideasy.com/demos/cinema/">Open the cinema demo</a></p>
-<!-- /wp:paragraph -->
-
-<!-- wp:paragraph -->
-<p><a href="https://fides.community/ecosystem-explorer/relying-party-catalog/?rp=eideasy-afterhours-cinema-demo">See Afterhours Cinema in the Relying Party Catalog</a></p>
-<!-- /wp:paragraph -->
+</div>
+<!-- /wp:html -->
 </div>
 <!-- /wp:group -->
 </div>
@@ -103,7 +124,3 @@
 <li><a href="{{pilot}}/personal-wallets/">Browse personal wallets</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
-
-<!-- wp:paragraph {"className":"fides-learn-note"} -->
-<p class="fides-learn-note">The examples are illustrative. What a wallet can do differs per wallet and credential. Content last checked: 12 November 2026. Check the provider and the current European and national situation before relying on a feature.</p>
-<!-- /wp:paragraph -->

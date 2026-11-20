@@ -42,6 +42,7 @@
    "excerpt": "Start with a business process: what must your organisation prove, receive or check?",
    "seo_title": "For businesses | FIDES Community",
    "seo_description": "Start with a business process: what must your organisation prove, receive or check?",
+   "series": "for-businesses",
    "content": "for-businesses.html",
    "menu_order": 2
   },
@@ -119,9 +120,10 @@
    "path": "topics/for-you",
    "title": "For you",
    "kind": "section",
-   "excerpt": "A digital wallet can help you receive and share information, such as a qualification or proof of a particular entitlement. What you can store and where you can use it depends on the wallet, the organisation issuing the information and the service you want to use.",
+   "excerpt": "A school offers you a digital diploma. A service asks you to share proof of your age. Or you want to find out which wallet works with a service you use. Start with the question you have.",
    "seo_title": "For you | FIDES Community",
-   "seo_description": "A digital wallet can help you receive and share information, such as a qualification or proof of a particular entitlement. What you can store and where you can use it depends on the wallet, the organisation issuing the information and the service you want to use.",
+   "seo_description": "A school offers you a digital diploma. A service asks you to share proof of your age. Or you want to find out which wallet works with a service you use. Start with the question you have.",
+   "series": "for-you",
    "content": "for-you.html",
    "menu_order": 1
   },
@@ -133,10 +135,10 @@
    "excerpt": "How does information get into a wallet, and who provides it?",
    "seo_title": "Receiving information in a wallet | FIDES Community",
    "seo_description": "How does information get into a wallet, and who provides it?",
-   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/",
+   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nEuropean Commission · PID Identification Manual | https://ec.europa.eu/digital-building-blocks/sites/spaces/EUDIGITALIDENTITYWALLET/pages/930451131/PID+Identification+Manual\nCalifornia DMV · California mDL, consulted 13 November 2026 | https://www.dmv.ca.gov/portal/california-mdl/\nEuropean Union · Implementing Regulation (EU) 2024/2982, consolidated | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02024R2982-20260811",
    "series": "for-you",
    "content": "receiving-information-in-a-wallet.html",
-   "menu_order": 0
+   "menu_order": 2
   },
   {
    "path": "topics/for-you/sharing-information-from-a-wallet",
@@ -146,10 +148,10 @@
    "excerpt": "What should you look at when a service asks you to share information?",
    "seo_title": "Sharing information from a wallet | FIDES Community",
    "seo_description": "What should you look at when a service asks you to share information?",
-   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nEuropean Commission · Selective disclosure of attributes in the EUDI Wallet | https://ec.europa.eu/digital-building-blocks/sites/spaces/EUDIGITALIDENTITYWALLET/pages/949256476/What%2Bis%2Bselective%2Bdisclosure%2Bof%2Battributes\nEuropean Commission · European Digital Identity Wallet | https://digital-strategy.ec.europa.eu/en/factpages/european-digital-identity-wallet\nEU Digital Identity Wallet · Architecture and Reference Framework, data presentation flows | https://eudi.dev/2.9.0/architecture-and-reference-framework-main/#44-data-presentation-flows",
+   "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nEuropean Commission · Selective disclosure of attributes in the EUDI Wallet | https://ec.europa.eu/digital-building-blocks/sites/spaces/EUDIGITALIDENTITYWALLET/pages/949256476/What%2Bis%2Bselective%2Bdisclosure%2Bof%2Battributes\nEuropean Commission · European Digital Identity Wallet | https://digital-strategy.ec.europa.eu/en/factpages/european-digital-identity-wallet\nEU Digital Identity Wallet · Architecture and Reference Framework, data presentation flows | https://eudi.dev/2.9.0/architecture-and-reference-framework-main/#44-data-presentation-flows\nRegulation (EU) 2024/1183 · EUDI Wallet dashboard, Article 5a(4)(d) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj",
    "series": "for-you",
    "content": "sharing-information-from-a-wallet.html",
-   "menu_order": 1
+   "menu_order": 3
   },
   {
    "path": "topics/for-you/choosing-and-managing-a-wallet",
@@ -159,10 +161,10 @@
    "excerpt": "What can you check when choosing a wallet, and where can you find help?",
    "seo_title": "Choosing and managing a wallet | FIDES Community",
    "seo_description": "What can you check when choosing a wallet, and where can you find help?",
-   "sources": "European Commission · European Digital Identity Wallet | https://digital-strategy.ec.europa.eu/en/factpages/european-digital-identity-wallet",
+   "sources": "European Commission · European Digital Identity Wallet | https://digital-strategy.ec.europa.eu/en/factpages/european-digital-identity-wallet\nEU Digital Identity Wallet · TS10: data portability and download (export) | https://github.com/eu-digital-identity-wallet/eudi-doc-standards-and-technical-specifications/blob/main/docs/technical-specifications/ts10-data-portability-and-download-(export).md",
    "series": "for-you",
    "content": "choosing-and-managing-a-wallet.html",
-   "menu_order": 2
+   "menu_order": 4
   },
   {
    "path": "topics/for-governments",
@@ -208,7 +210,7 @@
    "excerpt": "What does a public service need to receive and check? Start with the decision the service makes, the information it needs and what happens when a wallet is not used.",
    "seo_title": "Accepting information from wallets in public services | FIDES Community",
    "seo_description": "What does a public service need to receive and check? Start with the decision the service makes, the information it needs and what happens when a wallet is not used.",
-   "sources": "European Union · Regulation (EU) 2024/1183 (eIDAS 2), Article 5f | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nICTU · Gemeenschappelijke Bronontsluiting, Globaal Ontwerp, version 0.9.5 (September 2026), consulted 12 November 2026 | https://ictu.github.io/GBO-GO/latest/",
+   "sources": "European Union · Regulation (EU) 2024/1183 (eIDAS 2), Article 5f and Article 45c | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nICTU · Gemeenschappelijke Bronontsluiting, Globaal Ontwerp, version 0.9.5 (September 2026), consulted 12 November 2026 | https://ictu.github.io/GBO-GO/latest/",
    "series": "for-governments",
    "content": "accepting-information-from-wallets-in-public-services.html",
    "menu_order": 2
@@ -221,7 +223,7 @@
    "excerpt": "What is set at European level, and what is decided nationally? A starting point for public organisations that want to see where national arrangements come in.",
    "seo_title": "The EUDI Wallet and national implementation | FIDES Community",
    "seo_description": "What is set at European level, and what is decided nationally? A starting point for public organisations that want to see where national arrangements come in.",
-   "sources": "European Commission · EUDI Regulation | https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation\nEuropean Union · Regulation (EU) 2024/1183 (eIDAS 2), Article 5f | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nGerman EUDI Wallet programme · The EUDI Wallet ecosystem | https://eudi-wallet.gov.de/en/ecosystem\nEDI-Stelsel Nederland · Background on European digital identity | https://edi.pleio.nl/page/view/418945e3-ced5-42e2-aeb6-a799ad2f9bce/achtergrondinformatie-europese-digitale-identiteit-edi\nICTU · Gemeenschappelijke Bronontsluiting, Globaal Ontwerp, version 0.9.5 (September 2026), consulted 12 November 2026 | https://ictu.github.io/GBO-GO/latest/\nICTU · Gemeenschappelijke Bronontsluiting: documentation and review status, consulted 12 November 2026 | https://ictu.github.io/GBO/latest/\nICTU · Joint approach to uniform sharing of data (GBO), consulted 12 November 2026 | https://www.ictu.nl/projecten/gezamenlijke-aanpak-voor-uniform-delen-van-gegevens/",
+   "sources": "European Commission · EUDI Regulation | https://digital-strategy.ec.europa.eu/en/policies/eudi-regulation\nEuropean Union · Regulation (EU) 2024/1183 (eIDAS 2), Article 5f | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nGerman EUDI Wallet programme · The EUDI Wallet ecosystem, consulted 12 November 2026 | https://eudi-wallet.gov.de/en/ecosystem\nEDI-Stelsel Nederland · Background on European digital identity, consulted 12 November 2026 | https://edi.pleio.nl/page/view/418945e3-ced5-42e2-aeb6-a799ad2f9bce/achtergrondinformatie-europese-digitale-identiteit-edi\nICTU · Gemeenschappelijke Bronontsluiting, Globaal Ontwerp, version 0.9.5 (September 2026), consulted 20 November 2026 | https://ictu.github.io/GBO-GO/latest/\nICTU · Gemeenschappelijke Bronontsluiting: documentation and review status, consulted 20 November 2026 | https://ictu.github.io/GBO/latest/\nICTU · Joint approach to uniform sharing of data (GBO), consulted 20 November 2026 | https://www.ictu.nl/projecten/gezamenlijke-aanpak-voor-uniform-delen-van-gegevens/",
    "series": "for-governments",
    "content": "the-eudi-wallet-and-national-implementation.html",
    "menu_order": 3
@@ -508,8 +510,9 @@
    "cta_text": "Browse the credential types listed in the FIDES Explorer to see what existing types describe.",
    "cta_label": "Browse credential types",
    "cta_url": "{{pilot}}/credentials/",
+   "series": "for-businesses",
    "content": "issuing-credentials-for-wallets.html",
-   "menu_order": 2
+   "menu_order": 16
   },
   {
    "path": "topics/for-businesses/accepting-information-from-a-wallet",
@@ -524,24 +527,26 @@
    "cta_text": "Work through one process with your team in the Wallet Readiness Workshop.",
    "cta_label": "View the workshop",
    "cta_url": "{{learn}}/sessions/wallet-readiness-workshop/",
+   "series": "for-businesses",
    "content": "accepting-information-from-a-wallet.html",
-   "menu_order": 3
+   "menu_order": 12
   },
   {
    "path": "topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case",
    "title": "How can an organisation prepare a wallet use case?",
    "kind": "article",
    "eyebrow": "Explainer · For businesses",
-   "excerpt": "Before choosing a product, describe one concrete exchange: who provides which information to whom, in which situation, how it is checked and what to test first. That makes it easier to decide whether a wallet fits and which parties need to be involved.",
+   "excerpt": "Choose one transaction your organisation handles regularly. Work out what your team needs to decide, what evidence supports that decision and how to test it before choosing software.",
    "seo_title": "How can an organisation prepare a wallet use case? | FIDES Community",
-   "seo_description": "Before choosing a product, describe one concrete exchange: who provides which information to whom, in which situation, how it is checked and what to test first. That makes it easier to decide whether a wallet fits and which parties need to be involved.",
+   "seo_description": "Choose one transaction your organisation handles regularly. Work out what your team needs to decide, what evidence supports that decision and how to test it before choosing software.",
    "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nRegulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nFIDES · Verifiable Credentials | https://fides.community/topics/verifiable-credentials/",
-   "cta_title": "Look at your own exchange",
-   "cta_text": "Work through one exchange with your team in the Wallet Readiness Workshop.",
+   "cta_title": "Work through your own transaction",
+   "cta_text": "Work through one transaction with your team in the Wallet Readiness Workshop.",
    "cta_label": "View the workshop",
    "cta_url": "{{learn}}/sessions/wallet-readiness-workshop/",
+   "series": "for-businesses",
    "content": "how-can-an-organisation-prepare-a-wallet-use-case.html",
-   "menu_order": 4
+   "menu_order": 11
   },
   {
    "path": "topics/for-businesses/what-should-a-service-check-when-receiving-a-credential",
@@ -552,8 +557,9 @@
    "seo_title": "What should a service check when receiving a credential? | FIDES Community",
    "seo_description": "When a service receives information from a wallet, a technical check can help establish whether it can rely on the credential. The service also needs to decide whether the information is suitable for its particular purpose.",
    "sources": "W3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nRegulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nEuropean Commission · Selective disclosure of attributes in the EUDI Wallet | https://ec.europa.eu/digital-building-blocks/sites/spaces/EUDIGITALIDENTITYWALLET/pages/949256476/What%2Bis%2Bselective%2Bdisclosure%2Bof%2Battributes",
+   "series": "for-businesses",
    "content": "what-should-a-service-check-when-receiving-a-credential.html",
-   "menu_order": 5
+   "menu_order": 14
   },
   {
    "path": "topics/for-businesses/how-can-someone-act-for-an-organisation",
@@ -564,8 +570,9 @@
    "seo_title": "How can someone act for an organisation? | FIDES Community",
    "seo_description": "A person may need to act for an organisation when signing an agreement, accessing a service or sharing information. The organisation and the person may each need to be identified. The receiving service may also need to establish whether the person has authority to act for that organisation.",
    "sources": "Regulation (EU) 2024/1183 (EUR-Lex) | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nW3C · Verifiable Credentials Data Model 2.0 | https://www.w3.org/TR/vc-data-model-2.0/\nDirective (EU) 2025/25 (EUR-Lex) | https://eur-lex.europa.eu/eli/dir/2025/25/oj\nEuropean Commission · Proposal for a Regulation on European Business Wallets (COM(2025) 838) | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0838\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets\nCouncil of the EU · European business wallets: Council adopts negotiating position | https://www.consilium.europa.eu/en/press/press-releases/2026/06/09/european-business-wallets-council-adopts-negotiating-position/\nEuropean Parliament · Legislative procedure file 2025/0358(COD) | https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0358(COD)\nEU Digital Identity Wallet · Architecture and Reference Framework | https://github.com/eu-digital-identity-wallet/eudi-doc-architecture-and-reference-framework",
+   "series": "for-businesses",
    "content": "how-can-someone-act-for-an-organisation.html",
-   "menu_order": 6
+   "menu_order": 15
   },
   {
    "path": "topics/for-businesses/european-business-wallet",
@@ -576,13 +583,14 @@
    "excerpt": "A European proposal for exchanging business information and acting on behalf of an organisation. What it aims to do, where it stands and how it relates to business wallets in use today.",
    "seo_title": "European Business Wallet | FIDES Community",
    "seo_description": "A European proposal for exchanging business information and acting on behalf of an organisation. What it aims to do, where it stands and how it relates to business wallets in use today.",
-   "sources": "FIDES · European Business Wallet | https://fides.community/topics/european-business-wallet/\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets\nCouncil of the EU · Negotiating position, 9 June 2026 | https://www.consilium.europa.eu/en/press/press-releases/2026/06/09/european-business-wallets-council-adopts-negotiating-position/\nEuropean Parliament · Legislative procedure file 2025/0358(COD) | https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0358(COD)",
+   "sources": "FIDES · European Business Wallet | https://fides.community/topics/european-business-wallet/\nEuropean Commission · European Business Wallets | https://digital-strategy.ec.europa.eu/en/policies/business-wallets\nCouncil of the EU · Negotiating position, 9 June 2026 | https://www.consilium.europa.eu/en/press/press-releases/2026/06/09/european-business-wallets-council-adopts-negotiating-position/\nEuropean Commission proposal · COM(2025) 838, Article 5 | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A52025PC0838\nEuropean Parliament · Legislative procedure file 2025/0358(COD) | https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0358(COD)",
    "cta_title": "Browse business wallets in the catalog",
    "cta_text": "Browse the business wallets in the catalog, or look at a process with your team.",
    "cta_label": "Browse business wallets",
    "cta_url": "{{pilot}}/business-wallets/",
+   "series": "for-businesses",
    "content": "european-business-wallet.html",
-   "menu_order": 1
+   "menu_order": 17
   },
   {
    "path": "topics/wallets-and-credentials",
@@ -742,16 +750,30 @@
    "title": "Business wallets: where to start",
    "kind": "article",
    "eyebrow": "Explainer · For businesses",
-   "excerpt": "Which role does your organisation play, and how do you choose a business wallet? Start from one transaction, then compare wallets and providers.",
+   "excerpt": "Start with one transaction. Decide what your organisation needs to do, then compare the tools and providers that support that role.",
    "seo_title": "Business wallets: where to start | FIDES Community",
    "seo_description": "Which role does your organisation play, and how do you choose a business wallet? Start from one transaction, then compare wallets and providers.",
-   "sources": "FIDES · Business Wallets explained | https://fides.community/topics/business-wallets/\nFIDES · Credential Types | https://fides.community/topics/credentials/",
+   "sources": "FIDES · Business Wallets explained | https://fides.community/topics/business-wallets/\nFIDES · Credential Types | https://fides.community/topics/credentials/\nEuropean Commission · European Business Wallet proposal (COM(2025) 838), Article 5 | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0838\nEerste Kamer · COM(2025) 838 proposal, Article 5 (PDF) | https://www.eerstekamer.nl/bijlage/20251121/com_2025_838_proposal_for_a_2/document3/f=/vmsoctgrbbeb.pdf\nEuropean Union · eIDAS, Articles 25, 35, 41 and 43–44 | https://eur-lex.europa.eu/eli/reg/2014/910\nKVK · Form 13, registration of an authorised representative | https://www.kvk.nl/over-het-handelsregister/formulier-13-inschrijving-gevolmachtigde/",
    "cta_title": "Browse the catalog or work through your process",
    "cta_text": "Browse the business wallets in the catalog, or explore the impact with your team.",
    "cta_label": "Browse business wallets",
    "cta_url": "{{pilot}}/business-wallets/",
+   "series": "for-businesses",
    "content": "business-wallets-where-to-start.html",
-   "menu_order": 0
+   "menu_order": 10
+  },
+  {
+   "path": "topics/for-businesses/requesting-data-from-an-eudi-wallet",
+   "title": "How can your organisation request data from an EUDI Wallet?",
+   "kind": "article",
+   "eyebrow": "Explainer · For businesses",
+   "excerpt": "Choose what to request, register as a relying party and test how the result fits into your service.",
+   "seo_title": "How can your organisation request data from an EUDI Wallet? | FIDES Community",
+   "seo_description": "Choose what to request, register as a relying party and test how the result fits into your service.",
+   "sources": "eIDAS · Articles 5b and 5f | https://eur-lex.europa.eu/eli/reg/2024/1183/oj\nEuropean Union · Implementing Regulation (EU) 2025/848, consolidated, articles 7 and 8 | https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:02025R0848-20260811\nEuropean Union · Implementing Regulation (EU) 2026/1731 | https://eur-lex.europa.eu/eli/reg_impl/2026/1731/oj\nEUDI · Architecture and Reference Framework | https://eudi.dev/latest/architecture-and-reference-framework-main/\nEUDI Wallet · Reference Implementation | https://github.com/eu-digital-identity-wallet/.github/blob/main/profile/reference-implementation.md\nID-wallets · Technisch aansluiten | https://id-wallets.nl/uitvoering/technisch-aansluiten\nGerman EUDI Wallet programme · Sandbox onboarding | https://bmi.usercontent.opencode.de/eudi-wallet/developer-guide/sandbox/onboarding/joining/\nFrance Identité · Playground | https://france-identite.gouv.fr/playground/\nIndependent practical reading · EUDI Wallet integration handbook (not an official EU text) | https://eudiwallet.com/handbook/",
+   "series": "for-businesses",
+   "content": "requesting-data-from-an-eudi-wallet.html",
+   "menu_order": 13
   },
   {
    "tree": "services",

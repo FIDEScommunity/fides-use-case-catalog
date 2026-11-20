@@ -14,11 +14,13 @@ const G = `${L}/topics/for-you/`;
 const W3C = ["W3C", "Verifiable Credentials Data Model 2.0", "https://www.w3.org/TR/vc-data-model-2.0/"];
 const SD = ["European Commission", "Selective disclosure of attributes in the EUDI Wallet", "https://ec.europa.eu/digital-building-blocks/sites/spaces/EUDIGITALIDENTITYWALLET/pages/949256476/What%2Bis%2Bselective%2Bdisclosure%2Bof%2Battributes"];
 const EW = ["European Commission", "European Digital Identity Wallet", "https://digital-strategy.ec.europa.eu/en/factpages/european-digital-identity-wallet"];
+const ARF = ["EU Digital Identity Wallet", "Architecture and Reference Framework, data presentation flows", "https://eudi.dev/2.9.0/architecture-and-reference-framework-main/#44-data-presentation-flows"];
+const DASH = ["Regulation (EU) 2024/1183", "EUDI Wallet dashboard, Article 5a(4)(d)", "https://eur-lex.europa.eu/eli/reg/2024/1183/oj"];
 const PAGES = [
   { slug: "receiving-information-in-a-wallet", title: "Receiving information in a wallet", intro: /^How does information get into a wallet, and who provides it\?/, sources: [W3C],
-    headings: ["An example", "Before you add something", "What happens if information changes?", "Continue learning"],
+    headings: ["An example", "Add a credential to your wallet", "Before you add something", "What happens if information changes?", "Continue learning"],
     links: ["sharing-information-from-a-wallet", "what-is-a-credential", "how-credentials-connect", "personal-wallets"], terms: 1, learnMore: 3 },
-  { slug: "sharing-information-from-a-wallet", title: "Sharing information from a wallet", intro: /^What should you look at when a service asks you to share information\?/, sources: [W3C, SD, EW],
+  { slug: "sharing-information-from-a-wallet", title: "Sharing information from a wallet", intro: /^What should you look at when a service asks you to share information\?/, sources: [W3C, SD, EW, ARF, DASH],
     headings: ["Check the request", "What can you choose to share?", "What happens afterwards?", "Continue learning"],
     links: ["receiving-information-in-a-wallet", "the-holder", "the-relying-party", "personal-wallets"], terms: 1, learnMore: 3 },
   { slug: "choosing-and-managing-a-wallet", title: "Choosing and managing a wallet", intro: /^What can you check when choosing a wallet, and where can you find help\?/, sources: [EW],
@@ -103,17 +105,17 @@ async function focusOk(page, tag, locators) {
       const crumbLinks = await page.locator("nav[aria-label=Breadcrumb] a").evaluateAll((as) => as.map((x) => new URL(x.href).pathname.replace(/\/$/, "")));
       check(`${tag}: breadcrumb parents are clickable (Learn, Topics)`, crumbLinks.join(",") === [L, `${L}/topics`].join(","), crumbLinks.join(","));
       const intro = squash(await page.locator(".fides-learn__intro").first().innerText().catch(() => ""));
-      check(`${tag}: intro text`, /^A digital wallet can help you receive and share information, such as a qualification or proof of a particular entitlement\./.test(intro), intro);
+      check(`${tag}: intro text`, /^A school offers you a digital diploma\./.test(intro), intro);
       const heads = (await page.locator(".fides-learn__content h2").allInnerTexts()).map(squash);
       for (const h of ["Start with a question", "Explore further"]) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
       const text = squash(await page.locator(".fides-learn__content").innerText());
       check(`${tag}: no "Design preview" and no "not available yet"`, !/Design preview|not available yet/i.test(text));
       const rowHrefs = await page.locator(".fides-learn__content ul.fides-learn-rows > li > a").evaluateAll((as) => as.map((x) => new URL(x.href).pathname));
-      check(`${tag}: four question rows`, rowHrefs.length === 4, rowHrefs.join(","));
+      check(`${tag}: three question rows`, rowHrefs.length === 3, rowHrefs.join(","));
       for (const a of PAGES) check(`${tag}: row links to ${a.slug}`, rowHrefs.includes(`${G}${a.slug}/`), rowHrefs.join(","));
-      check(`${tag}: row links to the existing European Digital Identity Wallet article`, rowHrefs.includes(`${L}/topics/the-big-picture/european-digital-identity-wallet/`));
+      check(`${tag}: European Digital Identity Wallet is further reading, not a question row`, !rowHrefs.includes(`${L}/topics/the-big-picture/european-digital-identity-wallet/`));
       const hrefs = norm(await page.locator(".fides-learn__content a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
-      for (const l of ["what-is-a-digital-wallet", "what-is-a-credential", "personal-wallets"]) check(`${tag}: Explore further links to ${l}`, hrefs.some((h) => h.includes(l)), hrefs.join(" "));
+      for (const l of ["european-digital-identity-wallet", "what-is-a-digital-wallet", "what-is-a-credential", "personal-wallets"]) check(`${tag}: Explore further links to ${l}`, hrefs.some((h) => h.includes(l)), hrefs.join(" "));
       check(`${tag}: no local host and no unavailable destination in the links`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h) && !UNAVAILABLE.test(h)));
       await linksOk(page, tag, hrefs);
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));
@@ -140,8 +142,6 @@ async function focusOk(page, tag, locators) {
       check(`${tag}: intro text`, a.intro.test(intro), intro);
       const heads = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h2").allInnerTexts()).map(squash);
       for (const h of a.headings) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
-      const body = squash(await page.locator(".fides-learn-article__body").innerText());
-      check(`${tag}: illustrative note and last checked date`, /The examples are illustrative\./.test(body) && /Content last checked: 12 November 2026/.test(body));
       check(`${tag}: glossary term chips (${a.terms})`, (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) button.fides-ds-term").count()) === a.terms);
       const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
       check(`${tag}: "Learn more" has ${a.learnMore} links`, learnMore === a.learnMore, learnMore);
@@ -159,14 +159,15 @@ async function focusOk(page, tag, locators) {
       // Links.
       const hrefs = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       check(`${tag}: no local host in the content links`, hrefs.every((h) => !/localhost|127\.0\.0\.1/.test(h)));
-      check(`${tag}: no link to an unavailable destination (issuer catalog, relying party websites, interop profiles or matrix)`, hrefs.every((h) => !UNAVAILABLE.test(h)), hrefs.filter((h) => UNAVAILABLE.test(h)).join(","));
+      const blocked = hrefs.filter((h) => UNAVAILABLE.test(h) && !/digital-credentials-issuer/.test(h));
+      check(`${tag}: no link to an unavailable destination (issuer catalog, relying party websites, interop profiles or matrix)`, blocked.length === 0, blocked.join(","));
       for (const l of a.links) check(`${tag}: links to ${l}`, hrefs.some((h) => h.includes(l)), hrefs.join(" "));
       await linksOk(page, tag, hrefs, src.map((s) => s.href));
 
       // Series navigation: Previous / Next in the order of the articles.
       const prev = await page.locator("nav.fides-learn-series a[rel=prev]").evaluateAll((as) => as.map((x) => new URL(x.href).pathname));
       const next = await page.locator("nav.fides-learn-series a[rel=next]").evaluateAll((as) => as.map((x) => new URL(x.href).pathname));
-      check(`${tag}: Previous is ${i ? PAGES[i - 1].slug : "absent"}`, i ? prev.join() === `${G}${PAGES[i - 1].slug}/` : prev.length === 0, prev.join());
+      check(`${tag}: Previous is ${i ? PAGES[i - 1].slug : "the overview"}`, i ? prev.join() === `${G}${PAGES[i - 1].slug}/` : prev.join() === G, prev.join());
       check(`${tag}: Next is ${i < PAGES.length - 1 ? PAGES[i + 1].slug : "absent"}`, i < PAGES.length - 1 ? next.join() === `${G}${PAGES[i + 1].slug}/` : next.length === 0, next.join());
 
       check(`${tag}: no horizontal overflow`, (await overflow(page)) <= 0, await overflow(page));

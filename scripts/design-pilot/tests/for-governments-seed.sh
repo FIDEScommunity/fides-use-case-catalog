@@ -7,6 +7,8 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 source "$HERE/env.sh"
+# This throwaway seed must not inherit a route filter or a dry-run/apply flag from the caller.
+unset LEARN_IDS LEARN_DRY_RUN LEARN_APPLY LEARN_FORCE LEARN_TRIAL_BOUNDED LEARN_ALLOW_NON_PILOT LEARN_SEO
 WORK="$HERE/tests/output/for-governments-seed"
 rm -rf "$WORK"; mkdir -p "$WORK/content"
 fail=0
@@ -37,21 +39,31 @@ for i, s in enumerate(slugs):
     assert lines, f"{s}: sources present"
     for line in lines:
         assert re.match(r"^[^|]+ · [^|]+ \| https://\S+$", line.strip()) or re.match(r"^Regulation \(EU\) [^|]+ \| https://\S+$", line.strip()), f"{s}: source line format: {line}"
-    assert any("version 0.9.5 (September 2026)" in l and "consulted 12 November 2026" in l and "ictu.github.io/GBO-GO" in l for l in lines), f"{s}: GBO global design source names version, month and consulted date"
+    gbo_date = "20 November 2026" if s == slugs[3] else "12 November 2026"
+    assert any("version 0.9.5 (September 2026)" in l and f"consulted {gbo_date}" in l and "ictu.github.io/GBO-GO" in l for l in lines), f"{s}: GBO global design source names version, month and consulted date"
+    if s == slugs[3]:
+        assert any("consulted 20 November 2026" in l and "ictu.github.io/GBO/latest" in l for l in lines), f"{s}: GBO documentation consulted 20 November 2026"
+        assert any("consulted 20 November 2026" in l and "www.ictu.nl/" in l for l in lines), f"{s}: ICTU programme page consulted 20 November 2026"
+        assert any("consulted 12 November 2026" in l and "eudi-wallet.gov.de" in l for l in lines), f"{s}: German EUDI source keeps 12 November 2026"
+        assert any("consulted 12 November 2026" in l and "edi.pleio.nl" in l for l in lines), f"{s}: EDI Pleio keeps 12 November 2026"
     urls = [l.split("|")[-1].strip() for l in lines]
     assert len(urls) == len(set(urls)), f"{s}: no duplicate source URLs"
     body = (here / "learn/content" / e["content"]).read_text()
     assert not re.search(r"localhost|127\.0\.0\.1|issuer-catalog|relying-party-websites|interop-profiles|interop-matrix", body), f"{s}: no local host/unavailable destination"
     full = "version 0.9.5 (September 2026), a draft design submitted for adoption" in body
     assert full == (s == slugs[3]), f"{s}: version and status wording only on article 4"
-    if s != slugs[3]: assert "{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/#a-dutch-example" in body, f"{s}: links to the Dutch example on article 4"
+    if s in (slugs[0], slugs[1]):
+        assert "{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/" in body and "#a-dutch-example" not in body, f"{s}: short pointer to national implementation, without the anchor"
+    elif s == slugs[2]:
+        assert "{{learn}}/topics/for-governments/the-eudi-wallet-and-national-implementation/#a-dutch-example" in body, f"{s}: links to the Dutch example on article 4"
+    if s == slugs[3]:
+        assert "Each source below gives its own consultation date" in body and "The pages cited here were checked on" not in body, f"{s}: consultation dates are per source"
     ln = re.search(r"Learn more.*?<!-- /wp:list -->", body, re.S)
     assert ln and 3 <= ln.group(0).count("<li>") <= 4, f"{s}: Learn more has 3-4 links"
     if s == slugs[2]:
-        assert "https://eur-lex.europa.eu/eli/reg/2024/1183/oj" in body and "Article 5f of" in body and any("Article 5f | https://eur-lex.europa.eu/eli/reg/2024/1183/oj" in l for l in lines), f"{s}: Article 5f passage, EUR-Lex link and source line"
+        assert "https://eur-lex.europa.eu/eli/reg/2024/1183/oj" in body and "Article 5f of" in body and any("Article 5f" in l and "https://eur-lex.europa.eu/eli/reg/2024/1183/oj" in l for l in lines), f"{s}: Article 5f passage, EUR-Lex link and source line"
     if s == slugs[1]:
-        assert "<strong>Verify:</strong>" in body and "<strong>Retrieve:</strong>" in body, f"{s}: QTSP route separates verify and retrieve"
-    assert "Content last checked: 12 November 2026" in body, f"{s}: last checked date"
+        assert 'term="Authentic Source"' in body and "The register that holds the data is the" in body, f"{s}: names the register as an authentic source"
     assert "{{learn}}/topics/for-governments/" in body, f"{s}: links to a sibling or the overview"
     entries.append((s, e))
 ov = (here / "learn/content" / hub["content"]).read_text()

@@ -1,13 +1,13 @@
-<!-- wp:paragraph -->
-<p>Organisations regularly exchange company information, permits, certifications and evidence of authority. A [fides_learn_term term="Business wallet"]business wallet[/fides_learn_term] may help an organisation manage or present some of that information. Products differ, so the first questions are which role your organisation plays and which interaction you want to support. This article helps you choose a business wallet. To prepare one concrete exchange in detail, see <a href="{{learn}}/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case/">How can an organisation prepare a wallet use case?</a></p>
-<!-- /wp:paragraph -->
+<!-- wp:html -->
+<style>.fides-learn-nl-only{display:none}html[lang^="nl"] span.fides-learn-nl-only{display:inline}html[lang^="nl"] .fides-learn-en-only{display:none}</style>
+<!-- /wp:html -->
 
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">Start with one transaction</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Take supplier onboarding as an example. A customer asks for company information, evidence of a certification and confirmation that a representative may act for the supplier. Which role does your organisation play in it?</p>
+<p>Take supplier onboarding as an example. A buyer wants to identify the supplier and check whether the person submitting the application can act for it. Which role does your organisation play?</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -21,37 +21,21 @@
 <!-- wp:shortcode -->[fides_learn_usecase id="end-to-end-digital-business-workflows-transforming-kyb-kyc-kys-via-eu-business-wallet-F665Dh" url="{{pilot}}/use-case/" label="Explore the use case"]<!-- /wp:shortcode -->
 
 <!-- wp:heading {"level":2} -->
-<h2 class="wp-block-heading">Identify the roles</h2>
+<h2 class="wp-block-heading">Choose your role</h2>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph -->
-<p>A register, certification body or another party may provide information. The supplier may hold or manage a credential, and the customer's service may receive and check it. These roles are not fixed to particular kinds of organisation. A register is not always the issuer, and an organisation may issue information in one process and receive it in another.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:list {"ordered":true,"className":"fides-learn-flow"} -->
-<ol class="wp-block-list fides-learn-flow"><!-- wp:list-item -->
-<li><strong>Issuer</strong><span>Register or partner</span></li>
+<!-- wp:list {"className":"fides-learn-rows fides-learn-rows--static"} -->
+<ul class="wp-block-list fides-learn-rows fides-learn-rows--static"><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Hold and present</strong><span class="fides-learn-rows__text">The supplier keeps proof of company registration in its wallet and shares the details the buyer needs. Under the proposed European Business Wallet framework, the supplier could share its owner identification data ([fides_learn_term term="European Business Wallet Owner Identification Data"]EBWOID[/fides_learn_term]), which includes a unique identifier for the wallet owner.</span></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><strong>Business wallet</strong><span>Your organisation</span></li>
+<li><strong class="fides-learn-rows__title">Issue</strong><span class="fides-learn-rows__text">An issuer gives the supplier a digital credential. For example, a company register can issue proof that the company is registered.</span></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><strong>Receiving service</strong><span>Customer or authority</span></li>
-<!-- /wp:list-item --></ol>
+<li><strong class="fides-learn-rows__title">Request and verify</strong><span class="fides-learn-rows__text">The buyer asks for evidence, checks it and decides whether to open a supplier account.</span></li>
+<!-- /wp:list-item --></ul>
 <!-- /wp:list -->
 
-<!-- wp:paragraph {"className":"fides-learn-note"} -->
-<p class="fides-learn-note">The diagram is illustrative; a register is not always the issuer.</p>
-<!-- /wp:paragraph -->
-
 <!-- wp:paragraph -->
-<p>Some business-wallet products can also issue or verify credentials. Others focus on holding and presenting them. These capabilities vary by product. Identify which roles your organisation needs before comparing providers.</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:heading {"level":2} -->
-<h2 class="wp-block-heading">Separate identity from authority</h2>
-<!-- /wp:heading -->
-
-<!-- wp:paragraph -->
-<p>Knowing which organisation you are dealing with does not by itself establish what a representative is allowed to do. Ask where the evidence of authority comes from, what it covers, how long it applies and what the receiving party needs to check. The answers depend on the transaction and the applicable rules. See also [fides_learn_term term="Representation rights"]representation[/fides_learn_term] and [fides_learn_term term="Mandate"]mandates[/fides_learn_term].</p>
+<p>An organisation can play different roles in different transactions. An issuer can use information from a register or another source. A wallet product may support one role or several.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -59,7 +43,67 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>When comparing wallets and providers, consider the credential types, formats and protocols each party supports, and the trust arrangements for the process. Also look at access management, integration with existing systems, deployment and support. A feature listed in a catalog is a starting point for discussion. It does not by itself establish that the complete interaction will work between the parties you have in mind.</p>
+<p>Once you know your role in the transaction, look at the part of the process you need to support. Start with your existing systems and see which capability is missing.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"fides-learn-rows fides-learn-rows--static"} -->
+<ul class="wp-block-list fides-learn-rows fides-learn-rows--static"><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">[fides_learn_term term="Business wallet"]Business wallet[/fides_learn_term]</strong><span class="fides-learn-rows__text">If your organisation needs to hold and share its own evidence, look for a business wallet that supports those credentials and fits your workflow. Business wallets often also support issuing or verifying credentials. Check which functions the product offers.</span></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Issuing software</strong><span class="fides-learn-rows__text">If your organisation needs to issue credentials, look for software or a provider that can connect to the source of the data and deliver credentials to the wallets people use.</span></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Verification software</strong><span class="fides-learn-rows__text">If your organisation needs to request and check evidence, look for software or a service that can return the result to your existing process.</span></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Wallet connector</strong><span class="fides-learn-rows__text">A wallet connector links an application to digital wallets. The term covers products, services and software development kits (SDKs). Depending on the connector, it can help issue credentials, request and verify them, or do both.</span></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title"><span class="fides-learn-nl-only" lang="nl" data-no-translation="1">[fides_learn_term term="Intermediary"]Intermediair[/fides_learn_term]</span><span class="fides-learn-en-only">[fides_learn_term term="Intermediary"]Intermediary[/fides_learn_term]</span></strong><span class="fides-learn-rows__text">If you want a provider to make EUDI Wallet requests on your behalf, consider an intermediary. Under <a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">eIDAS</a>, an intermediary acting for a relying party is itself treated as a relying party and may not store data about the content of the transaction. Agree who makes the request, who verifies the evidence and who decides what happens next.</span></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:group {"className":"fides-learn-soft"} -->
+<div class="wp-block-group fides-learn-soft">
+<!-- wp:paragraph -->
+<p><strong>Examples to explore</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"fides-learn-rows"} -->
+<ul class="wp-block-list fides-learn-rows"><!-- wp:list-item -->
+<li><a href="{{pilot}}/business-wallets/?wallet=lissi-id-wallet-connector">Lissi ID-Wallet Connector</a></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><a href="{{pilot}}/business-wallets/?wallet=paradym-platform">Paradym Platform</a></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><a href="https://trusttech.nl/products/id-connector/">TrustTech’s ID Connector</a></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><a href="https://ver.id/platform/verify">Ver.iD Verify</a></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><a href="https://docs.eudiplo.dev/">EUDIPLO</a></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+</div>
+<!-- /wp:group -->
+
+<!-- wp:paragraph -->
+<p>This list is not exhaustive. Some solutions combine the functions listed above. When comparing options, check which wallets and credential types they support, which steps they handle and what your organisation needs to manage itself.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><a href="{{pilot}}/business-wallets/">Compare business wallets in the FIDES catalog</a>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">Separate identity from authority</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A company acts through its representatives. A director, an employee or someone outside the company may have authority to act on its behalf. In supplier onboarding, the buyer checks which company is applying and whether the person submitting the application can act for it in that transaction.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Some transactions require a person to act on behalf of the company. For example, if a contract requires a <a href="{{learn}}/topics/the-big-picture/european-digital-identity-wallet/">qualified electronic signature</a>, an authorised representative signs it as a natural person. Where the signing process supports it, the representative can use their EUDI Wallet to sign. Check separately whether that person has <a href="{{learn}}/topics/for-businesses/how-can-someone-act-for-an-organisation/">authority to sign this contract for the company</a>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Knowing which organisation you are dealing with does not by itself establish what a representative is allowed to do. Ask where the evidence of authority comes from, what it covers, how long it applies and what the receiving party needs to check. The answers depend on the transaction and the applicable rules. See also [fides_learn_term term="Representation rights"]representation[/fides_learn_term] and [fides_learn_term term="Mandate"]mandates[/fides_learn_term].</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -67,7 +111,27 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The European Business Wallet is the subject of a European legislative proposal for organisational and business interactions. Business wallets and related tools also exist outside that proposal. When comparing solutions, distinguish what a product supports today from requirements that may apply under a future European framework. A FIDES listing is not proof of compliance with requirements that have not been finalised. For the proposal and its status, see <a href="{{learn}}/topics/for-businesses/european-business-wallet/">European Business Wallet</a>. To see how it relates to the EUDI Wallet, see <a href="{{learn}}/topics/the-big-picture/eudi-wallet-and-european-business-wallet/">EUDI Wallet and European Business Wallet: how do they relate?</a>.</p>
+<p>The European Business Wallet is a type of business wallet defined in a proposed EU regulation that is still going through the legislative process. Under the proposal, it would give businesses and public bodies a common way to identify themselves, share digital evidence and send documents across borders. It would also let organisations manage who can use the wallet on their behalf. The proposal includes four qualified trust services that support those transactions.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"className":"fides-learn-rows fides-learn-rows--static"} -->
+<ul class="wp-block-list fides-learn-rows fides-learn-rows--static"><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Qualified electronic signature</strong><span class="fides-learn-rows__text">A person can sign a document electronically with the same legal effect as a handwritten signature.</span></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Qualified electronic seal</strong><span class="fides-learn-rows__text">Helps establish the origin and integrity of the sealed data.</span></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">Qualified electronic time stamp</strong><span class="fides-learn-rows__text">Provides evidence that the data existed at a particular time.</span></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><strong class="fides-learn-rows__title">[fides_learn_term term="Qualified Electronic Registered Delivery Service"]Qualified electronic registered delivery service (QERDS)[/fides_learn_term]</strong><span class="fides-learn-rows__text">Provides evidence of who sent and received the data and when. Under eIDAS, the data is presumed to have retained its integrity.</span></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>A supplier sends a document to a public authority. QERDS can provide evidence that the authority received it and when. The authority can use separate credentials to check the supplier's identity and the representative's authority.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Follow the proposal and its legislative status in <a href="{{learn}}/topics/for-businesses/european-business-wallet/">European Business Wallet</a>. For checking the qualified status of a service, see <a href="{{learn}}/topics/ecosystem-roles/trust-service-providers-and-trust-frameworks/">Trust service providers and trust frameworks</a>.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -75,7 +139,7 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Decide which role your organisation needs to play and shortlist one or two wallets or providers that support it. Then describe one exchange in detail: one transaction, one receiving service and the evidence it needs. <a href="{{learn}}/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case/">How can an organisation prepare a wallet use case?</a> walks through it. A <a href="{{learn}}/sessions/wallet-readiness-workshop/">readiness workshop</a> or <a href="{{services}}/wallet-readiness-assessment/">assessment</a> can help your team examine the process and the decisions ahead.</p>
+<p><a href="{{learn}}/topics/for-businesses/how-can-an-organisation-prepare-a-wallet-use-case/">How can an organisation prepare a wallet use case?</a> walks through one transaction: one receiving service and the evidence it needs. Then <a href="{{pilot}}/business-wallets/">compare business wallets in the FIDES catalog</a>. A <a href="{{learn}}/sessions/wallet-readiness-workshop/">readiness workshop</a> or <a href="{{services}}/wallet-readiness-assessment/">assessment</a> can help your team examine the process and the decisions ahead.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -107,7 +171,3 @@
 <li><a href="{{pilot}}/credentials/">Browse credential types</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
-
-<!-- wp:paragraph {"className":"fides-learn-note"} -->
-<p class="fides-learn-note">The supplier example is illustrative. Content last checked: 12 November 2026. The status of the European Business Wallet proposal can change; check it again before relying on this page.</p>
-<!-- /wp:paragraph -->

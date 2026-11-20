@@ -41,7 +41,6 @@ for s in slugs:
     assert len(urls) == len(set(urls)), f"{s}: no duplicate source URLs"
     body = (here / "learn/content" / e["content"]).read_text()
     assert not re.search(r"localhost|127\.0\.0\.1|issuer-catalog|relying-party-websites|interop-profiles|interop-matrix", body), f"{s}: no local host/unavailable destination"
-    assert "Content last checked: 12 November 2026" in body, f"{s}: last checked date"
     assert body.count('<h2 class="wp-block-heading">Continue learning</h2>') == 1, f"{s}: Continue learning once"
     entries.append((s, e))
 ov = (here / "learn/content" / hub["content"]).read_text()

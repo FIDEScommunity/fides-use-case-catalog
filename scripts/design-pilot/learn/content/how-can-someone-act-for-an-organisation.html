@@ -1,3 +1,14 @@
+<!-- wp:html -->
+<style>
+.fides-learn-auth{display:grid;gap:12px;margin:1.25rem 0}
+.fides-learn-auth__block{box-sizing:border-box;margin:0;padding:14px 16px;background:var(--fides-ds-soft,#f4f7fb);border-radius:12px}
+.fides-learn-auth__block p{margin:0;font-size:16px;line-height:22px;font-weight:700;color:var(--fides-ds-ink,#142033)}
+@media (min-width:720px){
+  .fides-learn-auth{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+</style>
+<!-- /wp:html -->
+
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">Identity and authority are different questions</h2>
 <!-- /wp:heading -->
@@ -8,6 +19,18 @@
 
 <!-- wp:paragraph -->
 <p>For example, a supplier's employee wants to open an account with a business service. The service may need to identify the employee and the supplier, then determine whether the employee is authorised to complete the registration. What evidence is sufficient depends on the process and the applicable rules.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:html -->
+<figure class="fides-learn-auth">
+<div class="fides-learn-auth__block"><p>Who submits the application?</p></div>
+<div class="fides-learn-auth__block"><p>Which company do they represent?</p></div>
+<div class="fides-learn-auth__block"><p>May they submit this application for that company?</p></div>
+</figure>
+<!-- /wp:html -->
+
+<!-- wp:paragraph -->
+<p>This page does not give legal advice and does not state who may act for an organisation in a given country.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
@@ -37,7 +60,7 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>A credential identifies its subject. W3C notes that verifiable credentials are intended as a means of reliably identifying subjects, and that authorisation is not an appropriate use of the data model without an accompanying authorisation framework. A mandate credential therefore needs rules around it: who may issue it, what it covers and how a service decides to rely on it.</p>
+<p>A credential contains claims about a subject and may include an identifier. The service still needs to decide whether the evidence shows that the person can perform the action in question. W3C notes that verifiable credentials are intended as a means of reliably identifying subjects, and that authorisation is not an appropriate use of the data model without an accompanying authorisation framework. A mandate credential therefore needs rules around it: who may issue it, what it covers and how a service decides to rely on it.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -68,7 +91,7 @@
 <!-- /wp:list-item --><!-- wp:list-item -->
 <li>Directive (EU) 2025/25 inserts a digital EU power of attorney (Article 16c) into the company-law Directive (EU) 2017/1132. Companies of the types listed in that directive can use a Commission template to authorise a person to represent the company in procedures within the directive's scope in another Member State, such as forming a company or registering a branch. It is drawn up, amended and revoked under national requirements, which must at least include verification of the identity, legal capacity and authority of the person granting it, and it is to be accepted as evidence of the authorised person's entitlement to represent the company as specified in the document. It does not affect national rules on legal and statutory representation or other powers of attorney, and Member States may require it to be filed with a register. Member States apply these measures from 31 July 2028.</li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li>The Commission's proposal for European Business Wallets (COM(2025) 838, published on 19 November 2025) would define a mandate as an authorisation granted by the wallet owner to an authorised representative, and says in a recital that its authorisation system should be compatible with the digital EU power of attorney. The Council's negotiating position of 9 June 2026 states that this system is not intended to affect any power of attorney or legal mandates under national or Union law. As checked on 12 November 2026 it is still a proposal: the Council has its position and the European Parliament decided in October 2026 to open negotiations, but nothing has been adopted.</li>
+<li>The Commission's proposal for European Business Wallets (COM(2025) 838, published on 19 November 2025) would define a mandate as an authorisation granted by the wallet owner to an authorised representative, and says in a recital that its authorisation system should be compatible with the digital EU power of attorney. The Council's negotiating position of 9 June 2026 states that this system is not intended to affect any power of attorney or legal mandates under national or Union law. See <a href="{{learn}}/topics/for-businesses/european-business-wallet/">European Business Wallet</a> for the status of the proposal.</li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
 
@@ -121,7 +144,3 @@
 <li><a href="{{pilot}}/business-wallets/">Browse business wallets</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
-
-<!-- wp:paragraph {"className":"fides-learn-note"} -->
-<p class="fides-learn-note">The supplier example is illustrative. This page does not give legal advice and does not state who may act for an organisation in a given country. Content last checked: 12 November 2026. The European Business Wallet proposal and national rules can change; check the applicable rules before relying on this page.</p>
-<!-- /wp:paragraph -->

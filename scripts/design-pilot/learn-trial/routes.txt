@@ -53,3 +53,4 @@ sessions/wallet-introduction
 sessions/wallet-readiness-workshop
 sessions/training-partnerships
 topics/for-businesses/business-wallets-where-to-start
+topics/for-businesses/requesting-data-from-an-eudi-wallet

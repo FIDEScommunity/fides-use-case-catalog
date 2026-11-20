@@ -1,9 +1,25 @@
+<!-- wp:html -->
+<style>.fides-learn-nl-only{display:none!important}html[lang^="nl"] span.fides-learn-nl-only{display:inline!important}html:not([lang|="nl"]) .fides-learn-alt-nl{display:none!important}html[lang|="nl"] .fides-learn-alt-en{display:none!important}</style>
+<!-- /wp:html -->
+
 <!-- wp:paragraph -->
 <p>Your organisation may ask people or other organisations for information before providing a service. A bank identifies a customer. An employer checks a qualification. A company asks a supplier for registration details.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>A wallet can offer another way to receive that information. The holder presents a digital credential, or selected information from it, to your service. Your organisation then checks whether the information is suitable for the decision it needs to make. To choose where to begin, see <a href="{{start}}/receive/">Receive information from wallets</a>. This article explains what to look at once you have a service in mind.</p>
+<p>A wallet can offer another way to receive that information. The holder presents a digital credential, or selected information from it, to your service. Your organisation then checks whether the information is suitable for the decision it needs to make.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p class="fides-learn-alt-en" data-no-translation="1">To choose a starting point, see <a href="{{learn}}/topics/for-businesses/">For businesses</a>.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p class="fides-learn-alt-nl" lang="nl" data-no-translation="1">Ga naar <a href="{{learn}}/topics/for-businesses/">Voor organisaties</a> om te kiezen waar u wilt beginnen.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>This article explains what to look at once you have a service in mind.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"level":2} -->
@@ -17,6 +33,10 @@
 <!-- wp:paragraph -->
 <p>For example, an employer wants to check whether an applicant holds a particular qualification. The employer does not necessarily need the applicant's full education history. It first needs to determine what must be demonstrated, which issuers it can rely on and what happens if the information cannot be provided.</p>
 <!-- /wp:paragraph -->
+
+<!-- wp:shortcode -->
+[fides_learn_record type="usecase" id="gradus-verify-the-diploma-before-you-interview-obA7P8" url="{{pilot}}/use-case/" kicker="Demo with a fictional scenario" text="Gradus shows how a recruiter could check a digital diploma before inviting a candidate for an interview." label="Explore the use case"]
+<!-- /wp:shortcode -->
 
 <!-- wp:paragraph -->
 <p>Discuss these questions with the people responsible for the service:</p>
@@ -59,28 +79,44 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>The checks depend on the credential and the rules of the process. They may include questions such as:</p>
+<p>Start with the decision your service needs to make. Decide what evidence is sufficient for that decision. See <a href="{{learn}}/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential/">What should a service check when receiving a credential?</a> for the technical checks, and <a href="{{learn}}/topics/for-businesses/how-can-someone-act-for-an-organisation/">How can someone act for an organisation?</a> if the request concerns someone acting on behalf of a company.</p>
 <!-- /wp:paragraph -->
-
-<!-- wp:list -->
-<ul class="wp-block-list"><!-- wp:list-item -->
-<li>Has the credential been issued by a party the organisation accepts?</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li>Has the information been altered?</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li>Is the credential still within its period of validity?</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li>Is there [fides_learn_term term="Credential Status"]status information[/fides_learn_term] the service needs to check?</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li>Is the person presenting the credential the one it was issued to, where the credential supports that check?</li>
-<!-- /wp:list-item --><!-- wp:list-item -->
-<li>Does the information satisfy the requirement for this service?</li>
-<!-- /wp:list-item --></ul>
-<!-- /wp:list -->
 
 <!-- wp:paragraph -->
-<p>The organisation also needs to decide how its service responds when a check fails or cannot be completed. A listing in a FIDES catalog does not replace these checks or confirm the legal status of a credential.</p>
+<p>If you want a customer or employee to share information from a European Digital Identity Wallet, follow <a href="{{learn}}/topics/for-businesses/requesting-data-from-an-eudi-wallet/">How can your organisation request data from an EUDI Wallet?</a> When you need evidence about a supplier, decide separately what you need to know about the organisation and what shows that someone can act on its behalf.</p>
 <!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">Checking a supplier and its representative</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>When a new supplier signs up, you may need to check which company you are dealing with. If someone submits the application on the supplier’s behalf, you may also need to check whether that person has authority to do so. Evidence of the company’s identity answers the first question. For the second, check what the person is authorised to do on behalf of that company.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:group {"className":"fides-learn-record fides-learn-record--plain"} -->
+<div class="wp-block-group fides-learn-record fides-learn-record--plain">
+<!-- wp:paragraph {"className":"fides-learn-record__kicker"} -->
+<p class="fides-learn-record__kicker">WE BUILD use cases</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Supplier onboarding and company representation</h3>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>WE BUILD explores how wallets could help organisations check information about business partners across borders. A related use case looks at how a person could show that they are authorised to carry out a specific task on behalf of a company.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><a class="fides-ds-action-link" href="https://www.webuildconsortium.eu/use-cases/know-your-business-partner-kyc-kys-kyb-due-diligence">Explore Know Your Business Partner <span aria-hidden="true">→</span></a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><a class="fides-ds-action-link" href="https://www.webuildconsortium.eu/use-cases/company-representative-acting-on-behalf-of-a-company">Explore company representation <span aria-hidden="true">→</span></a></p>
+<!-- /wp:paragraph -->
+</div>
+<!-- /wp:group -->
 
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">How does the person share the information?</h2>
@@ -107,16 +143,28 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>An organisation preparing to accept information from an EUDI Wallet should consider both the European framework and the arrangements in the country where it needs to operate.</p>
+<p><a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">Article 5f</a> sets different acceptance rules for public services, certain private services and very large online platforms. The private-services rule applies where law or contract requires strong user authentication for online identification. Microenterprises and small enterprises are exempt from that rule. The platform rule applies where a very large online platform requires users to authenticate to access its online services. In both cases, the wallet is accepted at the user’s voluntary request. Check <a href="https://eur-lex.europa.eu/eli/reg/2024/1183/oj">Article 5f</a> for the conditions and timing that apply to your service.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p>Questions may include relying-party registration, the declared purpose of a request, the information requested and the technical connection to the service. Requirements and implementation arrangements should be checked against the applicable rules and national guidance. See also <a href="{{learn}}/topics/the-big-picture/european-digital-identity-wallet/">European Digital Identity Wallet</a>.</p>
+<p>For the rules on public services, see <a href="{{learn}}/topics/for-governments/accepting-information-from-wallets-in-public-services/">Accepting information from wallets in public services</a>.</p>
 <!-- /wp:paragraph -->
 
+<!-- wp:heading {"level":2} -->
+<h2 class="wp-block-heading">What about the European Business Wallet?</h2>
+<!-- /wp:heading -->
+
 <!-- wp:paragraph -->
-<p>Some service providers may be required to accept EUDI Wallets in certain circumstances. Whether an obligation applies depends on the organisation and the service.</p>
+<p>The European Commission has proposed a framework for European Business Wallets. It would support businesses in identifying themselves, sharing verified information and authorising people to act on their behalf, including across EU borders. The proposal is still going through the EU legislative process.</p>
 <!-- /wp:paragraph -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><a href="{{learn}}/topics/the-big-picture/eudi-wallet-and-european-business-wallet/">Compare the EUDI Wallet and European Business Wallet</a></li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li><a href="https://eur-lex.europa.eu/procedure/EN/2025_358">Follow the European Business Wallet legislative procedure</a></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
 
 <!-- wp:heading {"level":2} -->
 <h2 class="wp-block-heading">Prepare for a first discussion</h2>
@@ -143,11 +191,25 @@
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Pick one credential type in the EUDI Test Relying Party listing. Then find a wallet the listing says the service supports. Think of a service you run. What would you ask for, when would you check it, and what would you do if you couldn’t complete the check?</p>
+<p>A supplier based in another EU country applies to join your supplier portal. A member of staff submits the application on the supplier’s behalf.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li>What is the minimum information you need to identify the supplier? Which source would you accept as evidence?</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>What evidence would you accept that this person can submit the application for that company? How would you check that their authority covers this task?</li>
+<!-- /wp:list-item --><!-- wp:list-item -->
+<li>If you can verify the company’s identity but cannot confirm the person’s authority, how would you follow up?</li>
+<!-- /wp:list-item --></ol>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p>Want to see how a test service describes what it accepts? Open the EUDI Test Relying Party listing and look at the credentials it lists.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph -->
-<p><a href="https://fides.community/ecosystem-explorer/relying-party-catalog/?rp=eudi-test-relying-party">Open the EUDI Test Relying Party listing</a></p>
+<p><a class="fides-ds-action-link" href="https://fides.community/ecosystem-explorer/relying-party-catalog/?rp=eudi-test-relying-party">Open the EUDI Test Relying Party listing <span aria-hidden="true">→</span></a></p>
 <!-- /wp:paragraph -->
 </div>
 <!-- /wp:group -->
@@ -166,9 +228,9 @@
 <ul class="wp-block-list"><!-- wp:list-item -->
 <li><a href="{{learn}}/topics/for-businesses/what-should-a-service-check-when-receiving-a-credential/">What should a service check when receiving a credential?</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{learn}}/topics/the-big-picture/formats-and-protocols/">Formats and protocols: what do they do?</a></li>
+<li><a href="{{learn}}/topics/the-big-picture/formats-and-protocols/">How do wallets and services work together?</a></li>
 <!-- /wp:list-item --><!-- wp:list-item -->
-<li><a href="{{start}}/receive/">Receive information from wallets</a></li>
+<li><span class="fides-learn-alt-en" data-no-translation="1">To choose a starting point, see <a href="{{learn}}/topics/for-businesses/">For businesses</a>.</span><span class="fides-learn-alt-nl" lang="nl" data-no-translation="1">Ga naar <a href="{{learn}}/topics/for-businesses/">Voor organisaties</a> om te kiezen waar u wilt beginnen.</span></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
 
@@ -183,7 +245,3 @@
 <li><a href="{{pilot}}/credentials/">Browse credential types</a></li>
 <!-- /wp:list-item --></ul>
 <!-- /wp:list -->
-
-<!-- wp:paragraph {"className":"fides-learn-note"} -->
-<p class="fides-learn-note">The examples are illustrative; German sandbox requirements are not generalised. Content last checked: 11 November 2026. Legal and technical requirements can change; check the applicable rules for a specific use.</p>
-<!-- /wp:paragraph -->

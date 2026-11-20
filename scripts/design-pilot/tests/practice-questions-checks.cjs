@@ -118,15 +118,19 @@ async function focusOk(page, tag, locators) {
       check(`${tag}: intro text`, a.intro.test(intro), intro);
       const heads = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h2").allInnerTexts()).map(squash);
       for (const h of a.headings) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
-      const body = squash(await page.locator(".fides-learn-article__body").innerText());
-      check(`${tag}: illustrative note and last checked date`, /illustrative\./.test(body) && /Content last checked: 12 November 2026/.test(body));
       check(`${tag}: glossary term chips (${a.terms})`, (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) button.fides-ds-term").count()) === a.terms);
       const learnMore = await page.evaluate(() => { const h = [...document.querySelectorAll(":is(.fides-learn-article__body, .fides-learn-continue) h3")].find((x) => x.textContent.trim() === "Learn more"); const ul = h && h.nextElementSibling; return ul ? ul.querySelectorAll("li").length : 0; });
       check(`${tag}: "Learn more" has ${a.learnMore} links`, learnMore === a.learnMore, learnMore);
       const groups = await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h3").allInnerTexts();
       check(`${tag}: groups "Learn more" and "Explore in the catalogs"`, ["Learn more", "Explore in the catalogs"].every((g) => groups.includes(g)), groups.join("|"));
-      const noSeries = await page.locator("nav.fides-learn-series").count();
-      check(`${tag}: no series navigation (not part of a series)`, noSeries === 0, noSeries);
+      const seriesPrev = await page.locator("nav.fides-learn-series a[rel=prev]").evaluateAll((as) => as.map((x) => new URL(x.href).pathname));
+      const seriesNext = await page.locator("nav.fides-learn-series a[rel=next]").evaluateAll((as) => as.map((x) => new URL(x.href).pathname));
+      const series = {
+        "how-can-an-organisation-prepare-a-wallet-use-case": ["business-wallets-where-to-start", "accepting-information-from-a-wallet"],
+        "what-should-a-service-check-when-receiving-a-credential": ["requesting-data-from-an-eudi-wallet", "how-can-someone-act-for-an-organisation"],
+        "how-can-someone-act-for-an-organisation": ["what-should-a-service-check-when-receiving-a-credential", "issuing-credentials-for-wallets"],
+      }[a.slug];
+      check(`${tag}: series previous and next`, seriesPrev.length === 1 && seriesNext.length === 1 && seriesPrev[0].endsWith(`/${series[0]}/`) && seriesNext[0].endsWith(`/${series[1]}/`), seriesPrev.concat(seriesNext).join(" "));
       if (a.cta) check(`${tag}: call to action links to the Readiness Workshop`, (await page.locator("main a[href*='/sessions/wallet-readiness-workshop/']").count()) >= 1); // one call to action: Continue learning no longer repeats it
 
       const src = await page.locator(".fides-learn-sources__link").evaluateAll((as) => as.map((x) => ({ href: x.getAttribute("href"), name: x.querySelector(".fides-learn-sources__name")?.textContent.trim(), text: x.textContent.replace(/\s+/g, " ").trim(), target: x.target })));
@@ -183,7 +187,7 @@ async function focusOk(page, tag, locators) {
       const hs = norm(await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a[href]").evaluateAll((as) => as.map((x) => x.getAttribute("href"))));
       check(`${tag}: links to the preparation article`, hs.some((h) => h === `${G}how-can-an-organisation-prepare-a-wallet-use-case/`), hs.join(" "));
       const heads = (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) h2").allInnerTexts()).map(squash);
-      for (const h of ["Identify the roles", "Separate identity from authority", "Compare wallets and providers", "How does the European Business Wallet fit?", "Prepare a small first step"]) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
+      for (const h of ["Start with one transaction", "Choose your role", "Compare wallets and providers", "Separate identity from authority", "How does the European Business Wallet fit?", "Prepare a small first step"]) check(`${tag}: section "${h}"`, heads.includes(h), heads.join("|"));
       check(`${tag}: use case card is still present`, (await page.locator(":is(.fides-learn-article__body, .fides-learn-continue) a", { hasText: "Explore the use case" }).count()) >= 1);
     }
     await context.close();
