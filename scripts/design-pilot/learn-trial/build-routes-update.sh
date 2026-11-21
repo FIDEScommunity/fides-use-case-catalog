@@ -26,7 +26,9 @@ if [[ ! -f "$ROUTES_FILE" ]]; then
 fi
 
 stamp="$(date -u +%Y%m%d-%H%M%S)"
-name="learn-routes-${stamp}-concept"
+# LEARN_PACKAGE_LABEL=-concept only when the installed file hashes were not read.
+# A source comparison of page bodies is recorded in COMPARE.txt; it does not add the suffix.
+name="learn-routes-${stamp}${LEARN_PACKAGE_LABEL:-}"
 dest="$OUT_ROOT/$name"
 stage="$(mktemp -d)"
 trap 'rm -rf "$stage"' EXIT
@@ -39,6 +41,7 @@ git -C "$UC_ROOT" archive "$CONTENT_COMMIT" \
   scripts/design-pilot/learn/content \
   scripts/design-pilot/learn/media \
   scripts/design-pilot/learn/nl-translations.json \
+  scripts/design-pilot/learn/nl-translations-transfer.php \
   | tar -x -C "$stage/extract"
 git -C "$UC_ROOT" archive "$SEED_COMMIT" \
   scripts/design-pilot/create-learn-pages.php \
@@ -55,6 +58,13 @@ git -C "$UC_ROOT" archive "$SEED_COMMIT" \
   scripts/design-pilot/learn-trial/check-seo.py \
   scripts/design-pilot/learn-trial/glossary-pin.json \
   scripts/design-pilot/learn-trial/seo-control.md \
+  scripts/design-pilot/learn-trial/preflight-installed-files.sh \
+  scripts/design-pilot/learn-trial/backup-before-apply.sh \
+  scripts/design-pilot/learn-trial/backup-pages.php \
+  scripts/design-pilot/learn-trial/apply-tiles-files.sh \
+  scripts/design-pilot/learn-trial/restore-backup.sh \
+  scripts/design-pilot/learn-trial/restore-pages.php \
+  scripts/design-pilot/learn-trial/record-after-apply.php \
   | tar -x -C "$stage/extract"
 mkdir -p "$stage/extract-tiles"
 git -C "$TILES_ROOT" archive "$TILES_COMMIT" assets/learn.js includes/class-fides-ds-learn.php | tar -x -C "$stage/extract-tiles"
@@ -85,6 +95,7 @@ if missing:
     sys.exit(1)
 PY
 cp "$stage/extract/scripts/design-pilot/learn/nl-translations.json" "$stage/pkg/seed/learn/nl-translations.json"
+cp "$stage/extract/scripts/design-pilot/learn/nl-translations-transfer.php" "$stage/pkg/seed/learn/nl-translations-transfer.php"
 cp "$stage/extract/scripts/design-pilot/create-learn-pages.php" "$stage/pkg/seed/create-learn-pages.php"
 cp "$stage/extract/scripts/design-pilot/staging/seed-guard.php" "$stage/pkg/seed/staging/seed-guard.php"
 cp "$stage/extract/scripts/design-pilot/learn-trial/media.php" \
@@ -99,15 +110,30 @@ cp "$stage/extract/scripts/design-pilot/learn-trial/media.php" \
   "$stage/extract/scripts/design-pilot/learn-trial/check-seo.py" \
   "$stage/extract/scripts/design-pilot/learn-trial/glossary-pin.json" \
   "$stage/extract/scripts/design-pilot/learn-trial/seo-control.md" \
+  "$stage/extract/scripts/design-pilot/learn-trial/preflight-installed-files.sh" \
+  "$stage/extract/scripts/design-pilot/learn-trial/backup-before-apply.sh" \
+  "$stage/extract/scripts/design-pilot/learn-trial/backup-pages.php" \
+  "$stage/extract/scripts/design-pilot/learn-trial/apply-tiles-files.sh" \
+  "$stage/extract/scripts/design-pilot/learn-trial/restore-backup.sh" \
+  "$stage/extract/scripts/design-pilot/learn-trial/restore-pages.php" \
+  "$stage/extract/scripts/design-pilot/learn-trial/record-after-apply.php" \
   "$stage/pkg/seed/learn-trial/"
 cp "$ROUTES_FILE" "$stage/pkg/seed/learn-trial/routes-update.txt"
 : > "$stage/pkg/seed/learn-trial/content-update"
 chmod +x "$stage/pkg/seed/learn-trial/seed-trial.sh" \
   "$stage/pkg/seed/learn-trial/seed-routes-update.sh" \
   "$stage/pkg/seed/learn-trial/validate-routes-update.py" \
-  "$stage/pkg/seed/learn-trial/check-seo.py"
+  "$stage/pkg/seed/learn-trial/check-seo.py" \
+  "$stage/pkg/seed/learn-trial/preflight-installed-files.sh" \
+  "$stage/pkg/seed/learn-trial/backup-before-apply.sh" \
+  "$stage/pkg/seed/learn-trial/apply-tiles-files.sh" \
+  "$stage/pkg/seed/learn-trial/restore-backup.sh"
 cp "$stage/extract-tiles/assets/learn.js" "$stage/pkg/tiles-delta/assets/learn.js"
 cp "$stage/extract-tiles/includes/class-fides-ds-learn.php" "$stage/pkg/tiles-delta/includes/class-fides-ds-learn.php"
+{
+  shasum -a 256 "$stage/pkg/tiles-delta/assets/learn.js" | awk '{print "tiles-delta/assets/learn.js " $1}'
+  shasum -a 256 "$stage/pkg/tiles-delta/includes/class-fides-ds-learn.php" | awk '{print "tiles-delta/includes/class-fides-ds-learn.php " $1}'
+} > "$stage/pkg/package-file-hashes.txt"
 
 python3 "$stage/pkg/seed/learn-trial/validate-routes-update.py" \
   "$stage/pkg/seed/learn-trial/routes-update.txt" \
