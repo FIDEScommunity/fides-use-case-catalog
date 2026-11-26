@@ -1,9 +1,0 @@
-{
-  "source": "https://raw.githubusercontent.com/FIDEScommunity/fides-interop-profiles/main/data/glossary-aggregated.json",
-  "version": "1.12.2",
-  "terms": 344,
-  "sha256": "355524646ac41171a31c9759c0f2702e1027c88f8e65ac4dc526d7b9238d18a6",
-  "checked": "2026-11-17",
-  "fallback": "fides-vocabulary-glossary 1.1.15 data/glossary-aggregated.json (file version 1.10.1, 335 terms on the local copy)",
-  "note": "Learn uses the same URL as the glossary page. This pin is the file checked for this package. European Business Wallet, Credential and Credential Type are in this file. The glossary plugin stays 1.1.15."
-}
